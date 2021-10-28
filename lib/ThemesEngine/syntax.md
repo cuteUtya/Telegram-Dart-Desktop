@@ -1,7 +1,7 @@
-##About
+# About
 **TinyCSS** — style description language,  has syntax similar to CSS. Support references, math operations with numbers,  can use functions and environment variables that are described in the interpreter.
 
-##Basic syntax
+# Basic syntax
 
 You can leave comments in language,  just write it on new line with '#' character on the sides 
 ```CSS 
@@ -54,7 +54,7 @@ background(theme=dark): #000000;
 background(theme=light): #FFFFFF;
 ```
 
-##Other 
+# Other 
 File extension is `.tscc`
 T - mean tiny 
 css -  mean CSS
