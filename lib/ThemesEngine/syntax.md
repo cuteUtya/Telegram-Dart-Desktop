@@ -5,22 +5,26 @@
 
 You can leave comments in language,  just write it on new line with '#' character on the sides 
 ```CSS 
-#comment#```
+#comment#
+```
 
 You can set the value of the fields using syntax below
 ```CSS
-FieldName: FieldValue;```
+FieldName: FieldValue;
+```
 
 You can init colors by RGB or ARGB constructor 
 ```CSS
 #if call getfield("absoluteRed") we wil get #FF0000#
 absoluteRed: Color(255, 0, 0);
-absoluteRed_HalfTransparent: Color(128, 255, 0, 0);```
+absoluteRed_HalfTransparent: Color(128, 255, 0, 0);
+```
 
 You can links to other fields using ref()
 ```CSS
 greenColor: ref(lightGreen);
-lightGreen: Color(144, 238, 144);```
+lightGreen: Color(144, 238, 144);
+```
 
 You can refer to color channels [a, r, g, b]
 ```CSS
