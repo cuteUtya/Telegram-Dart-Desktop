@@ -43,8 +43,10 @@ class TelegramClient with AsyncClient {
       if (obj is Update) {
         _updates.add(obj);
       }
-
-      yield obj;
+      //just ignore null's
+      if (obj != null) {
+        yield obj;
+      }
     }
   }
 
@@ -72,7 +74,6 @@ class TelegramClient with AsyncClient {
     bool ignoreFileNames = true,
     bool useChatInfoDatabase = true,
     bool useFileDatabase = true,
-
   }) {
     tdlibParams = TdlibParameters(
       apiId: apiId,
@@ -146,8 +147,11 @@ class AsyncClient {
   //factory AsyncClient._() => null;
 
   /// Receives a request from TD and parses it as a [TdObject]
-  Future<TdObject> receive([double timeout = 2.0]) async =>
-      tryConvertToTdObject(_client.receive(timeout)) as TdObject;
+  Future<TdObject?> receive([double timeout = 2.0]) async =>
+      Future<TdObject?>(() {
+        var receiveValue = tryConvertToTdObject(_client.receive(timeout));
+        return receiveValue == null ? null : receiveValue as TdObject;
+      });
 
   /// Sends an asynchronous request to TD
   Future<void> send(TdFunction request) async =>

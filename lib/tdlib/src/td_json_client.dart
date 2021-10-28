@@ -30,14 +30,17 @@ typedef void JsonClientSend(Pointer<Void> client, Pointer<Utf8> request);
 /// Receives incoming updates and request responses from the TDLib client.
 ///
 /// const char *td_json_client_receive(void *client, double timeout)
-typedef Pointer<Utf8> td_json_client_receive(Pointer<Void> client, Double timeout);
+typedef Pointer<Utf8> td_json_client_receive(
+    Pointer<Void> client, Double timeout);
 typedef Pointer<Utf8> JsonClientReceive(Pointer<Void> client, double timeout);
 
 /// Synchronously executes TDLib request.
 ///
 /// const char *td_json_client_execute(void *client, const char* request);
-typedef Pointer<Utf8> td_json_client_execute(Pointer<Void> client, Pointer<Utf8> request);
-typedef Pointer<Utf8> JsonClientExecute(Pointer<Void> client, Pointer<Utf8> request);
+typedef Pointer<Utf8> td_json_client_execute(
+    Pointer<Void> client, Pointer<Utf8> request);
+typedef Pointer<Utf8> JsonClientExecute(
+    Pointer<Void> client, Pointer<Utf8> request);
 
 /// Destroys the TDLib client instance.
 ///
@@ -64,20 +67,23 @@ class JsonClient {
   JsonClient.create(String dlDir) {
     // Get the path to the td_json_client dynamic library
     final dlPath = platformPath(dlDir);
-
     final dylib = DynamicLibrary.open(dlPath);
 
     // Get the td_json_client_create function from the dylib and create a client
-    _jsonClientCreate = dylib
-      .lookupFunction<td_json_client_create, JsonClientCreate>("td_json_client_create");
-    _jsonClientSend = dylib
-      .lookupFunction<td_json_client_send, JsonClientSend>("td_json_client_send");
-    _jsonClientReceive = dylib
-      .lookupFunction<td_json_client_receive, JsonClientReceive>("td_json_client_receive");
-    _jsonClientDestroy = dylib
-      .lookupFunction<td_json_client_destroy, JsonClientDestroy>("td_json_client_destroy");
-    _jsonClientExecute = dylib
-      .lookupFunction<td_json_client_execute, JsonClientExecute>("td_json_client_execute");
+    _jsonClientCreate =
+        dylib.lookupFunction<td_json_client_create, JsonClientCreate>(
+            "td_json_client_create");
+    _jsonClientSend = dylib.lookupFunction<td_json_client_send, JsonClientSend>(
+        "td_json_client_send");
+    _jsonClientReceive =
+        dylib.lookupFunction<td_json_client_receive, JsonClientReceive>(
+            "td_json_client_receive");
+    _jsonClientDestroy =
+        dylib.lookupFunction<td_json_client_destroy, JsonClientDestroy>(
+            "td_json_client_destroy");
+    _jsonClientExecute =
+        dylib.lookupFunction<td_json_client_execute, JsonClientExecute>(
+            "td_json_client_execute");
 
     _client = _jsonClientCreate();
     active = true;
@@ -101,9 +107,13 @@ class JsonClient {
   }
 
   /// Receive the API's response
-  Map<String, dynamic> receive([double timeout = 2.0]) {
+  Map<String, dynamic>? receive([double timeout = 2.0]) {
     _assertActive();
     final response = _jsonClientReceive(_client, timeout);
+
+    //if timeout is riched _jsonClientReceive return NullPointer
+    if (response == nullptr) return null;
+
     final resString = response.toDartString();
     return json.decode(resString);
   }
@@ -114,7 +124,8 @@ class JsonClient {
   /// [send] instead.
   Map<String, dynamic> execute(Map<String, dynamic> request) {
     _assertActive();
-    final result = _jsonClientExecute(_client, json.encode(request).toNativeUtf8());
+    final result =
+        _jsonClientExecute(_client, json.encode(request).toNativeUtf8());
 
     var resJson = result.toDartString();
     return json.decode(resJson);
