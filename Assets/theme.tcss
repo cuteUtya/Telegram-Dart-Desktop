@@ -1,0 +1,13 @@
+Accent: #40A7E3;
+BaseColor: #FFFFFF;
+
+HeaderFontFamily: Ubuntu;
+RegularFontFamily: Roboto;
+
+HeaderMain: #181818;
+HeaderSecondary: #464646;
+RegularText: #7F7F7F;
+
+#Introduction screen fields#
+CarouselIndicatorActive: ref(Accent);
+CarouselIndicatorInActive: #F0F0F0;

@@ -4,12 +4,12 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 class TextDisplay {
   static Widget H2(String text) {
     return H1(text,
-        size: 22,
+        size: 28,
         textColor:
             ClientTheme.currentTheme.getField("HeaderSecondary") as Color);
   }
 
-  static Widget H1(String text, {double size = 24, Color? textColor}) {
+  static Widget H1(String text, {double size = 36, Color? textColor}) {
     var fontFamily = ClientTheme.currentTheme.getField("HeaderFontFamily");
     textColor ??= ClientTheme.currentTheme.getField("HeaderMain") as Color;
     return Regular(text,
@@ -20,11 +20,12 @@ class TextDisplay {
   }
 
   static Widget Regular(String text,
-      {double size = 16,
+      {double size = 18,
       FontStyle fontStyle = FontStyle.normal,
       String? fontFamily,
       Color? textColor,
-      FontWeight fontWeight = FontWeight.normal}) {
+      FontWeight fontWeight = FontWeight.normal,
+      TextAlign textAlign = TextAlign.center}) {
     textColor ??= ClientTheme.currentTheme.getField("RegularText") as Color;
     fontFamily ??= ClientTheme.currentTheme.getField("RegularFontFamily");
     return Text(text,
@@ -35,6 +36,7 @@ class TextDisplay {
           fontStyle: fontStyle,
           fontFamily: fontFamily,
           decoration: TextDecoration.none,
-        ));
+        ),
+        textAlign: textAlign);
   }
 }

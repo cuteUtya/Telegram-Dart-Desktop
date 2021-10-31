@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,21 +14,9 @@ class LangFunction {
 }
 
 class ClientTheme {
-  static ClientTheme? defaultThemeCache;
-
-  static ClientTheme defaultTheme() {
-    if (defaultThemeCache != null) {
-      return defaultThemeCache ?? ClientTheme("NOT NULL, PROMISE");
-    }
-
-    var themeStr = "";
-    var theme = rootBundle.loadString("Assets/theme.tcss");
-    theme.then((value) => themeStr = value);
-    while (themeStr == "");
-    var th = ClientTheme(themeStr);
-    defaultThemeCache = th;
-    return th;
-  }
+  static ClientTheme currentTheme = ClientTheme("");
+  static final ClientTheme _defaultTheme =
+      ClientTheme(File("Assets/theme.tcss").readAsStringSync());
 
   static const String linesSeparator = ';';
   static const String valueSeparator = ':';
@@ -53,7 +43,6 @@ class ClientTheme {
       lines[val[0].replaceAll(" ", '')] = val[1].replaceAll(" ", "");
     });
   }
-
   String doFuntions(String value) {
     while (true) {
       bool findFunctions = false;
@@ -160,16 +149,14 @@ class ClientTheme {
     return results;
   }
 
-  String getField(String name) {
+  String _getFieldString(String name) {
     String value = "";
 
     environmentVariables.forEach((key, val) {
       value = getRawField("$name($key=" + val.call().toString() + ")");
     });
-
     if (value == "") value = getRawField(name);
-
-    if (value == "") return defaultTheme().getField(name);
+    if (value == "") return _defaultTheme._getFieldString(name);
 
     /*
     detect "infinity references"
@@ -214,7 +201,12 @@ class ClientTheme {
     value = replaceColorChannel(value);
     value = doFuntions(value);
 
-    doFuntions(value);
+    return value;
+  }
+
+  dynamic getField(String name) {
+    var value = _getFieldString(name);
+    if (isHEX(value)) return hexToColor(value);
     return value;
   }
 
@@ -320,7 +312,7 @@ class ClientTheme {
         var match = value.substring(element.start, element.end);
         var refName = match.substring(4, match.length - 1);
 
-        var refValue = getField(refName);
+        var refValue = _getFieldString(refName);
         value = value.replaceFirst(match, refValue);
       }
     }
