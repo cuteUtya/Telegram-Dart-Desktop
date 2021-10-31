@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
+import 'package:myapp/constants.dart';
 import 'package:myapp/math_extension.dart';
 
 class Introduction extends StatefulWidget {
@@ -20,7 +21,7 @@ class _IntroductionState extends State<Introduction> {
 
   static final List<_introductionScreenInfo> _screens = [
     _introductionScreenInfo(
-        "Smthgram",
+        appName,
         "An unofficial Telegram client. Written on Flutter and Dart. Have additional features and have nice look",
         "Assets/Introduction/Logo.json"),
     _introductionScreenInfo(
