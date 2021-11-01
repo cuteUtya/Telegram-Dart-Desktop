@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
 import 'package:myapp/constants.dart';
@@ -64,44 +66,64 @@ class _IntroductionState extends State<Introduction> {
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-        onKey: (kEvent) {
-          if (kEvent.isKeyPressed(LogicalKeyboardKey.arrowRight)) next();
-          if (kEvent.isKeyPressed(LogicalKeyboardKey.arrowLeft)) previus();
-        },
-        focusNode: FocusNode(debugLabel: "Button"),
-        child: GestureDetector(
-          onHorizontalDragStart: (draginfo) {
-            _dragStart = draginfo.globalPosition.dx;
+    return Stack(children: [
+      RawKeyboardListener(
+          onKey: (kEvent) {
+            if (kEvent.isKeyPressed(LogicalKeyboardKey.arrowRight)) next();
+            if (kEvent.isKeyPressed(LogicalKeyboardKey.arrowLeft)) previus();
           },
-          onHorizontalDragEnd: (_) {
-            if (_t > 0.5) next();
-            if (_t < -0.5) previus();
-            setT(0);
-          },
-          onTap: next,
-          child: Column(
-            children: [
-              _introductionScreen(screenInfo: _screens[current]),
-              Container(
-                child: DotIndicator(
-                  dotsCount: _screens.length,
-                  currentDot: current,
-                  t: _t,
-                  onDotClick: setCurrent,
+          focusNode: FocusNode(debugLabel: "Button"),
+          child: GestureDetector(
+            onHorizontalDragStart: (draginfo) {
+              _dragStart = draginfo.globalPosition.dx;
+            },
+            onHorizontalDragEnd: (_) {
+              if (_t > 0.5) next();
+              if (_t < -0.5) previus();
+              setT(0);
+            },
+            onTap: next,
+            child: Column(
+              children: [
+                _introductionScreen(screenInfo: _screens[current]),
+                Container(
+                  child: DotIndicator(
+                    dotsCount: _screens.length,
+                    currentDot: current,
+                    t: _t,
+                    onDotClick: setCurrent,
+                  ),
+                  margin: const EdgeInsets.only(top: 36),
                 ),
-                margin: const EdgeInsets.only(top: 36),
-              ),
-            ],
-            mainAxisAlignment: MainAxisAlignment.center,
-          ),
-          onHorizontalDragUpdate: (draginfo) {
-            setT(
-              (_dragStart - draginfo.globalPosition.dx) /
-                  (MediaQuery.of(context).size.width / 10),
-            );
-          },
-        ));
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
+            onHorizontalDragUpdate: (draginfo) {
+              setT(
+                (_dragStart - draginfo.globalPosition.dx) /
+                    (MediaQuery.of(context).size.width / 10),
+              );
+            },
+          )),
+      Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            DesktopButton(
+              text: "Continue in English",
+              width: 400,
+              color: ButtonColor.transparency,
+              textColor: ClientTheme.currentTheme.getField("Accent"),
+              pressColor: const Color(0x00),
+            ),
+            const SizedBox(height: 10),
+            const DesktopButton(text: "Начать общение", width: 250)
+          ],
+        ),
+        alignment: Alignment.bottomCenter,
+        margin: const EdgeInsets.only(bottom: 50),
+      )
+    ]);
   }
 }
 

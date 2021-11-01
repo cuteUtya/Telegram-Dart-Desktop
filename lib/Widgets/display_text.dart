@@ -9,12 +9,16 @@ class TextDisplay {
             ClientTheme.currentTheme.getField("HeaderSecondary") as Color);
   }
 
-  static Widget H1(String text, {double size = 36, Color? textColor}) {
-    var fontFamily = ClientTheme.currentTheme.getField("HeaderFontFamily");
+  static Widget H1(String text,
+      {double size = 36,
+      Color? textColor,
+      String? fontFamily,
+      FontWeight weight = FontWeight.bold}) {
+    fontFamily ??= ClientTheme.currentTheme.getField("HeaderFontFamily");
     textColor ??= ClientTheme.currentTheme.getField("HeaderMain") as Color;
     return Regular(text,
         size: size,
-        fontWeight: FontWeight.bold,
+        fontWeight: weight,
         fontFamily: fontFamily,
         textColor: textColor);
   }
