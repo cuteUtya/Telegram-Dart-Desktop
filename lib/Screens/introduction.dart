@@ -7,7 +7,7 @@ import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
 import 'package:myapp/constants.dart';
-import 'package:myapp/math_extension.dart';
+import 'package:myapp/utils.dart';
 
 class Introduction extends StatefulWidget {
   const Introduction({Key? key}) : super(key: key);

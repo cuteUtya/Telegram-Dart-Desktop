@@ -67,6 +67,7 @@ class JsonClient {
   JsonClient.create(String dlDir) {
     // Get the path to the td_json_client dynamic library
     final dlPath = platformPath(dlDir);
+
     final dylib = DynamicLibrary.open(dlPath);
 
     // Get the td_json_client_create function from the dylib and create a client
@@ -107,15 +108,14 @@ class JsonClient {
   }
 
   /// Receive the API's response
-  Map<String, dynamic>? receive([double timeout = 2.0]) {
+  String? receive([double timeout = 2.0]) {
     _assertActive();
     final response = _jsonClientReceive(_client, timeout);
 
     //if timeout is riched _jsonClientReceive return NullPointer
     if (response == nullptr) return null;
 
-    final resString = response.toDartString();
-    return json.decode(resString);
+    return response.toDartString();
   }
 
   /// Execute a TDLib function synchronously
@@ -137,4 +137,22 @@ class JsonClient {
     _jsonClientDestroy(_client);
     active = false;
   }
+
+  Stream<String> incomingString([double timeout = 2.0]) async* {
+    while (true) {
+      bool haveUpdates = true;
+      while (haveUpdates) {
+        var str = await receiveString(timeout);
+        if (str == null) {
+          haveUpdates = false;
+        } else {
+          yield str;
+        }
+      }
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+  }
+
+  Future<String?> receiveString([double timeout = 2.0]) async =>
+      receive(timeout);
 }

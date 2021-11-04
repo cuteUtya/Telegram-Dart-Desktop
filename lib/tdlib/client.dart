@@ -1,19 +1,17 @@
 import 'dart:async';
-
-import 'package:meta/meta.dart';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+import 'dart:isolate';
 
 import "src/td_json_client.dart" show JsonClient;
-import "src/api/base_classes.dart";
-import "src/api/objects.dart";
-import "src/api/utils.dart" show tryConvertToTdObject;
+import "src/tdapi/tdapi.dart";
 
 /// A controller that handles incoming requests asynchronously and exposes
 /// [Observable]s that stream data to their listeners.
-class TelegramClient with AsyncClient {
-  @override
-  final JsonClient _client;
-
+class TelegramClient {
   final BehaviorSubject<Update> _updates = BehaviorSubject();
 
   /// All [Update] objects received by the client are put into a
@@ -27,71 +25,55 @@ class TelegramClient with AsyncClient {
   /// the new authorization state.
   Stream<AuthorizationState> get authorizationState => updates
       .where((u) => u is UpdateAuthorizationState)
-      .map((a) => (a as UpdateAuthorizationState).authorizationState);
+      .map((a) => (a as UpdateAuthorizationState).authorizationState!);
 
   late TdlibParameters tdlibParams;
 
-  TelegramClient(String dlDir) : _client = JsonClient.create(dlDir);
-
-  /// Generates a [Stream] of incoming [TdObject]s that the client receives.
-  /// Objects of the appropriate type are added to their respective
-  /// [BehaviorSubject]s (for example, [Update]s are added to [_updates]).
-  Stream<TdObject> incoming() async* {
-    while (true) {
-      var obj = await receive();
-
-      if (obj is Update) {
-        _updates.add(obj);
+  Future<void> init() async {
+    Completer completer = Completer<void>();
+    _receivePort = await initIsolate();
+    //not null, promise
+    _receivePort!.listen((message) {
+      if (message is String) {
+        var tdobject = convertToObject(message);
+        if (tdobject is Update) {
+          _updates.add(tdobject);
+        } else {
+          _requestsQueue[0](tdobject);
+          _requestsQueue.removeAt(0);
+        }
+      } else if (message is SendPort) {
+        _sendPort = message;
+        completer.complete();
       }
-      //just ignore null's
-      if (obj != null) {
-        yield obj;
-      }
-    }
+    });
+    return completer.future;
+  }
+
+  ReceivePort? _receivePort;
+  SendPort? _sendPort;
+  final List<Function(TdObject)> _requestsQueue = [];
+
+  Future<ReceivePort> initIsolate() async {
+    Completer completer = Completer<SendPort>();
+    ReceivePort isolateToMainStream = ReceivePort();
+    Isolate myIsolateInstance =
+        await Isolate.spawn(_start, isolateToMainStream.sendPort);
+    return isolateToMainStream;
   }
 
   /// Asynchronously performs any necessary cleanup before [destroy]ing this
   /// client.
   Future<void> close() async {
-    await _updates.close();
-    await destroy();
+    //TODO implement close
   }
 
-  @Deprecated('Use [defineTdlibParams] instead')
-  void setTdLibParams({
-    required int apiId,
-    required String apiHash,
-    bool useMessageDatabase = true,
-    String databaseDirectory = 'tdb',
-    String systemLanguageCode = 'en-US',
-    required String deviceModel,
-    required String systemVersion,
-    String applicationVersion = '0.0.1',
-    bool enableStorageOptimizer = true,
-    bool useSecretChats = true,
-    bool useTestDc = false,
-    String filesDirectory = "/tgFiles/",
-    bool ignoreFileNames = true,
-    bool useChatInfoDatabase = true,
-    bool useFileDatabase = true,
-  }) {
-    tdlibParams = TdlibParameters(
-      apiId: apiId,
-      apiHash: apiHash,
-      useMessageDatabase: useMessageDatabase,
-      databaseDirectory: databaseDirectory,
-      systemLanguageCode: systemLanguageCode,
-      deviceModel: deviceModel,
-      systemVersion: systemVersion,
-      applicationVersion: applicationVersion,
-      enableStorageOptimizer: enableStorageOptimizer,
-      useSecretChats: useSecretChats,
-      useTestDc: useTestDc,
-      filesDirectory: filesDirectory,
-      ignoreFileNames: ignoreFileNames,
-      useChatInfoDatabase: useChatInfoDatabase,
-      useFileDatabase: useFileDatabase,
-    );
+  Future<TdObject> send(TdFunction function) async {
+    if (_sendPort == null) throw Exception("firstly init client using init()");
+    _sendPort!.send(json.encode(function));
+    final Completer<TdObject> _completer = Completer<TdObject>();
+    _requestsQueue.add(_completer.complete);
+    return _completer.future;
   }
 
   /// Defines this client's [tdlibParams] by taking keyword-arguments (some of
@@ -133,38 +115,24 @@ class TelegramClient with AsyncClient {
   }
 }
 
-/// Wraps the [JsonClient] and executes its methods asynchronously. A few names
-/// are different for convenience of use.
-///
-/// This mixin isn't strictly necessary--it could just go right in the
-/// [TelegramClient]--but I wanted to separate the logic for fetching and
-/// sending data from/to the Telegram API and the procedures that delegate that
-/// data, just for code organization purposes.
-class AsyncClient {
-  late JsonClient _client;
+void _start(SendPort isolateToMainStream) {
+  //create a new port and send it to the main
+  ReceivePort mainToIsolateStream = ReceivePort();
+  isolateToMainStream.send(mainToIsolateStream.sendPort);
 
-  //what?
-  //factory AsyncClient._() => null;
+  //listen Stream
+  var client = JsonClient.create("Assets/bin/tdlib");
+  //About this timeouts: Dart, as a language, has a problem - it is single-threaded,
+  //and td_json_client_receive blocks the thread for the timeout period, so I run tdlib in isolate.
+  //But these are not all problems, while td_json_client_receive is running I cannot listen for messages from SendPort.
+  //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 100ms.
+  //
+  //Who will solve this problem - cool dude.
+  client.incomingString(0.1).listen((update) {
+    isolateToMainStream.send(update);
+  });
 
-  /// Receives a request from TD and parses it as a [TdObject]
-  Future<TdObject?> receive([double timeout = 2.0]) async =>
-      Future<TdObject?>(() {
-        var receiveValue = tryConvertToTdObject(_client.receive(timeout));
-        return receiveValue == null ? null : receiveValue as TdObject;
-      });
-
-  /// Sends an asynchronous request to TD
-  Future<void> send(TdFunction request) async =>
-      _client.send(request.serialize());
-
-  /// Executes a synchronous request
-  Map<String, dynamic> executeSync(TdFunction request) =>
-      _client.execute(request.serialize());
-
-  /// Executes a synchronous request asynchronously o_O
-  Future<Map<String, dynamic>> execute(TdFunction request) async =>
-      _client.execute(request.serialize());
-
-  /// Closes the client, destroying the encapsulated [JsonClient]
-  Future<void> destroy() async => _client.destroy();
+  mainToIsolateStream.listen((data) {
+    if (data is String) client.send(json.decode(data));
+  });
 }

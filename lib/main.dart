@@ -1,11 +1,19 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:myapp/Screens/introduction.dart';
-import 'main.reflectable.dart';
+import 'package:flutter/material.dart';
+import 'package:myapp/tdlib/client.dart';
+
+import 'package:myapp/tdlib/td_api.dart';
 
 void main() async {
-  initializeReflectable();
   runApp(const MaterialApp(home: App()));
+  var client = TelegramClient();
+  await client.init();
+  client.updates.listen((event) {
+    print(event.runtimeType);
+  });
+
+  client.send(SetLogVerbosityLevel(newVerbosityLevel: 0));
 }
 
 class App extends StatelessWidget {

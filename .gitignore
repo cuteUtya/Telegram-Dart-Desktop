@@ -22,3 +22,4 @@ doc/api/
 
 # Avoid logs, what flutter generate 
 *.log
+lib/constants.dart
