@@ -8,10 +8,12 @@ import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
 import 'package:myapp/constants.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/tdlib/client.dart';
 
 class Introduction extends StatefulWidget {
-  const Introduction({Key? key}) : super(key: key);
+  const Introduction({required this.client, Key? key}) : super(key: key);
 
+  final TelegramClient client;
   @override
   State<Introduction> createState() => _IntroductionState();
 }
@@ -93,7 +95,7 @@ class _IntroductionState extends State<Introduction> {
                     t: _t,
                     onDotClick: setCurrent,
                   ),
-                  margin: const EdgeInsets.only(top: 36),
+                  margin: const EdgeInsets.only(top: 15),
                 ),
               ],
               mainAxisAlignment: MainAxisAlignment.center,
@@ -121,7 +123,7 @@ class _IntroductionState extends State<Introduction> {
           ],
         ),
         alignment: Alignment.bottomCenter,
-        margin: const EdgeInsets.only(bottom: 50),
+        margin: const EdgeInsets.only(bottom: 20),
       )
     ]);
   }
@@ -145,7 +147,7 @@ class _introductionScreen extends StatelessWidget {
       Container(
           child: TextDisplay.Regular(screenInfo.text),
           width: 500,
-          height: 80,
+          height: 75,
           margin: const EdgeInsets.only(top: 12))
     ]);
   }
