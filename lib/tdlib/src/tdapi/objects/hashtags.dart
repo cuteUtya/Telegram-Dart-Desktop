@@ -13,7 +13,11 @@ class Hashtags extends TdObject {
 
   /// Parse from a json
   Hashtags.fromJson(Map<String, dynamic> json)  {
-    hashtags = List<String>.from((json['hashtags'] ?? [])!.map((item) => item).toList());
+    List<String>? pre_hashtags;
+    try{
+      pre_hashtags=List<String>.from((json['hashtags'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    hashtags = pre_hashtags;
     extra = json['@extra'];
   }
 

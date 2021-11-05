@@ -10,7 +10,11 @@ class PassportRequiredElement extends TdObject {
 
   /// Parse from a json
   PassportRequiredElement.fromJson(Map<String, dynamic> json)  {
-    suitableElements = List<PassportSuitableElement>.from((json['suitable_elements'] ?? [])!.map((item) => PassportSuitableElement.fromJson(item ?? <String, dynamic>{})).toList());
+    List<PassportSuitableElement>? pre_suitableElements;
+    try{
+      pre_suitableElements=List<PassportSuitableElement>.from((json['suitable_elements'] ?? [])!.map((item) => PassportSuitableElement.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    suitableElements = pre_suitableElements;
   }
 
   @override

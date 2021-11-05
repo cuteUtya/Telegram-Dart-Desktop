@@ -18,9 +18,21 @@ class ChatTheme extends TdObject {
 
   /// Parse from a json
   ChatTheme.fromJson(Map<String, dynamic> json)  {
-    name = json['name'];
-    lightSettings = ThemeSettings.fromJson(json['light_settings'] ?? <String, dynamic>{});
-    darkSettings = ThemeSettings.fromJson(json['dark_settings'] ?? <String, dynamic>{});
+    String? pre_name;
+    try{
+      pre_name=json['name'];
+   }catch(_){}
+    name = pre_name;
+    ThemeSettings? pre_lightSettings;
+    try{
+      pre_lightSettings=ThemeSettings.fromJson(json['light_settings'] ?? <String, dynamic>{});
+   }catch(_){}
+    lightSettings = pre_lightSettings;
+    ThemeSettings? pre_darkSettings;
+    try{
+      pre_darkSettings=ThemeSettings.fromJson(json['dark_settings'] ?? <String, dynamic>{});
+   }catch(_){}
+    darkSettings = pre_darkSettings;
   }
 
   @override

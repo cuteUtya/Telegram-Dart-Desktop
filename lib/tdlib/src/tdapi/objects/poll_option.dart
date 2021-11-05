@@ -26,11 +26,31 @@ class PollOption extends TdObject {
 
   /// Parse from a json
   PollOption.fromJson(Map<String, dynamic> json)  {
-    text = json['text'];
-    voterCount = json['voter_count'];
-    votePercentage = json['vote_percentage'];
-    isChosen = json['is_chosen'];
-    isBeingChosen = json['is_being_chosen'];
+    String? pre_text;
+    try{
+      pre_text=json['text'];
+   }catch(_){}
+    text = pre_text;
+    int? pre_voterCount;
+    try{
+      pre_voterCount=json['voter_count'];
+   }catch(_){}
+    voterCount = pre_voterCount;
+    int? pre_votePercentage;
+    try{
+      pre_votePercentage=json['vote_percentage'];
+   }catch(_){}
+    votePercentage = pre_votePercentage;
+    bool? pre_isChosen;
+    try{
+      pre_isChosen=json['is_chosen'];
+   }catch(_){}
+    isChosen = pre_isChosen;
+    bool? pre_isBeingChosen;
+    try{
+      pre_isBeingChosen=json['is_being_chosen'];
+   }catch(_){}
+    isBeingChosen = pre_isBeingChosen;
   }
 
   @override

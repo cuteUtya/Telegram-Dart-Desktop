@@ -13,7 +13,11 @@ class TestBytes extends TdObject {
 
   /// Parse from a json
   TestBytes.fromJson(Map<String, dynamic> json)  {
-    value = json['value'];
+    String? pre_value;
+    try{
+      pre_value=json['value'];
+   }catch(_){}
+    value = pre_value;
     extra = json['@extra'];
   }
 

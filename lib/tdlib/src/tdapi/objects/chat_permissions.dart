@@ -38,14 +38,46 @@ class ChatPermissions extends TdObject {
 
   /// Parse from a json
   ChatPermissions.fromJson(Map<String, dynamic> json)  {
-    canSendMessages = json['can_send_messages'];
-    canSendMediaMessages = json['can_send_media_messages'];
-    canSendPolls = json['can_send_polls'];
-    canSendOtherMessages = json['can_send_other_messages'];
-    canAddWebPagePreviews = json['can_add_web_page_previews'];
-    canChangeInfo = json['can_change_info'];
-    canInviteUsers = json['can_invite_users'];
-    canPinMessages = json['can_pin_messages'];
+    bool? pre_canSendMessages;
+    try{
+      pre_canSendMessages=json['can_send_messages'];
+   }catch(_){}
+    canSendMessages = pre_canSendMessages;
+    bool? pre_canSendMediaMessages;
+    try{
+      pre_canSendMediaMessages=json['can_send_media_messages'];
+   }catch(_){}
+    canSendMediaMessages = pre_canSendMediaMessages;
+    bool? pre_canSendPolls;
+    try{
+      pre_canSendPolls=json['can_send_polls'];
+   }catch(_){}
+    canSendPolls = pre_canSendPolls;
+    bool? pre_canSendOtherMessages;
+    try{
+      pre_canSendOtherMessages=json['can_send_other_messages'];
+   }catch(_){}
+    canSendOtherMessages = pre_canSendOtherMessages;
+    bool? pre_canAddWebPagePreviews;
+    try{
+      pre_canAddWebPagePreviews=json['can_add_web_page_previews'];
+   }catch(_){}
+    canAddWebPagePreviews = pre_canAddWebPagePreviews;
+    bool? pre_canChangeInfo;
+    try{
+      pre_canChangeInfo=json['can_change_info'];
+   }catch(_){}
+    canChangeInfo = pre_canChangeInfo;
+    bool? pre_canInviteUsers;
+    try{
+      pre_canInviteUsers=json['can_invite_users'];
+   }catch(_){}
+    canInviteUsers = pre_canInviteUsers;
+    bool? pre_canPinMessages;
+    try{
+      pre_canPinMessages=json['can_pin_messages'];
+   }catch(_){}
+    canPinMessages = pre_canPinMessages;
   }
 
   @override

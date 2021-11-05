@@ -13,7 +13,11 @@ class LanguagePackStrings extends TdObject {
 
   /// Parse from a json
   LanguagePackStrings.fromJson(Map<String, dynamic> json)  {
-    strings = List<LanguagePackString>.from((json['strings'] ?? [])!.map((item) => LanguagePackString.fromJson(item ?? <String, dynamic>{})).toList());
+    List<LanguagePackString>? pre_strings;
+    try{
+      pre_strings=List<LanguagePackString>.from((json['strings'] ?? [])!.map((item) => LanguagePackString.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    strings = pre_strings;
     extra = json['@extra'];
   }
 

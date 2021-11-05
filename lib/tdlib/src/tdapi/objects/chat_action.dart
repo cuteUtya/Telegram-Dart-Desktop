@@ -128,7 +128,11 @@ class ChatActionUploadingVideo extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingVideo.fromJson(Map<String, dynamic> json)  {
-    progress = json['progress'];
+    int? pre_progress;
+    try{
+      pre_progress=json['progress'];
+   }catch(_){}
+    progress = pre_progress;
   }
 
   @override
@@ -178,7 +182,11 @@ class ChatActionUploadingVoiceNote extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingVoiceNote.fromJson(Map<String, dynamic> json)  {
-    progress = json['progress'];
+    int? pre_progress;
+    try{
+      pre_progress=json['progress'];
+   }catch(_){}
+    progress = pre_progress;
   }
 
   @override
@@ -205,7 +213,11 @@ class ChatActionUploadingPhoto extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingPhoto.fromJson(Map<String, dynamic> json)  {
-    progress = json['progress'];
+    int? pre_progress;
+    try{
+      pre_progress=json['progress'];
+   }catch(_){}
+    progress = pre_progress;
   }
 
   @override
@@ -232,7 +244,11 @@ class ChatActionUploadingDocument extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingDocument.fromJson(Map<String, dynamic> json)  {
-    progress = json['progress'];
+    int? pre_progress;
+    try{
+      pre_progress=json['progress'];
+   }catch(_){}
+    progress = pre_progress;
   }
 
   @override
@@ -374,7 +390,11 @@ class ChatActionUploadingVideoNote extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingVideoNote.fromJson(Map<String, dynamic> json)  {
-    progress = json['progress'];
+    int? pre_progress;
+    try{
+      pre_progress=json['progress'];
+   }catch(_){}
+    progress = pre_progress;
   }
 
   @override
@@ -401,7 +421,11 @@ class ChatActionWatchingAnimations extends ChatAction {
 
   /// Parse from a json
   ChatActionWatchingAnimations.fromJson(Map<String, dynamic> json)  {
-    emoji = json['emoji'];
+    String? pre_emoji;
+    try{
+      pre_emoji=json['emoji'];
+   }catch(_){}
+    emoji = pre_emoji;
   }
 
   @override

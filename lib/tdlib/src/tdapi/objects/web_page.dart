@@ -93,27 +93,111 @@ class WebPage extends TdObject {
 
   /// Parse from a json
   WebPage.fromJson(Map<String, dynamic> json)  {
-    url = json['url'];
-    displayUrl = json['display_url'];
-    type = json['type'];
-    siteName = json['site_name'];
-    title = json['title'];
-    description = FormattedText.fromJson(json['description'] ?? <String, dynamic>{});
-    photo = Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-    embedUrl = json['embed_url'];
-    embedType = json['embed_type'];
-    embedWidth = json['embed_width'];
-    embedHeight = json['embed_height'];
-    duration = json['duration'];
-    author = json['author'];
-    animation = Animation.fromJson(json['animation'] ?? <String, dynamic>{});
-    audio = Audio.fromJson(json['audio'] ?? <String, dynamic>{});
-    document = Document.fromJson(json['document'] ?? <String, dynamic>{});
-    sticker = Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
-    video = Video.fromJson(json['video'] ?? <String, dynamic>{});
-    videoNote = VideoNote.fromJson(json['video_note'] ?? <String, dynamic>{});
-    voiceNote = VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
-    instantViewVersion = json['instant_view_version'];
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
+    String? pre_displayUrl;
+    try{
+      pre_displayUrl=json['display_url'];
+   }catch(_){}
+    displayUrl = pre_displayUrl;
+    String? pre_type;
+    try{
+      pre_type=json['type'];
+   }catch(_){}
+    type = pre_type;
+    String? pre_siteName;
+    try{
+      pre_siteName=json['site_name'];
+   }catch(_){}
+    siteName = pre_siteName;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    FormattedText? pre_description;
+    try{
+      pre_description=FormattedText.fromJson(json['description'] ?? <String, dynamic>{});
+   }catch(_){}
+    description = pre_description;
+    Photo? pre_photo;
+    try{
+      pre_photo=Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    String? pre_embedUrl;
+    try{
+      pre_embedUrl=json['embed_url'];
+   }catch(_){}
+    embedUrl = pre_embedUrl;
+    String? pre_embedType;
+    try{
+      pre_embedType=json['embed_type'];
+   }catch(_){}
+    embedType = pre_embedType;
+    int? pre_embedWidth;
+    try{
+      pre_embedWidth=json['embed_width'];
+   }catch(_){}
+    embedWidth = pre_embedWidth;
+    int? pre_embedHeight;
+    try{
+      pre_embedHeight=json['embed_height'];
+   }catch(_){}
+    embedHeight = pre_embedHeight;
+    int? pre_duration;
+    try{
+      pre_duration=json['duration'];
+   }catch(_){}
+    duration = pre_duration;
+    String? pre_author;
+    try{
+      pre_author=json['author'];
+   }catch(_){}
+    author = pre_author;
+    Animation? pre_animation;
+    try{
+      pre_animation=Animation.fromJson(json['animation'] ?? <String, dynamic>{});
+   }catch(_){}
+    animation = pre_animation;
+    Audio? pre_audio;
+    try{
+      pre_audio=Audio.fromJson(json['audio'] ?? <String, dynamic>{});
+   }catch(_){}
+    audio = pre_audio;
+    Document? pre_document;
+    try{
+      pre_document=Document.fromJson(json['document'] ?? <String, dynamic>{});
+   }catch(_){}
+    document = pre_document;
+    Sticker? pre_sticker;
+    try{
+      pre_sticker=Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
+   }catch(_){}
+    sticker = pre_sticker;
+    Video? pre_video;
+    try{
+      pre_video=Video.fromJson(json['video'] ?? <String, dynamic>{});
+   }catch(_){}
+    video = pre_video;
+    VideoNote? pre_videoNote;
+    try{
+      pre_videoNote=VideoNote.fromJson(json['video_note'] ?? <String, dynamic>{});
+   }catch(_){}
+    videoNote = pre_videoNote;
+    VoiceNote? pre_voiceNote;
+    try{
+      pre_voiceNote=VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
+   }catch(_){}
+    voiceNote = pre_voiceNote;
+    int? pre_instantViewVersion;
+    try{
+      pre_instantViewVersion=json['instant_view_version'];
+   }catch(_){}
+    instantViewVersion = pre_instantViewVersion;
     extra = json['@extra'];
   }
 

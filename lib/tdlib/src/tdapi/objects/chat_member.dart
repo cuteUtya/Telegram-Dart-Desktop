@@ -25,10 +25,26 @@ class ChatMember extends TdObject {
 
   /// Parse from a json
   ChatMember.fromJson(Map<String, dynamic> json)  {
-    memberId = MessageSender.fromJson(json['member_id'] ?? <String, dynamic>{});
-    inviterUserId = json['inviter_user_id'];
-    joinedChatDate = json['joined_chat_date'];
-    status = ChatMemberStatus.fromJson(json['status'] ?? <String, dynamic>{});
+    MessageSender? pre_memberId;
+    try{
+      pre_memberId=MessageSender.fromJson(json['member_id'] ?? <String, dynamic>{});
+   }catch(_){}
+    memberId = pre_memberId;
+    int? pre_inviterUserId;
+    try{
+      pre_inviterUserId=json['inviter_user_id'];
+   }catch(_){}
+    inviterUserId = pre_inviterUserId;
+    int? pre_joinedChatDate;
+    try{
+      pre_joinedChatDate=json['joined_chat_date'];
+   }catch(_){}
+    joinedChatDate = pre_joinedChatDate;
+    ChatMemberStatus? pre_status;
+    try{
+      pre_status=ChatMemberStatus.fromJson(json['status'] ?? <String, dynamic>{});
+   }catch(_){}
+    status = pre_status;
     extra = json['@extra'];
   }
 

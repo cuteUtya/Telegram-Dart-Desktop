@@ -29,11 +29,31 @@ class BasicGroup extends TdObject {
 
   /// Parse from a json
   BasicGroup.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    memberCount = json['member_count'];
-    status = ChatMemberStatus.fromJson(json['status'] ?? <String, dynamic>{});
-    isActive = json['is_active'];
-    upgradedToSupergroupId = json['upgraded_to_supergroup_id'];
+    int? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    int? pre_memberCount;
+    try{
+      pre_memberCount=json['member_count'];
+   }catch(_){}
+    memberCount = pre_memberCount;
+    ChatMemberStatus? pre_status;
+    try{
+      pre_status=ChatMemberStatus.fromJson(json['status'] ?? <String, dynamic>{});
+   }catch(_){}
+    status = pre_status;
+    bool? pre_isActive;
+    try{
+      pre_isActive=json['is_active'];
+   }catch(_){}
+    isActive = pre_isActive;
+    int? pre_upgradedToSupergroupId;
+    try{
+      pre_upgradedToSupergroupId=json['upgraded_to_supergroup_id'];
+   }catch(_){}
+    upgradedToSupergroupId = pre_upgradedToSupergroupId;
     extra = json['@extra'];
   }
 

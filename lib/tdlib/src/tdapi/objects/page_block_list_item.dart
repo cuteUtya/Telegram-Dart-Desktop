@@ -14,8 +14,16 @@ class PageBlockListItem extends TdObject {
 
   /// Parse from a json
   PageBlockListItem.fromJson(Map<String, dynamic> json)  {
-    label = json['label'];
-    pageBlocks = List<PageBlock>.from((json['page_blocks'] ?? [])!.map((item) => PageBlock.fromJson(item ?? <String, dynamic>{})).toList());
+    String? pre_label;
+    try{
+      pre_label=json['label'];
+   }catch(_){}
+    label = pre_label;
+    List<PageBlock>? pre_pageBlocks;
+    try{
+      pre_pageBlocks=List<PageBlock>.from((json['page_blocks'] ?? [])!.map((item) => PageBlock.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    pageBlocks = pre_pageBlocks;
   }
 
   @override

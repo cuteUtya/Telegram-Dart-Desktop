@@ -13,7 +13,11 @@ class Countries extends TdObject {
 
   /// Parse from a json
   Countries.fromJson(Map<String, dynamic> json)  {
-    countries = List<CountryInfo>.from((json['countries'] ?? [])!.map((item) => CountryInfo.fromJson(item ?? <String, dynamic>{})).toList());
+    List<CountryInfo>? pre_countries;
+    try{
+      pre_countries=List<CountryInfo>.from((json['countries'] ?? [])!.map((item) => CountryInfo.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    countries = pre_countries;
     extra = json['@extra'];
   }
 

@@ -93,27 +93,111 @@ class SupergroupFullInfo extends TdObject {
 
   /// Parse from a json
   SupergroupFullInfo.fromJson(Map<String, dynamic> json)  {
-    photo = ChatPhoto.fromJson(json['photo'] ?? <String, dynamic>{});
-    description = json['description'];
-    memberCount = json['member_count'];
-    administratorCount = json['administrator_count'];
-    restrictedCount = json['restricted_count'];
-    bannedCount = json['banned_count'];
-    linkedChatId = json['linked_chat_id'];
-    slowModeDelay = json['slow_mode_delay'];
-    slowModeDelayExpiresIn = json['slow_mode_delay_expires_in'];
-    canGetMembers = json['can_get_members'];
-    canSetUsername = json['can_set_username'];
-    canSetStickerSet = json['can_set_sticker_set'];
-    canSetLocation = json['can_set_location'];
-    canGetStatistics = json['can_get_statistics'];
-    isAllHistoryAvailable = json['is_all_history_available'];
-    stickerSetId = int.tryParse(json['sticker_set_id'] ?? "");
-    location = ChatLocation.fromJson(json['location'] ?? <String, dynamic>{});
-    inviteLink = ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
-    botCommands = List<BotCommands>.from((json['bot_commands'] ?? [])!.map((item) => BotCommands.fromJson(item ?? <String, dynamic>{})).toList());
-    upgradedFromBasicGroupId = json['upgraded_from_basic_group_id'];
-    upgradedFromMaxMessageId = json['upgraded_from_max_message_id'];
+    ChatPhoto? pre_photo;
+    try{
+      pre_photo=ChatPhoto.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
+    int? pre_memberCount;
+    try{
+      pre_memberCount=json['member_count'];
+   }catch(_){}
+    memberCount = pre_memberCount;
+    int? pre_administratorCount;
+    try{
+      pre_administratorCount=json['administrator_count'];
+   }catch(_){}
+    administratorCount = pre_administratorCount;
+    int? pre_restrictedCount;
+    try{
+      pre_restrictedCount=json['restricted_count'];
+   }catch(_){}
+    restrictedCount = pre_restrictedCount;
+    int? pre_bannedCount;
+    try{
+      pre_bannedCount=json['banned_count'];
+   }catch(_){}
+    bannedCount = pre_bannedCount;
+    int? pre_linkedChatId;
+    try{
+      pre_linkedChatId=json['linked_chat_id'];
+   }catch(_){}
+    linkedChatId = pre_linkedChatId;
+    int? pre_slowModeDelay;
+    try{
+      pre_slowModeDelay=json['slow_mode_delay'];
+   }catch(_){}
+    slowModeDelay = pre_slowModeDelay;
+    double? pre_slowModeDelayExpiresIn;
+    try{
+      pre_slowModeDelayExpiresIn=json['slow_mode_delay_expires_in'];
+   }catch(_){}
+    slowModeDelayExpiresIn = pre_slowModeDelayExpiresIn;
+    bool? pre_canGetMembers;
+    try{
+      pre_canGetMembers=json['can_get_members'];
+   }catch(_){}
+    canGetMembers = pre_canGetMembers;
+    bool? pre_canSetUsername;
+    try{
+      pre_canSetUsername=json['can_set_username'];
+   }catch(_){}
+    canSetUsername = pre_canSetUsername;
+    bool? pre_canSetStickerSet;
+    try{
+      pre_canSetStickerSet=json['can_set_sticker_set'];
+   }catch(_){}
+    canSetStickerSet = pre_canSetStickerSet;
+    bool? pre_canSetLocation;
+    try{
+      pre_canSetLocation=json['can_set_location'];
+   }catch(_){}
+    canSetLocation = pre_canSetLocation;
+    bool? pre_canGetStatistics;
+    try{
+      pre_canGetStatistics=json['can_get_statistics'];
+   }catch(_){}
+    canGetStatistics = pre_canGetStatistics;
+    bool? pre_isAllHistoryAvailable;
+    try{
+      pre_isAllHistoryAvailable=json['is_all_history_available'];
+   }catch(_){}
+    isAllHistoryAvailable = pre_isAllHistoryAvailable;
+    int? pre_stickerSetId;
+    try{
+      pre_stickerSetId=int.tryParse(json['sticker_set_id'] ?? "");
+   }catch(_){}
+    stickerSetId = pre_stickerSetId;
+    ChatLocation? pre_location;
+    try{
+      pre_location=ChatLocation.fromJson(json['location'] ?? <String, dynamic>{});
+   }catch(_){}
+    location = pre_location;
+    ChatInviteLink? pre_inviteLink;
+    try{
+      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
+   }catch(_){}
+    inviteLink = pre_inviteLink;
+    List<BotCommands>? pre_botCommands;
+    try{
+      pre_botCommands=List<BotCommands>.from((json['bot_commands'] ?? [])!.map((item) => BotCommands.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    botCommands = pre_botCommands;
+    int? pre_upgradedFromBasicGroupId;
+    try{
+      pre_upgradedFromBasicGroupId=json['upgraded_from_basic_group_id'];
+   }catch(_){}
+    upgradedFromBasicGroupId = pre_upgradedFromBasicGroupId;
+    int? pre_upgradedFromMaxMessageId;
+    try{
+      pre_upgradedFromMaxMessageId=json['upgraded_from_max_message_id'];
+   }catch(_){}
+    upgradedFromMaxMessageId = pre_upgradedFromMaxMessageId;
     extra = json['@extra'];
   }
 

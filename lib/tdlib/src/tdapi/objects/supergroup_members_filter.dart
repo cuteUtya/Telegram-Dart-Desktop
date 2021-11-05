@@ -84,7 +84,11 @@ class SupergroupMembersFilterContacts extends SupergroupMembersFilter {
 
   /// Parse from a json
   SupergroupMembersFilterContacts.fromJson(Map<String, dynamic> json)  {
-    query = json['query'];
+    String? pre_query;
+    try{
+      pre_query=json['query'];
+   }catch(_){}
+    query = pre_query;
   }
 
   @override
@@ -134,7 +138,11 @@ class SupergroupMembersFilterSearch extends SupergroupMembersFilter {
 
   /// Parse from a json
   SupergroupMembersFilterSearch.fromJson(Map<String, dynamic> json)  {
-    query = json['query'];
+    String? pre_query;
+    try{
+      pre_query=json['query'];
+   }catch(_){}
+    query = pre_query;
   }
 
   @override
@@ -161,7 +169,11 @@ class SupergroupMembersFilterRestricted extends SupergroupMembersFilter {
 
   /// Parse from a json
   SupergroupMembersFilterRestricted.fromJson(Map<String, dynamic> json)  {
-    query = json['query'];
+    String? pre_query;
+    try{
+      pre_query=json['query'];
+   }catch(_){}
+    query = pre_query;
   }
 
   @override
@@ -188,7 +200,11 @@ class SupergroupMembersFilterBanned extends SupergroupMembersFilter {
 
   /// Parse from a json
   SupergroupMembersFilterBanned.fromJson(Map<String, dynamic> json)  {
-    query = json['query'];
+    String? pre_query;
+    try{
+      pre_query=json['query'];
+   }catch(_){}
+    query = pre_query;
   }
 
   @override
@@ -219,8 +235,16 @@ class SupergroupMembersFilterMention extends SupergroupMembersFilter {
 
   /// Parse from a json
   SupergroupMembersFilterMention.fromJson(Map<String, dynamic> json)  {
-    query = json['query'];
-    messageThreadId = json['message_thread_id'];
+    String? pre_query;
+    try{
+      pre_query=json['query'];
+   }catch(_){}
+    query = pre_query;
+    int? pre_messageThreadId;
+    try{
+      pre_messageThreadId=json['message_thread_id'];
+   }catch(_){}
+    messageThreadId = pre_messageThreadId;
   }
 
   @override

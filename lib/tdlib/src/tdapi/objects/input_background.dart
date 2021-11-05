@@ -43,7 +43,11 @@ class InputBackgroundLocal extends InputBackground {
 
   /// Parse from a json
   InputBackgroundLocal.fromJson(Map<String, dynamic> json)  {
-    background = InputFile.fromJson(json['background'] ?? <String, dynamic>{});
+    InputFile? pre_background;
+    try{
+      pre_background=InputFile.fromJson(json['background'] ?? <String, dynamic>{});
+   }catch(_){}
+    background = pre_background;
   }
 
   @override
@@ -70,7 +74,11 @@ class InputBackgroundRemote extends InputBackground {
 
   /// Parse from a json
   InputBackgroundRemote.fromJson(Map<String, dynamic> json)  {
-    backgroundId = int.tryParse(json['background_id'] ?? "");
+    int? pre_backgroundId;
+    try{
+      pre_backgroundId=int.tryParse(json['background_id'] ?? "");
+   }catch(_){}
+    backgroundId = pre_backgroundId;
   }
 
   @override

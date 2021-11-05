@@ -127,7 +127,11 @@ class ChatMembersFilterMention extends ChatMembersFilter {
 
   /// Parse from a json
   ChatMembersFilterMention.fromJson(Map<String, dynamic> json)  {
-    messageThreadId = json['message_thread_id'];
+    int? pre_messageThreadId;
+    try{
+      pre_messageThreadId=json['message_thread_id'];
+   }catch(_){}
+    messageThreadId = pre_messageThreadId;
   }
 
   @override

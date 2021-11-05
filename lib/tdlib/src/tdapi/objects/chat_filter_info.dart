@@ -21,9 +21,21 @@ class ChatFilterInfo extends TdObject {
 
   /// Parse from a json
   ChatFilterInfo.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    title = json['title'];
-    iconName = json['icon_name'];
+    int? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_iconName;
+    try{
+      pre_iconName=json['icon_name'];
+   }catch(_){}
+    iconName = pre_iconName;
     extra = json['@extra'];
   }
 

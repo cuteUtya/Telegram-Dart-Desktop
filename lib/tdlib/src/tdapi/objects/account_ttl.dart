@@ -13,7 +13,11 @@ class AccountTtl extends TdObject {
 
   /// Parse from a json
   AccountTtl.fromJson(Map<String, dynamic> json)  {
-    days = json['days'];
+    int? pre_days;
+    try{
+      pre_days=json['days'];
+   }catch(_){}
+    days = pre_days;
     extra = json['@extra'];
   }
 

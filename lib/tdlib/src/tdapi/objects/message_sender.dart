@@ -43,7 +43,11 @@ class MessageSenderUser extends MessageSender {
 
   /// Parse from a json
   MessageSenderUser.fromJson(Map<String, dynamic> json)  {
-    userId = json['user_id'];
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
   }
 
   @override
@@ -70,7 +74,11 @@ class MessageSenderChat extends MessageSender {
 
   /// Parse from a json
   MessageSenderChat.fromJson(Map<String, dynamic> json)  {
-    chatId = json['chat_id'];
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
   }
 
   @override

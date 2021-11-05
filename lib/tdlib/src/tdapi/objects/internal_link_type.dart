@@ -135,7 +135,11 @@ class InternalLinkTypeAuthenticationCode extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeAuthenticationCode.fromJson(Map<String, dynamic> json)  {
-    code = json['code'];
+    String? pre_code;
+    try{
+      pre_code=json['code'];
+   }catch(_){}
+    code = pre_code;
     extra = json['@extra'];
   }
 
@@ -166,7 +170,11 @@ class InternalLinkTypeBackground extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeBackground.fromJson(Map<String, dynamic> json)  {
-    backgroundName = json['background_name'];
+    String? pre_backgroundName;
+    try{
+      pre_backgroundName=json['background_name'];
+   }catch(_){}
+    backgroundName = pre_backgroundName;
     extra = json['@extra'];
   }
 
@@ -201,8 +209,16 @@ class InternalLinkTypeBotStart extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeBotStart.fromJson(Map<String, dynamic> json)  {
-    botUsername = json['bot_username'];
-    startParameter = json['start_parameter'];
+    String? pre_botUsername;
+    try{
+      pre_botUsername=json['bot_username'];
+   }catch(_){}
+    botUsername = pre_botUsername;
+    String? pre_startParameter;
+    try{
+      pre_startParameter=json['start_parameter'];
+   }catch(_){}
+    startParameter = pre_startParameter;
     extra = json['@extra'];
   }
 
@@ -238,8 +254,16 @@ class InternalLinkTypeBotStartInGroup extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeBotStartInGroup.fromJson(Map<String, dynamic> json)  {
-    botUsername = json['bot_username'];
-    startParameter = json['start_parameter'];
+    String? pre_botUsername;
+    try{
+      pre_botUsername=json['bot_username'];
+   }catch(_){}
+    botUsername = pre_botUsername;
+    String? pre_startParameter;
+    try{
+      pre_startParameter=json['start_parameter'];
+   }catch(_){}
+    startParameter = pre_startParameter;
     extra = json['@extra'];
   }
 
@@ -297,7 +321,11 @@ class InternalLinkTypeChatInvite extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeChatInvite.fromJson(Map<String, dynamic> json)  {
-    inviteLink = json['invite_link'];
+    String? pre_inviteLink;
+    try{
+      pre_inviteLink=json['invite_link'];
+   }catch(_){}
+    inviteLink = pre_inviteLink;
     extra = json['@extra'];
   }
 
@@ -358,8 +386,16 @@ class InternalLinkTypeGame extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeGame.fromJson(Map<String, dynamic> json)  {
-    botUsername = json['bot_username'];
-    gameShortName = json['game_short_name'];
+    String? pre_botUsername;
+    try{
+      pre_botUsername=json['bot_username'];
+   }catch(_){}
+    botUsername = pre_botUsername;
+    String? pre_gameShortName;
+    try{
+      pre_gameShortName=json['game_short_name'];
+   }catch(_){}
+    gameShortName = pre_gameShortName;
     extra = json['@extra'];
   }
 
@@ -391,7 +427,11 @@ class InternalLinkTypeLanguagePack extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeLanguagePack.fromJson(Map<String, dynamic> json)  {
-    languagePackId = json['language_pack_id'];
+    String? pre_languagePackId;
+    try{
+      pre_languagePackId=json['language_pack_id'];
+   }catch(_){}
+    languagePackId = pre_languagePackId;
     extra = json['@extra'];
   }
 
@@ -422,7 +462,11 @@ class InternalLinkTypeMessage extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeMessage.fromJson(Map<String, dynamic> json)  {
-    url = json['url'];
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
     extra = json['@extra'];
   }
 
@@ -457,8 +501,16 @@ class InternalLinkTypeMessageDraft extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeMessageDraft.fromJson(Map<String, dynamic> json)  {
-    text = FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
-    containsLink = json['contains_link'];
+    FormattedText? pre_text;
+    try{
+      pre_text=FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
+   }catch(_){}
+    text = pre_text;
+    bool? pre_containsLink;
+    try{
+      pre_containsLink=json['contains_link'];
+   }catch(_){}
+    containsLink = pre_containsLink;
     extra = json['@extra'];
   }
 
@@ -506,11 +558,31 @@ class InternalLinkTypePassportDataRequest extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypePassportDataRequest.fromJson(Map<String, dynamic> json)  {
-    botUserId = json['bot_user_id'];
-    scope = json['scope'];
-    publicKey = json['public_key'];
-    nonce = json['nonce'];
-    callbackUrl = json['callback_url'];
+    int? pre_botUserId;
+    try{
+      pre_botUserId=json['bot_user_id'];
+   }catch(_){}
+    botUserId = pre_botUserId;
+    String? pre_scope;
+    try{
+      pre_scope=json['scope'];
+   }catch(_){}
+    scope = pre_scope;
+    String? pre_publicKey;
+    try{
+      pre_publicKey=json['public_key'];
+   }catch(_){}
+    publicKey = pre_publicKey;
+    String? pre_nonce;
+    try{
+      pre_nonce=json['nonce'];
+   }catch(_){}
+    nonce = pre_nonce;
+    String? pre_callbackUrl;
+    try{
+      pre_callbackUrl=json['callback_url'];
+   }catch(_){}
+    callbackUrl = pre_callbackUrl;
     extra = json['@extra'];
   }
 
@@ -549,8 +621,16 @@ class InternalLinkTypePhoneNumberConfirmation extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypePhoneNumberConfirmation.fromJson(Map<String, dynamic> json)  {
-    hash = json['hash'];
-    phoneNumber = json['phone_number'];
+    String? pre_hash;
+    try{
+      pre_hash=json['hash'];
+   }catch(_){}
+    hash = pre_hash;
+    String? pre_phoneNumber;
+    try{
+      pre_phoneNumber=json['phone_number'];
+   }catch(_){}
+    phoneNumber = pre_phoneNumber;
     extra = json['@extra'];
   }
 
@@ -590,9 +670,21 @@ class InternalLinkTypeProxy extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeProxy.fromJson(Map<String, dynamic> json)  {
-    server = json['server'];
-    port = json['port'];
-    type = ProxyType.fromJson(json['type'] ?? <String, dynamic>{});
+    String? pre_server;
+    try{
+      pre_server=json['server'];
+   }catch(_){}
+    server = pre_server;
+    int? pre_port;
+    try{
+      pre_port=json['port'];
+   }catch(_){}
+    port = pre_port;
+    ProxyType? pre_type;
+    try{
+      pre_type=ProxyType.fromJson(json['type'] ?? <String, dynamic>{});
+   }catch(_){}
+    type = pre_type;
     extra = json['@extra'];
   }
 
@@ -625,7 +717,11 @@ class InternalLinkTypePublicChat extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypePublicChat.fromJson(Map<String, dynamic> json)  {
-    chatUsername = json['chat_username'];
+    String? pre_chatUsername;
+    try{
+      pre_chatUsername=json['chat_username'];
+   }catch(_){}
+    chatUsername = pre_chatUsername;
     extra = json['@extra'];
   }
 
@@ -708,7 +804,11 @@ class InternalLinkTypeStickerSet extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeStickerSet.fromJson(Map<String, dynamic> json)  {
-    stickerSetName = json['sticker_set_name'];
+    String? pre_stickerSetName;
+    try{
+      pre_stickerSetName=json['sticker_set_name'];
+   }catch(_){}
+    stickerSetName = pre_stickerSetName;
     extra = json['@extra'];
   }
 
@@ -739,7 +839,11 @@ class InternalLinkTypeTheme extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeTheme.fromJson(Map<String, dynamic> json)  {
-    themeName = json['theme_name'];
+    String? pre_themeName;
+    try{
+      pre_themeName=json['theme_name'];
+   }catch(_){}
+    themeName = pre_themeName;
     extra = json['@extra'];
   }
 
@@ -796,7 +900,11 @@ class InternalLinkTypeUnknownDeepLink extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeUnknownDeepLink.fromJson(Map<String, dynamic> json)  {
-    link = json['link'];
+    String? pre_link;
+    try{
+      pre_link=json['link'];
+   }catch(_){}
+    link = pre_link;
     extra = json['@extra'];
   }
 
@@ -835,9 +943,21 @@ class InternalLinkTypeVoiceChat extends InternalLinkType {
 
   /// Parse from a json
   InternalLinkTypeVoiceChat.fromJson(Map<String, dynamic> json)  {
-    chatUsername = json['chat_username'];
-    inviteHash = json['invite_hash'];
-    isLiveStream = json['is_live_stream'];
+    String? pre_chatUsername;
+    try{
+      pre_chatUsername=json['chat_username'];
+   }catch(_){}
+    chatUsername = pre_chatUsername;
+    String? pre_inviteHash;
+    try{
+      pre_inviteHash=json['invite_hash'];
+   }catch(_){}
+    inviteHash = pre_inviteHash;
+    bool? pre_isLiveStream;
+    try{
+      pre_isLiveStream=json['is_live_stream'];
+   }catch(_){}
+    isLiveStream = pre_isLiveStream;
     extra = json['@extra'];
   }
 

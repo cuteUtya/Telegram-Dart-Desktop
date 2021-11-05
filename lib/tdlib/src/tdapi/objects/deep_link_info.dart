@@ -17,8 +17,16 @@ class DeepLinkInfo extends TdObject {
 
   /// Parse from a json
   DeepLinkInfo.fromJson(Map<String, dynamic> json)  {
-    text = FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
-    needUpdateApplication = json['need_update_application'];
+    FormattedText? pre_text;
+    try{
+      pre_text=FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
+   }catch(_){}
+    text = pre_text;
+    bool? pre_needUpdateApplication;
+    try{
+      pre_needUpdateApplication=json['need_update_application'];
+   }catch(_){}
+    needUpdateApplication = pre_needUpdateApplication;
     extra = json['@extra'];
   }
 

@@ -30,12 +30,36 @@ class Venue extends TdObject {
 
   /// Parse from a json
   Venue.fromJson(Map<String, dynamic> json)  {
-    location = Location.fromJson(json['location'] ?? <String, dynamic>{});
-    title = json['title'];
-    address = json['address'];
-    provider = json['provider'];
-    id = json['id'];
-    type = json['type'];
+    Location? pre_location;
+    try{
+      pre_location=Location.fromJson(json['location'] ?? <String, dynamic>{});
+   }catch(_){}
+    location = pre_location;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_address;
+    try{
+      pre_address=json['address'];
+   }catch(_){}
+    address = pre_address;
+    String? pre_provider;
+    try{
+      pre_provider=json['provider'];
+   }catch(_){}
+    provider = pre_provider;
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    String? pre_type;
+    try{
+      pre_type=json['type'];
+   }catch(_){}
+    type = pre_type;
   }
 
   @override

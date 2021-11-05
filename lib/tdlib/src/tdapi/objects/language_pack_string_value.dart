@@ -49,7 +49,11 @@ class LanguagePackStringValueOrdinary extends LanguagePackStringValue {
 
   /// Parse from a json
   LanguagePackStringValueOrdinary.fromJson(Map<String, dynamic> json)  {
-    value = json['value'];
+    String? pre_value;
+    try{
+      pre_value=json['value'];
+   }catch(_){}
+    value = pre_value;
     extra = json['@extra'];
   }
 
@@ -100,12 +104,36 @@ class LanguagePackStringValuePluralized extends LanguagePackStringValue {
 
   /// Parse from a json
   LanguagePackStringValuePluralized.fromJson(Map<String, dynamic> json)  {
-    zeroValue = json['zero_value'];
-    oneValue = json['one_value'];
-    twoValue = json['two_value'];
-    fewValue = json['few_value'];
-    manyValue = json['many_value'];
-    otherValue = json['other_value'];
+    String? pre_zeroValue;
+    try{
+      pre_zeroValue=json['zero_value'];
+   }catch(_){}
+    zeroValue = pre_zeroValue;
+    String? pre_oneValue;
+    try{
+      pre_oneValue=json['one_value'];
+   }catch(_){}
+    oneValue = pre_oneValue;
+    String? pre_twoValue;
+    try{
+      pre_twoValue=json['two_value'];
+   }catch(_){}
+    twoValue = pre_twoValue;
+    String? pre_fewValue;
+    try{
+      pre_fewValue=json['few_value'];
+   }catch(_){}
+    fewValue = pre_fewValue;
+    String? pre_manyValue;
+    try{
+      pre_manyValue=json['many_value'];
+   }catch(_){}
+    manyValue = pre_manyValue;
+    String? pre_otherValue;
+    try{
+      pre_otherValue=json['other_value'];
+   }catch(_){}
+    otherValue = pre_otherValue;
     extra = json['@extra'];
   }
 

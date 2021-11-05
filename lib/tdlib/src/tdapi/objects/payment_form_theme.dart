@@ -30,12 +30,36 @@ class PaymentFormTheme extends TdObject {
 
   /// Parse from a json
   PaymentFormTheme.fromJson(Map<String, dynamic> json)  {
-    backgroundColor = json['background_color'];
-    textColor = json['text_color'];
-    hintColor = json['hint_color'];
-    linkColor = json['link_color'];
-    buttonColor = json['button_color'];
-    buttonTextColor = json['button_text_color'];
+    int? pre_backgroundColor;
+    try{
+      pre_backgroundColor=json['background_color'];
+   }catch(_){}
+    backgroundColor = pre_backgroundColor;
+    int? pre_textColor;
+    try{
+      pre_textColor=json['text_color'];
+   }catch(_){}
+    textColor = pre_textColor;
+    int? pre_hintColor;
+    try{
+      pre_hintColor=json['hint_color'];
+   }catch(_){}
+    hintColor = pre_hintColor;
+    int? pre_linkColor;
+    try{
+      pre_linkColor=json['link_color'];
+   }catch(_){}
+    linkColor = pre_linkColor;
+    int? pre_buttonColor;
+    try{
+      pre_buttonColor=json['button_color'];
+   }catch(_){}
+    buttonColor = pre_buttonColor;
+    int? pre_buttonTextColor;
+    try{
+      pre_buttonTextColor=json['button_text_color'];
+   }catch(_){}
+    buttonTextColor = pre_buttonTextColor;
   }
 
   @override

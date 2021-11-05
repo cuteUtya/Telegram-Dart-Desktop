@@ -13,7 +13,11 @@ class GroupCallId extends TdObject {
 
   /// Parse from a json
   GroupCallId.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
+    int? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
     extra = json['@extra'];
   }
 

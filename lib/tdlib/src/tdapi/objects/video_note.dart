@@ -26,11 +26,31 @@ class VideoNote extends TdObject {
 
   /// Parse from a json
   VideoNote.fromJson(Map<String, dynamic> json)  {
-    duration = json['duration'];
-    length = json['length'];
-    minithumbnail = Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
-    thumbnail = Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-    video = File.fromJson(json['video'] ?? <String, dynamic>{});
+    int? pre_duration;
+    try{
+      pre_duration=json['duration'];
+   }catch(_){}
+    duration = pre_duration;
+    int? pre_length;
+    try{
+      pre_length=json['length'];
+   }catch(_){}
+    length = pre_length;
+    Minithumbnail? pre_minithumbnail;
+    try{
+      pre_minithumbnail=Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    minithumbnail = pre_minithumbnail;
+    Thumbnail? pre_thumbnail;
+    try{
+      pre_thumbnail=Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    thumbnail = pre_thumbnail;
+    File? pre_video;
+    try{
+      pre_video=File.fromJson(json['video'] ?? <String, dynamic>{});
+   }catch(_){}
+    video = pre_video;
   }
 
   @override

@@ -26,11 +26,31 @@ class CountryInfo extends TdObject {
 
   /// Parse from a json
   CountryInfo.fromJson(Map<String, dynamic> json)  {
-    countryCode = json['country_code'];
-    name = json['name'];
-    englishName = json['english_name'];
-    isHidden = json['is_hidden'];
-    callingCodes = List<String>.from((json['calling_codes'] ?? [])!.map((item) => item).toList());
+    String? pre_countryCode;
+    try{
+      pre_countryCode=json['country_code'];
+   }catch(_){}
+    countryCode = pre_countryCode;
+    String? pre_name;
+    try{
+      pre_name=json['name'];
+   }catch(_){}
+    name = pre_name;
+    String? pre_englishName;
+    try{
+      pre_englishName=json['english_name'];
+   }catch(_){}
+    englishName = pre_englishName;
+    bool? pre_isHidden;
+    try{
+      pre_isHidden=json['is_hidden'];
+   }catch(_){}
+    isHidden = pre_isHidden;
+    List<String>? pre_callingCodes;
+    try{
+      pre_callingCodes=List<String>.from((json['calling_codes'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    callingCodes = pre_callingCodes;
   }
 
   @override

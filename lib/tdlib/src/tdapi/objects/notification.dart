@@ -22,10 +22,26 @@ class Notification extends TdObject {
 
   /// Parse from a json
   Notification.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    date = json['date'];
-    isSilent = json['is_silent'];
-    type = NotificationType.fromJson(json['type'] ?? <String, dynamic>{});
+    int? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    int? pre_date;
+    try{
+      pre_date=json['date'];
+   }catch(_){}
+    date = pre_date;
+    bool? pre_isSilent;
+    try{
+      pre_isSilent=json['is_silent'];
+   }catch(_){}
+    isSilent = pre_isSilent;
+    NotificationType? pre_type;
+    try{
+      pre_type=NotificationType.fromJson(json['type'] ?? <String, dynamic>{});
+   }catch(_){}
+    type = pre_type;
   }
 
   @override

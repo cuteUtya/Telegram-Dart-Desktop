@@ -13,7 +13,11 @@ class ConnectedWebsites extends TdObject {
 
   /// Parse from a json
   ConnectedWebsites.fromJson(Map<String, dynamic> json)  {
-    websites = List<ConnectedWebsite>.from((json['websites'] ?? [])!.map((item) => ConnectedWebsite.fromJson(item ?? <String, dynamic>{})).toList());
+    List<ConnectedWebsite>? pre_websites;
+    try{
+      pre_websites=List<ConnectedWebsite>.from((json['websites'] ?? [])!.map((item) => ConnectedWebsite.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    websites = pre_websites;
     extra = json['@extra'];
   }
 

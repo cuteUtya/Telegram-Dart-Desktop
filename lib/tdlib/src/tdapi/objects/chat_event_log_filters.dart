@@ -54,18 +54,66 @@ class ChatEventLogFilters extends TdObject {
 
   /// Parse from a json
   ChatEventLogFilters.fromJson(Map<String, dynamic> json)  {
-    messageEdits = json['message_edits'];
-    messageDeletions = json['message_deletions'];
-    messagePins = json['message_pins'];
-    memberJoins = json['member_joins'];
-    memberLeaves = json['member_leaves'];
-    memberInvites = json['member_invites'];
-    memberPromotions = json['member_promotions'];
-    memberRestrictions = json['member_restrictions'];
-    infoChanges = json['info_changes'];
-    settingChanges = json['setting_changes'];
-    inviteLinkChanges = json['invite_link_changes'];
-    voiceChatChanges = json['voice_chat_changes'];
+    bool? pre_messageEdits;
+    try{
+      pre_messageEdits=json['message_edits'];
+   }catch(_){}
+    messageEdits = pre_messageEdits;
+    bool? pre_messageDeletions;
+    try{
+      pre_messageDeletions=json['message_deletions'];
+   }catch(_){}
+    messageDeletions = pre_messageDeletions;
+    bool? pre_messagePins;
+    try{
+      pre_messagePins=json['message_pins'];
+   }catch(_){}
+    messagePins = pre_messagePins;
+    bool? pre_memberJoins;
+    try{
+      pre_memberJoins=json['member_joins'];
+   }catch(_){}
+    memberJoins = pre_memberJoins;
+    bool? pre_memberLeaves;
+    try{
+      pre_memberLeaves=json['member_leaves'];
+   }catch(_){}
+    memberLeaves = pre_memberLeaves;
+    bool? pre_memberInvites;
+    try{
+      pre_memberInvites=json['member_invites'];
+   }catch(_){}
+    memberInvites = pre_memberInvites;
+    bool? pre_memberPromotions;
+    try{
+      pre_memberPromotions=json['member_promotions'];
+   }catch(_){}
+    memberPromotions = pre_memberPromotions;
+    bool? pre_memberRestrictions;
+    try{
+      pre_memberRestrictions=json['member_restrictions'];
+   }catch(_){}
+    memberRestrictions = pre_memberRestrictions;
+    bool? pre_infoChanges;
+    try{
+      pre_infoChanges=json['info_changes'];
+   }catch(_){}
+    infoChanges = pre_infoChanges;
+    bool? pre_settingChanges;
+    try{
+      pre_settingChanges=json['setting_changes'];
+   }catch(_){}
+    settingChanges = pre_settingChanges;
+    bool? pre_inviteLinkChanges;
+    try{
+      pre_inviteLinkChanges=json['invite_link_changes'];
+   }catch(_){}
+    inviteLinkChanges = pre_inviteLinkChanges;
+    bool? pre_voiceChatChanges;
+    try{
+      pre_voiceChatChanges=json['voice_chat_changes'];
+   }catch(_){}
+    voiceChatChanges = pre_voiceChatChanges;
   }
 
   @override

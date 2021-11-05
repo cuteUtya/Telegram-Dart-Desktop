@@ -13,7 +13,11 @@ class LogVerbosityLevel extends TdObject {
 
   /// Parse from a json
   LogVerbosityLevel.fromJson(Map<String, dynamic> json)  {
-    verbosityLevel = json['verbosity_level'];
+    int? pre_verbosityLevel;
+    try{
+      pre_verbosityLevel=json['verbosity_level'];
+   }catch(_){}
+    verbosityLevel = pre_verbosityLevel;
     extra = json['@extra'];
   }
 

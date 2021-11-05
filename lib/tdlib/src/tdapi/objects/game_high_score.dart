@@ -18,9 +18,21 @@ class GameHighScore extends TdObject {
 
   /// Parse from a json
   GameHighScore.fromJson(Map<String, dynamic> json)  {
-    position = json['position'];
-    userId = json['user_id'];
-    score = json['score'];
+    int? pre_position;
+    try{
+      pre_position=json['position'];
+   }catch(_){}
+    position = pre_position;
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
+    int? pre_score;
+    try{
+      pre_score=json['score'];
+   }catch(_){}
+    score = pre_score;
   }
 
   @override

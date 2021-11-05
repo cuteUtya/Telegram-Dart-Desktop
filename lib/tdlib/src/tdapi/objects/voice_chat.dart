@@ -18,9 +18,21 @@ class VoiceChat extends TdObject {
 
   /// Parse from a json
   VoiceChat.fromJson(Map<String, dynamic> json)  {
-    groupCallId = json['group_call_id'];
-    hasParticipants = json['has_participants'];
-    defaultParticipantId = MessageSender.fromJson(json['default_participant_id'] ?? <String, dynamic>{});
+    int? pre_groupCallId;
+    try{
+      pre_groupCallId=json['group_call_id'];
+   }catch(_){}
+    groupCallId = pre_groupCallId;
+    bool? pre_hasParticipants;
+    try{
+      pre_hasParticipants=json['has_participants'];
+   }catch(_){}
+    hasParticipants = pre_hasParticipants;
+    MessageSender? pre_defaultParticipantId;
+    try{
+      pre_defaultParticipantId=MessageSender.fromJson(json['default_participant_id'] ?? <String, dynamic>{});
+   }catch(_){}
+    defaultParticipantId = pre_defaultParticipantId;
   }
 
   @override

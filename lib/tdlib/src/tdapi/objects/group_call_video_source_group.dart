@@ -14,8 +14,16 @@ class GroupCallVideoSourceGroup extends TdObject {
 
   /// Parse from a json
   GroupCallVideoSourceGroup.fromJson(Map<String, dynamic> json)  {
-    semantics = json['semantics'];
-    sourceIds = List<int>.from((json['source_ids'] ?? [])!.map((item) => item).toList());
+    String? pre_semantics;
+    try{
+      pre_semantics=json['semantics'];
+   }catch(_){}
+    semantics = pre_semantics;
+    List<int>? pre_sourceIds;
+    try{
+      pre_sourceIds=List<int>.from((json['source_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    sourceIds = pre_sourceIds;
   }
 
   @override

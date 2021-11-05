@@ -93,12 +93,36 @@ class InlineQueryResultArticle extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultArticle.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    url = json['url'];
-    hideUrl = json['hide_url'];
-    title = json['title'];
-    description = json['description'];
-    thumbnail = Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
+    bool? pre_hideUrl;
+    try{
+      pre_hideUrl=json['hide_url'];
+   }catch(_){}
+    hideUrl = pre_hideUrl;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
+    Thumbnail? pre_thumbnail;
+    try{
+      pre_thumbnail=Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    thumbnail = pre_thumbnail;
   }
 
   @override
@@ -138,9 +162,21 @@ class InlineQueryResultContact extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultContact.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    contact = Contact.fromJson(json['contact'] ?? <String, dynamic>{});
-    thumbnail = Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Contact? pre_contact;
+    try{
+      pre_contact=Contact.fromJson(json['contact'] ?? <String, dynamic>{});
+   }catch(_){}
+    contact = pre_contact;
+    Thumbnail? pre_thumbnail;
+    try{
+      pre_thumbnail=Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    thumbnail = pre_thumbnail;
   }
 
   @override
@@ -181,10 +217,26 @@ class InlineQueryResultLocation extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultLocation.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    location = Location.fromJson(json['location'] ?? <String, dynamic>{});
-    title = json['title'];
-    thumbnail = Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Location? pre_location;
+    try{
+      pre_location=Location.fromJson(json['location'] ?? <String, dynamic>{});
+   }catch(_){}
+    location = pre_location;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    Thumbnail? pre_thumbnail;
+    try{
+      pre_thumbnail=Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    thumbnail = pre_thumbnail;
   }
 
   @override
@@ -222,9 +274,21 @@ class InlineQueryResultVenue extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultVenue.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    venue = Venue.fromJson(json['venue'] ?? <String, dynamic>{});
-    thumbnail = Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Venue? pre_venue;
+    try{
+      pre_venue=Venue.fromJson(json['venue'] ?? <String, dynamic>{});
+   }catch(_){}
+    venue = pre_venue;
+    Thumbnail? pre_thumbnail;
+    try{
+      pre_thumbnail=Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    thumbnail = pre_thumbnail;
   }
 
   @override
@@ -257,8 +321,16 @@ class InlineQueryResultGame extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultGame.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    game = Game.fromJson(json['game'] ?? <String, dynamic>{});
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Game? pre_game;
+    try{
+      pre_game=Game.fromJson(json['game'] ?? <String, dynamic>{});
+   }catch(_){}
+    game = pre_game;
   }
 
   @override
@@ -294,9 +366,21 @@ class InlineQueryResultAnimation extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultAnimation.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    animation = Animation.fromJson(json['animation'] ?? <String, dynamic>{});
-    title = json['title'];
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Animation? pre_animation;
+    try{
+      pre_animation=Animation.fromJson(json['animation'] ?? <String, dynamic>{});
+   }catch(_){}
+    animation = pre_animation;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
   }
 
   @override
@@ -329,8 +413,16 @@ class InlineQueryResultAudio extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultAudio.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    audio = Audio.fromJson(json['audio'] ?? <String, dynamic>{});
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Audio? pre_audio;
+    try{
+      pre_audio=Audio.fromJson(json['audio'] ?? <String, dynamic>{});
+   }catch(_){}
+    audio = pre_audio;
   }
 
   @override
@@ -370,10 +462,26 @@ class InlineQueryResultDocument extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultDocument.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    document = Document.fromJson(json['document'] ?? <String, dynamic>{});
-    title = json['title'];
-    description = json['description'];
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Document? pre_document;
+    try{
+      pre_document=Document.fromJson(json['document'] ?? <String, dynamic>{});
+   }catch(_){}
+    document = pre_document;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
   }
 
   @override
@@ -415,10 +523,26 @@ class InlineQueryResultPhoto extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultPhoto.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    photo = Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-    title = json['title'];
-    description = json['description'];
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Photo? pre_photo;
+    try{
+      pre_photo=Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
   }
 
   @override
@@ -452,8 +576,16 @@ class InlineQueryResultSticker extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultSticker.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    sticker = Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Sticker? pre_sticker;
+    try{
+      pre_sticker=Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
+   }catch(_){}
+    sticker = pre_sticker;
   }
 
   @override
@@ -493,10 +625,26 @@ class InlineQueryResultVideo extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultVideo.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    video = Video.fromJson(json['video'] ?? <String, dynamic>{});
-    title = json['title'];
-    description = json['description'];
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    Video? pre_video;
+    try{
+      pre_video=Video.fromJson(json['video'] ?? <String, dynamic>{});
+   }catch(_){}
+    video = pre_video;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
   }
 
   @override
@@ -534,9 +682,21 @@ class InlineQueryResultVoiceNote extends InlineQueryResult {
 
   /// Parse from a json
   InlineQueryResultVoiceNote.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    voiceNote = VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
-    title = json['title'];
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    VoiceNote? pre_voiceNote;
+    try{
+      pre_voiceNote=VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
+   }catch(_){}
+    voiceNote = pre_voiceNote;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
   }
 
   @override

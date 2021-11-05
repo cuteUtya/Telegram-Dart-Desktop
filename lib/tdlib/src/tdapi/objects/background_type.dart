@@ -50,8 +50,16 @@ class BackgroundTypeWallpaper extends BackgroundType {
 
   /// Parse from a json
   BackgroundTypeWallpaper.fromJson(Map<String, dynamic> json)  {
-    isBlurred = json['is_blurred'];
-    isMoving = json['is_moving'];
+    bool? pre_isBlurred;
+    try{
+      pre_isBlurred=json['is_blurred'];
+   }catch(_){}
+    isBlurred = pre_isBlurred;
+    bool? pre_isMoving;
+    try{
+      pre_isMoving=json['is_moving'];
+   }catch(_){}
+    isMoving = pre_isMoving;
   }
 
   @override
@@ -91,10 +99,26 @@ class BackgroundTypePattern extends BackgroundType {
 
   /// Parse from a json
   BackgroundTypePattern.fromJson(Map<String, dynamic> json)  {
-    fill = BackgroundFill.fromJson(json['fill'] ?? <String, dynamic>{});
-    intensity = json['intensity'];
-    isInverted = json['is_inverted'];
-    isMoving = json['is_moving'];
+    BackgroundFill? pre_fill;
+    try{
+      pre_fill=BackgroundFill.fromJson(json['fill'] ?? <String, dynamic>{});
+   }catch(_){}
+    fill = pre_fill;
+    int? pre_intensity;
+    try{
+      pre_intensity=json['intensity'];
+   }catch(_){}
+    intensity = pre_intensity;
+    bool? pre_isInverted;
+    try{
+      pre_isInverted=json['is_inverted'];
+   }catch(_){}
+    isInverted = pre_isInverted;
+    bool? pre_isMoving;
+    try{
+      pre_isMoving=json['is_moving'];
+   }catch(_){}
+    isMoving = pre_isMoving;
   }
 
   @override
@@ -124,7 +148,11 @@ class BackgroundTypeFill extends BackgroundType {
 
   /// Parse from a json
   BackgroundTypeFill.fromJson(Map<String, dynamic> json)  {
-    fill = BackgroundFill.fromJson(json['fill'] ?? <String, dynamic>{});
+    BackgroundFill? pre_fill;
+    try{
+      pre_fill=BackgroundFill.fromJson(json['fill'] ?? <String, dynamic>{});
+   }catch(_){}
+    fill = pre_fill;
   }
 
   @override

@@ -53,17 +53,61 @@ class UserFullInfo extends TdObject {
 
   /// Parse from a json
   UserFullInfo.fromJson(Map<String, dynamic> json)  {
-    photo = ChatPhoto.fromJson(json['photo'] ?? <String, dynamic>{});
-    isBlocked = json['is_blocked'];
-    canBeCalled = json['can_be_called'];
-    supportsVideoCalls = json['supports_video_calls'];
-    hasPrivateCalls = json['has_private_calls'];
-    needPhoneNumberPrivacyException = json['need_phone_number_privacy_exception'];
-    bio = json['bio'];
-    shareText = json['share_text'];
-    description = json['description'];
-    groupInCommonCount = json['group_in_common_count'];
-    commands = List<BotCommand>.from((json['commands'] ?? [])!.map((item) => BotCommand.fromJson(item ?? <String, dynamic>{})).toList());
+    ChatPhoto? pre_photo;
+    try{
+      pre_photo=ChatPhoto.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    bool? pre_isBlocked;
+    try{
+      pre_isBlocked=json['is_blocked'];
+   }catch(_){}
+    isBlocked = pre_isBlocked;
+    bool? pre_canBeCalled;
+    try{
+      pre_canBeCalled=json['can_be_called'];
+   }catch(_){}
+    canBeCalled = pre_canBeCalled;
+    bool? pre_supportsVideoCalls;
+    try{
+      pre_supportsVideoCalls=json['supports_video_calls'];
+   }catch(_){}
+    supportsVideoCalls = pre_supportsVideoCalls;
+    bool? pre_hasPrivateCalls;
+    try{
+      pre_hasPrivateCalls=json['has_private_calls'];
+   }catch(_){}
+    hasPrivateCalls = pre_hasPrivateCalls;
+    bool? pre_needPhoneNumberPrivacyException;
+    try{
+      pre_needPhoneNumberPrivacyException=json['need_phone_number_privacy_exception'];
+   }catch(_){}
+    needPhoneNumberPrivacyException = pre_needPhoneNumberPrivacyException;
+    String? pre_bio;
+    try{
+      pre_bio=json['bio'];
+   }catch(_){}
+    bio = pre_bio;
+    String? pre_shareText;
+    try{
+      pre_shareText=json['share_text'];
+   }catch(_){}
+    shareText = pre_shareText;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
+    int? pre_groupInCommonCount;
+    try{
+      pre_groupInCommonCount=json['group_in_common_count'];
+   }catch(_){}
+    groupInCommonCount = pre_groupInCommonCount;
+    List<BotCommand>? pre_commands;
+    try{
+      pre_commands=List<BotCommand>.from((json['commands'] ?? [])!.map((item) => BotCommand.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    commands = pre_commands;
     extra = json['@extra'];
   }
 

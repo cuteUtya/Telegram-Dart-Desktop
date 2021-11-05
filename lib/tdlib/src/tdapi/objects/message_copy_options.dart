@@ -18,9 +18,21 @@ class MessageCopyOptions extends TdObject {
 
   /// Parse from a json
   MessageCopyOptions.fromJson(Map<String, dynamic> json)  {
-    sendCopy = json['send_copy'];
-    replaceCaption = json['replace_caption'];
-    newCaption = FormattedText.fromJson(json['new_caption'] ?? <String, dynamic>{});
+    bool? pre_sendCopy;
+    try{
+      pre_sendCopy=json['send_copy'];
+   }catch(_){}
+    sendCopy = pre_sendCopy;
+    bool? pre_replaceCaption;
+    try{
+      pre_replaceCaption=json['replace_caption'];
+   }catch(_){}
+    replaceCaption = pre_replaceCaption;
+    FormattedText? pre_newCaption;
+    try{
+      pre_newCaption=FormattedText.fromJson(json['new_caption'] ?? <String, dynamic>{});
+   }catch(_){}
+    newCaption = pre_newCaption;
   }
 
   @override

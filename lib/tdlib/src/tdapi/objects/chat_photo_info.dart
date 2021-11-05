@@ -22,10 +22,26 @@ class ChatPhotoInfo extends TdObject {
 
   /// Parse from a json
   ChatPhotoInfo.fromJson(Map<String, dynamic> json)  {
-    small = File.fromJson(json['small'] ?? <String, dynamic>{});
-    big = File.fromJson(json['big'] ?? <String, dynamic>{});
-    minithumbnail = Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
-    hasAnimation = json['has_animation'];
+    File? pre_small;
+    try{
+      pre_small=File.fromJson(json['small'] ?? <String, dynamic>{});
+   }catch(_){}
+    small = pre_small;
+    File? pre_big;
+    try{
+      pre_big=File.fromJson(json['big'] ?? <String, dynamic>{});
+   }catch(_){}
+    big = pre_big;
+    Minithumbnail? pre_minithumbnail;
+    try{
+      pre_minithumbnail=Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    minithumbnail = pre_minithumbnail;
+    bool? pre_hasAnimation;
+    try{
+      pre_hasAnimation=json['has_animation'];
+   }catch(_){}
+    hasAnimation = pre_hasAnimation;
   }
 
   @override

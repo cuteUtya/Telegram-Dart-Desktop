@@ -13,7 +13,11 @@ class MessageStatistics extends TdObject {
 
   /// Parse from a json
   MessageStatistics.fromJson(Map<String, dynamic> json)  {
-    messageInteractionGraph = StatisticalGraph.fromJson(json['message_interaction_graph'] ?? <String, dynamic>{});
+    StatisticalGraph? pre_messageInteractionGraph;
+    try{
+      pre_messageInteractionGraph=StatisticalGraph.fromJson(json['message_interaction_graph'] ?? <String, dynamic>{});
+   }catch(_){}
+    messageInteractionGraph = pre_messageInteractionGraph;
     extra = json['@extra'];
   }
 

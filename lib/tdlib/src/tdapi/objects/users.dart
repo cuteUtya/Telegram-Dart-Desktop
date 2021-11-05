@@ -17,8 +17,16 @@ class Users extends TdObject {
 
   /// Parse from a json
   Users.fromJson(Map<String, dynamic> json)  {
-    totalCount = json['total_count'];
-    userIds = List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
+    int? pre_totalCount;
+    try{
+      pre_totalCount=json['total_count'];
+   }catch(_){}
+    totalCount = pre_totalCount;
+    List<int>? pre_userIds;
+    try{
+      pre_userIds=List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    userIds = pre_userIds;
     extra = json['@extra'];
   }
 

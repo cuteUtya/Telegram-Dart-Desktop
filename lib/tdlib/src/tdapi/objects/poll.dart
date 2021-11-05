@@ -46,16 +46,56 @@ class Poll extends TdObject {
 
   /// Parse from a json
   Poll.fromJson(Map<String, dynamic> json)  {
-    id = int.tryParse(json['id'] ?? "");
-    question = json['question'];
-    options = List<PollOption>.from((json['options'] ?? [])!.map((item) => PollOption.fromJson(item ?? <String, dynamic>{})).toList());
-    totalVoterCount = json['total_voter_count'];
-    recentVoterUserIds = List<int>.from((json['recent_voter_user_ids'] ?? [])!.map((item) => item).toList());
-    isAnonymous = json['is_anonymous'];
-    type = PollType.fromJson(json['type'] ?? <String, dynamic>{});
-    openPeriod = json['open_period'];
-    closeDate = json['close_date'];
-    isClosed = json['is_closed'];
+    int? pre_id;
+    try{
+      pre_id=int.tryParse(json['id'] ?? "");
+   }catch(_){}
+    id = pre_id;
+    String? pre_question;
+    try{
+      pre_question=json['question'];
+   }catch(_){}
+    question = pre_question;
+    List<PollOption>? pre_options;
+    try{
+      pre_options=List<PollOption>.from((json['options'] ?? [])!.map((item) => PollOption.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    options = pre_options;
+    int? pre_totalVoterCount;
+    try{
+      pre_totalVoterCount=json['total_voter_count'];
+   }catch(_){}
+    totalVoterCount = pre_totalVoterCount;
+    List<int>? pre_recentVoterUserIds;
+    try{
+      pre_recentVoterUserIds=List<int>.from((json['recent_voter_user_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    recentVoterUserIds = pre_recentVoterUserIds;
+    bool? pre_isAnonymous;
+    try{
+      pre_isAnonymous=json['is_anonymous'];
+   }catch(_){}
+    isAnonymous = pre_isAnonymous;
+    PollType? pre_type;
+    try{
+      pre_type=PollType.fromJson(json['type'] ?? <String, dynamic>{});
+   }catch(_){}
+    type = pre_type;
+    int? pre_openPeriod;
+    try{
+      pre_openPeriod=json['open_period'];
+   }catch(_){}
+    openPeriod = pre_openPeriod;
+    int? pre_closeDate;
+    try{
+      pre_closeDate=json['close_date'];
+   }catch(_){}
+    closeDate = pre_closeDate;
+    bool? pre_isClosed;
+    try{
+      pre_isClosed=json['is_closed'];
+   }catch(_){}
+    isClosed = pre_isClosed;
   }
 
   @override

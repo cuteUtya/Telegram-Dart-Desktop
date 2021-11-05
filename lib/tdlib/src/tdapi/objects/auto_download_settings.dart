@@ -38,14 +38,46 @@ class AutoDownloadSettings extends TdObject {
 
   /// Parse from a json
   AutoDownloadSettings.fromJson(Map<String, dynamic> json)  {
-    isAutoDownloadEnabled = json['is_auto_download_enabled'];
-    maxPhotoFileSize = json['max_photo_file_size'];
-    maxVideoFileSize = json['max_video_file_size'];
-    maxOtherFileSize = json['max_other_file_size'];
-    videoUploadBitrate = json['video_upload_bitrate'];
-    preloadLargeVideos = json['preload_large_videos'];
-    preloadNextAudio = json['preload_next_audio'];
-    useLessDataForCalls = json['use_less_data_for_calls'];
+    bool? pre_isAutoDownloadEnabled;
+    try{
+      pre_isAutoDownloadEnabled=json['is_auto_download_enabled'];
+   }catch(_){}
+    isAutoDownloadEnabled = pre_isAutoDownloadEnabled;
+    int? pre_maxPhotoFileSize;
+    try{
+      pre_maxPhotoFileSize=json['max_photo_file_size'];
+   }catch(_){}
+    maxPhotoFileSize = pre_maxPhotoFileSize;
+    int? pre_maxVideoFileSize;
+    try{
+      pre_maxVideoFileSize=json['max_video_file_size'];
+   }catch(_){}
+    maxVideoFileSize = pre_maxVideoFileSize;
+    int? pre_maxOtherFileSize;
+    try{
+      pre_maxOtherFileSize=json['max_other_file_size'];
+   }catch(_){}
+    maxOtherFileSize = pre_maxOtherFileSize;
+    int? pre_videoUploadBitrate;
+    try{
+      pre_videoUploadBitrate=json['video_upload_bitrate'];
+   }catch(_){}
+    videoUploadBitrate = pre_videoUploadBitrate;
+    bool? pre_preloadLargeVideos;
+    try{
+      pre_preloadLargeVideos=json['preload_large_videos'];
+   }catch(_){}
+    preloadLargeVideos = pre_preloadLargeVideos;
+    bool? pre_preloadNextAudio;
+    try{
+      pre_preloadNextAudio=json['preload_next_audio'];
+   }catch(_){}
+    preloadNextAudio = pre_preloadNextAudio;
+    bool? pre_useLessDataForCalls;
+    try{
+      pre_useLessDataForCalls=json['use_less_data_for_calls'];
+   }catch(_){}
+    useLessDataForCalls = pre_useLessDataForCalls;
   }
 
   @override

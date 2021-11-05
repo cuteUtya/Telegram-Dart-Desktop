@@ -26,11 +26,31 @@ class ThemeSettings extends TdObject {
 
   /// Parse from a json
   ThemeSettings.fromJson(Map<String, dynamic> json)  {
-    accentColor = json['accent_color'];
-    background = Background.fromJson(json['background'] ?? <String, dynamic>{});
-    outgoingMessageFill = BackgroundFill.fromJson(json['outgoing_message_fill'] ?? <String, dynamic>{});
-    animateOutgoingMessageFill = json['animate_outgoing_message_fill'];
-    outgoingMessageAccentColor = json['outgoing_message_accent_color'];
+    int? pre_accentColor;
+    try{
+      pre_accentColor=json['accent_color'];
+   }catch(_){}
+    accentColor = pre_accentColor;
+    Background? pre_background;
+    try{
+      pre_background=Background.fromJson(json['background'] ?? <String, dynamic>{});
+   }catch(_){}
+    background = pre_background;
+    BackgroundFill? pre_outgoingMessageFill;
+    try{
+      pre_outgoingMessageFill=BackgroundFill.fromJson(json['outgoing_message_fill'] ?? <String, dynamic>{});
+   }catch(_){}
+    outgoingMessageFill = pre_outgoingMessageFill;
+    bool? pre_animateOutgoingMessageFill;
+    try{
+      pre_animateOutgoingMessageFill=json['animate_outgoing_message_fill'];
+   }catch(_){}
+    animateOutgoingMessageFill = pre_animateOutgoingMessageFill;
+    int? pre_outgoingMessageAccentColor;
+    try{
+      pre_outgoingMessageAccentColor=json['outgoing_message_accent_color'];
+   }catch(_){}
+    outgoingMessageAccentColor = pre_outgoingMessageAccentColor;
   }
 
   @override

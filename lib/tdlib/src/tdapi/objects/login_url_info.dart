@@ -50,8 +50,16 @@ class LoginUrlInfoOpen extends LoginUrlInfo {
 
   /// Parse from a json
   LoginUrlInfoOpen.fromJson(Map<String, dynamic> json)  {
-    url = json['url'];
-    skipConfirm = json['skip_confirm'];
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
+    bool? pre_skipConfirm;
+    try{
+      pre_skipConfirm=json['skip_confirm'];
+   }catch(_){}
+    skipConfirm = pre_skipConfirm;
     extra = json['@extra'];
   }
 
@@ -95,10 +103,26 @@ class LoginUrlInfoRequestConfirmation extends LoginUrlInfo {
 
   /// Parse from a json
   LoginUrlInfoRequestConfirmation.fromJson(Map<String, dynamic> json)  {
-    url = json['url'];
-    domain = json['domain'];
-    botUserId = json['bot_user_id'];
-    requestWriteAccess = json['request_write_access'];
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
+    String? pre_domain;
+    try{
+      pre_domain=json['domain'];
+   }catch(_){}
+    domain = pre_domain;
+    int? pre_botUserId;
+    try{
+      pre_botUserId=json['bot_user_id'];
+   }catch(_){}
+    botUserId = pre_botUserId;
+    bool? pre_requestWriteAccess;
+    try{
+      pre_requestWriteAccess=json['request_write_access'];
+   }catch(_){}
+    requestWriteAccess = pre_requestWriteAccess;
     extra = json['@extra'];
   }
 

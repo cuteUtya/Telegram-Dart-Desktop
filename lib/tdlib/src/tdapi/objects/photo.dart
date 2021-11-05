@@ -18,9 +18,21 @@ class Photo extends TdObject {
 
   /// Parse from a json
   Photo.fromJson(Map<String, dynamic> json)  {
-    hasStickers = json['has_stickers'];
-    minithumbnail = Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
-    sizes = List<PhotoSize>.from((json['sizes'] ?? [])!.map((item) => PhotoSize.fromJson(item ?? <String, dynamic>{})).toList());
+    bool? pre_hasStickers;
+    try{
+      pre_hasStickers=json['has_stickers'];
+   }catch(_){}
+    hasStickers = pre_hasStickers;
+    Minithumbnail? pre_minithumbnail;
+    try{
+      pre_minithumbnail=Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    minithumbnail = pre_minithumbnail;
+    List<PhotoSize>? pre_sizes;
+    try{
+      pre_sizes=List<PhotoSize>.from((json['sizes'] ?? [])!.map((item) => PhotoSize.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    sizes = pre_sizes;
   }
 
   @override

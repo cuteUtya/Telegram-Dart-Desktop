@@ -14,8 +14,16 @@ class ChatInviteLinkMember extends TdObject {
 
   /// Parse from a json
   ChatInviteLinkMember.fromJson(Map<String, dynamic> json)  {
-    userId = json['user_id'];
-    joinedChatDate = json['joined_chat_date'];
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
+    int? pre_joinedChatDate;
+    try{
+      pre_joinedChatDate=json['joined_chat_date'];
+   }catch(_){}
+    joinedChatDate = pre_joinedChatDate;
   }
 
   @override

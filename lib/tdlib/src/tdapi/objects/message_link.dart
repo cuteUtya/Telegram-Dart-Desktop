@@ -17,8 +17,16 @@ class MessageLink extends TdObject {
 
   /// Parse from a json
   MessageLink.fromJson(Map<String, dynamic> json)  {
-    link = json['link'];
-    isPublic = json['is_public'];
+    String? pre_link;
+    try{
+      pre_link=json['link'];
+   }catch(_){}
+    link = pre_link;
+    bool? pre_isPublic;
+    try{
+      pre_isPublic=json['is_public'];
+   }catch(_){}
+    isPublic = pre_isPublic;
     extra = json['@extra'];
   }
 

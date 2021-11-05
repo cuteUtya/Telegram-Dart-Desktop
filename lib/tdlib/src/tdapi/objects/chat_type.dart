@@ -49,7 +49,11 @@ class ChatTypePrivate extends ChatType {
 
   /// Parse from a json
   ChatTypePrivate.fromJson(Map<String, dynamic> json)  {
-    userId = json['user_id'];
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
   }
 
   @override
@@ -76,7 +80,11 @@ class ChatTypeBasicGroup extends ChatType {
 
   /// Parse from a json
   ChatTypeBasicGroup.fromJson(Map<String, dynamic> json)  {
-    basicGroupId = json['basic_group_id'];
+    int? pre_basicGroupId;
+    try{
+      pre_basicGroupId=json['basic_group_id'];
+   }catch(_){}
+    basicGroupId = pre_basicGroupId;
   }
 
   @override
@@ -107,8 +115,16 @@ class ChatTypeSupergroup extends ChatType {
 
   /// Parse from a json
   ChatTypeSupergroup.fromJson(Map<String, dynamic> json)  {
-    supergroupId = json['supergroup_id'];
-    isChannel = json['is_channel'];
+    int? pre_supergroupId;
+    try{
+      pre_supergroupId=json['supergroup_id'];
+   }catch(_){}
+    supergroupId = pre_supergroupId;
+    bool? pre_isChannel;
+    try{
+      pre_isChannel=json['is_channel'];
+   }catch(_){}
+    isChannel = pre_isChannel;
   }
 
   @override
@@ -140,8 +156,16 @@ class ChatTypeSecret extends ChatType {
 
   /// Parse from a json
   ChatTypeSecret.fromJson(Map<String, dynamic> json)  {
-    secretChatId = json['secret_chat_id'];
-    userId = json['user_id'];
+    int? pre_secretChatId;
+    try{
+      pre_secretChatId=json['secret_chat_id'];
+   }catch(_){}
+    secretChatId = pre_secretChatId;
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
   }
 
   @override

@@ -45,15 +45,51 @@ class ChatInviteLink extends TdObject {
 
   /// Parse from a json
   ChatInviteLink.fromJson(Map<String, dynamic> json)  {
-    inviteLink = json['invite_link'];
-    creatorUserId = json['creator_user_id'];
-    date = json['date'];
-    editDate = json['edit_date'];
-    expireDate = json['expire_date'];
-    memberLimit = json['member_limit'];
-    memberCount = json['member_count'];
-    isPrimary = json['is_primary'];
-    isRevoked = json['is_revoked'];
+    String? pre_inviteLink;
+    try{
+      pre_inviteLink=json['invite_link'];
+   }catch(_){}
+    inviteLink = pre_inviteLink;
+    int? pre_creatorUserId;
+    try{
+      pre_creatorUserId=json['creator_user_id'];
+   }catch(_){}
+    creatorUserId = pre_creatorUserId;
+    int? pre_date;
+    try{
+      pre_date=json['date'];
+   }catch(_){}
+    date = pre_date;
+    int? pre_editDate;
+    try{
+      pre_editDate=json['edit_date'];
+   }catch(_){}
+    editDate = pre_editDate;
+    int? pre_expireDate;
+    try{
+      pre_expireDate=json['expire_date'];
+   }catch(_){}
+    expireDate = pre_expireDate;
+    int? pre_memberLimit;
+    try{
+      pre_memberLimit=json['member_limit'];
+   }catch(_){}
+    memberLimit = pre_memberLimit;
+    int? pre_memberCount;
+    try{
+      pre_memberCount=json['member_count'];
+   }catch(_){}
+    memberCount = pre_memberCount;
+    bool? pre_isPrimary;
+    try{
+      pre_isPrimary=json['is_primary'];
+   }catch(_){}
+    isPrimary = pre_isPrimary;
+    bool? pre_isRevoked;
+    try{
+      pre_isRevoked=json['is_revoked'];
+   }catch(_){}
+    isRevoked = pre_isRevoked;
     extra = json['@extra'];
   }
 

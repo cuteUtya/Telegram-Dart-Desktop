@@ -43,7 +43,11 @@ class MessageSchedulingStateSendAtDate extends MessageSchedulingState {
 
   /// Parse from a json
   MessageSchedulingStateSendAtDate.fromJson(Map<String, dynamic> json)  {
-    sendDate = json['send_date'];
+    int? pre_sendDate;
+    try{
+      pre_sendDate=json['send_date'];
+   }catch(_){}
+    sendDate = pre_sendDate;
   }
 
   @override

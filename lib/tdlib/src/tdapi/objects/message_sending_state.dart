@@ -78,10 +78,26 @@ class MessageSendingStateFailed extends MessageSendingState {
 
   /// Parse from a json
   MessageSendingStateFailed.fromJson(Map<String, dynamic> json)  {
-    errorCode = json['error_code'];
-    errorMessage = json['error_message'];
-    canRetry = json['can_retry'];
-    retryAfter = json['retry_after'];
+    int? pre_errorCode;
+    try{
+      pre_errorCode=json['error_code'];
+   }catch(_){}
+    errorCode = pre_errorCode;
+    String? pre_errorMessage;
+    try{
+      pre_errorMessage=json['error_message'];
+   }catch(_){}
+    errorMessage = pre_errorMessage;
+    bool? pre_canRetry;
+    try{
+      pre_canRetry=json['can_retry'];
+   }catch(_){}
+    canRetry = pre_canRetry;
+    double? pre_retryAfter;
+    try{
+      pre_retryAfter=json['retry_after'];
+   }catch(_){}
+    retryAfter = pre_retryAfter;
   }
 
   @override

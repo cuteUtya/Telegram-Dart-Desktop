@@ -13,7 +13,11 @@ class Updates extends TdObject {
 
   /// Parse from a json
   Updates.fromJson(Map<String, dynamic> json)  {
-    updates = List<Update>.from((json['updates'] ?? [])!.map((item) => Update.fromJson(item ?? <String, dynamic>{})).toList());
+    List<Update>? pre_updates;
+    try{
+      pre_updates=List<Update>.from((json['updates'] ?? [])!.map((item) => Update.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    updates = pre_updates;
     extra = json['@extra'];
   }
 

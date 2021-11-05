@@ -13,7 +13,11 @@ class LocalizationTargetInfo extends TdObject {
 
   /// Parse from a json
   LocalizationTargetInfo.fromJson(Map<String, dynamic> json)  {
-    languagePacks = List<LanguagePackInfo>.from((json['language_packs'] ?? [])!.map((item) => LanguagePackInfo.fromJson(item ?? <String, dynamic>{})).toList());
+    List<LanguagePackInfo>? pre_languagePacks;
+    try{
+      pre_languagePacks=List<LanguagePackInfo>.from((json['language_packs'] ?? [])!.map((item) => LanguagePackInfo.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    languagePacks = pre_languagePacks;
     extra = json['@extra'];
   }
 

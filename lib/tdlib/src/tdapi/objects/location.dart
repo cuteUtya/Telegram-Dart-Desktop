@@ -18,9 +18,21 @@ class Location extends TdObject {
 
   /// Parse from a json
   Location.fromJson(Map<String, dynamic> json)  {
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    horizontalAccuracy = json['horizontal_accuracy'];
+    double? pre_latitude;
+    try{
+      pre_latitude=json['latitude'];
+   }catch(_){}
+    latitude = pre_latitude;
+    double? pre_longitude;
+    try{
+      pre_longitude=json['longitude'];
+   }catch(_){}
+    longitude = pre_longitude;
+    double? pre_horizontalAccuracy;
+    try{
+      pre_horizontalAccuracy=json['horizontal_accuracy'];
+   }catch(_){}
+    horizontalAccuracy = pre_horizontalAccuracy;
   }
 
   @override

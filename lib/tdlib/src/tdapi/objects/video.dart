@@ -46,16 +46,56 @@ class Video extends TdObject {
 
   /// Parse from a json
   Video.fromJson(Map<String, dynamic> json)  {
-    duration = json['duration'];
-    width = json['width'];
-    height = json['height'];
-    fileName = json['file_name'];
-    mimeType = json['mime_type'];
-    hasStickers = json['has_stickers'];
-    supportsStreaming = json['supports_streaming'];
-    minithumbnail = Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
-    thumbnail = Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-    video = File.fromJson(json['video'] ?? <String, dynamic>{});
+    int? pre_duration;
+    try{
+      pre_duration=json['duration'];
+   }catch(_){}
+    duration = pre_duration;
+    int? pre_width;
+    try{
+      pre_width=json['width'];
+   }catch(_){}
+    width = pre_width;
+    int? pre_height;
+    try{
+      pre_height=json['height'];
+   }catch(_){}
+    height = pre_height;
+    String? pre_fileName;
+    try{
+      pre_fileName=json['file_name'];
+   }catch(_){}
+    fileName = pre_fileName;
+    String? pre_mimeType;
+    try{
+      pre_mimeType=json['mime_type'];
+   }catch(_){}
+    mimeType = pre_mimeType;
+    bool? pre_hasStickers;
+    try{
+      pre_hasStickers=json['has_stickers'];
+   }catch(_){}
+    hasStickers = pre_hasStickers;
+    bool? pre_supportsStreaming;
+    try{
+      pre_supportsStreaming=json['supports_streaming'];
+   }catch(_){}
+    supportsStreaming = pre_supportsStreaming;
+    Minithumbnail? pre_minithumbnail;
+    try{
+      pre_minithumbnail=Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    minithumbnail = pre_minithumbnail;
+    Thumbnail? pre_thumbnail;
+    try{
+      pre_thumbnail=Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    thumbnail = pre_thumbnail;
+    File? pre_video;
+    try{
+      pre_video=File.fromJson(json['video'] ?? <String, dynamic>{});
+   }catch(_){}
+    video = pre_video;
   }
 
   @override

@@ -13,7 +13,11 @@ class GameHighScores extends TdObject {
 
   /// Parse from a json
   GameHighScores.fromJson(Map<String, dynamic> json)  {
-    scores = List<GameHighScore>.from((json['scores'] ?? [])!.map((item) => GameHighScore.fromJson(item ?? <String, dynamic>{})).toList());
+    List<GameHighScore>? pre_scores;
+    try{
+      pre_scores=List<GameHighScore>.from((json['scores'] ?? [])!.map((item) => GameHighScore.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    scores = pre_scores;
     extra = json['@extra'];
   }
 

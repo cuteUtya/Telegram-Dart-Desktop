@@ -63,9 +63,21 @@ class ChatMemberStatusCreator extends ChatMemberStatus {
 
   /// Parse from a json
   ChatMemberStatusCreator.fromJson(Map<String, dynamic> json)  {
-    customTitle = json['custom_title'];
-    isAnonymous = json['is_anonymous'];
-    isMember = json['is_member'];
+    String? pre_customTitle;
+    try{
+      pre_customTitle=json['custom_title'];
+   }catch(_){}
+    customTitle = pre_customTitle;
+    bool? pre_isAnonymous;
+    try{
+      pre_isAnonymous=json['is_anonymous'];
+   }catch(_){}
+    isAnonymous = pre_isAnonymous;
+    bool? pre_isMember;
+    try{
+      pre_isMember=json['is_member'];
+   }catch(_){}
+    isMember = pre_isMember;
   }
 
   @override
@@ -142,19 +154,71 @@ class ChatMemberStatusAdministrator extends ChatMemberStatus {
 
   /// Parse from a json
   ChatMemberStatusAdministrator.fromJson(Map<String, dynamic> json)  {
-    customTitle = json['custom_title'];
-    canBeEdited = json['can_be_edited'];
-    canManageChat = json['can_manage_chat'];
-    canChangeInfo = json['can_change_info'];
-    canPostMessages = json['can_post_messages'];
-    canEditMessages = json['can_edit_messages'];
-    canDeleteMessages = json['can_delete_messages'];
-    canInviteUsers = json['can_invite_users'];
-    canRestrictMembers = json['can_restrict_members'];
-    canPinMessages = json['can_pin_messages'];
-    canPromoteMembers = json['can_promote_members'];
-    canManageVoiceChats = json['can_manage_voice_chats'];
-    isAnonymous = json['is_anonymous'];
+    String? pre_customTitle;
+    try{
+      pre_customTitle=json['custom_title'];
+   }catch(_){}
+    customTitle = pre_customTitle;
+    bool? pre_canBeEdited;
+    try{
+      pre_canBeEdited=json['can_be_edited'];
+   }catch(_){}
+    canBeEdited = pre_canBeEdited;
+    bool? pre_canManageChat;
+    try{
+      pre_canManageChat=json['can_manage_chat'];
+   }catch(_){}
+    canManageChat = pre_canManageChat;
+    bool? pre_canChangeInfo;
+    try{
+      pre_canChangeInfo=json['can_change_info'];
+   }catch(_){}
+    canChangeInfo = pre_canChangeInfo;
+    bool? pre_canPostMessages;
+    try{
+      pre_canPostMessages=json['can_post_messages'];
+   }catch(_){}
+    canPostMessages = pre_canPostMessages;
+    bool? pre_canEditMessages;
+    try{
+      pre_canEditMessages=json['can_edit_messages'];
+   }catch(_){}
+    canEditMessages = pre_canEditMessages;
+    bool? pre_canDeleteMessages;
+    try{
+      pre_canDeleteMessages=json['can_delete_messages'];
+   }catch(_){}
+    canDeleteMessages = pre_canDeleteMessages;
+    bool? pre_canInviteUsers;
+    try{
+      pre_canInviteUsers=json['can_invite_users'];
+   }catch(_){}
+    canInviteUsers = pre_canInviteUsers;
+    bool? pre_canRestrictMembers;
+    try{
+      pre_canRestrictMembers=json['can_restrict_members'];
+   }catch(_){}
+    canRestrictMembers = pre_canRestrictMembers;
+    bool? pre_canPinMessages;
+    try{
+      pre_canPinMessages=json['can_pin_messages'];
+   }catch(_){}
+    canPinMessages = pre_canPinMessages;
+    bool? pre_canPromoteMembers;
+    try{
+      pre_canPromoteMembers=json['can_promote_members'];
+   }catch(_){}
+    canPromoteMembers = pre_canPromoteMembers;
+    bool? pre_canManageVoiceChats;
+    try{
+      pre_canManageVoiceChats=json['can_manage_voice_chats'];
+   }catch(_){}
+    canManageVoiceChats = pre_canManageVoiceChats;
+    bool? pre_isAnonymous;
+    try{
+      pre_isAnonymous=json['is_anonymous'];
+   }catch(_){}
+    isAnonymous = pre_isAnonymous;
   }
 
   @override
@@ -224,9 +288,21 @@ class ChatMemberStatusRestricted extends ChatMemberStatus {
 
   /// Parse from a json
   ChatMemberStatusRestricted.fromJson(Map<String, dynamic> json)  {
-    isMember = json['is_member'];
-    restrictedUntilDate = json['restricted_until_date'];
-    permissions = ChatPermissions.fromJson(json['permissions'] ?? <String, dynamic>{});
+    bool? pre_isMember;
+    try{
+      pre_isMember=json['is_member'];
+   }catch(_){}
+    isMember = pre_isMember;
+    int? pre_restrictedUntilDate;
+    try{
+      pre_restrictedUntilDate=json['restricted_until_date'];
+   }catch(_){}
+    restrictedUntilDate = pre_restrictedUntilDate;
+    ChatPermissions? pre_permissions;
+    try{
+      pre_permissions=ChatPermissions.fromJson(json['permissions'] ?? <String, dynamic>{});
+   }catch(_){}
+    permissions = pre_permissions;
   }
 
   @override
@@ -278,7 +354,11 @@ class ChatMemberStatusBanned extends ChatMemberStatus {
 
   /// Parse from a json
   ChatMemberStatusBanned.fromJson(Map<String, dynamic> json)  {
-    bannedUntilDate = json['banned_until_date'];
+    int? pre_bannedUntilDate;
+    try{
+      pre_bannedUntilDate=json['banned_until_date'];
+   }catch(_){}
+    bannedUntilDate = pre_bannedUntilDate;
   }
 
   @override

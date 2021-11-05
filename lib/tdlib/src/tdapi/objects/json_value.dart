@@ -84,7 +84,11 @@ class JsonValueBoolean extends JsonValue {
 
   /// Parse from a json
   JsonValueBoolean.fromJson(Map<String, dynamic> json)  {
-    value = json['value'];
+    bool? pre_value;
+    try{
+      pre_value=json['value'];
+   }catch(_){}
+    value = pre_value;
     extra = json['@extra'];
   }
 
@@ -115,7 +119,11 @@ class JsonValueNumber extends JsonValue {
 
   /// Parse from a json
   JsonValueNumber.fromJson(Map<String, dynamic> json)  {
-    value = json['value'];
+    double? pre_value;
+    try{
+      pre_value=json['value'];
+   }catch(_){}
+    value = pre_value;
     extra = json['@extra'];
   }
 
@@ -146,7 +154,11 @@ class JsonValueString extends JsonValue {
 
   /// Parse from a json
   JsonValueString.fromJson(Map<String, dynamic> json)  {
-    value = json['value'];
+    String? pre_value;
+    try{
+      pre_value=json['value'];
+   }catch(_){}
+    value = pre_value;
     extra = json['@extra'];
   }
 
@@ -177,7 +189,11 @@ class JsonValueArray extends JsonValue {
 
   /// Parse from a json
   JsonValueArray.fromJson(Map<String, dynamic> json)  {
-    values = List<JsonValue>.from((json['values'] ?? [])!.map((item) => JsonValue.fromJson(item ?? <String, dynamic>{})).toList());
+    List<JsonValue>? pre_values;
+    try{
+      pre_values=List<JsonValue>.from((json['values'] ?? [])!.map((item) => JsonValue.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    values = pre_values;
     extra = json['@extra'];
   }
 
@@ -208,7 +224,11 @@ class JsonValueObject extends JsonValue {
 
   /// Parse from a json
   JsonValueObject.fromJson(Map<String, dynamic> json)  {
-    members = List<JsonObjectMember>.from((json['members'] ?? [])!.map((item) => JsonObjectMember.fromJson(item ?? <String, dynamic>{})).toList());
+    List<JsonObjectMember>? pre_members;
+    try{
+      pre_members=List<JsonObjectMember>.from((json['members'] ?? [])!.map((item) => JsonObjectMember.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    members = pre_members;
     extra = json['@extra'];
   }
 

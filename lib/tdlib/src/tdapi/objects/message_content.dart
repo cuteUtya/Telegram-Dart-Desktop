@@ -182,8 +182,16 @@ class MessageText extends MessageContent {
 
   /// Parse from a json
   MessageText.fromJson(Map<String, dynamic> json)  {
-    text = FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
-    webPage = WebPage.fromJson(json['web_page'] ?? <String, dynamic>{});
+    FormattedText? pre_text;
+    try{
+      pre_text=FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
+   }catch(_){}
+    text = pre_text;
+    WebPage? pre_webPage;
+    try{
+      pre_webPage=WebPage.fromJson(json['web_page'] ?? <String, dynamic>{});
+   }catch(_){}
+    webPage = pre_webPage;
   }
 
   @override
@@ -219,9 +227,21 @@ class MessageAnimation extends MessageContent {
 
   /// Parse from a json
   MessageAnimation.fromJson(Map<String, dynamic> json)  {
-    animation = Animation.fromJson(json['animation'] ?? <String, dynamic>{});
-    caption = FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-    isSecret = json['is_secret'];
+    Animation? pre_animation;
+    try{
+      pre_animation=Animation.fromJson(json['animation'] ?? <String, dynamic>{});
+   }catch(_){}
+    animation = pre_animation;
+    FormattedText? pre_caption;
+    try{
+      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+   }catch(_){}
+    caption = pre_caption;
+    bool? pre_isSecret;
+    try{
+      pre_isSecret=json['is_secret'];
+   }catch(_){}
+    isSecret = pre_isSecret;
   }
 
   @override
@@ -254,8 +274,16 @@ class MessageAudio extends MessageContent {
 
   /// Parse from a json
   MessageAudio.fromJson(Map<String, dynamic> json)  {
-    audio = Audio.fromJson(json['audio'] ?? <String, dynamic>{});
-    caption = FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+    Audio? pre_audio;
+    try{
+      pre_audio=Audio.fromJson(json['audio'] ?? <String, dynamic>{});
+   }catch(_){}
+    audio = pre_audio;
+    FormattedText? pre_caption;
+    try{
+      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+   }catch(_){}
+    caption = pre_caption;
   }
 
   @override
@@ -287,8 +315,16 @@ class MessageDocument extends MessageContent {
 
   /// Parse from a json
   MessageDocument.fromJson(Map<String, dynamic> json)  {
-    document = Document.fromJson(json['document'] ?? <String, dynamic>{});
-    caption = FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+    Document? pre_document;
+    try{
+      pre_document=Document.fromJson(json['document'] ?? <String, dynamic>{});
+   }catch(_){}
+    document = pre_document;
+    FormattedText? pre_caption;
+    try{
+      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+   }catch(_){}
+    caption = pre_caption;
   }
 
   @override
@@ -324,9 +360,21 @@ class MessagePhoto extends MessageContent {
 
   /// Parse from a json
   MessagePhoto.fromJson(Map<String, dynamic> json)  {
-    photo = Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-    caption = FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-    isSecret = json['is_secret'];
+    Photo? pre_photo;
+    try{
+      pre_photo=Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    FormattedText? pre_caption;
+    try{
+      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+   }catch(_){}
+    caption = pre_caption;
+    bool? pre_isSecret;
+    try{
+      pre_isSecret=json['is_secret'];
+   }catch(_){}
+    isSecret = pre_isSecret;
   }
 
   @override
@@ -378,7 +426,11 @@ class MessageSticker extends MessageContent {
 
   /// Parse from a json
   MessageSticker.fromJson(Map<String, dynamic> json)  {
-    sticker = Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
+    Sticker? pre_sticker;
+    try{
+      pre_sticker=Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
+   }catch(_){}
+    sticker = pre_sticker;
   }
 
   @override
@@ -413,9 +465,21 @@ class MessageVideo extends MessageContent {
 
   /// Parse from a json
   MessageVideo.fromJson(Map<String, dynamic> json)  {
-    video = Video.fromJson(json['video'] ?? <String, dynamic>{});
-    caption = FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-    isSecret = json['is_secret'];
+    Video? pre_video;
+    try{
+      pre_video=Video.fromJson(json['video'] ?? <String, dynamic>{});
+   }catch(_){}
+    video = pre_video;
+    FormattedText? pre_caption;
+    try{
+      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+   }catch(_){}
+    caption = pre_caption;
+    bool? pre_isSecret;
+    try{
+      pre_isSecret=json['is_secret'];
+   }catch(_){}
+    isSecret = pre_isSecret;
   }
 
   @override
@@ -475,9 +539,21 @@ class MessageVideoNote extends MessageContent {
 
   /// Parse from a json
   MessageVideoNote.fromJson(Map<String, dynamic> json)  {
-    videoNote = VideoNote.fromJson(json['video_note'] ?? <String, dynamic>{});
-    isViewed = json['is_viewed'];
-    isSecret = json['is_secret'];
+    VideoNote? pre_videoNote;
+    try{
+      pre_videoNote=VideoNote.fromJson(json['video_note'] ?? <String, dynamic>{});
+   }catch(_){}
+    videoNote = pre_videoNote;
+    bool? pre_isViewed;
+    try{
+      pre_isViewed=json['is_viewed'];
+   }catch(_){}
+    isViewed = pre_isViewed;
+    bool? pre_isSecret;
+    try{
+      pre_isSecret=json['is_secret'];
+   }catch(_){}
+    isSecret = pre_isSecret;
   }
 
   @override
@@ -514,9 +590,21 @@ class MessageVoiceNote extends MessageContent {
 
   /// Parse from a json
   MessageVoiceNote.fromJson(Map<String, dynamic> json)  {
-    voiceNote = VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
-    caption = FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-    isListened = json['is_listened'];
+    VoiceNote? pre_voiceNote;
+    try{
+      pre_voiceNote=VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
+   }catch(_){}
+    voiceNote = pre_voiceNote;
+    FormattedText? pre_caption;
+    try{
+      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+   }catch(_){}
+    caption = pre_caption;
+    bool? pre_isListened;
+    try{
+      pre_isListened=json['is_listened'];
+   }catch(_){}
+    isListened = pre_isListened;
   }
 
   @override
@@ -561,11 +649,31 @@ class MessageLocation extends MessageContent {
 
   /// Parse from a json
   MessageLocation.fromJson(Map<String, dynamic> json)  {
-    location = Location.fromJson(json['location'] ?? <String, dynamic>{});
-    livePeriod = json['live_period'];
-    expiresIn = json['expires_in'];
-    heading = json['heading'];
-    proximityAlertRadius = json['proximity_alert_radius'];
+    Location? pre_location;
+    try{
+      pre_location=Location.fromJson(json['location'] ?? <String, dynamic>{});
+   }catch(_){}
+    location = pre_location;
+    int? pre_livePeriod;
+    try{
+      pre_livePeriod=json['live_period'];
+   }catch(_){}
+    livePeriod = pre_livePeriod;
+    int? pre_expiresIn;
+    try{
+      pre_expiresIn=json['expires_in'];
+   }catch(_){}
+    expiresIn = pre_expiresIn;
+    int? pre_heading;
+    try{
+      pre_heading=json['heading'];
+   }catch(_){}
+    heading = pre_heading;
+    int? pre_proximityAlertRadius;
+    try{
+      pre_proximityAlertRadius=json['proximity_alert_radius'];
+   }catch(_){}
+    proximityAlertRadius = pre_proximityAlertRadius;
   }
 
   @override
@@ -596,7 +704,11 @@ class MessageVenue extends MessageContent {
 
   /// Parse from a json
   MessageVenue.fromJson(Map<String, dynamic> json)  {
-    venue = Venue.fromJson(json['venue'] ?? <String, dynamic>{});
+    Venue? pre_venue;
+    try{
+      pre_venue=Venue.fromJson(json['venue'] ?? <String, dynamic>{});
+   }catch(_){}
+    venue = pre_venue;
   }
 
   @override
@@ -623,7 +735,11 @@ class MessageContact extends MessageContent {
 
   /// Parse from a json
   MessageContact.fromJson(Map<String, dynamic> json)  {
-    contact = Contact.fromJson(json['contact'] ?? <String, dynamic>{});
+    Contact? pre_contact;
+    try{
+      pre_contact=Contact.fromJson(json['contact'] ?? <String, dynamic>{});
+   }catch(_){}
+    contact = pre_contact;
   }
 
   @override
@@ -666,11 +782,31 @@ class MessageDice extends MessageContent {
 
   /// Parse from a json
   MessageDice.fromJson(Map<String, dynamic> json)  {
-    initialState = DiceStickers.fromJson(json['initial_state'] ?? <String, dynamic>{});
-    finalState = DiceStickers.fromJson(json['final_state'] ?? <String, dynamic>{});
-    emoji = json['emoji'];
-    value = json['value'];
-    successAnimationFrameNumber = json['success_animation_frame_number'];
+    DiceStickers? pre_initialState;
+    try{
+      pre_initialState=DiceStickers.fromJson(json['initial_state'] ?? <String, dynamic>{});
+   }catch(_){}
+    initialState = pre_initialState;
+    DiceStickers? pre_finalState;
+    try{
+      pre_finalState=DiceStickers.fromJson(json['final_state'] ?? <String, dynamic>{});
+   }catch(_){}
+    finalState = pre_finalState;
+    String? pre_emoji;
+    try{
+      pre_emoji=json['emoji'];
+   }catch(_){}
+    emoji = pre_emoji;
+    int? pre_value;
+    try{
+      pre_value=json['value'];
+   }catch(_){}
+    value = pre_value;
+    int? pre_successAnimationFrameNumber;
+    try{
+      pre_successAnimationFrameNumber=json['success_animation_frame_number'];
+   }catch(_){}
+    successAnimationFrameNumber = pre_successAnimationFrameNumber;
   }
 
   @override
@@ -701,7 +837,11 @@ class MessageGame extends MessageContent {
 
   /// Parse from a json
   MessageGame.fromJson(Map<String, dynamic> json)  {
-    game = Game.fromJson(json['game'] ?? <String, dynamic>{});
+    Game? pre_game;
+    try{
+      pre_game=Game.fromJson(json['game'] ?? <String, dynamic>{});
+   }catch(_){}
+    game = pre_game;
   }
 
   @override
@@ -728,7 +868,11 @@ class MessagePoll extends MessageContent {
 
   /// Parse from a json
   MessagePoll.fromJson(Map<String, dynamic> json)  {
-    poll = Poll.fromJson(json['poll'] ?? <String, dynamic>{});
+    Poll? pre_poll;
+    try{
+      pre_poll=Poll.fromJson(json['poll'] ?? <String, dynamic>{});
+   }catch(_){}
+    poll = pre_poll;
   }
 
   @override
@@ -787,15 +931,51 @@ class MessageInvoice extends MessageContent {
 
   /// Parse from a json
   MessageInvoice.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
-    description = json['description'];
-    photo = Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-    currency = json['currency'];
-    totalAmount = json['total_amount'];
-    startParameter = json['start_parameter'];
-    isTest = json['is_test'];
-    needShippingAddress = json['need_shipping_address'];
-    receiptMessageId = json['receipt_message_id'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
+    Photo? pre_photo;
+    try{
+      pre_photo=Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    String? pre_currency;
+    try{
+      pre_currency=json['currency'];
+   }catch(_){}
+    currency = pre_currency;
+    int? pre_totalAmount;
+    try{
+      pre_totalAmount=json['total_amount'];
+   }catch(_){}
+    totalAmount = pre_totalAmount;
+    String? pre_startParameter;
+    try{
+      pre_startParameter=json['start_parameter'];
+   }catch(_){}
+    startParameter = pre_startParameter;
+    bool? pre_isTest;
+    try{
+      pre_isTest=json['is_test'];
+   }catch(_){}
+    isTest = pre_isTest;
+    bool? pre_needShippingAddress;
+    try{
+      pre_needShippingAddress=json['need_shipping_address'];
+   }catch(_){}
+    needShippingAddress = pre_needShippingAddress;
+    int? pre_receiptMessageId;
+    try{
+      pre_receiptMessageId=json['receipt_message_id'];
+   }catch(_){}
+    receiptMessageId = pre_receiptMessageId;
   }
 
   @override
@@ -838,9 +1018,21 @@ class MessageCall extends MessageContent {
 
   /// Parse from a json
   MessageCall.fromJson(Map<String, dynamic> json)  {
-    isVideo = json['is_video'];
-    discardReason = CallDiscardReason.fromJson(json['discard_reason'] ?? <String, dynamic>{});
-    duration = json['duration'];
+    bool? pre_isVideo;
+    try{
+      pre_isVideo=json['is_video'];
+   }catch(_){}
+    isVideo = pre_isVideo;
+    CallDiscardReason? pre_discardReason;
+    try{
+      pre_discardReason=CallDiscardReason.fromJson(json['discard_reason'] ?? <String, dynamic>{});
+   }catch(_){}
+    discardReason = pre_discardReason;
+    int? pre_duration;
+    try{
+      pre_duration=json['duration'];
+   }catch(_){}
+    duration = pre_duration;
   }
 
   @override
@@ -873,8 +1065,16 @@ class MessageVoiceChatScheduled extends MessageContent {
 
   /// Parse from a json
   MessageVoiceChatScheduled.fromJson(Map<String, dynamic> json)  {
-    groupCallId = json['group_call_id'];
-    startDate = json['start_date'];
+    int? pre_groupCallId;
+    try{
+      pre_groupCallId=json['group_call_id'];
+   }catch(_){}
+    groupCallId = pre_groupCallId;
+    int? pre_startDate;
+    try{
+      pre_startDate=json['start_date'];
+   }catch(_){}
+    startDate = pre_startDate;
   }
 
   @override
@@ -902,7 +1102,11 @@ class MessageVoiceChatStarted extends MessageContent {
 
   /// Parse from a json
   MessageVoiceChatStarted.fromJson(Map<String, dynamic> json)  {
-    groupCallId = json['group_call_id'];
+    int? pre_groupCallId;
+    try{
+      pre_groupCallId=json['group_call_id'];
+   }catch(_){}
+    groupCallId = pre_groupCallId;
   }
 
   @override
@@ -929,7 +1133,11 @@ class MessageVoiceChatEnded extends MessageContent {
 
   /// Parse from a json
   MessageVoiceChatEnded.fromJson(Map<String, dynamic> json)  {
-    duration = json['duration'];
+    int? pre_duration;
+    try{
+      pre_duration=json['duration'];
+   }catch(_){}
+    duration = pre_duration;
   }
 
   @override
@@ -960,8 +1168,16 @@ class MessageInviteVoiceChatParticipants extends MessageContent {
 
   /// Parse from a json
   MessageInviteVoiceChatParticipants.fromJson(Map<String, dynamic> json)  {
-    groupCallId = json['group_call_id'];
-    userIds = List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
+    int? pre_groupCallId;
+    try{
+      pre_groupCallId=json['group_call_id'];
+   }catch(_){}
+    groupCallId = pre_groupCallId;
+    List<int>? pre_userIds;
+    try{
+      pre_userIds=List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    userIds = pre_userIds;
   }
 
   @override
@@ -993,8 +1209,16 @@ class MessageBasicGroupChatCreate extends MessageContent {
 
   /// Parse from a json
   MessageBasicGroupChatCreate.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
-    memberUserIds = List<int>.from((json['member_user_ids'] ?? [])!.map((item) => item).toList());
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    List<int>? pre_memberUserIds;
+    try{
+      pre_memberUserIds=List<int>.from((json['member_user_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    memberUserIds = pre_memberUserIds;
   }
 
   @override
@@ -1022,7 +1246,11 @@ class MessageSupergroupChatCreate extends MessageContent {
 
   /// Parse from a json
   MessageSupergroupChatCreate.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
   }
 
   @override
@@ -1049,7 +1277,11 @@ class MessageChatChangeTitle extends MessageContent {
 
   /// Parse from a json
   MessageChatChangeTitle.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
   }
 
   @override
@@ -1076,7 +1308,11 @@ class MessageChatChangePhoto extends MessageContent {
 
   /// Parse from a json
   MessageChatChangePhoto.fromJson(Map<String, dynamic> json)  {
-    photo = ChatPhoto.fromJson(json['photo'] ?? <String, dynamic>{});
+    ChatPhoto? pre_photo;
+    try{
+      pre_photo=ChatPhoto.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
   }
 
   @override
@@ -1126,7 +1362,11 @@ class MessageChatAddMembers extends MessageContent {
 
   /// Parse from a json
   MessageChatAddMembers.fromJson(Map<String, dynamic> json)  {
-    memberUserIds = List<int>.from((json['member_user_ids'] ?? [])!.map((item) => item).toList());
+    List<int>? pre_memberUserIds;
+    try{
+      pre_memberUserIds=List<int>.from((json['member_user_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    memberUserIds = pre_memberUserIds;
   }
 
   @override
@@ -1176,7 +1416,11 @@ class MessageChatDeleteMember extends MessageContent {
 
   /// Parse from a json
   MessageChatDeleteMember.fromJson(Map<String, dynamic> json)  {
-    userId = json['user_id'];
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
   }
 
   @override
@@ -1203,7 +1447,11 @@ class MessageChatUpgradeTo extends MessageContent {
 
   /// Parse from a json
   MessageChatUpgradeTo.fromJson(Map<String, dynamic> json)  {
-    supergroupId = json['supergroup_id'];
+    int? pre_supergroupId;
+    try{
+      pre_supergroupId=json['supergroup_id'];
+   }catch(_){}
+    supergroupId = pre_supergroupId;
   }
 
   @override
@@ -1234,8 +1482,16 @@ class MessageChatUpgradeFrom extends MessageContent {
 
   /// Parse from a json
   MessageChatUpgradeFrom.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
-    basicGroupId = json['basic_group_id'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    int? pre_basicGroupId;
+    try{
+      pre_basicGroupId=json['basic_group_id'];
+   }catch(_){}
+    basicGroupId = pre_basicGroupId;
   }
 
   @override
@@ -1263,7 +1519,11 @@ class MessagePinMessage extends MessageContent {
 
   /// Parse from a json
   MessagePinMessage.fromJson(Map<String, dynamic> json)  {
-    messageId = json['message_id'];
+    int? pre_messageId;
+    try{
+      pre_messageId=json['message_id'];
+   }catch(_){}
+    messageId = pre_messageId;
   }
 
   @override
@@ -1313,7 +1573,11 @@ class MessageChatSetTheme extends MessageContent {
 
   /// Parse from a json
   MessageChatSetTheme.fromJson(Map<String, dynamic> json)  {
-    themeName = json['theme_name'];
+    String? pre_themeName;
+    try{
+      pre_themeName=json['theme_name'];
+   }catch(_){}
+    themeName = pre_themeName;
   }
 
   @override
@@ -1340,7 +1604,11 @@ class MessageChatSetTtl extends MessageContent {
 
   /// Parse from a json
   MessageChatSetTtl.fromJson(Map<String, dynamic> json)  {
-    ttl = json['ttl'];
+    int? pre_ttl;
+    try{
+      pre_ttl=json['ttl'];
+   }catch(_){}
+    ttl = pre_ttl;
   }
 
   @override
@@ -1367,7 +1635,11 @@ class MessageCustomServiceAction extends MessageContent {
 
   /// Parse from a json
   MessageCustomServiceAction.fromJson(Map<String, dynamic> json)  {
-    text = json['text'];
+    String? pre_text;
+    try{
+      pre_text=json['text'];
+   }catch(_){}
+    text = pre_text;
   }
 
   @override
@@ -1402,9 +1674,21 @@ class MessageGameScore extends MessageContent {
 
   /// Parse from a json
   MessageGameScore.fromJson(Map<String, dynamic> json)  {
-    gameMessageId = json['game_message_id'];
-    gameId = int.tryParse(json['game_id'] ?? "");
-    score = json['score'];
+    int? pre_gameMessageId;
+    try{
+      pre_gameMessageId=json['game_message_id'];
+   }catch(_){}
+    gameMessageId = pre_gameMessageId;
+    int? pre_gameId;
+    try{
+      pre_gameId=int.tryParse(json['game_id'] ?? "");
+   }catch(_){}
+    gameId = pre_gameId;
+    int? pre_score;
+    try{
+      pre_score=json['score'];
+   }catch(_){}
+    score = pre_score;
   }
 
   @override
@@ -1445,10 +1729,26 @@ class MessagePaymentSuccessful extends MessageContent {
 
   /// Parse from a json
   MessagePaymentSuccessful.fromJson(Map<String, dynamic> json)  {
-    invoiceChatId = json['invoice_chat_id'];
-    invoiceMessageId = json['invoice_message_id'];
-    currency = json['currency'];
-    totalAmount = json['total_amount'];
+    int? pre_invoiceChatId;
+    try{
+      pre_invoiceChatId=json['invoice_chat_id'];
+   }catch(_){}
+    invoiceChatId = pre_invoiceChatId;
+    int? pre_invoiceMessageId;
+    try{
+      pre_invoiceMessageId=json['invoice_message_id'];
+   }catch(_){}
+    invoiceMessageId = pre_invoiceMessageId;
+    String? pre_currency;
+    try{
+      pre_currency=json['currency'];
+   }catch(_){}
+    currency = pre_currency;
+    int? pre_totalAmount;
+    try{
+      pre_totalAmount=json['total_amount'];
+   }catch(_){}
+    totalAmount = pre_totalAmount;
   }
 
   @override
@@ -1502,13 +1802,41 @@ class MessagePaymentSuccessfulBot extends MessageContent {
 
   /// Parse from a json
   MessagePaymentSuccessfulBot.fromJson(Map<String, dynamic> json)  {
-    currency = json['currency'];
-    totalAmount = json['total_amount'];
-    invoicePayload = json['invoice_payload'];
-    shippingOptionId = json['shipping_option_id'];
-    orderInfo = OrderInfo.fromJson(json['order_info'] ?? <String, dynamic>{});
-    telegramPaymentChargeId = json['telegram_payment_charge_id'];
-    providerPaymentChargeId = json['provider_payment_charge_id'];
+    String? pre_currency;
+    try{
+      pre_currency=json['currency'];
+   }catch(_){}
+    currency = pre_currency;
+    int? pre_totalAmount;
+    try{
+      pre_totalAmount=json['total_amount'];
+   }catch(_){}
+    totalAmount = pre_totalAmount;
+    String? pre_invoicePayload;
+    try{
+      pre_invoicePayload=json['invoice_payload'];
+   }catch(_){}
+    invoicePayload = pre_invoicePayload;
+    String? pre_shippingOptionId;
+    try{
+      pre_shippingOptionId=json['shipping_option_id'];
+   }catch(_){}
+    shippingOptionId = pre_shippingOptionId;
+    OrderInfo? pre_orderInfo;
+    try{
+      pre_orderInfo=OrderInfo.fromJson(json['order_info'] ?? <String, dynamic>{});
+   }catch(_){}
+    orderInfo = pre_orderInfo;
+    String? pre_telegramPaymentChargeId;
+    try{
+      pre_telegramPaymentChargeId=json['telegram_payment_charge_id'];
+   }catch(_){}
+    telegramPaymentChargeId = pre_telegramPaymentChargeId;
+    String? pre_providerPaymentChargeId;
+    try{
+      pre_providerPaymentChargeId=json['provider_payment_charge_id'];
+   }catch(_){}
+    providerPaymentChargeId = pre_providerPaymentChargeId;
   }
 
   @override
@@ -1564,7 +1892,11 @@ class MessageWebsiteConnected extends MessageContent {
 
   /// Parse from a json
   MessageWebsiteConnected.fromJson(Map<String, dynamic> json)  {
-    domainName = json['domain_name'];
+    String? pre_domainName;
+    try{
+      pre_domainName=json['domain_name'];
+   }catch(_){}
+    domainName = pre_domainName;
   }
 
   @override
@@ -1591,7 +1923,11 @@ class MessagePassportDataSent extends MessageContent {
 
   /// Parse from a json
   MessagePassportDataSent.fromJson(Map<String, dynamic> json)  {
-    types = List<PassportElementType>.from((json['types'] ?? [])!.map((item) => PassportElementType.fromJson(item ?? <String, dynamic>{})).toList());
+    List<PassportElementType>? pre_types;
+    try{
+      pre_types=List<PassportElementType>.from((json['types'] ?? [])!.map((item) => PassportElementType.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    types = pre_types;
   }
 
   @override
@@ -1622,8 +1958,16 @@ class MessagePassportDataReceived extends MessageContent {
 
   /// Parse from a json
   MessagePassportDataReceived.fromJson(Map<String, dynamic> json)  {
-    elements = List<EncryptedPassportElement>.from((json['elements'] ?? [])!.map((item) => EncryptedPassportElement.fromJson(item ?? <String, dynamic>{})).toList());
-    credentials = EncryptedCredentials.fromJson(json['credentials'] ?? <String, dynamic>{});
+    List<EncryptedPassportElement>? pre_elements;
+    try{
+      pre_elements=List<EncryptedPassportElement>.from((json['elements'] ?? [])!.map((item) => EncryptedPassportElement.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    elements = pre_elements;
+    EncryptedCredentials? pre_credentials;
+    try{
+      pre_credentials=EncryptedCredentials.fromJson(json['credentials'] ?? <String, dynamic>{});
+   }catch(_){}
+    credentials = pre_credentials;
   }
 
   @override
@@ -1659,9 +2003,21 @@ class MessageProximityAlertTriggered extends MessageContent {
 
   /// Parse from a json
   MessageProximityAlertTriggered.fromJson(Map<String, dynamic> json)  {
-    traveler = MessageSender.fromJson(json['traveler'] ?? <String, dynamic>{});
-    watcher = MessageSender.fromJson(json['watcher'] ?? <String, dynamic>{});
-    distance = json['distance'];
+    MessageSender? pre_traveler;
+    try{
+      pre_traveler=MessageSender.fromJson(json['traveler'] ?? <String, dynamic>{});
+   }catch(_){}
+    traveler = pre_traveler;
+    MessageSender? pre_watcher;
+    try{
+      pre_watcher=MessageSender.fromJson(json['watcher'] ?? <String, dynamic>{});
+   }catch(_){}
+    watcher = pre_watcher;
+    int? pre_distance;
+    try{
+      pre_distance=json['distance'];
+   }catch(_){}
+    distance = pre_distance;
   }
 
   @override

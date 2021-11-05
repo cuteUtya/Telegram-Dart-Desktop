@@ -49,7 +49,11 @@ class MessageFileTypePrivate extends MessageFileType {
 
   /// Parse from a json
   MessageFileTypePrivate.fromJson(Map<String, dynamic> json)  {
-    name = json['name'];
+    String? pre_name;
+    try{
+      pre_name=json['name'];
+   }catch(_){}
+    name = pre_name;
     extra = json['@extra'];
   }
 
@@ -80,7 +84,11 @@ class MessageFileTypeGroup extends MessageFileType {
 
   /// Parse from a json
   MessageFileTypeGroup.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
     extra = json['@extra'];
   }
 

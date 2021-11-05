@@ -22,10 +22,26 @@ class VoiceNote extends TdObject {
 
   /// Parse from a json
   VoiceNote.fromJson(Map<String, dynamic> json)  {
-    duration = json['duration'];
-    waveform = json['waveform'];
-    mimeType = json['mime_type'];
-    voice = File.fromJson(json['voice'] ?? <String, dynamic>{});
+    int? pre_duration;
+    try{
+      pre_duration=json['duration'];
+   }catch(_){}
+    duration = pre_duration;
+    String? pre_waveform;
+    try{
+      pre_waveform=json['waveform'];
+   }catch(_){}
+    waveform = pre_waveform;
+    String? pre_mimeType;
+    try{
+      pre_mimeType=json['mime_type'];
+   }catch(_){}
+    mimeType = pre_mimeType;
+    File? pre_voice;
+    try{
+      pre_voice=File.fromJson(json['voice'] ?? <String, dynamic>{});
+   }catch(_){}
+    voice = pre_voice;
   }
 
   @override

@@ -77,23 +77,91 @@ class User extends TdObject {
 
   /// Parse from a json
   User.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    firstName = json['first_name'];
-    lastName = json['last_name'];
-    username = json['username'];
-    phoneNumber = json['phone_number'];
-    status = UserStatus.fromJson(json['status'] ?? <String, dynamic>{});
-    profilePhoto = ProfilePhoto.fromJson(json['profile_photo'] ?? <String, dynamic>{});
-    isContact = json['is_contact'];
-    isMutualContact = json['is_mutual_contact'];
-    isVerified = json['is_verified'];
-    isSupport = json['is_support'];
-    restrictionReason = json['restriction_reason'];
-    isScam = json['is_scam'];
-    isFake = json['is_fake'];
-    haveAccess = json['have_access'];
-    type = UserType.fromJson(json['type'] ?? <String, dynamic>{});
-    languageCode = json['language_code'];
+    int? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    String? pre_firstName;
+    try{
+      pre_firstName=json['first_name'];
+   }catch(_){}
+    firstName = pre_firstName;
+    String? pre_lastName;
+    try{
+      pre_lastName=json['last_name'];
+   }catch(_){}
+    lastName = pre_lastName;
+    String? pre_username;
+    try{
+      pre_username=json['username'];
+   }catch(_){}
+    username = pre_username;
+    String? pre_phoneNumber;
+    try{
+      pre_phoneNumber=json['phone_number'];
+   }catch(_){}
+    phoneNumber = pre_phoneNumber;
+    UserStatus? pre_status;
+    try{
+      pre_status=UserStatus.fromJson(json['status'] ?? <String, dynamic>{});
+   }catch(_){}
+    status = pre_status;
+    ProfilePhoto? pre_profilePhoto;
+    try{
+      pre_profilePhoto=ProfilePhoto.fromJson(json['profile_photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    profilePhoto = pre_profilePhoto;
+    bool? pre_isContact;
+    try{
+      pre_isContact=json['is_contact'];
+   }catch(_){}
+    isContact = pre_isContact;
+    bool? pre_isMutualContact;
+    try{
+      pre_isMutualContact=json['is_mutual_contact'];
+   }catch(_){}
+    isMutualContact = pre_isMutualContact;
+    bool? pre_isVerified;
+    try{
+      pre_isVerified=json['is_verified'];
+   }catch(_){}
+    isVerified = pre_isVerified;
+    bool? pre_isSupport;
+    try{
+      pre_isSupport=json['is_support'];
+   }catch(_){}
+    isSupport = pre_isSupport;
+    String? pre_restrictionReason;
+    try{
+      pre_restrictionReason=json['restriction_reason'];
+   }catch(_){}
+    restrictionReason = pre_restrictionReason;
+    bool? pre_isScam;
+    try{
+      pre_isScam=json['is_scam'];
+   }catch(_){}
+    isScam = pre_isScam;
+    bool? pre_isFake;
+    try{
+      pre_isFake=json['is_fake'];
+   }catch(_){}
+    isFake = pre_isFake;
+    bool? pre_haveAccess;
+    try{
+      pre_haveAccess=json['have_access'];
+   }catch(_){}
+    haveAccess = pre_haveAccess;
+    UserType? pre_type;
+    try{
+      pre_type=UserType.fromJson(json['type'] ?? <String, dynamic>{});
+   }catch(_){}
+    type = pre_type;
+    String? pre_languageCode;
+    try{
+      pre_languageCode=json['language_code'];
+   }catch(_){}
+    languageCode = pre_languageCode;
     extra = json['@extra'];
   }
 

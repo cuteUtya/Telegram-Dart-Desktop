@@ -13,7 +13,11 @@ class Text extends TdObject {
 
   /// Parse from a json
   Text.fromJson(Map<String, dynamic> json)  {
-    text = json['text'];
+    String? pre_text;
+    try{
+      pre_text=json['text'];
+   }catch(_){}
+    text = pre_text;
     extra = json['@extra'];
   }
 

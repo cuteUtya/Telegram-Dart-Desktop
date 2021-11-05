@@ -49,16 +49,56 @@ class PaymentForm extends TdObject {
 
   /// Parse from a json
   PaymentForm.fromJson(Map<String, dynamic> json)  {
-    id = int.tryParse(json['id'] ?? "");
-    invoice = Invoice.fromJson(json['invoice'] ?? <String, dynamic>{});
-    url = json['url'];
-    sellerBotUserId = json['seller_bot_user_id'];
-    paymentsProviderUserId = json['payments_provider_user_id'];
-    paymentsProvider = PaymentsProviderStripe.fromJson(json['payments_provider'] ?? <String, dynamic>{});
-    savedOrderInfo = OrderInfo.fromJson(json['saved_order_info'] ?? <String, dynamic>{});
-    savedCredentials = SavedCredentials.fromJson(json['saved_credentials'] ?? <String, dynamic>{});
-    canSaveCredentials = json['can_save_credentials'];
-    needPassword = json['need_password'];
+    int? pre_id;
+    try{
+      pre_id=int.tryParse(json['id'] ?? "");
+   }catch(_){}
+    id = pre_id;
+    Invoice? pre_invoice;
+    try{
+      pre_invoice=Invoice.fromJson(json['invoice'] ?? <String, dynamic>{});
+   }catch(_){}
+    invoice = pre_invoice;
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
+    int? pre_sellerBotUserId;
+    try{
+      pre_sellerBotUserId=json['seller_bot_user_id'];
+   }catch(_){}
+    sellerBotUserId = pre_sellerBotUserId;
+    int? pre_paymentsProviderUserId;
+    try{
+      pre_paymentsProviderUserId=json['payments_provider_user_id'];
+   }catch(_){}
+    paymentsProviderUserId = pre_paymentsProviderUserId;
+    PaymentsProviderStripe? pre_paymentsProvider;
+    try{
+      pre_paymentsProvider=PaymentsProviderStripe.fromJson(json['payments_provider'] ?? <String, dynamic>{});
+   }catch(_){}
+    paymentsProvider = pre_paymentsProvider;
+    OrderInfo? pre_savedOrderInfo;
+    try{
+      pre_savedOrderInfo=OrderInfo.fromJson(json['saved_order_info'] ?? <String, dynamic>{});
+   }catch(_){}
+    savedOrderInfo = pre_savedOrderInfo;
+    SavedCredentials? pre_savedCredentials;
+    try{
+      pre_savedCredentials=SavedCredentials.fromJson(json['saved_credentials'] ?? <String, dynamic>{});
+   }catch(_){}
+    savedCredentials = pre_savedCredentials;
+    bool? pre_canSaveCredentials;
+    try{
+      pre_canSaveCredentials=json['can_save_credentials'];
+   }catch(_){}
+    canSaveCredentials = pre_canSaveCredentials;
+    bool? pre_needPassword;
+    try{
+      pre_needPassword=json['need_password'];
+   }catch(_){}
+    needPassword = pre_needPassword;
     extra = json['@extra'];
   }
 

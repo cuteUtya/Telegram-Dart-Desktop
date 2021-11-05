@@ -21,9 +21,21 @@ class AutoDownloadSettingsPresets extends TdObject {
 
   /// Parse from a json
   AutoDownloadSettingsPresets.fromJson(Map<String, dynamic> json)  {
-    low = AutoDownloadSettings.fromJson(json['low'] ?? <String, dynamic>{});
-    medium = AutoDownloadSettings.fromJson(json['medium'] ?? <String, dynamic>{});
-    high = AutoDownloadSettings.fromJson(json['high'] ?? <String, dynamic>{});
+    AutoDownloadSettings? pre_low;
+    try{
+      pre_low=AutoDownloadSettings.fromJson(json['low'] ?? <String, dynamic>{});
+   }catch(_){}
+    low = pre_low;
+    AutoDownloadSettings? pre_medium;
+    try{
+      pre_medium=AutoDownloadSettings.fromJson(json['medium'] ?? <String, dynamic>{});
+   }catch(_){}
+    medium = pre_medium;
+    AutoDownloadSettings? pre_high;
+    try{
+      pre_high=AutoDownloadSettings.fromJson(json['high'] ?? <String, dynamic>{});
+   }catch(_){}
+    high = pre_high;
     extra = json['@extra'];
   }
 

@@ -14,8 +14,16 @@ class InputPersonalDocument extends TdObject {
 
   /// Parse from a json
   InputPersonalDocument.fromJson(Map<String, dynamic> json)  {
-    files = List<InputFile>.from((json['files'] ?? [])!.map((item) => InputFile.fromJson(item ?? <String, dynamic>{})).toList());
-    translation = List<InputFile>.from((json['translation'] ?? [])!.map((item) => InputFile.fromJson(item ?? <String, dynamic>{})).toList());
+    List<InputFile>? pre_files;
+    try{
+      pre_files=List<InputFile>.from((json['files'] ?? [])!.map((item) => InputFile.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    files = pre_files;
+    List<InputFile>? pre_translation;
+    try{
+      pre_translation=List<InputFile>.from((json['translation'] ?? [])!.map((item) => InputFile.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    translation = pre_translation;
   }
 
   @override

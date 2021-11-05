@@ -14,8 +14,16 @@ class RecommendedChatFilter extends TdObject {
 
   /// Parse from a json
   RecommendedChatFilter.fromJson(Map<String, dynamic> json)  {
-    filter = ChatFilter.fromJson(json['filter'] ?? <String, dynamic>{});
-    description = json['description'];
+    ChatFilter? pre_filter;
+    try{
+      pre_filter=ChatFilter.fromJson(json['filter'] ?? <String, dynamic>{});
+   }catch(_){}
+    filter = pre_filter;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
   }
 
   @override

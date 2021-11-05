@@ -33,12 +33,36 @@ class MessageLinkInfo extends TdObject {
 
   /// Parse from a json
   MessageLinkInfo.fromJson(Map<String, dynamic> json)  {
-    isPublic = json['is_public'];
-    chatId = json['chat_id'];
-    message = Message.fromJson(json['message'] ?? <String, dynamic>{});
-    mediaTimestamp = json['media_timestamp'];
-    forAlbum = json['for_album'];
-    forComment = json['for_comment'];
+    bool? pre_isPublic;
+    try{
+      pre_isPublic=json['is_public'];
+   }catch(_){}
+    isPublic = pre_isPublic;
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
+    Message? pre_message;
+    try{
+      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
+   }catch(_){}
+    message = pre_message;
+    int? pre_mediaTimestamp;
+    try{
+      pre_mediaTimestamp=json['media_timestamp'];
+   }catch(_){}
+    mediaTimestamp = pre_mediaTimestamp;
+    bool? pre_forAlbum;
+    try{
+      pre_forAlbum=json['for_album'];
+   }catch(_){}
+    forAlbum = pre_forAlbum;
+    bool? pre_forComment;
+    try{
+      pre_forComment=json['for_comment'];
+   }catch(_){}
+    forComment = pre_forComment;
     extra = json['@extra'];
   }
 

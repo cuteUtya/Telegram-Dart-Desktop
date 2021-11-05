@@ -14,8 +14,16 @@ class ChatStatisticsInviterInfo extends TdObject {
 
   /// Parse from a json
   ChatStatisticsInviterInfo.fromJson(Map<String, dynamic> json)  {
-    userId = json['user_id'];
-    addedMemberCount = json['added_member_count'];
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
+    int? pre_addedMemberCount;
+    try{
+      pre_addedMemberCount=json['added_member_count'];
+   }catch(_){}
+    addedMemberCount = pre_addedMemberCount;
   }
 
   @override

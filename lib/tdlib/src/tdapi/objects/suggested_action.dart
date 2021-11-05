@@ -144,7 +144,11 @@ class SuggestedActionConvertToBroadcastGroup extends SuggestedAction {
 
   /// Parse from a json
   SuggestedActionConvertToBroadcastGroup.fromJson(Map<String, dynamic> json)  {
-    supergroupId = json['supergroup_id'];
+    int? pre_supergroupId;
+    try{
+      pre_supergroupId=json['supergroup_id'];
+   }catch(_){}
+    supergroupId = pre_supergroupId;
   }
 
   @override

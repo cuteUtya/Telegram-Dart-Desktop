@@ -29,11 +29,31 @@ class File extends TdObject {
 
   /// Parse from a json
   File.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    size = json['size'];
-    expectedSize = json['expected_size'];
-    local = LocalFile.fromJson(json['local'] ?? <String, dynamic>{});
-    remote = RemoteFile.fromJson(json['remote'] ?? <String, dynamic>{});
+    int? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    int? pre_size;
+    try{
+      pre_size=json['size'];
+   }catch(_){}
+    size = pre_size;
+    int? pre_expectedSize;
+    try{
+      pre_expectedSize=json['expected_size'];
+   }catch(_){}
+    expectedSize = pre_expectedSize;
+    LocalFile? pre_local;
+    try{
+      pre_local=LocalFile.fromJson(json['local'] ?? <String, dynamic>{});
+   }catch(_){}
+    local = pre_local;
+    RemoteFile? pre_remote;
+    try{
+      pre_remote=RemoteFile.fromJson(json['remote'] ?? <String, dynamic>{});
+   }catch(_){}
+    remote = pre_remote;
     extra = json['@extra'];
   }
 

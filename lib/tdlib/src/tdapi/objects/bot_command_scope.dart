@@ -150,7 +150,11 @@ class BotCommandScopeChat extends BotCommandScope {
 
   /// Parse from a json
   BotCommandScopeChat.fromJson(Map<String, dynamic> json)  {
-    chatId = json['chat_id'];
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
   }
 
   @override
@@ -177,7 +181,11 @@ class BotCommandScopeChatAdministrators extends BotCommandScope {
 
   /// Parse from a json
   BotCommandScopeChatAdministrators.fromJson(Map<String, dynamic> json)  {
-    chatId = json['chat_id'];
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
   }
 
   @override
@@ -208,8 +216,16 @@ class BotCommandScopeChatMember extends BotCommandScope {
 
   /// Parse from a json
   BotCommandScopeChatMember.fromJson(Map<String, dynamic> json)  {
-    chatId = json['chat_id'];
-    userId = json['user_id'];
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
   }
 
   @override

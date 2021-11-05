@@ -13,7 +13,11 @@ class ChatEvents extends TdObject {
 
   /// Parse from a json
   ChatEvents.fromJson(Map<String, dynamic> json)  {
-    events = List<ChatEvent>.from((json['events'] ?? [])!.map((item) => ChatEvent.fromJson(item ?? <String, dynamic>{})).toList());
+    List<ChatEvent>? pre_events;
+    try{
+      pre_events=List<ChatEvent>.from((json['events'] ?? [])!.map((item) => ChatEvent.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    events = pre_events;
     extra = json['@extra'];
   }
 

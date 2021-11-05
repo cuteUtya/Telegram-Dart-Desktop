@@ -18,9 +18,21 @@ class ShippingOption extends TdObject {
 
   /// Parse from a json
   ShippingOption.fromJson(Map<String, dynamic> json)  {
-    id = json['id'];
-    title = json['title'];
-    priceParts = List<LabeledPricePart>.from((json['price_parts'] ?? [])!.map((item) => LabeledPricePart.fromJson(item ?? <String, dynamic>{})).toList());
+    String? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    List<LabeledPricePart>? pre_priceParts;
+    try{
+      pre_priceParts=List<LabeledPricePart>.from((json['price_parts'] ?? [])!.map((item) => LabeledPricePart.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    priceParts = pre_priceParts;
   }
 
   @override

@@ -20,7 +20,7 @@ class ReplyMarkup extends TdObject {
       case ReplyMarkupInlineKeyboard.CONSTRUCTOR:
         return ReplyMarkupInlineKeyboard.fromJson(json);
     }
-    throw Exception('undefined type');
+    throw new Exception('undefined type');
   }
 
   @override
@@ -43,7 +43,11 @@ class ReplyMarkupRemoveKeyboard extends ReplyMarkup {
 
   /// Parse from a json
   ReplyMarkupRemoveKeyboard.fromJson(Map<String, dynamic> json) {
-    isPersonal = json['is_personal'];
+    bool? pre_isPersonal;
+    try {
+      pre_isPersonal = json['is_personal'];
+    } catch (_) {}
+    isPersonal = pre_isPersonal;
   }
 
   @override
@@ -72,8 +76,16 @@ class ReplyMarkupForceReply extends ReplyMarkup {
 
   /// Parse from a json
   ReplyMarkupForceReply.fromJson(Map<String, dynamic> json) {
-    isPersonal = json['is_personal'];
-    inputFieldPlaceholder = json['input_field_placeholder'];
+    bool? pre_isPersonal;
+    try {
+      pre_isPersonal = json['is_personal'];
+    } catch (_) {}
+    isPersonal = pre_isPersonal;
+    String? pre_inputFieldPlaceholder;
+    try {
+      pre_inputFieldPlaceholder = json['input_field_placeholder'];
+    } catch (_) {}
+    inputFieldPlaceholder = pre_inputFieldPlaceholder;
   }
 
   @override
@@ -117,16 +129,36 @@ class ReplyMarkupShowKeyboard extends ReplyMarkup {
 
   /// Parse from a json
   ReplyMarkupShowKeyboard.fromJson(Map<String, dynamic> json) {
-    rows = List<List<KeyboardButton>>.from((json['rows'] ?? [])!
-        .map((item) => List<KeyboardButton>.from((item ?? [])!
-            .map((innerItem) =>
-                KeyboardButton.fromJson(innerItem ?? <String, dynamic>{}))
-            .toList()))
-        .toList());
-    resizeKeyboard = json['resize_keyboard'];
-    oneTime = json['one_time'];
-    isPersonal = json['is_personal'];
-    inputFieldPlaceholder = json['input_field_placeholder'];
+    List<List<KeyboardButton>>? pre_rows;
+    try {
+      pre_rows = List<List<KeyboardButton>>.from((json['rows'] ?? [])!
+          .map((item) => List<KeyboardButton>.from((item ?? [])!
+              .map((innerItem) =>
+                  KeyboardButton.fromJson(innerItem ?? <String, dynamic>{}))
+              .toList()))
+          .toList());
+    } catch (_) {}
+    rows = pre_rows;
+    bool? pre_resizeKeyboard;
+    try {
+      pre_resizeKeyboard = json['resize_keyboard'];
+    } catch (_) {}
+    resizeKeyboard = pre_resizeKeyboard;
+    bool? pre_oneTime;
+    try {
+      pre_oneTime = json['one_time'];
+    } catch (_) {}
+    oneTime = pre_oneTime;
+    bool? pre_isPersonal;
+    try {
+      pre_isPersonal = json['is_personal'];
+    } catch (_) {}
+    isPersonal = pre_isPersonal;
+    String? pre_inputFieldPlaceholder;
+    try {
+      pre_inputFieldPlaceholder = json['input_field_placeholder'];
+    } catch (_) {}
+    inputFieldPlaceholder = pre_inputFieldPlaceholder;
   }
 
   @override
@@ -156,12 +188,16 @@ class ReplyMarkupInlineKeyboard extends ReplyMarkup {
 
   /// Parse from a json
   ReplyMarkupInlineKeyboard.fromJson(Map<String, dynamic> json) {
-    rows = List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!
-        .map((item) => List<InlineKeyboardButton>.from((item ?? [])!
-            .map((innerItem) =>
-                InlineKeyboardButton.fromJson(innerItem ?? <String, dynamic>{}))
-            .toList()))
-        .toList());
+    List<List<InlineKeyboardButton>>? pre_rows;
+    try {
+      pre_rows = List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!
+          .map((item) => List<InlineKeyboardButton>.from((item ?? [])!
+              .map((innerItem) => InlineKeyboardButton.fromJson(
+                  innerItem ?? <String, dynamic>{}))
+              .toList()))
+          .toList());
+    } catch (_) {}
+    rows = pre_rows;
   }
 
   @override

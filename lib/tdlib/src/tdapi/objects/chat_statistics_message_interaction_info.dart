@@ -18,9 +18,21 @@ class ChatStatisticsMessageInteractionInfo extends TdObject {
 
   /// Parse from a json
   ChatStatisticsMessageInteractionInfo.fromJson(Map<String, dynamic> json)  {
-    messageId = json['message_id'];
-    viewCount = json['view_count'];
-    forwardCount = json['forward_count'];
+    int? pre_messageId;
+    try{
+      pre_messageId=json['message_id'];
+   }catch(_){}
+    messageId = pre_messageId;
+    int? pre_viewCount;
+    try{
+      pre_viewCount=json['view_count'];
+   }catch(_){}
+    viewCount = pre_viewCount;
+    int? pre_forwardCount;
+    try{
+      pre_forwardCount=json['forward_count'];
+   }catch(_){}
+    forwardCount = pre_forwardCount;
   }
 
   @override

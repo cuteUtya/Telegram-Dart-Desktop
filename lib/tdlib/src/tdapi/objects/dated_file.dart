@@ -14,8 +14,16 @@ class DatedFile extends TdObject {
 
   /// Parse from a json
   DatedFile.fromJson(Map<String, dynamic> json)  {
-    file = File.fromJson(json['file'] ?? <String, dynamic>{});
-    date = json['date'];
+    File? pre_file;
+    try{
+      pre_file=File.fromJson(json['file'] ?? <String, dynamic>{});
+   }catch(_){}
+    file = pre_file;
+    int? pre_date;
+    try{
+      pre_date=json['date'];
+   }catch(_){}
+    date = pre_date;
   }
 
   @override

@@ -13,7 +13,11 @@ class Seconds extends TdObject {
 
   /// Parse from a json
   Seconds.fromJson(Map<String, dynamic> json)  {
-    seconds = json['seconds'];
+    double? pre_seconds;
+    try{
+      pre_seconds=json['seconds'];
+   }catch(_){}
+    seconds = pre_seconds;
     extra = json['@extra'];
   }
 

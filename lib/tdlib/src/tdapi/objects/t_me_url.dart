@@ -14,8 +14,16 @@ class TMeUrl extends TdObject {
 
   /// Parse from a json
   TMeUrl.fromJson(Map<String, dynamic> json)  {
-    url = json['url'];
-    type = TMeUrlType.fromJson(json['type'] ?? <String, dynamic>{});
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
+    TMeUrlType? pre_type;
+    try{
+      pre_type=TMeUrlType.fromJson(json['type'] ?? <String, dynamic>{});
+   }catch(_){}
+    type = pre_type;
   }
 
   @override

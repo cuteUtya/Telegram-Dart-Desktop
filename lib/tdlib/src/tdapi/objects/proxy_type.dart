@@ -50,8 +50,16 @@ class ProxyTypeSocks5 extends ProxyType {
 
   /// Parse from a json
   ProxyTypeSocks5.fromJson(Map<String, dynamic> json)  {
-    username = json['username'];
-    password = json['password'];
+    String? pre_username;
+    try{
+      pre_username=json['username'];
+   }catch(_){}
+    username = pre_username;
+    String? pre_password;
+    try{
+      pre_password=json['password'];
+   }catch(_){}
+    password = pre_password;
   }
 
   @override
@@ -87,9 +95,21 @@ class ProxyTypeHttp extends ProxyType {
 
   /// Parse from a json
   ProxyTypeHttp.fromJson(Map<String, dynamic> json)  {
-    username = json['username'];
-    password = json['password'];
-    httpOnly = json['http_only'];
+    String? pre_username;
+    try{
+      pre_username=json['username'];
+   }catch(_){}
+    username = pre_username;
+    String? pre_password;
+    try{
+      pre_password=json['password'];
+   }catch(_){}
+    password = pre_password;
+    bool? pre_httpOnly;
+    try{
+      pre_httpOnly=json['http_only'];
+   }catch(_){}
+    httpOnly = pre_httpOnly;
   }
 
   @override
@@ -118,7 +138,11 @@ class ProxyTypeMtproto extends ProxyType {
 
   /// Parse from a json
   ProxyTypeMtproto.fromJson(Map<String, dynamic> json)  {
-    secret = json['secret'];
+    String? pre_secret;
+    try{
+      pre_secret=json['secret'];
+   }catch(_){}
+    secret = pre_secret;
   }
 
   @override

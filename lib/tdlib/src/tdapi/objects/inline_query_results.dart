@@ -29,11 +29,31 @@ class InlineQueryResults extends TdObject {
 
   /// Parse from a json
   InlineQueryResults.fromJson(Map<String, dynamic> json)  {
-    inlineQueryId = int.tryParse(json['inline_query_id'] ?? "");
-    nextOffset = json['next_offset'];
-    results = List<InlineQueryResult>.from((json['results'] ?? [])!.map((item) => InlineQueryResult.fromJson(item ?? <String, dynamic>{})).toList());
-    switchPmText = json['switch_pm_text'];
-    switchPmParameter = json['switch_pm_parameter'];
+    int? pre_inlineQueryId;
+    try{
+      pre_inlineQueryId=int.tryParse(json['inline_query_id'] ?? "");
+   }catch(_){}
+    inlineQueryId = pre_inlineQueryId;
+    String? pre_nextOffset;
+    try{
+      pre_nextOffset=json['next_offset'];
+   }catch(_){}
+    nextOffset = pre_nextOffset;
+    List<InlineQueryResult>? pre_results;
+    try{
+      pre_results=List<InlineQueryResult>.from((json['results'] ?? [])!.map((item) => InlineQueryResult.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    results = pre_results;
+    String? pre_switchPmText;
+    try{
+      pre_switchPmText=json['switch_pm_text'];
+   }catch(_){}
+    switchPmText = pre_switchPmText;
+    String? pre_switchPmParameter;
+    try{
+      pre_switchPmParameter=json['switch_pm_parameter'];
+   }catch(_){}
+    switchPmParameter = pre_switchPmParameter;
     extra = json['@extra'];
   }
 

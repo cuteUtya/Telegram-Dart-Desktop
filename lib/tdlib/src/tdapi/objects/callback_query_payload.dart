@@ -46,7 +46,11 @@ class CallbackQueryPayloadData extends CallbackQueryPayload {
 
   /// Parse from a json
   CallbackQueryPayloadData.fromJson(Map<String, dynamic> json)  {
-    data = json['data'];
+    String? pre_data;
+    try{
+      pre_data=json['data'];
+   }catch(_){}
+    data = pre_data;
   }
 
   @override
@@ -77,8 +81,16 @@ class CallbackQueryPayloadDataWithPassword extends CallbackQueryPayload {
 
   /// Parse from a json
   CallbackQueryPayloadDataWithPassword.fromJson(Map<String, dynamic> json)  {
-    password = json['password'];
-    data = json['data'];
+    String? pre_password;
+    try{
+      pre_password=json['password'];
+   }catch(_){}
+    password = pre_password;
+    String? pre_data;
+    try{
+      pre_data=json['data'];
+   }catch(_){}
+    data = pre_data;
   }
 
   @override
@@ -106,7 +118,11 @@ class CallbackQueryPayloadGame extends CallbackQueryPayload {
 
   /// Parse from a json
   CallbackQueryPayloadGame.fromJson(Map<String, dynamic> json)  {
-    gameShortName = json['game_short_name'];
+    String? pre_gameShortName;
+    try{
+      pre_gameShortName=json['game_short_name'];
+   }catch(_){}
+    gameShortName = pre_gameShortName;
   }
 
   @override

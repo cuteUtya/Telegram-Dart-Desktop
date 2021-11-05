@@ -21,9 +21,21 @@ class CallbackQueryAnswer extends TdObject {
 
   /// Parse from a json
   CallbackQueryAnswer.fromJson(Map<String, dynamic> json)  {
-    text = json['text'];
-    showAlert = json['show_alert'];
-    url = json['url'];
+    String? pre_text;
+    try{
+      pre_text=json['text'];
+   }catch(_){}
+    text = pre_text;
+    bool? pre_showAlert;
+    try{
+      pre_showAlert=json['show_alert'];
+   }catch(_){}
+    showAlert = pre_showAlert;
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
     extra = json['@extra'];
   }
 

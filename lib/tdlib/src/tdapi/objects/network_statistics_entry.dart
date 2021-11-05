@@ -55,10 +55,26 @@ class NetworkStatisticsEntryFile extends NetworkStatisticsEntry {
 
   /// Parse from a json
   NetworkStatisticsEntryFile.fromJson(Map<String, dynamic> json)  {
-    fileType = FileType.fromJson(json['file_type'] ?? <String, dynamic>{});
-    networkType = NetworkType.fromJson(json['network_type'] ?? <String, dynamic>{});
-    sentBytes = json['sent_bytes'];
-    receivedBytes = json['received_bytes'];
+    FileType? pre_fileType;
+    try{
+      pre_fileType=FileType.fromJson(json['file_type'] ?? <String, dynamic>{});
+   }catch(_){}
+    fileType = pre_fileType;
+    NetworkType? pre_networkType;
+    try{
+      pre_networkType=NetworkType.fromJson(json['network_type'] ?? <String, dynamic>{});
+   }catch(_){}
+    networkType = pre_networkType;
+    int? pre_sentBytes;
+    try{
+      pre_sentBytes=json['sent_bytes'];
+   }catch(_){}
+    sentBytes = pre_sentBytes;
+    int? pre_receivedBytes;
+    try{
+      pre_receivedBytes=json['received_bytes'];
+   }catch(_){}
+    receivedBytes = pre_receivedBytes;
   }
 
   @override
@@ -100,10 +116,26 @@ class NetworkStatisticsEntryCall extends NetworkStatisticsEntry {
 
   /// Parse from a json
   NetworkStatisticsEntryCall.fromJson(Map<String, dynamic> json)  {
-    networkType = NetworkType.fromJson(json['network_type'] ?? <String, dynamic>{});
-    sentBytes = json['sent_bytes'];
-    receivedBytes = json['received_bytes'];
-    duration = json['duration'];
+    NetworkType? pre_networkType;
+    try{
+      pre_networkType=NetworkType.fromJson(json['network_type'] ?? <String, dynamic>{});
+   }catch(_){}
+    networkType = pre_networkType;
+    int? pre_sentBytes;
+    try{
+      pre_sentBytes=json['sent_bytes'];
+   }catch(_){}
+    sentBytes = pre_sentBytes;
+    int? pre_receivedBytes;
+    try{
+      pre_receivedBytes=json['received_bytes'];
+   }catch(_){}
+    receivedBytes = pre_receivedBytes;
+    double? pre_duration;
+    try{
+      pre_duration=json['duration'];
+   }catch(_){}
+    duration = pre_duration;
   }
 
   @override

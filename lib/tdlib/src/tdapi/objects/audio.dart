@@ -38,14 +38,46 @@ class Audio extends TdObject {
 
   /// Parse from a json
   Audio.fromJson(Map<String, dynamic> json)  {
-    duration = json['duration'];
-    title = json['title'];
-    performer = json['performer'];
-    fileName = json['file_name'];
-    mimeType = json['mime_type'];
-    albumCoverMinithumbnail = Minithumbnail.fromJson(json['album_cover_minithumbnail'] ?? <String, dynamic>{});
-    albumCoverThumbnail = Thumbnail.fromJson(json['album_cover_thumbnail'] ?? <String, dynamic>{});
-    audio = File.fromJson(json['audio'] ?? <String, dynamic>{});
+    int? pre_duration;
+    try{
+      pre_duration=json['duration'];
+   }catch(_){}
+    duration = pre_duration;
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_performer;
+    try{
+      pre_performer=json['performer'];
+   }catch(_){}
+    performer = pre_performer;
+    String? pre_fileName;
+    try{
+      pre_fileName=json['file_name'];
+   }catch(_){}
+    fileName = pre_fileName;
+    String? pre_mimeType;
+    try{
+      pre_mimeType=json['mime_type'];
+   }catch(_){}
+    mimeType = pre_mimeType;
+    Minithumbnail? pre_albumCoverMinithumbnail;
+    try{
+      pre_albumCoverMinithumbnail=Minithumbnail.fromJson(json['album_cover_minithumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    albumCoverMinithumbnail = pre_albumCoverMinithumbnail;
+    Thumbnail? pre_albumCoverThumbnail;
+    try{
+      pre_albumCoverThumbnail=Thumbnail.fromJson(json['album_cover_thumbnail'] ?? <String, dynamic>{});
+   }catch(_){}
+    albumCoverThumbnail = pre_albumCoverThumbnail;
+    File? pre_audio;
+    try{
+      pre_audio=File.fromJson(json['audio'] ?? <String, dynamic>{});
+   }catch(_){}
+    audio = pre_audio;
   }
 
   @override

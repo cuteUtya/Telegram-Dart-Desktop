@@ -64,7 +64,11 @@ class InputPassportElementErrorSourceUnspecified extends InputPassportElementErr
 
   /// Parse from a json
   InputPassportElementErrorSourceUnspecified.fromJson(Map<String, dynamic> json)  {
-    elementHash = json['element_hash'];
+    String? pre_elementHash;
+    try{
+      pre_elementHash=json['element_hash'];
+   }catch(_){}
+    elementHash = pre_elementHash;
   }
 
   @override
@@ -95,8 +99,16 @@ class InputPassportElementErrorSourceDataField extends InputPassportElementError
 
   /// Parse from a json
   InputPassportElementErrorSourceDataField.fromJson(Map<String, dynamic> json)  {
-    fieldName = json['field_name'];
-    dataHash = json['data_hash'];
+    String? pre_fieldName;
+    try{
+      pre_fieldName=json['field_name'];
+   }catch(_){}
+    fieldName = pre_fieldName;
+    String? pre_dataHash;
+    try{
+      pre_dataHash=json['data_hash'];
+   }catch(_){}
+    dataHash = pre_dataHash;
   }
 
   @override
@@ -124,7 +136,11 @@ class InputPassportElementErrorSourceFrontSide extends InputPassportElementError
 
   /// Parse from a json
   InputPassportElementErrorSourceFrontSide.fromJson(Map<String, dynamic> json)  {
-    fileHash = json['file_hash'];
+    String? pre_fileHash;
+    try{
+      pre_fileHash=json['file_hash'];
+   }catch(_){}
+    fileHash = pre_fileHash;
   }
 
   @override
@@ -151,7 +167,11 @@ class InputPassportElementErrorSourceReverseSide extends InputPassportElementErr
 
   /// Parse from a json
   InputPassportElementErrorSourceReverseSide.fromJson(Map<String, dynamic> json)  {
-    fileHash = json['file_hash'];
+    String? pre_fileHash;
+    try{
+      pre_fileHash=json['file_hash'];
+   }catch(_){}
+    fileHash = pre_fileHash;
   }
 
   @override
@@ -178,7 +198,11 @@ class InputPassportElementErrorSourceSelfie extends InputPassportElementErrorSou
 
   /// Parse from a json
   InputPassportElementErrorSourceSelfie.fromJson(Map<String, dynamic> json)  {
-    fileHash = json['file_hash'];
+    String? pre_fileHash;
+    try{
+      pre_fileHash=json['file_hash'];
+   }catch(_){}
+    fileHash = pre_fileHash;
   }
 
   @override
@@ -205,7 +229,11 @@ class InputPassportElementErrorSourceTranslationFile extends InputPassportElemen
 
   /// Parse from a json
   InputPassportElementErrorSourceTranslationFile.fromJson(Map<String, dynamic> json)  {
-    fileHash = json['file_hash'];
+    String? pre_fileHash;
+    try{
+      pre_fileHash=json['file_hash'];
+   }catch(_){}
+    fileHash = pre_fileHash;
   }
 
   @override
@@ -232,7 +260,11 @@ class InputPassportElementErrorSourceTranslationFiles extends InputPassportEleme
 
   /// Parse from a json
   InputPassportElementErrorSourceTranslationFiles.fromJson(Map<String, dynamic> json)  {
-    fileHashes = List<String>.from((json['file_hashes'] ?? [])!.map((item) => item).toList());
+    List<String>? pre_fileHashes;
+    try{
+      pre_fileHashes=List<String>.from((json['file_hashes'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    fileHashes = pre_fileHashes;
   }
 
   @override
@@ -259,7 +291,11 @@ class InputPassportElementErrorSourceFile extends InputPassportElementErrorSourc
 
   /// Parse from a json
   InputPassportElementErrorSourceFile.fromJson(Map<String, dynamic> json)  {
-    fileHash = json['file_hash'];
+    String? pre_fileHash;
+    try{
+      pre_fileHash=json['file_hash'];
+   }catch(_){}
+    fileHash = pre_fileHash;
   }
 
   @override
@@ -286,7 +322,11 @@ class InputPassportElementErrorSourceFiles extends InputPassportElementErrorSour
 
   /// Parse from a json
   InputPassportElementErrorSourceFiles.fromJson(Map<String, dynamic> json)  {
-    fileHashes = List<String>.from((json['file_hashes'] ?? [])!.map((item) => item).toList());
+    List<String>? pre_fileHashes;
+    try{
+      pre_fileHashes=List<String>.from((json['file_hashes'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    fileHashes = pre_fileHashes;
   }
 
   @override

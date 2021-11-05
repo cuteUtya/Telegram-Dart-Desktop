@@ -413,7 +413,11 @@ class TextEntityTypePreCode extends TextEntityType {
 
   /// Parse from a json
   TextEntityTypePreCode.fromJson(Map<String, dynamic> json)  {
-    language = json['language'];
+    String? pre_language;
+    try{
+      pre_language=json['language'];
+   }catch(_){}
+    language = pre_language;
   }
 
   @override
@@ -440,7 +444,11 @@ class TextEntityTypeTextUrl extends TextEntityType {
 
   /// Parse from a json
   TextEntityTypeTextUrl.fromJson(Map<String, dynamic> json)  {
-    url = json['url'];
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
   }
 
   @override
@@ -467,7 +475,11 @@ class TextEntityTypeMentionName extends TextEntityType {
 
   /// Parse from a json
   TextEntityTypeMentionName.fromJson(Map<String, dynamic> json)  {
-    userId = json['user_id'];
+    int? pre_userId;
+    try{
+      pre_userId=json['user_id'];
+   }catch(_){}
+    userId = pre_userId;
   }
 
   @override
@@ -494,7 +506,11 @@ class TextEntityTypeMediaTimestamp extends TextEntityType {
 
   /// Parse from a json
   TextEntityTypeMediaTimestamp.fromJson(Map<String, dynamic> json)  {
-    mediaTimestamp = json['media_timestamp'];
+    int? pre_mediaTimestamp;
+    try{
+      pre_mediaTimestamp=json['media_timestamp'];
+   }catch(_){}
+    mediaTimestamp = pre_mediaTimestamp;
   }
 
   @override

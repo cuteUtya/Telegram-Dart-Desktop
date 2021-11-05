@@ -26,11 +26,31 @@ class PhotoSize extends TdObject {
 
   /// Parse from a json
   PhotoSize.fromJson(Map<String, dynamic> json)  {
-    type = json['type'];
-    photo = File.fromJson(json['photo'] ?? <String, dynamic>{});
-    width = json['width'];
-    height = json['height'];
-    progressiveSizes = List<int>.from((json['progressive_sizes'] ?? [])!.map((item) => item).toList());
+    String? pre_type;
+    try{
+      pre_type=json['type'];
+   }catch(_){}
+    type = pre_type;
+    File? pre_photo;
+    try{
+      pre_photo=File.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    int? pre_width;
+    try{
+      pre_width=json['width'];
+   }catch(_){}
+    width = pre_width;
+    int? pre_height;
+    try{
+      pre_height=json['height'];
+   }catch(_){}
+    height = pre_height;
+    List<int>? pre_progressiveSizes;
+    try{
+      pre_progressiveSizes=List<int>.from((json['progressive_sizes'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    progressiveSizes = pre_progressiveSizes;
   }
 
   @override

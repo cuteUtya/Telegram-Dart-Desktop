@@ -61,19 +61,71 @@ class ChatFilter extends TdObject {
 
   /// Parse from a json
   ChatFilter.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
-    iconName = json['icon_name'];
-    pinnedChatIds = List<int>.from((json['pinned_chat_ids'] ?? [])!.map((item) => item).toList());
-    includedChatIds = List<int>.from((json['included_chat_ids'] ?? [])!.map((item) => item).toList());
-    excludedChatIds = List<int>.from((json['excluded_chat_ids'] ?? [])!.map((item) => item).toList());
-    excludeMuted = json['exclude_muted'];
-    excludeRead = json['exclude_read'];
-    excludeArchived = json['exclude_archived'];
-    includeContacts = json['include_contacts'];
-    includeNonContacts = json['include_non_contacts'];
-    includeBots = json['include_bots'];
-    includeGroups = json['include_groups'];
-    includeChannels = json['include_channels'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    String? pre_iconName;
+    try{
+      pre_iconName=json['icon_name'];
+   }catch(_){}
+    iconName = pre_iconName;
+    List<int>? pre_pinnedChatIds;
+    try{
+      pre_pinnedChatIds=List<int>.from((json['pinned_chat_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    pinnedChatIds = pre_pinnedChatIds;
+    List<int>? pre_includedChatIds;
+    try{
+      pre_includedChatIds=List<int>.from((json['included_chat_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    includedChatIds = pre_includedChatIds;
+    List<int>? pre_excludedChatIds;
+    try{
+      pre_excludedChatIds=List<int>.from((json['excluded_chat_ids'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    excludedChatIds = pre_excludedChatIds;
+    bool? pre_excludeMuted;
+    try{
+      pre_excludeMuted=json['exclude_muted'];
+   }catch(_){}
+    excludeMuted = pre_excludeMuted;
+    bool? pre_excludeRead;
+    try{
+      pre_excludeRead=json['exclude_read'];
+   }catch(_){}
+    excludeRead = pre_excludeRead;
+    bool? pre_excludeArchived;
+    try{
+      pre_excludeArchived=json['exclude_archived'];
+   }catch(_){}
+    excludeArchived = pre_excludeArchived;
+    bool? pre_includeContacts;
+    try{
+      pre_includeContacts=json['include_contacts'];
+   }catch(_){}
+    includeContacts = pre_includeContacts;
+    bool? pre_includeNonContacts;
+    try{
+      pre_includeNonContacts=json['include_non_contacts'];
+   }catch(_){}
+    includeNonContacts = pre_includeNonContacts;
+    bool? pre_includeBots;
+    try{
+      pre_includeBots=json['include_bots'];
+   }catch(_){}
+    includeBots = pre_includeBots;
+    bool? pre_includeGroups;
+    try{
+      pre_includeGroups=json['include_groups'];
+   }catch(_){}
+    includeGroups = pre_includeGroups;
+    bool? pre_includeChannels;
+    try{
+      pre_includeChannels=json['include_channels'];
+   }catch(_){}
+    includeChannels = pre_includeChannels;
     extra = json['@extra'];
   }
 

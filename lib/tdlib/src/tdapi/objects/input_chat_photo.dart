@@ -46,7 +46,11 @@ class InputChatPhotoPrevious extends InputChatPhoto {
 
   /// Parse from a json
   InputChatPhotoPrevious.fromJson(Map<String, dynamic> json)  {
-    chatPhotoId = int.tryParse(json['chat_photo_id'] ?? "");
+    int? pre_chatPhotoId;
+    try{
+      pre_chatPhotoId=int.tryParse(json['chat_photo_id'] ?? "");
+   }catch(_){}
+    chatPhotoId = pre_chatPhotoId;
   }
 
   @override
@@ -73,7 +77,11 @@ class InputChatPhotoStatic extends InputChatPhoto {
 
   /// Parse from a json
   InputChatPhotoStatic.fromJson(Map<String, dynamic> json)  {
-    photo = InputFile.fromJson(json['photo'] ?? <String, dynamic>{});
+    InputFile? pre_photo;
+    try{
+      pre_photo=InputFile.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
   }
 
   @override
@@ -104,8 +112,16 @@ class InputChatPhotoAnimation extends InputChatPhoto {
 
   /// Parse from a json
   InputChatPhotoAnimation.fromJson(Map<String, dynamic> json)  {
-    animation = InputFile.fromJson(json['animation'] ?? <String, dynamic>{});
-    mainFrameTimestamp = json['main_frame_timestamp'];
+    InputFile? pre_animation;
+    try{
+      pre_animation=InputFile.fromJson(json['animation'] ?? <String, dynamic>{});
+   }catch(_){}
+    animation = pre_animation;
+    double? pre_mainFrameTimestamp;
+    try{
+      pre_mainFrameTimestamp=json['main_frame_timestamp'];
+   }catch(_){}
+    mainFrameTimestamp = pre_mainFrameTimestamp;
   }
 
   @override

@@ -52,7 +52,11 @@ class MessageForwardOriginUser extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginUser.fromJson(Map<String, dynamic> json)  {
-    senderUserId = json['sender_user_id'];
+    int? pre_senderUserId;
+    try{
+      pre_senderUserId=json['sender_user_id'];
+   }catch(_){}
+    senderUserId = pre_senderUserId;
   }
 
   @override
@@ -83,8 +87,16 @@ class MessageForwardOriginChat extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginChat.fromJson(Map<String, dynamic> json)  {
-    senderChatId = json['sender_chat_id'];
-    authorSignature = json['author_signature'];
+    int? pre_senderChatId;
+    try{
+      pre_senderChatId=json['sender_chat_id'];
+   }catch(_){}
+    senderChatId = pre_senderChatId;
+    String? pre_authorSignature;
+    try{
+      pre_authorSignature=json['author_signature'];
+   }catch(_){}
+    authorSignature = pre_authorSignature;
   }
 
   @override
@@ -112,7 +124,11 @@ class MessageForwardOriginHiddenUser extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginHiddenUser.fromJson(Map<String, dynamic> json)  {
-    senderName = json['sender_name'];
+    String? pre_senderName;
+    try{
+      pre_senderName=json['sender_name'];
+   }catch(_){}
+    senderName = pre_senderName;
   }
 
   @override
@@ -147,9 +163,21 @@ class MessageForwardOriginChannel extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginChannel.fromJson(Map<String, dynamic> json)  {
-    chatId = json['chat_id'];
-    messageId = json['message_id'];
-    authorSignature = json['author_signature'];
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
+    int? pre_messageId;
+    try{
+      pre_messageId=json['message_id'];
+   }catch(_){}
+    messageId = pre_messageId;
+    String? pre_authorSignature;
+    try{
+      pre_authorSignature=json['author_signature'];
+   }catch(_){}
+    authorSignature = pre_authorSignature;
   }
 
   @override
@@ -178,7 +206,11 @@ class MessageForwardOriginMessageImport extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginMessageImport.fromJson(Map<String, dynamic> json)  {
-    senderName = json['sender_name'];
+    String? pre_senderName;
+    try{
+      pre_senderName=json['sender_name'];
+   }catch(_){}
+    senderName = pre_senderName;
   }
 
   @override

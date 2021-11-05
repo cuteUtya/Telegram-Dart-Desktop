@@ -78,24 +78,96 @@ class GroupCallParticipant extends TdObject {
 
   /// Parse from a json
   GroupCallParticipant.fromJson(Map<String, dynamic> json)  {
-    participantId = MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
-    audioSourceId = json['audio_source_id'];
-    screenSharingAudioSourceId = json['screen_sharing_audio_source_id'];
-    videoInfo = GroupCallParticipantVideoInfo.fromJson(json['video_info'] ?? <String, dynamic>{});
-    screenSharingVideoInfo = GroupCallParticipantVideoInfo.fromJson(json['screen_sharing_video_info'] ?? <String, dynamic>{});
-    bio = json['bio'];
-    isCurrentUser = json['is_current_user'];
-    isSpeaking = json['is_speaking'];
-    isHandRaised = json['is_hand_raised'];
-    canBeMutedForAllUsers = json['can_be_muted_for_all_users'];
-    canBeUnmutedForAllUsers = json['can_be_unmuted_for_all_users'];
-    canBeMutedForCurrentUser = json['can_be_muted_for_current_user'];
-    canBeUnmutedForCurrentUser = json['can_be_unmuted_for_current_user'];
-    isMutedForAllUsers = json['is_muted_for_all_users'];
-    isMutedForCurrentUser = json['is_muted_for_current_user'];
-    canUnmuteSelf = json['can_unmute_self'];
-    volumeLevel = json['volume_level'];
-    order = json['order'];
+    MessageSender? pre_participantId;
+    try{
+      pre_participantId=MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
+   }catch(_){}
+    participantId = pre_participantId;
+    int? pre_audioSourceId;
+    try{
+      pre_audioSourceId=json['audio_source_id'];
+   }catch(_){}
+    audioSourceId = pre_audioSourceId;
+    int? pre_screenSharingAudioSourceId;
+    try{
+      pre_screenSharingAudioSourceId=json['screen_sharing_audio_source_id'];
+   }catch(_){}
+    screenSharingAudioSourceId = pre_screenSharingAudioSourceId;
+    GroupCallParticipantVideoInfo? pre_videoInfo;
+    try{
+      pre_videoInfo=GroupCallParticipantVideoInfo.fromJson(json['video_info'] ?? <String, dynamic>{});
+   }catch(_){}
+    videoInfo = pre_videoInfo;
+    GroupCallParticipantVideoInfo? pre_screenSharingVideoInfo;
+    try{
+      pre_screenSharingVideoInfo=GroupCallParticipantVideoInfo.fromJson(json['screen_sharing_video_info'] ?? <String, dynamic>{});
+   }catch(_){}
+    screenSharingVideoInfo = pre_screenSharingVideoInfo;
+    String? pre_bio;
+    try{
+      pre_bio=json['bio'];
+   }catch(_){}
+    bio = pre_bio;
+    bool? pre_isCurrentUser;
+    try{
+      pre_isCurrentUser=json['is_current_user'];
+   }catch(_){}
+    isCurrentUser = pre_isCurrentUser;
+    bool? pre_isSpeaking;
+    try{
+      pre_isSpeaking=json['is_speaking'];
+   }catch(_){}
+    isSpeaking = pre_isSpeaking;
+    bool? pre_isHandRaised;
+    try{
+      pre_isHandRaised=json['is_hand_raised'];
+   }catch(_){}
+    isHandRaised = pre_isHandRaised;
+    bool? pre_canBeMutedForAllUsers;
+    try{
+      pre_canBeMutedForAllUsers=json['can_be_muted_for_all_users'];
+   }catch(_){}
+    canBeMutedForAllUsers = pre_canBeMutedForAllUsers;
+    bool? pre_canBeUnmutedForAllUsers;
+    try{
+      pre_canBeUnmutedForAllUsers=json['can_be_unmuted_for_all_users'];
+   }catch(_){}
+    canBeUnmutedForAllUsers = pre_canBeUnmutedForAllUsers;
+    bool? pre_canBeMutedForCurrentUser;
+    try{
+      pre_canBeMutedForCurrentUser=json['can_be_muted_for_current_user'];
+   }catch(_){}
+    canBeMutedForCurrentUser = pre_canBeMutedForCurrentUser;
+    bool? pre_canBeUnmutedForCurrentUser;
+    try{
+      pre_canBeUnmutedForCurrentUser=json['can_be_unmuted_for_current_user'];
+   }catch(_){}
+    canBeUnmutedForCurrentUser = pre_canBeUnmutedForCurrentUser;
+    bool? pre_isMutedForAllUsers;
+    try{
+      pre_isMutedForAllUsers=json['is_muted_for_all_users'];
+   }catch(_){}
+    isMutedForAllUsers = pre_isMutedForAllUsers;
+    bool? pre_isMutedForCurrentUser;
+    try{
+      pre_isMutedForCurrentUser=json['is_muted_for_current_user'];
+   }catch(_){}
+    isMutedForCurrentUser = pre_isMutedForCurrentUser;
+    bool? pre_canUnmuteSelf;
+    try{
+      pre_canUnmuteSelf=json['can_unmute_self'];
+   }catch(_){}
+    canUnmuteSelf = pre_canUnmuteSelf;
+    int? pre_volumeLevel;
+    try{
+      pre_volumeLevel=json['volume_level'];
+   }catch(_){}
+    volumeLevel = pre_volumeLevel;
+    String? pre_order;
+    try{
+      pre_order=json['order'];
+   }catch(_){}
+    order = pre_order;
   }
 
   @override

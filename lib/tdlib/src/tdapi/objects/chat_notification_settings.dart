@@ -46,16 +46,56 @@ class ChatNotificationSettings extends TdObject {
 
   /// Parse from a json
   ChatNotificationSettings.fromJson(Map<String, dynamic> json)  {
-    useDefaultMuteFor = json['use_default_mute_for'];
-    muteFor = json['mute_for'];
-    useDefaultSound = json['use_default_sound'];
-    sound = json['sound'];
-    useDefaultShowPreview = json['use_default_show_preview'];
-    showPreview = json['show_preview'];
-    useDefaultDisablePinnedMessageNotifications = json['use_default_disable_pinned_message_notifications'];
-    disablePinnedMessageNotifications = json['disable_pinned_message_notifications'];
-    useDefaultDisableMentionNotifications = json['use_default_disable_mention_notifications'];
-    disableMentionNotifications = json['disable_mention_notifications'];
+    bool? pre_useDefaultMuteFor;
+    try{
+      pre_useDefaultMuteFor=json['use_default_mute_for'];
+   }catch(_){}
+    useDefaultMuteFor = pre_useDefaultMuteFor;
+    int? pre_muteFor;
+    try{
+      pre_muteFor=json['mute_for'];
+   }catch(_){}
+    muteFor = pre_muteFor;
+    bool? pre_useDefaultSound;
+    try{
+      pre_useDefaultSound=json['use_default_sound'];
+   }catch(_){}
+    useDefaultSound = pre_useDefaultSound;
+    String? pre_sound;
+    try{
+      pre_sound=json['sound'];
+   }catch(_){}
+    sound = pre_sound;
+    bool? pre_useDefaultShowPreview;
+    try{
+      pre_useDefaultShowPreview=json['use_default_show_preview'];
+   }catch(_){}
+    useDefaultShowPreview = pre_useDefaultShowPreview;
+    bool? pre_showPreview;
+    try{
+      pre_showPreview=json['show_preview'];
+   }catch(_){}
+    showPreview = pre_showPreview;
+    bool? pre_useDefaultDisablePinnedMessageNotifications;
+    try{
+      pre_useDefaultDisablePinnedMessageNotifications=json['use_default_disable_pinned_message_notifications'];
+   }catch(_){}
+    useDefaultDisablePinnedMessageNotifications = pre_useDefaultDisablePinnedMessageNotifications;
+    bool? pre_disablePinnedMessageNotifications;
+    try{
+      pre_disablePinnedMessageNotifications=json['disable_pinned_message_notifications'];
+   }catch(_){}
+    disablePinnedMessageNotifications = pre_disablePinnedMessageNotifications;
+    bool? pre_useDefaultDisableMentionNotifications;
+    try{
+      pre_useDefaultDisableMentionNotifications=json['use_default_disable_mention_notifications'];
+   }catch(_){}
+    useDefaultDisableMentionNotifications = pre_useDefaultDisableMentionNotifications;
+    bool? pre_disableMentionNotifications;
+    try{
+      pre_disableMentionNotifications=json['disable_mention_notifications'];
+   }catch(_){}
+    disableMentionNotifications = pre_disableMentionNotifications;
   }
 
   @override

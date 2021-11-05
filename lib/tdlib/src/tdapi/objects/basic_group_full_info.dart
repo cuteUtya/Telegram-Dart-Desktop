@@ -33,12 +33,36 @@ class BasicGroupFullInfo extends TdObject {
 
   /// Parse from a json
   BasicGroupFullInfo.fromJson(Map<String, dynamic> json)  {
-    photo = ChatPhoto.fromJson(json['photo'] ?? <String, dynamic>{});
-    description = json['description'];
-    creatorUserId = json['creator_user_id'];
-    members = List<ChatMember>.from((json['members'] ?? [])!.map((item) => ChatMember.fromJson(item ?? <String, dynamic>{})).toList());
-    inviteLink = ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
-    botCommands = List<BotCommands>.from((json['bot_commands'] ?? [])!.map((item) => BotCommands.fromJson(item ?? <String, dynamic>{})).toList());
+    ChatPhoto? pre_photo;
+    try{
+      pre_photo=ChatPhoto.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
+    int? pre_creatorUserId;
+    try{
+      pre_creatorUserId=json['creator_user_id'];
+   }catch(_){}
+    creatorUserId = pre_creatorUserId;
+    List<ChatMember>? pre_members;
+    try{
+      pre_members=List<ChatMember>.from((json['members'] ?? [])!.map((item) => ChatMember.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    members = pre_members;
+    ChatInviteLink? pre_inviteLink;
+    try{
+      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
+   }catch(_){}
+    inviteLink = pre_inviteLink;
+    List<BotCommands>? pre_botCommands;
+    try{
+      pre_botCommands=List<BotCommands>.from((json['bot_commands'] ?? [])!.map((item) => BotCommands.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    botCommands = pre_botCommands;
     extra = json['@extra'];
   }
 

@@ -14,8 +14,16 @@ class BankCardActionOpenUrl extends TdObject {
 
   /// Parse from a json
   BankCardActionOpenUrl.fromJson(Map<String, dynamic> json)  {
-    text = json['text'];
-    url = json['url'];
+    String? pre_text;
+    try{
+      pre_text=json['text'];
+   }catch(_){}
+    text = pre_text;
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
   }
 
   @override

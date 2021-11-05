@@ -46,7 +46,11 @@ class BackgroundFillSolid extends BackgroundFill {
 
   /// Parse from a json
   BackgroundFillSolid.fromJson(Map<String, dynamic> json)  {
-    color = json['color'];
+    int? pre_color;
+    try{
+      pre_color=json['color'];
+   }catch(_){}
+    color = pre_color;
   }
 
   @override
@@ -81,9 +85,21 @@ class BackgroundFillGradient extends BackgroundFill {
 
   /// Parse from a json
   BackgroundFillGradient.fromJson(Map<String, dynamic> json)  {
-    topColor = json['top_color'];
-    bottomColor = json['bottom_color'];
-    rotationAngle = json['rotation_angle'];
+    int? pre_topColor;
+    try{
+      pre_topColor=json['top_color'];
+   }catch(_){}
+    topColor = pre_topColor;
+    int? pre_bottomColor;
+    try{
+      pre_bottomColor=json['bottom_color'];
+   }catch(_){}
+    bottomColor = pre_bottomColor;
+    int? pre_rotationAngle;
+    try{
+      pre_rotationAngle=json['rotation_angle'];
+   }catch(_){}
+    rotationAngle = pre_rotationAngle;
   }
 
   @override
@@ -112,7 +128,11 @@ class BackgroundFillFreeformGradient extends BackgroundFill {
 
   /// Parse from a json
   BackgroundFillFreeformGradient.fromJson(Map<String, dynamic> json)  {
-    colors = List<int>.from((json['colors'] ?? [])!.map((item) => item).toList());
+    List<int>? pre_colors;
+    try{
+      pre_colors=List<int>.from((json['colors'] ?? [])!.map((item) => item).toList());
+   }catch(_){}
+    colors = pre_colors;
   }
 
   @override

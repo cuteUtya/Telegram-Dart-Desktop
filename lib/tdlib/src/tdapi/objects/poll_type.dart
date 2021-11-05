@@ -43,7 +43,11 @@ class PollTypeRegular extends PollType {
 
   /// Parse from a json
   PollTypeRegular.fromJson(Map<String, dynamic> json)  {
-    allowMultipleAnswers = json['allow_multiple_answers'];
+    bool? pre_allowMultipleAnswers;
+    try{
+      pre_allowMultipleAnswers=json['allow_multiple_answers'];
+   }catch(_){}
+    allowMultipleAnswers = pre_allowMultipleAnswers;
   }
 
   @override
@@ -74,8 +78,16 @@ class PollTypeQuiz extends PollType {
 
   /// Parse from a json
   PollTypeQuiz.fromJson(Map<String, dynamic> json)  {
-    correctOptionId = json['correct_option_id'];
-    explanation = FormattedText.fromJson(json['explanation'] ?? <String, dynamic>{});
+    int? pre_correctOptionId;
+    try{
+      pre_correctOptionId=json['correct_option_id'];
+   }catch(_){}
+    correctOptionId = pre_correctOptionId;
+    FormattedText? pre_explanation;
+    try{
+      pre_explanation=FormattedText.fromJson(json['explanation'] ?? <String, dynamic>{});
+   }catch(_){}
+    explanation = pre_explanation;
   }
 
   @override

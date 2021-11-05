@@ -17,8 +17,16 @@ class TdError extends TdObject {
 
   /// Parse from a json
   TdError.fromJson(Map<String, dynamic> json)  {
-    code = json['code'];
-    message = json['message'];
+    int? pre_code;
+    try{
+      pre_code=json['code'];
+   }catch(_){}
+    code = pre_code;
+    String? pre_message;
+    try{
+      pre_message=json['message'];
+   }catch(_){}
+    message = pre_message;
     extra = json['@extra'];
   }
 

@@ -13,7 +13,11 @@ class TMeUrls extends TdObject {
 
   /// Parse from a json
   TMeUrls.fromJson(Map<String, dynamic> json)  {
-    urls = List<TMeUrl>.from((json['urls'] ?? [])!.map((item) => TMeUrl.fromJson(item ?? <String, dynamic>{})).toList());
+    List<TMeUrl>? pre_urls;
+    try{
+      pre_urls=List<TMeUrl>.from((json['urls'] ?? [])!.map((item) => TMeUrl.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    urls = pre_urls;
     extra = json['@extra'];
   }
 

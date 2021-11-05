@@ -13,7 +13,11 @@ class DatabaseStatistics extends TdObject {
 
   /// Parse from a json
   DatabaseStatistics.fromJson(Map<String, dynamic> json)  {
-    statistics = json['statistics'];
+    String? pre_statistics;
+    try{
+      pre_statistics=json['statistics'];
+   }catch(_){}
+    statistics = pre_statistics;
     extra = json['@extra'];
   }
 

@@ -17,8 +17,16 @@ class ValidatedOrderInfo extends TdObject {
 
   /// Parse from a json
   ValidatedOrderInfo.fromJson(Map<String, dynamic> json)  {
-    orderInfoId = json['order_info_id'];
-    shippingOptions = List<ShippingOption>.from((json['shipping_options'] ?? [])!.map((item) => ShippingOption.fromJson(item ?? <String, dynamic>{})).toList());
+    String? pre_orderInfoId;
+    try{
+      pre_orderInfoId=json['order_info_id'];
+   }catch(_){}
+    orderInfoId = pre_orderInfoId;
+    List<ShippingOption>? pre_shippingOptions;
+    try{
+      pre_shippingOptions=List<ShippingOption>.from((json['shipping_options'] ?? [])!.map((item) => ShippingOption.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    shippingOptions = pre_shippingOptions;
     extra = json['@extra'];
   }
 

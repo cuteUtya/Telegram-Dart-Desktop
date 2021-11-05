@@ -13,7 +13,11 @@ class Stickers extends TdObject {
 
   /// Parse from a json
   Stickers.fromJson(Map<String, dynamic> json)  {
-    stickers = List<Sticker>.from((json['stickers'] ?? [])!.map((item) => Sticker.fromJson(item ?? <String, dynamic>{})).toList());
+    List<Sticker>? pre_stickers;
+    try{
+      pre_stickers=List<Sticker>.from((json['stickers'] ?? [])!.map((item) => Sticker.fromJson(item ?? <String, dynamic>{})).toList());
+   }catch(_){}
+    stickers = pre_stickers;
     extra = json['@extra'];
   }
 

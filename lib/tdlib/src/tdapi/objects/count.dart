@@ -13,7 +13,11 @@ class Count extends TdObject {
 
   /// Parse from a json
   Count.fromJson(Map<String, dynamic> json)  {
-    count = json['count'];
+    int? pre_count;
+    try{
+      pre_count=json['count'];
+   }catch(_){}
+    count = pre_count;
     extra = json['@extra'];
   }
 

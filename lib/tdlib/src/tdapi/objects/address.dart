@@ -30,12 +30,36 @@ class Address extends TdObject {
 
   /// Parse from a json
   Address.fromJson(Map<String, dynamic> json)  {
-    countryCode = json['country_code'];
-    state = json['state'];
-    city = json['city'];
-    streetLine1 = json['street_line1'];
-    streetLine2 = json['street_line2'];
-    postalCode = json['postal_code'];
+    String? pre_countryCode;
+    try{
+      pre_countryCode=json['country_code'];
+   }catch(_){}
+    countryCode = pre_countryCode;
+    String? pre_state;
+    try{
+      pre_state=json['state'];
+   }catch(_){}
+    state = pre_state;
+    String? pre_city;
+    try{
+      pre_city=json['city'];
+   }catch(_){}
+    city = pre_city;
+    String? pre_streetLine1;
+    try{
+      pre_streetLine1=json['street_line1'];
+   }catch(_){}
+    streetLine1 = pre_streetLine1;
+    String? pre_streetLine2;
+    try{
+      pre_streetLine2=json['street_line2'];
+   }catch(_){}
+    streetLine2 = pre_streetLine2;
+    String? pre_postalCode;
+    try{
+      pre_postalCode=json['postal_code'];
+   }catch(_){}
+    postalCode = pre_postalCode;
   }
 
   @override

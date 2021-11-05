@@ -38,14 +38,46 @@ class LocalFile extends TdObject {
 
   /// Parse from a json
   LocalFile.fromJson(Map<String, dynamic> json)  {
-    path = json['path'];
-    canBeDownloaded = json['can_be_downloaded'];
-    canBeDeleted = json['can_be_deleted'];
-    isDownloadingActive = json['is_downloading_active'];
-    isDownloadingCompleted = json['is_downloading_completed'];
-    downloadOffset = json['download_offset'];
-    downloadedPrefixSize = json['downloaded_prefix_size'];
-    downloadedSize = json['downloaded_size'];
+    String? pre_path;
+    try{
+      pre_path=json['path'];
+   }catch(_){}
+    path = pre_path;
+    bool? pre_canBeDownloaded;
+    try{
+      pre_canBeDownloaded=json['can_be_downloaded'];
+   }catch(_){}
+    canBeDownloaded = pre_canBeDownloaded;
+    bool? pre_canBeDeleted;
+    try{
+      pre_canBeDeleted=json['can_be_deleted'];
+   }catch(_){}
+    canBeDeleted = pre_canBeDeleted;
+    bool? pre_isDownloadingActive;
+    try{
+      pre_isDownloadingActive=json['is_downloading_active'];
+   }catch(_){}
+    isDownloadingActive = pre_isDownloadingActive;
+    bool? pre_isDownloadingCompleted;
+    try{
+      pre_isDownloadingCompleted=json['is_downloading_completed'];
+   }catch(_){}
+    isDownloadingCompleted = pre_isDownloadingCompleted;
+    int? pre_downloadOffset;
+    try{
+      pre_downloadOffset=json['download_offset'];
+   }catch(_){}
+    downloadOffset = pre_downloadOffset;
+    int? pre_downloadedPrefixSize;
+    try{
+      pre_downloadedPrefixSize=json['downloaded_prefix_size'];
+   }catch(_){}
+    downloadedPrefixSize = pre_downloadedPrefixSize;
+    int? pre_downloadedSize;
+    try{
+      pre_downloadedSize=json['downloaded_size'];
+   }catch(_){}
+    downloadedSize = pre_downloadedSize;
   }
 
   @override

@@ -74,8 +74,16 @@ class DeviceTokenFirebaseCloudMessaging extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenFirebaseCloudMessaging.fromJson(Map<String, dynamic> json)  {
-    token = json['token'];
-    encrypt = json['encrypt'];
+    String? pre_token;
+    try{
+      pre_token=json['token'];
+   }catch(_){}
+    token = pre_token;
+    bool? pre_encrypt;
+    try{
+      pre_encrypt=json['encrypt'];
+   }catch(_){}
+    encrypt = pre_encrypt;
   }
 
   @override
@@ -107,8 +115,16 @@ class DeviceTokenApplePush extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenApplePush.fromJson(Map<String, dynamic> json)  {
-    deviceToken = json['device_token'];
-    isAppSandbox = json['is_app_sandbox'];
+    String? pre_deviceToken;
+    try{
+      pre_deviceToken=json['device_token'];
+   }catch(_){}
+    deviceToken = pre_deviceToken;
+    bool? pre_isAppSandbox;
+    try{
+      pre_isAppSandbox=json['is_app_sandbox'];
+   }catch(_){}
+    isAppSandbox = pre_isAppSandbox;
   }
 
   @override
@@ -144,9 +160,21 @@ class DeviceTokenApplePushVoIP extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenApplePushVoIP.fromJson(Map<String, dynamic> json)  {
-    deviceToken = json['device_token'];
-    isAppSandbox = json['is_app_sandbox'];
-    encrypt = json['encrypt'];
+    String? pre_deviceToken;
+    try{
+      pre_deviceToken=json['device_token'];
+   }catch(_){}
+    deviceToken = pre_deviceToken;
+    bool? pre_isAppSandbox;
+    try{
+      pre_isAppSandbox=json['is_app_sandbox'];
+   }catch(_){}
+    isAppSandbox = pre_isAppSandbox;
+    bool? pre_encrypt;
+    try{
+      pre_encrypt=json['encrypt'];
+   }catch(_){}
+    encrypt = pre_encrypt;
   }
 
   @override
@@ -175,7 +203,11 @@ class DeviceTokenWindowsPush extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenWindowsPush.fromJson(Map<String, dynamic> json)  {
-    accessToken = json['access_token'];
+    String? pre_accessToken;
+    try{
+      pre_accessToken=json['access_token'];
+   }catch(_){}
+    accessToken = pre_accessToken;
   }
 
   @override
@@ -202,7 +234,11 @@ class DeviceTokenMicrosoftPush extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenMicrosoftPush.fromJson(Map<String, dynamic> json)  {
-    channelUri = json['channel_uri'];
+    String? pre_channelUri;
+    try{
+      pre_channelUri=json['channel_uri'];
+   }catch(_){}
+    channelUri = pre_channelUri;
   }
 
   @override
@@ -229,7 +265,11 @@ class DeviceTokenMicrosoftPushVoIP extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenMicrosoftPushVoIP.fromJson(Map<String, dynamic> json)  {
-    channelUri = json['channel_uri'];
+    String? pre_channelUri;
+    try{
+      pre_channelUri=json['channel_uri'];
+   }catch(_){}
+    channelUri = pre_channelUri;
   }
 
   @override
@@ -264,9 +304,21 @@ class DeviceTokenWebPush extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenWebPush.fromJson(Map<String, dynamic> json)  {
-    endpoint = json['endpoint'];
-    p256dhBase64url = json['p256dh_base64url'];
-    authBase64url = json['auth_base64url'];
+    String? pre_endpoint;
+    try{
+      pre_endpoint=json['endpoint'];
+   }catch(_){}
+    endpoint = pre_endpoint;
+    String? pre_p256dhBase64url;
+    try{
+      pre_p256dhBase64url=json['p256dh_base64url'];
+   }catch(_){}
+    p256dhBase64url = pre_p256dhBase64url;
+    String? pre_authBase64url;
+    try{
+      pre_authBase64url=json['auth_base64url'];
+   }catch(_){}
+    authBase64url = pre_authBase64url;
   }
 
   @override
@@ -295,7 +347,11 @@ class DeviceTokenSimplePush extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenSimplePush.fromJson(Map<String, dynamic> json)  {
-    endpoint = json['endpoint'];
+    String? pre_endpoint;
+    try{
+      pre_endpoint=json['endpoint'];
+   }catch(_){}
+    endpoint = pre_endpoint;
   }
 
   @override
@@ -322,7 +378,11 @@ class DeviceTokenUbuntuPush extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenUbuntuPush.fromJson(Map<String, dynamic> json)  {
-    token = json['token'];
+    String? pre_token;
+    try{
+      pre_token=json['token'];
+   }catch(_){}
+    token = pre_token;
   }
 
   @override
@@ -349,7 +409,11 @@ class DeviceTokenBlackBerryPush extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenBlackBerryPush.fromJson(Map<String, dynamic> json)  {
-    token = json['token'];
+    String? pre_token;
+    try{
+      pre_token=json['token'];
+   }catch(_){}
+    token = pre_token;
   }
 
   @override
@@ -376,7 +440,11 @@ class DeviceTokenTizenPush extends DeviceToken {
 
   /// Parse from a json
   DeviceTokenTizenPush.fromJson(Map<String, dynamic> json)  {
-    regId = json['reg_id'];
+    String? pre_regId;
+    try{
+      pre_regId=json['reg_id'];
+   }catch(_){}
+    regId = pre_regId;
   }
 
   @override

@@ -29,11 +29,31 @@ class StorageStatisticsFast extends TdObject {
 
   /// Parse from a json
   StorageStatisticsFast.fromJson(Map<String, dynamic> json)  {
-    filesSize = json['files_size'];
-    fileCount = json['file_count'];
-    databaseSize = json['database_size'];
-    languagePackDatabaseSize = json['language_pack_database_size'];
-    logSize = json['log_size'];
+    int? pre_filesSize;
+    try{
+      pre_filesSize=json['files_size'];
+   }catch(_){}
+    filesSize = pre_filesSize;
+    int? pre_fileCount;
+    try{
+      pre_fileCount=json['file_count'];
+   }catch(_){}
+    fileCount = pre_fileCount;
+    int? pre_databaseSize;
+    try{
+      pre_databaseSize=json['database_size'];
+   }catch(_){}
+    databaseSize = pre_databaseSize;
+    int? pre_languagePackDatabaseSize;
+    try{
+      pre_languagePackDatabaseSize=json['language_pack_database_size'];
+   }catch(_){}
+    languagePackDatabaseSize = pre_languagePackDatabaseSize;
+    int? pre_logSize;
+    try{
+      pre_logSize=json['log_size'];
+   }catch(_){}
+    logSize = pre_logSize;
     extra = json['@extra'];
   }
 

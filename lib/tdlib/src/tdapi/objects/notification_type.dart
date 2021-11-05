@@ -49,7 +49,11 @@ class NotificationTypeNewMessage extends NotificationType {
 
   /// Parse from a json
   NotificationTypeNewMessage.fromJson(Map<String, dynamic> json)  {
-    message = Message.fromJson(json['message'] ?? <String, dynamic>{});
+    Message? pre_message;
+    try{
+      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
+   }catch(_){}
+    message = pre_message;
   }
 
   @override
@@ -99,7 +103,11 @@ class NotificationTypeNewCall extends NotificationType {
 
   /// Parse from a json
   NotificationTypeNewCall.fromJson(Map<String, dynamic> json)  {
-    callId = json['call_id'];
+    int? pre_callId;
+    try{
+      pre_callId=json['call_id'];
+   }catch(_){}
+    callId = pre_callId;
   }
 
   @override
@@ -142,11 +150,31 @@ class NotificationTypeNewPushMessage extends NotificationType {
 
   /// Parse from a json
   NotificationTypeNewPushMessage.fromJson(Map<String, dynamic> json)  {
-    messageId = json['message_id'];
-    sender = MessageSender.fromJson(json['sender'] ?? <String, dynamic>{});
-    senderName = json['sender_name'];
-    isOutgoing = json['is_outgoing'];
-    content = PushMessageContent.fromJson(json['content'] ?? <String, dynamic>{});
+    int? pre_messageId;
+    try{
+      pre_messageId=json['message_id'];
+   }catch(_){}
+    messageId = pre_messageId;
+    MessageSender? pre_sender;
+    try{
+      pre_sender=MessageSender.fromJson(json['sender'] ?? <String, dynamic>{});
+   }catch(_){}
+    sender = pre_sender;
+    String? pre_senderName;
+    try{
+      pre_senderName=json['sender_name'];
+   }catch(_){}
+    senderName = pre_senderName;
+    bool? pre_isOutgoing;
+    try{
+      pre_isOutgoing=json['is_outgoing'];
+   }catch(_){}
+    isOutgoing = pre_isOutgoing;
+    PushMessageContent? pre_content;
+    try{
+      pre_content=PushMessageContent.fromJson(json['content'] ?? <String, dynamic>{});
+   }catch(_){}
+    content = pre_content;
   }
 
   @override

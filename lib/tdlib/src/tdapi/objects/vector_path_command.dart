@@ -43,7 +43,11 @@ class VectorPathCommandLine extends VectorPathCommand {
 
   /// Parse from a json
   VectorPathCommandLine.fromJson(Map<String, dynamic> json)  {
-    endPoint = Point.fromJson(json['end_point'] ?? <String, dynamic>{});
+    Point? pre_endPoint;
+    try{
+      pre_endPoint=Point.fromJson(json['end_point'] ?? <String, dynamic>{});
+   }catch(_){}
+    endPoint = pre_endPoint;
   }
 
   @override

@@ -58,7 +58,11 @@ class InlineKeyboardButtonTypeUrl extends InlineKeyboardButtonType {
 
   /// Parse from a json
   InlineKeyboardButtonTypeUrl.fromJson(Map<String, dynamic> json)  {
-    url = json['url'];
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
   }
 
   @override
@@ -93,9 +97,21 @@ class InlineKeyboardButtonTypeLoginUrl extends InlineKeyboardButtonType {
 
   /// Parse from a json
   InlineKeyboardButtonTypeLoginUrl.fromJson(Map<String, dynamic> json)  {
-    url = json['url'];
-    id = json['id'];
-    forwardText = json['forward_text'];
+    String? pre_url;
+    try{
+      pre_url=json['url'];
+   }catch(_){}
+    url = pre_url;
+    int? pre_id;
+    try{
+      pre_id=json['id'];
+   }catch(_){}
+    id = pre_id;
+    String? pre_forwardText;
+    try{
+      pre_forwardText=json['forward_text'];
+   }catch(_){}
+    forwardText = pre_forwardText;
   }
 
   @override
@@ -124,7 +140,11 @@ class InlineKeyboardButtonTypeCallback extends InlineKeyboardButtonType {
 
   /// Parse from a json
   InlineKeyboardButtonTypeCallback.fromJson(Map<String, dynamic> json)  {
-    data = json['data'];
+    String? pre_data;
+    try{
+      pre_data=json['data'];
+   }catch(_){}
+    data = pre_data;
   }
 
   @override
@@ -151,7 +171,11 @@ class InlineKeyboardButtonTypeCallbackWithPassword extends InlineKeyboardButtonT
 
   /// Parse from a json
   InlineKeyboardButtonTypeCallbackWithPassword.fromJson(Map<String, dynamic> json)  {
-    data = json['data'];
+    String? pre_data;
+    try{
+      pre_data=json['data'];
+   }catch(_){}
+    data = pre_data;
   }
 
   @override
@@ -205,8 +229,16 @@ class InlineKeyboardButtonTypeSwitchInline extends InlineKeyboardButtonType {
 
   /// Parse from a json
   InlineKeyboardButtonTypeSwitchInline.fromJson(Map<String, dynamic> json)  {
-    query = json['query'];
-    inCurrentChat = json['in_current_chat'];
+    String? pre_query;
+    try{
+      pre_query=json['query'];
+   }catch(_){}
+    query = pre_query;
+    bool? pre_inCurrentChat;
+    try{
+      pre_inCurrentChat=json['in_current_chat'];
+   }catch(_){}
+    inCurrentChat = pre_inCurrentChat;
   }
 
   @override

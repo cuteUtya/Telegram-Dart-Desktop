@@ -42,15 +42,51 @@ class ConnectedWebsite extends TdObject {
 
   /// Parse from a json
   ConnectedWebsite.fromJson(Map<String, dynamic> json)  {
-    id = int.tryParse(json['id'] ?? "");
-    domainName = json['domain_name'];
-    botUserId = json['bot_user_id'];
-    browser = json['browser'];
-    platform = json['platform'];
-    logInDate = json['log_in_date'];
-    lastActiveDate = json['last_active_date'];
-    ip = json['ip'];
-    location = json['location'];
+    int? pre_id;
+    try{
+      pre_id=int.tryParse(json['id'] ?? "");
+   }catch(_){}
+    id = pre_id;
+    String? pre_domainName;
+    try{
+      pre_domainName=json['domain_name'];
+   }catch(_){}
+    domainName = pre_domainName;
+    int? pre_botUserId;
+    try{
+      pre_botUserId=json['bot_user_id'];
+   }catch(_){}
+    botUserId = pre_botUserId;
+    String? pre_browser;
+    try{
+      pre_browser=json['browser'];
+   }catch(_){}
+    browser = pre_browser;
+    String? pre_platform;
+    try{
+      pre_platform=json['platform'];
+   }catch(_){}
+    platform = pre_platform;
+    int? pre_logInDate;
+    try{
+      pre_logInDate=json['log_in_date'];
+   }catch(_){}
+    logInDate = pre_logInDate;
+    int? pre_lastActiveDate;
+    try{
+      pre_lastActiveDate=json['last_active_date'];
+   }catch(_){}
+    lastActiveDate = pre_lastActiveDate;
+    String? pre_ip;
+    try{
+      pre_ip=json['ip'];
+   }catch(_){}
+    ip = pre_ip;
+    String? pre_location;
+    try{
+      pre_location=json['location'];
+   }catch(_){}
+    location = pre_location;
   }
 
   @override

@@ -87,7 +87,11 @@ class PassportElementErrorSourceDataField extends PassportElementErrorSource {
 
   /// Parse from a json
   PassportElementErrorSourceDataField.fromJson(Map<String, dynamic> json)  {
-    fieldName = json['field_name'];
+    String? pre_fieldName;
+    try{
+      pre_fieldName=json['field_name'];
+   }catch(_){}
+    fieldName = pre_fieldName;
   }
 
   @override
@@ -183,7 +187,11 @@ class PassportElementErrorSourceTranslationFile extends PassportElementErrorSour
 
   /// Parse from a json
   PassportElementErrorSourceTranslationFile.fromJson(Map<String, dynamic> json)  {
-    fileIndex = json['file_index'];
+    int? pre_fileIndex;
+    try{
+      pre_fileIndex=json['file_index'];
+   }catch(_){}
+    fileIndex = pre_fileIndex;
   }
 
   @override
@@ -233,7 +241,11 @@ class PassportElementErrorSourceFile extends PassportElementErrorSource {
 
   /// Parse from a json
   PassportElementErrorSourceFile.fromJson(Map<String, dynamic> json)  {
-    fileIndex = json['file_index'];
+    int? pre_fileIndex;
+    try{
+      pre_fileIndex=json['file_index'];
+   }catch(_){}
+    fileIndex = pre_fileIndex;
   }
 
   @override

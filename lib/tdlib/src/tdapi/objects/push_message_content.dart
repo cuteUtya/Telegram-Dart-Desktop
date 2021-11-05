@@ -118,7 +118,11 @@ class PushMessageContentHidden extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentHidden.fromJson(Map<String, dynamic> json)  {
-    isPinned = json['is_pinned'];
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -153,9 +157,21 @@ class PushMessageContentAnimation extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentAnimation.fromJson(Map<String, dynamic> json)  {
-    animation = Animation.fromJson(json['animation'] ?? <String, dynamic>{});
-    caption = json['caption'];
-    isPinned = json['is_pinned'];
+    Animation? pre_animation;
+    try{
+      pre_animation=Animation.fromJson(json['animation'] ?? <String, dynamic>{});
+   }catch(_){}
+    animation = pre_animation;
+    String? pre_caption;
+    try{
+      pre_caption=json['caption'];
+   }catch(_){}
+    caption = pre_caption;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -188,8 +204,16 @@ class PushMessageContentAudio extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentAudio.fromJson(Map<String, dynamic> json)  {
-    audio = Audio.fromJson(json['audio'] ?? <String, dynamic>{});
-    isPinned = json['is_pinned'];
+    Audio? pre_audio;
+    try{
+      pre_audio=Audio.fromJson(json['audio'] ?? <String, dynamic>{});
+   }catch(_){}
+    audio = pre_audio;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -221,8 +245,16 @@ class PushMessageContentContact extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentContact.fromJson(Map<String, dynamic> json)  {
-    name = json['name'];
-    isPinned = json['is_pinned'];
+    String? pre_name;
+    try{
+      pre_name=json['name'];
+   }catch(_){}
+    name = pre_name;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -277,8 +309,16 @@ class PushMessageContentDocument extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentDocument.fromJson(Map<String, dynamic> json)  {
-    document = Document.fromJson(json['document'] ?? <String, dynamic>{});
-    isPinned = json['is_pinned'];
+    Document? pre_document;
+    try{
+      pre_document=Document.fromJson(json['document'] ?? <String, dynamic>{});
+   }catch(_){}
+    document = pre_document;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -310,8 +350,16 @@ class PushMessageContentGame extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentGame.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
-    isPinned = json['is_pinned'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -347,9 +395,21 @@ class PushMessageContentGameScore extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentGameScore.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
-    score = json['score'];
-    isPinned = json['is_pinned'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
+    int? pre_score;
+    try{
+      pre_score=json['score'];
+   }catch(_){}
+    score = pre_score;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -382,8 +442,16 @@ class PushMessageContentInvoice extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentInvoice.fromJson(Map<String, dynamic> json)  {
-    price = json['price'];
-    isPinned = json['is_pinned'];
+    String? pre_price;
+    try{
+      pre_price=json['price'];
+   }catch(_){}
+    price = pre_price;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -415,8 +483,16 @@ class PushMessageContentLocation extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentLocation.fromJson(Map<String, dynamic> json)  {
-    isLive = json['is_live'];
-    isPinned = json['is_pinned'];
+    bool? pre_isLive;
+    try{
+      pre_isLive=json['is_live'];
+   }catch(_){}
+    isLive = pre_isLive;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -456,10 +532,26 @@ class PushMessageContentPhoto extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentPhoto.fromJson(Map<String, dynamic> json)  {
-    photo = Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-    caption = json['caption'];
-    isSecret = json['is_secret'];
-    isPinned = json['is_pinned'];
+    Photo? pre_photo;
+    try{
+      pre_photo=Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+   }catch(_){}
+    photo = pre_photo;
+    String? pre_caption;
+    try{
+      pre_caption=json['caption'];
+   }catch(_){}
+    caption = pre_caption;
+    bool? pre_isSecret;
+    try{
+      pre_isSecret=json['is_secret'];
+   }catch(_){}
+    isSecret = pre_isSecret;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -497,9 +589,21 @@ class PushMessageContentPoll extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentPoll.fromJson(Map<String, dynamic> json)  {
-    question = json['question'];
-    isRegular = json['is_regular'];
-    isPinned = json['is_pinned'];
+    String? pre_question;
+    try{
+      pre_question=json['question'];
+   }catch(_){}
+    question = pre_question;
+    bool? pre_isRegular;
+    try{
+      pre_isRegular=json['is_regular'];
+   }catch(_){}
+    isRegular = pre_isRegular;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -559,9 +663,21 @@ class PushMessageContentSticker extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentSticker.fromJson(Map<String, dynamic> json)  {
-    sticker = Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
-    emoji = json['emoji'];
-    isPinned = json['is_pinned'];
+    Sticker? pre_sticker;
+    try{
+      pre_sticker=Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
+   }catch(_){}
+    sticker = pre_sticker;
+    String? pre_emoji;
+    try{
+      pre_emoji=json['emoji'];
+   }catch(_){}
+    emoji = pre_emoji;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -594,8 +710,16 @@ class PushMessageContentText extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentText.fromJson(Map<String, dynamic> json)  {
-    text = json['text'];
-    isPinned = json['is_pinned'];
+    String? pre_text;
+    try{
+      pre_text=json['text'];
+   }catch(_){}
+    text = pre_text;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -635,10 +759,26 @@ class PushMessageContentVideo extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentVideo.fromJson(Map<String, dynamic> json)  {
-    video = Video.fromJson(json['video'] ?? <String, dynamic>{});
-    caption = json['caption'];
-    isSecret = json['is_secret'];
-    isPinned = json['is_pinned'];
+    Video? pre_video;
+    try{
+      pre_video=Video.fromJson(json['video'] ?? <String, dynamic>{});
+   }catch(_){}
+    video = pre_video;
+    String? pre_caption;
+    try{
+      pre_caption=json['caption'];
+   }catch(_){}
+    caption = pre_caption;
+    bool? pre_isSecret;
+    try{
+      pre_isSecret=json['is_secret'];
+   }catch(_){}
+    isSecret = pre_isSecret;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -672,8 +812,16 @@ class PushMessageContentVideoNote extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentVideoNote.fromJson(Map<String, dynamic> json)  {
-    videoNote = VideoNote.fromJson(json['video_note'] ?? <String, dynamic>{});
-    isPinned = json['is_pinned'];
+    VideoNote? pre_videoNote;
+    try{
+      pre_videoNote=VideoNote.fromJson(json['video_note'] ?? <String, dynamic>{});
+   }catch(_){}
+    videoNote = pre_videoNote;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -705,8 +853,16 @@ class PushMessageContentVoiceNote extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentVoiceNote.fromJson(Map<String, dynamic> json)  {
-    voiceNote = VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
-    isPinned = json['is_pinned'];
+    VoiceNote? pre_voiceNote;
+    try{
+      pre_voiceNote=VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
+   }catch(_){}
+    voiceNote = pre_voiceNote;
+    bool? pre_isPinned;
+    try{
+      pre_isPinned=json['is_pinned'];
+   }catch(_){}
+    isPinned = pre_isPinned;
   }
 
   @override
@@ -765,9 +921,21 @@ class PushMessageContentChatAddMembers extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentChatAddMembers.fromJson(Map<String, dynamic> json)  {
-    memberName = json['member_name'];
-    isCurrentUser = json['is_current_user'];
-    isReturned = json['is_returned'];
+    String? pre_memberName;
+    try{
+      pre_memberName=json['member_name'];
+   }catch(_){}
+    memberName = pre_memberName;
+    bool? pre_isCurrentUser;
+    try{
+      pre_isCurrentUser=json['is_current_user'];
+   }catch(_){}
+    isCurrentUser = pre_isCurrentUser;
+    bool? pre_isReturned;
+    try{
+      pre_isReturned=json['is_returned'];
+   }catch(_){}
+    isReturned = pre_isReturned;
   }
 
   @override
@@ -819,7 +987,11 @@ class PushMessageContentChatChangeTitle extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentChatChangeTitle.fromJson(Map<String, dynamic> json)  {
-    title = json['title'];
+    String? pre_title;
+    try{
+      pre_title=json['title'];
+   }catch(_){}
+    title = pre_title;
   }
 
   @override
@@ -846,7 +1018,11 @@ class PushMessageContentChatSetTheme extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentChatSetTheme.fromJson(Map<String, dynamic> json)  {
-    themeName = json['theme_name'];
+    String? pre_themeName;
+    try{
+      pre_themeName=json['theme_name'];
+   }catch(_){}
+    themeName = pre_themeName;
   }
 
   @override
@@ -881,9 +1057,21 @@ class PushMessageContentChatDeleteMember extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentChatDeleteMember.fromJson(Map<String, dynamic> json)  {
-    memberName = json['member_name'];
-    isCurrentUser = json['is_current_user'];
-    isLeft = json['is_left'];
+    String? pre_memberName;
+    try{
+      pre_memberName=json['member_name'];
+   }catch(_){}
+    memberName = pre_memberName;
+    bool? pre_isCurrentUser;
+    try{
+      pre_isCurrentUser=json['is_current_user'];
+   }catch(_){}
+    isCurrentUser = pre_isCurrentUser;
+    bool? pre_isLeft;
+    try{
+      pre_isLeft=json['is_left'];
+   }catch(_){}
+    isLeft = pre_isLeft;
   }
 
   @override
@@ -935,7 +1123,11 @@ class PushMessageContentMessageForwards extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentMessageForwards.fromJson(Map<String, dynamic> json)  {
-    totalCount = json['total_count'];
+    int? pre_totalCount;
+    try{
+      pre_totalCount=json['total_count'];
+   }catch(_){}
+    totalCount = pre_totalCount;
   }
 
   @override
@@ -978,11 +1170,31 @@ class PushMessageContentMediaAlbum extends PushMessageContent {
 
   /// Parse from a json
   PushMessageContentMediaAlbum.fromJson(Map<String, dynamic> json)  {
-    totalCount = json['total_count'];
-    hasPhotos = json['has_photos'];
-    hasVideos = json['has_videos'];
-    hasAudios = json['has_audios'];
-    hasDocuments = json['has_documents'];
+    int? pre_totalCount;
+    try{
+      pre_totalCount=json['total_count'];
+   }catch(_){}
+    totalCount = pre_totalCount;
+    bool? pre_hasPhotos;
+    try{
+      pre_hasPhotos=json['has_photos'];
+   }catch(_){}
+    hasPhotos = pre_hasPhotos;
+    bool? pre_hasVideos;
+    try{
+      pre_hasVideos=json['has_videos'];
+   }catch(_){}
+    hasVideos = pre_hasVideos;
+    bool? pre_hasAudios;
+    try{
+      pre_hasAudios=json['has_audios'];
+   }catch(_){}
+    hasAudios = pre_hasAudios;
+    bool? pre_hasDocuments;
+    try{
+      pre_hasDocuments=json['has_documents'];
+   }catch(_){}
+    hasDocuments = pre_hasDocuments;
   }
 
   @override

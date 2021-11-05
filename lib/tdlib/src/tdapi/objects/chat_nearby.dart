@@ -14,8 +14,16 @@ class ChatNearby extends TdObject {
 
   /// Parse from a json
   ChatNearby.fromJson(Map<String, dynamic> json)  {
-    chatId = json['chat_id'];
-    distance = json['distance'];
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
+    int? pre_distance;
+    try{
+      pre_distance=json['distance'];
+   }catch(_){}
+    distance = pre_distance;
   }
 
   @override
