@@ -19,7 +19,9 @@ double lerp(double a, double b, double t) {
 }
 
 String getUserLocale() => "ru";
-
+String getDatabaseDirectory() => "/home/timur/tdDb";
+String getFilesDirectory() => "/home/timur/tdFiles";
+String getLanguagePackDatabasePath() => "/home/timur/langPack";
 Future<String> getDeviceName() async {
   var info = DeviceInfoPlugin();
   try {
@@ -47,4 +49,3 @@ Future<String> getSystemVersion() async {
   } catch (_) {}
   return Future(() => "undefined system");
 }
-

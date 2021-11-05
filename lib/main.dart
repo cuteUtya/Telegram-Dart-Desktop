@@ -1,27 +1,58 @@
 import 'package:flutter/foundation.dart';
 import 'package:myapp/Screens/introduction.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/constants.dart';
+import 'package:myapp/secrets.dart';
 import 'package:myapp/tdlib/client.dart';
 
 import 'package:myapp/tdlib/td_api.dart';
+import 'package:myapp/utils.dart';
 
 void main() async {
-  runApp(const MaterialApp(home: App()));
-  var client = TelegramClient();
+  var client = TelegramClient(getDatabaseDirectory());
+  client.userLocale = getUserLocale();
   await client.init();
-  client.updates.listen((event) {
-    print(event.runtimeType);
-  });
-
-  client.send(SetLogVerbosityLevel(newVerbosityLevel: 0));
+  await client.send(SetTdlibParameters(
+      parameters: TdlibParameters(
+          useTestDc: false,
+          databaseDirectory: client.databaseDirectory,
+          filesDirectory: getFilesDirectory(),
+          applicationVersion: appVersion,
+          useFileDatabase: true,
+          useMessageDatabase: true,
+          useChatInfoDatabase: true,
+          useSecretChats: false,
+          apiHash: appHash,
+          apiId: appId,
+          systemLanguageCode: client.userLocale,
+          deviceModel: await getDeviceName(),
+          systemVersion: await getSystemVersion())));
+  await client.send(CheckDatabaseEncryptionKey(encryptionKey: ""));
+  await client.send(SetOption(
+      name: "localization_target",
+      value: OptionValueString(value: "tdesktop")));
+  await client.send(SetOption(
+      name: "language_pack_database_path",
+      value: OptionValueString(value: getLanguagePackDatabasePath())));
+  if (await client.send(GetLanguagePackString(
+      localizationTarget: TelegramClient.localizationTarget,
+      languagePackDatabasePath: getLanguagePackDatabasePath(),
+      languagePackId: client.userLangPackId,
+      key: "lng_start_msgs")) is TdError) {
+    await client.send(
+        GetLanguagePackStrings(keys: [], languagePackId: client.userLocale));
+    await client.send(GetLanguagePackStrings(keys: [], languagePackId: "en"));
+  }
+  runApp(MaterialApp(home: App(client: client)));
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({required this.client, Key? key}) : super(key: key);
 
+  final TelegramClient client;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Introduction());
+    return Center(child: Introduction(client: client));
   }
 }

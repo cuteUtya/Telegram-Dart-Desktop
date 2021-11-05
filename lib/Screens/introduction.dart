@@ -7,6 +7,7 @@ import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
 import 'package:myapp/constants.dart';
+import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/tdlib/client.dart';
 
@@ -111,15 +112,16 @@ class _IntroductionState extends State<Introduction> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            DesktopButton(
-              text: "Continue in English",
-              width: 400,
-              color: ButtonColor.transparency,
-              textColor: ClientTheme.currentTheme.getField("Accent"),
-              pressColor: const Color(0x00),
-            ),
             const SizedBox(height: 10),
-            const DesktopButton(text: "Начать общение", width: 250)
+            FutureBuilder(
+                future: widget.client.getLanguagePackString("lng_start_msgs"),
+                builder: (context, builder) {
+                  return DesktopButton(
+                      text: builder.hasData
+                          ? (builder.data as LanguagePackStringValueOrdinary)
+                              .value!
+                          : "Loading... ");
+                }),
           ],
         ),
         alignment: Alignment.bottomCenter,
