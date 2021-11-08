@@ -19,6 +19,7 @@ class DesktopButton extends StatefulWidget {
       this.font,
       this.textColor,
       this.fontSize = 20,
+      this.weight = FontWeight.normal,
       this.padding = const EdgeInsets.all(12)})
       : super(key: key);
 
@@ -34,6 +35,7 @@ class DesktopButton extends StatefulWidget {
   final Color? textColor;
   final double fontSize;
   final EdgeInsets padding;
+  final FontWeight weight;
 
   @override
   State<DesktopButton> createState() => _desktopButtonState();
@@ -54,14 +56,15 @@ class _desktopButtonState extends State<DesktopButton> {
                     widget.customColor ?? _getEnumColor(widget.color)),
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         padding: widget.padding,
-        child: TextDisplay.H1(
-          widget.text,
-          weight: FontWeight.normal,
-          textColor:
-              widget.textColor ?? ClientTheme.currentTheme.getField("Accent"),
-          size: widget.fontSize,
-          fontFamily: widget.font,
-        ),
+        child: Text(widget.text,
+            textAlign: TextAlign.center,
+            style: TextDisplay.H1(
+              weight: widget.weight,
+              textColor: widget.textColor ??
+                  ClientTheme.currentTheme.getField("Accent"),
+              size: widget.fontSize,
+              fontFamily: widget.font,
+            )),
       ),
       onTap: () {
         widget.onPressed;
