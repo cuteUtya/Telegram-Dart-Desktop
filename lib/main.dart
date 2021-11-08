@@ -41,8 +41,8 @@ void main() async {
       key: "lng_start_msgs")) is TdError) {
     await client.send(
         GetLanguagePackStrings(keys: [], languagePackId: client.userLocale));
-    await client.send(GetLanguagePackStrings(keys: [], languagePackId: "en"));
   }
+  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 0));
   runApp(MaterialApp(home: App(client: client)));
 }
 
