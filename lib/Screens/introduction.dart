@@ -7,7 +7,7 @@ import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
 import 'package:myapp/constants.dart';
-import 'package:myapp/tdlib/td_api.dart';
+import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/utils.dart';
 import 'package:myapp/tdlib/client.dart';
 
@@ -27,24 +27,135 @@ class _IntroductionState extends State<Introduction> {
   static final List<_introductionScreenInfo> _screens = [
     _introductionScreenInfo(
         appName,
-        "An unofficial Telegram client. Written on Flutter and Dart. Have additional features and have nice look",
+        RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(children: [
+              TextSpan(text: "An ", style: TextDisplay.Regular()),
+              TextSpan(
+                  text: "unofficial ",
+                  style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      "Telegram client. Have additional features and nice look.",
+                  style: TextDisplay.Regular())
+            ])),
         "Assets/Introduction/Logo.json"),
     _introductionScreenInfo(
-        "Transparency",
-        "Telegram has a public, well-documented API. All clients are open source.",
-        "Assets/Introduction/Transparency.json"),
+        "Private",
+        RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(children: [
+              TextSpan(
+                  text: "Telegram messages are ", style: TextDisplay.Regular()),
+              TextSpan(
+                  text: "heavily encrypted ",
+                  style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: "and can self-destruct.", style: TextDisplay.Regular())
+            ])),
+        "Assets/Introduction/Private.json"),
     _introductionScreenInfo(
         "Synchronous",
-        "All your actions are synced across all devices",
+        RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(children: [
+              TextSpan(
+                  text: "Telegram lets you access your chats from multiple ",
+                  style: TextDisplay.Regular()),
+              TextSpan(
+                  text: "multiple ",
+                  style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+              TextSpan(text: "devices.", style: TextDisplay.Regular()),
+            ])),
         "Assets/Introduction/Synchronous.json"),
     _introductionScreenInfo(
-        "Powerfull",
-        "Telegram allows you to store an unlimited number of files and dialogues in the cloud",
+        "Fast",
+        RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(children: [
+              TextSpan(
+                  text: "Telegram delivers messages ",
+                  style: TextDisplay.Regular()),
+              TextSpan(
+                  text: "faster ",
+                  style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: "than any other application.",
+                  style: TextDisplay.Regular()),
+            ])),
+        "Assets/Introduction/Fast.json"),
+    _introductionScreenInfo(
+        "Powerful",
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(children: [
+            TextSpan(text: "Telegram has ", style: TextDisplay.Regular()),
+            TextSpan(
+                text: "no limits ",
+                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+            TextSpan(
+                text: "on the size of your media and chats.",
+                style: TextDisplay.Regular()),
+          ]),
+        ),
         "Assets/Introduction/Powerfull.json"),
     _introductionScreenInfo(
-        "Customizable",
-        "Customize the client for you, a powerful client tool allows you to create themes for every taste",
-        "Assets/Introduction/Customizable.json")
+        "Open",
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(children: [
+            TextSpan(text: "Telegram has an ", style: TextDisplay.Regular()),
+            TextSpan(
+                text: "open API and source ",
+                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+            TextSpan(
+                text: "code free for everyone.", style: TextDisplay.Regular()),
+          ]),
+        ),
+        "Assets/Introduction/Open.json"),
+    _introductionScreenInfo(
+        "Secure",
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(children: [
+            TextSpan(
+                text: "Telegram keeps your messages ",
+                style: TextDisplay.Regular()),
+            TextSpan(
+                text: "safe ",
+                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+            TextSpan(
+                text: "from hacker attacks.", style: TextDisplay.Regular()),
+          ]),
+        ),
+        "Assets/Introduction/Secure.json"),
+    _introductionScreenInfo(
+        "Social",
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(children: [
+            TextSpan(
+                text: "Telegram groups can hold ",
+                style: TextDisplay.Regular()),
+            TextSpan(
+                text: "up to 200,000 members. ",
+                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+          ]),
+        ),
+        "Assets/Introduction/Social.json"),
+    _introductionScreenInfo(
+        "Expressive",
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(children: [
+            TextSpan(text: "Telegram lets you ", style: TextDisplay.Regular()),
+            TextSpan(
+                text: "completely customize ",
+                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+            TextSpan(text: "your messenger.", style: TextDisplay.Regular()),
+          ]),
+        ),
+        "Assets/Introduction/Expressive.json")
   ];
 
   setT(double value) => setState(() {
@@ -96,7 +207,6 @@ class _IntroductionState extends State<Introduction> {
                     t: _t,
                     onDotClick: setCurrent,
                   ),
-                  margin: const EdgeInsets.only(top: 15),
                 ),
               ],
               mainAxisAlignment: MainAxisAlignment.center,
@@ -117,15 +227,19 @@ class _IntroductionState extends State<Introduction> {
                 future: widget.client.getLanguagePackString("lng_start_msgs"),
                 builder: (context, builder) {
                   return DesktopButton(
-                      text: builder.hasData
-                          ? (builder.data as LanguagePackStringValueOrdinary)
-                              .value!
-                          : "Loading... ");
+                    fontSize: 18,
+                    weight: FontWeight.w500,
+                    text: builder.hasData
+                        ? (builder.data as LanguagePackStringValueOrdinary)
+                            .value!
+                        : "Loading... ",
+                    width: 300,
+                  );
                 }),
           ],
         ),
         alignment: Alignment.bottomCenter,
-        margin: const EdgeInsets.only(bottom: 20),
+        margin: const EdgeInsets.only(bottom: 40),
       )
     ]);
   }
@@ -143,13 +257,16 @@ class _introductionScreen extends StatelessWidget {
         child: Lottie.asset(screenInfo.lottieAnimationPath),
         width: 256,
         height: 256,
-        margin: const EdgeInsets.only(bottom: 0),
+        margin: const EdgeInsets.only(bottom: 20),
       ),
-      TextDisplay.H1(screenInfo.header),
+      Text(screenInfo.header,
+          style: TextDisplay.Regular(
+              size: 26,
+              textColor: ClientTheme.currentTheme.getField("Accent"))),
       Container(
-          child: TextDisplay.Regular(screenInfo.text),
-          width: 500,
-          height: 75,
+          child: screenInfo.text,
+          width: 330,
+          height: 64,
           margin: const EdgeInsets.only(top: 12))
     ]);
   }
@@ -159,5 +276,5 @@ class _introductionScreenInfo {
   _introductionScreenInfo(this.header, this.text, this.lottieAnimationPath);
   final String lottieAnimationPath;
   final String header;
-  final String text;
+  final RichText text;
 }
