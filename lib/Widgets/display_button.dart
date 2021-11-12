@@ -67,7 +67,7 @@ class _desktopButtonState extends State<DesktopButton> {
             )),
       ),
       onTap: () {
-        widget.onPressed;
+        widget.onPressed!();
         setState(() => isPressed = true);
         Future.delayed(const Duration(microseconds: 100),
             () => setState(() => isPressed = false));
