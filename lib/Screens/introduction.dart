@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
+import 'package:myapp/Screens/phone_enter.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_text.dart';
@@ -11,15 +12,15 @@ import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/utils.dart';
 import 'package:myapp/tdlib/client.dart';
 
-class Introduction extends StatefulWidget {
-  const Introduction({required this.client, Key? key}) : super(key: key);
+class IntroductionScreen extends StatefulWidget {
+  const IntroductionScreen({required this.client, Key? key}) : super(key: key);
 
   final TelegramClient client;
   @override
-  State<Introduction> createState() => _IntroductionState();
+  State<IntroductionScreen> createState() => _IntroductionScreenState();
 }
 
-class _IntroductionState extends State<Introduction> {
+class _IntroductionScreenState extends State<IntroductionScreen> {
   int current = 0;
   double _t = 0;
   double _dragStart = 0;
@@ -227,6 +228,13 @@ class _IntroductionState extends State<Introduction> {
                 future: widget.client.getLanguagePackString("lng_start_msgs"),
                 builder: (context, builder) {
                   return DesktopButton(
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) => PhoneEnterScreen(
+                            client: widget.client,
+                          ),
+                        )),
                     fontSize: 18,
                     weight: FontWeight.w500,
                     text: builder.hasData
