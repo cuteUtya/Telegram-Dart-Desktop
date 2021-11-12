@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' hide ConnectionState;
+import 'package:myapp/constants.dart';
+import 'package:myapp/secrets.dart' as secrets;
 import 'package:myapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
 import 'dart:isolate';
 
 import "src/td_json_client.dart" show JsonClient;
-import "src/tdapi/tdapi.dart";
+import "src/tdapi/tdapi.dart" hide Text;
 
 /// A controller that handles incoming requests asynchronously and exposes
 /// [Observable]s that stream data to their listeners.
@@ -384,29 +386,94 @@ class TelegramClient {
       .where((u) => u is UpdateUserStatus)
       .map((a) => (a as UpdateUserStatus).status!);
 
-  late TdlibParameters tdlibParams;
-  late String databaseDirectory;
   String userLocale = "ru";
   String userLangPackId = "ru";
   static const String localizationTarget = "tdesktop";
 
-  TelegramClient(String dbDirectory) {
-    databaseDirectory = dbDirectory;
+  FutureBuilder buildTextByKey(String key, TextStyle style) {
+    return FutureBuilder(
+        builder: (context, data) {
+          return Text(
+            data.hasData
+                ? (data.data as LanguagePackStringValueOrdinary).value ?? ""
+                : "",
+            style: style,
+          );
+        },
+        future: getLanguagePackString(key));
   }
+
+  setTdlibParameters(
+      {bool? useTestDc,
+      String? databaseDirectory,
+      String? filesDirectory,
+      bool useFileDatabase = true,
+      bool useMessageDatabase = true,
+      bool useChatInfoDatabase = true,
+      bool useSecretChats = true,
+      String? apiHash,
+      int? apiId,
+      String? systemLanguageCode,
+      String? deviceModel,
+      String? systemVersion}) async {
+    useTestDc ??= false;
+    databaseDirectory ??= getDatabaseDirectory();
+    filesDirectory ??= getFilesDirectory();
+    apiHash ??= secrets.appHash;
+    apiId ??= secrets.appId;
+    systemLanguageCode ??= getUserLocale();
+    deviceModel ??= await getDeviceName();
+    systemVersion ??= await getSystemVersion();
+
+    await send(SetTdlibParameters(
+        parameters: TdlibParameters(
+            useTestDc: false,
+            databaseDirectory: databaseDirectory,
+            filesDirectory: filesDirectory,
+            applicationVersion: appVersion,
+            useFileDatabase: true,
+            useMessageDatabase: true,
+            useChatInfoDatabase: true,
+            useSecretChats: false,
+            apiHash: apiHash,
+            apiId: apiId,
+            systemLanguageCode: systemLanguageCode,
+            deviceModel: deviceModel,
+            systemVersion: systemVersion)));
+    await send(CheckDatabaseEncryptionKey(encryptionKey: ""));
+    await send(SetOption(
+        name: "localization_target",
+        value: OptionValueString(value: "tdesktop")));
+    await send(SetOption(
+        name: "language_pack_database_path",
+        value: OptionValueString(value: getLanguagePackDatabasePath())));
+  }
+
+  final Map<String, TdObject> _cachedLanguagePackString = {};
 
   Future<TdObject> getLanguagePackString(String key,
       {String? languagePackDatabasePath,
       String? languagePackId,
-      String? localizationTarget}) {
+      String? localizationTarget,
+      bool throwExcepetions = false}) async {
     languagePackDatabasePath ??= getLanguagePackDatabasePath();
-    languagePackId = userLangPackId;
-    localizationTarget = TelegramClient.localizationTarget;
+    languagePackId ??= userLangPackId;
+    localizationTarget ??= TelegramClient.localizationTarget;
 
-    return send(GetLanguagePackString(
+    var cachedResult = _cachedLanguagePackString[languagePackId + key];
+    if (cachedResult != null) return cachedResult;
+
+    var result = await send(GetLanguagePackString(
         key: key,
         languagePackDatabasePath: languagePackDatabasePath,
         languagePackId: languagePackId,
         localizationTarget: localizationTarget));
+
+    if (result is! TdError) {
+      _cachedLanguagePackString[languagePackId + key] = result;
+    }
+
+    return result;
   }
 
   Future<void> init() async {
@@ -435,7 +502,6 @@ class TelegramClient {
   final List<Function(TdObject)> _requestsQueue = [];
 
   Future<ReceivePort> initIsolate() async {
-    Completer completer = Completer<SendPort>();
     ReceivePort isolateToMainStream = ReceivePort();
     Isolate myIsolateInstance =
         await Isolate.spawn(_start, isolateToMainStream.sendPort);
@@ -467,10 +533,10 @@ void _start(SendPort isolateToMainStream) {
   //About this timeouts: Dart, as a language, has a problem - it is single-threaded,
   //and td_json_client_receive blocks the thread for the timeout period, so I run tdlib in isolate.
   //But these are not all problems, while td_json_client_receive is running I cannot listen for messages from SendPort.
-  //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 100ms.
+  //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 50ms.
   //
   //Who will solve this problem - cool dude.
-  client.incomingString(0.1).listen((update) {
+  client.incomingString(0.05).listen((update) {
     isolateToMainStream.send(update);
   });
 
