@@ -177,6 +177,48 @@
             </list>
           </value>
         </entry>
+        <entry key="device_info_plus">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus-3.1.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_linux">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_linux-2.1.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_macos">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_macos-2.2.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_platform_interface">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_platform_interface-2.2.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_web">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_web-2.1.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_windows">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_windows-2.1.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="fake_async">
           <value>
             <list>
@@ -223,6 +265,13 @@
           <value>
             <list>
               <option value="$USER_HOME$/snap/flutter/common/flutter/packages/flutter_test/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="flutter_web_plugins">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/packages/flutter_web_plugins/lib" />
             </list>
           </value>
         </entry>
@@ -335,6 +384,13 @@
           <value>
             <list>
               <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="plugin_platform_interface">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib" />
             </list>
           </value>
         </entry>
@@ -478,6 +534,13 @@
             </list>
           </value>
         </entry>
+        <entry key="win32">
+          <value>
+            <list>
+              <option value="$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.2.10/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="yaml">
           <value>
             <list>
@@ -513,6 +576,12 @@
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.3/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/dart_style-2.2.0/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus-3.1.0/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_linux-2.1.0/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_macos-2.2.0/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_platform_interface-2.2.0/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_web-2.1.0/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_windows-2.1.0/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
@@ -534,6 +603,7 @@
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/mime-1.0.1/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/package_config-2.0.2/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/pool-1.5.0/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/pub_semver-2.1.0/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-1.1.0/lib" />
@@ -553,10 +623,12 @@
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/watcher-1.0.1/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.1.0/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.2.10/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/yaml-3.1.0/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/bin/cache/pkg/sky_engine/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/packages/flutter/lib" />
       <root url="file://$USER_HOME$/snap/flutter/common/flutter/packages/flutter_test/lib" />
+      <root url="file://$USER_HOME$/snap/flutter/common/flutter/packages/flutter_web_plugins/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

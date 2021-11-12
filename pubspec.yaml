@@ -30,6 +30,29 @@ flutter:
     - Assets/Introduction/
     - Assets/bin/tdlib/
     - Assets/
+  fonts:
+  - family: Ubuntu
+    fonts:
+       - asset: fonts/Ubuntu-Regular.ttf
+       - asset: fonts/Ubuntu-Italic.ttf
+       - asset: fonts/Ubuntu-Bold.ttf
+       - asset: fonts/Ubuntu-Light.ttf
+       - asset: fonts/Ubuntu-Medium.ttf
+  - family: TwitterColorEmoji
+    fonts: 
+        - asset: fonts/Emoji/TwitterColorEmoji.ttf
+        - asset: fonts/Emoji/TwitterColorEmoji.ttf
+          style: italic
+  - family: AppleColorEmoji
+    fonts: 
+        - asset: fonts/Emoji/AppleColorEmoji.ttf
+        - asset: fonts/Emoji/AppleColorEmoji.ttf
+          style: italic
+  - family: GoogleColorEmoji
+    fonts:
+        - asset: fonts/Emoji/GoogleColorEmoji.ttf
+        - asset: fonts/Emoji/GoogleColorEmoji.ttf
+          style: italic
     
   uses-material-design: true
 
@@ -42,11 +65,4 @@ targets:
         options:
           formatted: true
 
-fonts:
-  - family: Ubuntu
-    fonts:
-       - asset: fonts/Ubuntu-Regular.ttf
-       - asset: fonts/Ubuntu-Italic.ttf
-       - asset: fonts/Ubuntu-Bold.ttf
-       - asset: fonts/Ubuntu-Light.ttf
-       - asset: fonts/Ubuntu-Medium.ttf
+

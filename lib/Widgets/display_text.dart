@@ -24,6 +24,17 @@ class TextDisplay {
         textColor: textColor);
   }
 
+  static String _getEmojiFont() => "TwitterColorEmoji";
+
+  static InlineSpan emoji(String emoji, double size) {
+    return TextSpan(
+        text: emoji,
+        style: TextStyle(
+            fontFamily: _getEmojiFont(),
+            fontSize: size,
+            decoration: TextDecoration.none));
+  }
+
   static TextStyle Regular(
       {double size = 20,
       FontStyle fontStyle = FontStyle.normal,
