@@ -31,14 +31,14 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
             textAlign: TextAlign.center,
             text: TextSpan(children: [
-              TextSpan(text: "An ", style: TextDisplay.Regular()),
+              TextSpan(text: "An ", style: TextDisplay.create()),
               TextSpan(
                   text: "unofficial ",
-                  style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+                  style: TextDisplay.create(fontWeight: FontWeight.bold)),
               TextSpan(
                   text:
                       "Telegram client. Have additional features and nice look.",
-                  style: TextDisplay.Regular())
+                  style: TextDisplay.create())
             ])),
         "Assets/Introduction/Logo.json"),
     _introductionScreenInfo(
@@ -47,12 +47,12 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             textAlign: TextAlign.center,
             text: TextSpan(children: [
               TextSpan(
-                  text: "Telegram messages are ", style: TextDisplay.Regular()),
+                  text: "Telegram messages are ", style: TextDisplay.create()),
               TextSpan(
                   text: "heavily encrypted ",
-                  style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+                  style: TextDisplay.create(fontWeight: FontWeight.bold)),
               TextSpan(
-                  text: "and can self-destruct.", style: TextDisplay.Regular())
+                  text: "and can self-destruct.", style: TextDisplay.create())
             ])),
         "Assets/Introduction/Private.json"),
     _introductionScreenInfo(
@@ -62,11 +62,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             text: TextSpan(children: [
               TextSpan(
                   text: "Telegram lets you access your chats from multiple ",
-                  style: TextDisplay.Regular()),
+                  style: TextDisplay.create()),
               TextSpan(
                   text: "multiple ",
-                  style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
-              TextSpan(text: "devices.", style: TextDisplay.Regular()),
+                  style: TextDisplay.create(fontWeight: FontWeight.bold)),
+              TextSpan(text: "devices.", style: TextDisplay.create()),
             ])),
         "Assets/Introduction/Synchronous.json"),
     _introductionScreenInfo(
@@ -76,13 +76,13 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             text: TextSpan(children: [
               TextSpan(
                   text: "Telegram delivers messages ",
-                  style: TextDisplay.Regular()),
+                  style: TextDisplay.create()),
               TextSpan(
                   text: "faster ",
-                  style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+                  style: TextDisplay.create(fontWeight: FontWeight.bold)),
               TextSpan(
                   text: "than any other application.",
-                  style: TextDisplay.Regular()),
+                  style: TextDisplay.create()),
             ])),
         "Assets/Introduction/Fast.json"),
     _introductionScreenInfo(
@@ -90,13 +90,13 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(children: [
-            TextSpan(text: "Telegram has ", style: TextDisplay.Regular()),
+            TextSpan(text: "Telegram has ", style: TextDisplay.create()),
             TextSpan(
                 text: "no limits ",
-                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+                style: TextDisplay.create(fontWeight: FontWeight.bold)),
             TextSpan(
                 text: "on the size of your media and chats.",
-                style: TextDisplay.Regular()),
+                style: TextDisplay.create()),
           ]),
         ),
         "Assets/Introduction/Powerfull.json"),
@@ -105,12 +105,12 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(children: [
-            TextSpan(text: "Telegram has an ", style: TextDisplay.Regular()),
+            TextSpan(text: "Telegram has an ", style: TextDisplay.create()),
             TextSpan(
                 text: "open API and source ",
-                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+                style: TextDisplay.create(fontWeight: FontWeight.bold)),
             TextSpan(
-                text: "code free for everyone.", style: TextDisplay.Regular()),
+                text: "code free for everyone.", style: TextDisplay.create()),
           ]),
         ),
         "Assets/Introduction/Open.json"),
@@ -121,12 +121,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           text: TextSpan(children: [
             TextSpan(
                 text: "Telegram keeps your messages ",
-                style: TextDisplay.Regular()),
+                style: TextDisplay.create()),
             TextSpan(
                 text: "safe ",
-                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
-            TextSpan(
-                text: "from hacker attacks.", style: TextDisplay.Regular()),
+                style: TextDisplay.create(fontWeight: FontWeight.bold)),
+            TextSpan(text: "from hacker attacks.", style: TextDisplay.create()),
           ]),
         ),
         "Assets/Introduction/Secure.json"),
@@ -136,11 +135,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           textAlign: TextAlign.center,
           text: TextSpan(children: [
             TextSpan(
-                text: "Telegram groups can hold ",
-                style: TextDisplay.Regular()),
+                text: "Telegram groups can hold ", style: TextDisplay.create()),
             TextSpan(
                 text: "up to 200,000 members. ",
-                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
+                style: TextDisplay.create(fontWeight: FontWeight.bold)),
           ]),
         ),
         "Assets/Introduction/Social.json"),
@@ -149,11 +147,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(children: [
-            TextSpan(text: "Telegram lets you ", style: TextDisplay.Regular()),
+            TextSpan(text: "Telegram lets you ", style: TextDisplay.create()),
             TextSpan(
                 text: "completely customize ",
-                style: TextDisplay.Regular(fontWeight: FontWeight.bold)),
-            TextSpan(text: "your messenger.", style: TextDisplay.Regular()),
+                style: TextDisplay.create(fontWeight: FontWeight.bold)),
+            TextSpan(text: "your messenger.", style: TextDisplay.create()),
           ]),
         ),
         "Assets/Introduction/Expressive.json")
@@ -268,9 +266,7 @@ class _introductionScreen extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 20),
       ),
       Text(screenInfo.header,
-          style: TextDisplay.Regular(
-              size: 26,
-              textColor: ClientTheme.currentTheme.getField("Accent"))),
+          style: TextDisplay.create(size: 26, textColor: TextColor.Accent)),
       Container(
           child: screenInfo.text,
           width: 330,

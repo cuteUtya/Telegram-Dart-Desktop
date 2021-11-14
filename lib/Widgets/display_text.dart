@@ -3,27 +3,6 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:path/path.dart';
 
 class TextDisplay {
-  static TextStyle H2(String text) {
-    return H1(
-        size: 28,
-        textColor:
-            ClientTheme.currentTheme.getField("HeaderSecondary") as Color);
-  }
-
-  static TextStyle H1(
-      {double size = 36,
-      Color? textColor,
-      String? fontFamily,
-      FontWeight weight = FontWeight.bold}) {
-    fontFamily ??= ClientTheme.currentTheme.getField("HeaderFontFamily");
-    textColor ??= ClientTheme.currentTheme.getField("HeaderMain") as Color;
-    return Regular(
-        size: size,
-        fontWeight: weight,
-        fontFamily: fontFamily,
-        textColor: textColor);
-  }
-
   static String _getEmojiFont() => "TwitterColorEmoji";
 
   static InlineSpan emoji(String emoji, double size) {
@@ -35,22 +14,34 @@ class TextDisplay {
             decoration: TextDecoration.none));
   }
 
-  static TextStyle Regular(
+  static TextStyle create(
       {double size = 20,
-      FontStyle fontStyle = FontStyle.normal,
-      String? fontFamily,
-      Color? textColor,
-      FontWeight fontWeight = FontWeight.normal,
-      TextAlign textAlign = TextAlign.center}) {
-    textColor ??= ClientTheme.currentTheme.getField("RegularText") as Color;
-    fontFamily ??= ClientTheme.currentTheme.getField("RegularFontFamily");
+      FontStyle? fontStyle = FontStyle.normal,
+      TextFont? fontFamily = TextFont.regular,
+      TextColor? textColor = TextColor.RegularText,
+      FontWeight? fontWeight = FontWeight.normal,
+      TextAlign? textAlign = TextAlign.left}) {
+    var color = ClientTheme.currentTheme
+        .getField(textColor.toString().replaceFirst("TextColor.", "")) as Color;
+    var font = ClientTheme.currentTheme.getField(fontFamily == TextFont.regular
+        ? "RegularFontFamily"
+        : "HeaderFontFamily");
     return TextStyle(
-      color: textColor,
+      color: color,
       fontSize: size,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
-      fontFamily: fontFamily,
+      fontFamily: font,
       decoration: TextDecoration.none,
     );
   }
+}
+
+enum TextFont { regular, greaterImportance }
+enum TextColor {
+  Accent,
+  HeaderMain,
+  HeaderSecondary,
+  AdditionalTextColor,
+  RegularText
 }
