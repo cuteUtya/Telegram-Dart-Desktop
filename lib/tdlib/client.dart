@@ -425,7 +425,14 @@ class TelegramClient {
     deviceModel ??= await getDeviceName();
     systemVersion ??= await getSystemVersion();
 
-    await send(SetTdlibParameters(
+    send(SetOption(
+        name: "localization_target",
+        value: OptionValueString(value: "tdesktop")));
+    send(SetOption(
+        name: "language_pack_database_path",
+        value: OptionValueString(value: getLanguagePackDatabasePath())));
+
+    send(SetTdlibParameters(
         parameters: TdlibParameters(
             useTestDc: false,
             databaseDirectory: databaseDirectory,
@@ -441,12 +448,6 @@ class TelegramClient {
             deviceModel: deviceModel,
             systemVersion: systemVersion)));
     await send(CheckDatabaseEncryptionKey(encryptionKey: ""));
-    await send(SetOption(
-        name: "localization_target",
-        value: OptionValueString(value: "tdesktop")));
-    await send(SetOption(
-        name: "language_pack_database_path",
-        value: OptionValueString(value: getLanguagePackDatabasePath())));
   }
 
   final Map<String, TdObject> _cachedLanguagePackString = {};
