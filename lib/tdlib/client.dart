@@ -431,6 +431,9 @@ class TelegramClient {
     send(SetOption(
         name: "language_pack_database_path",
         value: OptionValueString(value: getLanguagePackDatabasePath())));
+    send(SetOption(
+        name: "language_pack_id",
+        value: OptionValueString(value: userLangPackId)));
 
     send(SetTdlibParameters(
         parameters: TdlibParameters(
@@ -484,11 +487,12 @@ class TelegramClient {
     _receivePort!.listen((message) {
       if (message is String) {
         var tdobject = convertToObject(message);
-        if (tdobject is Update) {
-          _updates.add(tdobject);
+        var extra = json.decode(message)["@extra"];
+        if (extra == null) {
+          _updates.add(tdobject as Update);
         } else {
-          _requestsQueue[0](tdobject);
-          _requestsQueue.removeAt(0);
+          _requestsQueue[extra as int]!(tdobject);
+          _requestsQueue.remove(extra);
         }
       } else if (message is SendPort) {
         _sendPort = message;
@@ -500,7 +504,7 @@ class TelegramClient {
 
   ReceivePort? _receivePort;
   SendPort? _sendPort;
-  final List<Function(TdObject)> _requestsQueue = [];
+  final Map<int, Function(TdObject)> _requestsQueue = {};
 
   Future<ReceivePort> initIsolate() async {
     ReceivePort isolateToMainStream = ReceivePort();
@@ -515,11 +519,15 @@ class TelegramClient {
     //TODO implement close
   }
 
-  Future<TdObject> send(TdFunction function) async {
+  int _extra = 1;
+
+  Future<TdObject> send(dynamic function) async {
+    function.extra = _extra;
     if (_sendPort == null) throw Exception("firstly init client using init()");
     _sendPort!.send(json.encode(function));
     final Completer<TdObject> _completer = Completer<TdObject>();
-    _requestsQueue.add(_completer.complete);
+    _requestsQueue[_extra] = _completer.complete;
+    _extra++;
     return _completer.future;
   }
 }
