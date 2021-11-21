@@ -386,6 +386,7 @@ class TelegramClient {
       .where((u) => u is UpdateUserStatus)
       .map((a) => (a as UpdateUserStatus).status!);
 
+  late TdlibParameters tdlibParameters;
   String userLocale = "ru";
   String userLangPackId = "ru";
   static const String localizationTarget = "tdesktop";
@@ -435,21 +436,22 @@ class TelegramClient {
         name: "language_pack_id",
         value: OptionValueString(value: userLangPackId)));
 
-    send(SetTdlibParameters(
-        parameters: TdlibParameters(
-            useTestDc: false,
-            databaseDirectory: databaseDirectory,
-            filesDirectory: filesDirectory,
-            applicationVersion: appVersion,
-            useFileDatabase: true,
-            useMessageDatabase: true,
-            useChatInfoDatabase: true,
-            useSecretChats: false,
-            apiHash: apiHash,
-            apiId: apiId,
-            systemLanguageCode: systemLanguageCode,
-            deviceModel: deviceModel,
-            systemVersion: systemVersion)));
+    tdlibParameters = TdlibParameters(
+        useTestDc: false,
+        databaseDirectory: databaseDirectory,
+        filesDirectory: filesDirectory,
+        applicationVersion: appVersion,
+        useFileDatabase: true,
+        useMessageDatabase: true,
+        useChatInfoDatabase: true,
+        useSecretChats: false,
+        apiHash: apiHash,
+        apiId: apiId,
+        systemLanguageCode: systemLanguageCode,
+        deviceModel: deviceModel,
+        systemVersion: systemVersion);
+
+    send(SetTdlibParameters(parameters: tdlibParameters));
     await send(CheckDatabaseEncryptionKey(encryptionKey: ""));
   }
 
@@ -545,7 +547,7 @@ void _start(SendPort isolateToMainStream) {
   //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 50ms.
   //
   //Who will solve this problem - cool dude.
-  client.incomingString(0.05).listen((update) {
+  client.incomingString(0.1).listen((update) {
     isolateToMainStream.send(update);
   });
 
