@@ -14,6 +14,7 @@ class DataInput extends StatefulWidget {
       this.fieldName = "",
       this.getHintCallback,
       this.customLabelDisplay,
+      this.onDataStateChanged,
       this.labelFontSize = 14,
       this.hintText = ""})
       : super(key: key) {
@@ -34,6 +35,7 @@ class DataInput extends StatefulWidget {
   final Widget? customLabelDisplay;
   final double labelFontSize;
   final bool controllStateSingly;
+  final OnDataStateChanged? onDataStateChanged;
   late String hintText;
 
   final TextEditingController _inputController = TextEditingController();
@@ -125,6 +127,9 @@ class _DataInputState extends State<DataInput> {
           : (widget.validationCallback(input)
               ? DataState.valid
               : DataState.invalid);
+      if (widget.onDataStateChanged != null) {
+        widget.onDataStateChanged!(dataState);
+      }
     });
   }
 
@@ -139,7 +144,12 @@ class _DataInputState extends State<DataInput> {
     return widget.hintText;
   }
 
-  static Color getBorderColor(DataState state) {
+  Color getBorderColor(DataState state) {
+    if (widget.value.isNotEmpty) {
+      dataState = DataState.valid;
+      return ClientTheme.currentTheme.getField("DataInputValidColor");
+    }
+
     switch (state) {
       case DataState.empty:
         return ClientTheme.currentTheme.getField("DataInputEmtyColor");
@@ -156,3 +166,4 @@ enum DataState { valid, invalid, empty }
 typedef DataValidationCallback = bool Function(String);
 typedef GetHintCallback = String Function(String);
 typedef OnChangeValue = void Function(String);
+typedef OnDataStateChanged = void Function(DataState);

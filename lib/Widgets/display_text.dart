@@ -45,5 +45,6 @@ enum TextColor {
   HeaderMain,
   HeaderSecondary,
   AdditionalTextColor,
-  RegularText
+  RegularText,
+  DangerColor
 }

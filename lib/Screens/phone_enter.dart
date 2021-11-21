@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:path/path.dart';
 import 'package:myapp/tdlib/td_api.dart';
-import 'package:rxdart/streams.dart';
 
 class PhoneEnterScreen extends StatefulWidget {
   PhoneEnterScreen({required this.client, Key? key}) : super(key: key) {
@@ -20,7 +17,22 @@ class PhoneEnterScreen extends StatefulWidget {
 
 class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
   String _phoneCode = "";
+  DataState _phoneState = DataState.empty;
   String _country = "";
+  DataState _countryState = DataState.empty;
+  String _sessionName = "";
+
+  final Map<DataState, FontWeight> _weigths = {
+    DataState.empty: FontWeight.normal,
+    DataState.valid: FontWeight.w600,
+    DataState.invalid: FontWeight.w600
+  };
+
+  final Map<DataState, TextColor> _colors = {
+    DataState.empty: TextColor.RegularText,
+    DataState.valid: TextColor.Accent,
+    DataState.invalid: TextColor.DangerColor
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +60,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                       const SizedBox(height: 20),
                       //Country field
                       DataInput(
+                        onDataStateChanged: (v) => _countryState = v,
                         value: _country,
                         controllStateSingly: false,
                         getHintCallback: countryHint,
@@ -55,7 +68,9 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                         customLabelDisplay: widget.client.buildTextByKey(
                             "lng_payments_billing_country",
                             TextDisplay.create(
-                                size: 13, textColor: TextColor.RegularText)),
+                                size: 13,
+                                textColor: _colors[_countryState],
+                                fontWeight: _weigths[_countryState])),
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -66,19 +81,22 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                                   value: _phoneCode,
                                   controllStateSingly: false,
                                   onValueChange: validatePhoneCode,
+                                  onDataStateChanged: (v) => _phoneState = v,
                                   customLabelDisplay: widget.client
                                       .buildTextByKey(
                                           "lng_passport_phone_title",
                                           TextDisplay.create(
                                               overflow: TextOverflow.visible,
                                               size: 13,
-                                              textColor:
-                                                  TextColor.RegularText)),
+                                              textColor: _colors[_phoneState],
+                                              fontWeight:
+                                                  _weigths[_phoneState])),
                                   validationCallback: validatePhoneCode),
                               width: 130),
                           const SizedBox(width: 20),
                           Container(
                               width: 350,
+                              //phone field
                               child: DataInput(
                                 labelFontSize: 13,
                                 validationCallback: (e) => true,
@@ -86,8 +104,9 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      //phone number field
+                      //session name field
                       DataInput(
+                        onValueChange: (v) => _sessionName = v,
                         validationCallback: (_) => true,
                         fieldName: "Session name",
                         labelFontSize: 13,
@@ -133,6 +152,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
         if (val) {
           setState(() {
             _country = value;
+            _phoneState = DataState.valid;
             _phoneCode = "+${element.callingCodes![0]}";
           });
           return val;
@@ -143,15 +163,15 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
   }
 
   bool validatePhoneCode(String value) {
-    print("validatePhoneCode($value)");
     if (value.length > 1) {
       value = value.substring(1, value.length);
       if (widget.countries != null) {
         for (var element in widget.countries!.countries!) {
           if (element.callingCodes!.contains(value)) {
-            print("SET STATE()");
             setState(() {
-              _country = element.name ?? "";
+              if (_country != element.englishName && _country != element.name) {
+                _country = element.name ?? "";
+              }
               _phoneCode = "+$value";
             });
             return true;

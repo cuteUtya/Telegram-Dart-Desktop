@@ -10,6 +10,7 @@ HeaderMain: #181818;
 HeaderSecondary: #464646;
 AdditionalTextColor: #BABABA;
 RegularText: #333333;
+DangerColor: #DF1E1E;
 
 #Introduction screen fields#
 CarouselIndicatorActive: ref(Accent);
@@ -19,5 +20,5 @@ CarouselIndicatorInActive: #F0F0F0;
 DataInputTextColor: ref(HeaderSecondary);
 DataInputHintColor: ref(AdditionalTextColor);
 DataInputValidColor: ref(Accent);
-DataInputInvalidColor: #DF1E1E;
+DataInputInvalidColor: ref(DangerColor);
 DataInputEmtyColor: #EBEBEB;
