@@ -1,14 +1,23 @@
+#Base fields#
 Accent: #40A7E3;
 AccentHalfTransparent: linear(ref(Accent), #FFFFFFFF, 0.75);
 BaseColor: #FFFFFF;
 
+#Typography fields#
 HeaderFontFamily: Ubuntu;
 RegularFontFamily: Roboto;
-
 HeaderMain: #181818;
 HeaderSecondary: #464646;
+AdditionalTextColor: #BABABA;
 RegularText: #333333;
 
 #Introduction screen fields#
 CarouselIndicatorActive: ref(Accent);
 CarouselIndicatorInActive: #F0F0F0;
+
+#Login input fields#
+DataInputTextColor: ref(HeaderSecondary);
+DataInputHintColor: ref(AdditionalTextColor);
+DataInputValidColor: ref(Accent);
+DataInputInvalidColor: #DF1E1E;
+DataInputEmtyColor: #EBEBEB;
