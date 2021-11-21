@@ -233,7 +233,6 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             client: widget.client,
                           ),
                         )),
-                    fontSize: 18,
                     weight: FontWeight.w500,
                     text: builder.hasData
                         ? (builder.data as LanguagePackStringValueOrdinary)
