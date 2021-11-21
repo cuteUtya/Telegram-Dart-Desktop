@@ -20,13 +20,15 @@ class TextDisplay {
       TextFont? fontFamily = TextFont.regular,
       TextColor? textColor = TextColor.RegularText,
       FontWeight? fontWeight = FontWeight.normal,
-      TextAlign? textAlign = TextAlign.left}) {
+      TextAlign? textAlign = TextAlign.left,
+      TextOverflow? overflow}) {
     var color = ClientTheme.currentTheme
         .getField(textColor.toString().replaceFirst("TextColor.", "")) as Color;
     var font = ClientTheme.currentTheme.getField(fontFamily == TextFont.regular
         ? "RegularFontFamily"
         : "HeaderFontFamily");
     return TextStyle(
+      overflow: overflow,
       color: color,
       fontSize: size,
       fontWeight: fontWeight,
