@@ -3,17 +3,28 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 
 class DataInput extends StatefulWidget {
-  const DataInput(
+  DataInput(
       {Key? key,
+      this.value = "",
       required this.validationCallback,
       this.defaultText,
-      this.fontSize = 22,
+      this.fontSize = 24,
       this.onValueChange,
-      this.fieldName = "label",
+      this.controllStateSingly = true,
+      this.fieldName = "",
       this.getHintCallback,
-      this.customLabelDisplay})
-      : super(key: key);
+      this.customLabelDisplay,
+      this.labelFontSize = 14,
+      this.hintText = ""})
+      : super(key: key) {
+    if (!controllStateSingly) {
+      _inputController.text = value;
+      _inputController.selection =
+          TextSelection(baseOffset: value.length, extentOffset: value.length);
+    }
+  }
 
+  final String value;
   final DataValidationCallback validationCallback;
   final String? defaultText;
   final double fontSize;
@@ -21,6 +32,11 @@ class DataInput extends StatefulWidget {
   final String fieldName;
   final GetHintCallback? getHintCallback;
   final Widget? customLabelDisplay;
+  final double labelFontSize;
+  final bool controllStateSingly;
+  late String hintText;
+
+  final TextEditingController _inputController = TextEditingController();
 
   @override
   State<StatefulWidget> createState() => _DataInputState();
@@ -28,13 +44,11 @@ class DataInput extends StatefulWidget {
 
 class _DataInputState extends State<DataInput> {
   DataState dataState = DataState.empty;
-  String hintText = "";
-  TextEditingController inputController = TextEditingController();
+  late String _displaingHint = widget.hintText;
 
   @override
   Widget build(BuildContext contex) {
     var clr = getBorderColor(dataState);
-    print(clr);
     var border =
         UnderlineInputBorder(borderSide: BorderSide(color: clr, width: 2));
 
@@ -44,19 +58,18 @@ class _DataInputState extends State<DataInput> {
               widget.fieldName,
               style: TextDisplay.create(
                   textAlign: TextAlign.left,
-                  size: 16,
-                  textColor: ClientTheme.currentTheme.getField("RegularText")),
+                  size: widget.labelFontSize,
+                  textColor: TextColor.RegularText),
             )
-          : widget.customLabelDisplay ??
-              const Text(
-                  "Are you seriosly, Google, you think here can be NULL? Look at ternary operator!"),
+          : widget.customLabelDisplay ?? const Text(""),
       Stack(children: [
+        //hint field
         TextField(
           style: TextStyle(fontSize: widget.fontSize),
           enabled: false,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 12),
-              hintText: hintText,
+              hintText: _displaingHint,
               hintStyle: TextStyle(
                   color:
                       ClientTheme.currentTheme.getField("DataInputHintColor")),
@@ -64,30 +77,35 @@ class _DataInputState extends State<DataInput> {
               enabledBorder: border,
               focusedBorder: border),
         ),
+        //input field
         TextField(
-          controller: inputController,
+          controller: widget._inputController,
           onSubmitted: (value) {
             setState(() {
-              inputController.text = hintText.isEmpty ? value : hintText;
-              validate(inputController.text);
+              widget._inputController.text =
+                  widget.hintText.isEmpty || _displaingHint.isEmpty
+                      ? value
+                      : widget.hintText;
+              validate(widget._inputController.text);
             });
           },
           style: TextStyle(fontSize: widget.fontSize),
           onChanged: (value) {
-            widget.onValueChange ?? (value);
+            if (widget.onValueChange != null) widget.onValueChange!(value);
             setState(() {
-              inputController.text = value;
-              inputController.selection = TextSelection.fromPosition(
-                TextPosition(offset: inputController.text.length),
+              _displaingHint = _getHintText(widget._inputController.text);
+              widget._inputController.text = value;
+              widget._inputController.selection = TextSelection.fromPosition(
+                TextPosition(offset: widget._inputController.text.length),
               );
               if (widget.getHintCallback != null) {
-                hintText = widget.getHintCallback!(value);
+                widget.hintText = widget.getHintCallback!(value);
               }
               dataState = value.isEmpty ? DataState.empty : DataState.valid;
             });
           },
           decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(left: 12),
+              contentPadding: const EdgeInsets.only(left: 12),
               hintText: widget.defaultText,
               hintStyle: TextStyle(
                   color:
@@ -110,20 +128,26 @@ class _DataInputState extends State<DataInput> {
     });
   }
 
+  String _getHintText(String? inputValue) {
+    if (inputValue != null && inputValue.length <= widget.hintText.length) {
+      if (inputValue.isEmpty ||
+          widget.hintText.substring(0, inputValue.length) == inputValue) {
+        return widget.hintText;
+      }
+      return "";
+    }
+    return widget.hintText;
+  }
+
   static Color getBorderColor(DataState state) {
-    String fieldName = "";
     switch (state) {
       case DataState.empty:
-        fieldName = "DataInputEmtyColor";
-        break;
+        return ClientTheme.currentTheme.getField("DataInputEmtyColor");
       case DataState.invalid:
-        fieldName = "DataInputInvalidColor";
-        break;
+        return ClientTheme.currentTheme.getField("DataInputInvalidColor");
       case DataState.valid:
-        fieldName = "DataInputValidColor";
-        break;
+        return ClientTheme.currentTheme.getField("DataInputValidColor");
     }
-    return ClientTheme.currentTheme.getField(fieldName);
   }
 }
 
