@@ -404,7 +404,7 @@ class TelegramClient {
         future: getLanguagePackString(key));
   }
 
-  setTdlibParameters(
+  Future setTdlibParameters(
       {bool? useTestDc,
       String? databaseDirectory,
       String? filesDirectory,
@@ -452,7 +452,6 @@ class TelegramClient {
         systemVersion: systemVersion);
 
     send(SetTdlibParameters(parameters: tdlibParameters));
-    await send(CheckDatabaseEncryptionKey(encryptionKey: ""));
   }
 
   final Map<String, TdObject> _cachedLanguagePackString = {};
@@ -475,10 +474,18 @@ class TelegramClient {
         languagePackId: languagePackId,
         localizationTarget: localizationTarget));
 
+    //download string if we dont have it in database
+    if (result is TdError) {
+      result = (await send(GetLanguagePackStrings(
+              keys: [key],
+              languagePackId: languagePackId)) as LanguagePackStrings)
+          .strings![0]
+          .value!;
+    }
+
     if (result is! TdError) {
       _cachedLanguagePackString[languagePackId + key] = result;
     }
-
     return result;
   }
 
