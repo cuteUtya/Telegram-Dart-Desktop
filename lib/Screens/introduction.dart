@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:myapp/Screens/phone_enter.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
@@ -222,25 +221,17 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             const SizedBox(height: 10),
-            FutureBuilder(
-                future: widget.client.getLanguagePackString("lng_start_msgs"),
-                builder: (context, builder) {
-                  return DesktopButton(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (BuildContext context) => PhoneEnterScreen(
-                            client: widget.client,
-                          ),
-                        )),
-                    weight: FontWeight.w500,
-                    text: builder.hasData
-                        ? (builder.data as LanguagePackStringValueOrdinary)
-                            .value!
-                        : "Loading... ",
-                    width: 300,
-                  );
-                }),
+            DesktopButton(
+                weight: FontWeight.w500,
+                width: 300,
+                languagePackStringFuture:
+                    widget.client.getLanguagePackString("lng_start_msgs"),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                        builder: (_) => PhoneEnterScreen(
+                              client: widget.client,
+                            )))),
           ],
         ),
         alignment: Alignment.bottomCenter,

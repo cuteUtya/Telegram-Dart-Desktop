@@ -114,19 +114,11 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                             widget.client.tdlibParameters.deviceModel ?? "",
                       ),
                       const SizedBox(height: 40),
-                      FutureBuilder(
-                          future: widget.client
-                              .getLanguagePackString("lng_intro_next"),
-                          builder: (context, future) {
-                            return DesktopButton(
-                                width: 500,
-                                weight: FontWeight.w500,
-                                text: future.hasData
-                                    ? (future.data
-                                            as LanguagePackStringValueOrdinary)
-                                        .value!
-                                    : "loading...");
-                          }),
+                      DesktopButton(
+                          width: 500,
+                          weight: FontWeight.w500,
+                          languagePackStringFuture: widget.client
+                              .getLanguagePackString("lng_intro_next")),
                     ]))));
   }
 
