@@ -21,7 +21,12 @@ class _AutorizationRouter extends State<AutorizationRouter> {
           print(builder.data);
           switch ((builder.data as AuthorizationState).getConstructor()) {
             case AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
-              return IntroductionScreen(client: widget.client);
+              return IntroductionScreen(
+                client: widget.client,
+                phoneNumberCallback: (phoneNumber, newSessionName) {
+                  print(phoneNumber + "    " + (newSessionName ?? ""));
+                },
+              );
 
             case AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
               widget.client.userLocale = getUserLocale();

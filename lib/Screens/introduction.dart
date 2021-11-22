@@ -12,8 +12,11 @@ import 'package:myapp/utils.dart';
 import 'package:myapp/tdlib/client.dart';
 
 class IntroductionScreen extends StatefulWidget {
-  const IntroductionScreen({required this.client, Key? key}) : super(key: key);
+  const IntroductionScreen(
+      {required this.client, required this.phoneNumberCallback, Key? key})
+      : super(key: key);
 
+  final PhoneNumberScreenCallback phoneNumberCallback;
   final TelegramClient client;
   @override
   State<IntroductionScreen> createState() => _IntroductionScreenState();
@@ -230,6 +233,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     context,
                     MaterialPageRoute<void>(
                         builder: (_) => PhoneEnterScreen(
+                              phoneNumberScreenCallback:
+                                  widget.phoneNumberCallback,
                               client: widget.client,
                             )))),
           ],

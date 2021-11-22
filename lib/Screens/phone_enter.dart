@@ -6,17 +6,21 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
 class PhoneEnterScreen extends StatefulWidget {
-  PhoneEnterScreen({required this.client, Key? key}) : super(key: key) {
+  PhoneEnterScreen(
+      {required this.client, required this.phoneNumberScreenCallback, Key? key})
+      : super(key: key) {
     client.send(GetCountries()).then((value) => countries = value as Countries);
   }
   Countries? countries;
   final TelegramClient client;
+  final PhoneNumberScreenCallback phoneNumberScreenCallback;
   @override
   State<StatefulWidget> createState() => _PhoneEnterScreenState();
 }
 
 class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
-  String _phoneCode = "";
+  String _phoneCode = "+";
+  String _phone = "";
   DataState _phoneState = DataState.empty;
   String _country = "";
   DataState _countryState = DataState.empty;
@@ -98,6 +102,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                               width: 350,
                               //phone field
                               child: DataInput(
+                                onValueChange: (v) => _phone = v,
                                 labelFontSize: 13,
                                 validationCallback: (e) => true,
                               ))
@@ -115,6 +120,8 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                       ),
                       const SizedBox(height: 40),
                       DesktopButton(
+                          onPressed: () => widget.phoneNumberScreenCallback(
+                              _phoneCode + _phone, _sessionName),
                           width: 500,
                           weight: FontWeight.w500,
                           languagePackStringFuture: widget.client
@@ -174,3 +181,6 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
     return false;
   }
 }
+
+typedef PhoneNumberScreenCallback = void Function(
+    String phoneNumber, String? sessionName);
