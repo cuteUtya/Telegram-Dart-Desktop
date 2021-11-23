@@ -476,6 +476,7 @@ class TelegramClient {
 
     //download string if we dont have it in database
     if (result is TdError) {
+        if(throwExcepetions) return result;
       result = (await send(GetLanguagePackStrings(
               keys: [key],
               languagePackId: languagePackId)) as LanguagePackStrings)
