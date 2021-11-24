@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
 import 'package:myapp/secrets.dart' as secrets;
 import 'package:myapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:flutter/services.dart';
 import 'dart:isolate';
 
 import "src/td_json_client.dart" show JsonClient;
@@ -476,7 +474,7 @@ class TelegramClient {
 
     //download string if we dont have it in database
     if (result is TdError) {
-        if(throwExcepetions) return result;
+      if (throwExcepetions) return result;
       result = (await send(GetLanguagePackStrings(
               keys: [key],
               languagePackId: languagePackId)) as LanguagePackStrings)

@@ -7,7 +7,6 @@ import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
 import 'package:myapp/constants.dart';
-import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/utils.dart';
 import 'package:myapp/tdlib/client.dart';
 

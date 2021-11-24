@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
-import 'package:path/path.dart';
 
 class TextDisplay {
   static String _getEmojiFont() => "TwitterColorEmoji";

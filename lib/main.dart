@@ -1,14 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:myapp/Screens/autorization_router.dart';
-import 'package:myapp/Screens/introduction.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Widgets/display_input.dart';
-import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
-
 import 'package:myapp/tdlib/td_api.dart';
-import 'package:myapp/utils.dart';
 
 void main() async {
   var client = TelegramClient();
