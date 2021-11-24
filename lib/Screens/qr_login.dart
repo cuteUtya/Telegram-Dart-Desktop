@@ -36,7 +36,7 @@ class _QrLoginState extends State<QrLogin> {
             size: 256.0,
             padding: const EdgeInsets.all(0),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 36),
           widget.client.buildTextByKey("lng_intro_qr_title",
               TextDisplay.create(fontWeight: FontWeight.w600, size: 26)),
           const SizedBox(height: 16),
