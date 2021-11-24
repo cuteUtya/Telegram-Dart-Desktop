@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
 import 'package:myapp/Widgets/display_text.dart';
@@ -7,11 +8,15 @@ import 'package:myapp/tdlib/td_api.dart';
 
 class PhoneEnterScreen extends StatefulWidget {
   PhoneEnterScreen(
-      {required this.client, required this.phoneNumberScreenCallback, Key? key})
+      {required this.client,
+      required this.phoneNumberScreenCallback,
+      required this.qrLoginCallback,
+      Key? key})
       : super(key: key) {
     client.send(GetCountries()).then((value) => countries = value as Countries);
   }
   Countries? countries;
+  final void Function() qrLoginCallback;
   final TelegramClient client;
   final PhoneNumberScreenCallback phoneNumberScreenCallback;
   @override
@@ -48,6 +53,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Spacer(),
                       widget.client.buildTextByKey(
                           "lng_phone_title",
                           TextDisplay.create(
@@ -126,6 +132,23 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                           weight: FontWeight.w500,
                           languagePackStringFuture: widget.client
                               .getLanguagePackString("lng_intro_next")),
+                      const Spacer(),
+                      Container(
+                          margin: const EdgeInsets.only(bottom: 24),
+                          alignment: Alignment.bottomCenter,
+                          child: ClickableText(
+                              onTap: () => widget.qrLoginCallback(),
+                              builder: (select) {
+                                return widget.client.buildTextByKey(
+                                    "lng_phone_to_qr",
+                                    TextDisplay.create(
+                                        textAlign: TextAlign.center,
+                                        size: 18,
+                                        textColor: TextColor.Accent,
+                                        decoration: select
+                                            ? TextDecoration.underline
+                                            : TextDecoration.none));
+                              }))
                     ]))));
   }
 

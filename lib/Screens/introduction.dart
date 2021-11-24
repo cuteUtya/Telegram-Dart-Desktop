@@ -13,9 +13,13 @@ import 'package:myapp/tdlib/client.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen(
-      {required this.client, required this.phoneNumberCallback, Key? key})
+      {required this.client,
+      required this.phoneNumberCallback,
+      required this.qrLoginCallback,
+      Key? key})
       : super(key: key);
 
+  final void Function() qrLoginCallback;
   final PhoneNumberScreenCallback phoneNumberCallback;
   final TelegramClient client;
   @override
@@ -233,6 +237,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     context,
                     MaterialPageRoute<void>(
                         builder: (_) => PhoneEnterScreen(
+                              qrLoginCallback: () {
+                                widget.qrLoginCallback.call();
+                                Navigator.pop(context);
+                              },
                               phoneNumberScreenCallback:
                                   widget.phoneNumberCallback,
                               client: widget.client,
