@@ -21,7 +21,8 @@ class TextDisplay {
       TextColor? textColor = TextColor.RegularText,
       FontWeight? fontWeight = FontWeight.normal,
       TextAlign? textAlign = TextAlign.left,
-      TextOverflow? overflow}) {
+      TextOverflow? overflow,
+      TextDecoration decoration = TextDecoration.none}) {
     var color = ClientTheme.currentTheme
         .getField(textColor.toString().replaceFirst("TextColor.", "")) as Color;
     var font = ClientTheme.currentTheme.getField(fontFamily == TextFont.regular
@@ -34,7 +35,7 @@ class TextDisplay {
       fontWeight: fontWeight,
       fontStyle: fontStyle,
       fontFamily: font,
-      decoration: TextDecoration.none,
+      decoration: decoration,
     );
   }
 }
