@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' as io;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
 import 'package:myapp/secrets.dart' as secrets;
@@ -402,6 +403,9 @@ class TelegramClient {
         future: getLanguagePackString(key));
   }
 
+  String? _dbPath;
+  String? _filesPath;
+
   Future setTdlibParameters(
       {bool? useTestDc,
       String? databaseDirectory,
@@ -423,6 +427,9 @@ class TelegramClient {
     systemLanguageCode ??= getUserLocale();
     deviceModel ??= await getDeviceName();
     systemVersion ??= await getSystemVersion();
+
+    _dbPath = databaseDirectory;
+    _filesPath = filesDirectory;
 
     send(SetOption(
         name: "localization_target",
@@ -453,7 +460,6 @@ class TelegramClient {
   }
 
   final Map<String, TdObject> _cachedLanguagePackString = {};
-
   Future<TdObject> getLanguagePackString(String key,
       {String? languagePackDatabasePath,
       String? languagePackId,
@@ -496,6 +502,8 @@ class TelegramClient {
       if (message is String) {
         if (message == "\$goodbye!\$") {
           _isolate!.kill();
+          io.Directory(_dbPath!).deleteSync(recursive: true);
+          io.Directory(_filesPath!).deleteSync(recursive: true);
           return;
         }
         var tdobject = convertToObject(message);
