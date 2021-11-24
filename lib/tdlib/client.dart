@@ -494,6 +494,10 @@ class TelegramClient {
     //not null, promise
     _receivePort!.listen((message) {
       if (message is String) {
+        if (message == "\$goodbye!\$") {
+          _isolate!.kill();
+          return;
+        }
         var tdobject = convertToObject(message);
         var extra = json.decode(message)["@extra"];
         if (extra == null) {
@@ -513,18 +517,21 @@ class TelegramClient {
   ReceivePort? _receivePort;
   SendPort? _sendPort;
   final Map<int, Function(TdObject)> _requestsQueue = {};
+  Isolate? _isolate;
 
   Future<ReceivePort> initIsolate() async {
     ReceivePort isolateToMainStream = ReceivePort();
-    Isolate myIsolateInstance =
-        await Isolate.spawn(_start, isolateToMainStream.sendPort);
+    _isolate = await Isolate.spawn(_start, isolateToMainStream.sendPort);
     return isolateToMainStream;
   }
 
   /// Asynchronously performs any necessary cleanup before [destroy]ing this
   /// client.
-  Future<void> close() async {
-    //TODO implement close
+  Future<void> destroy() async {
+    if (_isolate == null) {
+      throw Exception("Instance can't be destroy, because it doesnt open");
+    }
+    _sendPort!.send("\$killme\$");
   }
 
   int _extra = 1;
@@ -550,7 +557,7 @@ void _start(SendPort isolateToMainStream) {
   //About this timeouts: Dart, as a language, has a problem - it is single-threaded,
   //and td_json_client_receive blocks the thread for the timeout period, so I run tdlib in isolate.
   //But these are not all problems, while td_json_client_receive is running I cannot listen for messages from SendPort.
-  //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 50ms.
+  //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 100ms.
   //
   //Who will solve this problem - cool dude.
   client.incomingString(0.1).listen((update) {
@@ -558,6 +565,13 @@ void _start(SendPort isolateToMainStream) {
   });
 
   mainToIsolateStream.listen((data) {
-    if (data is String) client.send(json.decode(data));
+    if (data is String) {
+      if (data == "\$killme\$") {
+        client.destroy();
+        isolateToMainStream.send("\$goodbye!\$");
+      } else {
+        client.send(json.decode(data));
+      }
+    }
   });
 }
