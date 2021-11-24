@@ -12,14 +12,10 @@ import 'package:myapp/tdlib/client.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen(
-      {required this.client,
-      required this.phoneNumberCallback,
-      required this.qrLoginCallback,
-      Key? key})
+      {required this.client, required this.onNextClick, Key? key})
       : super(key: key);
 
-  final void Function() qrLoginCallback;
-  final PhoneNumberScreenCallback phoneNumberCallback;
+  final void Function() onNextClick;
   final TelegramClient client;
   @override
   State<IntroductionScreen> createState() => _IntroductionScreenState();
@@ -232,18 +228,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 width: 300,
                 languagePackStringFuture:
                     widget.client.getLanguagePackString("lng_start_msgs"),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                        builder: (_) => PhoneEnterScreen(
-                              qrLoginCallback: () {
-                                widget.qrLoginCallback.call();
-                                Navigator.pop(context);
-                              },
-                              phoneNumberScreenCallback:
-                                  widget.phoneNumberCallback,
-                              client: widget.client,
-                            )))),
+                onPressed: () => widget.onNextClick()),
           ],
         ),
         alignment: Alignment.bottomCenter,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Screens/introduction.dart';
+import 'package:myapp/Screens/phone_enter.dart';
 import 'package:myapp/Screens/qr_login.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/td_api.dart' hide Text;
+import 'package:myapp/tdlib/td_api.dart' hide Text hide File;
 import 'package:myapp/utils.dart';
 
 class AutorizationRouter extends StatefulWidget {
@@ -15,6 +16,20 @@ class AutorizationRouter extends StatefulWidget {
 }
 
 class _AutorizationRouter extends State<AutorizationRouter> {
+  TelegramClient? client;
+  bool seeIntroduction = false;
+
+  TelegramClient getClient() {
+    if (client != null) return client!;
+    return widget.client;
+  }
+
+  initNewClient() => setState(() {
+        var newClient = TelegramClient();
+        newClient.init().then((_) => newClient.setTdlibParameters());
+        client = newClient;
+      });
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -22,28 +37,32 @@ class _AutorizationRouter extends State<AutorizationRouter> {
           if (builder.hasData) {
             switch ((builder.data as AuthorizationState).getConstructor()) {
               case AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
-                return IntroductionScreen(
-                  qrLoginCallback: () => widget.client
-                      .send(RequestQrCodeAuthentication(otherUserIds: [])),
-                  client: widget.client,
-                  phoneNumberCallback: (phoneNumber, newSessionName) {
-                    print(phoneNumber + "    " + (newSessionName ?? ""));
-                  },
-                );
+                return client == null && !seeIntroduction
+                    ? IntroductionScreen(
+                        client: getClient(),
+                        onNextClick: () =>
+                            setState(() => seeIntroduction = true),
+                      )
+                    : PhoneEnterScreen(
+                        client: getClient(),
+                        phoneNumberScreenCallback: (_, __) {},
+                        qrLoginCallback: () => getClient().send(
+                              RequestQrCodeAuthentication(otherUserIds: []),
+                            ));
 
               case AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
-                widget.client.userLocale = getUserLocale();
-                widget.client
+                getClient().userLocale = getUserLocale();
+                getClient()
                     .setTdlibParameters()
                     //download language strings if we don't have it
                     .then((_) =>
-                        {widget.client.getLanguagePackString("lng_start_msgs")})
+                        {getClient().getLanguagePackString("lng_start_msgs")})
                     .then((value) => {
                           if (value is TdError)
                             {
-                              widget.client.send(GetLanguagePackStrings(
+                              getClient().send(GetLanguagePackStrings(
                                   keys: [],
-                                  languagePackId: widget.client.userLocale))
+                                  languagePackId: getClient().userLocale))
                             }
                         });
                 break;
@@ -53,8 +72,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                     builder.data as AuthorizationStateWaitEncryptionKey;
 
                 //[TODO] CURWA, it don't looks safe
-                widget.client
-                    .send(CheckDatabaseEncryptionKey(encryptionKey: ""));
+                getClient().send(CheckDatabaseEncryptionKey(encryptionKey: ""));
                 break;
 
               case AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR:
@@ -63,12 +81,15 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                 return QrLogin(
                     client: widget.client,
                     link: authState.link ?? "https://google.com",
-                    onBackButtonClick: () => print("TODO"));
+                    onBackButtonClick: () {
+                      getClient().destroy();
+                      initNewClient();
+                    });
             }
           }
           //[TODO] return here LoadScreen
           return const Center(child: Text("LOADING"));
         },
-        stream: widget.client.updateAuthorizationState);
+        stream: getClient().updateAuthorizationState);
   }
 }
