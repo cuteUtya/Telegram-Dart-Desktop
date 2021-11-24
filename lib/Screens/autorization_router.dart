@@ -19,16 +19,19 @@ class _AutorizationRouter extends State<AutorizationRouter> {
   TelegramClient? client;
   bool seeIntroduction = false;
 
+  String? _phoneNumber;
+
   TelegramClient getClient() {
     if (client != null) return client!;
     return widget.client;
   }
 
-  initNewClient() => setState(() {
-        var newClient = TelegramClient();
-        newClient.init().then((_) => newClient.setTdlibParameters());
-        client = newClient;
-      });
+  initNewClient({String? sessionName}) {
+    var newClient = TelegramClient();
+    newClient.init().then((_) => newClient
+        .setTdlibParameters(deviceModel: sessionName)
+        .then((value) => setState(() => client = newClient)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,17 @@ class _AutorizationRouter extends State<AutorizationRouter> {
           if (builder.hasData) {
             switch ((builder.data as AuthorizationState).getConstructor()) {
               case AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
+                if (_phoneNumber != null) {
+                  getClient()
+                      .send(SetAuthenticationPhoneNumber(
+                          phoneNumber: _phoneNumber,
+                          settings: PhoneNumberAuthenticationSettings(
+                              allowFlashCall: false,
+                              isCurrentPhoneNumber: false,
+                              allowSmsRetrieverApi: false)))
+                      .then((value) => {if (value is Ok) _phoneNumber = null});
+                  break;
+                }
                 return client == null && !seeIntroduction
                     ? IntroductionScreen(
                         client: getClient(),
@@ -45,7 +59,13 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                       )
                     : PhoneEnterScreen(
                         client: getClient(),
-                        phoneNumberScreenCallback: (_, __) {},
+                        phoneNumberScreenCallback: (number, session) {
+                          if (session != null) {
+                            _phoneNumber = number;
+                            getClient().destroy();
+                            initNewClient(sessionName: session);
+                          }
+                        },
                         qrLoginCallback: () => getClient().send(
                               RequestQrCodeAuthentication(otherUserIds: []),
                             ));
@@ -68,9 +88,6 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                 break;
 
               case AuthorizationStateWaitEncryptionKey.CONSTRUCTOR:
-                var waitEncryptionKey =
-                    builder.data as AuthorizationStateWaitEncryptionKey;
-
                 //[TODO] CURWA, it don't looks safe
                 getClient().send(CheckDatabaseEncryptionKey(encryptionKey: ""));
                 break;
@@ -80,7 +97,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                     as AuthorizationStateWaitOtherDeviceConfirmation;
                 return QrLogin(
                     client: widget.client,
-                    link: authState.link ?? "https://google.com",
+                    link: authState.link!,
                     onBackButtonClick: () {
                       getClient().destroy();
                       initNewClient();
