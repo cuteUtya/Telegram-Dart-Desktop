@@ -72,7 +72,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                       DataInput(
                         onDataStateChanged: (v) => _countryState = v,
                         value: _country,
-                        controllStateSingly: false,
+                        externalControll: true,
                         getHintCallback: countryHint,
                         validationCallback: validateCountry,
                         customLabelDisplay: widget.client.buildTextByKey(
@@ -89,7 +89,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                               //phone code field
                               child: DataInput(
                                   value: _phoneCode,
-                                  controllStateSingly: false,
+                                  externalControll: true,
                                   onValueChange: validatePhoneCode,
                                   onDataStateChanged: (v) => _phoneState = v,
                                   customLabelDisplay: widget.client
@@ -121,6 +121,8 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                         validationCallback: (_) => true,
                         fieldName: "Session name",
                         labelFontSize: 13,
+                        externalControll: true,
+                        value: _sessionName,
                         hintText:
                             widget.client.tdlibParameters.deviceModel ?? "",
                       ),
