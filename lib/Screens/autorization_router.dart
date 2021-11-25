@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Screens/introduction.dart';
+import 'package:myapp/Screens/load_screen.dart';
 import 'package:myapp/Screens/phone_enter.dart';
 import 'package:myapp/Screens/qr_login.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -104,8 +105,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                     });
             }
           }
-          //[TODO] return here LoadScreen
-          return const Center(child: Text("LOADING"));
+          return LoadScreen();
         },
         stream: getClient().updateAuthorizationState);
   }
