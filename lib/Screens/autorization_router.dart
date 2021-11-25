@@ -19,6 +19,7 @@ class AutorizationRouter extends StatefulWidget {
 class _AutorizationRouter extends State<AutorizationRouter> {
   TelegramClient? client;
   bool seeIntroduction = false;
+  Widget? lastScreen;
 
   String? _phoneNumber;
 
@@ -38,6 +39,10 @@ class _AutorizationRouter extends State<AutorizationRouter> {
   Widget build(BuildContext context) {
     return StreamBuilder(
         builder: (context, builder) {
+          lastScreen = QrLogin(
+              link: "google.com",
+              client: widget.client,
+              onBackButtonClick: () => {});
           if (builder.hasData) {
             switch ((builder.data as AuthorizationState).getConstructor()) {
               case AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
@@ -52,7 +57,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                       .then((value) => {if (value is Ok) _phoneNumber = null});
                   break;
                 }
-                return client == null && !seeIntroduction
+                lastScreen = client == null && !seeIntroduction
                     ? IntroductionScreen(
                         client: getClient(),
                         onNextClick: () =>
@@ -70,6 +75,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                         qrLoginCallback: () => getClient().send(
                               RequestQrCodeAuthentication(otherUserIds: []),
                             ));
+                return lastScreen!;
 
               case AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
                 getClient().userLocale = getUserLocale();
@@ -96,16 +102,17 @@ class _AutorizationRouter extends State<AutorizationRouter> {
               case AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR:
                 var authState = builder.data
                     as AuthorizationStateWaitOtherDeviceConfirmation;
-                return QrLogin(
+                lastScreen = QrLogin(
                     client: widget.client,
                     link: authState.link!,
                     onBackButtonClick: () {
                       getClient().destroy();
                       initNewClient();
                     });
+                return lastScreen!;
             }
           }
-          return LoadScreen();
+          return Stack(children: [lastScreen ?? const Center(), LoadScreen()]);
         },
         stream: getClient().updateAuthorizationState);
   }

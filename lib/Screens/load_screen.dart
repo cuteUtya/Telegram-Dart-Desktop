@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 
 class LoadScreen extends StatelessWidget {
   LoadScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+    return Container(
+      child: Column(children: [
         SizedBox(
-            width: 256, height: 256, child: Lottie.asset("Assets/Load.json")),
-        const SizedBox(height: 24),
-        Text("Loading...",
-            style: TextDisplay.create(fontWeight: FontWeight.w500, size: 24))
-      ],
+            width: 186, height: 186, child: Lottie.asset("Assets/Load.json")),
+      ]),
+      width: 200,
+      height: 200,
+      decoration: BoxDecoration(
+        color: ClientTheme.currentTheme.getField("LoadScreenBackgroundColor"),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: ClientTheme.currentTheme.getField("LoadScreenShadowColor"),
+            blurRadius: 4,
+            offset: const Offset(2, -2), // Shadow position
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,7 +1,7 @@
 #Base fields#
 Accent: #40A7E3;
 AccentHalfTransparent: linear(ref(Accent), #FFFFFFFF, 0.75);
-BaseColor: #FFFFFF;
+BaseColor: #FAFAFA;
 
 #Typography fields#
 HeaderFontFamily: Ubuntu;
@@ -22,3 +22,6 @@ DataInputHintColor: ref(AdditionalTextColor);
 DataInputValidColor: ref(Accent);
 DataInputInvalidColor: ref(DangerColor);
 DataInputEmtyColor: #EBEBEB;
+
+LoadScreenBackgroundColor: ref(BaseColor);
+LoadScreenShadowColor: #AAAAAA
