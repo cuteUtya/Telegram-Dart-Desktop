@@ -27,10 +27,6 @@ class _QrLoginState extends State<QrLogin> {
         children: [
           const Spacer(),
           QrImage(
-            eyeStyle: const QrEyeStyle(
-                color: Colors.black, eyeShape: QrEyeShape.circle),
-            dataModuleStyle: const QrDataModuleStyle(
-                dataModuleShape: QrDataModuleShape.circle, color: Colors.black),
             data: widget.link,
             version: QrVersions.auto,
             size: 256.0,
