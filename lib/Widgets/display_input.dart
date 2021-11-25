@@ -107,7 +107,7 @@ class _DataInputState extends State<DataInput> {
               //control input cursor
               //for example:
               //
-              // | - is user input cursor
+              // | — user input cursor
               //
               //I very much love programming!|
               //I v|ery much love programming!
@@ -155,11 +155,8 @@ class _DataInputState extends State<DataInput> {
     if (b.isEmpty) return 0;
 
     for (int i = 0; i < max(a.length, b.length); i++) {
-      print("A=\"$a\"");
-      print("B=\"$b\"");
       var aChar = i >= a.length ? "" : a[i];
       var bChar = i >= b.length ? "" : b[i];
-      print(aChar + " != " + bChar);
       if (aChar != bChar) return i + (a.length < b.length ? 1 : 0);
     }
 
