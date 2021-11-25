@@ -16,7 +16,7 @@ class MessageThreadInfo extends TdObject {
   /// [messageThreadId] Message thread identifier, unique within the chat
   int? messageThreadId;
 
-  /// [replyInfo] Contains information about the message thread
+  /// [replyInfo] Information about the message thread
   MessageReplyInfo? replyInfo;
 
   /// [unreadMessageCount] Approximate number of unread messages in the message thread

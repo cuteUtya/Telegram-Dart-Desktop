@@ -14,7 +14,7 @@ class JoinGroupCall extends TdFunction {
   /// [groupCallId] Group call identifier
   int? groupCallId;
 
-  /// [participantId] Identifier of a group call participant, which will be used to join the call; pass null to join as self; voice chats only
+  /// [participantId] Identifier of a group call participant, which will be used to join the call; pass null to join as self; video chats only
   MessageSender? participantId;
 
   /// [audioSourceId] Caller audio channel synchronization source identifier; received from tgcalls

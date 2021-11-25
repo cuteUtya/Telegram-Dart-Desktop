@@ -29,7 +29,7 @@ class Update extends TdObject {
   /// * UpdateChatIsMarkedAsUnread
   /// * UpdateChatIsBlocked
   /// * UpdateChatHasScheduledMessages
-  /// * UpdateChatVoiceChat
+  /// * UpdateChatVideoChat
   /// * UpdateChatDefaultDisableNotification
   /// * UpdateChatReadInbox
   /// * UpdateChatReadOutbox
@@ -39,6 +39,7 @@ class Update extends TdObject {
   /// * UpdateChatMessageTtlSetting
   /// * UpdateChatActionBar
   /// * UpdateChatTheme
+  /// * UpdateChatPendingJoinRequests
   /// * UpdateChatReplyMarkup
   /// * UpdateChatDraftMessage
   /// * UpdateChatFilters
@@ -96,6 +97,7 @@ class Update extends TdObject {
   /// * UpdatePoll
   /// * UpdatePollAnswer
   /// * UpdateChatMember
+  /// * UpdateNewChatJoinRequest
   factory Update.fromJson(Map<String, dynamic> json)  {
     switch(json["@type"]) {
       case UpdateAuthorizationState.CONSTRUCTOR:
@@ -140,8 +142,8 @@ class Update extends TdObject {
         return UpdateChatIsBlocked.fromJson(json);
       case UpdateChatHasScheduledMessages.CONSTRUCTOR:
         return UpdateChatHasScheduledMessages.fromJson(json);
-      case UpdateChatVoiceChat.CONSTRUCTOR:
-        return UpdateChatVoiceChat.fromJson(json);
+      case UpdateChatVideoChat.CONSTRUCTOR:
+        return UpdateChatVideoChat.fromJson(json);
       case UpdateChatDefaultDisableNotification.CONSTRUCTOR:
         return UpdateChatDefaultDisableNotification.fromJson(json);
       case UpdateChatReadInbox.CONSTRUCTOR:
@@ -160,6 +162,8 @@ class Update extends TdObject {
         return UpdateChatActionBar.fromJson(json);
       case UpdateChatTheme.CONSTRUCTOR:
         return UpdateChatTheme.fromJson(json);
+      case UpdateChatPendingJoinRequests.CONSTRUCTOR:
+        return UpdateChatPendingJoinRequests.fromJson(json);
       case UpdateChatReplyMarkup.CONSTRUCTOR:
         return UpdateChatReplyMarkup.fromJson(json);
       case UpdateChatDraftMessage.CONSTRUCTOR:
@@ -274,6 +278,8 @@ class Update extends TdObject {
         return UpdatePollAnswer.fromJson(json);
       case UpdateChatMember.CONSTRUCTOR:
         return UpdateChatMember.fromJson(json);
+      case UpdateNewChatJoinRequest.CONSTRUCTOR:
+        return UpdateNewChatJoinRequest.fromJson(json);
     }
     throw new Exception('undefined type');
   }
@@ -412,7 +418,7 @@ class UpdateMessageSendSucceeded extends Update {
   UpdateMessageSendSucceeded({this.message,
     this.oldMessageId});
 
-  /// [message] Information about the sent message. Usually only the message identifier, date, and content are changed, but almost all other fields can also change 
+  /// [message] The sent message. Usually only the message identifier, date, and content are changed, but almost all other fields can also change 
   Message? message;
 
   /// [oldMessageId] The previous temporary message identifier
@@ -459,7 +465,7 @@ class UpdateMessageSendFailed extends Update {
     this.errorCode,
     this.errorMessage});
 
-  /// [message] Contains information about the message which failed to send
+  /// [message] The failed to send message
   Message? message;
 
   /// [oldMessageId] The previous temporary message identifier 
@@ -1296,33 +1302,33 @@ class UpdateChatHasScheduledMessages extends Update {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class UpdateChatVoiceChat extends Update {
+class UpdateChatVideoChat extends Update {
 
-  /// A chat voice chat state has changed
-  UpdateChatVoiceChat({this.chatId,
-    this.voiceChat});
+  /// A chat video chat state has changed
+  UpdateChatVideoChat({this.chatId,
+    this.videoChat});
 
   /// [chatId] Chat identifier 
   int? chatId;
 
-  /// [voiceChat] New value of voice_chat
-  VoiceChat? voiceChat;
+  /// [videoChat] New value of video_chat
+  VideoChat? videoChat;
 
   /// callback sign
   dynamic extra;
 
   /// Parse from a json
-  UpdateChatVoiceChat.fromJson(Map<String, dynamic> json)  {
+  UpdateChatVideoChat.fromJson(Map<String, dynamic> json)  {
     int? pre_chatId;
     try{
       pre_chatId=json['chat_id'];
    }catch(_){}
     chatId = pre_chatId;
-    VoiceChat? pre_voiceChat;
+    VideoChat? pre_videoChat;
     try{
-      pre_voiceChat=VoiceChat.fromJson(json['voice_chat'] ?? <String, dynamic>{});
+      pre_videoChat=VideoChat.fromJson(json['video_chat'] ?? <String, dynamic>{});
    }catch(_){}
-    voiceChat = pre_voiceChat;
+    videoChat = pre_videoChat;
     extra = json['@extra'];
   }
 
@@ -1331,11 +1337,11 @@ class UpdateChatVoiceChat extends Update {
     return {
       "@type": CONSTRUCTOR,
       "chat_id": chatId,
-      "voice_chat": voiceChat == null ? null : voiceChat?.toJson(),
+      "video_chat": videoChat == null ? null : videoChat?.toJson(),
     };
   }
 
-  static const CONSTRUCTOR = 'updateChatVoiceChat';
+  static const CONSTRUCTOR = 'updateChatVideoChat';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -1751,6 +1757,51 @@ class UpdateChatTheme extends Update {
   }
 
   static const CONSTRUCTOR = 'updateChatTheme';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class UpdateChatPendingJoinRequests extends Update {
+
+  /// The chat pending join requests were changed
+  UpdateChatPendingJoinRequests({this.chatId,
+    this.pendingJoinRequests});
+
+  /// [chatId] Chat identifier 
+  int? chatId;
+
+  /// [pendingJoinRequests] The new data about pending join requests; may be null
+  ChatJoinRequestsInfo? pendingJoinRequests;
+
+  /// callback sign
+  dynamic extra;
+
+  /// Parse from a json
+  UpdateChatPendingJoinRequests.fromJson(Map<String, dynamic> json)  {
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
+    ChatJoinRequestsInfo? pre_pendingJoinRequests;
+    try{
+      pre_pendingJoinRequests=ChatJoinRequestsInfo.fromJson(json['pending_join_requests'] ?? <String, dynamic>{});
+   }catch(_){}
+    pendingJoinRequests = pre_pendingJoinRequests;
+    extra = json['@extra'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "chat_id": chatId,
+      "pending_join_requests": pendingJoinRequests == null ? null : pendingJoinRequests?.toJson(),
+    };
+  }
+
+  static const CONSTRUCTOR = 'updateChatPendingJoinRequests';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -3865,7 +3916,7 @@ class UpdateNewInlineQuery extends Update {
   /// [userLocation] User location; may be null
   Location? userLocation;
 
-  /// [chatType] Contains information about the type of the chat, from which the query originated; may be null if unknown
+  /// [chatType] The type of the chat, from which the query originated; may be null if unknown
   ChatType? chatType;
 
   /// [query] Text of the query 
@@ -4586,6 +4637,61 @@ class UpdateChatMember extends Update {
   }
 
   static const CONSTRUCTOR = 'updateChatMember';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class UpdateNewChatJoinRequest extends Update {
+
+  /// A user sent a join request to a chat; for bots only
+  UpdateNewChatJoinRequest({this.chatId,
+    this.request,
+    this.inviteLink});
+
+  /// [chatId] Chat identifier 
+  int? chatId;
+
+  /// [request] Join request 
+  ChatJoinRequest? request;
+
+  /// [inviteLink] The invite link, which was used to send join request; may be null
+  ChatInviteLink? inviteLink;
+
+  /// callback sign
+  dynamic extra;
+
+  /// Parse from a json
+  UpdateNewChatJoinRequest.fromJson(Map<String, dynamic> json)  {
+    int? pre_chatId;
+    try{
+      pre_chatId=json['chat_id'];
+   }catch(_){}
+    chatId = pre_chatId;
+    ChatJoinRequest? pre_request;
+    try{
+      pre_request=ChatJoinRequest.fromJson(json['request'] ?? <String, dynamic>{});
+   }catch(_){}
+    request = pre_request;
+    ChatInviteLink? pre_inviteLink;
+    try{
+      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
+   }catch(_){}
+    inviteLink = pre_inviteLink;
+    extra = json['@extra'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "chat_id": chatId,
+      "request": request == null ? null : request?.toJson(),
+      "invite_link": inviteLink == null ? null : inviteLink?.toJson(),
+    };
+  }
+
+  static const CONSTRUCTOR = 'updateNewChatJoinRequest';
   
   @override
   String getConstructor() => CONSTRUCTOR;

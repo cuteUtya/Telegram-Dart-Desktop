@@ -29,13 +29,13 @@ class PaymentForm extends TdObject {
   /// [paymentsProviderUserId] User identifier of the payment provider bot
   int? paymentsProviderUserId;
 
-  /// [paymentsProvider] Contains information about the payment provider, if available, to support it natively without the need for opening the URL; may be null
+  /// [paymentsProvider] Information about the payment provider, if available, to support it natively without the need for opening the URL; may be null
   PaymentsProviderStripe? paymentsProvider;
 
   /// [savedOrderInfo] Saved server-side order information; may be null
   OrderInfo? savedOrderInfo;
 
-  /// [savedCredentials] Contains information about saved card credentials; may be null
+  /// [savedCredentials] Information about saved card credentials; may be null
   SavedCredentials? savedCredentials;
 
   /// [canSaveCredentials] True, if the user can choose to save credentials

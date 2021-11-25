@@ -28,6 +28,7 @@ part 'objects/thumbnail_format.dart';
 part 'objects/thumbnail.dart';
 part 'objects/mask_point.dart';
 part 'objects/mask_position.dart';
+part 'objects/color_replacement.dart';
 part 'objects/closed_vector_path.dart';
 part 'objects/poll_option.dart';
 part 'objects/poll_type.dart';
@@ -39,6 +40,7 @@ part 'objects/sticker.dart';
 part 'objects/video.dart';
 part 'objects/video_note.dart';
 part 'objects/voice_note.dart';
+part 'objects/animated_emoji.dart';
 part 'objects/contact.dart';
 part 'objects/location.dart';
 part 'objects/venue.dart';
@@ -72,6 +74,9 @@ part 'objects/chat_invite_link_counts.dart';
 part 'objects/chat_invite_link_member.dart';
 part 'objects/chat_invite_link_members.dart';
 part 'objects/chat_invite_link_info.dart';
+part 'objects/chat_join_request.dart';
+part 'objects/chat_join_requests.dart';
+part 'objects/chat_join_requests_info.dart';
 part 'objects/basic_group.dart';
 part 'objects/basic_group_full_info.dart';
 part 'objects/supergroup.dart';
@@ -88,6 +93,10 @@ part 'objects/message_sending_state.dart';
 part 'objects/message.dart';
 part 'objects/messages.dart';
 part 'objects/found_messages.dart';
+part 'objects/message_position.dart';
+part 'objects/message_positions.dart';
+part 'objects/message_calendar_day.dart';
+part 'objects/message_calendar.dart';
 part 'objects/sponsored_message.dart';
 part 'objects/sponsored_messages.dart';
 part 'objects/notification_settings_scope.dart';
@@ -103,7 +112,7 @@ part 'objects/chat_list.dart';
 part 'objects/chat_lists.dart';
 part 'objects/chat_source.dart';
 part 'objects/chat_position.dart';
-part 'objects/voice_chat.dart';
+part 'objects/video_chat.dart';
 part 'objects/chat.dart';
 part 'objects/chats.dart';
 part 'objects/chat_nearby.dart';
@@ -386,6 +395,8 @@ part 'functions/delete_all_call_messages.dart';
 part 'functions/search_chat_recent_location_messages.dart';
 part 'functions/get_active_live_location_messages.dart';
 part 'functions/get_chat_message_by_date.dart';
+part 'functions/get_chat_sparse_message_positions.dart';
+part 'functions/get_chat_message_calendar.dart';
 part 'functions/get_chat_message_count.dart';
 part 'functions/get_chat_scheduled_messages.dart';
 part 'functions/get_message_public_forwards.dart';
@@ -406,6 +417,7 @@ part 'functions/send_chat_screenshot_taken_notification.dart';
 part 'functions/add_local_message.dart';
 part 'functions/delete_messages.dart';
 part 'functions/delete_chat_messages_from_user.dart';
+part 'functions/delete_chat_messages_by_date.dart';
 part 'functions/edit_message_text.dart';
 part 'functions/edit_message_live_location.dart';
 part 'functions/edit_message_media.dart';
@@ -532,15 +544,18 @@ part 'functions/delete_revoked_chat_invite_link.dart';
 part 'functions/delete_all_revoked_chat_invite_links.dart';
 part 'functions/check_chat_invite_link.dart';
 part 'functions/join_chat_by_invite_link.dart';
+part 'functions/get_chat_join_requests.dart';
+part 'functions/approve_chat_join_request.dart';
+part 'functions/decline_chat_join_request.dart';
 part 'functions/create_call.dart';
 part 'functions/accept_call.dart';
 part 'functions/send_call_signaling_data.dart';
 part 'functions/discard_call.dart';
 part 'functions/send_call_rating.dart';
 part 'functions/send_call_debug_information.dart';
-part 'functions/get_voice_chat_available_participants.dart';
-part 'functions/set_voice_chat_default_participant.dart';
-part 'functions/create_voice_chat.dart';
+part 'functions/get_video_chat_available_participants.dart';
+part 'functions/set_video_chat_default_participant.dart';
+part 'functions/create_video_chat.dart';
 part 'functions/get_group_call.dart';
 part 'functions/start_scheduled_group_call.dart';
 part 'functions/toggle_group_call_enabled_start_notification.dart';
@@ -600,6 +615,7 @@ part 'functions/add_favorite_sticker.dart';
 part 'functions/remove_favorite_sticker.dart';
 part 'functions/get_sticker_emojis.dart';
 part 'functions/search_emojis.dart';
+part 'functions/get_animated_emoji.dart';
 part 'functions/get_emoji_suggestions_url.dart';
 part 'functions/get_saved_animations.dart';
 part 'functions/add_saved_animation.dart';
@@ -821,6 +837,7 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'maskPointMouth': (d) => MaskPointMouth.fromJson(d),
   'maskPointChin': (d) => MaskPointChin.fromJson(d),
   'maskPosition': (d) => MaskPosition.fromJson(d),
+  'colorReplacement': (d) => ColorReplacement.fromJson(d),
   'closedVectorPath': (d) => ClosedVectorPath.fromJson(d),
   'pollOption': (d) => PollOption.fromJson(d),
   'pollType': (d) => PollType.fromJson(d),
@@ -834,6 +851,7 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'video': (d) => Video.fromJson(d),
   'videoNote': (d) => VideoNote.fromJson(d),
   'voiceNote': (d) => VoiceNote.fromJson(d),
+  'animatedEmoji': (d) => AnimatedEmoji.fromJson(d),
   'contact': (d) => Contact.fromJson(d),
   'location': (d) => Location.fromJson(d),
   'venue': (d) => Venue.fromJson(d),
@@ -904,6 +922,9 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'chatInviteLinkMember': (d) => ChatInviteLinkMember.fromJson(d),
   'chatInviteLinkMembers': (d) => ChatInviteLinkMembers.fromJson(d),
   'chatInviteLinkInfo': (d) => ChatInviteLinkInfo.fromJson(d),
+  'chatJoinRequest': (d) => ChatJoinRequest.fromJson(d),
+  'chatJoinRequests': (d) => ChatJoinRequests.fromJson(d),
+  'chatJoinRequestsInfo': (d) => ChatJoinRequestsInfo.fromJson(d),
   'basicGroup': (d) => BasicGroup.fromJson(d),
   'basicGroupFullInfo': (d) => BasicGroupFullInfo.fromJson(d),
   'supergroup': (d) => Supergroup.fromJson(d),
@@ -934,6 +955,10 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'message': (d) => Message.fromJson(d),
   'messages': (d) => Messages.fromJson(d),
   'foundMessages': (d) => FoundMessages.fromJson(d),
+  'messagePosition': (d) => MessagePosition.fromJson(d),
+  'messagePositions': (d) => MessagePositions.fromJson(d),
+  'messageCalendarDay': (d) => MessageCalendarDay.fromJson(d),
+  'messageCalendar': (d) => MessageCalendar.fromJson(d),
   'sponsoredMessage': (d) => SponsoredMessage.fromJson(d),
   'sponsoredMessages': (d) => SponsoredMessages.fromJson(d),
   'notificationSettingsScope': (d) => NotificationSettingsScope.fromJson(d),
@@ -965,7 +990,7 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'chatSourcePublicServiceAnnouncement': (d) =>
       ChatSourcePublicServiceAnnouncement.fromJson(d),
   'chatPosition': (d) => ChatPosition.fromJson(d),
-  'voiceChat': (d) => VoiceChat.fromJson(d),
+  'videoChat': (d) => VideoChat.fromJson(d),
   'chat': (d) => Chat.fromJson(d),
   'chats': (d) => Chats.fromJson(d),
   'chatNearby': (d) => ChatNearby.fromJson(d),
@@ -1249,16 +1274,17 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'messageLocation': (d) => MessageLocation.fromJson(d),
   'messageVenue': (d) => MessageVenue.fromJson(d),
   'messageContact': (d) => MessageContact.fromJson(d),
+  'messageAnimatedEmoji': (d) => MessageAnimatedEmoji.fromJson(d),
   'messageDice': (d) => MessageDice.fromJson(d),
   'messageGame': (d) => MessageGame.fromJson(d),
   'messagePoll': (d) => MessagePoll.fromJson(d),
   'messageInvoice': (d) => MessageInvoice.fromJson(d),
   'messageCall': (d) => MessageCall.fromJson(d),
-  'messageVoiceChatScheduled': (d) => MessageVoiceChatScheduled.fromJson(d),
-  'messageVoiceChatStarted': (d) => MessageVoiceChatStarted.fromJson(d),
-  'messageVoiceChatEnded': (d) => MessageVoiceChatEnded.fromJson(d),
-  'messageInviteVoiceChatParticipants': (d) =>
-      MessageInviteVoiceChatParticipants.fromJson(d),
+  'messageVideoChatScheduled': (d) => MessageVideoChatScheduled.fromJson(d),
+  'messageVideoChatStarted': (d) => MessageVideoChatStarted.fromJson(d),
+  'messageVideoChatEnded': (d) => MessageVideoChatEnded.fromJson(d),
+  'messageInviteVideoChatParticipants': (d) =>
+      MessageInviteVideoChatParticipants.fromJson(d),
   'messageBasicGroupChatCreate': (d) => MessageBasicGroupChatCreate.fromJson(d),
   'messageSupergroupChatCreate': (d) => MessageSupergroupChatCreate.fromJson(d),
   'messageChatChangeTitle': (d) => MessageChatChangeTitle.fromJson(d),
@@ -1266,6 +1292,7 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'messageChatDeletePhoto': (d) => MessageChatDeletePhoto.fromJson(d),
   'messageChatAddMembers': (d) => MessageChatAddMembers.fromJson(d),
   'messageChatJoinByLink': (d) => MessageChatJoinByLink.fromJson(d),
+  'messageChatJoinByRequest': (d) => MessageChatJoinByRequest.fromJson(d),
   'messageChatDeleteMember': (d) => MessageChatDeleteMember.fromJson(d),
   'messageChatUpgradeTo': (d) => MessageChatUpgradeTo.fromJson(d),
   'messageChatUpgradeFrom': (d) => MessageChatUpgradeFrom.fromJson(d),
@@ -1497,6 +1524,8 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'chatEventMemberJoined': (d) => ChatEventMemberJoined.fromJson(d),
   'chatEventMemberJoinedByInviteLink': (d) =>
       ChatEventMemberJoinedByInviteLink.fromJson(d),
+  'chatEventMemberJoinedByRequest': (d) =>
+      ChatEventMemberJoinedByRequest.fromJson(d),
   'chatEventMemberLeft': (d) => ChatEventMemberLeft.fromJson(d),
   'chatEventMemberInvited': (d) => ChatEventMemberInvited.fromJson(d),
   'chatEventMemberPromoted': (d) => ChatEventMemberPromoted.fromJson(d),
@@ -1521,14 +1550,14 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'chatEventInviteLinkEdited': (d) => ChatEventInviteLinkEdited.fromJson(d),
   'chatEventInviteLinkRevoked': (d) => ChatEventInviteLinkRevoked.fromJson(d),
   'chatEventInviteLinkDeleted': (d) => ChatEventInviteLinkDeleted.fromJson(d),
-  'chatEventVoiceChatCreated': (d) => ChatEventVoiceChatCreated.fromJson(d),
-  'chatEventVoiceChatDiscarded': (d) => ChatEventVoiceChatDiscarded.fromJson(d),
-  'chatEventVoiceChatParticipantIsMutedToggled': (d) =>
-      ChatEventVoiceChatParticipantIsMutedToggled.fromJson(d),
-  'chatEventVoiceChatParticipantVolumeLevelChanged': (d) =>
-      ChatEventVoiceChatParticipantVolumeLevelChanged.fromJson(d),
-  'chatEventVoiceChatMuteNewParticipantsToggled': (d) =>
-      ChatEventVoiceChatMuteNewParticipantsToggled.fromJson(d),
+  'chatEventVideoChatCreated': (d) => ChatEventVideoChatCreated.fromJson(d),
+  'chatEventVideoChatDiscarded': (d) => ChatEventVideoChatDiscarded.fromJson(d),
+  'chatEventVideoChatParticipantIsMutedToggled': (d) =>
+      ChatEventVideoChatParticipantIsMutedToggled.fromJson(d),
+  'chatEventVideoChatParticipantVolumeLevelChanged': (d) =>
+      ChatEventVideoChatParticipantVolumeLevelChanged.fromJson(d),
+  'chatEventVideoChatMuteNewParticipantsToggled': (d) =>
+      ChatEventVideoChatMuteNewParticipantsToggled.fromJson(d),
   'chatEvent': (d) => ChatEvent.fromJson(d),
   'chatEvents': (d) => ChatEvents.fromJson(d),
   'chatEventLogFilters': (d) => ChatEventLogFilters.fromJson(d),
@@ -1643,6 +1672,8 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
       PushMessageContentChatDeleteMember.fromJson(d),
   'pushMessageContentChatJoinByLink': (d) =>
       PushMessageContentChatJoinByLink.fromJson(d),
+  'pushMessageContentChatJoinByRequest': (d) =>
+      PushMessageContentChatJoinByRequest.fromJson(d),
   'pushMessageContentMessageForwards': (d) =>
       PushMessageContentMessageForwards.fromJson(d),
   'pushMessageContentMediaAlbum': (d) =>
@@ -1762,7 +1793,9 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
       InternalLinkTypeThemeSettings.fromJson(d),
   'internalLinkTypeUnknownDeepLink': (d) =>
       InternalLinkTypeUnknownDeepLink.fromJson(d),
-  'internalLinkTypeVoiceChat': (d) => InternalLinkTypeVoiceChat.fromJson(d),
+  'internalLinkTypeUnsupportedProxy': (d) =>
+      InternalLinkTypeUnsupportedProxy.fromJson(d),
+  'internalLinkTypeVideoChat': (d) => InternalLinkTypeVideoChat.fromJson(d),
   'messageLink': (d) => MessageLink.fromJson(d),
   'messageLinkInfo': (d) => MessageLinkInfo.fromJson(d),
   'filePart': (d) => FilePart.fromJson(d),
@@ -1909,7 +1942,7 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'updateChatIsBlocked': (d) => UpdateChatIsBlocked.fromJson(d),
   'updateChatHasScheduledMessages': (d) =>
       UpdateChatHasScheduledMessages.fromJson(d),
-  'updateChatVoiceChat': (d) => UpdateChatVoiceChat.fromJson(d),
+  'updateChatVideoChat': (d) => UpdateChatVideoChat.fromJson(d),
   'updateChatDefaultDisableNotification': (d) =>
       UpdateChatDefaultDisableNotification.fromJson(d),
   'updateChatReadInbox': (d) => UpdateChatReadInbox.fromJson(d),
@@ -1923,6 +1956,8 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'updateChatMessageTtlSetting': (d) => UpdateChatMessageTtlSetting.fromJson(d),
   'updateChatActionBar': (d) => UpdateChatActionBar.fromJson(d),
   'updateChatTheme': (d) => UpdateChatTheme.fromJson(d),
+  'updateChatPendingJoinRequests': (d) =>
+      UpdateChatPendingJoinRequests.fromJson(d),
   'updateChatReplyMarkup': (d) => UpdateChatReplyMarkup.fromJson(d),
   'updateChatDraftMessage': (d) => UpdateChatDraftMessage.fromJson(d),
   'updateChatFilters': (d) => UpdateChatFilters.fromJson(d),
@@ -1985,6 +2020,7 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
   'updatePoll': (d) => UpdatePoll.fromJson(d),
   'updatePollAnswer': (d) => UpdatePollAnswer.fromJson(d),
   'updateChatMember': (d) => UpdateChatMember.fromJson(d),
+  'updateNewChatJoinRequest': (d) => UpdateNewChatJoinRequest.fromJson(d),
   'updates': (d) => Updates.fromJson(d),
   'logStream': (d) => LogStream.fromJson(d),
   'logStreamDefault': (d) => LogStreamDefault.fromJson(d),

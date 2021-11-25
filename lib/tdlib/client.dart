@@ -92,6 +92,10 @@ class TelegramClient {
       .where((u) => u is UpdateChatMember)
       .map((a) => (a as UpdateChatMember));
 
+  Stream<UpdateNewChatJoinRequest> get updateNewChatJoinRequest => updates
+      .where((u) => u is UpdateNewChatJoinRequest)
+      .map((a) => (a as UpdateNewChatJoinRequest));
+
   Stream<UpdateChatMessageTtlSetting> get updateChatMessageTTlSetting => updates
       .where((u) => u is UpdateChatMessageTtlSetting)
       .map((a) => (a as UpdateChatMessageTtlSetting));
@@ -137,6 +141,11 @@ class TelegramClient {
       .where((u) => u is UpdateChatThemes)
       .map((a) => (a as UpdateChatThemes));
 
+  Stream<UpdateChatPendingJoinRequests> get updateChatPendingJoinRequests =>
+      updates
+          .where((u) => u is UpdateChatPendingJoinRequests)
+          .map((a) => (a as UpdateChatPendingJoinRequests));
+
   Stream<UpdateChatTitle> get updateChatTitle => updates
       .where((u) => u is UpdateChatTitle)
       .map((a) => (a as UpdateChatTitle));
@@ -146,9 +155,9 @@ class TelegramClient {
           .where((u) => u is UpdateChatUnreadMentionCount)
           .map((a) => (a as UpdateChatUnreadMentionCount));
 
-  Stream<UpdateChatVoiceChat> get updateChatVoiceChat => updates
-      .where((u) => u is UpdateChatVoiceChat)
-      .map((a) => (a as UpdateChatVoiceChat));
+  Stream<UpdateChatVideoChat> get updateChatVoiceChat => updates
+      .where((u) => u is UpdateChatVideoChat)
+      .map((a) => (a as UpdateChatVideoChat));
 
   Stream<ConnectionState> get updateConnectionState => updates
       .where((u) => u is UpdateConnectionState)

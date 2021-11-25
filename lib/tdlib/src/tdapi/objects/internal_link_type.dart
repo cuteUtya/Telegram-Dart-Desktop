@@ -30,7 +30,8 @@ class InternalLinkType extends TdObject {
   /// * InternalLinkTypeTheme
   /// * InternalLinkTypeThemeSettings
   /// * InternalLinkTypeUnknownDeepLink
-  /// * InternalLinkTypeVoiceChat
+  /// * InternalLinkTypeUnsupportedProxy
+  /// * InternalLinkTypeVideoChat
   factory InternalLinkType.fromJson(Map<String, dynamic> json)  {
     switch(json["@type"]) {
       case InternalLinkTypeActiveSessions.CONSTRUCTOR:
@@ -77,8 +78,10 @@ class InternalLinkType extends TdObject {
         return InternalLinkTypeThemeSettings.fromJson(json);
       case InternalLinkTypeUnknownDeepLink.CONSTRUCTOR:
         return InternalLinkTypeUnknownDeepLink.fromJson(json);
-      case InternalLinkTypeVoiceChat.CONSTRUCTOR:
-        return InternalLinkTypeVoiceChat.fromJson(json);
+      case InternalLinkTypeUnsupportedProxy.CONSTRUCTOR:
+        return InternalLinkTypeUnsupportedProxy.fromJson(json);
+      case InternalLinkTypeVideoChat.CONSTRUCTOR:
+        return InternalLinkTypeVideoChat.fromJson(json);
     }
     throw new Exception('undefined type');
   }
@@ -922,27 +925,53 @@ class InternalLinkTypeUnknownDeepLink extends InternalLinkType {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class InternalLinkTypeVoiceChat extends InternalLinkType {
+class InternalLinkTypeUnsupportedProxy extends InternalLinkType {
 
-  /// The link is a link to a voice chat. Call searchPublicChat with the given chat username, and then joinGoupCall with the given invite hash to process the link
-  InternalLinkTypeVoiceChat({this.chatUsername,
+  /// The link is a link to an unsupported proxy. An alert can be shown to the user
+  InternalLinkTypeUnsupportedProxy();
+
+  /// callback sign
+  dynamic extra;
+
+  /// Parse from a json
+  InternalLinkTypeUnsupportedProxy.fromJson(Map<String, dynamic> json)  {
+    extra = json['@extra'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+    };
+  }
+
+  static const CONSTRUCTOR = 'internalLinkTypeUnsupportedProxy';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class InternalLinkTypeVideoChat extends InternalLinkType {
+
+  /// The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGoupCall with the given invite hash to process the link
+  InternalLinkTypeVideoChat({this.chatUsername,
     this.inviteHash,
     this.isLiveStream});
 
-  /// [chatUsername] Username of the chat with the voice chat
+  /// [chatUsername] Username of the chat with the video chat
   String? chatUsername;
 
-  /// [inviteHash] If non-empty, invite hash to be used to join the voice chat without being muted by administrators
+  /// [inviteHash] If non-empty, invite hash to be used to join the video chat without being muted by administrators
   String? inviteHash;
 
-  /// [isLiveStream] True, if the voice chat is expected to be a live stream in a channel or a broadcast group
+  /// [isLiveStream] True, if the video chat is expected to be a live stream in a channel or a broadcast group
   bool? isLiveStream;
 
   /// callback sign
   dynamic extra;
 
   /// Parse from a json
-  InternalLinkTypeVoiceChat.fromJson(Map<String, dynamic> json)  {
+  InternalLinkTypeVideoChat.fromJson(Map<String, dynamic> json)  {
     String? pre_chatUsername;
     try{
       pre_chatUsername=json['chat_username'];
@@ -971,7 +1000,7 @@ class InternalLinkTypeVoiceChat extends InternalLinkType {
     };
   }
 
-  static const CONSTRUCTOR = 'internalLinkTypeVoiceChat';
+  static const CONSTRUCTOR = 'internalLinkTypeVideoChat';
   
   @override
   String getConstructor() => CONSTRUCTOR;

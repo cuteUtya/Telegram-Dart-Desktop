@@ -1,16 +1,19 @@
 part of '../tdapi.dart';
 
 class ReplyMarkup extends TdObject {
+
   /// Contains a description of a custom keyboard and actions that can be done with it to quickly reply to bots
   ReplyMarkup();
+
+  
 
   /// a ReplyMarkup return type can be :
   /// * ReplyMarkupRemoveKeyboard
   /// * ReplyMarkupForceReply
   /// * ReplyMarkupShowKeyboard
   /// * ReplyMarkupInlineKeyboard
-  factory ReplyMarkup.fromJson(Map<String, dynamic> json) {
-    switch (json["@type"]) {
+  factory ReplyMarkup.fromJson(Map<String, dynamic> json)  {
+    switch(json["@type"]) {
       case ReplyMarkupRemoveKeyboard.CONSTRUCTOR:
         return ReplyMarkupRemoveKeyboard.fromJson(json);
       case ReplyMarkupForceReply.CONSTRUCTOR:
@@ -25,16 +28,19 @@ class ReplyMarkup extends TdObject {
 
   @override
   Map<String, dynamic> toJson() {
-    return {};
+    return {
+      
+    };
   }
 
   static const CONSTRUCTOR = 'replyMarkup';
-
+  
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class ReplyMarkupRemoveKeyboard extends ReplyMarkup {
+
   /// Instructs application to remove the keyboard once this message has been received. This kind of keyboard can't be received in an incoming message; instead, UpdateChatReplyMarkup with message_id == 0 will be sent
   ReplyMarkupRemoveKeyboard({this.isPersonal});
 
@@ -42,11 +48,11 @@ class ReplyMarkupRemoveKeyboard extends ReplyMarkup {
   bool? isPersonal;
 
   /// Parse from a json
-  ReplyMarkupRemoveKeyboard.fromJson(Map<String, dynamic> json) {
+  ReplyMarkupRemoveKeyboard.fromJson(Map<String, dynamic> json)  {
     bool? pre_isPersonal;
-    try {
-      pre_isPersonal = json['is_personal'];
-    } catch (_) {}
+    try{
+      pre_isPersonal=json['is_personal'];
+   }catch(_){}
     isPersonal = pre_isPersonal;
   }
 
@@ -59,14 +65,16 @@ class ReplyMarkupRemoveKeyboard extends ReplyMarkup {
   }
 
   static const CONSTRUCTOR = 'replyMarkupRemoveKeyboard';
-
+  
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class ReplyMarkupForceReply extends ReplyMarkup {
+
   /// Instructs application to force a reply to this message
-  ReplyMarkupForceReply({this.isPersonal, this.inputFieldPlaceholder});
+  ReplyMarkupForceReply({this.isPersonal,
+    this.inputFieldPlaceholder});
 
   /// [isPersonal] True, if a forced reply must automatically be shown to the current user. For outgoing messages, specify true to show the forced reply only for the mentioned users and for the target user of a reply
   bool? isPersonal;
@@ -75,16 +83,16 @@ class ReplyMarkupForceReply extends ReplyMarkup {
   String? inputFieldPlaceholder;
 
   /// Parse from a json
-  ReplyMarkupForceReply.fromJson(Map<String, dynamic> json) {
+  ReplyMarkupForceReply.fromJson(Map<String, dynamic> json)  {
     bool? pre_isPersonal;
-    try {
-      pre_isPersonal = json['is_personal'];
-    } catch (_) {}
+    try{
+      pre_isPersonal=json['is_personal'];
+   }catch(_){}
     isPersonal = pre_isPersonal;
     String? pre_inputFieldPlaceholder;
-    try {
-      pre_inputFieldPlaceholder = json['input_field_placeholder'];
-    } catch (_) {}
+    try{
+      pre_inputFieldPlaceholder=json['input_field_placeholder'];
+   }catch(_){}
     inputFieldPlaceholder = pre_inputFieldPlaceholder;
   }
 
@@ -98,19 +106,19 @@ class ReplyMarkupForceReply extends ReplyMarkup {
   }
 
   static const CONSTRUCTOR = 'replyMarkupForceReply';
-
+  
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class ReplyMarkupShowKeyboard extends ReplyMarkup {
+
   /// Contains a custom keyboard layout to quickly reply to bots
-  ReplyMarkupShowKeyboard(
-      {this.rows,
-      this.resizeKeyboard,
-      this.oneTime,
-      this.isPersonal,
-      this.inputFieldPlaceholder});
+  ReplyMarkupShowKeyboard({this.rows,
+    this.resizeKeyboard,
+    this.oneTime,
+    this.isPersonal,
+    this.inputFieldPlaceholder});
 
   /// [rows] A list of rows of bot keyboard buttons
   List<List<KeyboardButton>>? rows;
@@ -128,36 +136,31 @@ class ReplyMarkupShowKeyboard extends ReplyMarkup {
   String? inputFieldPlaceholder;
 
   /// Parse from a json
-  ReplyMarkupShowKeyboard.fromJson(Map<String, dynamic> json) {
+  ReplyMarkupShowKeyboard.fromJson(Map<String, dynamic> json)  {
     List<List<KeyboardButton>>? pre_rows;
-    try {
-      pre_rows = List<List<KeyboardButton>>.from((json['rows'] ?? [])!
-          .map((item) => List<KeyboardButton>.from((item ?? [])!
-              .map((innerItem) =>
-                  KeyboardButton.fromJson(innerItem ?? <String, dynamic>{}))
-              .toList()))
-          .toList());
-    } catch (_) {}
+    try{
+      pre_rows=List<List<KeyboardButton>>.from((json['rows'] ?? [])!.map((item) => List<KeyboardButton>.from((item ?? [])!.map((innerItem) => KeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList())).toList());
+   }catch(_){}
     rows = pre_rows;
     bool? pre_resizeKeyboard;
-    try {
-      pre_resizeKeyboard = json['resize_keyboard'];
-    } catch (_) {}
+    try{
+      pre_resizeKeyboard=json['resize_keyboard'];
+   }catch(_){}
     resizeKeyboard = pre_resizeKeyboard;
     bool? pre_oneTime;
-    try {
-      pre_oneTime = json['one_time'];
-    } catch (_) {}
+    try{
+      pre_oneTime=json['one_time'];
+   }catch(_){}
     oneTime = pre_oneTime;
     bool? pre_isPersonal;
-    try {
-      pre_isPersonal = json['is_personal'];
-    } catch (_) {}
+    try{
+      pre_isPersonal=json['is_personal'];
+   }catch(_){}
     isPersonal = pre_isPersonal;
     String? pre_inputFieldPlaceholder;
-    try {
-      pre_inputFieldPlaceholder = json['input_field_placeholder'];
-    } catch (_) {}
+    try{
+      pre_inputFieldPlaceholder=json['input_field_placeholder'];
+   }catch(_){}
     inputFieldPlaceholder = pre_inputFieldPlaceholder;
   }
 
@@ -174,12 +177,13 @@ class ReplyMarkupShowKeyboard extends ReplyMarkup {
   }
 
   static const CONSTRUCTOR = 'replyMarkupShowKeyboard';
-
+  
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class ReplyMarkupInlineKeyboard extends ReplyMarkup {
+
   /// Contains an inline keyboard layout
   ReplyMarkupInlineKeyboard({this.rows});
 
@@ -187,16 +191,11 @@ class ReplyMarkupInlineKeyboard extends ReplyMarkup {
   List<List<InlineKeyboardButton>>? rows;
 
   /// Parse from a json
-  ReplyMarkupInlineKeyboard.fromJson(Map<String, dynamic> json) {
+  ReplyMarkupInlineKeyboard.fromJson(Map<String, dynamic> json)  {
     List<List<InlineKeyboardButton>>? pre_rows;
-    try {
-      pre_rows = List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!
-          .map((item) => List<InlineKeyboardButton>.from((item ?? [])!
-              .map((innerItem) => InlineKeyboardButton.fromJson(
-                  innerItem ?? <String, dynamic>{}))
-              .toList()))
-          .toList());
-    } catch (_) {}
+    try{
+      pre_rows=List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!.map((item) => List<InlineKeyboardButton>.from((item ?? [])!.map((innerItem) => InlineKeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList())).toList());
+   }catch(_){}
     rows = pre_rows;
   }
 
@@ -209,7 +208,7 @@ class ReplyMarkupInlineKeyboard extends ReplyMarkup {
   }
 
   static const CONSTRUCTOR = 'replyMarkupInlineKeyboard';
-
+  
   @override
   String getConstructor() => CONSTRUCTOR;
 }

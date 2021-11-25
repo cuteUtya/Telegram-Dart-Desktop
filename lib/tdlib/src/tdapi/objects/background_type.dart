@@ -85,7 +85,7 @@ class BackgroundTypePattern extends BackgroundType {
     this.isInverted,
     this.isMoving});
 
-  /// [fill] Description of the background fill
+  /// [fill] Fill of the background
   BackgroundFill? fill;
 
   /// [intensity] Intensity of the pattern when it is shown above the filled background; 0-100.
@@ -143,7 +143,7 @@ class BackgroundTypeFill extends BackgroundType {
   /// A filled background
   BackgroundTypeFill({this.fill});
 
-  /// [fill] Description of the background fill
+  /// [fill] The background fill
   BackgroundFill? fill;
 
   /// Parse from a json

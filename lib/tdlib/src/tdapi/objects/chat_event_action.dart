@@ -15,6 +15,7 @@ class ChatEventAction extends TdObject {
   /// * ChatEventMessageUnpinned
   /// * ChatEventMemberJoined
   /// * ChatEventMemberJoinedByInviteLink
+  /// * ChatEventMemberJoinedByRequest
   /// * ChatEventMemberLeft
   /// * ChatEventMemberInvited
   /// * ChatEventMemberPromoted
@@ -35,11 +36,11 @@ class ChatEventAction extends TdObject {
   /// * ChatEventInviteLinkEdited
   /// * ChatEventInviteLinkRevoked
   /// * ChatEventInviteLinkDeleted
-  /// * ChatEventVoiceChatCreated
-  /// * ChatEventVoiceChatDiscarded
-  /// * ChatEventVoiceChatParticipantIsMutedToggled
-  /// * ChatEventVoiceChatParticipantVolumeLevelChanged
-  /// * ChatEventVoiceChatMuteNewParticipantsToggled
+  /// * ChatEventVideoChatCreated
+  /// * ChatEventVideoChatDiscarded
+  /// * ChatEventVideoChatParticipantIsMutedToggled
+  /// * ChatEventVideoChatParticipantVolumeLevelChanged
+  /// * ChatEventVideoChatMuteNewParticipantsToggled
   factory ChatEventAction.fromJson(Map<String, dynamic> json)  {
     switch(json["@type"]) {
       case ChatEventMessageEdited.CONSTRUCTOR:
@@ -56,6 +57,8 @@ class ChatEventAction extends TdObject {
         return ChatEventMemberJoined.fromJson(json);
       case ChatEventMemberJoinedByInviteLink.CONSTRUCTOR:
         return ChatEventMemberJoinedByInviteLink.fromJson(json);
+      case ChatEventMemberJoinedByRequest.CONSTRUCTOR:
+        return ChatEventMemberJoinedByRequest.fromJson(json);
       case ChatEventMemberLeft.CONSTRUCTOR:
         return ChatEventMemberLeft.fromJson(json);
       case ChatEventMemberInvited.CONSTRUCTOR:
@@ -96,16 +99,16 @@ class ChatEventAction extends TdObject {
         return ChatEventInviteLinkRevoked.fromJson(json);
       case ChatEventInviteLinkDeleted.CONSTRUCTOR:
         return ChatEventInviteLinkDeleted.fromJson(json);
-      case ChatEventVoiceChatCreated.CONSTRUCTOR:
-        return ChatEventVoiceChatCreated.fromJson(json);
-      case ChatEventVoiceChatDiscarded.CONSTRUCTOR:
-        return ChatEventVoiceChatDiscarded.fromJson(json);
-      case ChatEventVoiceChatParticipantIsMutedToggled.CONSTRUCTOR:
-        return ChatEventVoiceChatParticipantIsMutedToggled.fromJson(json);
-      case ChatEventVoiceChatParticipantVolumeLevelChanged.CONSTRUCTOR:
-        return ChatEventVoiceChatParticipantVolumeLevelChanged.fromJson(json);
-      case ChatEventVoiceChatMuteNewParticipantsToggled.CONSTRUCTOR:
-        return ChatEventVoiceChatMuteNewParticipantsToggled.fromJson(json);
+      case ChatEventVideoChatCreated.CONSTRUCTOR:
+        return ChatEventVideoChatCreated.fromJson(json);
+      case ChatEventVideoChatDiscarded.CONSTRUCTOR:
+        return ChatEventVideoChatDiscarded.fromJson(json);
+      case ChatEventVideoChatParticipantIsMutedToggled.CONSTRUCTOR:
+        return ChatEventVideoChatParticipantIsMutedToggled.fromJson(json);
+      case ChatEventVideoChatParticipantVolumeLevelChanged.CONSTRUCTOR:
+        return ChatEventVideoChatParticipantVolumeLevelChanged.fromJson(json);
+      case ChatEventVideoChatMuteNewParticipantsToggled.CONSTRUCTOR:
+        return ChatEventVideoChatMuteNewParticipantsToggled.fromJson(json);
     }
     throw new Exception('undefined type');
   }
@@ -337,6 +340,47 @@ class ChatEventMemberJoinedByInviteLink extends ChatEventAction {
   }
 
   static const CONSTRUCTOR = 'chatEventMemberJoinedByInviteLink';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventMemberJoinedByRequest extends ChatEventAction {
+
+  /// A new member was accepted to the chat by an administrator
+  ChatEventMemberJoinedByRequest({this.approverUserId,
+    this.inviteLink});
+
+  /// [approverUserId] User identifier of the chat administrator, approved user join request 
+  int? approverUserId;
+
+  /// [inviteLink] Invite link used to join the chat; may be null
+  ChatInviteLink? inviteLink;
+
+  /// Parse from a json
+  ChatEventMemberJoinedByRequest.fromJson(Map<String, dynamic> json)  {
+    int? pre_approverUserId;
+    try{
+      pre_approverUserId=json['approver_user_id'];
+   }catch(_){}
+    approverUserId = pre_approverUserId;
+    ChatInviteLink? pre_inviteLink;
+    try{
+      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
+   }catch(_){}
+    inviteLink = pre_inviteLink;
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "approver_user_id": approverUserId,
+      "invite_link": inviteLink == null ? null : inviteLink?.toJson(),
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventMemberJoinedByRequest';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -1114,16 +1158,16 @@ class ChatEventInviteLinkDeleted extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventVoiceChatCreated extends ChatEventAction {
+class ChatEventVideoChatCreated extends ChatEventAction {
 
-  /// A voice chat was created
-  ChatEventVoiceChatCreated({this.groupCallId});
+  /// A video chat was created
+  ChatEventVideoChatCreated({this.groupCallId});
 
-  /// [groupCallId] Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+  /// [groupCallId] Identifier of the video chat. The video chat can be received through the method getGroupCall
   int? groupCallId;
 
   /// Parse from a json
-  ChatEventVoiceChatCreated.fromJson(Map<String, dynamic> json)  {
+  ChatEventVideoChatCreated.fromJson(Map<String, dynamic> json)  {
     int? pre_groupCallId;
     try{
       pre_groupCallId=json['group_call_id'];
@@ -1139,22 +1183,22 @@ class ChatEventVoiceChatCreated extends ChatEventAction {
     };
   }
 
-  static const CONSTRUCTOR = 'chatEventVoiceChatCreated';
+  static const CONSTRUCTOR = 'chatEventVideoChatCreated';
   
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventVoiceChatDiscarded extends ChatEventAction {
+class ChatEventVideoChatDiscarded extends ChatEventAction {
 
-  /// A voice chat was discarded
-  ChatEventVoiceChatDiscarded({this.groupCallId});
+  /// A video chat was discarded
+  ChatEventVideoChatDiscarded({this.groupCallId});
 
-  /// [groupCallId] Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+  /// [groupCallId] Identifier of the video chat. The video chat can be received through the method getGroupCall
   int? groupCallId;
 
   /// Parse from a json
-  ChatEventVoiceChatDiscarded.fromJson(Map<String, dynamic> json)  {
+  ChatEventVideoChatDiscarded.fromJson(Map<String, dynamic> json)  {
     int? pre_groupCallId;
     try{
       pre_groupCallId=json['group_call_id'];
@@ -1170,16 +1214,16 @@ class ChatEventVoiceChatDiscarded extends ChatEventAction {
     };
   }
 
-  static const CONSTRUCTOR = 'chatEventVoiceChatDiscarded';
+  static const CONSTRUCTOR = 'chatEventVideoChatDiscarded';
   
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventVoiceChatParticipantIsMutedToggled extends ChatEventAction {
+class ChatEventVideoChatParticipantIsMutedToggled extends ChatEventAction {
 
-  /// A voice chat participant was muted or unmuted
-  ChatEventVoiceChatParticipantIsMutedToggled({this.participantId,
+  /// A video chat participant was muted or unmuted
+  ChatEventVideoChatParticipantIsMutedToggled({this.participantId,
     this.isMuted});
 
   /// [participantId] Identifier of the affected group call participant 
@@ -1189,7 +1233,7 @@ class ChatEventVoiceChatParticipantIsMutedToggled extends ChatEventAction {
   bool? isMuted;
 
   /// Parse from a json
-  ChatEventVoiceChatParticipantIsMutedToggled.fromJson(Map<String, dynamic> json)  {
+  ChatEventVideoChatParticipantIsMutedToggled.fromJson(Map<String, dynamic> json)  {
     MessageSender? pre_participantId;
     try{
       pre_participantId=MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
@@ -1211,16 +1255,16 @@ class ChatEventVoiceChatParticipantIsMutedToggled extends ChatEventAction {
     };
   }
 
-  static const CONSTRUCTOR = 'chatEventVoiceChatParticipantIsMutedToggled';
+  static const CONSTRUCTOR = 'chatEventVideoChatParticipantIsMutedToggled';
   
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventVoiceChatParticipantVolumeLevelChanged extends ChatEventAction {
+class ChatEventVideoChatParticipantVolumeLevelChanged extends ChatEventAction {
 
-  /// A voice chat participant volume level was changed
-  ChatEventVoiceChatParticipantVolumeLevelChanged({this.participantId,
+  /// A video chat participant volume level was changed
+  ChatEventVideoChatParticipantVolumeLevelChanged({this.participantId,
     this.volumeLevel});
 
   /// [participantId] Identifier of the affected group call participant 
@@ -1230,7 +1274,7 @@ class ChatEventVoiceChatParticipantVolumeLevelChanged extends ChatEventAction {
   int? volumeLevel;
 
   /// Parse from a json
-  ChatEventVoiceChatParticipantVolumeLevelChanged.fromJson(Map<String, dynamic> json)  {
+  ChatEventVideoChatParticipantVolumeLevelChanged.fromJson(Map<String, dynamic> json)  {
     MessageSender? pre_participantId;
     try{
       pre_participantId=MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
@@ -1252,22 +1296,22 @@ class ChatEventVoiceChatParticipantVolumeLevelChanged extends ChatEventAction {
     };
   }
 
-  static const CONSTRUCTOR = 'chatEventVoiceChatParticipantVolumeLevelChanged';
+  static const CONSTRUCTOR = 'chatEventVideoChatParticipantVolumeLevelChanged';
   
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventVoiceChatMuteNewParticipantsToggled extends ChatEventAction {
+class ChatEventVideoChatMuteNewParticipantsToggled extends ChatEventAction {
 
-  /// The mute_new_participants setting of a voice chat was toggled
-  ChatEventVoiceChatMuteNewParticipantsToggled({this.muteNewParticipants});
+  /// The mute_new_participants setting of a video chat was toggled
+  ChatEventVideoChatMuteNewParticipantsToggled({this.muteNewParticipants});
 
   /// [muteNewParticipants] New value of the mute_new_participants setting
   bool? muteNewParticipants;
 
   /// Parse from a json
-  ChatEventVoiceChatMuteNewParticipantsToggled.fromJson(Map<String, dynamic> json)  {
+  ChatEventVideoChatMuteNewParticipantsToggled.fromJson(Map<String, dynamic> json)  {
     bool? pre_muteNewParticipants;
     try{
       pre_muteNewParticipants=json['mute_new_participants'];
@@ -1283,7 +1327,7 @@ class ChatEventVoiceChatMuteNewParticipantsToggled extends ChatEventAction {
     };
   }
 
-  static const CONSTRUCTOR = 'chatEventVoiceChatMuteNewParticipantsToggled';
+  static const CONSTRUCTOR = 'chatEventVideoChatMuteNewParticipantsToggled';
   
   @override
   String getConstructor() => CONSTRUCTOR;

@@ -53,7 +53,7 @@ class StickerSetInfo extends TdObject {
   /// [size] Total number of stickers in the set
   int? size;
 
-  /// [covers] Contains up to the first 5 stickers from the set, depending on the context. If the application needs more stickers the full sticker set needs to be requested
+  /// [covers] Up to the first 5 stickers from the set, depending on the context. If the application needs more stickers the full sticker set needs to be requested
   List<Sticker>? covers;
 
   /// Parse from a json

@@ -14,7 +14,7 @@ class ChatEventLogFilters extends TdObject {
     this.infoChanges,
     this.settingChanges,
     this.inviteLinkChanges,
-    this.voiceChatChanges});
+    this.videoChatChanges});
 
   /// [messageEdits] True, if message edits need to be returned
   bool? messageEdits;
@@ -49,8 +49,8 @@ class ChatEventLogFilters extends TdObject {
   /// [inviteLinkChanges] True, if changes to invite links need to be returned
   bool? inviteLinkChanges;
 
-  /// [voiceChatChanges] True, if voice chat actions need to be returned
-  bool? voiceChatChanges;
+  /// [videoChatChanges] True, if video chat actions need to be returned
+  bool? videoChatChanges;
 
   /// Parse from a json
   ChatEventLogFilters.fromJson(Map<String, dynamic> json)  {
@@ -109,11 +109,11 @@ class ChatEventLogFilters extends TdObject {
       pre_inviteLinkChanges=json['invite_link_changes'];
    }catch(_){}
     inviteLinkChanges = pre_inviteLinkChanges;
-    bool? pre_voiceChatChanges;
+    bool? pre_videoChatChanges;
     try{
-      pre_voiceChatChanges=json['voice_chat_changes'];
+      pre_videoChatChanges=json['video_chat_changes'];
    }catch(_){}
-    voiceChatChanges = pre_voiceChatChanges;
+    videoChatChanges = pre_videoChatChanges;
   }
 
   @override
@@ -131,7 +131,7 @@ class ChatEventLogFilters extends TdObject {
       "info_changes": infoChanges,
       "setting_changes": settingChanges,
       "invite_link_changes": inviteLinkChanges,
-      "voice_chat_changes": voiceChatChanges,
+      "video_chat_changes": videoChatChanges,
     };
   }
 

@@ -46,10 +46,10 @@ class Message extends TdObject {
   /// [chatId] Chat identifier
   int? chatId;
 
-  /// [sendingState] Information about the sending state of the message; may be null
+  /// [sendingState] The sending state of the message; may be null
   MessageSendingState? sendingState;
 
-  /// [schedulingState] Information about the scheduling state of the message; may be null
+  /// [schedulingState] The scheduling state of the message; may be null
   MessageSchedulingState? schedulingState;
 
   /// [isOutgoing] True, if the message is outgoing

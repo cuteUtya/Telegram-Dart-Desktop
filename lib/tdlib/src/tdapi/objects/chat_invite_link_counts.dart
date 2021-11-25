@@ -5,7 +5,7 @@ class ChatInviteLinkCounts extends TdObject {
   /// Contains a list of chat invite link counts
   ChatInviteLinkCounts({this.inviteLinkCounts});
 
-  /// [inviteLinkCounts] List of invite linkcounts
+  /// [inviteLinkCounts] List of invite link counts
   List<ChatInviteLinkCount>? inviteLinkCounts;
 
   /// callback sign

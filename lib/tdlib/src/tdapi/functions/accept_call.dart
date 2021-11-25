@@ -9,7 +9,7 @@ class AcceptCall extends TdFunction {
   /// [callId] Call identifier 
   int? callId;
 
-  /// [protocol] Description of the call protocols supported by the application
+  /// [protocol] The call protocols supported by the application
   CallProtocol? protocol;
 
   /// callback sign

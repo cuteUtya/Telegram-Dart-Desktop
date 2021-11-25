@@ -98,7 +98,7 @@ class ChatMemberStatusCreator extends ChatMemberStatus {
 
 class ChatMemberStatusAdministrator extends ChatMemberStatus {
 
-  /// The user is a member of the chat and has some additional privileges. In basic groups, administrators can edit and delete messages sent by others, add new members, ban unprivileged members, and manage voice chats. In supergroups and channels, there are more detailed options for administrator privileges
+  /// The user is a member of the chat and has some additional privileges. In basic groups, administrators can edit and delete messages sent by others, add new members, ban unprivileged members, and manage video chats. In supergroups and channels, there are more detailed options for administrator privileges
   ChatMemberStatusAdministrator({this.customTitle,
     this.canBeEdited,
     this.canManageChat,
@@ -110,7 +110,7 @@ class ChatMemberStatusAdministrator extends ChatMemberStatus {
     this.canRestrictMembers,
     this.canPinMessages,
     this.canPromoteMembers,
-    this.canManageVoiceChats,
+    this.canManageVideoChats,
     this.isAnonymous});
 
   /// [customTitle] A custom title of the administrator; 0-16 characters without emojis; applicable to supergroups only
@@ -146,8 +146,8 @@ class ChatMemberStatusAdministrator extends ChatMemberStatus {
   /// [canPromoteMembers] True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by them
   bool? canPromoteMembers;
 
-  /// [canManageVoiceChats] True, if the administrator can manage voice chats
-  bool? canManageVoiceChats;
+  /// [canManageVideoChats] True, if the administrator can manage video chats
+  bool? canManageVideoChats;
 
   /// [isAnonymous] True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only
   bool? isAnonymous;
@@ -209,11 +209,11 @@ class ChatMemberStatusAdministrator extends ChatMemberStatus {
       pre_canPromoteMembers=json['can_promote_members'];
    }catch(_){}
     canPromoteMembers = pre_canPromoteMembers;
-    bool? pre_canManageVoiceChats;
+    bool? pre_canManageVideoChats;
     try{
-      pre_canManageVoiceChats=json['can_manage_voice_chats'];
+      pre_canManageVideoChats=json['can_manage_video_chats'];
    }catch(_){}
-    canManageVoiceChats = pre_canManageVoiceChats;
+    canManageVideoChats = pre_canManageVideoChats;
     bool? pre_isAnonymous;
     try{
       pre_isAnonymous=json['is_anonymous'];
@@ -236,7 +236,7 @@ class ChatMemberStatusAdministrator extends ChatMemberStatus {
       "can_restrict_members": canRestrictMembers,
       "can_pin_messages": canPinMessages,
       "can_promote_members": canPromoteMembers,
-      "can_manage_voice_chats": canManageVoiceChats,
+      "can_manage_video_chats": canManageVideoChats,
       "is_anonymous": isAnonymous,
     };
   }
@@ -346,7 +346,7 @@ class ChatMemberStatusLeft extends ChatMemberStatus {
 
 class ChatMemberStatusBanned extends ChatMemberStatus {
 
-  /// The user or the chat was banned (and hence is not a member of the chat). Implies the user can't return to the chat, view messages, or be used as a participant identifier to join a voice chat of the chat
+  /// The user or the chat was banned (and hence is not a member of the chat). Implies the user can't return to the chat, view messages, or be used as a participant identifier to join a video chat of the chat
   ChatMemberStatusBanned({this.bannedUntilDate});
 
   /// [bannedUntilDate] Point in time (Unix timestamp) when the user will be unbanned; 0 if never. If the user is banned for more than 366 days or for less than 30 seconds from the current time, the user is considered to be banned forever. Always 0 in basic groups

@@ -2,7 +2,7 @@ part of '../tdapi.dart';
 
 class GetGroupCallInviteLink extends TdFunction {
 
-  /// Returns invite link to a voice chat in a public chat
+  /// Returns invite link to a video chat in a public chat
   GetGroupCallInviteLink({this.groupCallId,
     this.canSelfUnmute});
 

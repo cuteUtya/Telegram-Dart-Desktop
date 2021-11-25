@@ -9,7 +9,7 @@ class GetRepliedMessage extends TdFunction {
   /// [chatId] Identifier of the chat the message belongs to
   int? chatId;
 
-  /// [messageId] Identifier of the message reply to which to get
+  /// [messageId] Identifier of the reply message
   int? messageId;
 
   /// callback sign

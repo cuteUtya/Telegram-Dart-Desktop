@@ -76,7 +76,7 @@ class InputCredentialsNew extends InputCredentials {
   InputCredentialsNew({this.data,
     this.allowSave});
 
-  /// [data] Contains JSON-encoded data with a credential identifier from the payment provider 
+  /// [data] JSON-encoded data with the credential identifier from the payment provider 
   String? data;
 
   /// [allowSave] True, if the credential identifier can be saved on the server side

@@ -25,7 +25,8 @@ class Chat extends TdObject {
     this.messageTtlSetting,
     this.themeName,
     this.actionBar,
-    this.voiceChat,
+    this.videoChat,
+    this.pendingJoinRequests,
     this.replyMarkupMessageId,
     this.draftMessage,
     this.clientData});
@@ -93,11 +94,14 @@ class Chat extends TdObject {
   /// [themeName] If non-empty, name of a theme, set for the chat
   String? themeName;
 
-  /// [actionBar] Describes actions which must be possible to do through a chat action bar; may be null
+  /// [actionBar] Information about actions which must be possible to do through the chat action bar; may be null
   ChatActionBar? actionBar;
 
-  /// [voiceChat] Contains information about voice chat of the chat
-  VoiceChat? voiceChat;
+  /// [videoChat] Information about video chat of the chat
+  VideoChat? videoChat;
+
+  /// [pendingJoinRequests] Information about pending join requests; may be null
+  ChatJoinRequestsInfo? pendingJoinRequests;
 
   /// [replyMarkupMessageId] Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
   int? replyMarkupMessageId;
@@ -105,7 +109,7 @@ class Chat extends TdObject {
   /// [draftMessage] A draft of a message in the chat; may be null
   DraftMessage? draftMessage;
 
-  /// [clientData] Contains application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
+  /// [clientData] Application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
   String? clientData;
 
   /// callback sign
@@ -223,11 +227,16 @@ class Chat extends TdObject {
       pre_actionBar=ChatActionBar.fromJson(json['action_bar'] ?? <String, dynamic>{});
    }catch(_){}
     actionBar = pre_actionBar;
-    VoiceChat? pre_voiceChat;
+    VideoChat? pre_videoChat;
     try{
-      pre_voiceChat=VoiceChat.fromJson(json['voice_chat'] ?? <String, dynamic>{});
+      pre_videoChat=VideoChat.fromJson(json['video_chat'] ?? <String, dynamic>{});
    }catch(_){}
-    voiceChat = pre_voiceChat;
+    videoChat = pre_videoChat;
+    ChatJoinRequestsInfo? pre_pendingJoinRequests;
+    try{
+      pre_pendingJoinRequests=ChatJoinRequestsInfo.fromJson(json['pending_join_requests'] ?? <String, dynamic>{});
+   }catch(_){}
+    pendingJoinRequests = pre_pendingJoinRequests;
     int? pre_replyMarkupMessageId;
     try{
       pre_replyMarkupMessageId=json['reply_markup_message_id'];
@@ -272,7 +281,8 @@ class Chat extends TdObject {
       "message_ttl_setting": messageTtlSetting,
       "theme_name": themeName,
       "action_bar": actionBar == null ? null : actionBar?.toJson(),
-      "voice_chat": voiceChat == null ? null : voiceChat?.toJson(),
+      "video_chat": videoChat == null ? null : videoChat?.toJson(),
+      "pending_join_requests": pendingJoinRequests == null ? null : pendingJoinRequests?.toJson(),
       "reply_markup_message_id": replyMarkupMessageId,
       "draft_message": draftMessage == null ? null : draftMessage?.toJson(),
       "client_data": clientData,

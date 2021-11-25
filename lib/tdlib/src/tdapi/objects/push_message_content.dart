@@ -33,6 +33,7 @@ class PushMessageContent extends TdObject {
   /// * PushMessageContentChatSetTheme
   /// * PushMessageContentChatDeleteMember
   /// * PushMessageContentChatJoinByLink
+  /// * PushMessageContentChatJoinByRequest
   /// * PushMessageContentMessageForwards
   /// * PushMessageContentMediaAlbum
   factory PushMessageContent.fromJson(Map<String, dynamic> json)  {
@@ -87,6 +88,8 @@ class PushMessageContent extends TdObject {
         return PushMessageContentChatDeleteMember.fromJson(json);
       case PushMessageContentChatJoinByLink.CONSTRUCTOR:
         return PushMessageContentChatJoinByLink.fromJson(json);
+      case PushMessageContentChatJoinByRequest.CONSTRUCTOR:
+        return PushMessageContentChatJoinByRequest.fromJson(json);
       case PushMessageContentMessageForwards.CONSTRUCTOR:
         return PushMessageContentMessageForwards.fromJson(json);
       case PushMessageContentMediaAlbum.CONSTRUCTOR:
@@ -1108,6 +1111,29 @@ class PushMessageContentChatJoinByLink extends PushMessageContent {
   }
 
   static const CONSTRUCTOR = 'pushMessageContentChatJoinByLink';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class PushMessageContentChatJoinByRequest extends PushMessageContent {
+
+  /// A new member was accepted to the chat by an administrator
+  PushMessageContentChatJoinByRequest();
+
+  
+
+  /// Parse from a json
+  PushMessageContentChatJoinByRequest.fromJson(Map<String, dynamic> json) ;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+    };
+  }
+
+  static const CONSTRUCTOR = 'pushMessageContentChatJoinByRequest';
   
   @override
   String getConstructor() => CONSTRUCTOR;

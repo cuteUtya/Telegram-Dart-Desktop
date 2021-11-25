@@ -2,7 +2,7 @@ part of '../tdapi.dart';
 
 class ChatMember extends TdObject {
 
-  /// Information about a user or a chat as a member of another chat
+  /// Describes a user or a chat as a member of another chat
   ChatMember({this.memberId,
     this.inviterUserId,
     this.joinedChatDate,

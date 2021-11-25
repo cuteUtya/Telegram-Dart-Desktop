@@ -8,8 +8,10 @@ class ChatInviteLinkInfo extends TdObject {
     this.type,
     this.title,
     this.photo,
+    this.description,
     this.memberCount,
     this.memberUserIds,
+    this.createsJoinRequest,
     this.isPublic});
 
   /// [chatId] Chat identifier of the invite link; 0 if the user has no access to the chat before joining
@@ -18,7 +20,7 @@ class ChatInviteLinkInfo extends TdObject {
   /// [accessibleFor] If non-zero, the amount of time for which read access to the chat will remain available, in seconds
   int? accessibleFor;
 
-  /// [type] Contains information about the type of the chat
+  /// [type] Type of the chat
   ChatType? type;
 
   /// [title] Title of the chat
@@ -27,11 +29,17 @@ class ChatInviteLinkInfo extends TdObject {
   /// [photo] Chat photo; may be null
   ChatPhotoInfo? photo;
 
+  /// [description] Chat description
+  String? description;
+
   /// [memberCount] Number of members in the chat
   int? memberCount;
 
   /// [memberUserIds] User identifiers of some chat members that may be known to the current user
   List<int>? memberUserIds;
+
+  /// [createsJoinRequest] True, if the link only creates join request
+  bool? createsJoinRequest;
 
   /// [isPublic] True, if the chat is a public supergroup or channel, i.e. it has a username or it is a location-based supergroup
   bool? isPublic;
@@ -66,6 +74,11 @@ class ChatInviteLinkInfo extends TdObject {
       pre_photo=ChatPhotoInfo.fromJson(json['photo'] ?? <String, dynamic>{});
    }catch(_){}
     photo = pre_photo;
+    String? pre_description;
+    try{
+      pre_description=json['description'];
+   }catch(_){}
+    description = pre_description;
     int? pre_memberCount;
     try{
       pre_memberCount=json['member_count'];
@@ -76,6 +89,11 @@ class ChatInviteLinkInfo extends TdObject {
       pre_memberUserIds=List<int>.from((json['member_user_ids'] ?? [])!.map((item) => item).toList());
    }catch(_){}
     memberUserIds = pre_memberUserIds;
+    bool? pre_createsJoinRequest;
+    try{
+      pre_createsJoinRequest=json['creates_join_request'];
+   }catch(_){}
+    createsJoinRequest = pre_createsJoinRequest;
     bool? pre_isPublic;
     try{
       pre_isPublic=json['is_public'];
@@ -93,8 +111,10 @@ class ChatInviteLinkInfo extends TdObject {
       "type": type == null ? null : type?.toJson(),
       "title": title,
       "photo": photo == null ? null : photo?.toJson(),
+      "description": description,
       "member_count": memberCount,
       "member_user_ids": memberUserIds?.map((i) => i).toList(),
+      "creates_join_request": createsJoinRequest,
       "is_public": isPublic,
     };
   }

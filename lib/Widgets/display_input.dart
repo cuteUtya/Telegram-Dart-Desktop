@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
@@ -10,7 +12,7 @@ class DataInput extends StatefulWidget {
       this.defaultText,
       this.fontSize = 24,
       this.onValueChange,
-      this.controllStateSingly = true,
+      this.externalControll = false,
       this.fieldName = "",
       this.getHintCallback,
       this.customLabelDisplay,
@@ -18,7 +20,7 @@ class DataInput extends StatefulWidget {
       this.labelFontSize = 14,
       this.hintText = ""})
       : super(key: key) {
-    if (!controllStateSingly) {
+    if (externalControll) {
       _inputController.text = value;
       _inputController.selection =
           TextSelection(baseOffset: value.length, extentOffset: value.length);
@@ -34,7 +36,7 @@ class DataInput extends StatefulWidget {
   final GetHintCallback? getHintCallback;
   final Widget? customLabelDisplay;
   final double labelFontSize;
-  final bool controllStateSingly;
+  final bool externalControll;
   final OnDataStateChanged? onDataStateChanged;
   late String hintText;
 
@@ -47,6 +49,7 @@ class DataInput extends StatefulWidget {
 class _DataInputState extends State<DataInput> {
   DataState dataState = DataState.empty;
   late String _displaingHint = widget.hintText;
+  String _lastInputValue = "";
 
   @override
   Widget build(BuildContext contex) {
@@ -96,14 +99,29 @@ class _DataInputState extends State<DataInput> {
             if (widget.onValueChange != null) widget.onValueChange!(value);
             setState(() {
               _displaingHint = _getHintText(widget._inputController.text);
-              widget._inputController.text = value;
-              widget._inputController.selection = TextSelection.fromPosition(
-                TextPosition(offset: widget._inputController.text.length),
-              );
               if (widget.getHintCallback != null) {
                 widget.hintText = widget.getHintCallback!(value);
               }
               dataState = value.isEmpty ? DataState.empty : DataState.valid;
+              //Be honestly, few line below isn't perfect way to
+              //control input cursor
+              //for example:
+              //
+              // | - is user input cursor
+              //
+              //I very much love programming!|
+              //I v|ery much love programming!
+              //I vee|ry much love programming!
+              //
+              //cursor shift on two symbols here. Because i just compare two strings and
+              //set value in position where strings different. Flutter don't allow
+              //get cursor shifts (or allow, but i don't know about this). This (as i know) only
+              //one bug and it's happen only if you write symbol in center of text,
+              //which has the same value as the character on the left
+              widget._inputController.selection = TextSelection.fromPosition(
+                  TextPosition(
+                      offset: getTextPosition(_lastInputValue, value)));
+              _lastInputValue = value;
             });
           },
           decoration: InputDecoration(
@@ -133,15 +151,29 @@ class _DataInputState extends State<DataInput> {
     });
   }
 
-  String _getHintText(String? inputValue) {
-    if (inputValue != null && inputValue.length <= widget.hintText.length) {
-      if (inputValue.isEmpty ||
-          widget.hintText.substring(0, inputValue.length) == inputValue) {
-        return widget.hintText;
-      }
-      return "";
+  int getTextPosition(String a, String b) {
+    if (b.isEmpty) return 0;
+
+    for (int i = 0; i < max(a.length, b.length); i++) {
+      print("A=\"$a\"");
+      print("B=\"$b\"");
+      var aChar = i >= a.length ? "" : a[i];
+      var bChar = i >= b.length ? "" : b[i];
+      print(aChar + " != " + bChar);
+      if (aChar != bChar) return i + (a.length < b.length ? 1 : 0);
     }
-    return widget.hintText;
+
+    return b.length;
+  }
+
+  String _getHintText(String? inputValue) {
+    if (inputValue!.length > widget.hintText.length) return "";
+
+    if (inputValue.isEmpty ||
+        widget.hintText.substring(0, inputValue.length) == inputValue) {
+      return widget.hintText;
+    }
+    return "";
   }
 
   Color getBorderColor(DataState state) {
