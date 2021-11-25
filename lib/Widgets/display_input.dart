@@ -21,6 +21,7 @@ class DataInput extends StatefulWidget {
       this.hintText = ""})
       : super(key: key) {
     if (externalControll) {
+      _lastInputValue = value;
       _inputController.text = value;
       _inputController.selection =
           TextSelection(baseOffset: value.length, extentOffset: value.length);
@@ -39,6 +40,7 @@ class DataInput extends StatefulWidget {
   final bool externalControll;
   final OnDataStateChanged? onDataStateChanged;
   late String hintText;
+  late String _lastInputValue = "";
 
   final TextEditingController _inputController = TextEditingController();
 
@@ -49,7 +51,6 @@ class DataInput extends StatefulWidget {
 class _DataInputState extends State<DataInput> {
   DataState dataState = DataState.empty;
   late String _displaingHint = widget.hintText;
-  String _lastInputValue = "";
 
   @override
   Widget build(BuildContext contex) {
@@ -120,8 +121,8 @@ class _DataInputState extends State<DataInput> {
               //which has the same value as the character on the left
               widget._inputController.selection = TextSelection.fromPosition(
                   TextPosition(
-                      offset: getTextPosition(_lastInputValue, value)));
-              _lastInputValue = value;
+                      offset: getTextPosition(widget._lastInputValue, value)));
+              widget._lastInputValue = value;
             });
           },
           decoration: InputDecoration(
