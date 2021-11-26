@@ -8,7 +8,8 @@ class DataInput extends StatefulWidget {
   DataInput(
       {Key? key,
       this.value = "",
-      required this.validationCallback,
+      this.validationCallback,
+      this.asyncValidationCallback,
       this.defaultText,
       this.fontSize = 24,
       this.onValueChange,
@@ -29,7 +30,8 @@ class DataInput extends StatefulWidget {
   }
 
   final String value;
-  final DataValidationCallback validationCallback;
+  final DataValidationCallback? validationCallback;
+  final AsyncDataValidationCallback? asyncValidationCallback;
   final String? defaultText;
   final double fontSize;
   final OnChangeValue? onValueChange;
@@ -140,16 +142,21 @@ class _DataInputState extends State<DataInput> {
   }
 
   void validate(String input) {
-    setState(() {
-      dataState = input.isEmpty
-          ? DataState.empty
-          : (widget.validationCallback(input)
-              ? DataState.valid
-              : DataState.invalid);
+    if (input.isNotEmpty) {
+      if (widget.validationCallback != null) {
+        setState(() => dataState = widget.validationCallback!(input)
+            ? DataState.valid
+            : DataState.invalid);
+      } else if (widget.asyncValidationCallback != null) {
+        widget.asyncValidationCallback!(input)!.then((value) => setState(
+            () => dataState = value ? DataState.valid : DataState.invalid));
+      }
       if (widget.onDataStateChanged != null) {
         widget.onDataStateChanged!(dataState);
       }
-    });
+    } else {
+      dataState = DataState.empty;
+    }
   }
 
   int getTextPosition(String a, String b) {
@@ -193,6 +200,7 @@ class _DataInputState extends State<DataInput> {
 
 enum DataState { valid, invalid, empty }
 
+typedef AsyncDataValidationCallback = Future<bool>? Function(String);
 typedef DataValidationCallback = bool Function(String);
 typedef GetHintCallback = String Function(String);
 typedef OnChangeValue = void Function(String);
