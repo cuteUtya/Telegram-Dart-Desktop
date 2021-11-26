@@ -3,6 +3,7 @@ import 'package:myapp/Screens/introduction.dart';
 import 'package:myapp/Screens/load_screen.dart';
 import 'package:myapp/Screens/phone_enter.dart';
 import 'package:myapp/Screens/qr_login.dart';
+import 'package:myapp/Screens/registration.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide File;
 import 'package:myapp/utils.dart';
@@ -39,10 +40,6 @@ class _AutorizationRouter extends State<AutorizationRouter> {
   Widget build(BuildContext context) {
     return StreamBuilder(
         builder: (context, builder) {
-          lastScreen = QrLogin(
-              link: "google.com",
-              client: widget.client,
-              onBackButtonClick: () => {});
           if (builder.hasData) {
             switch ((builder.data as AuthorizationState).getConstructor()) {
               case AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
@@ -95,7 +92,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                 break;
 
               case AuthorizationStateWaitEncryptionKey.CONSTRUCTOR:
-                //[TODO] CURWA, it don't looks safe
+                //TODO CURWA, it don't looks safe
                 getClient().send(CheckDatabaseEncryptionKey(encryptionKey: ""));
                 break;
 
@@ -110,6 +107,14 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                       initNewClient();
                     });
                 return lastScreen!;
+
+              case AuthorizationStateWaitRegistration.CONSTRUCTOR:
+                return RegistrationScreen(
+                  client: widget.client,
+                  //TODO set userpic
+                  registrationCallback: (fname, lname, ava) => getClient()
+                      .send(RegisterUser(firstName: fname, lastName: lname)),
+                );
             }
           }
           return Stack(children: [lastScreen ?? const Center(), LoadScreen()]);
