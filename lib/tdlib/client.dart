@@ -399,7 +399,14 @@ class TelegramClient {
   String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
 
-  FutureBuilder buildTextByKey(String key, TextStyle style) {
+  Widget buildTextByKey(String key, TextStyle style) {
+    if (_cachedLanguagePackString.containsKey(key)) {
+      return Text(
+          (_cachedLanguagePackString[key] as LanguagePackStringValueOrdinary)
+              .value!,
+          style: style);
+    }
+
     return FutureBuilder(
         builder: (context, data) {
           return Text(
@@ -434,8 +441,12 @@ class TelegramClient {
     apiHash ??= secrets.appHash;
     apiId ??= secrets.appId;
     systemLanguageCode ??= getUserLocale();
-    deviceModel ??= await getDeviceName();
-    systemVersion ??= await getSystemVersion();
+    deviceModel ??= getDeviceName();
+
+    if (deviceModel.isEmpty) {
+      deviceModel = getSystemVersion();
+    }
+    systemVersion ??= getSystemVersion();
 
     _dbPath = databaseDirectory;
     _filesPath = filesDirectory;
