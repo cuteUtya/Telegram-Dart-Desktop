@@ -64,8 +64,9 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                           "lng_phone_title",
                           TextDisplay.create(
                               size: 24,
-                              fontWeight: FontWeight.bold,
-                              textAlign: TextAlign.left)),
+                              fontWeight: FontWeight.w500,
+                              textAlign: TextAlign.left,
+                              textColor: TextColor.HeaderMain)),
                       const SizedBox(height: 8),
                       widget.client.buildTextByKey(
                           "lng_phone_desc",
@@ -91,7 +92,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                       const SizedBox(height: 16),
                       Row(
                         children: [
-                          Container(
+                          SizedBox(
                               //phone code field
                               child: DataInput(
                                   value: _phoneCode,
@@ -110,7 +111,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                                   validationCallback: validatePhoneCode),
                               width: 130),
                           const SizedBox(width: 20),
-                          Container(
+                          SizedBox(
                               width: 350,
                               //phone field
                               child: DataInput(
