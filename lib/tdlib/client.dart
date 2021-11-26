@@ -399,11 +399,22 @@ class TelegramClient {
   String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
 
-  Widget buildTextByKey(String key, TextStyle style) {
+  Widget buildTextByKey(String key, TextStyle style,
+      {Map<String, String>? replacing}) {
+    String replace(String text) {
+      if (replacing != null) {
+        replacing.forEach((key, value) {
+          text = text.replaceAll(key, value);
+        });
+      }
+      return text;
+    }
+
     if (_cachedLanguagePackString.containsKey(key)) {
       return Text(
-          (_cachedLanguagePackString[key] as LanguagePackStringValueOrdinary)
-              .value!,
+          replace((_cachedLanguagePackString[key]
+                  as LanguagePackStringValueOrdinary)
+              .value!),
           style: style);
     }
 
@@ -411,7 +422,8 @@ class TelegramClient {
         builder: (context, data) {
           return Text(
             data.hasData
-                ? (data.data as LanguagePackStringValueOrdinary).value ?? ""
+                ? replace(
+                    (data.data as LanguagePackStringValueOrdinary).value ?? "")
                 : "",
             style: style,
           );

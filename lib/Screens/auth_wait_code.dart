@@ -69,6 +69,15 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
     super.dispose();
   }
 
+  String getMinutes() {
+    return max((seconds / 60) - 0.5, 0).toStringAsFixed(0);
+  }
+
+  String getSeconds() {
+    var scnd = ((seconds % 60) + 0.5).toInt();
+    return scnd < 10 ? "0$scnd" : scnd.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (seconds <= 0 &&
@@ -117,29 +126,14 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                                   ? TextDecoration.underline
                                   : TextDecoration.none));
                     })
-                  : FutureBuilder(
-                      future: widget.client.getLanguagePackString(
-                          telegramIsDial ? "lng_code_called" : "lng_code_call"),
-                      builder: (context, data) {
-                        var str = "loading...";
-                        if (data.hasData) {
-                          str = (data.data as LanguagePackStringValueOrdinary)
-                              .value!;
-                          if (!telegramIsDial) {
-                            str = str.replaceAll(
-                                "{minutes}",
-                                (max((seconds / 60) - 0.5, 0))
-                                    .toStringAsFixed(0));
-                            var scnd = ((seconds % 60) + 0.5).toInt();
-                            str = str.replaceAll("{seconds}",
-                                scnd < 10 ? "0$scnd" : scnd.toString());
-                          }
-                        }
-                        return Text(str,
-                            style: TextDisplay.create(
-                                textColor: TextColor.AdditionalTextColor,
-                                size: 16));
-                      }),
+                  : widget.client.buildTextByKey(
+                      telegramIsDial ? "lng_code_called" : "lng_code_call",
+                      TextDisplay.create(
+                          textColor: TextColor.AdditionalTextColor, size: 16),
+                      replacing: {
+                          "{minutes}": getMinutes(),
+                          "{seconds}": getSeconds()
+                        }),
               const SizedBox(height: 40),
               DesktopButton(
                   onPressed: () => widget.codeCheckCallback(code),
