@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
-import 'package:myapp/Screens/phone_enter.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/dots_indicator.dart';
@@ -26,8 +25,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   double _t = 0;
   double _dragStart = 0;
 
-  static final List<_introductionScreenInfo> _screens = [
-    _introductionScreenInfo(
+  static final List<_IntroductionScreenInfo> _screens = [
+    _IntroductionScreenInfo(
         appName,
         RichText(
             textAlign: TextAlign.center,
@@ -42,7 +41,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   style: TextDisplay.create())
             ])),
         "Assets/Introduction/Logo.json"),
-    _introductionScreenInfo(
+    _IntroductionScreenInfo(
         "Private",
         RichText(
             textAlign: TextAlign.center,
@@ -56,7 +55,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   text: "and can self-destruct.", style: TextDisplay.create())
             ])),
         "Assets/Introduction/Private.json"),
-    _introductionScreenInfo(
+    _IntroductionScreenInfo(
         "Synchronous",
         RichText(
             textAlign: TextAlign.center,
@@ -70,7 +69,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
               TextSpan(text: "devices.", style: TextDisplay.create()),
             ])),
         "Assets/Introduction/Synchronous.json"),
-    _introductionScreenInfo(
+    _IntroductionScreenInfo(
         "Fast",
         RichText(
             textAlign: TextAlign.center,
@@ -86,7 +85,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   style: TextDisplay.create()),
             ])),
         "Assets/Introduction/Fast.json"),
-    _introductionScreenInfo(
+    _IntroductionScreenInfo(
         "Powerful",
         RichText(
           textAlign: TextAlign.center,
@@ -101,7 +100,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           ]),
         ),
         "Assets/Introduction/Powerfull.json"),
-    _introductionScreenInfo(
+    _IntroductionScreenInfo(
         "Open",
         RichText(
           textAlign: TextAlign.center,
@@ -115,7 +114,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           ]),
         ),
         "Assets/Introduction/Open.json"),
-    _introductionScreenInfo(
+    _IntroductionScreenInfo(
         "Secure",
         RichText(
           textAlign: TextAlign.center,
@@ -130,7 +129,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           ]),
         ),
         "Assets/Introduction/Secure.json"),
-    _introductionScreenInfo(
+    _IntroductionScreenInfo(
         "Social",
         RichText(
           textAlign: TextAlign.center,
@@ -143,7 +142,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           ]),
         ),
         "Assets/Introduction/Social.json"),
-    _introductionScreenInfo(
+    _IntroductionScreenInfo(
         "Expressive",
         RichText(
           textAlign: TextAlign.center,
@@ -199,7 +198,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             onTap: next,
             child: Column(
               children: [
-                _introductionScreen(screenInfo: _screens[current]),
+                _IntroductionScreen(screenInfo: _screens[current]),
                 Container(
                   child: DotIndicator(
                     dotsCount: _screens.length,
@@ -238,10 +237,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   }
 }
 
-class _introductionScreen extends StatelessWidget {
-  const _introductionScreen({Key? key, required this.screenInfo})
+class _IntroductionScreen extends StatelessWidget {
+  const _IntroductionScreen({Key? key, required this.screenInfo})
       : super(key: key);
-  final _introductionScreenInfo screenInfo;
+  final _IntroductionScreenInfo screenInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -263,8 +262,8 @@ class _introductionScreen extends StatelessWidget {
   }
 }
 
-class _introductionScreenInfo {
-  _introductionScreenInfo(this.header, this.text, this.lottieAnimationPath);
+class _IntroductionScreenInfo {
+  _IntroductionScreenInfo(this.header, this.text, this.lottieAnimationPath);
   final String lottieAnimationPath;
   final String header;
   final RichText text;

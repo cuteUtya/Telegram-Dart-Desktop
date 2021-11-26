@@ -7,15 +7,13 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
 class PhoneEnterScreen extends StatefulWidget {
-  PhoneEnterScreen(
+  const PhoneEnterScreen(
       {required this.client,
       required this.phoneNumberScreenCallback,
       required this.qrLoginCallback,
       Key? key})
-      : super(key: key) {
-    client.send(GetCountries()).then((value) => countries = value as Countries);
-  }
-  Countries? countries;
+      : super(key: key);
+
   final void Function() qrLoginCallback;
   final TelegramClient client;
   final PhoneNumberScreenCallback phoneNumberScreenCallback;
@@ -31,6 +29,8 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
   DataState _countryState = DataState.empty;
   String _sessionName = "";
 
+  Countries? countries;
+
   final Map<DataState, FontWeight> _weigths = {
     DataState.empty: FontWeight.normal,
     DataState.valid: FontWeight.w600,
@@ -45,6 +45,12 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (countries == null) {
+      widget.client
+          .send(GetCountries())
+          .then((value) => setState(() => countries = value as Countries));
+    }
+
     return Material(
         child: Center(
             child: SizedBox(
@@ -156,7 +162,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
 
   String countryHint(String value) {
     if (value.isEmpty) return "";
-    for (var element in widget.countries!.countries!) {
+    for (var element in countries!.countries!) {
       if (element.name!.length >= value.length) {
         if (value == element.name!.substring(0, value.length)) {
           return element.name!;
@@ -170,27 +176,26 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
   }
 
   bool validateCountry(String value) {
-    if (widget.countries != null) {
-      for (var element in widget.countries!.countries!) {
-        var val = element.name == value || element.englishName == value;
-        if (val) {
-          setState(() {
-            _country = value;
-            _phoneState = DataState.valid;
-            _phoneCode = "+${element.callingCodes![0]}";
-          });
-          return val;
-        }
+    for (var element in countries!.countries!) {
+      var val = element.name == value || element.englishName == value;
+      if (val) {
+        setState(() {
+          _country = value;
+          _phoneState = DataState.valid;
+          _phoneCode = "+${element.callingCodes![0]}";
+        });
+        return val;
       }
     }
+
     return false;
   }
 
   bool validatePhoneCode(String value) {
     if (value.length > 1) {
       value = value.substring(1, value.length);
-      if (widget.countries != null) {
-        for (var element in widget.countries!.countries!) {
+      if (countries != null) {
+        for (var element in countries!.countries!) {
           if (element.callingCodes!.contains(value)) {
             setState(() {
               if (_country != element.englishName && _country != element.name) {

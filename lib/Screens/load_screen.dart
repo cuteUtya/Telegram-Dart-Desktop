@@ -3,14 +3,13 @@ import 'package:lottie/lottie.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 
 class LoadScreen extends StatelessWidget {
-  LoadScreen({Key? key}) : super(key: key);
+  const LoadScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(children: [
-        SizedBox(
-            width: 186, height: 186, child: Lottie.asset("Assets/Load.json")),
-      ]),
+    return Center(
+        child: Container(
+      child: SizedBox(
+          width: 186, height: 186, child: Lottie.asset("Assets/Load.json")),
       width: 200,
       height: 200,
       decoration: BoxDecoration(
@@ -20,10 +19,10 @@ class LoadScreen extends StatelessWidget {
           BoxShadow(
             color: ClientTheme.currentTheme.getField("LoadScreenShadowColor"),
             blurRadius: 4,
-            offset: const Offset(2, -2), // Shadow position
+            offset: const Offset(2, -2),
           ),
         ],
       ),
-    );
+    ));
   }
 }

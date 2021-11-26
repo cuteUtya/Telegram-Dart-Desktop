@@ -88,8 +88,15 @@ class _desktopButtonState extends State<DesktopButton> {
       onTap: () {
         widget.onPressed!();
         setState(() => isPressed = true);
-        Future.delayed(const Duration(microseconds: 100),
-            () => setState(() => isPressed = false));
+        Future.delayed(const Duration(microseconds: 100), () {
+          //if after 100ms button does not exists:
+          //screen been changed, or widget been replaced with another etc.
+          //call to setState() throw exception
+          //So, we need call setState() only if mounted = true
+          if (mounted) {
+            setState(() => isPressed = false);
+          }
+        });
       },
       onLongPress: widget.onLongPress,
       onTapDown: (_) => setState(() => isPressed = true),

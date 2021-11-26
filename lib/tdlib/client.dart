@@ -395,8 +395,8 @@ class TelegramClient {
       .map((a) => (a as UpdateUserStatus).status!);
 
   late TdlibParameters tdlibParameters;
-  String userLocale = "ru";
-  String userLangPackId = "ru";
+  String userLocale = "en";
+  String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
 
   FutureBuilder buildTextByKey(String key, TextStyle style) {
