@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Screens/auth_wait_code.dart';
 import 'package:myapp/Screens/introduction.dart';
 import 'package:myapp/Screens/load_screen.dart';
 import 'package:myapp/Screens/phone_enter.dart';
 import 'package:myapp/Screens/qr_login.dart';
 import 'package:myapp/Screens/registration.dart';
 import 'package:myapp/tdlib/client.dart';
+import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide File;
 import 'package:myapp/utils.dart';
 
@@ -63,10 +65,12 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                     : PhoneEnterScreen(
                         client: getClient(),
                         phoneNumberScreenCallback: (number, session) {
+                          _phoneNumber = number;
                           if (session != null) {
-                            _phoneNumber = number;
                             getClient().destroy();
                             initNewClient(sessionName: session);
+                          } else {
+                            setState(() => {});
                           }
                         },
                         qrLoginCallback: () => getClient().send(
@@ -115,9 +119,21 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                   registrationCallback: (fname, lname, ava) => getClient()
                       .send(RegisterUser(firstName: fname, lastName: lname)),
                 );
+
+              case AuthorizationStateWaitCode.CONSTRUCTOR:
+                var codeInfo =
+                    (builder.data as AuthorizationStateWaitCode).codeInfo!;
+                return EnterCodeScreen(
+                    client: getClient(),
+                    codeInfo: codeInfo,
+                    resendCallback: () =>
+                        getClient().send(ResendAuthenticationCode()),
+                    codeCheckCallback: (code) => (getClient()
+                        .send(CheckAuthenticationCode(code: code))));
             }
           }
-          return Stack(children: [lastScreen ?? const Center(), LoadScreen()]);
+          return Stack(
+              children: [lastScreen ?? const Center(), const LoadScreen()]);
         },
         stream: getClient().updateAuthorizationState);
   }
