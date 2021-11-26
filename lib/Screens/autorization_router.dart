@@ -130,6 +130,11 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                         getClient().send(ResendAuthenticationCode()),
                     codeCheckCallback: (code) => (getClient()
                         .send(CheckAuthenticationCode(code: code))));
+
+              case AuthorizationStateClosed.CONSTRUCTOR:
+                seeIntroduction = false;
+                initNewClient();
+                break;
             }
           }
           return Stack(
