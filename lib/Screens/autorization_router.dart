@@ -114,6 +114,9 @@ class _AutorizationRouter extends State<AutorizationRouter> {
 
               case AuthorizationStateWaitRegistration.CONSTRUCTOR:
                 return RegistrationScreen(
+                  termsOfService:
+                      (builder.data as AuthorizationStateWaitRegistration)
+                          .termsOfService!,
                   client: widget.client,
                   //TODO set userpic
                   registrationCallback: (fname, lname, ava) => getClient()
