@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:device_info_plus/device_info_plus.dart';
+import "dart:io" show Platform;
 
 double clamp(double value, double min, double max) {
   if (value > max) return max;
@@ -22,30 +22,13 @@ String getUserLocale() => "ru";
 String getDatabaseDirectory() => "/home/timur/tdDb";
 String getFilesDirectory() => "/home/timur/tdFiles";
 String getLanguagePackDatabasePath() => "/home/timur/tdTranslate.db";
-Future<String> getDeviceName() async {
-  var info = DeviceInfoPlugin();
-  try {
-    return "Linux " + (await info.linuxInfo).prettyName;
-  } catch (_) {}
-  try {
-    return (await info.windowsInfo).computerName;
-  } catch (_) {}
-  try {
-    return (await info.macOsInfo).model;
-  } catch (_) {}
-  return Future(() => "undefined device");
+
+String getDeviceName() {
+  String deviceName =
+      "${Platform.localHostname} ${Platform.operatingSystem} ${Platform.numberOfProcessors} cores";
+  return deviceName;
 }
 
-Future<String> getSystemVersion() async {
-  var info = DeviceInfoPlugin();
-  try {
-    return (await info.linuxInfo).version ?? "undefined version";
-  } catch (_) {}
-  try {
-    return (await info.windowsInfo) == null ? "Windows" : throw Exception();
-  } catch (_) {}
-  try {
-    return (await info.macOsInfo).osRelease;
-  } catch (_) {}
-  return Future(() => "undefined system");
+String getSystemVersion() {
+  return "${Platform.operatingSystem} ${Platform.operatingSystemVersion}";
 }
