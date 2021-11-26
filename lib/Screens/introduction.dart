@@ -199,13 +199,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             child: Column(
               children: [
                 _IntroductionScreen(screenInfo: _screens[current]),
-                Container(
-                  child: DotIndicator(
-                    dotsCount: _screens.length,
-                    currentDot: current,
-                    t: _t,
-                    onDotClick: setCurrent,
-                  ),
+                DotIndicator(
+                  dotsCount: _screens.length,
+                  currentDot: current,
+                  t: _t,
+                  onDotClick: setCurrent,
                 ),
               ],
               mainAxisAlignment: MainAxisAlignment.center,
