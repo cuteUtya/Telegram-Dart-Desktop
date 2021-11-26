@@ -16,6 +16,7 @@ class DataInput extends StatefulWidget {
       this.externalControll = false,
       this.fieldName = "",
       this.getHintCallback,
+      this.obscureText = false,
       this.customLabelDisplay,
       this.onDataStateChanged,
       this.labelFontSize = 14,
@@ -37,6 +38,7 @@ class DataInput extends StatefulWidget {
   final OnChangeValue? onValueChange;
   final String fieldName;
   final GetHintCallback? getHintCallback;
+  final bool obscureText;
   final Widget? customLabelDisplay;
   final double labelFontSize;
   final bool externalControll;
@@ -87,6 +89,7 @@ class _DataInputState extends State<DataInput> {
         ),
         //input field
         TextField(
+          obscureText: widget.obscureText,
           controller: widget._inputController,
           onSubmitted: (value) {
             setState(() {
