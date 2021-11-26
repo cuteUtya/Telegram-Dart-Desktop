@@ -429,13 +429,13 @@ class TelegramClient {
       bool useFileDatabase = true,
       bool useMessageDatabase = true,
       bool useChatInfoDatabase = true,
-      bool useSecretChats = true,
+      bool useSecretChats = false,
       String? apiHash,
       int? apiId,
       String? systemLanguageCode,
       String? deviceModel,
       String? systemVersion}) async {
-    useTestDc ??= false;
+    useTestDc ??= true;
     databaseDirectory ??= getDatabaseDirectory();
     filesDirectory ??= getFilesDirectory();
     apiHash ??= secrets.appHash;
@@ -462,21 +462,21 @@ class TelegramClient {
         value: OptionValueString(value: userLangPackId)));
 
     tdlibParameters = TdlibParameters(
-        useTestDc: false,
+        useTestDc: useTestDc,
         databaseDirectory: databaseDirectory,
         filesDirectory: filesDirectory,
         applicationVersion: appVersion,
-        useFileDatabase: true,
-        useMessageDatabase: true,
-        useChatInfoDatabase: true,
-        useSecretChats: false,
+        useFileDatabase: useFileDatabase,
+        useMessageDatabase: useMessageDatabase,
+        useChatInfoDatabase: useChatInfoDatabase,
+        useSecretChats: useSecretChats,
         apiHash: apiHash,
         apiId: apiId,
         systemLanguageCode: systemLanguageCode,
         deviceModel: deviceModel,
         systemVersion: systemVersion);
 
-    send(SetTdlibParameters(parameters: tdlibParameters));
+    await send(SetTdlibParameters(parameters: tdlibParameters));
   }
 
   final Map<String, TdObject> _cachedLanguagePackString = {};
@@ -588,8 +588,9 @@ void _start(SendPort isolateToMainStream) {
   //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 100ms.
   //
   //Who will solve this problem - cool dude.
-  client.incomingString(0.1).listen((update) {
+  client.incomingString(0.016).listen((update) async {
     isolateToMainStream.send(update);
+    await Future.delayed(const Duration(milliseconds: 16));
   });
 
   mainToIsolateStream.listen((data) {
