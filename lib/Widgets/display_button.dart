@@ -86,7 +86,7 @@ class _desktopButtonState extends State<DesktopButton> {
             )),
       ),
       onTap: () {
-        widget.onPressed!();
+        widget.onPressed?.call();
         setState(() => isPressed = true);
         Future.delayed(const Duration(microseconds: 100), () {
           //if after 100ms button does not exists:
