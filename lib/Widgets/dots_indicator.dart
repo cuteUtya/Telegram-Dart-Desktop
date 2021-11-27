@@ -18,20 +18,17 @@ class DotIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> dots = [];
-    for (int i = 0; i < dotsCount; i++) {
-      dots.add(GestureDetector(
-          onTap: () => onDotClick!(i),
-          child: Dot(
-              selected: i == currentDot,
-              color: ClientTheme.currentTheme
-                  .getField("CarouselIndicatorInActive"))));
-    }
-
     return Stack(
       children: <Widget>[
         Row(
-          children: dots,
+          children: List<GestureDetector>.generate(
+              dotsCount,
+              (i) => GestureDetector(
+                  onTap: () => onDotClick!(i),
+                  child: Dot(
+                      selected: i == currentDot,
+                      color: ClientTheme.currentTheme
+                          .getField("CarouselIndicatorInActive")))),
           mainAxisAlignment: MainAxisAlignment.center,
           verticalDirection: VerticalDirection.up,
           crossAxisAlignment: CrossAxisAlignment.end,

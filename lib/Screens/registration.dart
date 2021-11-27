@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import "dart:io" as io;
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
-import 'package:myapp/Widgets/clickable_text.dart';
+import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
 import 'package:myapp/Widgets/display_text.dart';
@@ -93,7 +93,7 @@ class _TOSAgree extends StatelessWidget {
   Widget build(BuildContext context) {
     var tosText = client.getTranslation("lng_terms_signup");
     var tosLink = client.getTranslation("lng_terms_signup_link");
-    return ClickableText(
+    return ClickabeObject(
         onTap: () => showDialog(
             context: context,
             builder: (_) =>
