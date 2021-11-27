@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' as io;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
 import 'package:myapp/secrets.dart' as secrets;
@@ -494,7 +493,7 @@ class TelegramClient {
     });
   }
 
-  String getLanguagePackOrdinaryString(String key,
+  String getTranslation(String key,
       {String? languagePackDatabasePath,
       String? languagePackId,
       String? localizationTarget}) {
@@ -514,8 +513,6 @@ class TelegramClient {
       if (message is String) {
         if (message == "\$goodbye!\$") {
           _isolate!.kill();
-          io.Directory(_dbPath!).deleteSync(recursive: true);
-          io.Directory(_filesPath!).deleteSync(recursive: true);
           return;
         }
         var tdobject = convertToObject(message);

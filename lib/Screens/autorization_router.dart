@@ -64,15 +64,15 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                       )
                     : PhoneEnterScreen(
                         client: getClient(),
-                        phoneNumberScreenCallback: (number, session) {
-                          _phoneNumber = number;
-                          if (session != null) {
-                            getClient().destroy();
-                            initNewClient(sessionName: session);
-                          } else {
-                            setState(() => {});
-                          }
-                        });
+                        phoneNumberScreenCallback: (number, session) =>
+                          setState(() {
+                            _phoneNumber = number;
+                            if (session != null) {
+                              getClient().send(LogOut()).then((value) =>
+                                  getClient().destroy().then((value) =>
+                                      initNewClient(sessionName: session)));
+                          }})
+                        );
 
               case AuthorizationStateWaitTdlibParameters:
                 getClient().userLocale = getUserLocale();
