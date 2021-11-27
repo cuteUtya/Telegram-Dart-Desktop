@@ -82,12 +82,8 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                         externalControll: true,
                         getHintCallback: countryHint,
                         validationCallback: validateCountry,
-                        customLabelDisplay: widget.client.buildTextByKey(
-                            "lng_payments_billing_country",
-                            TextDisplay.create(
-                                size: 13,
-                                textColor: _colors[_countryState],
-                                fontWeight: _weigths[_countryState])),
+                        fieldName:
+                            widget.client.getTranslation("lng_country_ph"),
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -99,15 +95,13 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                                   externalControll: true,
                                   onValueChange: validatePhoneCode,
                                   onDataStateChanged: (v) => _phoneState = v,
-                                  customLabelDisplay: widget.client
-                                      .buildTextByKey(
-                                          "lng_passport_phone_title",
-                                          TextDisplay.create(
-                                              overflow: TextOverflow.visible,
-                                              size: 13,
-                                              textColor: _colors[_phoneState],
-                                              fontWeight:
-                                                  _weigths[_phoneState])),
+                                  customLabel: widget.client.buildTextByKey(
+                                      "lng_passport_phone_title",
+                                      TextDisplay.create(
+                                          overflow: TextOverflow.visible,
+                                          size: 13,
+                                          textColor: _colors[_phoneState],
+                                          fontWeight: _weigths[_phoneState])),
                                   validationCallback: validatePhoneCode),
                               width: 130),
                           const SizedBox(width: 20),
@@ -139,8 +133,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                               _phoneCode + _phone, _sessionName),
                           width: 500,
                           weight: FontWeight.w500,
-                          languagePackStringFuture: widget.client
-                              .getLanguagePackString("lng_intro_next")),
+                          text: widget.client.getTranslation("lng_intro_next")),
                       const Spacer(),
                       Container(
                           margin: const EdgeInsets.only(bottom: 24),

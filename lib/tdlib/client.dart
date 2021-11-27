@@ -399,36 +399,26 @@ class TelegramClient {
   String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
 
+  bool containString(String key, {String? languagePackId}) {
+    languagePackId ??= userLangPackId;
+    return _cachedLanguagePackString.containsKey(key);
+  }
+
   Widget buildTextByKey(String key, TextStyle style,
-      {Map<String, String>? replacing}) {
-    String replace(String text) {
-      if (replacing != null) {
-        replacing.forEach((key, value) {
-          text = text.replaceAll(key, value);
-        });
-      }
-      return text;
+      {Map<String, String>? replacing, String? languagePackId}) {
+    languagePackId ??= userLangPackId;
+
+    String text = (_cachedLanguagePackString[languagePackId + key]
+            as LanguagePackStringValueOrdinary)
+        .value!;
+
+    if (replacing != null) {
+      replacing.forEach((key, value) {
+        text = text.replaceAll(key, value);
+      });
     }
 
-    if (_cachedLanguagePackString.containsKey(key)) {
-      return Text(
-          replace((_cachedLanguagePackString[key]
-                  as LanguagePackStringValueOrdinary)
-              .value!),
-          style: style);
-    }
-
-    return FutureBuilder(
-        builder: (context, data) {
-          return Text(
-            data.hasData
-                ? replace(
-                    (data.data as LanguagePackStringValueOrdinary).value ?? "")
-                : "",
-            style: style,
-          );
-        },
-        future: getLanguagePackString(key));
+    return Text(text, style: style);
   }
 
   String? _dbPath;
@@ -447,7 +437,7 @@ class TelegramClient {
       String? systemLanguageCode,
       String? deviceModel,
       String? systemVersion}) async {
-    useTestDc ??= true;
+    useTestDc ??= false;
     databaseDirectory ??= getDatabaseDirectory();
     filesDirectory ??= getFilesDirectory();
     apiHash ??= secrets.appHash;
@@ -489,41 +479,31 @@ class TelegramClient {
         systemVersion: systemVersion);
 
     await send(SetTdlibParameters(parameters: tdlibParameters));
+    loadAllStrings();
   }
 
   final Map<String, TdObject> _cachedLanguagePackString = {};
-  Future<TdObject> getLanguagePackString(String key,
+
+  Future loadAllStrings({String? languagePackId}) async {
+    languagePackId ??= userLangPackId;
+    var strs = await send(
+        GetLanguagePackStrings(keys: [], languagePackId: languagePackId));
+    (strs as LanguagePackStrings).strings!.forEach((element) {
+      _cachedLanguagePackString[languagePackId! + element.key!] =
+          element.value!;
+    });
+  }
+
+  String getLanguagePackOrdinaryString(String key,
       {String? languagePackDatabasePath,
       String? languagePackId,
-      String? localizationTarget,
-      bool throwExcepetions = false}) async {
+      String? localizationTarget}) {
     languagePackDatabasePath ??= getLanguagePackDatabasePath();
     languagePackId ??= userLangPackId;
     localizationTarget ??= TelegramClient.localizationTarget;
-
-    var cachedResult = _cachedLanguagePackString[languagePackId + key];
-    if (cachedResult != null) return cachedResult;
-
-    var result = await send(GetLanguagePackString(
-        key: key,
-        languagePackDatabasePath: languagePackDatabasePath,
-        languagePackId: languagePackId,
-        localizationTarget: localizationTarget));
-
-    //download string if we dont have it in database
-    if (result is TdError) {
-      if (throwExcepetions) return result;
-      result = (await send(GetLanguagePackStrings(
-              keys: [key],
-              languagePackId: languagePackId)) as LanguagePackStrings)
-          .strings![0]
-          .value!;
-    }
-
-    if (result is! TdError) {
-      _cachedLanguagePackString[languagePackId + key] = result;
-    }
-    return result;
+    return (_cachedLanguagePackString[languagePackId + key]!
+            as LanguagePackStringValueOrdinary)
+        .value!;
   }
 
   Future<void> init() async {

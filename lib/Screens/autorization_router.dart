@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:myapp/Screens/auth_wait_code.dart';
 import 'package:myapp/Screens/introduction.dart';
 import 'package:myapp/Screens/load_screen.dart';
+import 'package:myapp/Screens/password_check.dart';
 import 'package:myapp/Screens/phone_enter.dart';
 import 'package:myapp/Screens/qr_login.dart';
 import 'package:myapp/Screens/registration.dart';
@@ -80,19 +83,13 @@ class _AutorizationRouter extends State<AutorizationRouter> {
 
               case AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
                 getClient().userLocale = getUserLocale();
-                getClient()
-                    .setTdlibParameters()
-                    //download language strings if we don't have it
-                    .then((_) =>
-                        {getClient().getLanguagePackString("lng_start_msgs")})
-                    .then((value) => {
-                          if (value is TdError)
-                            {
-                              getClient().send(GetLanguagePackStrings(
-                                  keys: [],
-                                  languagePackId: getClient().userLocale))
-                            }
-                        });
+                getClient().setTdlibParameters().then((_) {
+                  //download language strings if we don't have it
+                  if (!getClient().containString("lng_start_msgs")) {
+                    getClient().send(GetLanguagePackStrings(
+                        keys: [], languagePackId: getClient().userLocale));
+                  }
+                });
                 break;
 
               case AuthorizationStateWaitEncryptionKey.CONSTRUCTOR:
@@ -133,6 +130,22 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                         getClient().send(ResendAuthenticationCode()),
                     codeCheckCallback: (code) => (getClient()
                         .send(CheckAuthenticationCode(code: code))));
+
+              case AuthorizationStateWaitPassword.CONSTRUCTOR:
+                var authStatePass =
+                    builder.data as AuthorizationStateWaitPassword;
+                return PasswordCheckScreen(
+                    client: getClient(),
+                    passwordEnterCallback: (pass) async {
+                      var completer = Completer<bool>();
+                      widget.client
+                          .send(CheckAuthenticationPassword(password: pass))
+                          .then((value) => completer.complete(value is Ok));
+                      return completer.future;
+                    },
+                    canRecover: authStatePass.hasRecoveryEmailAddress!,
+                    passHint: authStatePass.passwordHint!,
+                    recoverEmail: authStatePass.recoveryEmailAddressPattern!);
 
               case AuthorizationStateClosed.CONSTRUCTOR:
                 seeIntroduction = false;

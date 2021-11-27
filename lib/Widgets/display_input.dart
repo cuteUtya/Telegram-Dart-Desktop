@@ -17,7 +17,7 @@ class DataInput extends StatefulWidget {
       this.fieldName = "",
       this.getHintCallback,
       this.obscureText = false,
-      this.customLabelDisplay,
+      this.customLabel,
       this.onDataStateChanged,
       this.labelFontSize = 14,
       this.hintText = ""})
@@ -39,7 +39,7 @@ class DataInput extends StatefulWidget {
   final String fieldName;
   final GetHintCallback? getHintCallback;
   final bool obscureText;
-  final Widget? customLabelDisplay;
+  final Widget? customLabel;
   final double labelFontSize;
   final bool externalControll;
   final OnDataStateChanged? onDataStateChanged;
@@ -63,7 +63,7 @@ class _DataInputState extends State<DataInput> {
         UnderlineInputBorder(borderSide: BorderSide(color: clr, width: 2));
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      widget.customLabelDisplay == null
+      widget.customLabel == null
           ? Text(
               widget.fieldName,
               style: TextDisplay.create(
@@ -71,7 +71,7 @@ class _DataInputState extends State<DataInput> {
                   size: widget.labelFontSize,
                   textColor: TextColor.RegularText),
             )
-          : widget.customLabelDisplay ?? const Text(""),
+          : widget.customLabel!,
       Stack(children: [
         //hint field
         TextField(

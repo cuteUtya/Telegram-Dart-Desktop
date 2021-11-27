@@ -100,7 +100,10 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                       size: 24)),
               const SizedBox(height: 18),
               widget.client.buildTextByKey(
-                  currentDesc(),
+                  getCodeInfo().type!.getConstructor() ==
+                          AuthenticationCodeTypeTelegramMessage.CONSTRUCTOR
+                      ? "lng_code_telegram"
+                      : "lng_code_desc",
                   TextDisplay.create(
                       textColor: TextColor.AdditionalTextColor, size: 16)),
               const SizedBox(height: 20),
@@ -109,8 +112,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                   externalControll: true,
                   onValueChange: (v) => code = v,
                   validationCallback: (v) => v.length == codeLength(),
-                  customLabelDisplay: widget.client.buildTextByKey(
-                      "lng_code_ph", TextDisplay.create(size: 14))),
+                  fieldName: widget.client.getTranslation("lng_code_ph")),
               const SizedBox(height: 16),
               suggestResend
                   ? ClickableText(onTap: () {
@@ -139,17 +141,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                   onPressed: () => widget.codeCheckCallback(code),
                   width: 400,
                   weight: FontWeight.w500,
-                  languagePackStringFuture:
-                      widget.client.getLanguagePackString("lng_intro_next"))
+                  text: widget.client.getTranslation("lng_intro_next"))
             ]));
-  }
-
-  String currentDesc() {
-    if (getCodeInfo().type!.getConstructor() ==
-        AuthenticationCodeTypeTelegramMessage.CONSTRUCTOR) {
-      return "lng_code_telegram";
-    }
-    return "lng_code_desc";
   }
 
   int codeLength() {
@@ -163,9 +156,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
             .length!;
 
       default:
-        //why?
-        //Because
-        return 9999;
+        return 5;
     }
   }
 }

@@ -223,8 +223,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             DesktopButton(
                 weight: FontWeight.w500,
                 width: 300,
-                languagePackStringFuture:
-                    widget.client.getLanguagePackString("lng_start_msgs"),
+                text: widget.client.getTranslation("lng_start_msgs"),
                 onPressed: () => widget.onNextClick()),
           ],
         ),
