@@ -24,6 +24,8 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
   String _country = "";
   String _sessionName = "";
 
+  bool sendCode = false;
+
   Countries? countries;
 
   final Map<DataState, FontWeight> _weigths = {
@@ -114,8 +116,13 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                       ),
                       const SizedBox(height: 40),
                       DesktopButton(
-                          onPressed: () => widget.phoneNumberScreenCallback(
-                              _phoneCode + _phone, _sessionName),
+                          onPressed: () {
+                            if (!sendCode) {
+                              sendCode = true;
+                              widget.phoneNumberScreenCallback(
+                                  _phoneCode + _phone, _sessionName);
+                            }
+                          },
                           width: 500,
                           weight: FontWeight.w500,
                           text: widget.client.getTranslation("lng_intro_next")),
