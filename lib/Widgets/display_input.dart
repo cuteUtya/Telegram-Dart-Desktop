@@ -90,23 +90,33 @@ class _DataInputState extends State<DataInput> {
         //input field
         TextField(
           obscureText: widget.obscureText,
-          controller: widget._inputController,
+          controller: widget.externalControll ? widget._inputController : null,
           onSubmitted: (value) {
             setState(() {
-              widget._inputController.text =
-                  widget.hintText.isEmpty || _displaingHint.isEmpty
-                      ? value
-                      : widget.hintText;
-              validate(widget._inputController.text);
+              if (widget.externalControll) {
+                widget._inputController.text =
+                    widget.hintText.isEmpty || _displaingHint.isEmpty
+                        ? value
+                        : widget.hintText;
+                value = widget._inputController.text;
+              }
+              validate(value);
             });
           },
           style: TextStyle(fontSize: widget.fontSize),
           onChanged: (value) {
             if (widget.onValueChange != null) widget.onValueChange!(value);
             setState(() {
-              _displaingHint = _getHintText(widget._inputController.text);
+              if (widget.externalControll) {
+                _displaingHint = _getHintText(widget._inputController.text);
+              }
               if (widget.getHintCallback != null) {
                 widget.hintText = widget.getHintCallback!(value);
+                widget._inputController.selection = TextSelection.fromPosition(
+                    TextPosition(
+                        offset:
+                            getTextPosition(widget._lastInputValue, value)));
+                widget._lastInputValue = value;
               }
               dataState = value.isEmpty ? DataState.empty : DataState.valid;
               //Be honestly, few line below isn't perfect way to
@@ -124,10 +134,6 @@ class _DataInputState extends State<DataInput> {
               //get cursor shifts (or allow, but i don't know about this). This (as i know) only
               //one bug and it's happen only if you write symbol in center of text,
               //which has the same value as the character on the left
-              widget._inputController.selection = TextSelection.fromPosition(
-                  TextPosition(
-                      offset: getTextPosition(widget._lastInputValue, value)));
-              widget._lastInputValue = value;
             });
           },
           decoration: InputDecoration(
@@ -151,6 +157,7 @@ class _DataInputState extends State<DataInput> {
             ? DataState.valid
             : DataState.invalid);
       } else if (widget.asyncValidationCallback != null) {
+        print("VALIDATION CALLBACK");
         widget.asyncValidationCallback!(input)!.then((value) => setState(
             () => dataState = value ? DataState.valid : DataState.invalid));
       }
