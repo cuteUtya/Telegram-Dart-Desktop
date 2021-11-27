@@ -25,7 +25,6 @@ class AutorizationRouter extends StatefulWidget {
 class _AutorizationRouter extends State<AutorizationRouter> {
   TelegramClient? client;
   bool seeIntroduction = false;
-  Widget? lastScreen;
 
   String? _phoneNumber;
 
@@ -46,8 +45,8 @@ class _AutorizationRouter extends State<AutorizationRouter> {
     return StreamBuilder(
         builder: (context, builder) {
           if (builder.hasData) {
-            switch ((builder.data as AuthorizationState).getConstructor()) {
-              case AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
+            switch (builder.data.runtimeType) {
+              case AuthorizationStateWaitPhoneNumber:
                 if (_phoneNumber != null) {
                   getClient()
                       .send(SetAuthenticationPhoneNumber(
@@ -59,7 +58,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                       .then((value) => {if (value is Ok) _phoneNumber = null});
                   break;
                 }
-                lastScreen = client == null && !seeIntroduction
+                return client == null && !seeIntroduction
                     ? IntroductionScreen(
                         client: getClient(),
                         onNextClick: () =>
@@ -79,9 +78,8 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                         qrLoginCallback: () => getClient().send(
                               RequestQrCodeAuthentication(otherUserIds: []),
                             ));
-                return lastScreen!;
 
-              case AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
+              case AuthorizationStateWaitTdlibParameters:
                 getClient().userLocale = getUserLocale();
                 getClient().setTdlibParameters().then((_) {
                   //download language strings if we don't have it
@@ -92,24 +90,23 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                 });
                 break;
 
-              case AuthorizationStateWaitEncryptionKey.CONSTRUCTOR:
+              case AuthorizationStateWaitEncryptionKey:
                 //TODO CURWA, it don't looks safe
                 getClient().send(CheckDatabaseEncryptionKey(encryptionKey: ""));
                 break;
 
-              case AuthorizationStateWaitOtherDeviceConfirmation.CONSTRUCTOR:
+              case AuthorizationStateWaitOtherDeviceConfirmation:
                 var authState = builder.data
                     as AuthorizationStateWaitOtherDeviceConfirmation;
-                lastScreen = QrLogin(
+                return QrLogin(
                     client: widget.client,
                     link: authState.link!,
                     onBackButtonClick: () {
                       getClient().destroy();
                       initNewClient();
                     });
-                return lastScreen!;
 
-              case AuthorizationStateWaitRegistration.CONSTRUCTOR:
+              case AuthorizationStateWaitRegistration:
                 return RegistrationScreen(
                   termsOfService:
                       (builder.data as AuthorizationStateWaitRegistration)
@@ -120,7 +117,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                       .send(RegisterUser(firstName: fname, lastName: lname)),
                 );
 
-              case AuthorizationStateWaitCode.CONSTRUCTOR:
+              case AuthorizationStateWaitCode:
                 var codeInfo =
                     (builder.data as AuthorizationStateWaitCode).codeInfo!;
                 return EnterCodeScreen(
@@ -131,7 +128,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                     codeCheckCallback: (code) => (getClient()
                         .send(CheckAuthenticationCode(code: code))));
 
-              case AuthorizationStateWaitPassword.CONSTRUCTOR:
+              case AuthorizationStateWaitPassword:
                 var authStatePass =
                     builder.data as AuthorizationStateWaitPassword;
                 return PasswordCheckScreen(
@@ -147,14 +144,13 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                     passHint: authStatePass.passwordHint!,
                     recoverEmail: authStatePass.recoveryEmailAddressPattern!);
 
-              case AuthorizationStateClosed.CONSTRUCTOR:
+              case AuthorizationStateClosed:
                 seeIntroduction = false;
                 initNewClient();
                 break;
             }
           }
-          return Stack(
-              children: [lastScreen ?? const Center(), const LoadScreen()]);
+          return const LoadScreen();
         },
         stream: getClient().updateAuthorizationState);
   }
