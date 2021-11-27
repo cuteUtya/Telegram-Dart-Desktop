@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' as io;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
 import 'package:myapp/secrets.dart' as secrets;
@@ -478,12 +479,11 @@ class TelegramClient {
         systemVersion: systemVersion);
 
     await send(SetTdlibParameters(parameters: tdlibParameters));
-    loadAllStrings();
   }
 
   final Map<String, TdObject> _cachedLanguagePackString = {};
 
-  Future loadAllStrings({String? languagePackId}) async {
+  Future<void> loadAllStrings({String? languagePackId}) async {
     languagePackId ??= userLangPackId;
     var strs = await send(
         GetLanguagePackStrings(keys: [], languagePackId: languagePackId));
@@ -513,6 +513,8 @@ class TelegramClient {
       if (message is String) {
         if (message == "\$goodbye!\$") {
           _isolate!.kill();
+          io.Directory(_dbPath!).deleteSync(recursive: true);
+          io.Directory(_filesPath!).deleteSync(recursive: true);
           return;
         }
         var tdobject = convertToObject(message);
