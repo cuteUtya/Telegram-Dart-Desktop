@@ -1,7 +1,11 @@
 #Base fields#
 Accent: #40A7E3;
-AccentHalfTransparent: linear(ref(Accent), #FFFFFFFF, 0.75);
+AccentHalfTransparent: linear(ref(Accent), #00FFFFFF, 0.5);
 BaseColor: #FAFAFA;
+DangerColor: #DF1E1E; 
+DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
+
+Transparent: #00000000;
 
 #Typography fields#
 HeaderFontFamily: Ubuntu;
@@ -10,7 +14,6 @@ HeaderMain: #181818;
 HeaderSecondary: #464646;
 AdditionalTextColor: #BABABA;
 RegularText: #333333;
-DangerColor: #DF1E1E;
 
 #Introduction screen fields#
 CarouselIndicatorActive: ref(Accent);
@@ -22,6 +25,9 @@ DataInputHintColor: ref(AdditionalTextColor);
 DataInputValidColor: ref(Accent);
 DataInputInvalidColor: ref(DangerColor);
 DataInputEmtyColor: #EBEBEB;
+
+ButtonAccentBackColor: ref(AccentHalfTransparent);
+ButtonDangerBackColor: ref(DangerHalfTransparent);
 
 LoadScreenBackgroundColor: ref(BaseColor);
 LoadScreenShadowColor: #AAAAAA

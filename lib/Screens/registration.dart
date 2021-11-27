@@ -71,10 +71,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               fieldName: widget.client.getTranslation("lng_signup_lastname")),
           const SizedBox(height: 36),
           DesktopButton(
-              onPressed: () =>
-                  //TODO set userpic
-                  widget.client
-                      .send(RegisterUser(firstName: fName, lastName: lName)),
+              //TODO set userpic
+              onPressed: () => widget.client
+                  .send(RegisterUser(firstName: fName, lastName: lName)),
               width: 400,
               text: widget.client.getTranslation("lng_intro_finish")),
           const Spacer(),
@@ -129,12 +128,12 @@ class _TOSAlert extends StatelessWidget {
     return AlertDialog(
         title: Text(
           title,
-          style: TextDisplay.create(size: 24, textColor: TextColor.HeaderMain),
+          style: TextDisplay.title,
         ),
         content: SizedBox(
           height: 180,
           child: Column(children: [
-            Text(tosText, style: TextDisplay.create(size: 16)),
+            Text(tosText, style: TextDisplay.regular16),
             const Spacer(),
             Container(
               child: DesktopButton(
