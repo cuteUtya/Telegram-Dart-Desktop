@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
@@ -133,20 +134,12 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                           margin: const EdgeInsets.only(bottom: 24),
                           alignment: Alignment.bottomCenter,
                           child: ClickableText(
+                              data: widget.client
+                                  .getTranslation("lng_phone_to_qr"),
                               onTap: () => widget.client.send(
                                   RequestQrCodeAuthentication(
                                       otherUserIds: [])),
-                              builder: (select) {
-                                return widget.client.buildTextByKey(
-                                    "lng_phone_to_qr",
-                                    TextDisplay.create(
-                                        textAlign: TextAlign.center,
-                                        size: 18,
-                                        textColor: TextColor.Accent,
-                                        decoration: select
-                                            ? TextDecoration.underline
-                                            : TextDecoration.none));
-                              }))
+                              fontSize: 18))
                     ]))));
   }
 

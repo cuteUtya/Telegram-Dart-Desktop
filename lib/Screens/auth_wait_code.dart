@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
@@ -111,19 +112,14 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                   fieldName: widget.client.getTranslation("lng_code_ph")),
               const SizedBox(height: 16),
               suggestResend
-                  ? ClickableText(onTap: () {
-                      widget.client.send(ResendAuthenticationCode());
-                      suggestResend = false;
-                    }, builder: (hover) {
-                      return widget.client.buildTextByKey(
-                          "lng_code_no_telegram",
-                          TextDisplay.create(
-                              textColor: TextColor.Accent,
-                              size: 16,
-                              decoration: hover
-                                  ? TextDecoration.underline
-                                  : TextDecoration.none));
-                    })
+                  ? ClickableText(
+                      data:
+                          widget.client.getTranslation("lng_code_no_telegram"),
+                      onTap: () {
+                        widget.client.send(ResendAuthenticationCode());
+                        suggestResend = false;
+                      },
+                    )
                   : widget.client.buildTextByKey(
                       telegramIsDial ? "lng_code_called" : "lng_code_call",
                       TextDisplay.create(
@@ -134,7 +130,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                         }),
               const SizedBox(height: 40),
               DesktopButton(
-                  onPressed: () => widget.client.send(CheckAuthenticationCode(code: code)),
+                  onPressed: () =>
+                      widget.client.send(CheckAuthenticationCode(code: code)),
                   width: 400,
                   weight: FontWeight.w500,
                   text: widget.client.getTranslation("lng_intro_next"))

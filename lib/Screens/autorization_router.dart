@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:myapp/Screens/auth_wait_code.dart';
 import 'package:myapp/Screens/introduction.dart';

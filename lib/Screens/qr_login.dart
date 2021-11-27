@@ -65,16 +65,8 @@ class _QrLoginState extends State<QrLogin> {
               margin: const EdgeInsets.only(bottom: 24),
               child: ClickableText(
                   onTap: () => widget.onBackButtonClick(),
-                  builder: (select) {
-                    return widget.client.buildTextByKey(
-                        "lng_intro_qr_skip",
-                        TextDisplay.create(
-                            size: 18,
-                            textColor: TextColor.Accent,
-                            decoration: select
-                                ? TextDecoration.underline
-                                : TextDecoration.none));
-                  }))
+                  data: widget.client.getTranslation("lng_intro_qr_skip"),
+                  fontSize: 18))
         ]);
   }
 }

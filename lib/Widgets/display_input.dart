@@ -31,18 +31,18 @@ class DataInput extends StatefulWidget {
   }
 
   final String value;
-  final DataValidationCallback? validationCallback;
-  final AsyncDataValidationCallback? asyncValidationCallback;
+  final bool Function(String)? validationCallback;
+  final Future<bool>? Function(String)? asyncValidationCallback;
   final String? defaultText;
   final double fontSize;
-  final OnChangeValue? onValueChange;
+  final void Function(String)? onValueChange;
   final String fieldName;
-  final GetHintCallback? getHintCallback;
+  final String Function(String)? getHintCallback;
   final bool obscureText;
   final Widget? customLabel;
   final double labelFontSize;
   final bool externalControll;
-  final OnDataStateChanged? onDataStateChanged;
+  final void Function(DataState)? onDataStateChanged;
   late String hintText;
   late String _lastInputValue = "";
 
@@ -202,9 +202,3 @@ class _DataInputState extends State<DataInput> {
 }
 
 enum DataState { valid, invalid, empty }
-
-typedef AsyncDataValidationCallback = Future<bool>? Function(String);
-typedef DataValidationCallback = bool Function(String);
-typedef GetHintCallback = String Function(String);
-typedef OnChangeValue = void Function(String);
-typedef OnDataStateChanged = void Function(DataState);

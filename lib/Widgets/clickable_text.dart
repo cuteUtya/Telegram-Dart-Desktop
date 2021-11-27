@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/clickable_object.dart';
+import 'package:myapp/Widgets/display_text.dart';
 
-class ClickableText extends StatefulWidget {
-  const ClickableText({Key? key, this.onTap, required this.builder})
+class ClickableText extends StatelessWidget {
+  const ClickableText(
+      {Key? key,
+      required this.data,
+      this.fontSize = 16,
+      this.textColor = TextColor.Accent,
+      this.onTap})
       : super(key: key);
-  final clickableTextCallback builder;
-  final Function()? onTap;
-  @override
-  State<StatefulWidget> createState() => _ClickableTextState();
-}
-
-class _ClickableTextState extends State<ClickableText> {
-  bool _isMouseUnderText = false;
+  final String data;
+  final double fontSize;
+  final TextColor textColor;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => widget.onTap?.call(),
-        child: MouseRegion(
-            onEnter: (_) => setState(() => _isMouseUnderText = true),
-            onExit: (_) => setState(() => _isMouseUnderText = false),
-            child: widget.builder(_isMouseUnderText)));
+    return ClickabeObject(
+        onTap: () => onTap?.call(),
+        builder: (selected) => Text(data,
+            style: TextDisplay.create(
+                size: fontSize,
+                textColor: textColor,
+                decoration: selected
+                    ? TextDecoration.underline
+                    : TextDecoration.none)));
   }
 }
-
-typedef clickableTextCallback = Widget Function(bool selected);
