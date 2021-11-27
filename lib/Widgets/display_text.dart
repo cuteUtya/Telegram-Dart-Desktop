@@ -4,6 +4,16 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 class TextDisplay {
   static String _getEmojiFont() => "TwitterColorEmoji";
 
+  static TextStyle get title => create(
+      size: 24, fontWeight: FontWeight.w600, textColor: TextColor.HeaderMain);
+  static TextStyle get additional =>
+      create(textColor: TextColor.AdditionalTextColor, size: 16);
+  static TextStyle get introTitle =>
+      create(size: 26, textColor: TextColor.Accent);
+  static TextStyle get regular16 => create(size: 16);
+  static TextStyle get regular20 => create(size: 20);
+  static TextStyle get bold20 => create(size: 20, fontWeight: FontWeight.bold);
+
   static InlineSpan emoji(String emoji, double size) {
     return TextSpan(
         text: emoji,

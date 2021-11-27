@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
@@ -90,19 +89,14 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(getCodeInfo().phoneNumber!,
-                  style: TextDisplay.create(
-                      fontWeight: FontWeight.w500,
-                      textColor: TextColor.HeaderMain,
-                      size: 24)),
+              Text(getCodeInfo().phoneNumber!, style: TextDisplay.title),
               const SizedBox(height: 18),
               widget.client.buildTextByKey(
                   getCodeInfo().type!.getConstructor() ==
                           AuthenticationCodeTypeTelegramMessage.CONSTRUCTOR
                       ? "lng_code_telegram"
                       : "lng_code_desc",
-                  TextDisplay.create(
-                      textColor: TextColor.AdditionalTextColor, size: 16)),
+                  TextDisplay.additional),
               const SizedBox(height: 20),
               DataInput(
                   value: code,
@@ -122,8 +116,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                     )
                   : widget.client.buildTextByKey(
                       telegramIsDial ? "lng_code_called" : "lng_code_call",
-                      TextDisplay.create(
-                          textColor: TextColor.AdditionalTextColor, size: 16),
+                      TextDisplay.additional,
                       replacing: {
                           "{minutes}": getMinutes(),
                           "{seconds}": getSeconds()

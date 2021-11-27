@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
@@ -56,20 +55,11 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Spacer(),
-                      widget.client.buildTextByKey(
-                          "lng_phone_title",
-                          TextDisplay.create(
-                              size: 24,
-                              fontWeight: FontWeight.w500,
-                              textAlign: TextAlign.left,
-                              textColor: TextColor.HeaderMain)),
+                      widget.client
+                          .buildTextByKey("lng_phone_title", TextDisplay.title),
                       const SizedBox(height: 8),
                       widget.client.buildTextByKey(
-                          "lng_phone_desc",
-                          TextDisplay.create(
-                              textColor: TextColor.AdditionalTextColor,
-                              size: 16,
-                              textAlign: TextAlign.left)),
+                          "lng_phone_desc", TextDisplay.additional),
                       const SizedBox(height: 20),
                       //Country field
                       DataInput(
