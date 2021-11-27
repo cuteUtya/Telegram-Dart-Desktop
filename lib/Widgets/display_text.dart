@@ -56,5 +56,6 @@ enum TextColor {
   HeaderSecondary,
   AdditionalTextColor,
   RegularText,
-  DangerColor
+  DangerColor,
+  Transparent
 }

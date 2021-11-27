@@ -4,7 +4,7 @@ import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 
 typedef TapCallback = void Function();
-enum ButtonColor { accent, accentHalfTransparency, transparency }
+enum ButtonColor { ButtonAccentBackColor, ButtonDangerBackColor, Transparent }
 
 class DesktopButton extends StatefulWidget {
   const DesktopButton(
@@ -14,7 +14,7 @@ class DesktopButton extends StatefulWidget {
       this.heigth,
       this.onPressed,
       this.onLongPress,
-      this.color = ButtonColor.accentHalfTransparency,
+      this.backColor = ButtonColor.ButtonAccentBackColor,
       this.customColor,
       this.pressColor,
       this.font,
@@ -29,7 +29,7 @@ class DesktopButton extends StatefulWidget {
   final double? heigth;
   final TapCallback? onPressed;
   final TapCallback? onLongPress;
-  final ButtonColor color;
+  final ButtonColor backColor;
   final Color? pressColor;
   final Color? customColor;
   final TextFont? font;
@@ -54,7 +54,7 @@ class _desktopButtonState extends State<DesktopButton> {
         decoration: BoxDecoration(
             color: widget.pressColor ??
                 _getCurrentColor(isPressed,
-                    widget.customColor ?? _getEnumColor(widget.color)),
+                    widget.customColor ?? _getEnumColor(widget.backColor)),
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         padding: widget.padding,
         child: Text(widget.text,
@@ -92,14 +92,6 @@ class _desktopButtonState extends State<DesktopButton> {
     return baseColor;
   }
 
-  static Color _getEnumColor(ButtonColor clr) {
-    switch (clr) {
-      case ButtonColor.accent:
-        return ClientTheme.currentTheme.getField("Accent");
-      case ButtonColor.accentHalfTransparency:
-        return ClientTheme.currentTheme.getField("AccentHalfTransparent");
-      case ButtonColor.transparency:
-        return const Color(0x00000000);
-    }
-  }
+  static Color _getEnumColor(ButtonColor clr) => ClientTheme.currentTheme
+      .getField(clr.toString().replaceAll("ButtonColor.", ""));
 }
