@@ -11,16 +11,12 @@ import 'dart:async';
 
 class EnterCodeScreen extends StatefulWidget {
   const EnterCodeScreen(
-      {Key? key,
-      required this.client,
-      required this.codeInfo,
-      required this.codeCheckCallback,
-      required this.resendCallback})
+      {Key? key, required this.client, required this.codeInfo})
       : super(key: key);
   final TelegramClient client;
   final AuthenticationCodeInfo codeInfo;
-  final void Function() resendCallback;
-  final Future<TdObject> Function(String code) codeCheckCallback;
+  //final void Function() resendCallback;
+  //final Future<TdObject> Function(String code) codeCheckCallback;
   @override
   State<StatefulWidget> createState() => _EnterCodeScreenState();
 }
@@ -54,7 +50,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
             passedType = widget.codeInfo.nextType;
             if (widget.codeInfo.nextType!.getConstructor() ==
                 AuthenticationCodeTypeCall.CONSTRUCTOR) {
-              widget.resendCallback();
+              widget.client.send(ResendAuthenticationCode());
               telegramIsDial = true;
             }
           }
@@ -116,7 +112,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
               const SizedBox(height: 16),
               suggestResend
                   ? ClickableText(onTap: () {
-                      widget.resendCallback();
+                      widget.client.send(ResendAuthenticationCode());
                       suggestResend = false;
                     }, builder: (hover) {
                       return widget.client.buildTextByKey(
@@ -138,7 +134,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                         }),
               const SizedBox(height: 40),
               DesktopButton(
-                  onPressed: () => widget.codeCheckCallback(code),
+                  onPressed: () => widget.client.send(CheckAuthenticationCode(code: code)),
                   width: 400,
                   weight: FontWeight.w500,
                   text: widget.client.getTranslation("lng_intro_next"))

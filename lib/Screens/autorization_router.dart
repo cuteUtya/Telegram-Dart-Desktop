@@ -74,10 +74,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                           } else {
                             setState(() => {});
                           }
-                        },
-                        qrLoginCallback: () => getClient().send(
-                              RequestQrCodeAuthentication(otherUserIds: []),
-                            ));
+                        });
 
               case AuthorizationStateWaitTdlibParameters:
                 getClient().userLocale = getUserLocale();
@@ -108,41 +105,21 @@ class _AutorizationRouter extends State<AutorizationRouter> {
 
               case AuthorizationStateWaitRegistration:
                 return RegistrationScreen(
-                  termsOfService:
-                      (builder.data as AuthorizationStateWaitRegistration)
-                          .termsOfService!,
-                  client: widget.client,
-                  //TODO set userpic
-                  registrationCallback: (fname, lname, ava) => getClient()
-                      .send(RegisterUser(firstName: fname, lastName: lname)),
-                );
+                    termsOfService:
+                        (builder.data as AuthorizationStateWaitRegistration)
+                            .termsOfService!,
+                    client: widget.client);
 
               case AuthorizationStateWaitCode:
                 var codeInfo =
                     (builder.data as AuthorizationStateWaitCode).codeInfo!;
-                return EnterCodeScreen(
-                    client: getClient(),
-                    codeInfo: codeInfo,
-                    resendCallback: () =>
-                        getClient().send(ResendAuthenticationCode()),
-                    codeCheckCallback: (code) => (getClient()
-                        .send(CheckAuthenticationCode(code: code))));
+                return EnterCodeScreen(client: getClient(), codeInfo: codeInfo);
 
               case AuthorizationStateWaitPassword:
-                var authStatePass =
-                    builder.data as AuthorizationStateWaitPassword;
                 return PasswordCheckScreen(
                     client: getClient(),
-                    passwordEnterCallback: (pass) async {
-                      var completer = Completer<bool>();
-                      widget.client
-                          .send(CheckAuthenticationPassword(password: pass))
-                          .then((value) => completer.complete(value is Ok));
-                      return completer.future;
-                    },
-                    canRecover: authStatePass.hasRecoveryEmailAddress!,
-                    passHint: authStatePass.passwordHint!,
-                    recoverEmail: authStatePass.recoveryEmailAddressPattern!);
+                    authWaitPassword:
+                        builder.data as AuthorizationStateWaitPassword);
 
               case AuthorizationStateClosed:
                 seeIntroduction = false;

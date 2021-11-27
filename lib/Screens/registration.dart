@@ -11,14 +11,10 @@ import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen(
-      {Key? key,
-      required this.client,
-      required this.registrationCallback,
-      required this.termsOfService})
+      {Key? key, required this.client, required this.termsOfService})
       : super(key: key);
 
   final TermsOfService termsOfService;
-  final Function(String fname, String lname, String? ava) registrationCallback;
   final TelegramClient client;
   @override
   State<StatefulWidget> createState() => _RegistrationScreenState();
@@ -76,7 +72,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           const SizedBox(height: 36),
           DesktopButton(
               onPressed: () =>
-                  widget.registrationCallback(fName, lName, _avaPath),
+                  //TODO set userpic
+                  widget.client
+                      .send(RegisterUser(firstName: fName, lastName: lName)),
               width: 400,
               text: widget.client.getTranslation("lng_intro_finish")),
           const Spacer(),

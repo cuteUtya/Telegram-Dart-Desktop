@@ -8,13 +8,9 @@ import 'package:myapp/tdlib/td_api.dart';
 
 class PhoneEnterScreen extends StatefulWidget {
   const PhoneEnterScreen(
-      {required this.client,
-      required this.phoneNumberScreenCallback,
-      required this.qrLoginCallback,
-      Key? key})
+      {required this.client, required this.phoneNumberScreenCallback, Key? key})
       : super(key: key);
 
-  final void Function() qrLoginCallback;
   final TelegramClient client;
   final PhoneNumberScreenCallback phoneNumberScreenCallback;
   @override
@@ -26,7 +22,6 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
   String _phone = "";
   DataState _phoneState = DataState.empty;
   String _country = "";
-  DataState _countryState = DataState.empty;
   String _sessionName = "";
 
   Countries? countries;
@@ -77,7 +72,6 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                       const SizedBox(height: 20),
                       //Country field
                       DataInput(
-                        onDataStateChanged: (v) => _countryState = v,
                         value: _country,
                         externalControll: true,
                         getHintCallback: countryHint,
@@ -139,7 +133,9 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                           margin: const EdgeInsets.only(bottom: 24),
                           alignment: Alignment.bottomCenter,
                           child: ClickableText(
-                              onTap: () => widget.qrLoginCallback(),
+                              onTap: () => widget.client.send(
+                                  RequestQrCodeAuthentication(
+                                      otherUserIds: [])),
                               builder: (select) {
                                 return widget.client.buildTextByKey(
                                     "lng_phone_to_qr",
