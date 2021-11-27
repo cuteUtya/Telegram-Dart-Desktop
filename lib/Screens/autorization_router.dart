@@ -68,8 +68,9 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                                 allowFlashCall: false,
                                 isCurrentPhoneNumber: false,
                                 allowSmsRetrieverApi: false)))
-                        .then(
-                            (value) => {if (value is Ok) _phoneNumber = null});
+                        .then((value) {
+                      if (value is Ok) _phoneNumber = null;
+                    });
                     break;
                   }
                   return client == null && !seeIntroduction
@@ -80,13 +81,10 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                         )
                       : PhoneEnterScreen(
                           client: getClient(),
-                          phoneNumberScreenCallback: (number, session) =>
-                              setState(() {
-                                _phoneNumber = number;
-                                if (session != null) {
-                                  initNewClient(sessionName: session);
-                                }
-                              }));
+                          phoneNumberScreenCallback: (number, session) {
+                            _phoneNumber = number;
+                            initNewClient(sessionName: session);
+                          });
                 }
                 break;
 
@@ -105,7 +103,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                   var authState = builder.data
                       as AuthorizationStateWaitOtherDeviceConfirmation;
                   return QrLogin(
-                      client: widget.client,
+                      client: getClient(),
                       link: authState.link!,
                       onBackButtonClick: () => initNewClient());
                 }
@@ -117,7 +115,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                       termsOfService:
                           (builder.data as AuthorizationStateWaitRegistration)
                               .termsOfService!,
-                      client: widget.client);
+                      client: getClient());
                 }
                 break;
 
