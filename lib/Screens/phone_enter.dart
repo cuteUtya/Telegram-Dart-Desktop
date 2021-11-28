@@ -4,7 +4,7 @@ import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/td_api.dart';
+import 'package:myapp/tdlib/td_api.dart' hide Text;
 
 class PhoneEnterScreen extends StatefulWidget {
   const PhoneEnterScreen(
@@ -12,7 +12,7 @@ class PhoneEnterScreen extends StatefulWidget {
       : super(key: key);
 
   final TelegramClient client;
-  final Future<TdObject> Function(String phoneNumber, String? sessionName)
+  final Future<TdObject> Function(String phoneNumber, String sessionName)
       phoneNumberScreenCallback;
   @override
   State<StatefulWidget> createState() => _PhoneEnterScreenState();
@@ -121,13 +121,27 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                           onPressed: () {
                             if (!sendCode) {
                               sendCode = true;
-                              widget.phoneNumberScreenCallback(
-                                  _phoneCode + _phone, _sessionName);
+                              widget
+                                  .phoneNumberScreenCallback(
+                                      _phoneCode + _phone, _sessionName)
+                                  .then((value) => {
+                                        if (value.getConstructor() ==
+                                                TdError.CONSTRUCTOR &&
+                                            mounted)
+                                          setState(() => errorStr = widget
+                                              .client
+                                              .getLocalizedErrorMessage(
+                                                  value as TdError))
+                                      });
                             }
                           },
                           width: 500,
                           weight: FontWeight.w500,
                           text: widget.client.getTranslation("lng_intro_next")),
+                      const SizedBox(height: 16),
+                      errorStr == null
+                          ? const Center()
+                          : Text(errorStr!, style: TextDisplay.regular16),
                       const Spacer(),
                       Container(
                           margin: const EdgeInsets.only(bottom: 24),
@@ -138,7 +152,7 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                               onTap: () => widget.client.send(
                                   RequestQrCodeAuthentication(
                                       otherUserIds: [])),
-                              fontSize: 18))
+                              fontSize: 18)),
                     ]))));
   }
 

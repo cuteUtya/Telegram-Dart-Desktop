@@ -15,8 +15,6 @@ class EnterCodeScreen extends StatefulWidget {
       : super(key: key);
   final TelegramClient client;
   final AuthenticationCodeInfo codeInfo;
-  //final void Function() resendCallback;
-  //final Future<TdObject> Function(String code) codeCheckCallback;
   @override
   State<StatefulWidget> createState() => _EnterCodeScreenState();
 }
@@ -28,6 +26,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
     if (updatedCodeInfo != null) return updatedCodeInfo!;
     return widget.codeInfo;
   }
+
+  String? errorStr;
 
   bool telegramIsDial = false;
   String code = "";
@@ -50,7 +50,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
             passedType = widget.codeInfo.nextType;
             if (widget.codeInfo.nextType!.getConstructor() ==
                 AuthenticationCodeTypeCall.CONSTRUCTOR) {
-              widget.client.send(ResendAuthenticationCode());
+              widget.client.send(ResendAuthenticationCode()).then(errorHandler);
               telegramIsDial = true;
             }
           }
@@ -110,7 +110,9 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                       data:
                           widget.client.getTranslation("lng_code_no_telegram"),
                       onTap: () {
-                        widget.client.send(ResendAuthenticationCode());
+                        widget.client
+                            .send(ResendAuthenticationCode())
+                            .then(errorHandler);
                         suggestResend = false;
                       },
                     )
@@ -123,12 +125,24 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
                         }),
               const SizedBox(height: 40),
               DesktopButton(
-                  onPressed: () =>
-                      widget.client.send(CheckAuthenticationCode(code: code)),
+                  onPressed: () => widget.client
+                      .send(CheckAuthenticationCode(code: code))
+                      .then(errorHandler),
                   width: 400,
                   weight: FontWeight.w500,
-                  text: widget.client.getTranslation("lng_intro_next"))
+                  text: widget.client.getTranslation("lng_intro_next")),
+              const SizedBox(height: 16),
+              errorStr == null
+                  ? const Center()
+                  : Text(errorStr!, style: TextDisplay.regular16)
             ]));
+  }
+
+  void errorHandler(TdObject result) {
+    if (result.getConstructor() == TdError.CONSTRUCTOR) {
+      setState(() =>
+          errorStr = widget.client.getLocalizedErrorMessage(result as TdError));
+    }
   }
 
   int codeLength() {

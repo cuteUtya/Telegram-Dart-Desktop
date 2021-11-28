@@ -437,7 +437,7 @@ class TelegramClient {
       String? systemLanguageCode,
       String? deviceModel,
       String? systemVersion}) async {
-    useTestDc ??= false;
+    useTestDc ??= true;
     databaseDirectory ??= getDatabaseDirectory();
     filesDirectory ??= getFilesDirectory();
     apiHash ??= secrets.appHash;
@@ -484,6 +484,7 @@ class TelegramClient {
   static final Map<String, String> _400errorMessages = {
     "PHONE_NUMBER_INVALID": "lng_bad_phone",
     "PHONE_CODE_HASH_EMPTY": "lng_bad_phone",
+    "PHONE_CODE_INVALID": "lng_bad_code",
     "PHONE_CODE_EMPTY": "lng_bad_code",
     "PHONE_CODE_EXPIRED": "lng_bad_code",
     "FIRSTNAME_INVALID": "lng_bad_name",
@@ -496,8 +497,9 @@ class TelegramClient {
       key = _400errorMessages[error.message];
     } else if (error.code == 420) {
       key = "lng_flood_error";
+    } else if (error.code == 429) {
+      return error.message;
     }
-
     if (key != null) return getTranslation(key);
   }
 

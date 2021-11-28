@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:myapp/Screens/auth_wait_code.dart';
 import 'package:myapp/Screens/introduction.dart';
@@ -26,6 +28,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
   bool loadStrings = false;
 
   String? _phoneNumber;
+  Completer<TdObject>? phoneEnterScreenResultHandler;
 
   TelegramClient getClient() {
     if (client != null) return client!;
@@ -61,30 +64,29 @@ class _AutorizationRouter extends State<AutorizationRouter> {
               case AuthorizationStateWaitPhoneNumber:
                 if (loadStrings) {
                   if (_phoneNumber != null) {
-                    getClient()
-                        .send(SetAuthenticationPhoneNumber(
-                            phoneNumber: _phoneNumber,
-                            settings: PhoneNumberAuthenticationSettings(
-                                allowFlashCall: false,
-                                isCurrentPhoneNumber: false,
-                                allowSmsRetrieverApi: false)))
-                        .then((value) {
-                      if (value is Ok) _phoneNumber = null;
-                    });
+                    setPhone(_phoneNumber!);
+                    _phoneNumber = null;
                     break;
+                  } else {
+                    return !seeIntroduction
+                        ? IntroductionScreen(
+                            client: getClient(),
+                            onNextClick: () =>
+                                setState(() => seeIntroduction = true),
+                          )
+                        : PhoneEnterScreen(
+                            client: getClient(),
+                            phoneNumberScreenCallback: (number, session) {
+                              phoneEnterScreenResultHandler = Completer();
+                              if (session.isEmpty) {
+                                setPhone(number);
+                              } else {
+                                _phoneNumber = number;
+                                initNewClient();
+                              }
+                              return phoneEnterScreenResultHandler!.future;
+                            });
                   }
-                  return client == null && !seeIntroduction
-                      ? IntroductionScreen(
-                          client: getClient(),
-                          onNextClick: () =>
-                              setState(() => seeIntroduction = true),
-                        )
-                      : PhoneEnterScreen(
-                          client: getClient(),
-                          phoneNumberScreenCallback: (number, session) {
-                            _phoneNumber = number;
-                            initNewClient(sessionName: session);
-                          });
                 }
                 break;
 
@@ -146,5 +148,18 @@ class _AutorizationRouter extends State<AutorizationRouter> {
           return const LoadScreen();
         },
         stream: getClient().updateAuthorizationState);
+  }
+
+  void setPhone(String phone) {
+    getClient()
+        .send(SetAuthenticationPhoneNumber(
+            phoneNumber: phone,
+            settings: PhoneNumberAuthenticationSettings(
+                allowFlashCall: false,
+                isCurrentPhoneNumber: false,
+                allowSmsRetrieverApi: false)))
+        .then((value) {
+      phoneEnterScreenResultHandler!.complete(value);
+    });
   }
 }
