@@ -12,6 +12,7 @@ import "dart:convert";
 import "dart:ffi";
 
 import "package:ffi/ffi.dart";
+import 'package:myapp/tdlib/td_api.dart';
 
 import "utils.dart";
 
@@ -50,7 +51,7 @@ typedef void JsonClientDestroy(Pointer<Void> client);
 
 /// Represents a Telegram client that sends and receives JSON data.
 class JsonClient {
-  late Pointer<Void> _client;
+  late Pointer<Void> client;
 
   // If the client is inactive (if [destroy] has been called), further calls
   // to this class' methods will fail
@@ -64,7 +65,7 @@ class JsonClient {
   late JsonClientExecute _jsonClientExecute;
   late JsonClientDestroy _jsonClientDestroy;
 
-  JsonClient.create(String dlDir) {
+  JsonClient.create(String dlDir, {Pointer<Void>? clientPointer}) {
     // Get the path to the td_json_client dynamic library
     final dlPath = platformPath(dlDir);
 
@@ -86,7 +87,7 @@ class JsonClient {
         dylib.lookupFunction<td_json_client_execute, JsonClientExecute>(
             "td_json_client_execute");
 
-    _client = _jsonClientCreate();
+    client = clientPointer ?? _jsonClientCreate();
     active = true;
   }
 
@@ -100,17 +101,17 @@ class JsonClient {
   /// Send a request to the Telegram API
   /// This is an async version of [execute], which the TDLib docs don't make
   /// immediately clear :p
-  void send(Map<String, dynamic> request) {
+  void send(dynamic request) {
     _assertActive();
     var reqJson = json.encode(request);
 
-    _jsonClientSend(_client, reqJson.toNativeUtf8());
+    _jsonClientSend(client, reqJson.toNativeUtf8());
   }
 
   /// Receive the API's response
   String? receive([double timeout = 2.0]) {
     _assertActive();
-    final response = _jsonClientReceive(_client, timeout);
+    final response = _jsonClientReceive(client, timeout);
 
     //if timeout is riched _jsonClientReceive return NullPointer
     if (response == nullptr) return null;
@@ -122,37 +123,25 @@ class JsonClient {
   /// If you need to execute a function asynchronously (for example, you get an
   /// error along the lines of "Function can't be executed synchronously"), use
   /// [send] instead.
-  Map<String, dynamic> execute(Map<String, dynamic> request) {
+  TdObject execute(TdFunction request) {
     _assertActive();
     final result =
-        _jsonClientExecute(_client, json.encode(request).toNativeUtf8());
-
+        _jsonClientExecute(client, json.encode(request).toNativeUtf8());
     var resJson = result.toDartString();
-    return json.decode(resJson);
+    return convertToObject(resJson);
   }
 
   /// Destroy the client
   void destroy() {
     _assertActive();
-    _jsonClientDestroy(_client);
+    _jsonClientDestroy(client);
     active = false;
   }
 
   Stream<String> incomingString([double timeout = 2.0]) async* {
     while (true) {
-      bool haveUpdates = true;
-      while (haveUpdates) {
-        var str = await receiveString(timeout);
-        if (str == null) {
-          haveUpdates = false;
-        } else {
-          yield str;
-        }
-      }
-      await Future.delayed(const Duration(milliseconds: 100));
+      var str = receive(timeout);
+      if (str != null) yield str;
     }
   }
-
-  Future<String?> receiveString([double timeout = 2.0]) async =>
-      receive(timeout);
 }

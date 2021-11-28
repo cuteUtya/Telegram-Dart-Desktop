@@ -25,8 +25,6 @@ class AutorizationRouter extends StatefulWidget {
 class _AutorizationRouter extends State<AutorizationRouter> {
   TelegramClient? client;
   bool seeIntroduction = false;
-  bool loadStrings = false;
-
   String? _phoneNumber;
   Completer<TdObject>? phoneEnterScreenResultHandler;
 
@@ -43,10 +41,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
       var newClient = TelegramClient();
       newClient.init().then((_) => newClient
           .setTdlibParameters(deviceModel: sessionName)
-          .then((_) => setState(() {
-                loadStrings = false;
-                client = newClient;
-              })));
+          .then((_) => setState(() => client = newClient)));
     });
   }
 
@@ -55,43 +50,34 @@ class _AutorizationRouter extends State<AutorizationRouter> {
     return StreamBuilder(
         builder: (context, builder) {
           if (builder.hasData) {
-            if (!loadStrings) {
-              getClient()
-                  .loadAllStrings()
-                  .then((value) => setState(() => loadStrings = true));
-            }
             switch (builder.data.runtimeType) {
               case AuthorizationStateWaitPhoneNumber:
-                if (loadStrings) {
-                  if (_phoneNumber != null) {
-                    setPhone(_phoneNumber!);
-                    _phoneNumber = null;
-                    break;
-                  } else {
-                    return !seeIntroduction
-                        ? IntroductionScreen(
-                            client: getClient(),
-                            onNextClick: () =>
-                                setState(() => seeIntroduction = true),
-                          )
-                        : PhoneEnterScreen(
-                            client: getClient(),
-                            phoneNumberScreenCallback: (number, session) {
-                              phoneEnterScreenResultHandler = Completer();
-                              if (session.isEmpty) {
-                                setPhone(number);
-                              } else {
-                                _phoneNumber = number;
-                                initNewClient();
-                              }
-                              return phoneEnterScreenResultHandler!.future;
-                            });
-                  }
+                if (_phoneNumber != null) {
+                  setPhone(_phoneNumber!);
+                  _phoneNumber = null;
+                  break;
+                } else {
+                  return !seeIntroduction
+                      ? IntroductionScreen(
+                          client: getClient(),
+                          onNextClick: () =>
+                              setState(() => seeIntroduction = true),
+                        )
+                      : PhoneEnterScreen(
+                          client: getClient(),
+                          phoneNumberScreenCallback: (number, session) {
+                            phoneEnterScreenResultHandler = Completer();
+                            if (session.isEmpty) {
+                              setPhone(number);
+                            } else {
+                              _phoneNumber = number;
+                              initNewClient();
+                            }
+                            return phoneEnterScreenResultHandler!.future;
+                          });
                 }
-                break;
 
               case AuthorizationStateWaitTdlibParameters:
-                getClient().userLocale = getUserLocale();
                 getClient().setTdlibParameters();
                 break;
 
@@ -101,43 +87,30 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                 break;
 
               case AuthorizationStateWaitOtherDeviceConfirmation:
-                if (loadStrings) {
-                  var authState = builder.data
-                      as AuthorizationStateWaitOtherDeviceConfirmation;
-                  return QrLogin(
-                      client: getClient(),
-                      link: authState.link!,
-                      onBackButtonClick: () => initNewClient());
-                }
-                break;
+                var authState = builder.data
+                    as AuthorizationStateWaitOtherDeviceConfirmation;
+                return QrLogin(
+                    client: getClient(),
+                    link: authState.link!,
+                    onBackButtonClick: () => initNewClient());
 
               case AuthorizationStateWaitRegistration:
-                if (loadStrings) {
-                  return RegistrationScreen(
-                      termsOfService:
-                          (builder.data as AuthorizationStateWaitRegistration)
-                              .termsOfService!,
-                      client: getClient());
-                }
-                break;
+                return RegistrationScreen(
+                    termsOfService:
+                        (builder.data as AuthorizationStateWaitRegistration)
+                            .termsOfService!,
+                    client: getClient());
 
               case AuthorizationStateWaitCode:
-                if (loadStrings) {
-                  var codeInfo =
-                      (builder.data as AuthorizationStateWaitCode).codeInfo!;
-                  return EnterCodeScreen(
-                      client: getClient(), codeInfo: codeInfo);
-                }
-                break;
+                var codeInfo =
+                    (builder.data as AuthorizationStateWaitCode).codeInfo!;
+                return EnterCodeScreen(client: getClient(), codeInfo: codeInfo);
 
               case AuthorizationStateWaitPassword:
-                if (loadStrings) {
-                  return PasswordCheckScreen(
-                      client: getClient(),
-                      authWaitPassword:
-                          builder.data as AuthorizationStateWaitPassword);
-                }
-                break;
+                return PasswordCheckScreen(
+                    client: getClient(),
+                    authWaitPassword:
+                        builder.data as AuthorizationStateWaitPassword);
 
               case AuthorizationStateClosed:
                 seeIntroduction = false;

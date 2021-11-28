@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io' as io;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
@@ -399,18 +400,11 @@ class TelegramClient {
   String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
 
-  bool containString(String key, {String? languagePackId}) {
-    languagePackId ??= userLangPackId;
-    return _cachedLanguagePackString.containsKey(key);
-  }
-
   Widget buildTextByKey(String key, TextStyle style,
       {Map<String, String>? replacing, String? languagePackId}) {
     languagePackId ??= userLangPackId;
 
-    String text = (_cachedLanguagePackString[languagePackId + key]
-            as LanguagePackStringValueOrdinary)
-        .value!;
+    String text = getTranslation(key);
 
     if (replacing != null) {
       replacing.forEach((key, value) {
@@ -503,18 +497,6 @@ class TelegramClient {
     if (key != null) return getTranslation(key);
   }
 
-  final Map<String, TdObject> _cachedLanguagePackString = {};
-
-  Future<void> loadAllStrings({String? languagePackId}) async {
-    languagePackId ??= userLangPackId;
-    var strs = await send(
-        GetLanguagePackStrings(keys: [], languagePackId: languagePackId));
-    (strs as LanguagePackStrings).strings!.forEach((element) {
-      _cachedLanguagePackString[languagePackId! + element.key!] =
-          element.value!;
-    });
-  }
-
   String getTranslation(String key,
       {String? languagePackDatabasePath,
       String? languagePackId,
@@ -523,7 +505,11 @@ class TelegramClient {
     languagePackId ??= userLangPackId;
     localizationTarget ??= TelegramClient.localizationTarget;
 
-    var result = _cachedLanguagePackString[languagePackId + key];
+    var result = _sendClient!.execute(GetLanguagePackString(
+        key: key,
+        localizationTarget: localizationTarget,
+        languagePackId: languagePackId,
+        languagePackDatabasePath: languagePackDatabasePath));
 
     if (result is LanguagePackStringValueDeleted) {
       return getTranslation(key, languagePackId: "en");
@@ -533,16 +519,16 @@ class TelegramClient {
 
   Future<void> init() async {
     Completer completer = Completer<void>();
-    _receivePort = await initIsolate();
-    //not null, promise
-    _receivePort!.listen((message) {
+    var receive = await initIsolate();
+    receive.listen((message) {
+      if (message is int) {
+        Pointer<Void> pointer = Pointer.fromAddress(message);
+        _sendClient =
+            JsonClient.create("Assets/bin/tdlib", clientPointer: pointer);
+        completer.complete();
+      }
+
       if (message is String) {
-        if (message == "\$goodbye!\$") {
-          _isolate!.kill();
-          io.Directory(_dbPath!).deleteSync(recursive: true);
-          io.Directory(_filesPath!).deleteSync(recursive: true);
-          return;
-        }
         var tdobject = convertToObject(message);
         var extra = json.decode(message)["@extra"];
         if (extra == null) {
@@ -551,72 +537,48 @@ class TelegramClient {
           _requestsQueue[extra as int]!(tdobject);
           _requestsQueue.remove(extra);
         }
-      } else if (message is SendPort) {
-        _sendPort = message;
-        completer.complete();
       }
     });
     return completer.future;
   }
 
-  ReceivePort? _receivePort;
-  SendPort? _sendPort;
+  JsonClient? _sendClient;
   final Map<int, Function(TdObject)> _requestsQueue = {};
   Isolate? _isolate;
 
   Future<ReceivePort> initIsolate() async {
     ReceivePort isolateToMainStream = ReceivePort();
-    _isolate = await Isolate.spawn(_start, isolateToMainStream.sendPort);
+    _isolate = await Isolate.spawn(_tdlib_listen, isolateToMainStream.sendPort,
+        errorsAreFatal: false);
     return isolateToMainStream;
   }
 
-  /// Asynchronously performs any necessary cleanup before [destroy]ing this
+  /// Synchronously performs any necessary cleanup before [destroy]ing this
   /// client.
-  Future<void> destroy() async {
-    if (_isolate == null) {
-      throw Exception("Instance can't be destroy, because it doesnt open");
-    }
-    _sendPort!.send("\$killme\$");
+  void destroy() {
+    _isolate!.kill(priority: Isolate.immediate);
+    var destoryPort = ReceivePort();
+    destoryPort.doOnData((_) => _sendClient!.destroy());
+    _isolate!.addOnExitListener(destoryPort.sendPort);
   }
 
   int _extra = 1;
-
   Future<TdObject> send(dynamic function) async {
-    function.extra = _extra;
-    if (_sendPort == null) throw Exception("firstly init client using init()");
-    _sendPort!.send(json.encode(function));
     final Completer<TdObject> _completer = Completer<TdObject>();
+    function.extra = _extra;
+    _sendClient!.send(function);
     _requestsQueue[_extra] = _completer.complete;
     _extra++;
     return _completer.future;
   }
 }
 
-void _start(SendPort isolateToMainStream) {
-  //create a new port and send it to the main
+void _tdlib_listen(SendPort isolateToMainStream) {
   ReceivePort mainToIsolateStream = ReceivePort();
   isolateToMainStream.send(mainToIsolateStream.sendPort);
-
-  //listen Stream
   var client = JsonClient.create("Assets/bin/tdlib");
-  //About this timeouts: Dart, as a language, has a problem - it is single-threaded,
-  //and td_json_client_receive blocks the thread for the timeout period, so I run tdlib in isolate.
-  //But these are not all problems, while td_json_client_receive is running I cannot listen for messages from SendPort.
-  //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 100ms.
-  //
-  //Who will solve this problem - cool dude.
-  client.incomingString(0.100).listen((update) async {
+  isolateToMainStream.send(client.client.address);
+  client.incomingString().listen((update) {
     isolateToMainStream.send(update);
-  });
-
-  mainToIsolateStream.listen((data) {
-    if (data is String) {
-      if (data == "\$killme\$") {
-        client.destroy();
-        isolateToMainStream.send("\$goodbye!\$");
-      } else {
-        client.send(json.decode(data));
-      }
-    }
   });
 }
