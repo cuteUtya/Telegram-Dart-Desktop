@@ -92,8 +92,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
               Text(getCodeInfo().phoneNumber!, style: TextDisplay.title),
               const SizedBox(height: 18),
               widget.client.buildTextByKey(
-                  getCodeInfo().type!.getConstructor() ==
-                          AuthenticationCodeTypeTelegramMessage.CONSTRUCTOR
+                  getCodeInfo().type!.runtimeType ==
+                          AuthenticationCodeTypeTelegramMessage
                       ? "lng_code_telegram"
                       : "lng_code_desc",
                   TextDisplay.additional),
@@ -132,15 +132,14 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
   }
 
   int codeLength() {
-    switch (getCodeInfo().type!.getConstructor()) {
-      case AuthenticationCodeTypeCall.CONSTRUCTOR:
+    switch (getCodeInfo().type!.runtimeType) {
+      case AuthenticationCodeTypeCall:
         return (getCodeInfo().type as AuthenticationCodeTypeCall).length!;
-      case AuthenticationCodeTypeSms.CONSTRUCTOR:
+      case AuthenticationCodeTypeSms:
         return (getCodeInfo().type as AuthenticationCodeTypeSms).length!;
-      case AuthenticationCodeTypeTelegramMessage.CONSTRUCTOR:
+      case AuthenticationCodeTypeTelegramMessage:
         return (getCodeInfo().type as AuthenticationCodeTypeTelegramMessage)
             .length!;
-
       default:
         return 5;
     }

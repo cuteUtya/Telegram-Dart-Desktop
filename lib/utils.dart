@@ -23,12 +23,5 @@ String getDatabaseDirectory() => "/home/timur/tdDb";
 String getFilesDirectory() => "/home/timur/tdFiles";
 String getLanguagePackDatabasePath() => "/home/timur/tdTranslate.db";
 
-String getDeviceName() {
-  String deviceName =
-      "${Platform.localHostname} ${Platform.operatingSystem} ${Platform.numberOfProcessors} cores";
-  return deviceName;
-}
-
-String getSystemVersion() {
-  return "${Platform.operatingSystem} ${Platform.operatingSystemVersion}";
-}
+String getDeviceName() => Platform.localHostname;
+String getSystemVersion() => Platform.operatingSystem;

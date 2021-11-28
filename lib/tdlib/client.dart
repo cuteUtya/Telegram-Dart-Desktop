@@ -520,9 +520,13 @@ class TelegramClient {
     languagePackDatabasePath ??= getLanguagePackDatabasePath();
     languagePackId ??= userLangPackId;
     localizationTarget ??= TelegramClient.localizationTarget;
-    return (_cachedLanguagePackString[languagePackId + key]!
-            as LanguagePackStringValueOrdinary)
-        .value!;
+
+    var result = _cachedLanguagePackString[languagePackId + key];
+
+    if (result is LanguagePackStringValueDeleted) {
+      return getTranslation(key, languagePackId: "en");
+    }
+    return (result as LanguagePackStringValueOrdinary).value!;
   }
 
   Future<void> init() async {

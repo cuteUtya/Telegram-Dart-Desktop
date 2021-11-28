@@ -12,7 +12,8 @@ class PhoneEnterScreen extends StatefulWidget {
       : super(key: key);
 
   final TelegramClient client;
-  final PhoneNumberScreenCallback phoneNumberScreenCallback;
+  final Future<TdObject> Function(String phoneNumber, String? sessionName)
+      phoneNumberScreenCallback;
   @override
   State<StatefulWidget> createState() => _PhoneEnterScreenState();
 }
@@ -23,6 +24,8 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
   DataState _phoneState = DataState.empty;
   String _country = "";
   String _sessionName = "";
+
+  String? errorStr;
 
   bool sendCode = false;
 
@@ -106,7 +109,6 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                       //session name field
                       DataInput(
                         onValueChange: (v) => _sessionName = v,
-                        validationCallback: (_) => true,
                         fieldName: "Session name",
                         labelFontSize: 13,
                         externalControll: true,
@@ -191,6 +193,3 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
     return false;
   }
 }
-
-typedef PhoneNumberScreenCallback = void Function(
-    String phoneNumber, String? sessionName);

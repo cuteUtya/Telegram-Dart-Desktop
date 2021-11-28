@@ -36,19 +36,19 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
             const Spacer(),
             widget.client.buildTextByKey("lng_signin_title", TextDisplay.title),
             const SizedBox(height: 8),
-            Text(
-                widget.client
-                    .getTranslation(
-                        recover ? "lng_signin_recover_desc" : "lng_signin_desc")
-                    .replaceAll("{email}",
-                        widget.authWaitPassword.recoveryEmailAddressPattern!),
-                style: TextDisplay.additional),
+            widget.client.buildTextByKey(
+                recover ? "lng_signin_recover_desc" : "lng_signin_desc",
+                TextDisplay.additional,
+                replacing: {
+                  "{email}":
+                      widget.authWaitPassword.recoveryEmailAddressPattern!
+                }),
             const SizedBox(height: 36),
             DataInput(
                 onValueChange: (v) => recover ? _code = v : _pass = v,
                 obscureText: !recover,
                 asyncValidationCallback:
-                    recover ? _checkPassword : _checkEmailCode,
+                    recover ? _checkEmailCode : _checkPassword,
                 fieldName: widget.client.getTranslation(
                     recover ? "lng_signin_code" : "lng_signin_password")),
             const SizedBox(height: 8),

@@ -5,10 +5,10 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
-void main() async {
+void main() {
   var client = TelegramClient();
-  await client.init();
-  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 3));
+  client.init();
+  client.send(SetLogVerbosityLevel(newVerbosityLevel: 3));
 
   runApp(MaterialApp(home: Material(child: App(client: client))));
 }
