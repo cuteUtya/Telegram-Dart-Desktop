@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/Screens/app_main.dart';
 import 'package:myapp/Screens/auth_wait_code.dart';
 import 'package:myapp/Screens/introduction.dart';
 import 'package:myapp/Screens/load_screen.dart';
@@ -116,6 +117,9 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                 seeIntroduction = false;
                 initNewClient();
                 break;
+
+              case AuthorizationStateReady:
+                return AppMain();
             }
           }
           return const LoadScreen();

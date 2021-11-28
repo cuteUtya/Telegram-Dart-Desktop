@@ -24,3 +24,4 @@ doc/api/
 *.log
 lib/constants.dart
 lib/secrets.dart
+.flutter-plugins-dependencies
