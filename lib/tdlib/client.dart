@@ -481,6 +481,26 @@ class TelegramClient {
     await send(SetTdlibParameters(parameters: tdlibParameters));
   }
 
+  static final Map<String, String> _400errorMessages = {
+    "PHONE_NUMBER_INVALID": "lng_bad_phone",
+    "PHONE_CODE_HASH_EMPTY": "lng_bad_phone",
+    "PHONE_CODE_EMPTY": "lng_bad_code",
+    "PHONE_CODE_EXPIRED": "lng_bad_code",
+    "FIRSTNAME_INVALID": "lng_bad_name",
+    "LASTNAME_INVALID": "lng_bad_name",
+  };
+
+  String? getLocalizedErrorMessage(TdError error) {
+    String? key;
+    if (error.code == 400 && error.code != 406) {
+      key = _400errorMessages[error.message];
+    } else if (error.code == 420) {
+      key = "lng_flood_error";
+    }
+
+    if (key != null) return getTranslation(key);
+  }
+
   final Map<String, TdObject> _cachedLanguagePackString = {};
 
   Future<void> loadAllStrings({String? languagePackId}) async {
@@ -579,9 +599,8 @@ void _start(SendPort isolateToMainStream) {
   //Therefore, I wait for updates from tdlib 100ms and wait for messages from SendPort, also 100ms.
   //
   //Who will solve this problem - cool dude.
-  client.incomingString(0.016).listen((update) async {
+  client.incomingString(0.100).listen((update) async {
     isolateToMainStream.send(update);
-    await Future.delayed(const Duration(milliseconds: 16));
   });
 
   mainToIsolateStream.listen((data) {
