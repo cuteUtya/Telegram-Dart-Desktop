@@ -141,171 +141,39 @@ class Message extends TdObject {
 
   /// Parse from a json
   Message.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    MessageSender? pre_sender;
-    try{
-      pre_sender=MessageSender.fromJson(json['sender'] ?? <String, dynamic>{});
-   }catch(_){}
-    sender = pre_sender;
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    MessageSendingState? pre_sendingState;
-    try{
-      pre_sendingState=MessageSendingState.fromJson(json['sending_state'] ?? <String, dynamic>{});
-   }catch(_){}
-    sendingState = pre_sendingState;
-    MessageSchedulingState? pre_schedulingState;
-    try{
-      pre_schedulingState=MessageSchedulingState.fromJson(json['scheduling_state'] ?? <String, dynamic>{});
-   }catch(_){}
-    schedulingState = pre_schedulingState;
-    bool? pre_isOutgoing;
-    try{
-      pre_isOutgoing=json['is_outgoing'];
-   }catch(_){}
-    isOutgoing = pre_isOutgoing;
-    bool? pre_isPinned;
-    try{
-      pre_isPinned=json['is_pinned'];
-   }catch(_){}
-    isPinned = pre_isPinned;
-    bool? pre_canBeEdited;
-    try{
-      pre_canBeEdited=json['can_be_edited'];
-   }catch(_){}
-    canBeEdited = pre_canBeEdited;
-    bool? pre_canBeForwarded;
-    try{
-      pre_canBeForwarded=json['can_be_forwarded'];
-   }catch(_){}
-    canBeForwarded = pre_canBeForwarded;
-    bool? pre_canBeDeletedOnlyForSelf;
-    try{
-      pre_canBeDeletedOnlyForSelf=json['can_be_deleted_only_for_self'];
-   }catch(_){}
-    canBeDeletedOnlyForSelf = pre_canBeDeletedOnlyForSelf;
-    bool? pre_canBeDeletedForAllUsers;
-    try{
-      pre_canBeDeletedForAllUsers=json['can_be_deleted_for_all_users'];
-   }catch(_){}
-    canBeDeletedForAllUsers = pre_canBeDeletedForAllUsers;
-    bool? pre_canGetStatistics;
-    try{
-      pre_canGetStatistics=json['can_get_statistics'];
-   }catch(_){}
-    canGetStatistics = pre_canGetStatistics;
-    bool? pre_canGetMessageThread;
-    try{
-      pre_canGetMessageThread=json['can_get_message_thread'];
-   }catch(_){}
-    canGetMessageThread = pre_canGetMessageThread;
-    bool? pre_canGetViewers;
-    try{
-      pre_canGetViewers=json['can_get_viewers'];
-   }catch(_){}
-    canGetViewers = pre_canGetViewers;
-    bool? pre_canGetMediaTimestampLinks;
-    try{
-      pre_canGetMediaTimestampLinks=json['can_get_media_timestamp_links'];
-   }catch(_){}
-    canGetMediaTimestampLinks = pre_canGetMediaTimestampLinks;
-    bool? pre_hasTimestampedMedia;
-    try{
-      pre_hasTimestampedMedia=json['has_timestamped_media'];
-   }catch(_){}
-    hasTimestampedMedia = pre_hasTimestampedMedia;
-    bool? pre_isChannelPost;
-    try{
-      pre_isChannelPost=json['is_channel_post'];
-   }catch(_){}
-    isChannelPost = pre_isChannelPost;
-    bool? pre_containsUnreadMention;
-    try{
-      pre_containsUnreadMention=json['contains_unread_mention'];
-   }catch(_){}
-    containsUnreadMention = pre_containsUnreadMention;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
-    int? pre_editDate;
-    try{
-      pre_editDate=json['edit_date'];
-   }catch(_){}
-    editDate = pre_editDate;
-    MessageForwardInfo? pre_forwardInfo;
-    try{
-      pre_forwardInfo=MessageForwardInfo.fromJson(json['forward_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    forwardInfo = pre_forwardInfo;
-    MessageInteractionInfo? pre_interactionInfo;
-    try{
-      pre_interactionInfo=MessageInteractionInfo.fromJson(json['interaction_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    interactionInfo = pre_interactionInfo;
-    int? pre_replyInChatId;
-    try{
-      pre_replyInChatId=json['reply_in_chat_id'];
-   }catch(_){}
-    replyInChatId = pre_replyInChatId;
-    int? pre_replyToMessageId;
-    try{
-      pre_replyToMessageId=json['reply_to_message_id'];
-   }catch(_){}
-    replyToMessageId = pre_replyToMessageId;
-    int? pre_messageThreadId;
-    try{
-      pre_messageThreadId=json['message_thread_id'];
-   }catch(_){}
-    messageThreadId = pre_messageThreadId;
-    int? pre_ttl;
-    try{
-      pre_ttl=json['ttl'];
-   }catch(_){}
-    ttl = pre_ttl;
-    double? pre_ttlExpiresIn;
-    try{
-      pre_ttlExpiresIn=json['ttl_expires_in'];
-   }catch(_){}
-    ttlExpiresIn = pre_ttlExpiresIn;
-    int? pre_viaBotUserId;
-    try{
-      pre_viaBotUserId=json['via_bot_user_id'];
-   }catch(_){}
-    viaBotUserId = pre_viaBotUserId;
-    String? pre_authorSignature;
-    try{
-      pre_authorSignature=json['author_signature'];
-   }catch(_){}
-    authorSignature = pre_authorSignature;
-    int? pre_mediaAlbumId;
-    try{
-      pre_mediaAlbumId=int.tryParse(json['media_album_id'] ?? "");
-   }catch(_){}
-    mediaAlbumId = pre_mediaAlbumId;
-    String? pre_restrictionReason;
-    try{
-      pre_restrictionReason=json['restriction_reason'];
-   }catch(_){}
-    restrictionReason = pre_restrictionReason;
-    MessageContent? pre_content;
-    try{
-      pre_content=MessageContent.fromJson(json['content'] ?? <String, dynamic>{});
-   }catch(_){}
-    content = pre_content;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
+    id = json['id'] == null ? null : json['id'];
+    sender = json['sender'] == null ? null : MessageSender.fromJson(json['sender'] ?? <String, dynamic>{});
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    sendingState = json['sending_state'] == null ? null : MessageSendingState.fromJson(json['sending_state'] ?? <String, dynamic>{});
+    schedulingState = json['scheduling_state'] == null ? null : MessageSchedulingState.fromJson(json['scheduling_state'] ?? <String, dynamic>{});
+    isOutgoing = json['is_outgoing'] == null ? null : json['is_outgoing'];
+    isPinned = json['is_pinned'] == null ? null : json['is_pinned'];
+    canBeEdited = json['can_be_edited'] == null ? null : json['can_be_edited'];
+    canBeForwarded = json['can_be_forwarded'] == null ? null : json['can_be_forwarded'];
+    canBeDeletedOnlyForSelf = json['can_be_deleted_only_for_self'] == null ? null : json['can_be_deleted_only_for_self'];
+    canBeDeletedForAllUsers = json['can_be_deleted_for_all_users'] == null ? null : json['can_be_deleted_for_all_users'];
+    canGetStatistics = json['can_get_statistics'] == null ? null : json['can_get_statistics'];
+    canGetMessageThread = json['can_get_message_thread'] == null ? null : json['can_get_message_thread'];
+    canGetViewers = json['can_get_viewers'] == null ? null : json['can_get_viewers'];
+    canGetMediaTimestampLinks = json['can_get_media_timestamp_links'] == null ? null : json['can_get_media_timestamp_links'];
+    hasTimestampedMedia = json['has_timestamped_media'] == null ? null : json['has_timestamped_media'];
+    isChannelPost = json['is_channel_post'] == null ? null : json['is_channel_post'];
+    containsUnreadMention = json['contains_unread_mention'] == null ? null : json['contains_unread_mention'];
+    date = json['date'] == null ? null : json['date'];
+    editDate = json['edit_date'] == null ? null : json['edit_date'];
+    forwardInfo = json['forward_info'] == null ? null : MessageForwardInfo.fromJson(json['forward_info'] ?? <String, dynamic>{});
+    interactionInfo = json['interaction_info'] == null ? null : MessageInteractionInfo.fromJson(json['interaction_info'] ?? <String, dynamic>{});
+    replyInChatId = json['reply_in_chat_id'] == null ? null : json['reply_in_chat_id'];
+    replyToMessageId = json['reply_to_message_id'] == null ? null : json['reply_to_message_id'];
+    messageThreadId = json['message_thread_id'] == null ? null : json['message_thread_id'];
+    ttl = json['ttl'] == null ? null : json['ttl'];
+    ttlExpiresIn = json['ttl_expires_in'] == null ? null : json['ttl_expires_in'];
+    viaBotUserId = json['via_bot_user_id'] == null ? null : json['via_bot_user_id'];
+    authorSignature = json['author_signature'] == null ? null : json['author_signature'];
+    mediaAlbumId = json['media_album_id'] == null ? null : int.tryParse(json['media_album_id'] ?? "");
+    restrictionReason = json['restriction_reason'] == null ? null : json['restriction_reason'];
+    content = json['content'] == null ? null : MessageContent.fromJson(json['content'] ?? <String, dynamic>{});
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 

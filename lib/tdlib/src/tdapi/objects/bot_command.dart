@@ -14,16 +14,8 @@ class BotCommand extends TdObject {
 
   /// Parse from a json
   BotCommand.fromJson(Map<String, dynamic> json)  {
-    String? pre_command;
-    try{
-      pre_command=json['command'];
-   }catch(_){}
-    command = pre_command;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
+    command = json['command'] == null ? null : json['command'];
+    description = json['description'] == null ? null : json['description'];
   }
 
   @override

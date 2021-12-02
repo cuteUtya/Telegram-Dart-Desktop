@@ -106,86 +106,22 @@ class ChatStatisticsSupergroup extends ChatStatistics {
 
   /// Parse from a json
   ChatStatisticsSupergroup.fromJson(Map<String, dynamic> json)  {
-    DateRange? pre_period;
-    try{
-      pre_period=DateRange.fromJson(json['period'] ?? <String, dynamic>{});
-   }catch(_){}
-    period = pre_period;
-    StatisticalValue? pre_memberCount;
-    try{
-      pre_memberCount=StatisticalValue.fromJson(json['member_count'] ?? <String, dynamic>{});
-   }catch(_){}
-    memberCount = pre_memberCount;
-    StatisticalValue? pre_messageCount;
-    try{
-      pre_messageCount=StatisticalValue.fromJson(json['message_count'] ?? <String, dynamic>{});
-   }catch(_){}
-    messageCount = pre_messageCount;
-    StatisticalValue? pre_viewerCount;
-    try{
-      pre_viewerCount=StatisticalValue.fromJson(json['viewer_count'] ?? <String, dynamic>{});
-   }catch(_){}
-    viewerCount = pre_viewerCount;
-    StatisticalValue? pre_senderCount;
-    try{
-      pre_senderCount=StatisticalValue.fromJson(json['sender_count'] ?? <String, dynamic>{});
-   }catch(_){}
-    senderCount = pre_senderCount;
-    StatisticalGraph? pre_memberCountGraph;
-    try{
-      pre_memberCountGraph=StatisticalGraph.fromJson(json['member_count_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    memberCountGraph = pre_memberCountGraph;
-    StatisticalGraph? pre_joinGraph;
-    try{
-      pre_joinGraph=StatisticalGraph.fromJson(json['join_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    joinGraph = pre_joinGraph;
-    StatisticalGraph? pre_joinBySourceGraph;
-    try{
-      pre_joinBySourceGraph=StatisticalGraph.fromJson(json['join_by_source_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    joinBySourceGraph = pre_joinBySourceGraph;
-    StatisticalGraph? pre_languageGraph;
-    try{
-      pre_languageGraph=StatisticalGraph.fromJson(json['language_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    languageGraph = pre_languageGraph;
-    StatisticalGraph? pre_messageContentGraph;
-    try{
-      pre_messageContentGraph=StatisticalGraph.fromJson(json['message_content_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    messageContentGraph = pre_messageContentGraph;
-    StatisticalGraph? pre_actionGraph;
-    try{
-      pre_actionGraph=StatisticalGraph.fromJson(json['action_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    actionGraph = pre_actionGraph;
-    StatisticalGraph? pre_dayGraph;
-    try{
-      pre_dayGraph=StatisticalGraph.fromJson(json['day_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    dayGraph = pre_dayGraph;
-    StatisticalGraph? pre_weekGraph;
-    try{
-      pre_weekGraph=StatisticalGraph.fromJson(json['week_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    weekGraph = pre_weekGraph;
-    List<ChatStatisticsMessageSenderInfo>? pre_topSenders;
-    try{
-      pre_topSenders=List<ChatStatisticsMessageSenderInfo>.from((json['top_senders'] ?? [])!.map((item) => ChatStatisticsMessageSenderInfo.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    topSenders = pre_topSenders;
-    List<ChatStatisticsAdministratorActionsInfo>? pre_topAdministrators;
-    try{
-      pre_topAdministrators=List<ChatStatisticsAdministratorActionsInfo>.from((json['top_administrators'] ?? [])!.map((item) => ChatStatisticsAdministratorActionsInfo.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    topAdministrators = pre_topAdministrators;
-    List<ChatStatisticsInviterInfo>? pre_topInviters;
-    try{
-      pre_topInviters=List<ChatStatisticsInviterInfo>.from((json['top_inviters'] ?? [])!.map((item) => ChatStatisticsInviterInfo.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    topInviters = pre_topInviters;
+    period = json['period'] == null ? null : DateRange.fromJson(json['period'] ?? <String, dynamic>{});
+    memberCount = json['member_count'] == null ? null : StatisticalValue.fromJson(json['member_count'] ?? <String, dynamic>{});
+    messageCount = json['message_count'] == null ? null : StatisticalValue.fromJson(json['message_count'] ?? <String, dynamic>{});
+    viewerCount = json['viewer_count'] == null ? null : StatisticalValue.fromJson(json['viewer_count'] ?? <String, dynamic>{});
+    senderCount = json['sender_count'] == null ? null : StatisticalValue.fromJson(json['sender_count'] ?? <String, dynamic>{});
+    memberCountGraph = json['member_count_graph'] == null ? null : StatisticalGraph.fromJson(json['member_count_graph'] ?? <String, dynamic>{});
+    joinGraph = json['join_graph'] == null ? null : StatisticalGraph.fromJson(json['join_graph'] ?? <String, dynamic>{});
+    joinBySourceGraph = json['join_by_source_graph'] == null ? null : StatisticalGraph.fromJson(json['join_by_source_graph'] ?? <String, dynamic>{});
+    languageGraph = json['language_graph'] == null ? null : StatisticalGraph.fromJson(json['language_graph'] ?? <String, dynamic>{});
+    messageContentGraph = json['message_content_graph'] == null ? null : StatisticalGraph.fromJson(json['message_content_graph'] ?? <String, dynamic>{});
+    actionGraph = json['action_graph'] == null ? null : StatisticalGraph.fromJson(json['action_graph'] ?? <String, dynamic>{});
+    dayGraph = json['day_graph'] == null ? null : StatisticalGraph.fromJson(json['day_graph'] ?? <String, dynamic>{});
+    weekGraph = json['week_graph'] == null ? null : StatisticalGraph.fromJson(json['week_graph'] ?? <String, dynamic>{});
+    topSenders = json['top_senders'] == null ? null : List<ChatStatisticsMessageSenderInfo>.from((json['top_senders'] ?? [])!.map((item) => ChatStatisticsMessageSenderInfo.fromJson(item ?? <String, dynamic>{})).toList());
+    topAdministrators = json['top_administrators'] == null ? null : List<ChatStatisticsAdministratorActionsInfo>.from((json['top_administrators'] ?? [])!.map((item) => ChatStatisticsAdministratorActionsInfo.fromJson(item ?? <String, dynamic>{})).toList());
+    topInviters = json['top_inviters'] == null ? null : List<ChatStatisticsInviterInfo>.from((json['top_inviters'] ?? [])!.map((item) => ChatStatisticsInviterInfo.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -287,81 +223,21 @@ class ChatStatisticsChannel extends ChatStatistics {
 
   /// Parse from a json
   ChatStatisticsChannel.fromJson(Map<String, dynamic> json)  {
-    DateRange? pre_period;
-    try{
-      pre_period=DateRange.fromJson(json['period'] ?? <String, dynamic>{});
-   }catch(_){}
-    period = pre_period;
-    StatisticalValue? pre_memberCount;
-    try{
-      pre_memberCount=StatisticalValue.fromJson(json['member_count'] ?? <String, dynamic>{});
-   }catch(_){}
-    memberCount = pre_memberCount;
-    StatisticalValue? pre_meanViewCount;
-    try{
-      pre_meanViewCount=StatisticalValue.fromJson(json['mean_view_count'] ?? <String, dynamic>{});
-   }catch(_){}
-    meanViewCount = pre_meanViewCount;
-    StatisticalValue? pre_meanShareCount;
-    try{
-      pre_meanShareCount=StatisticalValue.fromJson(json['mean_share_count'] ?? <String, dynamic>{});
-   }catch(_){}
-    meanShareCount = pre_meanShareCount;
-    double? pre_enabledNotificationsPercentage;
-    try{
-      pre_enabledNotificationsPercentage=json['enabled_notifications_percentage'];
-   }catch(_){}
-    enabledNotificationsPercentage = pre_enabledNotificationsPercentage;
-    StatisticalGraph? pre_memberCountGraph;
-    try{
-      pre_memberCountGraph=StatisticalGraph.fromJson(json['member_count_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    memberCountGraph = pre_memberCountGraph;
-    StatisticalGraph? pre_joinGraph;
-    try{
-      pre_joinGraph=StatisticalGraph.fromJson(json['join_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    joinGraph = pre_joinGraph;
-    StatisticalGraph? pre_muteGraph;
-    try{
-      pre_muteGraph=StatisticalGraph.fromJson(json['mute_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    muteGraph = pre_muteGraph;
-    StatisticalGraph? pre_viewCountByHourGraph;
-    try{
-      pre_viewCountByHourGraph=StatisticalGraph.fromJson(json['view_count_by_hour_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    viewCountByHourGraph = pre_viewCountByHourGraph;
-    StatisticalGraph? pre_viewCountBySourceGraph;
-    try{
-      pre_viewCountBySourceGraph=StatisticalGraph.fromJson(json['view_count_by_source_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    viewCountBySourceGraph = pre_viewCountBySourceGraph;
-    StatisticalGraph? pre_joinBySourceGraph;
-    try{
-      pre_joinBySourceGraph=StatisticalGraph.fromJson(json['join_by_source_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    joinBySourceGraph = pre_joinBySourceGraph;
-    StatisticalGraph? pre_languageGraph;
-    try{
-      pre_languageGraph=StatisticalGraph.fromJson(json['language_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    languageGraph = pre_languageGraph;
-    StatisticalGraph? pre_messageInteractionGraph;
-    try{
-      pre_messageInteractionGraph=StatisticalGraph.fromJson(json['message_interaction_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    messageInteractionGraph = pre_messageInteractionGraph;
-    StatisticalGraph? pre_instantViewInteractionGraph;
-    try{
-      pre_instantViewInteractionGraph=StatisticalGraph.fromJson(json['instant_view_interaction_graph'] ?? <String, dynamic>{});
-   }catch(_){}
-    instantViewInteractionGraph = pre_instantViewInteractionGraph;
-    List<ChatStatisticsMessageInteractionInfo>? pre_recentMessageInteractions;
-    try{
-      pre_recentMessageInteractions=List<ChatStatisticsMessageInteractionInfo>.from((json['recent_message_interactions'] ?? [])!.map((item) => ChatStatisticsMessageInteractionInfo.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    recentMessageInteractions = pre_recentMessageInteractions;
+    period = json['period'] == null ? null : DateRange.fromJson(json['period'] ?? <String, dynamic>{});
+    memberCount = json['member_count'] == null ? null : StatisticalValue.fromJson(json['member_count'] ?? <String, dynamic>{});
+    meanViewCount = json['mean_view_count'] == null ? null : StatisticalValue.fromJson(json['mean_view_count'] ?? <String, dynamic>{});
+    meanShareCount = json['mean_share_count'] == null ? null : StatisticalValue.fromJson(json['mean_share_count'] ?? <String, dynamic>{});
+    enabledNotificationsPercentage = json['enabled_notifications_percentage'] == null ? null : json['enabled_notifications_percentage'];
+    memberCountGraph = json['member_count_graph'] == null ? null : StatisticalGraph.fromJson(json['member_count_graph'] ?? <String, dynamic>{});
+    joinGraph = json['join_graph'] == null ? null : StatisticalGraph.fromJson(json['join_graph'] ?? <String, dynamic>{});
+    muteGraph = json['mute_graph'] == null ? null : StatisticalGraph.fromJson(json['mute_graph'] ?? <String, dynamic>{});
+    viewCountByHourGraph = json['view_count_by_hour_graph'] == null ? null : StatisticalGraph.fromJson(json['view_count_by_hour_graph'] ?? <String, dynamic>{});
+    viewCountBySourceGraph = json['view_count_by_source_graph'] == null ? null : StatisticalGraph.fromJson(json['view_count_by_source_graph'] ?? <String, dynamic>{});
+    joinBySourceGraph = json['join_by_source_graph'] == null ? null : StatisticalGraph.fromJson(json['join_by_source_graph'] ?? <String, dynamic>{});
+    languageGraph = json['language_graph'] == null ? null : StatisticalGraph.fromJson(json['language_graph'] ?? <String, dynamic>{});
+    messageInteractionGraph = json['message_interaction_graph'] == null ? null : StatisticalGraph.fromJson(json['message_interaction_graph'] ?? <String, dynamic>{});
+    instantViewInteractionGraph = json['instant_view_interaction_graph'] == null ? null : StatisticalGraph.fromJson(json['instant_view_interaction_graph'] ?? <String, dynamic>{});
+    recentMessageInteractions = json['recent_message_interactions'] == null ? null : List<ChatStatisticsMessageInteractionInfo>.from((json['recent_message_interactions'] ?? [])!.map((item) => ChatStatisticsMessageInteractionInfo.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

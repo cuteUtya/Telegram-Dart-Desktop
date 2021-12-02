@@ -17,16 +17,8 @@ class ChatsNearby extends TdObject {
 
   /// Parse from a json
   ChatsNearby.fromJson(Map<String, dynamic> json)  {
-    List<ChatNearby>? pre_usersNearby;
-    try{
-      pre_usersNearby=List<ChatNearby>.from((json['users_nearby'] ?? [])!.map((item) => ChatNearby.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    usersNearby = pre_usersNearby;
-    List<ChatNearby>? pre_supergroupsNearby;
-    try{
-      pre_supergroupsNearby=List<ChatNearby>.from((json['supergroups_nearby'] ?? [])!.map((item) => ChatNearby.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    supergroupsNearby = pre_supergroupsNearby;
+    usersNearby = json['users_nearby'] == null ? null : List<ChatNearby>.from((json['users_nearby'] ?? [])!.map((item) => ChatNearby.fromJson(item ?? <String, dynamic>{})).toList());
+    supergroupsNearby = json['supergroups_nearby'] == null ? null : List<ChatNearby>.from((json['supergroups_nearby'] ?? [])!.map((item) => ChatNearby.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

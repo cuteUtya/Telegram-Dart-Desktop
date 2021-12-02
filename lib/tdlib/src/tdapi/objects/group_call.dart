@@ -85,101 +85,25 @@ class GroupCall extends TdObject {
 
   /// Parse from a json
   GroupCall.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    int? pre_scheduledStartDate;
-    try{
-      pre_scheduledStartDate=json['scheduled_start_date'];
-   }catch(_){}
-    scheduledStartDate = pre_scheduledStartDate;
-    bool? pre_enabledStartNotification;
-    try{
-      pre_enabledStartNotification=json['enabled_start_notification'];
-   }catch(_){}
-    enabledStartNotification = pre_enabledStartNotification;
-    bool? pre_isActive;
-    try{
-      pre_isActive=json['is_active'];
-   }catch(_){}
-    isActive = pre_isActive;
-    bool? pre_isJoined;
-    try{
-      pre_isJoined=json['is_joined'];
-   }catch(_){}
-    isJoined = pre_isJoined;
-    bool? pre_needRejoin;
-    try{
-      pre_needRejoin=json['need_rejoin'];
-   }catch(_){}
-    needRejoin = pre_needRejoin;
-    bool? pre_canBeManaged;
-    try{
-      pre_canBeManaged=json['can_be_managed'];
-   }catch(_){}
-    canBeManaged = pre_canBeManaged;
-    int? pre_participantCount;
-    try{
-      pre_participantCount=json['participant_count'];
-   }catch(_){}
-    participantCount = pre_participantCount;
-    bool? pre_loadedAllParticipants;
-    try{
-      pre_loadedAllParticipants=json['loaded_all_participants'];
-   }catch(_){}
-    loadedAllParticipants = pre_loadedAllParticipants;
-    List<GroupCallRecentSpeaker>? pre_recentSpeakers;
-    try{
-      pre_recentSpeakers=List<GroupCallRecentSpeaker>.from((json['recent_speakers'] ?? [])!.map((item) => GroupCallRecentSpeaker.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    recentSpeakers = pre_recentSpeakers;
-    bool? pre_isMyVideoEnabled;
-    try{
-      pre_isMyVideoEnabled=json['is_my_video_enabled'];
-   }catch(_){}
-    isMyVideoEnabled = pre_isMyVideoEnabled;
-    bool? pre_isMyVideoPaused;
-    try{
-      pre_isMyVideoPaused=json['is_my_video_paused'];
-   }catch(_){}
-    isMyVideoPaused = pre_isMyVideoPaused;
-    bool? pre_canEnableVideo;
-    try{
-      pre_canEnableVideo=json['can_enable_video'];
-   }catch(_){}
-    canEnableVideo = pre_canEnableVideo;
-    bool? pre_muteNewParticipants;
-    try{
-      pre_muteNewParticipants=json['mute_new_participants'];
-   }catch(_){}
-    muteNewParticipants = pre_muteNewParticipants;
-    bool? pre_canToggleMuteNewParticipants;
-    try{
-      pre_canToggleMuteNewParticipants=json['can_toggle_mute_new_participants'];
-   }catch(_){}
-    canToggleMuteNewParticipants = pre_canToggleMuteNewParticipants;
-    int? pre_recordDuration;
-    try{
-      pre_recordDuration=json['record_duration'];
-   }catch(_){}
-    recordDuration = pre_recordDuration;
-    bool? pre_isVideoRecorded;
-    try{
-      pre_isVideoRecorded=json['is_video_recorded'];
-   }catch(_){}
-    isVideoRecorded = pre_isVideoRecorded;
-    int? pre_duration;
-    try{
-      pre_duration=json['duration'];
-   }catch(_){}
-    duration = pre_duration;
+    id = json['id'] == null ? null : json['id'];
+    title = json['title'] == null ? null : json['title'];
+    scheduledStartDate = json['scheduled_start_date'] == null ? null : json['scheduled_start_date'];
+    enabledStartNotification = json['enabled_start_notification'] == null ? null : json['enabled_start_notification'];
+    isActive = json['is_active'] == null ? null : json['is_active'];
+    isJoined = json['is_joined'] == null ? null : json['is_joined'];
+    needRejoin = json['need_rejoin'] == null ? null : json['need_rejoin'];
+    canBeManaged = json['can_be_managed'] == null ? null : json['can_be_managed'];
+    participantCount = json['participant_count'] == null ? null : json['participant_count'];
+    loadedAllParticipants = json['loaded_all_participants'] == null ? null : json['loaded_all_participants'];
+    recentSpeakers = json['recent_speakers'] == null ? null : List<GroupCallRecentSpeaker>.from((json['recent_speakers'] ?? [])!.map((item) => GroupCallRecentSpeaker.fromJson(item ?? <String, dynamic>{})).toList());
+    isMyVideoEnabled = json['is_my_video_enabled'] == null ? null : json['is_my_video_enabled'];
+    isMyVideoPaused = json['is_my_video_paused'] == null ? null : json['is_my_video_paused'];
+    canEnableVideo = json['can_enable_video'] == null ? null : json['can_enable_video'];
+    muteNewParticipants = json['mute_new_participants'] == null ? null : json['mute_new_participants'];
+    canToggleMuteNewParticipants = json['can_toggle_mute_new_participants'] == null ? null : json['can_toggle_mute_new_participants'];
+    recordDuration = json['record_duration'] == null ? null : json['record_duration'];
+    isVideoRecorded = json['is_video_recorded'] == null ? null : json['is_video_recorded'];
+    duration = json['duration'] == null ? null : json['duration'];
     extra = json['@extra'];
   }
 

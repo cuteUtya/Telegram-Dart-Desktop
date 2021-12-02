@@ -53,61 +53,17 @@ class PaymentReceipt extends TdObject {
 
   /// Parse from a json
   PaymentReceipt.fromJson(Map<String, dynamic> json)  {
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
-    Photo? pre_photo;
-    try{
-      pre_photo=Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-   }catch(_){}
-    photo = pre_photo;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
-    int? pre_sellerBotUserId;
-    try{
-      pre_sellerBotUserId=json['seller_bot_user_id'];
-   }catch(_){}
-    sellerBotUserId = pre_sellerBotUserId;
-    int? pre_paymentsProviderUserId;
-    try{
-      pre_paymentsProviderUserId=json['payments_provider_user_id'];
-   }catch(_){}
-    paymentsProviderUserId = pre_paymentsProviderUserId;
-    Invoice? pre_invoice;
-    try{
-      pre_invoice=Invoice.fromJson(json['invoice'] ?? <String, dynamic>{});
-   }catch(_){}
-    invoice = pre_invoice;
-    OrderInfo? pre_orderInfo;
-    try{
-      pre_orderInfo=OrderInfo.fromJson(json['order_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    orderInfo = pre_orderInfo;
-    ShippingOption? pre_shippingOption;
-    try{
-      pre_shippingOption=ShippingOption.fromJson(json['shipping_option'] ?? <String, dynamic>{});
-   }catch(_){}
-    shippingOption = pre_shippingOption;
-    String? pre_credentialsTitle;
-    try{
-      pre_credentialsTitle=json['credentials_title'];
-   }catch(_){}
-    credentialsTitle = pre_credentialsTitle;
-    int? pre_tipAmount;
-    try{
-      pre_tipAmount=json['tip_amount'];
-   }catch(_){}
-    tipAmount = pre_tipAmount;
+    title = json['title'] == null ? null : json['title'];
+    description = json['description'] == null ? null : json['description'];
+    photo = json['photo'] == null ? null : Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+    date = json['date'] == null ? null : json['date'];
+    sellerBotUserId = json['seller_bot_user_id'] == null ? null : json['seller_bot_user_id'];
+    paymentsProviderUserId = json['payments_provider_user_id'] == null ? null : json['payments_provider_user_id'];
+    invoice = json['invoice'] == null ? null : Invoice.fromJson(json['invoice'] ?? <String, dynamic>{});
+    orderInfo = json['order_info'] == null ? null : OrderInfo.fromJson(json['order_info'] ?? <String, dynamic>{});
+    shippingOption = json['shipping_option'] == null ? null : ShippingOption.fromJson(json['shipping_option'] ?? <String, dynamic>{});
+    credentialsTitle = json['credentials_title'] == null ? null : json['credentials_title'];
+    tipAmount = json['tip_amount'] == null ? null : json['tip_amount'];
     extra = json['@extra'];
   }
 

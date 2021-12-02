@@ -18,21 +18,9 @@ class Date extends TdObject {
 
   /// Parse from a json
   Date.fromJson(Map<String, dynamic> json)  {
-    int? pre_day;
-    try{
-      pre_day=json['day'];
-   }catch(_){}
-    day = pre_day;
-    int? pre_month;
-    try{
-      pre_month=json['month'];
-   }catch(_){}
-    month = pre_month;
-    int? pre_year;
-    try{
-      pre_year=json['year'];
-   }catch(_){}
-    year = pre_year;
+    day = json['day'] == null ? null : json['day'];
+    month = json['month'] == null ? null : json['month'];
+    year = json['year'] == null ? null : json['year'];
   }
 
   @override

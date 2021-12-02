@@ -310,11 +310,7 @@ class UpdateAuthorizationState extends Update {
 
   /// Parse from a json
   UpdateAuthorizationState.fromJson(Map<String, dynamic> json)  {
-    AuthorizationState? pre_authorizationState;
-    try{
-      pre_authorizationState=AuthorizationState.fromJson(json['authorization_state'] ?? <String, dynamic>{});
-   }catch(_){}
-    authorizationState = pre_authorizationState;
+    authorizationState = json['authorization_state'] == null ? null : AuthorizationState.fromJson(json['authorization_state'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -345,11 +341,7 @@ class UpdateNewMessage extends Update {
 
   /// Parse from a json
   UpdateNewMessage.fromJson(Map<String, dynamic> json)  {
-    Message? pre_message;
-    try{
-      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
-   }catch(_){}
-    message = pre_message;
+    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -384,16 +376,8 @@ class UpdateMessageSendAcknowledged extends Update {
 
   /// Parse from a json
   UpdateMessageSendAcknowledged.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
     extra = json['@extra'];
   }
 
@@ -429,16 +413,8 @@ class UpdateMessageSendSucceeded extends Update {
 
   /// Parse from a json
   UpdateMessageSendSucceeded.fromJson(Map<String, dynamic> json)  {
-    Message? pre_message;
-    try{
-      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
-   }catch(_){}
-    message = pre_message;
-    int? pre_oldMessageId;
-    try{
-      pre_oldMessageId=json['old_message_id'];
-   }catch(_){}
-    oldMessageId = pre_oldMessageId;
+    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
+    oldMessageId = json['old_message_id'] == null ? null : json['old_message_id'];
     extra = json['@extra'];
   }
 
@@ -482,26 +458,10 @@ class UpdateMessageSendFailed extends Update {
 
   /// Parse from a json
   UpdateMessageSendFailed.fromJson(Map<String, dynamic> json)  {
-    Message? pre_message;
-    try{
-      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
-   }catch(_){}
-    message = pre_message;
-    int? pre_oldMessageId;
-    try{
-      pre_oldMessageId=json['old_message_id'];
-   }catch(_){}
-    oldMessageId = pre_oldMessageId;
-    int? pre_errorCode;
-    try{
-      pre_errorCode=json['error_code'];
-   }catch(_){}
-    errorCode = pre_errorCode;
-    String? pre_errorMessage;
-    try{
-      pre_errorMessage=json['error_message'];
-   }catch(_){}
-    errorMessage = pre_errorMessage;
+    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
+    oldMessageId = json['old_message_id'] == null ? null : json['old_message_id'];
+    errorCode = json['error_code'] == null ? null : json['error_code'];
+    errorMessage = json['error_message'] == null ? null : json['error_message'];
     extra = json['@extra'];
   }
 
@@ -543,21 +503,9 @@ class UpdateMessageContent extends Update {
 
   /// Parse from a json
   UpdateMessageContent.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    MessageContent? pre_newContent;
-    try{
-      pre_newContent=MessageContent.fromJson(json['new_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    newContent = pre_newContent;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    newContent = json['new_content'] == null ? null : MessageContent.fromJson(json['new_content'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -602,26 +550,10 @@ class UpdateMessageEdited extends Update {
 
   /// Parse from a json
   UpdateMessageEdited.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    int? pre_editDate;
-    try{
-      pre_editDate=json['edit_date'];
-   }catch(_){}
-    editDate = pre_editDate;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    editDate = json['edit_date'] == null ? null : json['edit_date'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -663,21 +595,9 @@ class UpdateMessageIsPinned extends Update {
 
   /// Parse from a json
   UpdateMessageIsPinned.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    bool? pre_isPinned;
-    try{
-      pre_isPinned=json['is_pinned'];
-   }catch(_){}
-    isPinned = pre_isPinned;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    isPinned = json['is_pinned'] == null ? null : json['is_pinned'];
     extra = json['@extra'];
   }
 
@@ -718,21 +638,9 @@ class UpdateMessageInteractionInfo extends Update {
 
   /// Parse from a json
   UpdateMessageInteractionInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    MessageInteractionInfo? pre_interactionInfo;
-    try{
-      pre_interactionInfo=MessageInteractionInfo.fromJson(json['interaction_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    interactionInfo = pre_interactionInfo;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    interactionInfo = json['interaction_info'] == null ? null : MessageInteractionInfo.fromJson(json['interaction_info'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -769,16 +677,8 @@ class UpdateMessageContentOpened extends Update {
 
   /// Parse from a json
   UpdateMessageContentOpened.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
     extra = json['@extra'];
   }
 
@@ -818,21 +718,9 @@ class UpdateMessageMentionRead extends Update {
 
   /// Parse from a json
   UpdateMessageMentionRead.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    int? pre_unreadMentionCount;
-    try{
-      pre_unreadMentionCount=json['unread_mention_count'];
-   }catch(_){}
-    unreadMentionCount = pre_unreadMentionCount;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    unreadMentionCount = json['unread_mention_count'] == null ? null : json['unread_mention_count'];
     extra = json['@extra'];
   }
 
@@ -869,16 +757,8 @@ class UpdateMessageLiveLocationViewed extends Update {
 
   /// Parse from a json
   UpdateMessageLiveLocationViewed.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
     extra = json['@extra'];
   }
 
@@ -910,11 +790,7 @@ class UpdateNewChat extends Update {
 
   /// Parse from a json
   UpdateNewChat.fromJson(Map<String, dynamic> json)  {
-    Chat? pre_chat;
-    try{
-      pre_chat=Chat.fromJson(json['chat'] ?? <String, dynamic>{});
-   }catch(_){}
-    chat = pre_chat;
+    chat = json['chat'] == null ? null : Chat.fromJson(json['chat'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -949,16 +825,8 @@ class UpdateChatTitle extends Update {
 
   /// Parse from a json
   UpdateChatTitle.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    title = json['title'] == null ? null : json['title'];
     extra = json['@extra'];
   }
 
@@ -994,16 +862,8 @@ class UpdateChatPhoto extends Update {
 
   /// Parse from a json
   UpdateChatPhoto.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    ChatPhotoInfo? pre_photo;
-    try{
-      pre_photo=ChatPhotoInfo.fromJson(json['photo'] ?? <String, dynamic>{});
-   }catch(_){}
-    photo = pre_photo;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    photo = json['photo'] == null ? null : ChatPhotoInfo.fromJson(json['photo'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -1039,16 +899,8 @@ class UpdateChatPermissions extends Update {
 
   /// Parse from a json
   UpdateChatPermissions.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    ChatPermissions? pre_permissions;
-    try{
-      pre_permissions=ChatPermissions.fromJson(json['permissions'] ?? <String, dynamic>{});
-   }catch(_){}
-    permissions = pre_permissions;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    permissions = json['permissions'] == null ? null : ChatPermissions.fromJson(json['permissions'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -1088,21 +940,9 @@ class UpdateChatLastMessage extends Update {
 
   /// Parse from a json
   UpdateChatLastMessage.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    Message? pre_lastMessage;
-    try{
-      pre_lastMessage=Message.fromJson(json['last_message'] ?? <String, dynamic>{});
-   }catch(_){}
-    lastMessage = pre_lastMessage;
-    List<ChatPosition>? pre_positions;
-    try{
-      pre_positions=List<ChatPosition>.from((json['positions'] ?? [])!.map((item) => ChatPosition.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    positions = pre_positions;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    lastMessage = json['last_message'] == null ? null : Message.fromJson(json['last_message'] ?? <String, dynamic>{});
+    positions = json['positions'] == null ? null : List<ChatPosition>.from((json['positions'] ?? [])!.map((item) => ChatPosition.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -1139,16 +979,8 @@ class UpdateChatPosition extends Update {
 
   /// Parse from a json
   UpdateChatPosition.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    ChatPosition? pre_position;
-    try{
-      pre_position=ChatPosition.fromJson(json['position'] ?? <String, dynamic>{});
-   }catch(_){}
-    position = pre_position;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    position = json['position'] == null ? null : ChatPosition.fromJson(json['position'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -1184,16 +1016,8 @@ class UpdateChatIsMarkedAsUnread extends Update {
 
   /// Parse from a json
   UpdateChatIsMarkedAsUnread.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    bool? pre_isMarkedAsUnread;
-    try{
-      pre_isMarkedAsUnread=json['is_marked_as_unread'];
-   }catch(_){}
-    isMarkedAsUnread = pre_isMarkedAsUnread;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    isMarkedAsUnread = json['is_marked_as_unread'] == null ? null : json['is_marked_as_unread'];
     extra = json['@extra'];
   }
 
@@ -1229,16 +1053,8 @@ class UpdateChatIsBlocked extends Update {
 
   /// Parse from a json
   UpdateChatIsBlocked.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    bool? pre_isBlocked;
-    try{
-      pre_isBlocked=json['is_blocked'];
-   }catch(_){}
-    isBlocked = pre_isBlocked;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    isBlocked = json['is_blocked'] == null ? null : json['is_blocked'];
     extra = json['@extra'];
   }
 
@@ -1274,16 +1090,8 @@ class UpdateChatHasScheduledMessages extends Update {
 
   /// Parse from a json
   UpdateChatHasScheduledMessages.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    bool? pre_hasScheduledMessages;
-    try{
-      pre_hasScheduledMessages=json['has_scheduled_messages'];
-   }catch(_){}
-    hasScheduledMessages = pre_hasScheduledMessages;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    hasScheduledMessages = json['has_scheduled_messages'] == null ? null : json['has_scheduled_messages'];
     extra = json['@extra'];
   }
 
@@ -1319,16 +1127,8 @@ class UpdateChatVideoChat extends Update {
 
   /// Parse from a json
   UpdateChatVideoChat.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    VideoChat? pre_videoChat;
-    try{
-      pre_videoChat=VideoChat.fromJson(json['video_chat'] ?? <String, dynamic>{});
-   }catch(_){}
-    videoChat = pre_videoChat;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    videoChat = json['video_chat'] == null ? null : VideoChat.fromJson(json['video_chat'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -1364,16 +1164,8 @@ class UpdateChatDefaultDisableNotification extends Update {
 
   /// Parse from a json
   UpdateChatDefaultDisableNotification.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    bool? pre_defaultDisableNotification;
-    try{
-      pre_defaultDisableNotification=json['default_disable_notification'];
-   }catch(_){}
-    defaultDisableNotification = pre_defaultDisableNotification;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    defaultDisableNotification = json['default_disable_notification'] == null ? null : json['default_disable_notification'];
     extra = json['@extra'];
   }
 
@@ -1413,21 +1205,9 @@ class UpdateChatReadInbox extends Update {
 
   /// Parse from a json
   UpdateChatReadInbox.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_lastReadInboxMessageId;
-    try{
-      pre_lastReadInboxMessageId=json['last_read_inbox_message_id'];
-   }catch(_){}
-    lastReadInboxMessageId = pre_lastReadInboxMessageId;
-    int? pre_unreadCount;
-    try{
-      pre_unreadCount=json['unread_count'];
-   }catch(_){}
-    unreadCount = pre_unreadCount;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    lastReadInboxMessageId = json['last_read_inbox_message_id'] == null ? null : json['last_read_inbox_message_id'];
+    unreadCount = json['unread_count'] == null ? null : json['unread_count'];
     extra = json['@extra'];
   }
 
@@ -1464,16 +1244,8 @@ class UpdateChatReadOutbox extends Update {
 
   /// Parse from a json
   UpdateChatReadOutbox.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_lastReadOutboxMessageId;
-    try{
-      pre_lastReadOutboxMessageId=json['last_read_outbox_message_id'];
-   }catch(_){}
-    lastReadOutboxMessageId = pre_lastReadOutboxMessageId;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    lastReadOutboxMessageId = json['last_read_outbox_message_id'] == null ? null : json['last_read_outbox_message_id'];
     extra = json['@extra'];
   }
 
@@ -1509,16 +1281,8 @@ class UpdateChatUnreadMentionCount extends Update {
 
   /// Parse from a json
   UpdateChatUnreadMentionCount.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_unreadMentionCount;
-    try{
-      pre_unreadMentionCount=json['unread_mention_count'];
-   }catch(_){}
-    unreadMentionCount = pre_unreadMentionCount;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    unreadMentionCount = json['unread_mention_count'] == null ? null : json['unread_mention_count'];
     extra = json['@extra'];
   }
 
@@ -1554,16 +1318,8 @@ class UpdateChatNotificationSettings extends Update {
 
   /// Parse from a json
   UpdateChatNotificationSettings.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    ChatNotificationSettings? pre_notificationSettings;
-    try{
-      pre_notificationSettings=ChatNotificationSettings.fromJson(json['notification_settings'] ?? <String, dynamic>{});
-   }catch(_){}
-    notificationSettings = pre_notificationSettings;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    notificationSettings = json['notification_settings'] == null ? null : ChatNotificationSettings.fromJson(json['notification_settings'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -1599,16 +1355,8 @@ class UpdateScopeNotificationSettings extends Update {
 
   /// Parse from a json
   UpdateScopeNotificationSettings.fromJson(Map<String, dynamic> json)  {
-    NotificationSettingsScope? pre_scope;
-    try{
-      pre_scope=NotificationSettingsScope.fromJson(json['scope'] ?? <String, dynamic>{});
-   }catch(_){}
-    scope = pre_scope;
-    ScopeNotificationSettings? pre_notificationSettings;
-    try{
-      pre_notificationSettings=ScopeNotificationSettings.fromJson(json['notification_settings'] ?? <String, dynamic>{});
-   }catch(_){}
-    notificationSettings = pre_notificationSettings;
+    scope = json['scope'] == null ? null : NotificationSettingsScope.fromJson(json['scope'] ?? <String, dynamic>{});
+    notificationSettings = json['notification_settings'] == null ? null : ScopeNotificationSettings.fromJson(json['notification_settings'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -1644,16 +1392,8 @@ class UpdateChatMessageTtlSetting extends Update {
 
   /// Parse from a json
   UpdateChatMessageTtlSetting.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageTtlSetting;
-    try{
-      pre_messageTtlSetting=json['message_ttl_setting'];
-   }catch(_){}
-    messageTtlSetting = pre_messageTtlSetting;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageTtlSetting = json['message_ttl_setting'] == null ? null : json['message_ttl_setting'];
     extra = json['@extra'];
   }
 
@@ -1689,16 +1429,8 @@ class UpdateChatActionBar extends Update {
 
   /// Parse from a json
   UpdateChatActionBar.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    ChatActionBar? pre_actionBar;
-    try{
-      pre_actionBar=ChatActionBar.fromJson(json['action_bar'] ?? <String, dynamic>{});
-   }catch(_){}
-    actionBar = pre_actionBar;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    actionBar = json['action_bar'] == null ? null : ChatActionBar.fromJson(json['action_bar'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -1734,16 +1466,8 @@ class UpdateChatTheme extends Update {
 
   /// Parse from a json
   UpdateChatTheme.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    String? pre_themeName;
-    try{
-      pre_themeName=json['theme_name'];
-   }catch(_){}
-    themeName = pre_themeName;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    themeName = json['theme_name'] == null ? null : json['theme_name'];
     extra = json['@extra'];
   }
 
@@ -1779,16 +1503,8 @@ class UpdateChatPendingJoinRequests extends Update {
 
   /// Parse from a json
   UpdateChatPendingJoinRequests.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    ChatJoinRequestsInfo? pre_pendingJoinRequests;
-    try{
-      pre_pendingJoinRequests=ChatJoinRequestsInfo.fromJson(json['pending_join_requests'] ?? <String, dynamic>{});
-   }catch(_){}
-    pendingJoinRequests = pre_pendingJoinRequests;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    pendingJoinRequests = json['pending_join_requests'] == null ? null : ChatJoinRequestsInfo.fromJson(json['pending_join_requests'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -1824,16 +1540,8 @@ class UpdateChatReplyMarkup extends Update {
 
   /// Parse from a json
   UpdateChatReplyMarkup.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_replyMarkupMessageId;
-    try{
-      pre_replyMarkupMessageId=json['reply_markup_message_id'];
-   }catch(_){}
-    replyMarkupMessageId = pre_replyMarkupMessageId;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    replyMarkupMessageId = json['reply_markup_message_id'] == null ? null : json['reply_markup_message_id'];
     extra = json['@extra'];
   }
 
@@ -1873,21 +1581,9 @@ class UpdateChatDraftMessage extends Update {
 
   /// Parse from a json
   UpdateChatDraftMessage.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    DraftMessage? pre_draftMessage;
-    try{
-      pre_draftMessage=DraftMessage.fromJson(json['draft_message'] ?? <String, dynamic>{});
-   }catch(_){}
-    draftMessage = pre_draftMessage;
-    List<ChatPosition>? pre_positions;
-    try{
-      pre_positions=List<ChatPosition>.from((json['positions'] ?? [])!.map((item) => ChatPosition.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    positions = pre_positions;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    draftMessage = json['draft_message'] == null ? null : DraftMessage.fromJson(json['draft_message'] ?? <String, dynamic>{});
+    positions = json['positions'] == null ? null : List<ChatPosition>.from((json['positions'] ?? [])!.map((item) => ChatPosition.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -1920,11 +1616,7 @@ class UpdateChatFilters extends Update {
 
   /// Parse from a json
   UpdateChatFilters.fromJson(Map<String, dynamic> json)  {
-    List<ChatFilterInfo>? pre_chatFilters;
-    try{
-      pre_chatFilters=List<ChatFilterInfo>.from((json['chat_filters'] ?? [])!.map((item) => ChatFilterInfo.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    chatFilters = pre_chatFilters;
+    chatFilters = json['chat_filters'] == null ? null : List<ChatFilterInfo>.from((json['chat_filters'] ?? [])!.map((item) => ChatFilterInfo.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -1959,16 +1651,8 @@ class UpdateChatOnlineMemberCount extends Update {
 
   /// Parse from a json
   UpdateChatOnlineMemberCount.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_onlineMemberCount;
-    try{
-      pre_onlineMemberCount=json['online_member_count'];
-   }catch(_){}
-    onlineMemberCount = pre_onlineMemberCount;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    onlineMemberCount = json['online_member_count'] == null ? null : json['online_member_count'];
     extra = json['@extra'];
   }
 
@@ -2004,16 +1688,8 @@ class UpdateNotification extends Update {
 
   /// Parse from a json
   UpdateNotification.fromJson(Map<String, dynamic> json)  {
-    int? pre_notificationGroupId;
-    try{
-      pre_notificationGroupId=json['notification_group_id'];
-   }catch(_){}
-    notificationGroupId = pre_notificationGroupId;
-    Notification? pre_notification;
-    try{
-      pre_notification=Notification.fromJson(json['notification'] ?? <String, dynamic>{});
-   }catch(_){}
-    notification = pre_notification;
+    notificationGroupId = json['notification_group_id'] == null ? null : json['notification_group_id'];
+    notification = json['notification'] == null ? null : Notification.fromJson(json['notification'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2073,46 +1749,14 @@ class UpdateNotificationGroup extends Update {
 
   /// Parse from a json
   UpdateNotificationGroup.fromJson(Map<String, dynamic> json)  {
-    int? pre_notificationGroupId;
-    try{
-      pre_notificationGroupId=json['notification_group_id'];
-   }catch(_){}
-    notificationGroupId = pre_notificationGroupId;
-    NotificationGroupType? pre_type;
-    try{
-      pre_type=NotificationGroupType.fromJson(json['type'] ?? <String, dynamic>{});
-   }catch(_){}
-    type = pre_type;
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_notificationSettingsChatId;
-    try{
-      pre_notificationSettingsChatId=json['notification_settings_chat_id'];
-   }catch(_){}
-    notificationSettingsChatId = pre_notificationSettingsChatId;
-    bool? pre_isSilent;
-    try{
-      pre_isSilent=json['is_silent'];
-   }catch(_){}
-    isSilent = pre_isSilent;
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<Notification>? pre_addedNotifications;
-    try{
-      pre_addedNotifications=List<Notification>.from((json['added_notifications'] ?? [])!.map((item) => Notification.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    addedNotifications = pre_addedNotifications;
-    List<int>? pre_removedNotificationIds;
-    try{
-      pre_removedNotificationIds=List<int>.from((json['removed_notification_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    removedNotificationIds = pre_removedNotificationIds;
+    notificationGroupId = json['notification_group_id'] == null ? null : json['notification_group_id'];
+    type = json['type'] == null ? null : NotificationGroupType.fromJson(json['type'] ?? <String, dynamic>{});
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    notificationSettingsChatId = json['notification_settings_chat_id'] == null ? null : json['notification_settings_chat_id'];
+    isSilent = json['is_silent'] == null ? null : json['is_silent'];
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    addedNotifications = json['added_notifications'] == null ? null : List<Notification>.from((json['added_notifications'] ?? [])!.map((item) => Notification.fromJson(item ?? <String, dynamic>{})).toList());
+    removedNotificationIds = json['removed_notification_ids'] == null ? null : List<int>.from((json['removed_notification_ids'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 
@@ -2150,11 +1794,7 @@ class UpdateActiveNotifications extends Update {
 
   /// Parse from a json
   UpdateActiveNotifications.fromJson(Map<String, dynamic> json)  {
-    List<NotificationGroup>? pre_groups;
-    try{
-      pre_groups=List<NotificationGroup>.from((json['groups'] ?? [])!.map((item) => NotificationGroup.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    groups = pre_groups;
+    groups = json['groups'] == null ? null : List<NotificationGroup>.from((json['groups'] ?? [])!.map((item) => NotificationGroup.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -2189,16 +1829,8 @@ class UpdateHavePendingNotifications extends Update {
 
   /// Parse from a json
   UpdateHavePendingNotifications.fromJson(Map<String, dynamic> json)  {
-    bool? pre_haveDelayedNotifications;
-    try{
-      pre_haveDelayedNotifications=json['have_delayed_notifications'];
-   }catch(_){}
-    haveDelayedNotifications = pre_haveDelayedNotifications;
-    bool? pre_haveUnreceivedNotifications;
-    try{
-      pre_haveUnreceivedNotifications=json['have_unreceived_notifications'];
-   }catch(_){}
-    haveUnreceivedNotifications = pre_haveUnreceivedNotifications;
+    haveDelayedNotifications = json['have_delayed_notifications'] == null ? null : json['have_delayed_notifications'];
+    haveUnreceivedNotifications = json['have_unreceived_notifications'] == null ? null : json['have_unreceived_notifications'];
     extra = json['@extra'];
   }
 
@@ -2242,26 +1874,10 @@ class UpdateDeleteMessages extends Update {
 
   /// Parse from a json
   UpdateDeleteMessages.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    List<int>? pre_messageIds;
-    try{
-      pre_messageIds=List<int>.from((json['message_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    messageIds = pre_messageIds;
-    bool? pre_isPermanent;
-    try{
-      pre_isPermanent=json['is_permanent'];
-   }catch(_){}
-    isPermanent = pre_isPermanent;
-    bool? pre_fromCache;
-    try{
-      pre_fromCache=json['from_cache'];
-   }catch(_){}
-    fromCache = pre_fromCache;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageIds = json['message_ids'] == null ? null : List<int>.from((json['message_ids'] ?? [])!.map((item) => item).toList());
+    isPermanent = json['is_permanent'] == null ? null : json['is_permanent'];
+    fromCache = json['from_cache'] == null ? null : json['from_cache'];
     extra = json['@extra'];
   }
 
@@ -2307,26 +1923,10 @@ class UpdateUserChatAction extends Update {
 
   /// Parse from a json
   UpdateUserChatAction.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageThreadId;
-    try{
-      pre_messageThreadId=json['message_thread_id'];
-   }catch(_){}
-    messageThreadId = pre_messageThreadId;
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    ChatAction? pre_action;
-    try{
-      pre_action=ChatAction.fromJson(json['action'] ?? <String, dynamic>{});
-   }catch(_){}
-    action = pre_action;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageThreadId = json['message_thread_id'] == null ? null : json['message_thread_id'];
+    userId = json['user_id'] == null ? null : json['user_id'];
+    action = json['action'] == null ? null : ChatAction.fromJson(json['action'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2364,16 +1964,8 @@ class UpdateUserStatus extends Update {
 
   /// Parse from a json
   UpdateUserStatus.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    UserStatus? pre_status;
-    try{
-      pre_status=UserStatus.fromJson(json['status'] ?? <String, dynamic>{});
-   }catch(_){}
-    status = pre_status;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    status = json['status'] == null ? null : UserStatus.fromJson(json['status'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2405,11 +1997,7 @@ class UpdateUser extends Update {
 
   /// Parse from a json
   UpdateUser.fromJson(Map<String, dynamic> json)  {
-    User? pre_user;
-    try{
-      pre_user=User.fromJson(json['user'] ?? <String, dynamic>{});
-   }catch(_){}
-    user = pre_user;
+    user = json['user'] == null ? null : User.fromJson(json['user'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2440,11 +2028,7 @@ class UpdateBasicGroup extends Update {
 
   /// Parse from a json
   UpdateBasicGroup.fromJson(Map<String, dynamic> json)  {
-    BasicGroup? pre_basicGroup;
-    try{
-      pre_basicGroup=BasicGroup.fromJson(json['basic_group'] ?? <String, dynamic>{});
-   }catch(_){}
-    basicGroup = pre_basicGroup;
+    basicGroup = json['basic_group'] == null ? null : BasicGroup.fromJson(json['basic_group'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2475,11 +2059,7 @@ class UpdateSupergroup extends Update {
 
   /// Parse from a json
   UpdateSupergroup.fromJson(Map<String, dynamic> json)  {
-    Supergroup? pre_supergroup;
-    try{
-      pre_supergroup=Supergroup.fromJson(json['supergroup'] ?? <String, dynamic>{});
-   }catch(_){}
-    supergroup = pre_supergroup;
+    supergroup = json['supergroup'] == null ? null : Supergroup.fromJson(json['supergroup'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2510,11 +2090,7 @@ class UpdateSecretChat extends Update {
 
   /// Parse from a json
   UpdateSecretChat.fromJson(Map<String, dynamic> json)  {
-    SecretChat? pre_secretChat;
-    try{
-      pre_secretChat=SecretChat.fromJson(json['secret_chat'] ?? <String, dynamic>{});
-   }catch(_){}
-    secretChat = pre_secretChat;
+    secretChat = json['secret_chat'] == null ? null : SecretChat.fromJson(json['secret_chat'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2549,16 +2125,8 @@ class UpdateUserFullInfo extends Update {
 
   /// Parse from a json
   UpdateUserFullInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    UserFullInfo? pre_userFullInfo;
-    try{
-      pre_userFullInfo=UserFullInfo.fromJson(json['user_full_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    userFullInfo = pre_userFullInfo;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    userFullInfo = json['user_full_info'] == null ? null : UserFullInfo.fromJson(json['user_full_info'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2594,16 +2162,8 @@ class UpdateBasicGroupFullInfo extends Update {
 
   /// Parse from a json
   UpdateBasicGroupFullInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_basicGroupId;
-    try{
-      pre_basicGroupId=json['basic_group_id'];
-   }catch(_){}
-    basicGroupId = pre_basicGroupId;
-    BasicGroupFullInfo? pre_basicGroupFullInfo;
-    try{
-      pre_basicGroupFullInfo=BasicGroupFullInfo.fromJson(json['basic_group_full_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    basicGroupFullInfo = pre_basicGroupFullInfo;
+    basicGroupId = json['basic_group_id'] == null ? null : json['basic_group_id'];
+    basicGroupFullInfo = json['basic_group_full_info'] == null ? null : BasicGroupFullInfo.fromJson(json['basic_group_full_info'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2639,16 +2199,8 @@ class UpdateSupergroupFullInfo extends Update {
 
   /// Parse from a json
   UpdateSupergroupFullInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_supergroupId;
-    try{
-      pre_supergroupId=json['supergroup_id'];
-   }catch(_){}
-    supergroupId = pre_supergroupId;
-    SupergroupFullInfo? pre_supergroupFullInfo;
-    try{
-      pre_supergroupFullInfo=SupergroupFullInfo.fromJson(json['supergroup_full_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    supergroupFullInfo = pre_supergroupFullInfo;
+    supergroupId = json['supergroup_id'] == null ? null : json['supergroup_id'];
+    supergroupFullInfo = json['supergroup_full_info'] == null ? null : SupergroupFullInfo.fromJson(json['supergroup_full_info'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2684,16 +2236,8 @@ class UpdateServiceNotification extends Update {
 
   /// Parse from a json
   UpdateServiceNotification.fromJson(Map<String, dynamic> json)  {
-    String? pre_type;
-    try{
-      pre_type=json['type'];
-   }catch(_){}
-    type = pre_type;
-    MessageContent? pre_content;
-    try{
-      pre_content=MessageContent.fromJson(json['content'] ?? <String, dynamic>{});
-   }catch(_){}
-    content = pre_content;
+    type = json['type'] == null ? null : json['type'];
+    content = json['content'] == null ? null : MessageContent.fromJson(json['content'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2725,11 +2269,7 @@ class UpdateFile extends Update {
 
   /// Parse from a json
   UpdateFile.fromJson(Map<String, dynamic> json)  {
-    File? pre_file;
-    try{
-      pre_file=File.fromJson(json['file'] ?? <String, dynamic>{});
-   }catch(_){}
-    file = pre_file;
+    file = json['file'] == null ? null : File.fromJson(json['file'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2772,26 +2312,10 @@ class UpdateFileGenerationStart extends Update {
 
   /// Parse from a json
   UpdateFileGenerationStart.fromJson(Map<String, dynamic> json)  {
-    int? pre_generationId;
-    try{
-      pre_generationId=int.tryParse(json['generation_id'] ?? "");
-   }catch(_){}
-    generationId = pre_generationId;
-    String? pre_originalPath;
-    try{
-      pre_originalPath=json['original_path'];
-   }catch(_){}
-    originalPath = pre_originalPath;
-    String? pre_destinationPath;
-    try{
-      pre_destinationPath=json['destination_path'];
-   }catch(_){}
-    destinationPath = pre_destinationPath;
-    String? pre_conversion;
-    try{
-      pre_conversion=json['conversion'];
-   }catch(_){}
-    conversion = pre_conversion;
+    generationId = json['generation_id'] == null ? null : int.tryParse(json['generation_id'] ?? "");
+    originalPath = json['original_path'] == null ? null : json['original_path'];
+    destinationPath = json['destination_path'] == null ? null : json['destination_path'];
+    conversion = json['conversion'] == null ? null : json['conversion'];
     extra = json['@extra'];
   }
 
@@ -2825,11 +2349,7 @@ class UpdateFileGenerationStop extends Update {
 
   /// Parse from a json
   UpdateFileGenerationStop.fromJson(Map<String, dynamic> json)  {
-    int? pre_generationId;
-    try{
-      pre_generationId=int.tryParse(json['generation_id'] ?? "");
-   }catch(_){}
-    generationId = pre_generationId;
+    generationId = json['generation_id'] == null ? null : int.tryParse(json['generation_id'] ?? "");
     extra = json['@extra'];
   }
 
@@ -2860,11 +2380,7 @@ class UpdateCall extends Update {
 
   /// Parse from a json
   UpdateCall.fromJson(Map<String, dynamic> json)  {
-    Call? pre_call;
-    try{
-      pre_call=Call.fromJson(json['call'] ?? <String, dynamic>{});
-   }catch(_){}
-    call = pre_call;
+    call = json['call'] == null ? null : Call.fromJson(json['call'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2895,11 +2411,7 @@ class UpdateGroupCall extends Update {
 
   /// Parse from a json
   UpdateGroupCall.fromJson(Map<String, dynamic> json)  {
-    GroupCall? pre_groupCall;
-    try{
-      pre_groupCall=GroupCall.fromJson(json['group_call'] ?? <String, dynamic>{});
-   }catch(_){}
-    groupCall = pre_groupCall;
+    groupCall = json['group_call'] == null ? null : GroupCall.fromJson(json['group_call'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2934,16 +2446,8 @@ class UpdateGroupCallParticipant extends Update {
 
   /// Parse from a json
   UpdateGroupCallParticipant.fromJson(Map<String, dynamic> json)  {
-    int? pre_groupCallId;
-    try{
-      pre_groupCallId=json['group_call_id'];
-   }catch(_){}
-    groupCallId = pre_groupCallId;
-    GroupCallParticipant? pre_participant;
-    try{
-      pre_participant=GroupCallParticipant.fromJson(json['participant'] ?? <String, dynamic>{});
-   }catch(_){}
-    participant = pre_participant;
+    groupCallId = json['group_call_id'] == null ? null : json['group_call_id'];
+    participant = json['participant'] == null ? null : GroupCallParticipant.fromJson(json['participant'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -2979,16 +2483,8 @@ class UpdateNewCallSignalingData extends Update {
 
   /// Parse from a json
   UpdateNewCallSignalingData.fromJson(Map<String, dynamic> json)  {
-    int? pre_callId;
-    try{
-      pre_callId=json['call_id'];
-   }catch(_){}
-    callId = pre_callId;
-    String? pre_data;
-    try{
-      pre_data=json['data'];
-   }catch(_){}
-    data = pre_data;
+    callId = json['call_id'] == null ? null : json['call_id'];
+    data = json['data'] == null ? null : json['data'];
     extra = json['@extra'];
   }
 
@@ -3024,16 +2520,8 @@ class UpdateUserPrivacySettingRules extends Update {
 
   /// Parse from a json
   UpdateUserPrivacySettingRules.fromJson(Map<String, dynamic> json)  {
-    UserPrivacySetting? pre_setting;
-    try{
-      pre_setting=UserPrivacySetting.fromJson(json['setting'] ?? <String, dynamic>{});
-   }catch(_){}
-    setting = pre_setting;
-    UserPrivacySettingRules? pre_rules;
-    try{
-      pre_rules=UserPrivacySettingRules.fromJson(json['rules'] ?? <String, dynamic>{});
-   }catch(_){}
-    rules = pre_rules;
+    setting = json['setting'] == null ? null : UserPrivacySetting.fromJson(json['setting'] ?? <String, dynamic>{});
+    rules = json['rules'] == null ? null : UserPrivacySettingRules.fromJson(json['rules'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -3073,21 +2561,9 @@ class UpdateUnreadMessageCount extends Update {
 
   /// Parse from a json
   UpdateUnreadMessageCount.fromJson(Map<String, dynamic> json)  {
-    ChatList? pre_chatList;
-    try{
-      pre_chatList=ChatList.fromJson(json['chat_list'] ?? <String, dynamic>{});
-   }catch(_){}
-    chatList = pre_chatList;
-    int? pre_unreadCount;
-    try{
-      pre_unreadCount=json['unread_count'];
-   }catch(_){}
-    unreadCount = pre_unreadCount;
-    int? pre_unreadUnmutedCount;
-    try{
-      pre_unreadUnmutedCount=json['unread_unmuted_count'];
-   }catch(_){}
-    unreadUnmutedCount = pre_unreadUnmutedCount;
+    chatList = json['chat_list'] == null ? null : ChatList.fromJson(json['chat_list'] ?? <String, dynamic>{});
+    unreadCount = json['unread_count'] == null ? null : json['unread_count'];
+    unreadUnmutedCount = json['unread_unmuted_count'] == null ? null : json['unread_unmuted_count'];
     extra = json['@extra'];
   }
 
@@ -3140,36 +2616,12 @@ class UpdateUnreadChatCount extends Update {
 
   /// Parse from a json
   UpdateUnreadChatCount.fromJson(Map<String, dynamic> json)  {
-    ChatList? pre_chatList;
-    try{
-      pre_chatList=ChatList.fromJson(json['chat_list'] ?? <String, dynamic>{});
-   }catch(_){}
-    chatList = pre_chatList;
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    int? pre_unreadCount;
-    try{
-      pre_unreadCount=json['unread_count'];
-   }catch(_){}
-    unreadCount = pre_unreadCount;
-    int? pre_unreadUnmutedCount;
-    try{
-      pre_unreadUnmutedCount=json['unread_unmuted_count'];
-   }catch(_){}
-    unreadUnmutedCount = pre_unreadUnmutedCount;
-    int? pre_markedAsUnreadCount;
-    try{
-      pre_markedAsUnreadCount=json['marked_as_unread_count'];
-   }catch(_){}
-    markedAsUnreadCount = pre_markedAsUnreadCount;
-    int? pre_markedAsUnreadUnmutedCount;
-    try{
-      pre_markedAsUnreadUnmutedCount=json['marked_as_unread_unmuted_count'];
-   }catch(_){}
-    markedAsUnreadUnmutedCount = pre_markedAsUnreadUnmutedCount;
+    chatList = json['chat_list'] == null ? null : ChatList.fromJson(json['chat_list'] ?? <String, dynamic>{});
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    unreadCount = json['unread_count'] == null ? null : json['unread_count'];
+    unreadUnmutedCount = json['unread_unmuted_count'] == null ? null : json['unread_unmuted_count'];
+    markedAsUnreadCount = json['marked_as_unread_count'] == null ? null : json['marked_as_unread_count'];
+    markedAsUnreadUnmutedCount = json['marked_as_unread_unmuted_count'] == null ? null : json['marked_as_unread_unmuted_count'];
     extra = json['@extra'];
   }
 
@@ -3209,16 +2661,8 @@ class UpdateOption extends Update {
 
   /// Parse from a json
   UpdateOption.fromJson(Map<String, dynamic> json)  {
-    String? pre_name;
-    try{
-      pre_name=json['name'];
-   }catch(_){}
-    name = pre_name;
-    OptionValue? pre_value;
-    try{
-      pre_value=OptionValue.fromJson(json['value'] ?? <String, dynamic>{});
-   }catch(_){}
-    value = pre_value;
+    name = json['name'] == null ? null : json['name'];
+    value = json['value'] == null ? null : OptionValue.fromJson(json['value'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -3250,11 +2694,7 @@ class UpdateStickerSet extends Update {
 
   /// Parse from a json
   UpdateStickerSet.fromJson(Map<String, dynamic> json)  {
-    StickerSet? pre_stickerSet;
-    try{
-      pre_stickerSet=StickerSet.fromJson(json['sticker_set'] ?? <String, dynamic>{});
-   }catch(_){}
-    stickerSet = pre_stickerSet;
+    stickerSet = json['sticker_set'] == null ? null : StickerSet.fromJson(json['sticker_set'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -3289,16 +2729,8 @@ class UpdateInstalledStickerSets extends Update {
 
   /// Parse from a json
   UpdateInstalledStickerSets.fromJson(Map<String, dynamic> json)  {
-    bool? pre_isMasks;
-    try{
-      pre_isMasks=json['is_masks'];
-   }catch(_){}
-    isMasks = pre_isMasks;
-    List<int>? pre_stickerSetIds;
-    try{
-      pre_stickerSetIds=List<int>.from((json['sticker_set_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    stickerSetIds = pre_stickerSetIds;
+    isMasks = json['is_masks'] == null ? null : json['is_masks'];
+    stickerSetIds = json['sticker_set_ids'] == null ? null : List<int>.from((json['sticker_set_ids'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 
@@ -3330,11 +2762,7 @@ class UpdateTrendingStickerSets extends Update {
 
   /// Parse from a json
   UpdateTrendingStickerSets.fromJson(Map<String, dynamic> json)  {
-    StickerSets? pre_stickerSets;
-    try{
-      pre_stickerSets=StickerSets.fromJson(json['sticker_sets'] ?? <String, dynamic>{});
-   }catch(_){}
-    stickerSets = pre_stickerSets;
+    stickerSets = json['sticker_sets'] == null ? null : StickerSets.fromJson(json['sticker_sets'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -3369,16 +2797,8 @@ class UpdateRecentStickers extends Update {
 
   /// Parse from a json
   UpdateRecentStickers.fromJson(Map<String, dynamic> json)  {
-    bool? pre_isAttached;
-    try{
-      pre_isAttached=json['is_attached'];
-   }catch(_){}
-    isAttached = pre_isAttached;
-    List<int>? pre_stickerIds;
-    try{
-      pre_stickerIds=List<int>.from((json['sticker_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    stickerIds = pre_stickerIds;
+    isAttached = json['is_attached'] == null ? null : json['is_attached'];
+    stickerIds = json['sticker_ids'] == null ? null : List<int>.from((json['sticker_ids'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 
@@ -3410,11 +2830,7 @@ class UpdateFavoriteStickers extends Update {
 
   /// Parse from a json
   UpdateFavoriteStickers.fromJson(Map<String, dynamic> json)  {
-    List<int>? pre_stickerIds;
-    try{
-      pre_stickerIds=List<int>.from((json['sticker_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    stickerIds = pre_stickerIds;
+    stickerIds = json['sticker_ids'] == null ? null : List<int>.from((json['sticker_ids'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 
@@ -3445,11 +2861,7 @@ class UpdateSavedAnimations extends Update {
 
   /// Parse from a json
   UpdateSavedAnimations.fromJson(Map<String, dynamic> json)  {
-    List<int>? pre_animationIds;
-    try{
-      pre_animationIds=List<int>.from((json['animation_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    animationIds = pre_animationIds;
+    animationIds = json['animation_ids'] == null ? null : List<int>.from((json['animation_ids'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 
@@ -3484,16 +2896,8 @@ class UpdateSelectedBackground extends Update {
 
   /// Parse from a json
   UpdateSelectedBackground.fromJson(Map<String, dynamic> json)  {
-    bool? pre_forDarkTheme;
-    try{
-      pre_forDarkTheme=json['for_dark_theme'];
-   }catch(_){}
-    forDarkTheme = pre_forDarkTheme;
-    Background? pre_background;
-    try{
-      pre_background=Background.fromJson(json['background'] ?? <String, dynamic>{});
-   }catch(_){}
-    background = pre_background;
+    forDarkTheme = json['for_dark_theme'] == null ? null : json['for_dark_theme'];
+    background = json['background'] == null ? null : Background.fromJson(json['background'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -3525,11 +2929,7 @@ class UpdateChatThemes extends Update {
 
   /// Parse from a json
   UpdateChatThemes.fromJson(Map<String, dynamic> json)  {
-    List<ChatTheme>? pre_chatThemes;
-    try{
-      pre_chatThemes=List<ChatTheme>.from((json['chat_themes'] ?? [])!.map((item) => ChatTheme.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    chatThemes = pre_chatThemes;
+    chatThemes = json['chat_themes'] == null ? null : List<ChatTheme>.from((json['chat_themes'] ?? [])!.map((item) => ChatTheme.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -3568,21 +2968,9 @@ class UpdateLanguagePackStrings extends Update {
 
   /// Parse from a json
   UpdateLanguagePackStrings.fromJson(Map<String, dynamic> json)  {
-    String? pre_localizationTarget;
-    try{
-      pre_localizationTarget=json['localization_target'];
-   }catch(_){}
-    localizationTarget = pre_localizationTarget;
-    String? pre_languagePackId;
-    try{
-      pre_languagePackId=json['language_pack_id'];
-   }catch(_){}
-    languagePackId = pre_languagePackId;
-    List<LanguagePackString>? pre_strings;
-    try{
-      pre_strings=List<LanguagePackString>.from((json['strings'] ?? [])!.map((item) => LanguagePackString.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    strings = pre_strings;
+    localizationTarget = json['localization_target'] == null ? null : json['localization_target'];
+    languagePackId = json['language_pack_id'] == null ? null : json['language_pack_id'];
+    strings = json['strings'] == null ? null : List<LanguagePackString>.from((json['strings'] ?? [])!.map((item) => LanguagePackString.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -3615,11 +3003,7 @@ class UpdateConnectionState extends Update {
 
   /// Parse from a json
   UpdateConnectionState.fromJson(Map<String, dynamic> json)  {
-    ConnectionState? pre_state;
-    try{
-      pre_state=ConnectionState.fromJson(json['state'] ?? <String, dynamic>{});
-   }catch(_){}
-    state = pre_state;
+    state = json['state'] == null ? null : ConnectionState.fromJson(json['state'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -3654,16 +3038,8 @@ class UpdateTermsOfService extends Update {
 
   /// Parse from a json
   UpdateTermsOfService.fromJson(Map<String, dynamic> json)  {
-    String? pre_termsOfServiceId;
-    try{
-      pre_termsOfServiceId=json['terms_of_service_id'];
-   }catch(_){}
-    termsOfServiceId = pre_termsOfServiceId;
-    TermsOfService? pre_termsOfService;
-    try{
-      pre_termsOfService=TermsOfService.fromJson(json['terms_of_service'] ?? <String, dynamic>{});
-   }catch(_){}
-    termsOfService = pre_termsOfService;
+    termsOfServiceId = json['terms_of_service_id'] == null ? null : json['terms_of_service_id'];
+    termsOfService = json['terms_of_service'] == null ? null : TermsOfService.fromJson(json['terms_of_service'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -3695,11 +3071,7 @@ class UpdateUsersNearby extends Update {
 
   /// Parse from a json
   UpdateUsersNearby.fromJson(Map<String, dynamic> json)  {
-    List<ChatNearby>? pre_usersNearby;
-    try{
-      pre_usersNearby=List<ChatNearby>.from((json['users_nearby'] ?? [])!.map((item) => ChatNearby.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    usersNearby = pre_usersNearby;
+    usersNearby = json['users_nearby'] == null ? null : List<ChatNearby>.from((json['users_nearby'] ?? [])!.map((item) => ChatNearby.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -3730,11 +3102,7 @@ class UpdateDiceEmojis extends Update {
 
   /// Parse from a json
   UpdateDiceEmojis.fromJson(Map<String, dynamic> json)  {
-    List<String>? pre_emojis;
-    try{
-      pre_emojis=List<String>.from((json['emojis'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    emojis = pre_emojis;
+    emojis = json['emojis'] == null ? null : List<String>.from((json['emojis'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 
@@ -3773,21 +3141,9 @@ class UpdateAnimatedEmojiMessageClicked extends Update {
 
   /// Parse from a json
   UpdateAnimatedEmojiMessageClicked.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    Sticker? pre_sticker;
-    try{
-      pre_sticker=Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
-   }catch(_){}
-    sticker = pre_sticker;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    sticker = json['sticker'] == null ? null : Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -3824,16 +3180,8 @@ class UpdateAnimationSearchParameters extends Update {
 
   /// Parse from a json
   UpdateAnimationSearchParameters.fromJson(Map<String, dynamic> json)  {
-    String? pre_provider;
-    try{
-      pre_provider=json['provider'];
-   }catch(_){}
-    provider = pre_provider;
-    List<String>? pre_emojis;
-    try{
-      pre_emojis=List<String>.from((json['emojis'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    emojis = pre_emojis;
+    provider = json['provider'] == null ? null : json['provider'];
+    emojis = json['emojis'] == null ? null : List<String>.from((json['emojis'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 
@@ -3869,16 +3217,8 @@ class UpdateSuggestedActions extends Update {
 
   /// Parse from a json
   UpdateSuggestedActions.fromJson(Map<String, dynamic> json)  {
-    List<SuggestedAction>? pre_addedActions;
-    try{
-      pre_addedActions=List<SuggestedAction>.from((json['added_actions'] ?? [])!.map((item) => SuggestedAction.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    addedActions = pre_addedActions;
-    List<SuggestedAction>? pre_removedActions;
-    try{
-      pre_removedActions=List<SuggestedAction>.from((json['removed_actions'] ?? [])!.map((item) => SuggestedAction.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    removedActions = pre_removedActions;
+    addedActions = json['added_actions'] == null ? null : List<SuggestedAction>.from((json['added_actions'] ?? [])!.map((item) => SuggestedAction.fromJson(item ?? <String, dynamic>{})).toList());
+    removedActions = json['removed_actions'] == null ? null : List<SuggestedAction>.from((json['removed_actions'] ?? [])!.map((item) => SuggestedAction.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 
@@ -3930,36 +3270,12 @@ class UpdateNewInlineQuery extends Update {
 
   /// Parse from a json
   UpdateNewInlineQuery.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    int? pre_senderUserId;
-    try{
-      pre_senderUserId=json['sender_user_id'];
-   }catch(_){}
-    senderUserId = pre_senderUserId;
-    Location? pre_userLocation;
-    try{
-      pre_userLocation=Location.fromJson(json['user_location'] ?? <String, dynamic>{});
-   }catch(_){}
-    userLocation = pre_userLocation;
-    ChatType? pre_chatType;
-    try{
-      pre_chatType=ChatType.fromJson(json['chat_type'] ?? <String, dynamic>{});
-   }catch(_){}
-    chatType = pre_chatType;
-    String? pre_query;
-    try{
-      pre_query=json['query'];
-   }catch(_){}
-    query = pre_query;
-    String? pre_offset;
-    try{
-      pre_offset=json['offset'];
-   }catch(_){}
-    offset = pre_offset;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    senderUserId = json['sender_user_id'] == null ? null : json['sender_user_id'];
+    userLocation = json['user_location'] == null ? null : Location.fromJson(json['user_location'] ?? <String, dynamic>{});
+    chatType = json['chat_type'] == null ? null : ChatType.fromJson(json['chat_type'] ?? <String, dynamic>{});
+    query = json['query'] == null ? null : json['query'];
+    offset = json['offset'] == null ? null : json['offset'];
     extra = json['@extra'];
   }
 
@@ -4011,31 +3327,11 @@ class UpdateNewChosenInlineResult extends Update {
 
   /// Parse from a json
   UpdateNewChosenInlineResult.fromJson(Map<String, dynamic> json)  {
-    int? pre_senderUserId;
-    try{
-      pre_senderUserId=json['sender_user_id'];
-   }catch(_){}
-    senderUserId = pre_senderUserId;
-    Location? pre_userLocation;
-    try{
-      pre_userLocation=Location.fromJson(json['user_location'] ?? <String, dynamic>{});
-   }catch(_){}
-    userLocation = pre_userLocation;
-    String? pre_query;
-    try{
-      pre_query=json['query'];
-   }catch(_){}
-    query = pre_query;
-    String? pre_resultId;
-    try{
-      pre_resultId=json['result_id'];
-   }catch(_){}
-    resultId = pre_resultId;
-    String? pre_inlineMessageId;
-    try{
-      pre_inlineMessageId=json['inline_message_id'];
-   }catch(_){}
-    inlineMessageId = pre_inlineMessageId;
+    senderUserId = json['sender_user_id'] == null ? null : json['sender_user_id'];
+    userLocation = json['user_location'] == null ? null : Location.fromJson(json['user_location'] ?? <String, dynamic>{});
+    query = json['query'] == null ? null : json['query'];
+    resultId = json['result_id'] == null ? null : json['result_id'];
+    inlineMessageId = json['inline_message_id'] == null ? null : json['inline_message_id'];
     extra = json['@extra'];
   }
 
@@ -4090,36 +3386,12 @@ class UpdateNewCallbackQuery extends Update {
 
   /// Parse from a json
   UpdateNewCallbackQuery.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    int? pre_senderUserId;
-    try{
-      pre_senderUserId=json['sender_user_id'];
-   }catch(_){}
-    senderUserId = pre_senderUserId;
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    int? pre_chatInstance;
-    try{
-      pre_chatInstance=int.tryParse(json['chat_instance'] ?? "");
-   }catch(_){}
-    chatInstance = pre_chatInstance;
-    CallbackQueryPayload? pre_payload;
-    try{
-      pre_payload=CallbackQueryPayload.fromJson(json['payload'] ?? <String, dynamic>{});
-   }catch(_){}
-    payload = pre_payload;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    senderUserId = json['sender_user_id'] == null ? null : json['sender_user_id'];
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    chatInstance = json['chat_instance'] == null ? null : int.tryParse(json['chat_instance'] ?? "");
+    payload = json['payload'] == null ? null : CallbackQueryPayload.fromJson(json['payload'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -4171,31 +3443,11 @@ class UpdateNewInlineCallbackQuery extends Update {
 
   /// Parse from a json
   UpdateNewInlineCallbackQuery.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    int? pre_senderUserId;
-    try{
-      pre_senderUserId=json['sender_user_id'];
-   }catch(_){}
-    senderUserId = pre_senderUserId;
-    String? pre_inlineMessageId;
-    try{
-      pre_inlineMessageId=json['inline_message_id'];
-   }catch(_){}
-    inlineMessageId = pre_inlineMessageId;
-    int? pre_chatInstance;
-    try{
-      pre_chatInstance=int.tryParse(json['chat_instance'] ?? "");
-   }catch(_){}
-    chatInstance = pre_chatInstance;
-    CallbackQueryPayload? pre_payload;
-    try{
-      pre_payload=CallbackQueryPayload.fromJson(json['payload'] ?? <String, dynamic>{});
-   }catch(_){}
-    payload = pre_payload;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    senderUserId = json['sender_user_id'] == null ? null : json['sender_user_id'];
+    inlineMessageId = json['inline_message_id'] == null ? null : json['inline_message_id'];
+    chatInstance = json['chat_instance'] == null ? null : int.tryParse(json['chat_instance'] ?? "");
+    payload = json['payload'] == null ? null : CallbackQueryPayload.fromJson(json['payload'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -4242,26 +3494,10 @@ class UpdateNewShippingQuery extends Update {
 
   /// Parse from a json
   UpdateNewShippingQuery.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    int? pre_senderUserId;
-    try{
-      pre_senderUserId=json['sender_user_id'];
-   }catch(_){}
-    senderUserId = pre_senderUserId;
-    String? pre_invoicePayload;
-    try{
-      pre_invoicePayload=json['invoice_payload'];
-   }catch(_){}
-    invoicePayload = pre_invoicePayload;
-    Address? pre_shippingAddress;
-    try{
-      pre_shippingAddress=Address.fromJson(json['shipping_address'] ?? <String, dynamic>{});
-   }catch(_){}
-    shippingAddress = pre_shippingAddress;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    senderUserId = json['sender_user_id'] == null ? null : json['sender_user_id'];
+    invoicePayload = json['invoice_payload'] == null ? null : json['invoice_payload'];
+    shippingAddress = json['shipping_address'] == null ? null : Address.fromJson(json['shipping_address'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -4319,41 +3555,13 @@ class UpdateNewPreCheckoutQuery extends Update {
 
   /// Parse from a json
   UpdateNewPreCheckoutQuery.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    int? pre_senderUserId;
-    try{
-      pre_senderUserId=json['sender_user_id'];
-   }catch(_){}
-    senderUserId = pre_senderUserId;
-    String? pre_currency;
-    try{
-      pre_currency=json['currency'];
-   }catch(_){}
-    currency = pre_currency;
-    int? pre_totalAmount;
-    try{
-      pre_totalAmount=json['total_amount'];
-   }catch(_){}
-    totalAmount = pre_totalAmount;
-    String? pre_invoicePayload;
-    try{
-      pre_invoicePayload=json['invoice_payload'];
-   }catch(_){}
-    invoicePayload = pre_invoicePayload;
-    String? pre_shippingOptionId;
-    try{
-      pre_shippingOptionId=json['shipping_option_id'];
-   }catch(_){}
-    shippingOptionId = pre_shippingOptionId;
-    OrderInfo? pre_orderInfo;
-    try{
-      pre_orderInfo=OrderInfo.fromJson(json['order_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    orderInfo = pre_orderInfo;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    senderUserId = json['sender_user_id'] == null ? null : json['sender_user_id'];
+    currency = json['currency'] == null ? null : json['currency'];
+    totalAmount = json['total_amount'] == null ? null : json['total_amount'];
+    invoicePayload = json['invoice_payload'] == null ? null : json['invoice_payload'];
+    shippingOptionId = json['shipping_option_id'] == null ? null : json['shipping_option_id'];
+    orderInfo = json['order_info'] == null ? null : OrderInfo.fromJson(json['order_info'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -4390,11 +3598,7 @@ class UpdateNewCustomEvent extends Update {
 
   /// Parse from a json
   UpdateNewCustomEvent.fromJson(Map<String, dynamic> json)  {
-    String? pre_event;
-    try{
-      pre_event=json['event'];
-   }catch(_){}
-    event = pre_event;
+    event = json['event'] == null ? null : json['event'];
     extra = json['@extra'];
   }
 
@@ -4433,21 +3637,9 @@ class UpdateNewCustomQuery extends Update {
 
   /// Parse from a json
   UpdateNewCustomQuery.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    String? pre_data;
-    try{
-      pre_data=json['data'];
-   }catch(_){}
-    data = pre_data;
-    int? pre_timeout;
-    try{
-      pre_timeout=json['timeout'];
-   }catch(_){}
-    timeout = pre_timeout;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    data = json['data'] == null ? null : json['data'];
+    timeout = json['timeout'] == null ? null : json['timeout'];
     extra = json['@extra'];
   }
 
@@ -4480,11 +3672,7 @@ class UpdatePoll extends Update {
 
   /// Parse from a json
   UpdatePoll.fromJson(Map<String, dynamic> json)  {
-    Poll? pre_poll;
-    try{
-      pre_poll=Poll.fromJson(json['poll'] ?? <String, dynamic>{});
-   }catch(_){}
-    poll = pre_poll;
+    poll = json['poll'] == null ? null : Poll.fromJson(json['poll'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -4523,21 +3711,9 @@ class UpdatePollAnswer extends Update {
 
   /// Parse from a json
   UpdatePollAnswer.fromJson(Map<String, dynamic> json)  {
-    int? pre_pollId;
-    try{
-      pre_pollId=int.tryParse(json['poll_id'] ?? "");
-   }catch(_){}
-    pollId = pre_pollId;
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    List<int>? pre_optionIds;
-    try{
-      pre_optionIds=List<int>.from((json['option_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    optionIds = pre_optionIds;
+    pollId = json['poll_id'] == null ? null : int.tryParse(json['poll_id'] ?? "");
+    userId = json['user_id'] == null ? null : json['user_id'];
+    optionIds = json['option_ids'] == null ? null : List<int>.from((json['option_ids'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 
@@ -4590,36 +3766,12 @@ class UpdateChatMember extends Update {
 
   /// Parse from a json
   UpdateChatMember.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_actorUserId;
-    try{
-      pre_actorUserId=json['actor_user_id'];
-   }catch(_){}
-    actorUserId = pre_actorUserId;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
-    ChatInviteLink? pre_inviteLink;
-    try{
-      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    inviteLink = pre_inviteLink;
-    ChatMember? pre_oldChatMember;
-    try{
-      pre_oldChatMember=ChatMember.fromJson(json['old_chat_member'] ?? <String, dynamic>{});
-   }catch(_){}
-    oldChatMember = pre_oldChatMember;
-    ChatMember? pre_newChatMember;
-    try{
-      pre_newChatMember=ChatMember.fromJson(json['new_chat_member'] ?? <String, dynamic>{});
-   }catch(_){}
-    newChatMember = pre_newChatMember;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    actorUserId = json['actor_user_id'] == null ? null : json['actor_user_id'];
+    date = json['date'] == null ? null : json['date'];
+    inviteLink = json['invite_link'] == null ? null : ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
+    oldChatMember = json['old_chat_member'] == null ? null : ChatMember.fromJson(json['old_chat_member'] ?? <String, dynamic>{});
+    newChatMember = json['new_chat_member'] == null ? null : ChatMember.fromJson(json['new_chat_member'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -4663,21 +3815,9 @@ class UpdateNewChatJoinRequest extends Update {
 
   /// Parse from a json
   UpdateNewChatJoinRequest.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    ChatJoinRequest? pre_request;
-    try{
-      pre_request=ChatJoinRequest.fromJson(json['request'] ?? <String, dynamic>{});
-   }catch(_){}
-    request = pre_request;
-    ChatInviteLink? pre_inviteLink;
-    try{
-      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    inviteLink = pre_inviteLink;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    request = json['request'] == null ? null : ChatJoinRequest.fromJson(json['request'] ?? <String, dynamic>{});
+    inviteLink = json['invite_link'] == null ? null : ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 

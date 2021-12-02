@@ -78,11 +78,7 @@ class UserStatusOnline extends UserStatus {
 
   /// Parse from a json
   UserStatusOnline.fromJson(Map<String, dynamic> json)  {
-    int? pre_expires;
-    try{
-      pre_expires=json['expires'];
-   }catch(_){}
-    expires = pre_expires;
+    expires = json['expires'] == null ? null : json['expires'];
   }
 
   @override
@@ -109,11 +105,7 @@ class UserStatusOffline extends UserStatus {
 
   /// Parse from a json
   UserStatusOffline.fromJson(Map<String, dynamic> json)  {
-    int? pre_wasOnline;
-    try{
-      pre_wasOnline=json['was_online'];
-   }catch(_){}
-    wasOnline = pre_wasOnline;
+    wasOnline = json['was_online'] == null ? null : json['was_online'];
   }
 
   @override

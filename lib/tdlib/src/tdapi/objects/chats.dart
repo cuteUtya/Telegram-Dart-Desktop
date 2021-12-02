@@ -17,16 +17,8 @@ class Chats extends TdObject {
 
   /// Parse from a json
   Chats.fromJson(Map<String, dynamic> json)  {
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<int>? pre_chatIds;
-    try{
-      pre_chatIds=List<int>.from((json['chat_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    chatIds = pre_chatIds;
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    chatIds = json['chat_ids'] == null ? null : List<int>.from((json['chat_ids'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 

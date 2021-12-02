@@ -53,16 +53,8 @@ class StatisticalGraphData extends StatisticalGraph {
 
   /// Parse from a json
   StatisticalGraphData.fromJson(Map<String, dynamic> json)  {
-    String? pre_jsonData;
-    try{
-      pre_jsonData=json['json_data'];
-   }catch(_){}
-    jsonData = pre_jsonData;
-    String? pre_zoomToken;
-    try{
-      pre_zoomToken=json['zoom_token'];
-   }catch(_){}
-    zoomToken = pre_zoomToken;
+    jsonData = json['json_data'] == null ? null : json['json_data'];
+    zoomToken = json['zoom_token'] == null ? null : json['zoom_token'];
     extra = json['@extra'];
   }
 
@@ -94,11 +86,7 @@ class StatisticalGraphAsync extends StatisticalGraph {
 
   /// Parse from a json
   StatisticalGraphAsync.fromJson(Map<String, dynamic> json)  {
-    String? pre_token;
-    try{
-      pre_token=json['token'];
-   }catch(_){}
-    token = pre_token;
+    token = json['token'] == null ? null : json['token'];
     extra = json['@extra'];
   }
 
@@ -129,11 +117,7 @@ class StatisticalGraphError extends StatisticalGraph {
 
   /// Parse from a json
   StatisticalGraphError.fromJson(Map<String, dynamic> json)  {
-    String? pre_errorMessage;
-    try{
-      pre_errorMessage=json['error_message'];
-   }catch(_){}
-    errorMessage = pre_errorMessage;
+    errorMessage = json['error_message'] == null ? null : json['error_message'];
     extra = json['@extra'];
   }
 

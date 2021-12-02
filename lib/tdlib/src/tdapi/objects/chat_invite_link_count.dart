@@ -18,21 +18,9 @@ class ChatInviteLinkCount extends TdObject {
 
   /// Parse from a json
   ChatInviteLinkCount.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    int? pre_inviteLinkCount;
-    try{
-      pre_inviteLinkCount=json['invite_link_count'];
-   }catch(_){}
-    inviteLinkCount = pre_inviteLinkCount;
-    int? pre_revokedInviteLinkCount;
-    try{
-      pre_revokedInviteLinkCount=json['revoked_invite_link_count'];
-   }catch(_){}
-    revokedInviteLinkCount = pre_revokedInviteLinkCount;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    inviteLinkCount = json['invite_link_count'] == null ? null : json['invite_link_count'];
+    revokedInviteLinkCount = json['revoked_invite_link_count'] == null ? null : json['revoked_invite_link_count'];
   }
 
   @override

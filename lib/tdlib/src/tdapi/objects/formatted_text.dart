@@ -17,16 +17,8 @@ class FormattedText extends TdObject {
 
   /// Parse from a json
   FormattedText.fromJson(Map<String, dynamic> json)  {
-    String? pre_text;
-    try{
-      pre_text=json['text'];
-   }catch(_){}
-    text = pre_text;
-    List<TextEntity>? pre_entities;
-    try{
-      pre_entities=List<TextEntity>.from((json['entities'] ?? [])!.map((item) => TextEntity.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    entities = pre_entities;
+    text = json['text'] == null ? null : json['text'];
+    entities = json['entities'] == null ? null : List<TextEntity>.from((json['entities'] ?? [])!.map((item) => TextEntity.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

@@ -26,31 +26,11 @@ class CallServer extends TdObject {
 
   /// Parse from a json
   CallServer.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    String? pre_ipAddress;
-    try{
-      pre_ipAddress=json['ip_address'];
-   }catch(_){}
-    ipAddress = pre_ipAddress;
-    String? pre_ipv6Address;
-    try{
-      pre_ipv6Address=json['ipv6_address'];
-   }catch(_){}
-    ipv6Address = pre_ipv6Address;
-    int? pre_port;
-    try{
-      pre_port=json['port'];
-   }catch(_){}
-    port = pre_port;
-    CallServerType? pre_type;
-    try{
-      pre_type=CallServerType.fromJson(json['type'] ?? <String, dynamic>{});
-   }catch(_){}
-    type = pre_type;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    ipAddress = json['ip_address'] == null ? null : json['ip_address'];
+    ipv6Address = json['ipv6_address'] == null ? null : json['ipv6_address'];
+    port = json['port'] == null ? null : json['port'];
+    type = json['type'] == null ? null : CallServerType.fromJson(json['type'] ?? <String, dynamic>{});
   }
 
   @override

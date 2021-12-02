@@ -88,11 +88,7 @@ class RichTextPlain extends RichText {
 
   /// Parse from a json
   RichTextPlain.fromJson(Map<String, dynamic> json)  {
-    String? pre_text;
-    try{
-      pre_text=json['text'];
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : json['text'];
   }
 
   @override
@@ -119,11 +115,7 @@ class RichTextBold extends RichText {
 
   /// Parse from a json
   RichTextBold.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -150,11 +142,7 @@ class RichTextItalic extends RichText {
 
   /// Parse from a json
   RichTextItalic.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -181,11 +169,7 @@ class RichTextUnderline extends RichText {
 
   /// Parse from a json
   RichTextUnderline.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -212,11 +196,7 @@ class RichTextStrikethrough extends RichText {
 
   /// Parse from a json
   RichTextStrikethrough.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -243,11 +223,7 @@ class RichTextFixed extends RichText {
 
   /// Parse from a json
   RichTextFixed.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -282,21 +258,9 @@ class RichTextUrl extends RichText {
 
   /// Parse from a json
   RichTextUrl.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
-    String? pre_url;
-    try{
-      pre_url=json['url'];
-   }catch(_){}
-    url = pre_url;
-    bool? pre_isCached;
-    try{
-      pre_isCached=json['is_cached'];
-   }catch(_){}
-    isCached = pre_isCached;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
+    url = json['url'] == null ? null : json['url'];
+    isCached = json['is_cached'] == null ? null : json['is_cached'];
   }
 
   @override
@@ -329,16 +293,8 @@ class RichTextEmailAddress extends RichText {
 
   /// Parse from a json
   RichTextEmailAddress.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
-    String? pre_emailAddress;
-    try{
-      pre_emailAddress=json['email_address'];
-   }catch(_){}
-    emailAddress = pre_emailAddress;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
+    emailAddress = json['email_address'] == null ? null : json['email_address'];
   }
 
   @override
@@ -366,11 +322,7 @@ class RichTextSubscript extends RichText {
 
   /// Parse from a json
   RichTextSubscript.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -397,11 +349,7 @@ class RichTextSuperscript extends RichText {
 
   /// Parse from a json
   RichTextSuperscript.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -428,11 +376,7 @@ class RichTextMarked extends RichText {
 
   /// Parse from a json
   RichTextMarked.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -463,16 +407,8 @@ class RichTextPhoneNumber extends RichText {
 
   /// Parse from a json
   RichTextPhoneNumber.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
-    String? pre_phoneNumber;
-    try{
-      pre_phoneNumber=json['phone_number'];
-   }catch(_){}
-    phoneNumber = pre_phoneNumber;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
+    phoneNumber = json['phone_number'] == null ? null : json['phone_number'];
   }
 
   @override
@@ -508,21 +444,9 @@ class RichTextIcon extends RichText {
 
   /// Parse from a json
   RichTextIcon.fromJson(Map<String, dynamic> json)  {
-    Document? pre_document;
-    try{
-      pre_document=Document.fromJson(json['document'] ?? <String, dynamic>{});
-   }catch(_){}
-    document = pre_document;
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
+    document = json['document'] == null ? null : Document.fromJson(json['document'] ?? <String, dynamic>{});
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
   }
 
   @override
@@ -559,21 +483,9 @@ class RichTextReference extends RichText {
 
   /// Parse from a json
   RichTextReference.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
-    String? pre_anchorName;
-    try{
-      pre_anchorName=json['anchor_name'];
-   }catch(_){}
-    anchorName = pre_anchorName;
-    String? pre_url;
-    try{
-      pre_url=json['url'];
-   }catch(_){}
-    url = pre_url;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
+    anchorName = json['anchor_name'] == null ? null : json['anchor_name'];
+    url = json['url'] == null ? null : json['url'];
   }
 
   @override
@@ -602,11 +514,7 @@ class RichTextAnchor extends RichText {
 
   /// Parse from a json
   RichTextAnchor.fromJson(Map<String, dynamic> json)  {
-    String? pre_name;
-    try{
-      pre_name=json['name'];
-   }catch(_){}
-    name = pre_name;
+    name = json['name'] == null ? null : json['name'];
   }
 
   @override
@@ -641,21 +549,9 @@ class RichTextAnchorLink extends RichText {
 
   /// Parse from a json
   RichTextAnchorLink.fromJson(Map<String, dynamic> json)  {
-    RichText? pre_text;
-    try{
-      pre_text=RichText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
-    String? pre_anchorName;
-    try{
-      pre_anchorName=json['anchor_name'];
-   }catch(_){}
-    anchorName = pre_anchorName;
-    String? pre_url;
-    try{
-      pre_url=json['url'];
-   }catch(_){}
-    url = pre_url;
+    text = json['text'] == null ? null : RichText.fromJson(json['text'] ?? <String, dynamic>{});
+    anchorName = json['anchor_name'] == null ? null : json['anchor_name'];
+    url = json['url'] == null ? null : json['url'];
   }
 
   @override
@@ -684,11 +580,7 @@ class RichTexts extends RichText {
 
   /// Parse from a json
   RichTexts.fromJson(Map<String, dynamic> json)  {
-    List<RichText>? pre_texts;
-    try{
-      pre_texts=List<RichText>.from((json['texts'] ?? [])!.map((item) => RichText.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    texts = pre_texts;
+    texts = json['texts'] == null ? null : List<RichText>.from((json['texts'] ?? [])!.map((item) => RichText.fromJson(item ?? <String, dynamic>{})).toList());
   }
 
   @override

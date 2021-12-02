@@ -33,36 +33,12 @@ class WebPageInstantView extends TdObject {
 
   /// Parse from a json
   WebPageInstantView.fromJson(Map<String, dynamic> json)  {
-    List<PageBlock>? pre_pageBlocks;
-    try{
-      pre_pageBlocks=List<PageBlock>.from((json['page_blocks'] ?? [])!.map((item) => PageBlock.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    pageBlocks = pre_pageBlocks;
-    int? pre_viewCount;
-    try{
-      pre_viewCount=json['view_count'];
-   }catch(_){}
-    viewCount = pre_viewCount;
-    int? pre_version;
-    try{
-      pre_version=json['version'];
-   }catch(_){}
-    version = pre_version;
-    bool? pre_isRtl;
-    try{
-      pre_isRtl=json['is_rtl'];
-   }catch(_){}
-    isRtl = pre_isRtl;
-    bool? pre_isFull;
-    try{
-      pre_isFull=json['is_full'];
-   }catch(_){}
-    isFull = pre_isFull;
-    InternalLinkType? pre_feedbackLink;
-    try{
-      pre_feedbackLink=InternalLinkType.fromJson(json['feedback_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    feedbackLink = pre_feedbackLink;
+    pageBlocks = json['page_blocks'] == null ? null : List<PageBlock>.from((json['page_blocks'] ?? [])!.map((item) => PageBlock.fromJson(item ?? <String, dynamic>{})).toList());
+    viewCount = json['view_count'] == null ? null : json['view_count'];
+    version = json['version'] == null ? null : json['version'];
+    isRtl = json['is_rtl'] == null ? null : json['is_rtl'];
+    isFull = json['is_full'] == null ? null : json['is_full'];
+    feedbackLink = json['feedback_link'] == null ? null : InternalLinkType.fromJson(json['feedback_link'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 

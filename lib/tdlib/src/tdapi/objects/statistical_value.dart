@@ -18,21 +18,9 @@ class StatisticalValue extends TdObject {
 
   /// Parse from a json
   StatisticalValue.fromJson(Map<String, dynamic> json)  {
-    double? pre_value;
-    try{
-      pre_value=json['value'];
-   }catch(_){}
-    value = pre_value;
-    double? pre_previousValue;
-    try{
-      pre_previousValue=json['previous_value'];
-   }catch(_){}
-    previousValue = pre_previousValue;
-    double? pre_growthRatePercentage;
-    try{
-      pre_growthRatePercentage=json['growth_rate_percentage'];
-   }catch(_){}
-    growthRatePercentage = pre_growthRatePercentage;
+    value = json['value'] == null ? null : json['value'];
+    previousValue = json['previous_value'] == null ? null : json['previous_value'];
+    growthRatePercentage = json['growth_rate_percentage'] == null ? null : json['growth_rate_percentage'];
   }
 
   @override

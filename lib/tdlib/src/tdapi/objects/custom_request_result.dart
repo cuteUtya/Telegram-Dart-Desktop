@@ -13,11 +13,7 @@ class CustomRequestResult extends TdObject {
 
   /// Parse from a json
   CustomRequestResult.fromJson(Map<String, dynamic> json)  {
-    String? pre_result;
-    try{
-      pre_result=json['result'];
-   }catch(_){}
-    result = pre_result;
+    result = json['result'] == null ? null : json['result'];
     extra = json['@extra'];
   }
 

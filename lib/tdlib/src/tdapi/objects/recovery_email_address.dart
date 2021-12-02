@@ -13,11 +13,7 @@ class RecoveryEmailAddress extends TdObject {
 
   /// Parse from a json
   RecoveryEmailAddress.fromJson(Map<String, dynamic> json)  {
-    String? pre_recoveryEmailAddress;
-    try{
-      pre_recoveryEmailAddress=json['recovery_email_address'];
-   }catch(_){}
-    recoveryEmailAddress = pre_recoveryEmailAddress;
+    recoveryEmailAddress = json['recovery_email_address'] == null ? null : json['recovery_email_address'];
     extra = json['@extra'];
   }
 

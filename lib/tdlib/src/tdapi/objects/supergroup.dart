@@ -69,81 +69,21 @@ class Supergroup extends TdObject {
 
   /// Parse from a json
   Supergroup.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_username;
-    try{
-      pre_username=json['username'];
-   }catch(_){}
-    username = pre_username;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
-    ChatMemberStatus? pre_status;
-    try{
-      pre_status=ChatMemberStatus.fromJson(json['status'] ?? <String, dynamic>{});
-   }catch(_){}
-    status = pre_status;
-    int? pre_memberCount;
-    try{
-      pre_memberCount=json['member_count'];
-   }catch(_){}
-    memberCount = pre_memberCount;
-    bool? pre_hasLinkedChat;
-    try{
-      pre_hasLinkedChat=json['has_linked_chat'];
-   }catch(_){}
-    hasLinkedChat = pre_hasLinkedChat;
-    bool? pre_hasLocation;
-    try{
-      pre_hasLocation=json['has_location'];
-   }catch(_){}
-    hasLocation = pre_hasLocation;
-    bool? pre_signMessages;
-    try{
-      pre_signMessages=json['sign_messages'];
-   }catch(_){}
-    signMessages = pre_signMessages;
-    bool? pre_isSlowModeEnabled;
-    try{
-      pre_isSlowModeEnabled=json['is_slow_mode_enabled'];
-   }catch(_){}
-    isSlowModeEnabled = pre_isSlowModeEnabled;
-    bool? pre_isChannel;
-    try{
-      pre_isChannel=json['is_channel'];
-   }catch(_){}
-    isChannel = pre_isChannel;
-    bool? pre_isBroadcastGroup;
-    try{
-      pre_isBroadcastGroup=json['is_broadcast_group'];
-   }catch(_){}
-    isBroadcastGroup = pre_isBroadcastGroup;
-    bool? pre_isVerified;
-    try{
-      pre_isVerified=json['is_verified'];
-   }catch(_){}
-    isVerified = pre_isVerified;
-    String? pre_restrictionReason;
-    try{
-      pre_restrictionReason=json['restriction_reason'];
-   }catch(_){}
-    restrictionReason = pre_restrictionReason;
-    bool? pre_isScam;
-    try{
-      pre_isScam=json['is_scam'];
-   }catch(_){}
-    isScam = pre_isScam;
-    bool? pre_isFake;
-    try{
-      pre_isFake=json['is_fake'];
-   }catch(_){}
-    isFake = pre_isFake;
+    id = json['id'] == null ? null : json['id'];
+    username = json['username'] == null ? null : json['username'];
+    date = json['date'] == null ? null : json['date'];
+    status = json['status'] == null ? null : ChatMemberStatus.fromJson(json['status'] ?? <String, dynamic>{});
+    memberCount = json['member_count'] == null ? null : json['member_count'];
+    hasLinkedChat = json['has_linked_chat'] == null ? null : json['has_linked_chat'];
+    hasLocation = json['has_location'] == null ? null : json['has_location'];
+    signMessages = json['sign_messages'] == null ? null : json['sign_messages'];
+    isSlowModeEnabled = json['is_slow_mode_enabled'] == null ? null : json['is_slow_mode_enabled'];
+    isChannel = json['is_channel'] == null ? null : json['is_channel'];
+    isBroadcastGroup = json['is_broadcast_group'] == null ? null : json['is_broadcast_group'];
+    isVerified = json['is_verified'] == null ? null : json['is_verified'];
+    restrictionReason = json['restriction_reason'] == null ? null : json['restriction_reason'];
+    isScam = json['is_scam'] == null ? null : json['is_scam'];
+    isFake = json['is_fake'] == null ? null : json['is_fake'];
     extra = json['@extra'];
   }
 

@@ -18,21 +18,9 @@ class MessageInteractionInfo extends TdObject {
 
   /// Parse from a json
   MessageInteractionInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_viewCount;
-    try{
-      pre_viewCount=json['view_count'];
-   }catch(_){}
-    viewCount = pre_viewCount;
-    int? pre_forwardCount;
-    try{
-      pre_forwardCount=json['forward_count'];
-   }catch(_){}
-    forwardCount = pre_forwardCount;
-    MessageReplyInfo? pre_replyInfo;
-    try{
-      pre_replyInfo=MessageReplyInfo.fromJson(json['reply_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyInfo = pre_replyInfo;
+    viewCount = json['view_count'] == null ? null : json['view_count'];
+    forwardCount = json['forward_count'] == null ? null : json['forward_count'];
+    replyInfo = json['reply_info'] == null ? null : MessageReplyInfo.fromJson(json['reply_info'] ?? <String, dynamic>{});
   }
 
   @override

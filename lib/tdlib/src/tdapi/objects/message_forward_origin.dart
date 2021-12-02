@@ -52,11 +52,7 @@ class MessageForwardOriginUser extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginUser.fromJson(Map<String, dynamic> json)  {
-    int? pre_senderUserId;
-    try{
-      pre_senderUserId=json['sender_user_id'];
-   }catch(_){}
-    senderUserId = pre_senderUserId;
+    senderUserId = json['sender_user_id'] == null ? null : json['sender_user_id'];
   }
 
   @override
@@ -87,16 +83,8 @@ class MessageForwardOriginChat extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginChat.fromJson(Map<String, dynamic> json)  {
-    int? pre_senderChatId;
-    try{
-      pre_senderChatId=json['sender_chat_id'];
-   }catch(_){}
-    senderChatId = pre_senderChatId;
-    String? pre_authorSignature;
-    try{
-      pre_authorSignature=json['author_signature'];
-   }catch(_){}
-    authorSignature = pre_authorSignature;
+    senderChatId = json['sender_chat_id'] == null ? null : json['sender_chat_id'];
+    authorSignature = json['author_signature'] == null ? null : json['author_signature'];
   }
 
   @override
@@ -124,11 +112,7 @@ class MessageForwardOriginHiddenUser extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginHiddenUser.fromJson(Map<String, dynamic> json)  {
-    String? pre_senderName;
-    try{
-      pre_senderName=json['sender_name'];
-   }catch(_){}
-    senderName = pre_senderName;
+    senderName = json['sender_name'] == null ? null : json['sender_name'];
   }
 
   @override
@@ -163,21 +147,9 @@ class MessageForwardOriginChannel extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginChannel.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    String? pre_authorSignature;
-    try{
-      pre_authorSignature=json['author_signature'];
-   }catch(_){}
-    authorSignature = pre_authorSignature;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    authorSignature = json['author_signature'] == null ? null : json['author_signature'];
   }
 
   @override
@@ -206,11 +178,7 @@ class MessageForwardOriginMessageImport extends MessageForwardOrigin {
 
   /// Parse from a json
   MessageForwardOriginMessageImport.fromJson(Map<String, dynamic> json)  {
-    String? pre_senderName;
-    try{
-      pre_senderName=json['sender_name'];
-   }catch(_){}
-    senderName = pre_senderName;
+    senderName = json['sender_name'] == null ? null : json['sender_name'];
   }
 
   @override

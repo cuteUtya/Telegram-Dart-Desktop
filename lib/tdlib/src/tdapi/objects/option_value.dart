@@ -52,11 +52,7 @@ class OptionValueBoolean extends OptionValue {
 
   /// Parse from a json
   OptionValueBoolean.fromJson(Map<String, dynamic> json)  {
-    bool? pre_value;
-    try{
-      pre_value=json['value'];
-   }catch(_){}
-    value = pre_value;
+    value = json['value'] == null ? null : json['value'];
     extra = json['@extra'];
   }
 
@@ -113,11 +109,7 @@ class OptionValueInteger extends OptionValue {
 
   /// Parse from a json
   OptionValueInteger.fromJson(Map<String, dynamic> json)  {
-    int? pre_value;
-    try{
-      pre_value=int.tryParse(json['value'] ?? "");
-   }catch(_){}
-    value = pre_value;
+    value = json['value'] == null ? null : int.tryParse(json['value'] ?? "");
     extra = json['@extra'];
   }
 
@@ -148,11 +140,7 @@ class OptionValueString extends OptionValue {
 
   /// Parse from a json
   OptionValueString.fromJson(Map<String, dynamic> json)  {
-    String? pre_value;
-    try{
-      pre_value=json['value'];
-   }catch(_){}
-    value = pre_value;
+    value = json['value'] == null ? null : json['value'];
     extra = json['@extra'];
   }
 

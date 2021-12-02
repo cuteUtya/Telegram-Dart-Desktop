@@ -64,11 +64,7 @@ class InputPassportElementErrorSourceUnspecified extends InputPassportElementErr
 
   /// Parse from a json
   InputPassportElementErrorSourceUnspecified.fromJson(Map<String, dynamic> json)  {
-    String? pre_elementHash;
-    try{
-      pre_elementHash=json['element_hash'];
-   }catch(_){}
-    elementHash = pre_elementHash;
+    elementHash = json['element_hash'] == null ? null : json['element_hash'];
   }
 
   @override
@@ -99,16 +95,8 @@ class InputPassportElementErrorSourceDataField extends InputPassportElementError
 
   /// Parse from a json
   InputPassportElementErrorSourceDataField.fromJson(Map<String, dynamic> json)  {
-    String? pre_fieldName;
-    try{
-      pre_fieldName=json['field_name'];
-   }catch(_){}
-    fieldName = pre_fieldName;
-    String? pre_dataHash;
-    try{
-      pre_dataHash=json['data_hash'];
-   }catch(_){}
-    dataHash = pre_dataHash;
+    fieldName = json['field_name'] == null ? null : json['field_name'];
+    dataHash = json['data_hash'] == null ? null : json['data_hash'];
   }
 
   @override
@@ -136,11 +124,7 @@ class InputPassportElementErrorSourceFrontSide extends InputPassportElementError
 
   /// Parse from a json
   InputPassportElementErrorSourceFrontSide.fromJson(Map<String, dynamic> json)  {
-    String? pre_fileHash;
-    try{
-      pre_fileHash=json['file_hash'];
-   }catch(_){}
-    fileHash = pre_fileHash;
+    fileHash = json['file_hash'] == null ? null : json['file_hash'];
   }
 
   @override
@@ -167,11 +151,7 @@ class InputPassportElementErrorSourceReverseSide extends InputPassportElementErr
 
   /// Parse from a json
   InputPassportElementErrorSourceReverseSide.fromJson(Map<String, dynamic> json)  {
-    String? pre_fileHash;
-    try{
-      pre_fileHash=json['file_hash'];
-   }catch(_){}
-    fileHash = pre_fileHash;
+    fileHash = json['file_hash'] == null ? null : json['file_hash'];
   }
 
   @override
@@ -198,11 +178,7 @@ class InputPassportElementErrorSourceSelfie extends InputPassportElementErrorSou
 
   /// Parse from a json
   InputPassportElementErrorSourceSelfie.fromJson(Map<String, dynamic> json)  {
-    String? pre_fileHash;
-    try{
-      pre_fileHash=json['file_hash'];
-   }catch(_){}
-    fileHash = pre_fileHash;
+    fileHash = json['file_hash'] == null ? null : json['file_hash'];
   }
 
   @override
@@ -229,11 +205,7 @@ class InputPassportElementErrorSourceTranslationFile extends InputPassportElemen
 
   /// Parse from a json
   InputPassportElementErrorSourceTranslationFile.fromJson(Map<String, dynamic> json)  {
-    String? pre_fileHash;
-    try{
-      pre_fileHash=json['file_hash'];
-   }catch(_){}
-    fileHash = pre_fileHash;
+    fileHash = json['file_hash'] == null ? null : json['file_hash'];
   }
 
   @override
@@ -260,11 +232,7 @@ class InputPassportElementErrorSourceTranslationFiles extends InputPassportEleme
 
   /// Parse from a json
   InputPassportElementErrorSourceTranslationFiles.fromJson(Map<String, dynamic> json)  {
-    List<String>? pre_fileHashes;
-    try{
-      pre_fileHashes=List<String>.from((json['file_hashes'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    fileHashes = pre_fileHashes;
+    fileHashes = json['file_hashes'] == null ? null : List<String>.from((json['file_hashes'] ?? [])!.map((item) => item).toList());
   }
 
   @override
@@ -291,11 +259,7 @@ class InputPassportElementErrorSourceFile extends InputPassportElementErrorSourc
 
   /// Parse from a json
   InputPassportElementErrorSourceFile.fromJson(Map<String, dynamic> json)  {
-    String? pre_fileHash;
-    try{
-      pre_fileHash=json['file_hash'];
-   }catch(_){}
-    fileHash = pre_fileHash;
+    fileHash = json['file_hash'] == null ? null : json['file_hash'];
   }
 
   @override
@@ -322,11 +286,7 @@ class InputPassportElementErrorSourceFiles extends InputPassportElementErrorSour
 
   /// Parse from a json
   InputPassportElementErrorSourceFiles.fromJson(Map<String, dynamic> json)  {
-    List<String>? pre_fileHashes;
-    try{
-      pre_fileHashes=List<String>.from((json['file_hashes'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    fileHashes = pre_fileHashes;
+    fileHashes = json['file_hashes'] == null ? null : List<String>.from((json['file_hashes'] ?? [])!.map((item) => item).toList());
   }
 
   @override

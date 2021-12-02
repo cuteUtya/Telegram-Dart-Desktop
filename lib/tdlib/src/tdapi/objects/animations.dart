@@ -13,11 +13,7 @@ class Animations extends TdObject {
 
   /// Parse from a json
   Animations.fromJson(Map<String, dynamic> json)  {
-    List<Animation>? pre_animations;
-    try{
-      pre_animations=List<Animation>.from((json['animations'] ?? [])!.map((item) => Animation.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    animations = pre_animations;
+    animations = json['animations'] == null ? null : List<Animation>.from((json['animations'] ?? [])!.map((item) => Animation.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

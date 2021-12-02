@@ -55,26 +55,10 @@ class NetworkStatisticsEntryFile extends NetworkStatisticsEntry {
 
   /// Parse from a json
   NetworkStatisticsEntryFile.fromJson(Map<String, dynamic> json)  {
-    FileType? pre_fileType;
-    try{
-      pre_fileType=FileType.fromJson(json['file_type'] ?? <String, dynamic>{});
-   }catch(_){}
-    fileType = pre_fileType;
-    NetworkType? pre_networkType;
-    try{
-      pre_networkType=NetworkType.fromJson(json['network_type'] ?? <String, dynamic>{});
-   }catch(_){}
-    networkType = pre_networkType;
-    int? pre_sentBytes;
-    try{
-      pre_sentBytes=json['sent_bytes'];
-   }catch(_){}
-    sentBytes = pre_sentBytes;
-    int? pre_receivedBytes;
-    try{
-      pre_receivedBytes=json['received_bytes'];
-   }catch(_){}
-    receivedBytes = pre_receivedBytes;
+    fileType = json['file_type'] == null ? null : FileType.fromJson(json['file_type'] ?? <String, dynamic>{});
+    networkType = json['network_type'] == null ? null : NetworkType.fromJson(json['network_type'] ?? <String, dynamic>{});
+    sentBytes = json['sent_bytes'] == null ? null : json['sent_bytes'];
+    receivedBytes = json['received_bytes'] == null ? null : json['received_bytes'];
   }
 
   @override
@@ -116,26 +100,10 @@ class NetworkStatisticsEntryCall extends NetworkStatisticsEntry {
 
   /// Parse from a json
   NetworkStatisticsEntryCall.fromJson(Map<String, dynamic> json)  {
-    NetworkType? pre_networkType;
-    try{
-      pre_networkType=NetworkType.fromJson(json['network_type'] ?? <String, dynamic>{});
-   }catch(_){}
-    networkType = pre_networkType;
-    int? pre_sentBytes;
-    try{
-      pre_sentBytes=json['sent_bytes'];
-   }catch(_){}
-    sentBytes = pre_sentBytes;
-    int? pre_receivedBytes;
-    try{
-      pre_receivedBytes=json['received_bytes'];
-   }catch(_){}
-    receivedBytes = pre_receivedBytes;
-    double? pre_duration;
-    try{
-      pre_duration=json['duration'];
-   }catch(_){}
-    duration = pre_duration;
+    networkType = json['network_type'] == null ? null : NetworkType.fromJson(json['network_type'] ?? <String, dynamic>{});
+    sentBytes = json['sent_bytes'] == null ? null : json['sent_bytes'];
+    receivedBytes = json['received_bytes'] == null ? null : json['received_bytes'];
+    duration = json['duration'] == null ? null : json['duration'];
   }
 
   @override

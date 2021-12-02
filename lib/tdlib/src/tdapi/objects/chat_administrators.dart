@@ -13,11 +13,7 @@ class ChatAdministrators extends TdObject {
 
   /// Parse from a json
   ChatAdministrators.fromJson(Map<String, dynamic> json)  {
-    List<ChatAdministrator>? pre_administrators;
-    try{
-      pre_administrators=List<ChatAdministrator>.from((json['administrators'] ?? [])!.map((item) => ChatAdministrator.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    administrators = pre_administrators;
+    administrators = json['administrators'] == null ? null : List<ChatAdministrator>.from((json['administrators'] ?? [])!.map((item) => ChatAdministrator.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

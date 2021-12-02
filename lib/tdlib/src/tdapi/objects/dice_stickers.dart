@@ -43,11 +43,7 @@ class DiceStickersRegular extends DiceStickers {
 
   /// Parse from a json
   DiceStickersRegular.fromJson(Map<String, dynamic> json)  {
-    Sticker? pre_sticker;
-    try{
-      pre_sticker=Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
-   }catch(_){}
-    sticker = pre_sticker;
+    sticker = json['sticker'] == null ? null : Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
   }
 
   @override
@@ -90,31 +86,11 @@ class DiceStickersSlotMachine extends DiceStickers {
 
   /// Parse from a json
   DiceStickersSlotMachine.fromJson(Map<String, dynamic> json)  {
-    Sticker? pre_background;
-    try{
-      pre_background=Sticker.fromJson(json['background'] ?? <String, dynamic>{});
-   }catch(_){}
-    background = pre_background;
-    Sticker? pre_lever;
-    try{
-      pre_lever=Sticker.fromJson(json['lever'] ?? <String, dynamic>{});
-   }catch(_){}
-    lever = pre_lever;
-    Sticker? pre_leftReel;
-    try{
-      pre_leftReel=Sticker.fromJson(json['left_reel'] ?? <String, dynamic>{});
-   }catch(_){}
-    leftReel = pre_leftReel;
-    Sticker? pre_centerReel;
-    try{
-      pre_centerReel=Sticker.fromJson(json['center_reel'] ?? <String, dynamic>{});
-   }catch(_){}
-    centerReel = pre_centerReel;
-    Sticker? pre_rightReel;
-    try{
-      pre_rightReel=Sticker.fromJson(json['right_reel'] ?? <String, dynamic>{});
-   }catch(_){}
-    rightReel = pre_rightReel;
+    background = json['background'] == null ? null : Sticker.fromJson(json['background'] ?? <String, dynamic>{});
+    lever = json['lever'] == null ? null : Sticker.fromJson(json['lever'] ?? <String, dynamic>{});
+    leftReel = json['left_reel'] == null ? null : Sticker.fromJson(json['left_reel'] ?? <String, dynamic>{});
+    centerReel = json['center_reel'] == null ? null : Sticker.fromJson(json['center_reel'] ?? <String, dynamic>{});
+    rightReel = json['right_reel'] == null ? null : Sticker.fromJson(json['right_reel'] ?? <String, dynamic>{});
   }
 
   @override

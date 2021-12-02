@@ -18,21 +18,9 @@ class ChatJoinRequest extends TdObject {
 
   /// Parse from a json
   ChatJoinRequest.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
-    String? pre_bio;
-    try{
-      pre_bio=json['bio'];
-   }catch(_){}
-    bio = pre_bio;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    date = json['date'] == null ? null : json['date'];
+    bio = json['bio'] == null ? null : json['bio'];
   }
 
   @override

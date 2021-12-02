@@ -18,21 +18,9 @@ class Minithumbnail extends TdObject {
 
   /// Parse from a json
   Minithumbnail.fromJson(Map<String, dynamic> json)  {
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
-    String? pre_data;
-    try{
-      pre_data=json['data'];
-   }catch(_){}
-    data = pre_data;
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    data = json['data'] == null ? null : json['data'];
   }
 
   @override

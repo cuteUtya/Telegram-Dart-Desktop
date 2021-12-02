@@ -17,16 +17,8 @@ class ChatJoinRequests extends TdObject {
 
   /// Parse from a json
   ChatJoinRequests.fromJson(Map<String, dynamic> json)  {
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<ChatJoinRequest>? pre_requests;
-    try{
-      pre_requests=List<ChatJoinRequest>.from((json['requests'] ?? [])!.map((item) => ChatJoinRequest.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    requests = pre_requests;
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    requests = json['requests'] == null ? null : List<ChatJoinRequest>.from((json['requests'] ?? [])!.map((item) => ChatJoinRequest.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

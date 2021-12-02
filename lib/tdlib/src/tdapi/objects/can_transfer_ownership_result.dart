@@ -104,11 +104,7 @@ class CanTransferOwnershipResultPasswordTooFresh extends CanTransferOwnershipRes
 
   /// Parse from a json
   CanTransferOwnershipResultPasswordTooFresh.fromJson(Map<String, dynamic> json)  {
-    int? pre_retryAfter;
-    try{
-      pre_retryAfter=json['retry_after'];
-   }catch(_){}
-    retryAfter = pre_retryAfter;
+    retryAfter = json['retry_after'] == null ? null : json['retry_after'];
     extra = json['@extra'];
   }
 
@@ -139,11 +135,7 @@ class CanTransferOwnershipResultSessionTooFresh extends CanTransferOwnershipResu
 
   /// Parse from a json
   CanTransferOwnershipResultSessionTooFresh.fromJson(Map<String, dynamic> json)  {
-    int? pre_retryAfter;
-    try{
-      pre_retryAfter=json['retry_after'];
-   }catch(_){}
-    retryAfter = pre_retryAfter;
+    retryAfter = json['retry_after'] == null ? null : json['retry_after'];
     extra = json['@extra'];
   }
 

@@ -14,16 +14,8 @@ class LabeledPricePart extends TdObject {
 
   /// Parse from a json
   LabeledPricePart.fromJson(Map<String, dynamic> json)  {
-    String? pre_label;
-    try{
-      pre_label=json['label'];
-   }catch(_){}
-    label = pre_label;
-    int? pre_amount;
-    try{
-      pre_amount=json['amount'];
-   }catch(_){}
-    amount = pre_amount;
+    label = json['label'] == null ? null : json['label'];
+    amount = json['amount'] == null ? null : json['amount'];
   }
 
   @override

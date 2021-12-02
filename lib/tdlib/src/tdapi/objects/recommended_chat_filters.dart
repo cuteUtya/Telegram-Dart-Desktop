@@ -13,11 +13,7 @@ class RecommendedChatFilters extends TdObject {
 
   /// Parse from a json
   RecommendedChatFilters.fromJson(Map<String, dynamic> json)  {
-    List<RecommendedChatFilter>? pre_chatFilters;
-    try{
-      pre_chatFilters=List<RecommendedChatFilter>.from((json['chat_filters'] ?? [])!.map((item) => RecommendedChatFilter.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    chatFilters = pre_chatFilters;
+    chatFilters = json['chat_filters'] == null ? null : List<RecommendedChatFilter>.from((json['chat_filters'] ?? [])!.map((item) => RecommendedChatFilter.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

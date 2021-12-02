@@ -26,31 +26,11 @@ class MessageReplyInfo extends TdObject {
 
   /// Parse from a json
   MessageReplyInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_replyCount;
-    try{
-      pre_replyCount=json['reply_count'];
-   }catch(_){}
-    replyCount = pre_replyCount;
-    List<MessageSender>? pre_recentRepliers;
-    try{
-      pre_recentRepliers=List<MessageSender>.from((json['recent_repliers'] ?? [])!.map((item) => MessageSender.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    recentRepliers = pre_recentRepliers;
-    int? pre_lastReadInboxMessageId;
-    try{
-      pre_lastReadInboxMessageId=json['last_read_inbox_message_id'];
-   }catch(_){}
-    lastReadInboxMessageId = pre_lastReadInboxMessageId;
-    int? pre_lastReadOutboxMessageId;
-    try{
-      pre_lastReadOutboxMessageId=json['last_read_outbox_message_id'];
-   }catch(_){}
-    lastReadOutboxMessageId = pre_lastReadOutboxMessageId;
-    int? pre_lastMessageId;
-    try{
-      pre_lastMessageId=json['last_message_id'];
-   }catch(_){}
-    lastMessageId = pre_lastMessageId;
+    replyCount = json['reply_count'] == null ? null : json['reply_count'];
+    recentRepliers = json['recent_repliers'] == null ? null : List<MessageSender>.from((json['recent_repliers'] ?? [])!.map((item) => MessageSender.fromJson(item ?? <String, dynamic>{})).toList());
+    lastReadInboxMessageId = json['last_read_inbox_message_id'] == null ? null : json['last_read_inbox_message_id'];
+    lastReadOutboxMessageId = json['last_read_outbox_message_id'] == null ? null : json['last_read_outbox_message_id'];
+    lastMessageId = json['last_message_id'] == null ? null : json['last_message_id'];
   }
 
   @override

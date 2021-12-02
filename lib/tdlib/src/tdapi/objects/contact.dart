@@ -26,31 +26,11 @@ class Contact extends TdObject {
 
   /// Parse from a json
   Contact.fromJson(Map<String, dynamic> json)  {
-    String? pre_phoneNumber;
-    try{
-      pre_phoneNumber=json['phone_number'];
-   }catch(_){}
-    phoneNumber = pre_phoneNumber;
-    String? pre_firstName;
-    try{
-      pre_firstName=json['first_name'];
-   }catch(_){}
-    firstName = pre_firstName;
-    String? pre_lastName;
-    try{
-      pre_lastName=json['last_name'];
-   }catch(_){}
-    lastName = pre_lastName;
-    String? pre_vcard;
-    try{
-      pre_vcard=json['vcard'];
-   }catch(_){}
-    vcard = pre_vcard;
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
+    phoneNumber = json['phone_number'] == null ? null : json['phone_number'];
+    firstName = json['first_name'] == null ? null : json['first_name'];
+    lastName = json['last_name'] == null ? null : json['last_name'];
+    vcard = json['vcard'] == null ? null : json['vcard'];
+    userId = json['user_id'] == null ? null : json['user_id'];
   }
 
   @override

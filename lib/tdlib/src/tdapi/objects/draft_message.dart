@@ -18,21 +18,9 @@ class DraftMessage extends TdObject {
 
   /// Parse from a json
   DraftMessage.fromJson(Map<String, dynamic> json)  {
-    int? pre_replyToMessageId;
-    try{
-      pre_replyToMessageId=json['reply_to_message_id'];
-   }catch(_){}
-    replyToMessageId = pre_replyToMessageId;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
-    InputMessageContent? pre_inputMessageText;
-    try{
-      pre_inputMessageText=InputMessageContent.fromJson(json['input_message_text'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageText = pre_inputMessageText;
+    replyToMessageId = json['reply_to_message_id'] == null ? null : json['reply_to_message_id'];
+    date = json['date'] == null ? null : json['date'];
+    inputMessageText = json['input_message_text'] == null ? null : InputMessageContent.fromJson(json['input_message_text'] ?? <String, dynamic>{});
   }
 
   @override

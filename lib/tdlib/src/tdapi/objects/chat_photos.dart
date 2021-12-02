@@ -17,16 +17,8 @@ class ChatPhotos extends TdObject {
 
   /// Parse from a json
   ChatPhotos.fromJson(Map<String, dynamic> json)  {
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<ChatPhoto>? pre_photos;
-    try{
-      pre_photos=List<ChatPhoto>.from((json['photos'] ?? [])!.map((item) => ChatPhoto.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    photos = pre_photos;
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    photos = json['photos'] == null ? null : List<ChatPhoto>.from((json['photos'] ?? [])!.map((item) => ChatPhoto.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

@@ -70,16 +70,8 @@ class ChatSourcePublicServiceAnnouncement extends ChatSource {
 
   /// Parse from a json
   ChatSourcePublicServiceAnnouncement.fromJson(Map<String, dynamic> json)  {
-    String? pre_type;
-    try{
-      pre_type=json['type'];
-   }catch(_){}
-    type = pre_type;
-    String? pre_text;
-    try{
-      pre_text=json['text'];
-   }catch(_){}
-    text = pre_text;
+    type = json['type'] == null ? null : json['type'];
+    text = json['text'] == null ? null : json['text'];
   }
 
   @override

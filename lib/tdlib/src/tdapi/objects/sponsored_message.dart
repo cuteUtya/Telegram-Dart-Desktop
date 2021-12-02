@@ -22,26 +22,10 @@ class SponsoredMessage extends TdObject {
 
   /// Parse from a json
   SponsoredMessage.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    int? pre_sponsorChatId;
-    try{
-      pre_sponsorChatId=json['sponsor_chat_id'];
-   }catch(_){}
-    sponsorChatId = pre_sponsorChatId;
-    InternalLinkType? pre_link;
-    try{
-      pre_link=InternalLinkType.fromJson(json['link'] ?? <String, dynamic>{});
-   }catch(_){}
-    link = pre_link;
-    MessageContent? pre_content;
-    try{
-      pre_content=MessageContent.fromJson(json['content'] ?? <String, dynamic>{});
-   }catch(_){}
-    content = pre_content;
+    id = json['id'] == null ? null : json['id'];
+    sponsorChatId = json['sponsor_chat_id'] == null ? null : json['sponsor_chat_id'];
+    link = json['link'] == null ? null : InternalLinkType.fromJson(json['link'] ?? <String, dynamic>{});
+    content = json['content'] == null ? null : MessageContent.fromJson(json['content'] ?? <String, dynamic>{});
   }
 
   @override

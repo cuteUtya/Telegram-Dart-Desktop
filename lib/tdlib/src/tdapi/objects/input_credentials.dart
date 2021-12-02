@@ -49,11 +49,7 @@ class InputCredentialsSaved extends InputCredentials {
 
   /// Parse from a json
   InputCredentialsSaved.fromJson(Map<String, dynamic> json)  {
-    String? pre_savedCredentialsId;
-    try{
-      pre_savedCredentialsId=json['saved_credentials_id'];
-   }catch(_){}
-    savedCredentialsId = pre_savedCredentialsId;
+    savedCredentialsId = json['saved_credentials_id'] == null ? null : json['saved_credentials_id'];
   }
 
   @override
@@ -84,16 +80,8 @@ class InputCredentialsNew extends InputCredentials {
 
   /// Parse from a json
   InputCredentialsNew.fromJson(Map<String, dynamic> json)  {
-    String? pre_data;
-    try{
-      pre_data=json['data'];
-   }catch(_){}
-    data = pre_data;
-    bool? pre_allowSave;
-    try{
-      pre_allowSave=json['allow_save'];
-   }catch(_){}
-    allowSave = pre_allowSave;
+    data = json['data'] == null ? null : json['data'];
+    allowSave = json['allow_save'] == null ? null : json['allow_save'];
   }
 
   @override
@@ -121,11 +109,7 @@ class InputCredentialsApplePay extends InputCredentials {
 
   /// Parse from a json
   InputCredentialsApplePay.fromJson(Map<String, dynamic> json)  {
-    String? pre_data;
-    try{
-      pre_data=json['data'];
-   }catch(_){}
-    data = pre_data;
+    data = json['data'] == null ? null : json['data'];
   }
 
   @override
@@ -152,11 +136,7 @@ class InputCredentialsGooglePay extends InputCredentials {
 
   /// Parse from a json
   InputCredentialsGooglePay.fromJson(Map<String, dynamic> json)  {
-    String? pre_data;
-    try{
-      pre_data=json['data'];
-   }catch(_){}
-    data = pre_data;
+    data = json['data'] == null ? null : json['data'];
   }
 
   @override

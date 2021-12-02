@@ -33,36 +33,12 @@ class Background extends TdObject {
 
   /// Parse from a json
   Background.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    bool? pre_isDefault;
-    try{
-      pre_isDefault=json['is_default'];
-   }catch(_){}
-    isDefault = pre_isDefault;
-    bool? pre_isDark;
-    try{
-      pre_isDark=json['is_dark'];
-   }catch(_){}
-    isDark = pre_isDark;
-    String? pre_name;
-    try{
-      pre_name=json['name'];
-   }catch(_){}
-    name = pre_name;
-    Document? pre_document;
-    try{
-      pre_document=Document.fromJson(json['document'] ?? <String, dynamic>{});
-   }catch(_){}
-    document = pre_document;
-    BackgroundType? pre_type;
-    try{
-      pre_type=BackgroundType.fromJson(json['type'] ?? <String, dynamic>{});
-   }catch(_){}
-    type = pre_type;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    isDefault = json['is_default'] == null ? null : json['is_default'];
+    isDark = json['is_dark'] == null ? null : json['is_dark'];
+    name = json['name'] == null ? null : json['name'];
+    document = json['document'] == null ? null : Document.fromJson(json['document'] ?? <String, dynamic>{});
+    type = json['type'] == null ? null : BackgroundType.fromJson(json['type'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 

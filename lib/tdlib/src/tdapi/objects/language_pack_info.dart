@@ -61,71 +61,19 @@ class LanguagePackInfo extends TdObject {
 
   /// Parse from a json
   LanguagePackInfo.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_baseLanguagePackId;
-    try{
-      pre_baseLanguagePackId=json['base_language_pack_id'];
-   }catch(_){}
-    baseLanguagePackId = pre_baseLanguagePackId;
-    String? pre_name;
-    try{
-      pre_name=json['name'];
-   }catch(_){}
-    name = pre_name;
-    String? pre_nativeName;
-    try{
-      pre_nativeName=json['native_name'];
-   }catch(_){}
-    nativeName = pre_nativeName;
-    String? pre_pluralCode;
-    try{
-      pre_pluralCode=json['plural_code'];
-   }catch(_){}
-    pluralCode = pre_pluralCode;
-    bool? pre_isOfficial;
-    try{
-      pre_isOfficial=json['is_official'];
-   }catch(_){}
-    isOfficial = pre_isOfficial;
-    bool? pre_isRtl;
-    try{
-      pre_isRtl=json['is_rtl'];
-   }catch(_){}
-    isRtl = pre_isRtl;
-    bool? pre_isBeta;
-    try{
-      pre_isBeta=json['is_beta'];
-   }catch(_){}
-    isBeta = pre_isBeta;
-    bool? pre_isInstalled;
-    try{
-      pre_isInstalled=json['is_installed'];
-   }catch(_){}
-    isInstalled = pre_isInstalled;
-    int? pre_totalStringCount;
-    try{
-      pre_totalStringCount=json['total_string_count'];
-   }catch(_){}
-    totalStringCount = pre_totalStringCount;
-    int? pre_translatedStringCount;
-    try{
-      pre_translatedStringCount=json['translated_string_count'];
-   }catch(_){}
-    translatedStringCount = pre_translatedStringCount;
-    int? pre_localStringCount;
-    try{
-      pre_localStringCount=json['local_string_count'];
-   }catch(_){}
-    localStringCount = pre_localStringCount;
-    String? pre_translationUrl;
-    try{
-      pre_translationUrl=json['translation_url'];
-   }catch(_){}
-    translationUrl = pre_translationUrl;
+    id = json['id'] == null ? null : json['id'];
+    baseLanguagePackId = json['base_language_pack_id'] == null ? null : json['base_language_pack_id'];
+    name = json['name'] == null ? null : json['name'];
+    nativeName = json['native_name'] == null ? null : json['native_name'];
+    pluralCode = json['plural_code'] == null ? null : json['plural_code'];
+    isOfficial = json['is_official'] == null ? null : json['is_official'];
+    isRtl = json['is_rtl'] == null ? null : json['is_rtl'];
+    isBeta = json['is_beta'] == null ? null : json['is_beta'];
+    isInstalled = json['is_installed'] == null ? null : json['is_installed'];
+    totalStringCount = json['total_string_count'] == null ? null : json['total_string_count'];
+    translatedStringCount = json['translated_string_count'] == null ? null : json['translated_string_count'];
+    localStringCount = json['local_string_count'] == null ? null : json['local_string_count'];
+    translationUrl = json['translation_url'] == null ? null : json['translation_url'];
     extra = json['@extra'];
   }
 

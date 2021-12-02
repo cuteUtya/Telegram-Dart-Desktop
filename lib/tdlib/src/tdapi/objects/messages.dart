@@ -17,16 +17,8 @@ class Messages extends TdObject {
 
   /// Parse from a json
   Messages.fromJson(Map<String, dynamic> json)  {
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<Message>? pre_messages;
-    try{
-      pre_messages=List<Message>.from((json['messages'] ?? [])!.map((item) => Message.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    messages = pre_messages;
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    messages = json['messages'] == null ? null : List<Message>.from((json['messages'] ?? [])!.map((item) => Message.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

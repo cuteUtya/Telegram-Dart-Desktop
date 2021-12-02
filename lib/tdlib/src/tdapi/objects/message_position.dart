@@ -18,21 +18,9 @@ class MessagePosition extends TdObject {
 
   /// Parse from a json
   MessagePosition.fromJson(Map<String, dynamic> json)  {
-    int? pre_position;
-    try{
-      pre_position=json['position'];
-   }catch(_){}
-    position = pre_position;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
+    position = json['position'] == null ? null : json['position'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    date = json['date'] == null ? null : json['date'];
   }
 
   @override

@@ -99,11 +99,7 @@ class AuthorizationStateWaitEncryptionKey extends AuthorizationState {
 
   /// Parse from a json
   AuthorizationStateWaitEncryptionKey.fromJson(Map<String, dynamic> json)  {
-    bool? pre_isEncrypted;
-    try{
-      pre_isEncrypted=json['is_encrypted'];
-   }catch(_){}
-    isEncrypted = pre_isEncrypted;
+    isEncrypted = json['is_encrypted'] == null ? null : json['is_encrypted'];
     extra = json['@extra'];
   }
 
@@ -160,11 +156,7 @@ class AuthorizationStateWaitCode extends AuthorizationState {
 
   /// Parse from a json
   AuthorizationStateWaitCode.fromJson(Map<String, dynamic> json)  {
-    AuthenticationCodeInfo? pre_codeInfo;
-    try{
-      pre_codeInfo=AuthenticationCodeInfo.fromJson(json['code_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    codeInfo = pre_codeInfo;
+    codeInfo = json['code_info'] == null ? null : AuthenticationCodeInfo.fromJson(json['code_info'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -195,11 +187,7 @@ class AuthorizationStateWaitOtherDeviceConfirmation extends AuthorizationState {
 
   /// Parse from a json
   AuthorizationStateWaitOtherDeviceConfirmation.fromJson(Map<String, dynamic> json)  {
-    String? pre_link;
-    try{
-      pre_link=json['link'];
-   }catch(_){}
-    link = pre_link;
+    link = json['link'] == null ? null : json['link'];
     extra = json['@extra'];
   }
 
@@ -230,11 +218,7 @@ class AuthorizationStateWaitRegistration extends AuthorizationState {
 
   /// Parse from a json
   AuthorizationStateWaitRegistration.fromJson(Map<String, dynamic> json)  {
-    TermsOfService? pre_termsOfService;
-    try{
-      pre_termsOfService=TermsOfService.fromJson(json['terms_of_service'] ?? <String, dynamic>{});
-   }catch(_){}
-    termsOfService = pre_termsOfService;
+    termsOfService = json['terms_of_service'] == null ? null : TermsOfService.fromJson(json['terms_of_service'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
@@ -273,21 +257,9 @@ class AuthorizationStateWaitPassword extends AuthorizationState {
 
   /// Parse from a json
   AuthorizationStateWaitPassword.fromJson(Map<String, dynamic> json)  {
-    String? pre_passwordHint;
-    try{
-      pre_passwordHint=json['password_hint'];
-   }catch(_){}
-    passwordHint = pre_passwordHint;
-    bool? pre_hasRecoveryEmailAddress;
-    try{
-      pre_hasRecoveryEmailAddress=json['has_recovery_email_address'];
-   }catch(_){}
-    hasRecoveryEmailAddress = pre_hasRecoveryEmailAddress;
-    String? pre_recoveryEmailAddressPattern;
-    try{
-      pre_recoveryEmailAddressPattern=json['recovery_email_address_pattern'];
-   }catch(_){}
-    recoveryEmailAddressPattern = pre_recoveryEmailAddressPattern;
+    passwordHint = json['password_hint'] == null ? null : json['password_hint'];
+    hasRecoveryEmailAddress = json['has_recovery_email_address'] == null ? null : json['has_recovery_email_address'];
+    recoveryEmailAddressPattern = json['recovery_email_address_pattern'] == null ? null : json['recovery_email_address_pattern'];
     extra = json['@extra'];
   }
 

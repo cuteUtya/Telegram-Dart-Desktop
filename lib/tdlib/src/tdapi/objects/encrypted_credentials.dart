@@ -18,21 +18,9 @@ class EncryptedCredentials extends TdObject {
 
   /// Parse from a json
   EncryptedCredentials.fromJson(Map<String, dynamic> json)  {
-    String? pre_data;
-    try{
-      pre_data=json['data'];
-   }catch(_){}
-    data = pre_data;
-    String? pre_hash;
-    try{
-      pre_hash=json['hash'];
-   }catch(_){}
-    hash = pre_hash;
-    String? pre_secret;
-    try{
-      pre_secret=json['secret'];
-   }catch(_){}
-    secret = pre_secret;
+    data = json['data'] == null ? null : json['data'];
+    hash = json['hash'] == null ? null : json['hash'];
+    secret = json['secret'] == null ? null : json['secret'];
   }
 
   @override

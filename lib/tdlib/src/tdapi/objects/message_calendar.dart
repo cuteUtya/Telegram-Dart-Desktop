@@ -17,16 +17,8 @@ class MessageCalendar extends TdObject {
 
   /// Parse from a json
   MessageCalendar.fromJson(Map<String, dynamic> json)  {
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<MessageCalendarDay>? pre_days;
-    try{
-      pre_days=List<MessageCalendarDay>.from((json['days'] ?? [])!.map((item) => MessageCalendarDay.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    days = pre_days;
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    days = json['days'] == null ? null : List<MessageCalendarDay>.from((json['days'] ?? [])!.map((item) => MessageCalendarDay.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

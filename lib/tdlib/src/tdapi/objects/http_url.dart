@@ -13,11 +13,7 @@ class HttpUrl extends TdObject {
 
   /// Parse from a json
   HttpUrl.fromJson(Map<String, dynamic> json)  {
-    String? pre_url;
-    try{
-      pre_url=json['url'];
-   }catch(_){}
-    url = pre_url;
+    url = json['url'] == null ? null : json['url'];
     extra = json['@extra'];
   }
 

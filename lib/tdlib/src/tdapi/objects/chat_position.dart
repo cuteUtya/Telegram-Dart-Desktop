@@ -22,26 +22,10 @@ class ChatPosition extends TdObject {
 
   /// Parse from a json
   ChatPosition.fromJson(Map<String, dynamic> json)  {
-    ChatList? pre_list;
-    try{
-      pre_list=ChatList.fromJson(json['list'] ?? <String, dynamic>{});
-   }catch(_){}
-    list = pre_list;
-    int? pre_order;
-    try{
-      pre_order=int.tryParse(json['order'] ?? "");
-   }catch(_){}
-    order = pre_order;
-    bool? pre_isPinned;
-    try{
-      pre_isPinned=json['is_pinned'];
-   }catch(_){}
-    isPinned = pre_isPinned;
-    ChatSource? pre_source;
-    try{
-      pre_source=ChatSource.fromJson(json['source'] ?? <String, dynamic>{});
-   }catch(_){}
-    source = pre_source;
+    list = json['list'] == null ? null : ChatList.fromJson(json['list'] ?? <String, dynamic>{});
+    order = json['order'] == null ? null : int.tryParse(json['order'] ?? "");
+    isPinned = json['is_pinned'] == null ? null : json['is_pinned'];
+    source = json['source'] == null ? null : ChatSource.fromJson(json['source'] ?? <String, dynamic>{});
   }
 
   @override

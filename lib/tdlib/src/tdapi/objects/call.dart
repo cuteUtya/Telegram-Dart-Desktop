@@ -26,31 +26,11 @@ class Call extends TdObject {
 
   /// Parse from a json
   Call.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    bool? pre_isOutgoing;
-    try{
-      pre_isOutgoing=json['is_outgoing'];
-   }catch(_){}
-    isOutgoing = pre_isOutgoing;
-    bool? pre_isVideo;
-    try{
-      pre_isVideo=json['is_video'];
-   }catch(_){}
-    isVideo = pre_isVideo;
-    CallState? pre_state;
-    try{
-      pre_state=CallState.fromJson(json['state'] ?? <String, dynamic>{});
-   }catch(_){}
-    state = pre_state;
+    id = json['id'] == null ? null : json['id'];
+    userId = json['user_id'] == null ? null : json['user_id'];
+    isOutgoing = json['is_outgoing'] == null ? null : json['is_outgoing'];
+    isVideo = json['is_video'] == null ? null : json['is_video'];
+    state = json['state'] == null ? null : CallState.fromJson(json['state'] ?? <String, dynamic>{});
   }
 
   @override

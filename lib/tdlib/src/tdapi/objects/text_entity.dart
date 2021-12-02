@@ -18,21 +18,9 @@ class TextEntity extends TdObject {
 
   /// Parse from a json
   TextEntity.fromJson(Map<String, dynamic> json)  {
-    int? pre_offset;
-    try{
-      pre_offset=json['offset'];
-   }catch(_){}
-    offset = pre_offset;
-    int? pre_length;
-    try{
-      pre_length=json['length'];
-   }catch(_){}
-    length = pre_length;
-    TextEntityType? pre_type;
-    try{
-      pre_type=TextEntityType.fromJson(json['type'] ?? <String, dynamic>{});
-   }catch(_){}
-    type = pre_type;
+    offset = json['offset'] == null ? null : json['offset'];
+    length = json['length'] == null ? null : json['length'];
+    type = json['type'] == null ? null : TextEntityType.fromJson(json['type'] ?? <String, dynamic>{});
   }
 
   @override

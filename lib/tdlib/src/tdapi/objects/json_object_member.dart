@@ -14,16 +14,8 @@ class JsonObjectMember extends TdObject {
 
   /// Parse from a json
   JsonObjectMember.fromJson(Map<String, dynamic> json)  {
-    String? pre_key;
-    try{
-      pre_key=json['key'];
-   }catch(_){}
-    key = pre_key;
-    JsonValue? pre_value;
-    try{
-      pre_value=JsonValue.fromJson(json['value'] ?? <String, dynamic>{});
-   }catch(_){}
-    value = pre_value;
+    key = json['key'] == null ? null : json['key'];
+    value = json['value'] == null ? null : JsonValue.fromJson(json['value'] ?? <String, dynamic>{});
   }
 
   @override

@@ -113,61 +113,17 @@ class InputInlineQueryResultAnimation extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultAnimation.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    String? pre_thumbnailMimeType;
-    try{
-      pre_thumbnailMimeType=json['thumbnail_mime_type'];
-   }catch(_){}
-    thumbnailMimeType = pre_thumbnailMimeType;
-    String? pre_videoUrl;
-    try{
-      pre_videoUrl=json['video_url'];
-   }catch(_){}
-    videoUrl = pre_videoUrl;
-    String? pre_videoMimeType;
-    try{
-      pre_videoMimeType=json['video_mime_type'];
-   }catch(_){}
-    videoMimeType = pre_videoMimeType;
-    int? pre_videoDuration;
-    try{
-      pre_videoDuration=json['video_duration'];
-   }catch(_){}
-    videoDuration = pre_videoDuration;
-    int? pre_videoWidth;
-    try{
-      pre_videoWidth=json['video_width'];
-   }catch(_){}
-    videoWidth = pre_videoWidth;
-    int? pre_videoHeight;
-    try{
-      pre_videoHeight=json['video_height'];
-   }catch(_){}
-    videoHeight = pre_videoHeight;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    title = json['title'] == null ? null : json['title'];
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    thumbnailMimeType = json['thumbnail_mime_type'] == null ? null : json['thumbnail_mime_type'];
+    videoUrl = json['video_url'] == null ? null : json['video_url'];
+    videoMimeType = json['video_mime_type'] == null ? null : json['video_mime_type'];
+    videoDuration = json['video_duration'] == null ? null : json['video_duration'];
+    videoWidth = json['video_width'] == null ? null : json['video_width'];
+    videoHeight = json['video_height'] == null ? null : json['video_height'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -240,56 +196,16 @@ class InputInlineQueryResultArticle extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultArticle.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_url;
-    try{
-      pre_url=json['url'];
-   }catch(_){}
-    url = pre_url;
-    bool? pre_hideUrl;
-    try{
-      pre_hideUrl=json['hide_url'];
-   }catch(_){}
-    hideUrl = pre_hideUrl;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    int? pre_thumbnailWidth;
-    try{
-      pre_thumbnailWidth=json['thumbnail_width'];
-   }catch(_){}
-    thumbnailWidth = pre_thumbnailWidth;
-    int? pre_thumbnailHeight;
-    try{
-      pre_thumbnailHeight=json['thumbnail_height'];
-   }catch(_){}
-    thumbnailHeight = pre_thumbnailHeight;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    url = json['url'] == null ? null : json['url'];
+    hideUrl = json['hide_url'] == null ? null : json['hide_url'];
+    title = json['title'] == null ? null : json['title'];
+    description = json['description'] == null ? null : json['description'];
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    thumbnailWidth = json['thumbnail_width'] == null ? null : json['thumbnail_width'];
+    thumbnailHeight = json['thumbnail_height'] == null ? null : json['thumbnail_height'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -349,41 +265,13 @@ class InputInlineQueryResultAudio extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultAudio.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_performer;
-    try{
-      pre_performer=json['performer'];
-   }catch(_){}
-    performer = pre_performer;
-    String? pre_audioUrl;
-    try{
-      pre_audioUrl=json['audio_url'];
-   }catch(_){}
-    audioUrl = pre_audioUrl;
-    int? pre_audioDuration;
-    try{
-      pre_audioDuration=json['audio_duration'];
-   }catch(_){}
-    audioDuration = pre_audioDuration;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    title = json['title'] == null ? null : json['title'];
+    performer = json['performer'] == null ? null : json['performer'];
+    audioUrl = json['audio_url'] == null ? null : json['audio_url'];
+    audioDuration = json['audio_duration'] == null ? null : json['audio_duration'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -440,41 +328,13 @@ class InputInlineQueryResultContact extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultContact.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    Contact? pre_contact;
-    try{
-      pre_contact=Contact.fromJson(json['contact'] ?? <String, dynamic>{});
-   }catch(_){}
-    contact = pre_contact;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    int? pre_thumbnailWidth;
-    try{
-      pre_thumbnailWidth=json['thumbnail_width'];
-   }catch(_){}
-    thumbnailWidth = pre_thumbnailWidth;
-    int? pre_thumbnailHeight;
-    try{
-      pre_thumbnailHeight=json['thumbnail_height'];
-   }catch(_){}
-    thumbnailHeight = pre_thumbnailHeight;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    contact = json['contact'] == null ? null : Contact.fromJson(json['contact'] ?? <String, dynamic>{});
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    thumbnailWidth = json['thumbnail_width'] == null ? null : json['thumbnail_width'];
+    thumbnailHeight = json['thumbnail_height'] == null ? null : json['thumbnail_height'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -543,56 +403,16 @@ class InputInlineQueryResultDocument extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultDocument.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
-    String? pre_documentUrl;
-    try{
-      pre_documentUrl=json['document_url'];
-   }catch(_){}
-    documentUrl = pre_documentUrl;
-    String? pre_mimeType;
-    try{
-      pre_mimeType=json['mime_type'];
-   }catch(_){}
-    mimeType = pre_mimeType;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    int? pre_thumbnailWidth;
-    try{
-      pre_thumbnailWidth=json['thumbnail_width'];
-   }catch(_){}
-    thumbnailWidth = pre_thumbnailWidth;
-    int? pre_thumbnailHeight;
-    try{
-      pre_thumbnailHeight=json['thumbnail_height'];
-   }catch(_){}
-    thumbnailHeight = pre_thumbnailHeight;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    title = json['title'] == null ? null : json['title'];
+    description = json['description'] == null ? null : json['description'];
+    documentUrl = json['document_url'] == null ? null : json['document_url'];
+    mimeType = json['mime_type'] == null ? null : json['mime_type'];
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    thumbnailWidth = json['thumbnail_width'] == null ? null : json['thumbnail_width'];
+    thumbnailHeight = json['thumbnail_height'] == null ? null : json['thumbnail_height'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -636,21 +456,9 @@ class InputInlineQueryResultGame extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultGame.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_gameShortName;
-    try{
-      pre_gameShortName=json['game_short_name'];
-   }catch(_){}
-    gameShortName = pre_gameShortName;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
+    id = json['id'] == null ? null : json['id'];
+    gameShortName = json['game_short_name'] == null ? null : json['game_short_name'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
   }
 
   @override
@@ -711,51 +519,15 @@ class InputInlineQueryResultLocation extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultLocation.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    Location? pre_location;
-    try{
-      pre_location=Location.fromJson(json['location'] ?? <String, dynamic>{});
-   }catch(_){}
-    location = pre_location;
-    int? pre_livePeriod;
-    try{
-      pre_livePeriod=json['live_period'];
-   }catch(_){}
-    livePeriod = pre_livePeriod;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    int? pre_thumbnailWidth;
-    try{
-      pre_thumbnailWidth=json['thumbnail_width'];
-   }catch(_){}
-    thumbnailWidth = pre_thumbnailWidth;
-    int? pre_thumbnailHeight;
-    try{
-      pre_thumbnailHeight=json['thumbnail_height'];
-   }catch(_){}
-    thumbnailHeight = pre_thumbnailHeight;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    location = json['location'] == null ? null : Location.fromJson(json['location'] ?? <String, dynamic>{});
+    livePeriod = json['live_period'] == null ? null : json['live_period'];
+    title = json['title'] == null ? null : json['title'];
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    thumbnailWidth = json['thumbnail_width'] == null ? null : json['thumbnail_width'];
+    thumbnailHeight = json['thumbnail_height'] == null ? null : json['thumbnail_height'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -822,51 +594,15 @@ class InputInlineQueryResultPhoto extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultPhoto.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    String? pre_photoUrl;
-    try{
-      pre_photoUrl=json['photo_url'];
-   }catch(_){}
-    photoUrl = pre_photoUrl;
-    int? pre_photoWidth;
-    try{
-      pre_photoWidth=json['photo_width'];
-   }catch(_){}
-    photoWidth = pre_photoWidth;
-    int? pre_photoHeight;
-    try{
-      pre_photoHeight=json['photo_height'];
-   }catch(_){}
-    photoHeight = pre_photoHeight;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    title = json['title'] == null ? null : json['title'];
+    description = json['description'] == null ? null : json['description'];
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    photoUrl = json['photo_url'] == null ? null : json['photo_url'];
+    photoWidth = json['photo_width'] == null ? null : json['photo_width'];
+    photoHeight = json['photo_height'] == null ? null : json['photo_height'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -925,41 +661,13 @@ class InputInlineQueryResultSticker extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultSticker.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    String? pre_stickerUrl;
-    try{
-      pre_stickerUrl=json['sticker_url'];
-   }catch(_){}
-    stickerUrl = pre_stickerUrl;
-    int? pre_stickerWidth;
-    try{
-      pre_stickerWidth=json['sticker_width'];
-   }catch(_){}
-    stickerWidth = pre_stickerWidth;
-    int? pre_stickerHeight;
-    try{
-      pre_stickerHeight=json['sticker_height'];
-   }catch(_){}
-    stickerHeight = pre_stickerHeight;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    stickerUrl = json['sticker_url'] == null ? null : json['sticker_url'];
+    stickerWidth = json['sticker_width'] == null ? null : json['sticker_width'];
+    stickerHeight = json['sticker_height'] == null ? null : json['sticker_height'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1016,41 +724,13 @@ class InputInlineQueryResultVenue extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultVenue.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    Venue? pre_venue;
-    try{
-      pre_venue=Venue.fromJson(json['venue'] ?? <String, dynamic>{});
-   }catch(_){}
-    venue = pre_venue;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    int? pre_thumbnailWidth;
-    try{
-      pre_thumbnailWidth=json['thumbnail_width'];
-   }catch(_){}
-    thumbnailWidth = pre_thumbnailWidth;
-    int? pre_thumbnailHeight;
-    try{
-      pre_thumbnailHeight=json['thumbnail_height'];
-   }catch(_){}
-    thumbnailHeight = pre_thumbnailHeight;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    venue = json['venue'] == null ? null : Venue.fromJson(json['venue'] ?? <String, dynamic>{});
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    thumbnailWidth = json['thumbnail_width'] == null ? null : json['thumbnail_width'];
+    thumbnailHeight = json['thumbnail_height'] == null ? null : json['thumbnail_height'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1123,61 +803,17 @@ class InputInlineQueryResultVideo extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultVideo.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
-    String? pre_thumbnailUrl;
-    try{
-      pre_thumbnailUrl=json['thumbnail_url'];
-   }catch(_){}
-    thumbnailUrl = pre_thumbnailUrl;
-    String? pre_videoUrl;
-    try{
-      pre_videoUrl=json['video_url'];
-   }catch(_){}
-    videoUrl = pre_videoUrl;
-    String? pre_mimeType;
-    try{
-      pre_mimeType=json['mime_type'];
-   }catch(_){}
-    mimeType = pre_mimeType;
-    int? pre_videoWidth;
-    try{
-      pre_videoWidth=json['video_width'];
-   }catch(_){}
-    videoWidth = pre_videoWidth;
-    int? pre_videoHeight;
-    try{
-      pre_videoHeight=json['video_height'];
-   }catch(_){}
-    videoHeight = pre_videoHeight;
-    int? pre_videoDuration;
-    try{
-      pre_videoDuration=json['video_duration'];
-   }catch(_){}
-    videoDuration = pre_videoDuration;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    title = json['title'] == null ? null : json['title'];
+    description = json['description'] == null ? null : json['description'];
+    thumbnailUrl = json['thumbnail_url'] == null ? null : json['thumbnail_url'];
+    videoUrl = json['video_url'] == null ? null : json['video_url'];
+    mimeType = json['mime_type'] == null ? null : json['mime_type'];
+    videoWidth = json['video_width'] == null ? null : json['video_width'];
+    videoHeight = json['video_height'] == null ? null : json['video_height'];
+    videoDuration = json['video_duration'] == null ? null : json['video_duration'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1234,36 +870,12 @@ class InputInlineQueryResultVoiceNote extends InputInlineQueryResult {
 
   /// Parse from a json
   InputInlineQueryResultVoiceNote.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_voiceNoteUrl;
-    try{
-      pre_voiceNoteUrl=json['voice_note_url'];
-   }catch(_){}
-    voiceNoteUrl = pre_voiceNoteUrl;
-    int? pre_voiceNoteDuration;
-    try{
-      pre_voiceNoteDuration=json['voice_note_duration'];
-   }catch(_){}
-    voiceNoteDuration = pre_voiceNoteDuration;
-    ReplyMarkup? pre_replyMarkup;
-    try{
-      pre_replyMarkup=ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyMarkup = pre_replyMarkup;
-    InputMessageContent? pre_inputMessageContent;
-    try{
-      pre_inputMessageContent=InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
-   }catch(_){}
-    inputMessageContent = pre_inputMessageContent;
+    id = json['id'] == null ? null : json['id'];
+    title = json['title'] == null ? null : json['title'];
+    voiceNoteUrl = json['voice_note_url'] == null ? null : json['voice_note_url'];
+    voiceNoteDuration = json['voice_note_duration'] == null ? null : json['voice_note_duration'];
+    replyMarkup = json['reply_markup'] == null ? null : ReplyMarkup.fromJson(json['reply_markup'] ?? <String, dynamic>{});
+    inputMessageContent = json['input_message_content'] == null ? null : InputMessageContent.fromJson(json['input_message_content'] ?? <String, dynamic>{});
   }
 
   @override

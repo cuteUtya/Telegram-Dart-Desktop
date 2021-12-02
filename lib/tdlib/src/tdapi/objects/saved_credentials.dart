@@ -14,16 +14,8 @@ class SavedCredentials extends TdObject {
 
   /// Parse from a json
   SavedCredentials.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
+    id = json['id'] == null ? null : json['id'];
+    title = json['title'] == null ? null : json['title'];
   }
 
   @override

@@ -21,21 +21,9 @@ class StorageStatistics extends TdObject {
 
   /// Parse from a json
   StorageStatistics.fromJson(Map<String, dynamic> json)  {
-    int? pre_size;
-    try{
-      pre_size=json['size'];
-   }catch(_){}
-    size = pre_size;
-    int? pre_count;
-    try{
-      pre_count=json['count'];
-   }catch(_){}
-    count = pre_count;
-    List<StorageStatisticsByChat>? pre_byChat;
-    try{
-      pre_byChat=List<StorageStatisticsByChat>.from((json['by_chat'] ?? [])!.map((item) => StorageStatisticsByChat.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    byChat = pre_byChat;
+    size = json['size'] == null ? null : json['size'];
+    count = json['count'] == null ? null : json['count'];
+    byChat = json['by_chat'] == null ? null : List<StorageStatisticsByChat>.from((json['by_chat'] ?? [])!.map((item) => StorageStatisticsByChat.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

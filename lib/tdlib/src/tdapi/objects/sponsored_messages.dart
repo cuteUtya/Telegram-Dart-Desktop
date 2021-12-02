@@ -13,11 +13,7 @@ class SponsoredMessages extends TdObject {
 
   /// Parse from a json
   SponsoredMessages.fromJson(Map<String, dynamic> json)  {
-    List<SponsoredMessage>? pre_messages;
-    try{
-      pre_messages=List<SponsoredMessage>.from((json['messages'] ?? [])!.map((item) => SponsoredMessage.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    messages = pre_messages;
+    messages = json['messages'] == null ? null : List<SponsoredMessage>.from((json['messages'] ?? [])!.map((item) => SponsoredMessage.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

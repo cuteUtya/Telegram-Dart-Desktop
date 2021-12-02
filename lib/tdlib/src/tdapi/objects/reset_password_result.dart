@@ -75,11 +75,7 @@ class ResetPasswordResultPending extends ResetPasswordResult {
 
   /// Parse from a json
   ResetPasswordResultPending.fromJson(Map<String, dynamic> json)  {
-    int? pre_pendingResetDate;
-    try{
-      pre_pendingResetDate=json['pending_reset_date'];
-   }catch(_){}
-    pendingResetDate = pre_pendingResetDate;
+    pendingResetDate = json['pending_reset_date'] == null ? null : json['pending_reset_date'];
     extra = json['@extra'];
   }
 
@@ -110,11 +106,7 @@ class ResetPasswordResultDeclined extends ResetPasswordResult {
 
   /// Parse from a json
   ResetPasswordResultDeclined.fromJson(Map<String, dynamic> json)  {
-    int? pre_retryDate;
-    try{
-      pre_retryDate=json['retry_date'];
-   }catch(_){}
-    retryDate = pre_retryDate;
+    retryDate = json['retry_date'] == null ? null : json['retry_date'];
     extra = json['@extra'];
   }
 

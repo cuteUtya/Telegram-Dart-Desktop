@@ -66,81 +66,21 @@ class TdlibParameters extends TdObject {
 
   /// Parse from a json
   TdlibParameters.fromJson(Map<String, dynamic> json)  {
-    bool? pre_useTestDc;
-    try{
-      pre_useTestDc=json['use_test_dc'];
-   }catch(_){}
-    useTestDc = pre_useTestDc;
-    String? pre_databaseDirectory;
-    try{
-      pre_databaseDirectory=json['database_directory'];
-   }catch(_){}
-    databaseDirectory = pre_databaseDirectory;
-    String? pre_filesDirectory;
-    try{
-      pre_filesDirectory=json['files_directory'];
-   }catch(_){}
-    filesDirectory = pre_filesDirectory;
-    bool? pre_useFileDatabase;
-    try{
-      pre_useFileDatabase=json['use_file_database'];
-   }catch(_){}
-    useFileDatabase = pre_useFileDatabase;
-    bool? pre_useChatInfoDatabase;
-    try{
-      pre_useChatInfoDatabase=json['use_chat_info_database'];
-   }catch(_){}
-    useChatInfoDatabase = pre_useChatInfoDatabase;
-    bool? pre_useMessageDatabase;
-    try{
-      pre_useMessageDatabase=json['use_message_database'];
-   }catch(_){}
-    useMessageDatabase = pre_useMessageDatabase;
-    bool? pre_useSecretChats;
-    try{
-      pre_useSecretChats=json['use_secret_chats'];
-   }catch(_){}
-    useSecretChats = pre_useSecretChats;
-    int? pre_apiId;
-    try{
-      pre_apiId=json['api_id'];
-   }catch(_){}
-    apiId = pre_apiId;
-    String? pre_apiHash;
-    try{
-      pre_apiHash=json['api_hash'];
-   }catch(_){}
-    apiHash = pre_apiHash;
-    String? pre_systemLanguageCode;
-    try{
-      pre_systemLanguageCode=json['system_language_code'];
-   }catch(_){}
-    systemLanguageCode = pre_systemLanguageCode;
-    String? pre_deviceModel;
-    try{
-      pre_deviceModel=json['device_model'];
-   }catch(_){}
-    deviceModel = pre_deviceModel;
-    String? pre_systemVersion;
-    try{
-      pre_systemVersion=json['system_version'];
-   }catch(_){}
-    systemVersion = pre_systemVersion;
-    String? pre_applicationVersion;
-    try{
-      pre_applicationVersion=json['application_version'];
-   }catch(_){}
-    applicationVersion = pre_applicationVersion;
-    bool? pre_enableStorageOptimizer;
-    try{
-      pre_enableStorageOptimizer=json['enable_storage_optimizer'];
-   }catch(_){}
-    enableStorageOptimizer = pre_enableStorageOptimizer;
-    bool? pre_ignoreFileNames;
-    try{
-      pre_ignoreFileNames=json['ignore_file_names'];
-   }catch(_){}
-    ignoreFileNames = pre_ignoreFileNames;
+    useTestDc = json['use_test_dc'] == null ? null : json['use_test_dc'];
+    databaseDirectory = json['database_directory'] == null ? null : json['database_directory'];
+    filesDirectory = json['files_directory'] == null ? null : json['files_directory'];
+    useFileDatabase = json['use_file_database'] == null ? null : json['use_file_database'];
+    useChatInfoDatabase = json['use_chat_info_database'] == null ? null : json['use_chat_info_database'];
+    useMessageDatabase = json['use_message_database'] == null ? null : json['use_message_database'];
+    useSecretChats = json['use_secret_chats'] == null ? null : json['use_secret_chats'];
+    apiId = json['api_id'] == null ? null : json['api_id'];
+    apiHash = json['api_hash'] == null ? null : json['api_hash'];
+    systemLanguageCode = json['system_language_code'] == null ? null : json['system_language_code'];
+    deviceModel = json['device_model'] == null ? null : json['device_model'];
+    systemVersion = json['system_version'] == null ? null : json['system_version'];
+    applicationVersion = json['application_version'] == null ? null : json['application_version'];
+    enableStorageOptimizer = json['enable_storage_optimizer'] == null ? null : json['enable_storage_optimizer'];
+    ignoreFileNames = json['ignore_file_names'] == null ? null : json['ignore_file_names'];
   }
 
   @override

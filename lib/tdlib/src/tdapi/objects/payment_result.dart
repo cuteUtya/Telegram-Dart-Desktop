@@ -17,16 +17,8 @@ class PaymentResult extends TdObject {
 
   /// Parse from a json
   PaymentResult.fromJson(Map<String, dynamic> json)  {
-    bool? pre_success;
-    try{
-      pre_success=json['success'];
-   }catch(_){}
-    success = pre_success;
-    String? pre_verificationUrl;
-    try{
-      pre_verificationUrl=json['verification_url'];
-   }catch(_){}
-    verificationUrl = pre_verificationUrl;
+    success = json['success'] == null ? null : json['success'];
+    verificationUrl = json['verification_url'] == null ? null : json['verification_url'];
     extra = json['@extra'];
   }
 

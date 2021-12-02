@@ -34,41 +34,13 @@ class Game extends TdObject {
 
   /// Parse from a json
   Game.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    String? pre_shortName;
-    try{
-      pre_shortName=json['short_name'];
-   }catch(_){}
-    shortName = pre_shortName;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    FormattedText? pre_text;
-    try{
-      pre_text=FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
-    Photo? pre_photo;
-    try{
-      pre_photo=Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-   }catch(_){}
-    photo = pre_photo;
-    Animation? pre_animation;
-    try{
-      pre_animation=Animation.fromJson(json['animation'] ?? <String, dynamic>{});
-   }catch(_){}
-    animation = pre_animation;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    shortName = json['short_name'] == null ? null : json['short_name'];
+    title = json['title'] == null ? null : json['title'];
+    text = json['text'] == null ? null : FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
+    description = json['description'] == null ? null : json['description'];
+    photo = json['photo'] == null ? null : Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+    animation = json['animation'] == null ? null : Animation.fromJson(json['animation'] ?? <String, dynamic>{});
   }
 
   @override

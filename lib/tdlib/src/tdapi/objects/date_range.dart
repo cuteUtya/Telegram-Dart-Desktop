@@ -14,16 +14,8 @@ class DateRange extends TdObject {
 
   /// Parse from a json
   DateRange.fromJson(Map<String, dynamic> json)  {
-    int? pre_startDate;
-    try{
-      pre_startDate=json['start_date'];
-   }catch(_){}
-    startDate = pre_startDate;
-    int? pre_endDate;
-    try{
-      pre_endDate=json['end_date'];
-   }catch(_){}
-    endDate = pre_endDate;
+    startDate = json['start_date'] == null ? null : json['start_date'];
+    endDate = json['end_date'] == null ? null : json['end_date'];
   }
 
   @override

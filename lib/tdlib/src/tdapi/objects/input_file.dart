@@ -49,11 +49,7 @@ class InputFileId extends InputFile {
 
   /// Parse from a json
   InputFileId.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
+    id = json['id'] == null ? null : json['id'];
   }
 
   @override
@@ -80,11 +76,7 @@ class InputFileRemote extends InputFile {
 
   /// Parse from a json
   InputFileRemote.fromJson(Map<String, dynamic> json)  {
-    String? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
+    id = json['id'] == null ? null : json['id'];
   }
 
   @override
@@ -111,11 +103,7 @@ class InputFileLocal extends InputFile {
 
   /// Parse from a json
   InputFileLocal.fromJson(Map<String, dynamic> json)  {
-    String? pre_path;
-    try{
-      pre_path=json['path'];
-   }catch(_){}
-    path = pre_path;
+    path = json['path'] == null ? null : json['path'];
   }
 
   @override
@@ -150,21 +138,9 @@ class InputFileGenerated extends InputFile {
 
   /// Parse from a json
   InputFileGenerated.fromJson(Map<String, dynamic> json)  {
-    String? pre_originalPath;
-    try{
-      pre_originalPath=json['original_path'];
-   }catch(_){}
-    originalPath = pre_originalPath;
-    String? pre_conversion;
-    try{
-      pre_conversion=json['conversion'];
-   }catch(_){}
-    conversion = pre_conversion;
-    int? pre_expectedSize;
-    try{
-      pre_expectedSize=json['expected_size'];
-   }catch(_){}
-    expectedSize = pre_expectedSize;
+    originalPath = json['original_path'] == null ? null : json['original_path'];
+    conversion = json['conversion'] == null ? null : json['conversion'];
+    expectedSize = json['expected_size'] == null ? null : json['expected_size'];
   }
 
   @override

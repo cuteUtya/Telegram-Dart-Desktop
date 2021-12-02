@@ -46,56 +46,16 @@ class PersonalDetails extends TdObject {
 
   /// Parse from a json
   PersonalDetails.fromJson(Map<String, dynamic> json)  {
-    String? pre_firstName;
-    try{
-      pre_firstName=json['first_name'];
-   }catch(_){}
-    firstName = pre_firstName;
-    String? pre_middleName;
-    try{
-      pre_middleName=json['middle_name'];
-   }catch(_){}
-    middleName = pre_middleName;
-    String? pre_lastName;
-    try{
-      pre_lastName=json['last_name'];
-   }catch(_){}
-    lastName = pre_lastName;
-    String? pre_nativeFirstName;
-    try{
-      pre_nativeFirstName=json['native_first_name'];
-   }catch(_){}
-    nativeFirstName = pre_nativeFirstName;
-    String? pre_nativeMiddleName;
-    try{
-      pre_nativeMiddleName=json['native_middle_name'];
-   }catch(_){}
-    nativeMiddleName = pre_nativeMiddleName;
-    String? pre_nativeLastName;
-    try{
-      pre_nativeLastName=json['native_last_name'];
-   }catch(_){}
-    nativeLastName = pre_nativeLastName;
-    Date? pre_birthdate;
-    try{
-      pre_birthdate=Date.fromJson(json['birthdate'] ?? <String, dynamic>{});
-   }catch(_){}
-    birthdate = pre_birthdate;
-    String? pre_gender;
-    try{
-      pre_gender=json['gender'];
-   }catch(_){}
-    gender = pre_gender;
-    String? pre_countryCode;
-    try{
-      pre_countryCode=json['country_code'];
-   }catch(_){}
-    countryCode = pre_countryCode;
-    String? pre_residenceCountryCode;
-    try{
-      pre_residenceCountryCode=json['residence_country_code'];
-   }catch(_){}
-    residenceCountryCode = pre_residenceCountryCode;
+    firstName = json['first_name'] == null ? null : json['first_name'];
+    middleName = json['middle_name'] == null ? null : json['middle_name'];
+    lastName = json['last_name'] == null ? null : json['last_name'];
+    nativeFirstName = json['native_first_name'] == null ? null : json['native_first_name'];
+    nativeMiddleName = json['native_middle_name'] == null ? null : json['native_middle_name'];
+    nativeLastName = json['native_last_name'] == null ? null : json['native_last_name'];
+    birthdate = json['birthdate'] == null ? null : Date.fromJson(json['birthdate'] ?? <String, dynamic>{});
+    gender = json['gender'] == null ? null : json['gender'];
+    countryCode = json['country_code'] == null ? null : json['country_code'];
+    residenceCountryCode = json['residence_country_code'] == null ? null : json['residence_country_code'];
   }
 
   @override

@@ -49,11 +49,7 @@ class TMeUrlTypeUser extends TMeUrlType {
 
   /// Parse from a json
   TMeUrlTypeUser.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
+    userId = json['user_id'] == null ? null : json['user_id'];
   }
 
   @override
@@ -80,11 +76,7 @@ class TMeUrlTypeSupergroup extends TMeUrlType {
 
   /// Parse from a json
   TMeUrlTypeSupergroup.fromJson(Map<String, dynamic> json)  {
-    int? pre_supergroupId;
-    try{
-      pre_supergroupId=json['supergroup_id'];
-   }catch(_){}
-    supergroupId = pre_supergroupId;
+    supergroupId = json['supergroup_id'] == null ? null : json['supergroup_id'];
   }
 
   @override
@@ -111,11 +103,7 @@ class TMeUrlTypeChatInvite extends TMeUrlType {
 
   /// Parse from a json
   TMeUrlTypeChatInvite.fromJson(Map<String, dynamic> json)  {
-    ChatInviteLinkInfo? pre_info;
-    try{
-      pre_info=ChatInviteLinkInfo.fromJson(json['info'] ?? <String, dynamic>{});
-   }catch(_){}
-    info = pre_info;
+    info = json['info'] == null ? null : ChatInviteLinkInfo.fromJson(json['info'] ?? <String, dynamic>{});
   }
 
   @override
@@ -142,11 +130,7 @@ class TMeUrlTypeStickerSet extends TMeUrlType {
 
   /// Parse from a json
   TMeUrlTypeStickerSet.fromJson(Map<String, dynamic> json)  {
-    int? pre_stickerSetId;
-    try{
-      pre_stickerSetId=int.tryParse(json['sticker_set_id'] ?? "");
-   }catch(_){}
-    stickerSetId = pre_stickerSetId;
+    stickerSetId = json['sticker_set_id'] == null ? null : int.tryParse(json['sticker_set_id'] ?? "");
   }
 
   @override

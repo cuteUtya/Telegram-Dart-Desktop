@@ -33,36 +33,12 @@ class MessageThreadInfo extends TdObject {
 
   /// Parse from a json
   MessageThreadInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatId;
-    try{
-      pre_chatId=json['chat_id'];
-   }catch(_){}
-    chatId = pre_chatId;
-    int? pre_messageThreadId;
-    try{
-      pre_messageThreadId=json['message_thread_id'];
-   }catch(_){}
-    messageThreadId = pre_messageThreadId;
-    MessageReplyInfo? pre_replyInfo;
-    try{
-      pre_replyInfo=MessageReplyInfo.fromJson(json['reply_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    replyInfo = pre_replyInfo;
-    int? pre_unreadMessageCount;
-    try{
-      pre_unreadMessageCount=json['unread_message_count'];
-   }catch(_){}
-    unreadMessageCount = pre_unreadMessageCount;
-    List<Message>? pre_messages;
-    try{
-      pre_messages=List<Message>.from((json['messages'] ?? [])!.map((item) => Message.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    messages = pre_messages;
-    DraftMessage? pre_draftMessage;
-    try{
-      pre_draftMessage=DraftMessage.fromJson(json['draft_message'] ?? <String, dynamic>{});
-   }catch(_){}
-    draftMessage = pre_draftMessage;
+    chatId = json['chat_id'] == null ? null : json['chat_id'];
+    messageThreadId = json['message_thread_id'] == null ? null : json['message_thread_id'];
+    replyInfo = json['reply_info'] == null ? null : MessageReplyInfo.fromJson(json['reply_info'] ?? <String, dynamic>{});
+    unreadMessageCount = json['unread_message_count'] == null ? null : json['unread_message_count'];
+    messages = json['messages'] == null ? null : List<Message>.from((json['messages'] ?? [])!.map((item) => Message.fromJson(item ?? <String, dynamic>{})).toList());
+    draftMessage = json['draft_message'] == null ? null : DraftMessage.fromJson(json['draft_message'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 

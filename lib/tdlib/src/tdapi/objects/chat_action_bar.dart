@@ -55,11 +55,7 @@ class ChatActionBarReportSpam extends ChatActionBar {
 
   /// Parse from a json
   ChatActionBarReportSpam.fromJson(Map<String, dynamic> json)  {
-    bool? pre_canUnarchive;
-    try{
-      pre_canUnarchive=json['can_unarchive'];
-   }catch(_){}
-    canUnarchive = pre_canUnarchive;
+    canUnarchive = json['can_unarchive'] == null ? null : json['can_unarchive'];
   }
 
   @override
@@ -136,16 +132,8 @@ class ChatActionBarReportAddBlock extends ChatActionBar {
 
   /// Parse from a json
   ChatActionBarReportAddBlock.fromJson(Map<String, dynamic> json)  {
-    bool? pre_canUnarchive;
-    try{
-      pre_canUnarchive=json['can_unarchive'];
-   }catch(_){}
-    canUnarchive = pre_canUnarchive;
-    int? pre_distance;
-    try{
-      pre_distance=json['distance'];
-   }catch(_){}
-    distance = pre_distance;
+    canUnarchive = json['can_unarchive'] == null ? null : json['can_unarchive'];
+    distance = json['distance'] == null ? null : json['distance'];
   }
 
   @override

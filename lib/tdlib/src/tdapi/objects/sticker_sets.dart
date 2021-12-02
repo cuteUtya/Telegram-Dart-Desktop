@@ -17,16 +17,8 @@ class StickerSets extends TdObject {
 
   /// Parse from a json
   StickerSets.fromJson(Map<String, dynamic> json)  {
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<StickerSetInfo>? pre_sets;
-    try{
-      pre_sets=List<StickerSetInfo>.from((json['sets'] ?? [])!.map((item) => StickerSetInfo.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    sets = pre_sets;
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    sets = json['sets'] == null ? null : List<StickerSetInfo>.from((json['sets'] ?? [])!.map((item) => StickerSetInfo.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

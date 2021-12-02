@@ -30,36 +30,12 @@ class PageBlockRelatedArticle extends TdObject {
 
   /// Parse from a json
   PageBlockRelatedArticle.fromJson(Map<String, dynamic> json)  {
-    String? pre_url;
-    try{
-      pre_url=json['url'];
-   }catch(_){}
-    url = pre_url;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
-    Photo? pre_photo;
-    try{
-      pre_photo=Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-   }catch(_){}
-    photo = pre_photo;
-    String? pre_author;
-    try{
-      pre_author=json['author'];
-   }catch(_){}
-    author = pre_author;
-    int? pre_publishDate;
-    try{
-      pre_publishDate=json['publish_date'];
-   }catch(_){}
-    publishDate = pre_publishDate;
+    url = json['url'] == null ? null : json['url'];
+    title = json['title'] == null ? null : json['title'];
+    description = json['description'] == null ? null : json['description'];
+    photo = json['photo'] == null ? null : Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+    author = json['author'] == null ? null : json['author'];
+    publishDate = json['publish_date'] == null ? null : json['publish_date'];
   }
 
   @override

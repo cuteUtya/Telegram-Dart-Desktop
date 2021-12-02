@@ -14,16 +14,8 @@ class ChatLocation extends TdObject {
 
   /// Parse from a json
   ChatLocation.fromJson(Map<String, dynamic> json)  {
-    Location? pre_location;
-    try{
-      pre_location=Location.fromJson(json['location'] ?? <String, dynamic>{});
-   }catch(_){}
-    location = pre_location;
-    String? pre_address;
-    try{
-      pre_address=json['address'];
-   }catch(_){}
-    address = pre_address;
+    location = json['location'] == null ? null : Location.fromJson(json['location'] ?? <String, dynamic>{});
+    address = json['address'] == null ? null : json['address'];
   }
 
   @override

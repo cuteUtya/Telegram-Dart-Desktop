@@ -21,21 +21,9 @@ class PhoneNumberInfo extends TdObject {
 
   /// Parse from a json
   PhoneNumberInfo.fromJson(Map<String, dynamic> json)  {
-    CountryInfo? pre_country;
-    try{
-      pre_country=CountryInfo.fromJson(json['country'] ?? <String, dynamic>{});
-   }catch(_){}
-    country = pre_country;
-    String? pre_countryCallingCode;
-    try{
-      pre_countryCallingCode=json['country_calling_code'];
-   }catch(_){}
-    countryCallingCode = pre_countryCallingCode;
-    String? pre_formattedPhoneNumber;
-    try{
-      pre_formattedPhoneNumber=json['formatted_phone_number'];
-   }catch(_){}
-    formattedPhoneNumber = pre_formattedPhoneNumber;
+    country = json['country'] == null ? null : CountryInfo.fromJson(json['country'] ?? <String, dynamic>{});
+    countryCallingCode = json['country_calling_code'] == null ? null : json['country_calling_code'];
+    formattedPhoneNumber = json['formatted_phone_number'] == null ? null : json['formatted_phone_number'];
     extra = json['@extra'];
   }
 

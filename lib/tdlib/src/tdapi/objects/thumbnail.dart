@@ -22,26 +22,10 @@ class Thumbnail extends TdObject {
 
   /// Parse from a json
   Thumbnail.fromJson(Map<String, dynamic> json)  {
-    ThumbnailFormat? pre_format;
-    try{
-      pre_format=ThumbnailFormat.fromJson(json['format'] ?? <String, dynamic>{});
-   }catch(_){}
-    format = pre_format;
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
-    File? pre_file;
-    try{
-      pre_file=File.fromJson(json['file'] ?? <String, dynamic>{});
-   }catch(_){}
-    file = pre_file;
+    format = json['format'] == null ? null : ThumbnailFormat.fromJson(json['format'] ?? <String, dynamic>{});
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    file = json['file'] == null ? null : File.fromJson(json['file'] ?? <String, dynamic>{});
   }
 
   @override

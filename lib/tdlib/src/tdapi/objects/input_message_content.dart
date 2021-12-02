@@ -96,21 +96,9 @@ class InputMessageText extends InputMessageContent {
 
   /// Parse from a json
   InputMessageText.fromJson(Map<String, dynamic> json)  {
-    FormattedText? pre_text;
-    try{
-      pre_text=FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
-    bool? pre_disableWebPagePreview;
-    try{
-      pre_disableWebPagePreview=json['disable_web_page_preview'];
-   }catch(_){}
-    disableWebPagePreview = pre_disableWebPagePreview;
-    bool? pre_clearDraft;
-    try{
-      pre_clearDraft=json['clear_draft'];
-   }catch(_){}
-    clearDraft = pre_clearDraft;
+    text = json['text'] == null ? null : FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
+    disableWebPagePreview = json['disable_web_page_preview'] == null ? null : json['disable_web_page_preview'];
+    clearDraft = json['clear_draft'] == null ? null : json['clear_draft'];
   }
 
   @override
@@ -163,41 +151,13 @@ class InputMessageAnimation extends InputMessageContent {
 
   /// Parse from a json
   InputMessageAnimation.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_animation;
-    try{
-      pre_animation=InputFile.fromJson(json['animation'] ?? <String, dynamic>{});
-   }catch(_){}
-    animation = pre_animation;
-    InputThumbnail? pre_thumbnail;
-    try{
-      pre_thumbnail=InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    List<int>? pre_addedStickerFileIds;
-    try{
-      pre_addedStickerFileIds=List<int>.from((json['added_sticker_file_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    addedStickerFileIds = pre_addedStickerFileIds;
-    int? pre_duration;
-    try{
-      pre_duration=json['duration'];
-   }catch(_){}
-    duration = pre_duration;
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
-    FormattedText? pre_caption;
-    try{
-      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-   }catch(_){}
-    caption = pre_caption;
+    animation = json['animation'] == null ? null : InputFile.fromJson(json['animation'] ?? <String, dynamic>{});
+    thumbnail = json['thumbnail'] == null ? null : InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    addedStickerFileIds = json['added_sticker_file_ids'] == null ? null : List<int>.from((json['added_sticker_file_ids'] ?? [])!.map((item) => item).toList());
+    duration = json['duration'] == null ? null : json['duration'];
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    caption = json['caption'] == null ? null : FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -250,36 +210,12 @@ class InputMessageAudio extends InputMessageContent {
 
   /// Parse from a json
   InputMessageAudio.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_audio;
-    try{
-      pre_audio=InputFile.fromJson(json['audio'] ?? <String, dynamic>{});
-   }catch(_){}
-    audio = pre_audio;
-    InputThumbnail? pre_albumCoverThumbnail;
-    try{
-      pre_albumCoverThumbnail=InputThumbnail.fromJson(json['album_cover_thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    albumCoverThumbnail = pre_albumCoverThumbnail;
-    int? pre_duration;
-    try{
-      pre_duration=json['duration'];
-   }catch(_){}
-    duration = pre_duration;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_performer;
-    try{
-      pre_performer=json['performer'];
-   }catch(_){}
-    performer = pre_performer;
-    FormattedText? pre_caption;
-    try{
-      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-   }catch(_){}
-    caption = pre_caption;
+    audio = json['audio'] == null ? null : InputFile.fromJson(json['audio'] ?? <String, dynamic>{});
+    albumCoverThumbnail = json['album_cover_thumbnail'] == null ? null : InputThumbnail.fromJson(json['album_cover_thumbnail'] ?? <String, dynamic>{});
+    duration = json['duration'] == null ? null : json['duration'];
+    title = json['title'] == null ? null : json['title'];
+    performer = json['performer'] == null ? null : json['performer'];
+    caption = json['caption'] == null ? null : FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -323,26 +259,10 @@ class InputMessageDocument extends InputMessageContent {
 
   /// Parse from a json
   InputMessageDocument.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_document;
-    try{
-      pre_document=InputFile.fromJson(json['document'] ?? <String, dynamic>{});
-   }catch(_){}
-    document = pre_document;
-    InputThumbnail? pre_thumbnail;
-    try{
-      pre_thumbnail=InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    bool? pre_disableContentTypeDetection;
-    try{
-      pre_disableContentTypeDetection=json['disable_content_type_detection'];
-   }catch(_){}
-    disableContentTypeDetection = pre_disableContentTypeDetection;
-    FormattedText? pre_caption;
-    try{
-      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-   }catch(_){}
-    caption = pre_caption;
+    document = json['document'] == null ? null : InputFile.fromJson(json['document'] ?? <String, dynamic>{});
+    thumbnail = json['thumbnail'] == null ? null : InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    disableContentTypeDetection = json['disable_content_type_detection'] == null ? null : json['disable_content_type_detection'];
+    caption = json['caption'] == null ? null : FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -396,41 +316,13 @@ class InputMessagePhoto extends InputMessageContent {
 
   /// Parse from a json
   InputMessagePhoto.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_photo;
-    try{
-      pre_photo=InputFile.fromJson(json['photo'] ?? <String, dynamic>{});
-   }catch(_){}
-    photo = pre_photo;
-    InputThumbnail? pre_thumbnail;
-    try{
-      pre_thumbnail=InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    List<int>? pre_addedStickerFileIds;
-    try{
-      pre_addedStickerFileIds=List<int>.from((json['added_sticker_file_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    addedStickerFileIds = pre_addedStickerFileIds;
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
-    FormattedText? pre_caption;
-    try{
-      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-   }catch(_){}
-    caption = pre_caption;
-    int? pre_ttl;
-    try{
-      pre_ttl=json['ttl'];
-   }catch(_){}
-    ttl = pre_ttl;
+    photo = json['photo'] == null ? null : InputFile.fromJson(json['photo'] ?? <String, dynamic>{});
+    thumbnail = json['thumbnail'] == null ? null : InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    addedStickerFileIds = json['added_sticker_file_ids'] == null ? null : List<int>.from((json['added_sticker_file_ids'] ?? [])!.map((item) => item).toList());
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    caption = json['caption'] == null ? null : FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+    ttl = json['ttl'] == null ? null : json['ttl'];
   }
 
   @override
@@ -479,31 +371,11 @@ class InputMessageSticker extends InputMessageContent {
 
   /// Parse from a json
   InputMessageSticker.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_sticker;
-    try{
-      pre_sticker=InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
-   }catch(_){}
-    sticker = pre_sticker;
-    InputThumbnail? pre_thumbnail;
-    try{
-      pre_thumbnail=InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
-    String? pre_emoji;
-    try{
-      pre_emoji=json['emoji'];
-   }catch(_){}
-    emoji = pre_emoji;
+    sticker = json['sticker'] == null ? null : InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
+    thumbnail = json['thumbnail'] == null ? null : InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    emoji = json['emoji'] == null ? null : json['emoji'];
   }
 
   @override
@@ -566,51 +438,15 @@ class InputMessageVideo extends InputMessageContent {
 
   /// Parse from a json
   InputMessageVideo.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_video;
-    try{
-      pre_video=InputFile.fromJson(json['video'] ?? <String, dynamic>{});
-   }catch(_){}
-    video = pre_video;
-    InputThumbnail? pre_thumbnail;
-    try{
-      pre_thumbnail=InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    List<int>? pre_addedStickerFileIds;
-    try{
-      pre_addedStickerFileIds=List<int>.from((json['added_sticker_file_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    addedStickerFileIds = pre_addedStickerFileIds;
-    int? pre_duration;
-    try{
-      pre_duration=json['duration'];
-   }catch(_){}
-    duration = pre_duration;
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
-    bool? pre_supportsStreaming;
-    try{
-      pre_supportsStreaming=json['supports_streaming'];
-   }catch(_){}
-    supportsStreaming = pre_supportsStreaming;
-    FormattedText? pre_caption;
-    try{
-      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-   }catch(_){}
-    caption = pre_caption;
-    int? pre_ttl;
-    try{
-      pre_ttl=json['ttl'];
-   }catch(_){}
-    ttl = pre_ttl;
+    video = json['video'] == null ? null : InputFile.fromJson(json['video'] ?? <String, dynamic>{});
+    thumbnail = json['thumbnail'] == null ? null : InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    addedStickerFileIds = json['added_sticker_file_ids'] == null ? null : List<int>.from((json['added_sticker_file_ids'] ?? [])!.map((item) => item).toList());
+    duration = json['duration'] == null ? null : json['duration'];
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    supportsStreaming = json['supports_streaming'] == null ? null : json['supports_streaming'];
+    caption = json['caption'] == null ? null : FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
+    ttl = json['ttl'] == null ? null : json['ttl'];
   }
 
   @override
@@ -657,26 +493,10 @@ class InputMessageVideoNote extends InputMessageContent {
 
   /// Parse from a json
   InputMessageVideoNote.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_videoNote;
-    try{
-      pre_videoNote=InputFile.fromJson(json['video_note'] ?? <String, dynamic>{});
-   }catch(_){}
-    videoNote = pre_videoNote;
-    InputThumbnail? pre_thumbnail;
-    try{
-      pre_thumbnail=InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    int? pre_duration;
-    try{
-      pre_duration=json['duration'];
-   }catch(_){}
-    duration = pre_duration;
-    int? pre_length;
-    try{
-      pre_length=json['length'];
-   }catch(_){}
-    length = pre_length;
+    videoNote = json['video_note'] == null ? null : InputFile.fromJson(json['video_note'] ?? <String, dynamic>{});
+    thumbnail = json['thumbnail'] == null ? null : InputThumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    duration = json['duration'] == null ? null : json['duration'];
+    length = json['length'] == null ? null : json['length'];
   }
 
   @override
@@ -718,26 +538,10 @@ class InputMessageVoiceNote extends InputMessageContent {
 
   /// Parse from a json
   InputMessageVoiceNote.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_voiceNote;
-    try{
-      pre_voiceNote=InputFile.fromJson(json['voice_note'] ?? <String, dynamic>{});
-   }catch(_){}
-    voiceNote = pre_voiceNote;
-    int? pre_duration;
-    try{
-      pre_duration=json['duration'];
-   }catch(_){}
-    duration = pre_duration;
-    String? pre_waveform;
-    try{
-      pre_waveform=json['waveform'];
-   }catch(_){}
-    waveform = pre_waveform;
-    FormattedText? pre_caption;
-    try{
-      pre_caption=FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
-   }catch(_){}
-    caption = pre_caption;
+    voiceNote = json['voice_note'] == null ? null : InputFile.fromJson(json['voice_note'] ?? <String, dynamic>{});
+    duration = json['duration'] == null ? null : json['duration'];
+    waveform = json['waveform'] == null ? null : json['waveform'];
+    caption = json['caption'] == null ? null : FormattedText.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -779,26 +583,10 @@ class InputMessageLocation extends InputMessageContent {
 
   /// Parse from a json
   InputMessageLocation.fromJson(Map<String, dynamic> json)  {
-    Location? pre_location;
-    try{
-      pre_location=Location.fromJson(json['location'] ?? <String, dynamic>{});
-   }catch(_){}
-    location = pre_location;
-    int? pre_livePeriod;
-    try{
-      pre_livePeriod=json['live_period'];
-   }catch(_){}
-    livePeriod = pre_livePeriod;
-    int? pre_heading;
-    try{
-      pre_heading=json['heading'];
-   }catch(_){}
-    heading = pre_heading;
-    int? pre_proximityAlertRadius;
-    try{
-      pre_proximityAlertRadius=json['proximity_alert_radius'];
-   }catch(_){}
-    proximityAlertRadius = pre_proximityAlertRadius;
+    location = json['location'] == null ? null : Location.fromJson(json['location'] ?? <String, dynamic>{});
+    livePeriod = json['live_period'] == null ? null : json['live_period'];
+    heading = json['heading'] == null ? null : json['heading'];
+    proximityAlertRadius = json['proximity_alert_radius'] == null ? null : json['proximity_alert_radius'];
   }
 
   @override
@@ -828,11 +616,7 @@ class InputMessageVenue extends InputMessageContent {
 
   /// Parse from a json
   InputMessageVenue.fromJson(Map<String, dynamic> json)  {
-    Venue? pre_venue;
-    try{
-      pre_venue=Venue.fromJson(json['venue'] ?? <String, dynamic>{});
-   }catch(_){}
-    venue = pre_venue;
+    venue = json['venue'] == null ? null : Venue.fromJson(json['venue'] ?? <String, dynamic>{});
   }
 
   @override
@@ -859,11 +643,7 @@ class InputMessageContact extends InputMessageContent {
 
   /// Parse from a json
   InputMessageContact.fromJson(Map<String, dynamic> json)  {
-    Contact? pre_contact;
-    try{
-      pre_contact=Contact.fromJson(json['contact'] ?? <String, dynamic>{});
-   }catch(_){}
-    contact = pre_contact;
+    contact = json['contact'] == null ? null : Contact.fromJson(json['contact'] ?? <String, dynamic>{});
   }
 
   @override
@@ -894,16 +674,8 @@ class InputMessageDice extends InputMessageContent {
 
   /// Parse from a json
   InputMessageDice.fromJson(Map<String, dynamic> json)  {
-    String? pre_emoji;
-    try{
-      pre_emoji=json['emoji'];
-   }catch(_){}
-    emoji = pre_emoji;
-    bool? pre_clearDraft;
-    try{
-      pre_clearDraft=json['clear_draft'];
-   }catch(_){}
-    clearDraft = pre_clearDraft;
+    emoji = json['emoji'] == null ? null : json['emoji'];
+    clearDraft = json['clear_draft'] == null ? null : json['clear_draft'];
   }
 
   @override
@@ -935,16 +707,8 @@ class InputMessageGame extends InputMessageContent {
 
   /// Parse from a json
   InputMessageGame.fromJson(Map<String, dynamic> json)  {
-    int? pre_botUserId;
-    try{
-      pre_botUserId=json['bot_user_id'];
-   }catch(_){}
-    botUserId = pre_botUserId;
-    String? pre_gameShortName;
-    try{
-      pre_gameShortName=json['game_short_name'];
-   }catch(_){}
-    gameShortName = pre_gameShortName;
+    botUserId = json['bot_user_id'] == null ? null : json['bot_user_id'];
+    gameShortName = json['game_short_name'] == null ? null : json['game_short_name'];
   }
 
   @override
@@ -1012,61 +776,17 @@ class InputMessageInvoice extends InputMessageContent {
 
   /// Parse from a json
   InputMessageInvoice.fromJson(Map<String, dynamic> json)  {
-    Invoice? pre_invoice;
-    try{
-      pre_invoice=Invoice.fromJson(json['invoice'] ?? <String, dynamic>{});
-   }catch(_){}
-    invoice = pre_invoice;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    String? pre_description;
-    try{
-      pre_description=json['description'];
-   }catch(_){}
-    description = pre_description;
-    String? pre_photoUrl;
-    try{
-      pre_photoUrl=json['photo_url'];
-   }catch(_){}
-    photoUrl = pre_photoUrl;
-    int? pre_photoSize;
-    try{
-      pre_photoSize=json['photo_size'];
-   }catch(_){}
-    photoSize = pre_photoSize;
-    int? pre_photoWidth;
-    try{
-      pre_photoWidth=json['photo_width'];
-   }catch(_){}
-    photoWidth = pre_photoWidth;
-    int? pre_photoHeight;
-    try{
-      pre_photoHeight=json['photo_height'];
-   }catch(_){}
-    photoHeight = pre_photoHeight;
-    String? pre_payload;
-    try{
-      pre_payload=json['payload'];
-   }catch(_){}
-    payload = pre_payload;
-    String? pre_providerToken;
-    try{
-      pre_providerToken=json['provider_token'];
-   }catch(_){}
-    providerToken = pre_providerToken;
-    String? pre_providerData;
-    try{
-      pre_providerData=json['provider_data'];
-   }catch(_){}
-    providerData = pre_providerData;
-    String? pre_startParameter;
-    try{
-      pre_startParameter=json['start_parameter'];
-   }catch(_){}
-    startParameter = pre_startParameter;
+    invoice = json['invoice'] == null ? null : Invoice.fromJson(json['invoice'] ?? <String, dynamic>{});
+    title = json['title'] == null ? null : json['title'];
+    description = json['description'] == null ? null : json['description'];
+    photoUrl = json['photo_url'] == null ? null : json['photo_url'];
+    photoSize = json['photo_size'] == null ? null : json['photo_size'];
+    photoWidth = json['photo_width'] == null ? null : json['photo_width'];
+    photoHeight = json['photo_height'] == null ? null : json['photo_height'];
+    payload = json['payload'] == null ? null : json['payload'];
+    providerToken = json['provider_token'] == null ? null : json['provider_token'];
+    providerData = json['provider_data'] == null ? null : json['provider_data'];
+    startParameter = json['start_parameter'] == null ? null : json['start_parameter'];
   }
 
   @override
@@ -1127,41 +847,13 @@ class InputMessagePoll extends InputMessageContent {
 
   /// Parse from a json
   InputMessagePoll.fromJson(Map<String, dynamic> json)  {
-    String? pre_question;
-    try{
-      pre_question=json['question'];
-   }catch(_){}
-    question = pre_question;
-    List<String>? pre_options;
-    try{
-      pre_options=List<String>.from((json['options'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    options = pre_options;
-    bool? pre_isAnonymous;
-    try{
-      pre_isAnonymous=json['is_anonymous'];
-   }catch(_){}
-    isAnonymous = pre_isAnonymous;
-    PollType? pre_type;
-    try{
-      pre_type=PollType.fromJson(json['type'] ?? <String, dynamic>{});
-   }catch(_){}
-    type = pre_type;
-    int? pre_openPeriod;
-    try{
-      pre_openPeriod=json['open_period'];
-   }catch(_){}
-    openPeriod = pre_openPeriod;
-    int? pre_closeDate;
-    try{
-      pre_closeDate=json['close_date'];
-   }catch(_){}
-    closeDate = pre_closeDate;
-    bool? pre_isClosed;
-    try{
-      pre_isClosed=json['is_closed'];
-   }catch(_){}
-    isClosed = pre_isClosed;
+    question = json['question'] == null ? null : json['question'];
+    options = json['options'] == null ? null : List<String>.from((json['options'] ?? [])!.map((item) => item).toList());
+    isAnonymous = json['is_anonymous'] == null ? null : json['is_anonymous'];
+    type = json['type'] == null ? null : PollType.fromJson(json['type'] ?? <String, dynamic>{});
+    openPeriod = json['open_period'] == null ? null : json['open_period'];
+    closeDate = json['close_date'] == null ? null : json['close_date'];
+    isClosed = json['is_closed'] == null ? null : json['is_closed'];
   }
 
   @override
@@ -1206,26 +898,10 @@ class InputMessageForwarded extends InputMessageContent {
 
   /// Parse from a json
   InputMessageForwarded.fromJson(Map<String, dynamic> json)  {
-    int? pre_fromChatId;
-    try{
-      pre_fromChatId=json['from_chat_id'];
-   }catch(_){}
-    fromChatId = pre_fromChatId;
-    int? pre_messageId;
-    try{
-      pre_messageId=json['message_id'];
-   }catch(_){}
-    messageId = pre_messageId;
-    bool? pre_inGameShare;
-    try{
-      pre_inGameShare=json['in_game_share'];
-   }catch(_){}
-    inGameShare = pre_inGameShare;
-    MessageCopyOptions? pre_copyOptions;
-    try{
-      pre_copyOptions=MessageCopyOptions.fromJson(json['copy_options'] ?? <String, dynamic>{});
-   }catch(_){}
-    copyOptions = pre_copyOptions;
+    fromChatId = json['from_chat_id'] == null ? null : json['from_chat_id'];
+    messageId = json['message_id'] == null ? null : json['message_id'];
+    inGameShare = json['in_game_share'] == null ? null : json['in_game_share'];
+    copyOptions = json['copy_options'] == null ? null : MessageCopyOptions.fromJson(json['copy_options'] ?? <String, dynamic>{});
   }
 
   @override

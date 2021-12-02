@@ -43,11 +43,7 @@ class TextParseModeMarkdown extends TextParseMode {
 
   /// Parse from a json
   TextParseModeMarkdown.fromJson(Map<String, dynamic> json)  {
-    int? pre_version;
-    try{
-      pre_version=json['version'];
-   }catch(_){}
-    version = pre_version;
+    version = json['version'] == null ? null : json['version'];
   }
 
   @override

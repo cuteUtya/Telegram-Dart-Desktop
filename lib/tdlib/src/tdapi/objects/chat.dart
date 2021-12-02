@@ -117,141 +117,33 @@ class Chat extends TdObject {
 
   /// Parse from a json
   Chat.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    ChatType? pre_type;
-    try{
-      pre_type=ChatType.fromJson(json['type'] ?? <String, dynamic>{});
-   }catch(_){}
-    type = pre_type;
-    String? pre_title;
-    try{
-      pre_title=json['title'];
-   }catch(_){}
-    title = pre_title;
-    ChatPhotoInfo? pre_photo;
-    try{
-      pre_photo=ChatPhotoInfo.fromJson(json['photo'] ?? <String, dynamic>{});
-   }catch(_){}
-    photo = pre_photo;
-    ChatPermissions? pre_permissions;
-    try{
-      pre_permissions=ChatPermissions.fromJson(json['permissions'] ?? <String, dynamic>{});
-   }catch(_){}
-    permissions = pre_permissions;
-    Message? pre_lastMessage;
-    try{
-      pre_lastMessage=Message.fromJson(json['last_message'] ?? <String, dynamic>{});
-   }catch(_){}
-    lastMessage = pre_lastMessage;
-    List<ChatPosition>? pre_positions;
-    try{
-      pre_positions=List<ChatPosition>.from((json['positions'] ?? [])!.map((item) => ChatPosition.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    positions = pre_positions;
-    bool? pre_isMarkedAsUnread;
-    try{
-      pre_isMarkedAsUnread=json['is_marked_as_unread'];
-   }catch(_){}
-    isMarkedAsUnread = pre_isMarkedAsUnread;
-    bool? pre_isBlocked;
-    try{
-      pre_isBlocked=json['is_blocked'];
-   }catch(_){}
-    isBlocked = pre_isBlocked;
-    bool? pre_hasScheduledMessages;
-    try{
-      pre_hasScheduledMessages=json['has_scheduled_messages'];
-   }catch(_){}
-    hasScheduledMessages = pre_hasScheduledMessages;
-    bool? pre_canBeDeletedOnlyForSelf;
-    try{
-      pre_canBeDeletedOnlyForSelf=json['can_be_deleted_only_for_self'];
-   }catch(_){}
-    canBeDeletedOnlyForSelf = pre_canBeDeletedOnlyForSelf;
-    bool? pre_canBeDeletedForAllUsers;
-    try{
-      pre_canBeDeletedForAllUsers=json['can_be_deleted_for_all_users'];
-   }catch(_){}
-    canBeDeletedForAllUsers = pre_canBeDeletedForAllUsers;
-    bool? pre_canBeReported;
-    try{
-      pre_canBeReported=json['can_be_reported'];
-   }catch(_){}
-    canBeReported = pre_canBeReported;
-    bool? pre_defaultDisableNotification;
-    try{
-      pre_defaultDisableNotification=json['default_disable_notification'];
-   }catch(_){}
-    defaultDisableNotification = pre_defaultDisableNotification;
-    int? pre_unreadCount;
-    try{
-      pre_unreadCount=json['unread_count'];
-   }catch(_){}
-    unreadCount = pre_unreadCount;
-    int? pre_lastReadInboxMessageId;
-    try{
-      pre_lastReadInboxMessageId=json['last_read_inbox_message_id'];
-   }catch(_){}
-    lastReadInboxMessageId = pre_lastReadInboxMessageId;
-    int? pre_lastReadOutboxMessageId;
-    try{
-      pre_lastReadOutboxMessageId=json['last_read_outbox_message_id'];
-   }catch(_){}
-    lastReadOutboxMessageId = pre_lastReadOutboxMessageId;
-    int? pre_unreadMentionCount;
-    try{
-      pre_unreadMentionCount=json['unread_mention_count'];
-   }catch(_){}
-    unreadMentionCount = pre_unreadMentionCount;
-    ChatNotificationSettings? pre_notificationSettings;
-    try{
-      pre_notificationSettings=ChatNotificationSettings.fromJson(json['notification_settings'] ?? <String, dynamic>{});
-   }catch(_){}
-    notificationSettings = pre_notificationSettings;
-    int? pre_messageTtlSetting;
-    try{
-      pre_messageTtlSetting=json['message_ttl_setting'];
-   }catch(_){}
-    messageTtlSetting = pre_messageTtlSetting;
-    String? pre_themeName;
-    try{
-      pre_themeName=json['theme_name'];
-   }catch(_){}
-    themeName = pre_themeName;
-    ChatActionBar? pre_actionBar;
-    try{
-      pre_actionBar=ChatActionBar.fromJson(json['action_bar'] ?? <String, dynamic>{});
-   }catch(_){}
-    actionBar = pre_actionBar;
-    VideoChat? pre_videoChat;
-    try{
-      pre_videoChat=VideoChat.fromJson(json['video_chat'] ?? <String, dynamic>{});
-   }catch(_){}
-    videoChat = pre_videoChat;
-    ChatJoinRequestsInfo? pre_pendingJoinRequests;
-    try{
-      pre_pendingJoinRequests=ChatJoinRequestsInfo.fromJson(json['pending_join_requests'] ?? <String, dynamic>{});
-   }catch(_){}
-    pendingJoinRequests = pre_pendingJoinRequests;
-    int? pre_replyMarkupMessageId;
-    try{
-      pre_replyMarkupMessageId=json['reply_markup_message_id'];
-   }catch(_){}
-    replyMarkupMessageId = pre_replyMarkupMessageId;
-    DraftMessage? pre_draftMessage;
-    try{
-      pre_draftMessage=DraftMessage.fromJson(json['draft_message'] ?? <String, dynamic>{});
-   }catch(_){}
-    draftMessage = pre_draftMessage;
-    String? pre_clientData;
-    try{
-      pre_clientData=json['client_data'];
-   }catch(_){}
-    clientData = pre_clientData;
+    id = json['id'] == null ? null : json['id'];
+    type = json['type'] == null ? null : ChatType.fromJson(json['type'] ?? <String, dynamic>{});
+    title = json['title'] == null ? null : json['title'];
+    photo = json['photo'] == null ? null : ChatPhotoInfo.fromJson(json['photo'] ?? <String, dynamic>{});
+    permissions = json['permissions'] == null ? null : ChatPermissions.fromJson(json['permissions'] ?? <String, dynamic>{});
+    lastMessage = json['last_message'] == null ? null : Message.fromJson(json['last_message'] ?? <String, dynamic>{});
+    positions = json['positions'] == null ? null : List<ChatPosition>.from((json['positions'] ?? [])!.map((item) => ChatPosition.fromJson(item ?? <String, dynamic>{})).toList());
+    isMarkedAsUnread = json['is_marked_as_unread'] == null ? null : json['is_marked_as_unread'];
+    isBlocked = json['is_blocked'] == null ? null : json['is_blocked'];
+    hasScheduledMessages = json['has_scheduled_messages'] == null ? null : json['has_scheduled_messages'];
+    canBeDeletedOnlyForSelf = json['can_be_deleted_only_for_self'] == null ? null : json['can_be_deleted_only_for_self'];
+    canBeDeletedForAllUsers = json['can_be_deleted_for_all_users'] == null ? null : json['can_be_deleted_for_all_users'];
+    canBeReported = json['can_be_reported'] == null ? null : json['can_be_reported'];
+    defaultDisableNotification = json['default_disable_notification'] == null ? null : json['default_disable_notification'];
+    unreadCount = json['unread_count'] == null ? null : json['unread_count'];
+    lastReadInboxMessageId = json['last_read_inbox_message_id'] == null ? null : json['last_read_inbox_message_id'];
+    lastReadOutboxMessageId = json['last_read_outbox_message_id'] == null ? null : json['last_read_outbox_message_id'];
+    unreadMentionCount = json['unread_mention_count'] == null ? null : json['unread_mention_count'];
+    notificationSettings = json['notification_settings'] == null ? null : ChatNotificationSettings.fromJson(json['notification_settings'] ?? <String, dynamic>{});
+    messageTtlSetting = json['message_ttl_setting'] == null ? null : json['message_ttl_setting'];
+    themeName = json['theme_name'] == null ? null : json['theme_name'];
+    actionBar = json['action_bar'] == null ? null : ChatActionBar.fromJson(json['action_bar'] ?? <String, dynamic>{});
+    videoChat = json['video_chat'] == null ? null : VideoChat.fromJson(json['video_chat'] ?? <String, dynamic>{});
+    pendingJoinRequests = json['pending_join_requests'] == null ? null : ChatJoinRequestsInfo.fromJson(json['pending_join_requests'] ?? <String, dynamic>{});
+    replyMarkupMessageId = json['reply_markup_message_id'] == null ? null : json['reply_markup_message_id'];
+    draftMessage = json['draft_message'] == null ? null : DraftMessage.fromJson(json['draft_message'] ?? <String, dynamic>{});
+    clientData = json['client_data'] == null ? null : json['client_data'];
     extra = json['@extra'];
   }
 

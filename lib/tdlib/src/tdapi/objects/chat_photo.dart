@@ -26,31 +26,11 @@ class ChatPhoto extends TdObject {
 
   /// Parse from a json
   ChatPhoto.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    int? pre_addedDate;
-    try{
-      pre_addedDate=json['added_date'];
-   }catch(_){}
-    addedDate = pre_addedDate;
-    Minithumbnail? pre_minithumbnail;
-    try{
-      pre_minithumbnail=Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    minithumbnail = pre_minithumbnail;
-    List<PhotoSize>? pre_sizes;
-    try{
-      pre_sizes=List<PhotoSize>.from((json['sizes'] ?? [])!.map((item) => PhotoSize.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    sizes = pre_sizes;
-    AnimatedChatPhoto? pre_animation;
-    try{
-      pre_animation=AnimatedChatPhoto.fromJson(json['animation'] ?? <String, dynamic>{});
-   }catch(_){}
-    animation = pre_animation;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    addedDate = json['added_date'] == null ? null : json['added_date'];
+    minithumbnail = json['minithumbnail'] == null ? null : Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
+    sizes = json['sizes'] == null ? null : List<PhotoSize>.from((json['sizes'] ?? [])!.map((item) => PhotoSize.fromJson(item ?? <String, dynamic>{})).toList());
+    animation = json['animation'] == null ? null : AnimatedChatPhoto.fromJson(json['animation'] ?? <String, dynamic>{});
   }
 
   @override

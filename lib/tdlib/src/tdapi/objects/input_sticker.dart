@@ -51,21 +51,9 @@ class InputStickerStatic extends InputSticker {
 
   /// Parse from a json
   InputStickerStatic.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_sticker;
-    try{
-      pre_sticker=InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
-   }catch(_){}
-    sticker = pre_sticker;
-    String? pre_emojis;
-    try{
-      pre_emojis=json['emojis'];
-   }catch(_){}
-    emojis = pre_emojis;
-    MaskPosition? pre_maskPosition;
-    try{
-      pre_maskPosition=MaskPosition.fromJson(json['mask_position'] ?? <String, dynamic>{});
-   }catch(_){}
-    maskPosition = pre_maskPosition;
+    sticker = json['sticker'] == null ? null : InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
+    emojis = json['emojis'] == null ? null : json['emojis'];
+    maskPosition = json['mask_position'] == null ? null : MaskPosition.fromJson(json['mask_position'] ?? <String, dynamic>{});
   }
 
   @override
@@ -98,16 +86,8 @@ class InputStickerAnimated extends InputSticker {
 
   /// Parse from a json
   InputStickerAnimated.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_sticker;
-    try{
-      pre_sticker=InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
-   }catch(_){}
-    sticker = pre_sticker;
-    String? pre_emojis;
-    try{
-      pre_emojis=json['emojis'];
-   }catch(_){}
-    emojis = pre_emojis;
+    sticker = json['sticker'] == null ? null : InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
+    emojis = json['emojis'] == null ? null : json['emojis'];
   }
 
   @override

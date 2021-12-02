@@ -18,21 +18,9 @@ class GroupCallParticipantVideoInfo extends TdObject {
 
   /// Parse from a json
   GroupCallParticipantVideoInfo.fromJson(Map<String, dynamic> json)  {
-    List<GroupCallVideoSourceGroup>? pre_sourceGroups;
-    try{
-      pre_sourceGroups=List<GroupCallVideoSourceGroup>.from((json['source_groups'] ?? [])!.map((item) => GroupCallVideoSourceGroup.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    sourceGroups = pre_sourceGroups;
-    String? pre_endpointId;
-    try{
-      pre_endpointId=json['endpoint_id'];
-   }catch(_){}
-    endpointId = pre_endpointId;
-    bool? pre_isPaused;
-    try{
-      pre_isPaused=json['is_paused'];
-   }catch(_){}
-    isPaused = pre_isPaused;
+    sourceGroups = json['source_groups'] == null ? null : List<GroupCallVideoSourceGroup>.from((json['source_groups'] ?? [])!.map((item) => GroupCallVideoSourceGroup.fromJson(item ?? <String, dynamic>{})).toList());
+    endpointId = json['endpoint_id'] == null ? null : json['endpoint_id'];
+    isPaused = json['is_paused'] == null ? null : json['is_paused'];
   }
 
   @override

@@ -13,11 +13,7 @@ class PushReceiverId extends TdObject {
 
   /// Parse from a json
   PushReceiverId.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
     extra = json['@extra'];
   }
 

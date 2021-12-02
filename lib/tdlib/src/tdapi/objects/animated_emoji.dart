@@ -21,21 +21,9 @@ class AnimatedEmoji extends TdObject {
 
   /// Parse from a json
   AnimatedEmoji.fromJson(Map<String, dynamic> json)  {
-    Sticker? pre_sticker;
-    try{
-      pre_sticker=Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
-   }catch(_){}
-    sticker = pre_sticker;
-    List<ColorReplacement>? pre_colorReplacements;
-    try{
-      pre_colorReplacements=List<ColorReplacement>.from((json['color_replacements'] ?? [])!.map((item) => ColorReplacement.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    colorReplacements = pre_colorReplacements;
-    File? pre_sound;
-    try{
-      pre_sound=File.fromJson(json['sound'] ?? <String, dynamic>{});
-   }catch(_){}
-    sound = pre_sound;
+    sticker = json['sticker'] == null ? null : Sticker.fromJson(json['sticker'] ?? <String, dynamic>{});
+    colorReplacements = json['color_replacements'] == null ? null : List<ColorReplacement>.from((json['color_replacements'] ?? [])!.map((item) => ColorReplacement.fromJson(item ?? <String, dynamic>{})).toList());
+    sound = json['sound'] == null ? null : File.fromJson(json['sound'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 

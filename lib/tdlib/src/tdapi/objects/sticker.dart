@@ -49,56 +49,16 @@ class Sticker extends TdObject {
 
   /// Parse from a json
   Sticker.fromJson(Map<String, dynamic> json)  {
-    int? pre_setId;
-    try{
-      pre_setId=int.tryParse(json['set_id'] ?? "");
-   }catch(_){}
-    setId = pre_setId;
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
-    String? pre_emoji;
-    try{
-      pre_emoji=json['emoji'];
-   }catch(_){}
-    emoji = pre_emoji;
-    bool? pre_isAnimated;
-    try{
-      pre_isAnimated=json['is_animated'];
-   }catch(_){}
-    isAnimated = pre_isAnimated;
-    bool? pre_isMask;
-    try{
-      pre_isMask=json['is_mask'];
-   }catch(_){}
-    isMask = pre_isMask;
-    MaskPosition? pre_maskPosition;
-    try{
-      pre_maskPosition=MaskPosition.fromJson(json['mask_position'] ?? <String, dynamic>{});
-   }catch(_){}
-    maskPosition = pre_maskPosition;
-    List<ClosedVectorPath>? pre_outline;
-    try{
-      pre_outline=List<ClosedVectorPath>.from((json['outline'] ?? [])!.map((item) => ClosedVectorPath.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    outline = pre_outline;
-    Thumbnail? pre_thumbnail;
-    try{
-      pre_thumbnail=Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    File? pre_sticker;
-    try{
-      pre_sticker=File.fromJson(json['sticker'] ?? <String, dynamic>{});
-   }catch(_){}
-    sticker = pre_sticker;
+    setId = json['set_id'] == null ? null : int.tryParse(json['set_id'] ?? "");
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    emoji = json['emoji'] == null ? null : json['emoji'];
+    isAnimated = json['is_animated'] == null ? null : json['is_animated'];
+    isMask = json['is_mask'] == null ? null : json['is_mask'];
+    maskPosition = json['mask_position'] == null ? null : MaskPosition.fromJson(json['mask_position'] ?? <String, dynamic>{});
+    outline = json['outline'] == null ? null : List<ClosedVectorPath>.from((json['outline'] ?? [])!.map((item) => ClosedVectorPath.fromJson(item ?? <String, dynamic>{})).toList());
+    thumbnail = json['thumbnail'] == null ? null : Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    sticker = json['sticker'] == null ? null : File.fromJson(json['sticker'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 

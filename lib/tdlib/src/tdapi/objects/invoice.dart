@@ -54,66 +54,18 @@ class Invoice extends TdObject {
 
   /// Parse from a json
   Invoice.fromJson(Map<String, dynamic> json)  {
-    String? pre_currency;
-    try{
-      pre_currency=json['currency'];
-   }catch(_){}
-    currency = pre_currency;
-    List<LabeledPricePart>? pre_priceParts;
-    try{
-      pre_priceParts=List<LabeledPricePart>.from((json['price_parts'] ?? [])!.map((item) => LabeledPricePart.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    priceParts = pre_priceParts;
-    int? pre_maxTipAmount;
-    try{
-      pre_maxTipAmount=json['max_tip_amount'];
-   }catch(_){}
-    maxTipAmount = pre_maxTipAmount;
-    List<int>? pre_suggestedTipAmounts;
-    try{
-      pre_suggestedTipAmounts=List<int>.from((json['suggested_tip_amounts'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    suggestedTipAmounts = pre_suggestedTipAmounts;
-    bool? pre_isTest;
-    try{
-      pre_isTest=json['is_test'];
-   }catch(_){}
-    isTest = pre_isTest;
-    bool? pre_needName;
-    try{
-      pre_needName=json['need_name'];
-   }catch(_){}
-    needName = pre_needName;
-    bool? pre_needPhoneNumber;
-    try{
-      pre_needPhoneNumber=json['need_phone_number'];
-   }catch(_){}
-    needPhoneNumber = pre_needPhoneNumber;
-    bool? pre_needEmailAddress;
-    try{
-      pre_needEmailAddress=json['need_email_address'];
-   }catch(_){}
-    needEmailAddress = pre_needEmailAddress;
-    bool? pre_needShippingAddress;
-    try{
-      pre_needShippingAddress=json['need_shipping_address'];
-   }catch(_){}
-    needShippingAddress = pre_needShippingAddress;
-    bool? pre_sendPhoneNumberToProvider;
-    try{
-      pre_sendPhoneNumberToProvider=json['send_phone_number_to_provider'];
-   }catch(_){}
-    sendPhoneNumberToProvider = pre_sendPhoneNumberToProvider;
-    bool? pre_sendEmailAddressToProvider;
-    try{
-      pre_sendEmailAddressToProvider=json['send_email_address_to_provider'];
-   }catch(_){}
-    sendEmailAddressToProvider = pre_sendEmailAddressToProvider;
-    bool? pre_isFlexible;
-    try{
-      pre_isFlexible=json['is_flexible'];
-   }catch(_){}
-    isFlexible = pre_isFlexible;
+    currency = json['currency'] == null ? null : json['currency'];
+    priceParts = json['price_parts'] == null ? null : List<LabeledPricePart>.from((json['price_parts'] ?? [])!.map((item) => LabeledPricePart.fromJson(item ?? <String, dynamic>{})).toList());
+    maxTipAmount = json['max_tip_amount'] == null ? null : json['max_tip_amount'];
+    suggestedTipAmounts = json['suggested_tip_amounts'] == null ? null : List<int>.from((json['suggested_tip_amounts'] ?? [])!.map((item) => item).toList());
+    isTest = json['is_test'] == null ? null : json['is_test'];
+    needName = json['need_name'] == null ? null : json['need_name'];
+    needPhoneNumber = json['need_phone_number'] == null ? null : json['need_phone_number'];
+    needEmailAddress = json['need_email_address'] == null ? null : json['need_email_address'];
+    needShippingAddress = json['need_shipping_address'] == null ? null : json['need_shipping_address'];
+    sendPhoneNumberToProvider = json['send_phone_number_to_provider'] == null ? null : json['send_phone_number_to_provider'];
+    sendEmailAddressToProvider = json['send_email_address_to_provider'] == null ? null : json['send_email_address_to_provider'];
+    isFlexible = json['is_flexible'] == null ? null : json['is_flexible'];
   }
 
   @override

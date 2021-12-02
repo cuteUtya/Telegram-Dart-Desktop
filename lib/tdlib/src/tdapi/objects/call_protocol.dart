@@ -26,31 +26,11 @@ class CallProtocol extends TdObject {
 
   /// Parse from a json
   CallProtocol.fromJson(Map<String, dynamic> json)  {
-    bool? pre_udpP2p;
-    try{
-      pre_udpP2p=json['udp_p2p'];
-   }catch(_){}
-    udpP2p = pre_udpP2p;
-    bool? pre_udpReflector;
-    try{
-      pre_udpReflector=json['udp_reflector'];
-   }catch(_){}
-    udpReflector = pre_udpReflector;
-    int? pre_minLayer;
-    try{
-      pre_minLayer=json['min_layer'];
-   }catch(_){}
-    minLayer = pre_minLayer;
-    int? pre_maxLayer;
-    try{
-      pre_maxLayer=json['max_layer'];
-   }catch(_){}
-    maxLayer = pre_maxLayer;
-    List<String>? pre_libraryVersions;
-    try{
-      pre_libraryVersions=List<String>.from((json['library_versions'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    libraryVersions = pre_libraryVersions;
+    udpP2p = json['udp_p2p'] == null ? null : json['udp_p2p'];
+    udpReflector = json['udp_reflector'] == null ? null : json['udp_reflector'];
+    minLayer = json['min_layer'] == null ? null : json['min_layer'];
+    maxLayer = json['max_layer'] == null ? null : json['max_layer'];
+    libraryVersions = json['library_versions'] == null ? null : List<String>.from((json['library_versions'] ?? [])!.map((item) => item).toList());
   }
 
   @override

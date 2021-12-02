@@ -111,31 +111,11 @@ class UserTypeBot extends UserType {
 
   /// Parse from a json
   UserTypeBot.fromJson(Map<String, dynamic> json)  {
-    bool? pre_canJoinGroups;
-    try{
-      pre_canJoinGroups=json['can_join_groups'];
-   }catch(_){}
-    canJoinGroups = pre_canJoinGroups;
-    bool? pre_canReadAllGroupMessages;
-    try{
-      pre_canReadAllGroupMessages=json['can_read_all_group_messages'];
-   }catch(_){}
-    canReadAllGroupMessages = pre_canReadAllGroupMessages;
-    bool? pre_isInline;
-    try{
-      pre_isInline=json['is_inline'];
-   }catch(_){}
-    isInline = pre_isInline;
-    String? pre_inlineQueryPlaceholder;
-    try{
-      pre_inlineQueryPlaceholder=json['inline_query_placeholder'];
-   }catch(_){}
-    inlineQueryPlaceholder = pre_inlineQueryPlaceholder;
-    bool? pre_needLocation;
-    try{
-      pre_needLocation=json['need_location'];
-   }catch(_){}
-    needLocation = pre_needLocation;
+    canJoinGroups = json['can_join_groups'] == null ? null : json['can_join_groups'];
+    canReadAllGroupMessages = json['can_read_all_group_messages'] == null ? null : json['can_read_all_group_messages'];
+    isInline = json['is_inline'] == null ? null : json['is_inline'];
+    inlineQueryPlaceholder = json['inline_query_placeholder'] == null ? null : json['inline_query_placeholder'];
+    needLocation = json['need_location'] == null ? null : json['need_location'];
   }
 
   @override

@@ -11,7 +11,9 @@ class TextDisplay {
   static TextStyle get introTitle =>
       create(size: 26, textColor: TextColor.Accent);
   static TextStyle get regular16 => create(size: 16);
+  static TextStyle get regular18 => create(size: 18);
   static TextStyle get regular20 => create(size: 20);
+  static TextStyle get bold18 => create(size: 20, fontWeight: FontWeight.bold);
   static TextStyle get bold20 => create(size: 20, fontWeight: FontWeight.bold);
 
   static InlineSpan emoji(String emoji, double size) {

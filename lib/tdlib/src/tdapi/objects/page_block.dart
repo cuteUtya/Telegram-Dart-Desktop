@@ -118,11 +118,9 @@ class PageBlockTitle extends PageBlock {
 
   /// Parse from a json
   PageBlockTitle.fromJson(Map<String, dynamic> json) {
-    RichText? pre_title;
-    try {
-      pre_title = RichText.fromJson(json['title'] ?? <String, dynamic>{});
-    } catch (_) {}
-    title = pre_title;
+    title = json['title'] == null
+        ? null
+        : RichText.fromJson(json['title'] ?? <String, dynamic>{});
   }
 
   @override
@@ -148,11 +146,9 @@ class PageBlockSubtitle extends PageBlock {
 
   /// Parse from a json
   PageBlockSubtitle.fromJson(Map<String, dynamic> json) {
-    RichText? pre_subtitle;
-    try {
-      pre_subtitle = RichText.fromJson(json['subtitle'] ?? <String, dynamic>{});
-    } catch (_) {}
-    subtitle = pre_subtitle;
+    subtitle = json['subtitle'] == null
+        ? null
+        : RichText.fromJson(json['subtitle'] ?? <String, dynamic>{});
   }
 
   @override
@@ -181,16 +177,10 @@ class PageBlockAuthorDate extends PageBlock {
 
   /// Parse from a json
   PageBlockAuthorDate.fromJson(Map<String, dynamic> json) {
-    RichText? pre_author;
-    try {
-      pre_author = RichText.fromJson(json['author'] ?? <String, dynamic>{});
-    } catch (_) {}
-    author = pre_author;
-    int? pre_publishDate;
-    try {
-      pre_publishDate = json['publish_date'];
-    } catch (_) {}
-    publishDate = pre_publishDate;
+    author = json['author'] == null
+        ? null
+        : RichText.fromJson(json['author'] ?? <String, dynamic>{});
+    publishDate = json['publish_date'] == null ? null : json['publish_date'];
   }
 
   @override
@@ -217,11 +207,9 @@ class PageBlockHeader extends PageBlock {
 
   /// Parse from a json
   PageBlockHeader.fromJson(Map<String, dynamic> json) {
-    RichText? pre_header;
-    try {
-      pre_header = RichText.fromJson(json['header'] ?? <String, dynamic>{});
-    } catch (_) {}
-    header = pre_header;
+    header = json['header'] == null
+        ? null
+        : RichText.fromJson(json['header'] ?? <String, dynamic>{});
   }
 
   @override
@@ -247,12 +235,9 @@ class PageBlockSubheader extends PageBlock {
 
   /// Parse from a json
   PageBlockSubheader.fromJson(Map<String, dynamic> json) {
-    RichText? pre_subheader;
-    try {
-      pre_subheader =
-          RichText.fromJson(json['subheader'] ?? <String, dynamic>{});
-    } catch (_) {}
-    subheader = pre_subheader;
+    subheader = json['subheader'] == null
+        ? null
+        : RichText.fromJson(json['subheader'] ?? <String, dynamic>{});
   }
 
   @override
@@ -278,11 +263,9 @@ class PageBlockKicker extends PageBlock {
 
   /// Parse from a json
   PageBlockKicker.fromJson(Map<String, dynamic> json) {
-    RichText? pre_kicker;
-    try {
-      pre_kicker = RichText.fromJson(json['kicker'] ?? <String, dynamic>{});
-    } catch (_) {}
-    kicker = pre_kicker;
+    kicker = json['kicker'] == null
+        ? null
+        : RichText.fromJson(json['kicker'] ?? <String, dynamic>{});
   }
 
   @override
@@ -308,11 +291,9 @@ class PageBlockParagraph extends PageBlock {
 
   /// Parse from a json
   PageBlockParagraph.fromJson(Map<String, dynamic> json) {
-    RichText? pre_text;
-    try {
-      pre_text = RichText.fromJson(json['text'] ?? <String, dynamic>{});
-    } catch (_) {}
-    text = pre_text;
+    text = json['text'] == null
+        ? null
+        : RichText.fromJson(json['text'] ?? <String, dynamic>{});
   }
 
   @override
@@ -341,16 +322,10 @@ class PageBlockPreformatted extends PageBlock {
 
   /// Parse from a json
   PageBlockPreformatted.fromJson(Map<String, dynamic> json) {
-    RichText? pre_text;
-    try {
-      pre_text = RichText.fromJson(json['text'] ?? <String, dynamic>{});
-    } catch (_) {}
-    text = pre_text;
-    String? pre_language;
-    try {
-      pre_language = json['language'];
-    } catch (_) {}
-    language = pre_language;
+    text = json['text'] == null
+        ? null
+        : RichText.fromJson(json['text'] ?? <String, dynamic>{});
+    language = json['language'] == null ? null : json['language'];
   }
 
   @override
@@ -377,11 +352,9 @@ class PageBlockFooter extends PageBlock {
 
   /// Parse from a json
   PageBlockFooter.fromJson(Map<String, dynamic> json) {
-    RichText? pre_footer;
-    try {
-      pre_footer = RichText.fromJson(json['footer'] ?? <String, dynamic>{});
-    } catch (_) {}
-    footer = pre_footer;
+    footer = json['footer'] == null
+        ? null
+        : RichText.fromJson(json['footer'] ?? <String, dynamic>{});
   }
 
   @override
@@ -427,11 +400,7 @@ class PageBlockAnchor extends PageBlock {
 
   /// Parse from a json
   PageBlockAnchor.fromJson(Map<String, dynamic> json) {
-    String? pre_name;
-    try {
-      pre_name = json['name'];
-    } catch (_) {}
-    name = pre_name;
+    name = json['name'] == null ? null : json['name'];
   }
 
   @override
@@ -457,14 +426,12 @@ class PageBlockList extends PageBlock {
 
   /// Parse from a json
   PageBlockList.fromJson(Map<String, dynamic> json) {
-    List<PageBlockListItem>? pre_items;
-    try {
-      pre_items = List<PageBlockListItem>.from((json['items'] ?? [])!
-          .map(
-              (item) => PageBlockListItem.fromJson(item ?? <String, dynamic>{}))
-          .toList());
-    } catch (_) {}
-    items = pre_items;
+    items = json['items'] == null
+        ? null
+        : List<PageBlockListItem>.from((json['items'] ?? [])!
+            .map((item) =>
+                PageBlockListItem.fromJson(item ?? <String, dynamic>{}))
+            .toList());
   }
 
   @override
@@ -493,16 +460,12 @@ class PageBlockBlockQuote extends PageBlock {
 
   /// Parse from a json
   PageBlockBlockQuote.fromJson(Map<String, dynamic> json) {
-    RichText? pre_text;
-    try {
-      pre_text = RichText.fromJson(json['text'] ?? <String, dynamic>{});
-    } catch (_) {}
-    text = pre_text;
-    RichText? pre_credit;
-    try {
-      pre_credit = RichText.fromJson(json['credit'] ?? <String, dynamic>{});
-    } catch (_) {}
-    credit = pre_credit;
+    text = json['text'] == null
+        ? null
+        : RichText.fromJson(json['text'] ?? <String, dynamic>{});
+    credit = json['credit'] == null
+        ? null
+        : RichText.fromJson(json['credit'] ?? <String, dynamic>{});
   }
 
   @override
@@ -532,16 +495,12 @@ class PageBlockPullQuote extends PageBlock {
 
   /// Parse from a json
   PageBlockPullQuote.fromJson(Map<String, dynamic> json) {
-    RichText? pre_text;
-    try {
-      pre_text = RichText.fromJson(json['text'] ?? <String, dynamic>{});
-    } catch (_) {}
-    text = pre_text;
-    RichText? pre_credit;
-    try {
-      pre_credit = RichText.fromJson(json['credit'] ?? <String, dynamic>{});
-    } catch (_) {}
-    credit = pre_credit;
+    text = json['text'] == null
+        ? null
+        : RichText.fromJson(json['text'] ?? <String, dynamic>{});
+    credit = json['credit'] == null
+        ? null
+        : RichText.fromJson(json['credit'] ?? <String, dynamic>{});
   }
 
   @override
@@ -574,23 +533,13 @@ class PageBlockAnimation extends PageBlock {
 
   /// Parse from a json
   PageBlockAnimation.fromJson(Map<String, dynamic> json) {
-    Animation? pre_animation;
-    try {
-      pre_animation =
-          Animation.fromJson(json['animation'] ?? <String, dynamic>{});
-    } catch (_) {}
-    animation = pre_animation;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
-    bool? pre_needAutoplay;
-    try {
-      pre_needAutoplay = json['need_autoplay'];
-    } catch (_) {}
-    needAutoplay = pre_needAutoplay;
+    animation = json['animation'] == null
+        ? null
+        : Animation.fromJson(json['animation'] ?? <String, dynamic>{});
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
+    needAutoplay = json['need_autoplay'] == null ? null : json['need_autoplay'];
   }
 
   @override
@@ -621,17 +570,12 @@ class PageBlockAudio extends PageBlock {
 
   /// Parse from a json
   PageBlockAudio.fromJson(Map<String, dynamic> json) {
-    Audio? pre_audio;
-    try {
-      pre_audio = Audio.fromJson(json['audio'] ?? <String, dynamic>{});
-    } catch (_) {}
-    audio = pre_audio;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
+    audio = json['audio'] == null
+        ? null
+        : Audio.fromJson(json['audio'] ?? <String, dynamic>{});
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -664,22 +608,13 @@ class PageBlockPhoto extends PageBlock {
 
   /// Parse from a json
   PageBlockPhoto.fromJson(Map<String, dynamic> json) {
-    Photo? pre_photo;
-    try {
-      pre_photo = Photo.fromJson(json['photo'] ?? <String, dynamic>{});
-    } catch (_) {}
-    photo = pre_photo;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
-    String? pre_url;
-    try {
-      pre_url = json['url'];
-    } catch (_) {}
-    url = pre_url;
+    photo = json['photo'] == null
+        ? null
+        : Photo.fromJson(json['photo'] ?? <String, dynamic>{});
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
+    url = json['url'] == null ? null : json['url'];
   }
 
   @override
@@ -716,27 +651,14 @@ class PageBlockVideo extends PageBlock {
 
   /// Parse from a json
   PageBlockVideo.fromJson(Map<String, dynamic> json) {
-    Video? pre_video;
-    try {
-      pre_video = Video.fromJson(json['video'] ?? <String, dynamic>{});
-    } catch (_) {}
-    video = pre_video;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
-    bool? pre_needAutoplay;
-    try {
-      pre_needAutoplay = json['need_autoplay'];
-    } catch (_) {}
-    needAutoplay = pre_needAutoplay;
-    bool? pre_isLooped;
-    try {
-      pre_isLooped = json['is_looped'];
-    } catch (_) {}
-    isLooped = pre_isLooped;
+    video = json['video'] == null
+        ? null
+        : Video.fromJson(json['video'] ?? <String, dynamic>{});
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
+    needAutoplay = json['need_autoplay'] == null ? null : json['need_autoplay'];
+    isLooped = json['is_looped'] == null ? null : json['is_looped'];
   }
 
   @override
@@ -768,18 +690,12 @@ class PageBlockVoiceNote extends PageBlock {
 
   /// Parse from a json
   PageBlockVoiceNote.fromJson(Map<String, dynamic> json) {
-    VoiceNote? pre_voiceNote;
-    try {
-      pre_voiceNote =
-          VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
-    } catch (_) {}
-    voiceNote = pre_voiceNote;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
+    voiceNote = json['voice_note'] == null
+        ? null
+        : VoiceNote.fromJson(json['voice_note'] ?? <String, dynamic>{});
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -806,11 +722,9 @@ class PageBlockCover extends PageBlock {
 
   /// Parse from a json
   PageBlockCover.fromJson(Map<String, dynamic> json) {
-    PageBlock? pre_cover;
-    try {
-      pre_cover = PageBlock.fromJson(json['cover'] ?? <String, dynamic>{});
-    } catch (_) {}
-    cover = pre_cover;
+    cover = json['cover'] == null
+        ? null
+        : PageBlock.fromJson(json['cover'] ?? <String, dynamic>{});
   }
 
   @override
@@ -865,48 +779,19 @@ class PageBlockEmbedded extends PageBlock {
 
   /// Parse from a json
   PageBlockEmbedded.fromJson(Map<String, dynamic> json) {
-    String? pre_url;
-    try {
-      pre_url = json['url'];
-    } catch (_) {}
-    url = pre_url;
-    String? pre_html;
-    try {
-      pre_html = json['html'];
-    } catch (_) {}
-    html = pre_html;
-    Photo? pre_posterPhoto;
-    try {
-      pre_posterPhoto =
-          Photo.fromJson(json['poster_photo'] ?? <String, dynamic>{});
-    } catch (_) {}
-    posterPhoto = pre_posterPhoto;
-    int? pre_width;
-    try {
-      pre_width = json['width'];
-    } catch (_) {}
-    width = pre_width;
-    int? pre_height;
-    try {
-      pre_height = json['height'];
-    } catch (_) {}
-    height = pre_height;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
-    bool? pre_isFullWidth;
-    try {
-      pre_isFullWidth = json['is_full_width'];
-    } catch (_) {}
-    isFullWidth = pre_isFullWidth;
-    bool? pre_allowScrolling;
-    try {
-      pre_allowScrolling = json['allow_scrolling'];
-    } catch (_) {}
-    allowScrolling = pre_allowScrolling;
+    url = json['url'] == null ? null : json['url'];
+    html = json['html'] == null ? null : json['html'];
+    posterPhoto = json['poster_photo'] == null
+        ? null
+        : Photo.fromJson(json['poster_photo'] ?? <String, dynamic>{});
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
+    isFullWidth = json['is_full_width'] == null ? null : json['is_full_width'];
+    allowScrolling =
+        json['allow_scrolling'] == null ? null : json['allow_scrolling'];
   }
 
   @override
@@ -960,40 +845,20 @@ class PageBlockEmbeddedPost extends PageBlock {
 
   /// Parse from a json
   PageBlockEmbeddedPost.fromJson(Map<String, dynamic> json) {
-    String? pre_url;
-    try {
-      pre_url = json['url'];
-    } catch (_) {}
-    url = pre_url;
-    String? pre_author;
-    try {
-      pre_author = json['author'];
-    } catch (_) {}
-    author = pre_author;
-    Photo? pre_authorPhoto;
-    try {
-      pre_authorPhoto =
-          Photo.fromJson(json['author_photo'] ?? <String, dynamic>{});
-    } catch (_) {}
-    authorPhoto = pre_authorPhoto;
-    int? pre_date;
-    try {
-      pre_date = json['date'];
-    } catch (_) {}
-    date = pre_date;
-    List<PageBlock>? pre_pageBlocks;
-    try {
-      pre_pageBlocks = List<PageBlock>.from((json['page_blocks'] ?? [])!
-          .map((item) => PageBlock.fromJson(item ?? <String, dynamic>{}))
-          .toList());
-    } catch (_) {}
-    pageBlocks = pre_pageBlocks;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
+    url = json['url'] == null ? null : json['url'];
+    author = json['author'] == null ? null : json['author'];
+    authorPhoto = json['author_photo'] == null
+        ? null
+        : Photo.fromJson(json['author_photo'] ?? <String, dynamic>{});
+    date = json['date'] == null ? null : json['date'];
+    pageBlocks = json['page_blocks'] == null
+        ? null
+        : List<PageBlock>.from((json['page_blocks'] ?? [])!
+            .map((item) => PageBlock.fromJson(item ?? <String, dynamic>{}))
+            .toList());
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1027,19 +892,14 @@ class PageBlockCollage extends PageBlock {
 
   /// Parse from a json
   PageBlockCollage.fromJson(Map<String, dynamic> json) {
-    List<PageBlock>? pre_pageBlocks;
-    try {
-      pre_pageBlocks = List<PageBlock>.from((json['page_blocks'] ?? [])!
-          .map((item) => PageBlock.fromJson(item ?? <String, dynamic>{}))
-          .toList());
-    } catch (_) {}
-    pageBlocks = pre_pageBlocks;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
+    pageBlocks = json['page_blocks'] == null
+        ? null
+        : List<PageBlock>.from((json['page_blocks'] ?? [])!
+            .map((item) => PageBlock.fromJson(item ?? <String, dynamic>{}))
+            .toList());
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1069,19 +929,14 @@ class PageBlockSlideshow extends PageBlock {
 
   /// Parse from a json
   PageBlockSlideshow.fromJson(Map<String, dynamic> json) {
-    List<PageBlock>? pre_pageBlocks;
-    try {
-      pre_pageBlocks = List<PageBlock>.from((json['page_blocks'] ?? [])!
-          .map((item) => PageBlock.fromJson(item ?? <String, dynamic>{}))
-          .toList());
-    } catch (_) {}
-    pageBlocks = pre_pageBlocks;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
+    pageBlocks = json['page_blocks'] == null
+        ? null
+        : List<PageBlock>.from((json['page_blocks'] ?? [])!
+            .map((item) => PageBlock.fromJson(item ?? <String, dynamic>{}))
+            .toList());
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1114,21 +969,11 @@ class PageBlockChatLink extends PageBlock {
 
   /// Parse from a json
   PageBlockChatLink.fromJson(Map<String, dynamic> json) {
-    String? pre_title;
-    try {
-      pre_title = json['title'];
-    } catch (_) {}
-    title = pre_title;
-    ChatPhotoInfo? pre_photo;
-    try {
-      pre_photo = ChatPhotoInfo.fromJson(json['photo'] ?? <String, dynamic>{});
-    } catch (_) {}
-    photo = pre_photo;
-    String? pre_username;
-    try {
-      pre_username = json['username'];
-    } catch (_) {}
-    username = pre_username;
+    title = json['title'] == null ? null : json['title'];
+    photo = json['photo'] == null
+        ? null
+        : ChatPhotoInfo.fromJson(json['photo'] ?? <String, dynamic>{});
+    username = json['username'] == null ? null : json['username'];
   }
 
   @override
@@ -1165,31 +1010,19 @@ class PageBlockTable extends PageBlock {
 
   /// Parse from a json
   PageBlockTable.fromJson(Map<String, dynamic> json) {
-    RichText? pre_caption;
-    try {
-      pre_caption = RichText.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
-    List<List<PageBlockTableCell>>? pre_cells;
-    try {
-      pre_cells = List<List<PageBlockTableCell>>.from((json['cells'] ?? [])!
-          .map((item) => List<PageBlockTableCell>.from((item ?? [])!
-              .map((innerItem) =>
-                  PageBlockTableCell.fromJson(innerItem ?? <String, dynamic>{}))
-              .toList()))
-          .toList());
-    } catch (_) {}
-    cells = pre_cells;
-    bool? pre_isBordered;
-    try {
-      pre_isBordered = json['is_bordered'];
-    } catch (_) {}
-    isBordered = pre_isBordered;
-    bool? pre_isStriped;
-    try {
-      pre_isStriped = json['is_striped'];
-    } catch (_) {}
-    isStriped = pre_isStriped;
+    caption = json['caption'] == null
+        ? null
+        : RichText.fromJson(json['caption'] ?? <String, dynamic>{});
+    cells = json['cells'] == null
+        ? null
+        : List<List<PageBlockTableCell>>.from((json['cells'] ?? [])!
+            .map((item) => List<PageBlockTableCell>.from((item ?? [])!
+                .map((innerItem) => PageBlockTableCell.fromJson(
+                    innerItem ?? <String, dynamic>{}))
+                .toList()))
+            .toList());
+    isBordered = json['is_bordered'] == null ? null : json['is_bordered'];
+    isStriped = json['is_striped'] == null ? null : json['is_striped'];
   }
 
   @override
@@ -1224,23 +1057,15 @@ class PageBlockDetails extends PageBlock {
 
   /// Parse from a json
   PageBlockDetails.fromJson(Map<String, dynamic> json) {
-    RichText? pre_header;
-    try {
-      pre_header = RichText.fromJson(json['header'] ?? <String, dynamic>{});
-    } catch (_) {}
-    header = pre_header;
-    List<PageBlock>? pre_pageBlocks;
-    try {
-      pre_pageBlocks = List<PageBlock>.from((json['page_blocks'] ?? [])!
-          .map((item) => PageBlock.fromJson(item ?? <String, dynamic>{}))
-          .toList());
-    } catch (_) {}
-    pageBlocks = pre_pageBlocks;
-    bool? pre_isOpen;
-    try {
-      pre_isOpen = json['is_open'];
-    } catch (_) {}
-    isOpen = pre_isOpen;
+    header = json['header'] == null
+        ? null
+        : RichText.fromJson(json['header'] ?? <String, dynamic>{});
+    pageBlocks = json['page_blocks'] == null
+        ? null
+        : List<PageBlock>.from((json['page_blocks'] ?? [])!
+            .map((item) => PageBlock.fromJson(item ?? <String, dynamic>{}))
+            .toList());
+    isOpen = json['is_open'] == null ? null : json['is_open'];
   }
 
   @override
@@ -1271,20 +1096,15 @@ class PageBlockRelatedArticles extends PageBlock {
 
   /// Parse from a json
   PageBlockRelatedArticles.fromJson(Map<String, dynamic> json) {
-    RichText? pre_header;
-    try {
-      pre_header = RichText.fromJson(json['header'] ?? <String, dynamic>{});
-    } catch (_) {}
-    header = pre_header;
-    List<PageBlockRelatedArticle>? pre_articles;
-    try {
-      pre_articles = List<PageBlockRelatedArticle>.from(
-          (json['articles'] ?? [])!
-              .map((item) =>
-                  PageBlockRelatedArticle.fromJson(item ?? <String, dynamic>{}))
-              .toList());
-    } catch (_) {}
-    articles = pre_articles;
+    header = json['header'] == null
+        ? null
+        : RichText.fromJson(json['header'] ?? <String, dynamic>{});
+    articles = json['articles'] == null
+        ? null
+        : List<PageBlockRelatedArticle>.from((json['articles'] ?? [])!
+            .map((item) =>
+                PageBlockRelatedArticle.fromJson(item ?? <String, dynamic>{}))
+            .toList());
   }
 
   @override
@@ -1324,32 +1144,15 @@ class PageBlockMap extends PageBlock {
 
   /// Parse from a json
   PageBlockMap.fromJson(Map<String, dynamic> json) {
-    Location? pre_location;
-    try {
-      pre_location = Location.fromJson(json['location'] ?? <String, dynamic>{});
-    } catch (_) {}
-    location = pre_location;
-    int? pre_zoom;
-    try {
-      pre_zoom = json['zoom'];
-    } catch (_) {}
-    zoom = pre_zoom;
-    int? pre_width;
-    try {
-      pre_width = json['width'];
-    } catch (_) {}
-    width = pre_width;
-    int? pre_height;
-    try {
-      pre_height = json['height'];
-    } catch (_) {}
-    height = pre_height;
-    PageBlockCaption? pre_caption;
-    try {
-      pre_caption =
-          PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
-    } catch (_) {}
-    caption = pre_caption;
+    location = json['location'] == null
+        ? null
+        : Location.fromJson(json['location'] ?? <String, dynamic>{});
+    zoom = json['zoom'] == null ? null : json['zoom'];
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
+    caption = json['caption'] == null
+        ? null
+        : PageBlockCaption.fromJson(json['caption'] ?? <String, dynamic>{});
   }
 
   @override

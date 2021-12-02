@@ -13,11 +13,7 @@ class TestVectorInt extends TdObject {
 
   /// Parse from a json
   TestVectorInt.fromJson(Map<String, dynamic> json)  {
-    List<int>? pre_value;
-    try{
-      pre_value=List<int>.from((json['value'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    value = pre_value;
+    value = json['value'] == null ? null : List<int>.from((json['value'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 

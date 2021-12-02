@@ -17,16 +17,8 @@ class TemporaryPasswordState extends TdObject {
 
   /// Parse from a json
   TemporaryPasswordState.fromJson(Map<String, dynamic> json)  {
-    bool? pre_hasPassword;
-    try{
-      pre_hasPassword=json['has_password'];
-   }catch(_){}
-    hasPassword = pre_hasPassword;
-    int? pre_validFor;
-    try{
-      pre_validFor=json['valid_for'];
-   }catch(_){}
-    validFor = pre_validFor;
+    hasPassword = json['has_password'] == null ? null : json['has_password'];
+    validFor = json['valid_for'] == null ? null : json['valid_for'];
     extra = json['@extra'];
   }
 

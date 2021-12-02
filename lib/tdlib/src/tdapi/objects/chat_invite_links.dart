@@ -17,16 +17,8 @@ class ChatInviteLinks extends TdObject {
 
   /// Parse from a json
   ChatInviteLinks.fromJson(Map<String, dynamic> json)  {
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<ChatInviteLink>? pre_inviteLinks;
-    try{
-      pre_inviteLinks=List<ChatInviteLink>.from((json['invite_links'] ?? [])!.map((item) => ChatInviteLink.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    inviteLinks = pre_inviteLinks;
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    inviteLinks = json['invite_links'] == null ? null : List<ChatInviteLink>.from((json['invite_links'] ?? [])!.map((item) => ChatInviteLink.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

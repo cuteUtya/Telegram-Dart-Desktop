@@ -26,31 +26,11 @@ class Document extends TdObject {
 
   /// Parse from a json
   Document.fromJson(Map<String, dynamic> json)  {
-    String? pre_fileName;
-    try{
-      pre_fileName=json['file_name'];
-   }catch(_){}
-    fileName = pre_fileName;
-    String? pre_mimeType;
-    try{
-      pre_mimeType=json['mime_type'];
-   }catch(_){}
-    mimeType = pre_mimeType;
-    Minithumbnail? pre_minithumbnail;
-    try{
-      pre_minithumbnail=Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    minithumbnail = pre_minithumbnail;
-    Thumbnail? pre_thumbnail;
-    try{
-      pre_thumbnail=Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    File? pre_document;
-    try{
-      pre_document=File.fromJson(json['document'] ?? <String, dynamic>{});
-   }catch(_){}
-    document = pre_document;
+    fileName = json['file_name'] == null ? null : json['file_name'];
+    mimeType = json['mime_type'] == null ? null : json['mime_type'];
+    minithumbnail = json['minithumbnail'] == null ? null : Minithumbnail.fromJson(json['minithumbnail'] ?? <String, dynamic>{});
+    thumbnail = json['thumbnail'] == null ? null : Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    document = json['document'] == null ? null : File.fromJson(json['document'] ?? <String, dynamic>{});
   }
 
   @override

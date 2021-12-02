@@ -13,11 +13,7 @@ class Backgrounds extends TdObject {
 
   /// Parse from a json
   Backgrounds.fromJson(Map<String, dynamic> json)  {
-    List<Background>? pre_backgrounds;
-    try{
-      pre_backgrounds=List<Background>.from((json['backgrounds'] ?? [])!.map((item) => Background.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    backgrounds = pre_backgrounds;
+    backgrounds = json['backgrounds'] == null ? null : List<Background>.from((json['backgrounds'] ?? [])!.map((item) => Background.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

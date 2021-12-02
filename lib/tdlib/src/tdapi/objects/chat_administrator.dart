@@ -18,21 +18,9 @@ class ChatAdministrator extends TdObject {
 
   /// Parse from a json
   ChatAdministrator.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    String? pre_customTitle;
-    try{
-      pre_customTitle=json['custom_title'];
-   }catch(_){}
-    customTitle = pre_customTitle;
-    bool? pre_isOwner;
-    try{
-      pre_isOwner=json['is_owner'];
-   }catch(_){}
-    isOwner = pre_isOwner;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    customTitle = json['custom_title'] == null ? null : json['custom_title'];
+    isOwner = json['is_owner'] == null ? null : json['is_owner'];
   }
 
   @override

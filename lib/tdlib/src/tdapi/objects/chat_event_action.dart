@@ -140,16 +140,8 @@ class ChatEventMessageEdited extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMessageEdited.fromJson(Map<String, dynamic> json)  {
-    Message? pre_oldMessage;
-    try{
-      pre_oldMessage=Message.fromJson(json['old_message'] ?? <String, dynamic>{});
-   }catch(_){}
-    oldMessage = pre_oldMessage;
-    Message? pre_newMessage;
-    try{
-      pre_newMessage=Message.fromJson(json['new_message'] ?? <String, dynamic>{});
-   }catch(_){}
-    newMessage = pre_newMessage;
+    oldMessage = json['old_message'] == null ? null : Message.fromJson(json['old_message'] ?? <String, dynamic>{});
+    newMessage = json['new_message'] == null ? null : Message.fromJson(json['new_message'] ?? <String, dynamic>{});
   }
 
   @override
@@ -177,11 +169,7 @@ class ChatEventMessageDeleted extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMessageDeleted.fromJson(Map<String, dynamic> json)  {
-    Message? pre_message;
-    try{
-      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
-   }catch(_){}
-    message = pre_message;
+    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
   }
 
   @override
@@ -208,11 +196,7 @@ class ChatEventPollStopped extends ChatEventAction {
 
   /// Parse from a json
   ChatEventPollStopped.fromJson(Map<String, dynamic> json)  {
-    Message? pre_message;
-    try{
-      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
-   }catch(_){}
-    message = pre_message;
+    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
   }
 
   @override
@@ -239,11 +223,7 @@ class ChatEventMessagePinned extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMessagePinned.fromJson(Map<String, dynamic> json)  {
-    Message? pre_message;
-    try{
-      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
-   }catch(_){}
-    message = pre_message;
+    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
   }
 
   @override
@@ -270,11 +250,7 @@ class ChatEventMessageUnpinned extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMessageUnpinned.fromJson(Map<String, dynamic> json)  {
-    Message? pre_message;
-    try{
-      pre_message=Message.fromJson(json['message'] ?? <String, dynamic>{});
-   }catch(_){}
-    message = pre_message;
+    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
   }
 
   @override
@@ -324,11 +300,7 @@ class ChatEventMemberJoinedByInviteLink extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMemberJoinedByInviteLink.fromJson(Map<String, dynamic> json)  {
-    ChatInviteLink? pre_inviteLink;
-    try{
-      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    inviteLink = pre_inviteLink;
+    inviteLink = json['invite_link'] == null ? null : ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
   }
 
   @override
@@ -359,16 +331,8 @@ class ChatEventMemberJoinedByRequest extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMemberJoinedByRequest.fromJson(Map<String, dynamic> json)  {
-    int? pre_approverUserId;
-    try{
-      pre_approverUserId=json['approver_user_id'];
-   }catch(_){}
-    approverUserId = pre_approverUserId;
-    ChatInviteLink? pre_inviteLink;
-    try{
-      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    inviteLink = pre_inviteLink;
+    approverUserId = json['approver_user_id'] == null ? null : json['approver_user_id'];
+    inviteLink = json['invite_link'] == null ? null : ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
   }
 
   @override
@@ -423,16 +387,8 @@ class ChatEventMemberInvited extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMemberInvited.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    ChatMemberStatus? pre_status;
-    try{
-      pre_status=ChatMemberStatus.fromJson(json['status'] ?? <String, dynamic>{});
-   }catch(_){}
-    status = pre_status;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    status = json['status'] == null ? null : ChatMemberStatus.fromJson(json['status'] ?? <String, dynamic>{});
   }
 
   @override
@@ -468,21 +424,9 @@ class ChatEventMemberPromoted extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMemberPromoted.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    ChatMemberStatus? pre_oldStatus;
-    try{
-      pre_oldStatus=ChatMemberStatus.fromJson(json['old_status'] ?? <String, dynamic>{});
-   }catch(_){}
-    oldStatus = pre_oldStatus;
-    ChatMemberStatus? pre_newStatus;
-    try{
-      pre_newStatus=ChatMemberStatus.fromJson(json['new_status'] ?? <String, dynamic>{});
-   }catch(_){}
-    newStatus = pre_newStatus;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    oldStatus = json['old_status'] == null ? null : ChatMemberStatus.fromJson(json['old_status'] ?? <String, dynamic>{});
+    newStatus = json['new_status'] == null ? null : ChatMemberStatus.fromJson(json['new_status'] ?? <String, dynamic>{});
   }
 
   @override
@@ -519,21 +463,9 @@ class ChatEventMemberRestricted extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMemberRestricted.fromJson(Map<String, dynamic> json)  {
-    MessageSender? pre_memberId;
-    try{
-      pre_memberId=MessageSender.fromJson(json['member_id'] ?? <String, dynamic>{});
-   }catch(_){}
-    memberId = pre_memberId;
-    ChatMemberStatus? pre_oldStatus;
-    try{
-      pre_oldStatus=ChatMemberStatus.fromJson(json['old_status'] ?? <String, dynamic>{});
-   }catch(_){}
-    oldStatus = pre_oldStatus;
-    ChatMemberStatus? pre_newStatus;
-    try{
-      pre_newStatus=ChatMemberStatus.fromJson(json['new_status'] ?? <String, dynamic>{});
-   }catch(_){}
-    newStatus = pre_newStatus;
+    memberId = json['member_id'] == null ? null : MessageSender.fromJson(json['member_id'] ?? <String, dynamic>{});
+    oldStatus = json['old_status'] == null ? null : ChatMemberStatus.fromJson(json['old_status'] ?? <String, dynamic>{});
+    newStatus = json['new_status'] == null ? null : ChatMemberStatus.fromJson(json['new_status'] ?? <String, dynamic>{});
   }
 
   @override
@@ -566,16 +498,8 @@ class ChatEventTitleChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventTitleChanged.fromJson(Map<String, dynamic> json)  {
-    String? pre_oldTitle;
-    try{
-      pre_oldTitle=json['old_title'];
-   }catch(_){}
-    oldTitle = pre_oldTitle;
-    String? pre_newTitle;
-    try{
-      pre_newTitle=json['new_title'];
-   }catch(_){}
-    newTitle = pre_newTitle;
+    oldTitle = json['old_title'] == null ? null : json['old_title'];
+    newTitle = json['new_title'] == null ? null : json['new_title'];
   }
 
   @override
@@ -607,16 +531,8 @@ class ChatEventPermissionsChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventPermissionsChanged.fromJson(Map<String, dynamic> json)  {
-    ChatPermissions? pre_oldPermissions;
-    try{
-      pre_oldPermissions=ChatPermissions.fromJson(json['old_permissions'] ?? <String, dynamic>{});
-   }catch(_){}
-    oldPermissions = pre_oldPermissions;
-    ChatPermissions? pre_newPermissions;
-    try{
-      pre_newPermissions=ChatPermissions.fromJson(json['new_permissions'] ?? <String, dynamic>{});
-   }catch(_){}
-    newPermissions = pre_newPermissions;
+    oldPermissions = json['old_permissions'] == null ? null : ChatPermissions.fromJson(json['old_permissions'] ?? <String, dynamic>{});
+    newPermissions = json['new_permissions'] == null ? null : ChatPermissions.fromJson(json['new_permissions'] ?? <String, dynamic>{});
   }
 
   @override
@@ -648,16 +564,8 @@ class ChatEventDescriptionChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventDescriptionChanged.fromJson(Map<String, dynamic> json)  {
-    String? pre_oldDescription;
-    try{
-      pre_oldDescription=json['old_description'];
-   }catch(_){}
-    oldDescription = pre_oldDescription;
-    String? pre_newDescription;
-    try{
-      pre_newDescription=json['new_description'];
-   }catch(_){}
-    newDescription = pre_newDescription;
+    oldDescription = json['old_description'] == null ? null : json['old_description'];
+    newDescription = json['new_description'] == null ? null : json['new_description'];
   }
 
   @override
@@ -689,16 +597,8 @@ class ChatEventUsernameChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventUsernameChanged.fromJson(Map<String, dynamic> json)  {
-    String? pre_oldUsername;
-    try{
-      pre_oldUsername=json['old_username'];
-   }catch(_){}
-    oldUsername = pre_oldUsername;
-    String? pre_newUsername;
-    try{
-      pre_newUsername=json['new_username'];
-   }catch(_){}
-    newUsername = pre_newUsername;
+    oldUsername = json['old_username'] == null ? null : json['old_username'];
+    newUsername = json['new_username'] == null ? null : json['new_username'];
   }
 
   @override
@@ -730,16 +630,8 @@ class ChatEventPhotoChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventPhotoChanged.fromJson(Map<String, dynamic> json)  {
-    ChatPhoto? pre_oldPhoto;
-    try{
-      pre_oldPhoto=ChatPhoto.fromJson(json['old_photo'] ?? <String, dynamic>{});
-   }catch(_){}
-    oldPhoto = pre_oldPhoto;
-    ChatPhoto? pre_newPhoto;
-    try{
-      pre_newPhoto=ChatPhoto.fromJson(json['new_photo'] ?? <String, dynamic>{});
-   }catch(_){}
-    newPhoto = pre_newPhoto;
+    oldPhoto = json['old_photo'] == null ? null : ChatPhoto.fromJson(json['old_photo'] ?? <String, dynamic>{});
+    newPhoto = json['new_photo'] == null ? null : ChatPhoto.fromJson(json['new_photo'] ?? <String, dynamic>{});
   }
 
   @override
@@ -767,11 +659,7 @@ class ChatEventInvitesToggled extends ChatEventAction {
 
   /// Parse from a json
   ChatEventInvitesToggled.fromJson(Map<String, dynamic> json)  {
-    bool? pre_canInviteUsers;
-    try{
-      pre_canInviteUsers=json['can_invite_users'];
-   }catch(_){}
-    canInviteUsers = pre_canInviteUsers;
+    canInviteUsers = json['can_invite_users'] == null ? null : json['can_invite_users'];
   }
 
   @override
@@ -802,16 +690,8 @@ class ChatEventLinkedChatChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventLinkedChatChanged.fromJson(Map<String, dynamic> json)  {
-    int? pre_oldLinkedChatId;
-    try{
-      pre_oldLinkedChatId=json['old_linked_chat_id'];
-   }catch(_){}
-    oldLinkedChatId = pre_oldLinkedChatId;
-    int? pre_newLinkedChatId;
-    try{
-      pre_newLinkedChatId=json['new_linked_chat_id'];
-   }catch(_){}
-    newLinkedChatId = pre_newLinkedChatId;
+    oldLinkedChatId = json['old_linked_chat_id'] == null ? null : json['old_linked_chat_id'];
+    newLinkedChatId = json['new_linked_chat_id'] == null ? null : json['new_linked_chat_id'];
   }
 
   @override
@@ -843,16 +723,8 @@ class ChatEventSlowModeDelayChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventSlowModeDelayChanged.fromJson(Map<String, dynamic> json)  {
-    int? pre_oldSlowModeDelay;
-    try{
-      pre_oldSlowModeDelay=json['old_slow_mode_delay'];
-   }catch(_){}
-    oldSlowModeDelay = pre_oldSlowModeDelay;
-    int? pre_newSlowModeDelay;
-    try{
-      pre_newSlowModeDelay=json['new_slow_mode_delay'];
-   }catch(_){}
-    newSlowModeDelay = pre_newSlowModeDelay;
+    oldSlowModeDelay = json['old_slow_mode_delay'] == null ? null : json['old_slow_mode_delay'];
+    newSlowModeDelay = json['new_slow_mode_delay'] == null ? null : json['new_slow_mode_delay'];
   }
 
   @override
@@ -884,16 +756,8 @@ class ChatEventMessageTtlSettingChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventMessageTtlSettingChanged.fromJson(Map<String, dynamic> json)  {
-    int? pre_oldMessageTtlSetting;
-    try{
-      pre_oldMessageTtlSetting=json['old_message_ttl_setting'];
-   }catch(_){}
-    oldMessageTtlSetting = pre_oldMessageTtlSetting;
-    int? pre_newMessageTtlSetting;
-    try{
-      pre_newMessageTtlSetting=json['new_message_ttl_setting'];
-   }catch(_){}
-    newMessageTtlSetting = pre_newMessageTtlSetting;
+    oldMessageTtlSetting = json['old_message_ttl_setting'] == null ? null : json['old_message_ttl_setting'];
+    newMessageTtlSetting = json['new_message_ttl_setting'] == null ? null : json['new_message_ttl_setting'];
   }
 
   @override
@@ -921,11 +785,7 @@ class ChatEventSignMessagesToggled extends ChatEventAction {
 
   /// Parse from a json
   ChatEventSignMessagesToggled.fromJson(Map<String, dynamic> json)  {
-    bool? pre_signMessages;
-    try{
-      pre_signMessages=json['sign_messages'];
-   }catch(_){}
-    signMessages = pre_signMessages;
+    signMessages = json['sign_messages'] == null ? null : json['sign_messages'];
   }
 
   @override
@@ -956,16 +816,8 @@ class ChatEventStickerSetChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventStickerSetChanged.fromJson(Map<String, dynamic> json)  {
-    int? pre_oldStickerSetId;
-    try{
-      pre_oldStickerSetId=int.tryParse(json['old_sticker_set_id'] ?? "");
-   }catch(_){}
-    oldStickerSetId = pre_oldStickerSetId;
-    int? pre_newStickerSetId;
-    try{
-      pre_newStickerSetId=int.tryParse(json['new_sticker_set_id'] ?? "");
-   }catch(_){}
-    newStickerSetId = pre_newStickerSetId;
+    oldStickerSetId = json['old_sticker_set_id'] == null ? null : int.tryParse(json['old_sticker_set_id'] ?? "");
+    newStickerSetId = json['new_sticker_set_id'] == null ? null : int.tryParse(json['new_sticker_set_id'] ?? "");
   }
 
   @override
@@ -997,16 +849,8 @@ class ChatEventLocationChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventLocationChanged.fromJson(Map<String, dynamic> json)  {
-    ChatLocation? pre_oldLocation;
-    try{
-      pre_oldLocation=ChatLocation.fromJson(json['old_location'] ?? <String, dynamic>{});
-   }catch(_){}
-    oldLocation = pre_oldLocation;
-    ChatLocation? pre_newLocation;
-    try{
-      pre_newLocation=ChatLocation.fromJson(json['new_location'] ?? <String, dynamic>{});
-   }catch(_){}
-    newLocation = pre_newLocation;
+    oldLocation = json['old_location'] == null ? null : ChatLocation.fromJson(json['old_location'] ?? <String, dynamic>{});
+    newLocation = json['new_location'] == null ? null : ChatLocation.fromJson(json['new_location'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1034,11 +878,7 @@ class ChatEventIsAllHistoryAvailableToggled extends ChatEventAction {
 
   /// Parse from a json
   ChatEventIsAllHistoryAvailableToggled.fromJson(Map<String, dynamic> json)  {
-    bool? pre_isAllHistoryAvailable;
-    try{
-      pre_isAllHistoryAvailable=json['is_all_history_available'];
-   }catch(_){}
-    isAllHistoryAvailable = pre_isAllHistoryAvailable;
+    isAllHistoryAvailable = json['is_all_history_available'] == null ? null : json['is_all_history_available'];
   }
 
   @override
@@ -1069,16 +909,8 @@ class ChatEventInviteLinkEdited extends ChatEventAction {
 
   /// Parse from a json
   ChatEventInviteLinkEdited.fromJson(Map<String, dynamic> json)  {
-    ChatInviteLink? pre_oldInviteLink;
-    try{
-      pre_oldInviteLink=ChatInviteLink.fromJson(json['old_invite_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    oldInviteLink = pre_oldInviteLink;
-    ChatInviteLink? pre_newInviteLink;
-    try{
-      pre_newInviteLink=ChatInviteLink.fromJson(json['new_invite_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    newInviteLink = pre_newInviteLink;
+    oldInviteLink = json['old_invite_link'] == null ? null : ChatInviteLink.fromJson(json['old_invite_link'] ?? <String, dynamic>{});
+    newInviteLink = json['new_invite_link'] == null ? null : ChatInviteLink.fromJson(json['new_invite_link'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1106,11 +938,7 @@ class ChatEventInviteLinkRevoked extends ChatEventAction {
 
   /// Parse from a json
   ChatEventInviteLinkRevoked.fromJson(Map<String, dynamic> json)  {
-    ChatInviteLink? pre_inviteLink;
-    try{
-      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    inviteLink = pre_inviteLink;
+    inviteLink = json['invite_link'] == null ? null : ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1137,11 +965,7 @@ class ChatEventInviteLinkDeleted extends ChatEventAction {
 
   /// Parse from a json
   ChatEventInviteLinkDeleted.fromJson(Map<String, dynamic> json)  {
-    ChatInviteLink? pre_inviteLink;
-    try{
-      pre_inviteLink=ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
-   }catch(_){}
-    inviteLink = pre_inviteLink;
+    inviteLink = json['invite_link'] == null ? null : ChatInviteLink.fromJson(json['invite_link'] ?? <String, dynamic>{});
   }
 
   @override
@@ -1168,11 +992,7 @@ class ChatEventVideoChatCreated extends ChatEventAction {
 
   /// Parse from a json
   ChatEventVideoChatCreated.fromJson(Map<String, dynamic> json)  {
-    int? pre_groupCallId;
-    try{
-      pre_groupCallId=json['group_call_id'];
-   }catch(_){}
-    groupCallId = pre_groupCallId;
+    groupCallId = json['group_call_id'] == null ? null : json['group_call_id'];
   }
 
   @override
@@ -1199,11 +1019,7 @@ class ChatEventVideoChatDiscarded extends ChatEventAction {
 
   /// Parse from a json
   ChatEventVideoChatDiscarded.fromJson(Map<String, dynamic> json)  {
-    int? pre_groupCallId;
-    try{
-      pre_groupCallId=json['group_call_id'];
-   }catch(_){}
-    groupCallId = pre_groupCallId;
+    groupCallId = json['group_call_id'] == null ? null : json['group_call_id'];
   }
 
   @override
@@ -1234,16 +1050,8 @@ class ChatEventVideoChatParticipantIsMutedToggled extends ChatEventAction {
 
   /// Parse from a json
   ChatEventVideoChatParticipantIsMutedToggled.fromJson(Map<String, dynamic> json)  {
-    MessageSender? pre_participantId;
-    try{
-      pre_participantId=MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
-   }catch(_){}
-    participantId = pre_participantId;
-    bool? pre_isMuted;
-    try{
-      pre_isMuted=json['is_muted'];
-   }catch(_){}
-    isMuted = pre_isMuted;
+    participantId = json['participant_id'] == null ? null : MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
+    isMuted = json['is_muted'] == null ? null : json['is_muted'];
   }
 
   @override
@@ -1275,16 +1083,8 @@ class ChatEventVideoChatParticipantVolumeLevelChanged extends ChatEventAction {
 
   /// Parse from a json
   ChatEventVideoChatParticipantVolumeLevelChanged.fromJson(Map<String, dynamic> json)  {
-    MessageSender? pre_participantId;
-    try{
-      pre_participantId=MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
-   }catch(_){}
-    participantId = pre_participantId;
-    int? pre_volumeLevel;
-    try{
-      pre_volumeLevel=json['volume_level'];
-   }catch(_){}
-    volumeLevel = pre_volumeLevel;
+    participantId = json['participant_id'] == null ? null : MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
+    volumeLevel = json['volume_level'] == null ? null : json['volume_level'];
   }
 
   @override
@@ -1312,11 +1112,7 @@ class ChatEventVideoChatMuteNewParticipantsToggled extends ChatEventAction {
 
   /// Parse from a json
   ChatEventVideoChatMuteNewParticipantsToggled.fromJson(Map<String, dynamic> json)  {
-    bool? pre_muteNewParticipants;
-    try{
-      pre_muteNewParticipants=json['mute_new_participants'];
-   }catch(_){}
-    muteNewParticipants = pre_muteNewParticipants;
+    muteNewParticipants = json['mute_new_participants'] == null ? null : json['mute_new_participants'];
   }
 
   @override

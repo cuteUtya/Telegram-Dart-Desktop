@@ -17,16 +17,8 @@ class NetworkStatistics extends TdObject {
 
   /// Parse from a json
   NetworkStatistics.fromJson(Map<String, dynamic> json)  {
-    int? pre_sinceDate;
-    try{
-      pre_sinceDate=json['since_date'];
-   }catch(_){}
-    sinceDate = pre_sinceDate;
-    List<NetworkStatisticsEntry>? pre_entries;
-    try{
-      pre_entries=List<NetworkStatisticsEntry>.from((json['entries'] ?? [])!.map((item) => NetworkStatisticsEntry.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    entries = pre_entries;
+    sinceDate = json['since_date'] == null ? null : json['since_date'];
+    entries = json['entries'] == null ? null : List<NetworkStatisticsEntry>.from((json['entries'] ?? [])!.map((item) => NetworkStatisticsEntry.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

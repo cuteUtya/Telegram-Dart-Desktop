@@ -22,26 +22,10 @@ class PassportSuitableElement extends TdObject {
 
   /// Parse from a json
   PassportSuitableElement.fromJson(Map<String, dynamic> json)  {
-    PassportElementType? pre_type;
-    try{
-      pre_type=PassportElementType.fromJson(json['type'] ?? <String, dynamic>{});
-   }catch(_){}
-    type = pre_type;
-    bool? pre_isSelfieRequired;
-    try{
-      pre_isSelfieRequired=json['is_selfie_required'];
-   }catch(_){}
-    isSelfieRequired = pre_isSelfieRequired;
-    bool? pre_isTranslationRequired;
-    try{
-      pre_isTranslationRequired=json['is_translation_required'];
-   }catch(_){}
-    isTranslationRequired = pre_isTranslationRequired;
-    bool? pre_isNativeNameRequired;
-    try{
-      pre_isNativeNameRequired=json['is_native_name_required'];
-   }catch(_){}
-    isNativeNameRequired = pre_isNativeNameRequired;
+    type = json['type'] == null ? null : PassportElementType.fromJson(json['type'] ?? <String, dynamic>{});
+    isSelfieRequired = json['is_selfie_required'] == null ? null : json['is_selfie_required'];
+    isTranslationRequired = json['is_translation_required'] == null ? null : json['is_translation_required'];
+    isNativeNameRequired = json['is_native_name_required'] == null ? null : json['is_native_name_required'];
   }
 
   @override

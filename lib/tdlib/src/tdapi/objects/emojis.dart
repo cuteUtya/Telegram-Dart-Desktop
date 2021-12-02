@@ -13,11 +13,7 @@ class Emojis extends TdObject {
 
   /// Parse from a json
   Emojis.fromJson(Map<String, dynamic> json)  {
-    List<String>? pre_emojis;
-    try{
-      pre_emojis=List<String>.from((json['emojis'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    emojis = pre_emojis;
+    emojis = json['emojis'] == null ? null : List<String>.from((json['emojis'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 

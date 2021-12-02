@@ -13,11 +13,7 @@ class LogTags extends TdObject {
 
   /// Parse from a json
   LogTags.fromJson(Map<String, dynamic> json)  {
-    List<String>? pre_tags;
-    try{
-      pre_tags=List<String>.from((json['tags'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    tags = pre_tags;
+    tags = json['tags'] == null ? null : List<String>.from((json['tags'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 

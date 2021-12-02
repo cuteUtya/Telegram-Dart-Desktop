@@ -14,16 +14,8 @@ class ColorReplacement extends TdObject {
 
   /// Parse from a json
   ColorReplacement.fromJson(Map<String, dynamic> json)  {
-    int? pre_oldColor;
-    try{
-      pre_oldColor=json['old_color'];
-   }catch(_){}
-    oldColor = pre_oldColor;
-    int? pre_newColor;
-    try{
-      pre_newColor=json['new_color'];
-   }catch(_){}
-    newColor = pre_newColor;
+    oldColor = json['old_color'] == null ? null : json['old_color'];
+    newColor = json['new_color'] == null ? null : json['new_color'];
   }
 
   @override

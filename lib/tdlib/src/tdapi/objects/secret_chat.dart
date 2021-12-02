@@ -33,36 +33,12 @@ class SecretChat extends TdObject {
 
   /// Parse from a json
   SecretChat.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=json['id'];
-   }catch(_){}
-    id = pre_id;
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    SecretChatState? pre_state;
-    try{
-      pre_state=SecretChatState.fromJson(json['state'] ?? <String, dynamic>{});
-   }catch(_){}
-    state = pre_state;
-    bool? pre_isOutbound;
-    try{
-      pre_isOutbound=json['is_outbound'];
-   }catch(_){}
-    isOutbound = pre_isOutbound;
-    String? pre_keyHash;
-    try{
-      pre_keyHash=json['key_hash'];
-   }catch(_){}
-    keyHash = pre_keyHash;
-    int? pre_layer;
-    try{
-      pre_layer=json['layer'];
-   }catch(_){}
-    layer = pre_layer;
+    id = json['id'] == null ? null : json['id'];
+    userId = json['user_id'] == null ? null : json['user_id'];
+    state = json['state'] == null ? null : SecretChatState.fromJson(json['state'] ?? <String, dynamic>{});
+    isOutbound = json['is_outbound'] == null ? null : json['is_outbound'];
+    keyHash = json['key_hash'] == null ? null : json['key_hash'];
+    layer = json['layer'] == null ? null : json['layer'];
     extra = json['@extra'];
   }
 

@@ -17,16 +17,8 @@ class MessagePositions extends TdObject {
 
   /// Parse from a json
   MessagePositions.fromJson(Map<String, dynamic> json)  {
-    int? pre_totalCount;
-    try{
-      pre_totalCount=json['total_count'];
-   }catch(_){}
-    totalCount = pre_totalCount;
-    List<MessagePosition>? pre_positions;
-    try{
-      pre_positions=List<MessagePosition>.from((json['positions'] ?? [])!.map((item) => MessagePosition.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    positions = pre_positions;
+    totalCount = json['total_count'] == null ? null : json['total_count'];
+    positions = json['positions'] == null ? null : List<MessagePosition>.from((json['positions'] ?? [])!.map((item) => MessagePosition.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

@@ -18,21 +18,9 @@ class PhoneNumberAuthenticationSettings extends TdObject {
 
   /// Parse from a json
   PhoneNumberAuthenticationSettings.fromJson(Map<String, dynamic> json)  {
-    bool? pre_allowFlashCall;
-    try{
-      pre_allowFlashCall=json['allow_flash_call'];
-   }catch(_){}
-    allowFlashCall = pre_allowFlashCall;
-    bool? pre_isCurrentPhoneNumber;
-    try{
-      pre_isCurrentPhoneNumber=json['is_current_phone_number'];
-   }catch(_){}
-    isCurrentPhoneNumber = pre_isCurrentPhoneNumber;
-    bool? pre_allowSmsRetrieverApi;
-    try{
-      pre_allowSmsRetrieverApi=json['allow_sms_retriever_api'];
-   }catch(_){}
-    allowSmsRetrieverApi = pre_allowSmsRetrieverApi;
+    allowFlashCall = json['allow_flash_call'] == null ? null : json['allow_flash_call'];
+    isCurrentPhoneNumber = json['is_current_phone_number'] == null ? null : json['is_current_phone_number'];
+    allowSmsRetrieverApi = json['allow_sms_retriever_api'] == null ? null : json['allow_sms_retriever_api'];
   }
 
   @override

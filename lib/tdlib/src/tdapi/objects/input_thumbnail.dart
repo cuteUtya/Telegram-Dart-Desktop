@@ -18,21 +18,9 @@ class InputThumbnail extends TdObject {
 
   /// Parse from a json
   InputThumbnail.fromJson(Map<String, dynamic> json)  {
-    InputFile? pre_thumbnail;
-    try{
-      pre_thumbnail=InputFile.fromJson(json['thumbnail'] ?? <String, dynamic>{});
-   }catch(_){}
-    thumbnail = pre_thumbnail;
-    int? pre_width;
-    try{
-      pre_width=json['width'];
-   }catch(_){}
-    width = pre_width;
-    int? pre_height;
-    try{
-      pre_height=json['height'];
-   }catch(_){}
-    height = pre_height;
+    thumbnail = json['thumbnail'] == null ? null : InputFile.fromJson(json['thumbnail'] ?? <String, dynamic>{});
+    width = json['width'] == null ? null : json['width'];
+    height = json['height'] == null ? null : json['height'];
   }
 
   @override

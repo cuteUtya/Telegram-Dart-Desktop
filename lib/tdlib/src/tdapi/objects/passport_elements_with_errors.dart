@@ -17,16 +17,8 @@ class PassportElementsWithErrors extends TdObject {
 
   /// Parse from a json
   PassportElementsWithErrors.fromJson(Map<String, dynamic> json)  {
-    List<PassportElement>? pre_elements;
-    try{
-      pre_elements=List<PassportElement>.from((json['elements'] ?? [])!.map((item) => PassportElement.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    elements = pre_elements;
-    List<PassportElementError>? pre_errors;
-    try{
-      pre_errors=List<PassportElementError>.from((json['errors'] ?? [])!.map((item) => PassportElementError.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    errors = pre_errors;
+    elements = json['elements'] == null ? null : List<PassportElement>.from((json['elements'] ?? [])!.map((item) => PassportElement.fromJson(item ?? <String, dynamic>{})).toList());
+    errors = json['errors'] == null ? null : List<PassportElementError>.from((json['errors'] ?? [])!.map((item) => PassportElementError.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

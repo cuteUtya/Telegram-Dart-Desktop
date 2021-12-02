@@ -25,26 +25,10 @@ class AuthenticationCodeInfo extends TdObject {
 
   /// Parse from a json
   AuthenticationCodeInfo.fromJson(Map<String, dynamic> json)  {
-    String? pre_phoneNumber;
-    try{
-      pre_phoneNumber=json['phone_number'];
-   }catch(_){}
-    phoneNumber = pre_phoneNumber;
-    AuthenticationCodeType? pre_type;
-    try{
-      pre_type=AuthenticationCodeType.fromJson(json['type'] ?? <String, dynamic>{});
-   }catch(_){}
-    type = pre_type;
-    AuthenticationCodeType? pre_nextType;
-    try{
-      pre_nextType=AuthenticationCodeType.fromJson(json['next_type'] ?? <String, dynamic>{});
-   }catch(_){}
-    nextType = pre_nextType;
-    int? pre_timeout;
-    try{
-      pre_timeout=json['timeout'];
-   }catch(_){}
-    timeout = pre_timeout;
+    phoneNumber = json['phone_number'] == null ? null : json['phone_number'];
+    type = json['type'] == null ? null : AuthenticationCodeType.fromJson(json['type'] ?? <String, dynamic>{});
+    nextType = json['next_type'] == null ? null : AuthenticationCodeType.fromJson(json['next_type'] ?? <String, dynamic>{});
+    timeout = json['timeout'] == null ? null : json['timeout'];
     extra = json['@extra'];
   }
 

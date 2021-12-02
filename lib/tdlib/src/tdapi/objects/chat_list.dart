@@ -92,11 +92,7 @@ class ChatListFilter extends ChatList {
 
   /// Parse from a json
   ChatListFilter.fromJson(Map<String, dynamic> json)  {
-    int? pre_chatFilterId;
-    try{
-      pre_chatFilterId=json['chat_filter_id'];
-   }catch(_){}
-    chatFilterId = pre_chatFilterId;
+    chatFilterId = json['chat_filter_id'] == null ? null : json['chat_filter_id'];
   }
 
   @override

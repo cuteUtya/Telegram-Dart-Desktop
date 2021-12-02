@@ -22,26 +22,10 @@ class ChatStatisticsAdministratorActionsInfo extends TdObject {
 
   /// Parse from a json
   ChatStatisticsAdministratorActionsInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    int? pre_deletedMessageCount;
-    try{
-      pre_deletedMessageCount=json['deleted_message_count'];
-   }catch(_){}
-    deletedMessageCount = pre_deletedMessageCount;
-    int? pre_bannedUserCount;
-    try{
-      pre_bannedUserCount=json['banned_user_count'];
-   }catch(_){}
-    bannedUserCount = pre_bannedUserCount;
-    int? pre_restrictedUserCount;
-    try{
-      pre_restrictedUserCount=json['restricted_user_count'];
-   }catch(_){}
-    restrictedUserCount = pre_restrictedUserCount;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    deletedMessageCount = json['deleted_message_count'] == null ? null : json['deleted_message_count'];
+    bannedUserCount = json['banned_user_count'] == null ? null : json['banned_user_count'];
+    restrictedUserCount = json['restricted_user_count'] == null ? null : json['restricted_user_count'];
   }
 
   @override

@@ -107,11 +107,7 @@ class UserPrivacySettingRuleAllowUsers extends UserPrivacySettingRule {
 
   /// Parse from a json
   UserPrivacySettingRuleAllowUsers.fromJson(Map<String, dynamic> json)  {
-    List<int>? pre_userIds;
-    try{
-      pre_userIds=List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    userIds = pre_userIds;
+    userIds = json['user_ids'] == null ? null : List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
   }
 
   @override
@@ -138,11 +134,7 @@ class UserPrivacySettingRuleAllowChatMembers extends UserPrivacySettingRule {
 
   /// Parse from a json
   UserPrivacySettingRuleAllowChatMembers.fromJson(Map<String, dynamic> json)  {
-    List<int>? pre_chatIds;
-    try{
-      pre_chatIds=List<int>.from((json['chat_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    chatIds = pre_chatIds;
+    chatIds = json['chat_ids'] == null ? null : List<int>.from((json['chat_ids'] ?? [])!.map((item) => item).toList());
   }
 
   @override
@@ -215,11 +207,7 @@ class UserPrivacySettingRuleRestrictUsers extends UserPrivacySettingRule {
 
   /// Parse from a json
   UserPrivacySettingRuleRestrictUsers.fromJson(Map<String, dynamic> json)  {
-    List<int>? pre_userIds;
-    try{
-      pre_userIds=List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    userIds = pre_userIds;
+    userIds = json['user_ids'] == null ? null : List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
   }
 
   @override
@@ -246,11 +234,7 @@ class UserPrivacySettingRuleRestrictChatMembers extends UserPrivacySettingRule {
 
   /// Parse from a json
   UserPrivacySettingRuleRestrictChatMembers.fromJson(Map<String, dynamic> json)  {
-    List<int>? pre_chatIds;
-    try{
-      pre_chatIds=List<int>.from((json['chat_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    chatIds = pre_chatIds;
+    chatIds = json['chat_ids'] == null ? null : List<int>.from((json['chat_ids'] ?? [])!.map((item) => item).toList());
   }
 
   @override

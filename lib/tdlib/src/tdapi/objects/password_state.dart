@@ -33,36 +33,12 @@ class PasswordState extends TdObject {
 
   /// Parse from a json
   PasswordState.fromJson(Map<String, dynamic> json)  {
-    bool? pre_hasPassword;
-    try{
-      pre_hasPassword=json['has_password'];
-   }catch(_){}
-    hasPassword = pre_hasPassword;
-    String? pre_passwordHint;
-    try{
-      pre_passwordHint=json['password_hint'];
-   }catch(_){}
-    passwordHint = pre_passwordHint;
-    bool? pre_hasRecoveryEmailAddress;
-    try{
-      pre_hasRecoveryEmailAddress=json['has_recovery_email_address'];
-   }catch(_){}
-    hasRecoveryEmailAddress = pre_hasRecoveryEmailAddress;
-    bool? pre_hasPassportData;
-    try{
-      pre_hasPassportData=json['has_passport_data'];
-   }catch(_){}
-    hasPassportData = pre_hasPassportData;
-    EmailAddressAuthenticationCodeInfo? pre_recoveryEmailAddressCodeInfo;
-    try{
-      pre_recoveryEmailAddressCodeInfo=EmailAddressAuthenticationCodeInfo.fromJson(json['recovery_email_address_code_info'] ?? <String, dynamic>{});
-   }catch(_){}
-    recoveryEmailAddressCodeInfo = pre_recoveryEmailAddressCodeInfo;
-    int? pre_pendingResetDate;
-    try{
-      pre_pendingResetDate=json['pending_reset_date'];
-   }catch(_){}
-    pendingResetDate = pre_pendingResetDate;
+    hasPassword = json['has_password'] == null ? null : json['has_password'];
+    passwordHint = json['password_hint'] == null ? null : json['password_hint'];
+    hasRecoveryEmailAddress = json['has_recovery_email_address'] == null ? null : json['has_recovery_email_address'];
+    hasPassportData = json['has_passport_data'] == null ? null : json['has_passport_data'];
+    recoveryEmailAddressCodeInfo = json['recovery_email_address_code_info'] == null ? null : EmailAddressAuthenticationCodeInfo.fromJson(json['recovery_email_address_code_info'] ?? <String, dynamic>{});
+    pendingResetDate = json['pending_reset_date'] == null ? null : json['pending_reset_date'];
     extra = json['@extra'];
   }
 

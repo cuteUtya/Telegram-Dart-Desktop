@@ -49,11 +49,7 @@ class ReplyMarkupRemoveKeyboard extends ReplyMarkup {
 
   /// Parse from a json
   ReplyMarkupRemoveKeyboard.fromJson(Map<String, dynamic> json)  {
-    bool? pre_isPersonal;
-    try{
-      pre_isPersonal=json['is_personal'];
-   }catch(_){}
-    isPersonal = pre_isPersonal;
+    isPersonal = json['is_personal'] == null ? null : json['is_personal'];
   }
 
   @override
@@ -84,16 +80,8 @@ class ReplyMarkupForceReply extends ReplyMarkup {
 
   /// Parse from a json
   ReplyMarkupForceReply.fromJson(Map<String, dynamic> json)  {
-    bool? pre_isPersonal;
-    try{
-      pre_isPersonal=json['is_personal'];
-   }catch(_){}
-    isPersonal = pre_isPersonal;
-    String? pre_inputFieldPlaceholder;
-    try{
-      pre_inputFieldPlaceholder=json['input_field_placeholder'];
-   }catch(_){}
-    inputFieldPlaceholder = pre_inputFieldPlaceholder;
+    isPersonal = json['is_personal'] == null ? null : json['is_personal'];
+    inputFieldPlaceholder = json['input_field_placeholder'] == null ? null : json['input_field_placeholder'];
   }
 
   @override
@@ -137,38 +125,18 @@ class ReplyMarkupShowKeyboard extends ReplyMarkup {
 
   /// Parse from a json
   ReplyMarkupShowKeyboard.fromJson(Map<String, dynamic> json)  {
-    List<List<KeyboardButton>>? pre_rows;
-    try{
-      pre_rows=List<List<KeyboardButton>>.from((json['rows'] ?? [])!.map((item) => List<KeyboardButton>.from((item ?? [])!.map((innerItem) => KeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList())).toList());
-   }catch(_){}
-    rows = pre_rows;
-    bool? pre_resizeKeyboard;
-    try{
-      pre_resizeKeyboard=json['resize_keyboard'];
-   }catch(_){}
-    resizeKeyboard = pre_resizeKeyboard;
-    bool? pre_oneTime;
-    try{
-      pre_oneTime=json['one_time'];
-   }catch(_){}
-    oneTime = pre_oneTime;
-    bool? pre_isPersonal;
-    try{
-      pre_isPersonal=json['is_personal'];
-   }catch(_){}
-    isPersonal = pre_isPersonal;
-    String? pre_inputFieldPlaceholder;
-    try{
-      pre_inputFieldPlaceholder=json['input_field_placeholder'];
-   }catch(_){}
-    inputFieldPlaceholder = pre_inputFieldPlaceholder;
+    rows = json['rows'] == null ? null : List<List<KeyboardButton>>.from((json['rows'] ?? [])!.map((item) => List<KeyboardButton>.from((item ?? [])!.map((innerItem) => KeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList())).toList());
+    resizeKeyboard = json['resize_keyboard'] == null ? null : json['resize_keyboard'];
+    oneTime = json['one_time'] == null ? null : json['one_time'];
+    isPersonal = json['is_personal'] == null ? null : json['is_personal'];
+    inputFieldPlaceholder = json['input_field_placeholder'] == null ? null : json['input_field_placeholder'];
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "rows": rows?.map((i) => i.map((ii) => ii.toJson()).toList()).toList(),
+      "rows": rows?.map((i) => i?.map((ii) => ii.toJson()).toList()).toList(),
       "resize_keyboard": resizeKeyboard,
       "one_time": oneTime,
       "is_personal": isPersonal,
@@ -192,18 +160,14 @@ class ReplyMarkupInlineKeyboard extends ReplyMarkup {
 
   /// Parse from a json
   ReplyMarkupInlineKeyboard.fromJson(Map<String, dynamic> json)  {
-    List<List<InlineKeyboardButton>>? pre_rows;
-    try{
-      pre_rows=List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!.map((item) => List<InlineKeyboardButton>.from((item ?? [])!.map((innerItem) => InlineKeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList())).toList());
-   }catch(_){}
-    rows = pre_rows;
+    rows = json['rows'] == null ? null : List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!.map((item) => List<InlineKeyboardButton>.from((item ?? [])!.map((innerItem) => InlineKeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList())).toList());
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "rows": rows?.map((i) => i.map((ii) => ii.toJson()).toList()).toList(),
+      "rows": rows?.map((i) => i?.map((ii) => ii.toJson()).toList()).toList(),
     };
   }
 

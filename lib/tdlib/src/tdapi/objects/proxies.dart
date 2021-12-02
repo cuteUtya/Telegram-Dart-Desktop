@@ -13,11 +13,7 @@ class Proxies extends TdObject {
 
   /// Parse from a json
   Proxies.fromJson(Map<String, dynamic> json)  {
-    List<Proxy>? pre_proxies;
-    try{
-      pre_proxies=List<Proxy>.from((json['proxies'] ?? [])!.map((item) => Proxy.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    proxies = pre_proxies;
+    proxies = json['proxies'] == null ? null : List<Proxy>.from((json['proxies'] ?? [])!.map((item) => Proxy.fromJson(item ?? <String, dynamic>{})).toList());
     extra = json['@extra'];
   }
 

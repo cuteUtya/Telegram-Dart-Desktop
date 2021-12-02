@@ -18,21 +18,9 @@ class VideoChat extends TdObject {
 
   /// Parse from a json
   VideoChat.fromJson(Map<String, dynamic> json)  {
-    int? pre_groupCallId;
-    try{
-      pre_groupCallId=json['group_call_id'];
-   }catch(_){}
-    groupCallId = pre_groupCallId;
-    bool? pre_hasParticipants;
-    try{
-      pre_hasParticipants=json['has_participants'];
-   }catch(_){}
-    hasParticipants = pre_hasParticipants;
-    MessageSender? pre_defaultParticipantId;
-    try{
-      pre_defaultParticipantId=MessageSender.fromJson(json['default_participant_id'] ?? <String, dynamic>{});
-   }catch(_){}
-    defaultParticipantId = pre_defaultParticipantId;
+    groupCallId = json['group_call_id'] == null ? null : json['group_call_id'];
+    hasParticipants = json['has_participants'] == null ? null : json['has_participants'];
+    defaultParticipantId = json['default_participant_id'] == null ? null : MessageSender.fromJson(json['default_participant_id'] ?? <String, dynamic>{});
   }
 
   @override

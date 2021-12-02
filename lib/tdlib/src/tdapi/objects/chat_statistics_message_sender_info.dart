@@ -18,21 +18,9 @@ class ChatStatisticsMessageSenderInfo extends TdObject {
 
   /// Parse from a json
   ChatStatisticsMessageSenderInfo.fromJson(Map<String, dynamic> json)  {
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    int? pre_sentMessageCount;
-    try{
-      pre_sentMessageCount=json['sent_message_count'];
-   }catch(_){}
-    sentMessageCount = pre_sentMessageCount;
-    int? pre_averageCharacterCount;
-    try{
-      pre_averageCharacterCount=json['average_character_count'];
-   }catch(_){}
-    averageCharacterCount = pre_averageCharacterCount;
+    userId = json['user_id'] == null ? null : json['user_id'];
+    sentMessageCount = json['sent_message_count'] == null ? null : json['sent_message_count'];
+    averageCharacterCount = json['average_character_count'] == null ? null : json['average_character_count'];
   }
 
   @override

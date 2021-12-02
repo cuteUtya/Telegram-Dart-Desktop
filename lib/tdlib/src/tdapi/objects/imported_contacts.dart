@@ -17,16 +17,8 @@ class ImportedContacts extends TdObject {
 
   /// Parse from a json
   ImportedContacts.fromJson(Map<String, dynamic> json)  {
-    List<int>? pre_userIds;
-    try{
-      pre_userIds=List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    userIds = pre_userIds;
-    List<int>? pre_importerCount;
-    try{
-      pre_importerCount=List<int>.from((json['importer_count'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    importerCount = pre_importerCount;
+    userIds = json['user_ids'] == null ? null : List<int>.from((json['user_ids'] ?? [])!.map((item) => item).toList());
+    importerCount = json['importer_count'] == null ? null : List<int>.from((json['importer_count'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 

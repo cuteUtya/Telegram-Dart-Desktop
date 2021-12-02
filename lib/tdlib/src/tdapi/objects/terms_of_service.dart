@@ -18,21 +18,9 @@ class TermsOfService extends TdObject {
 
   /// Parse from a json
   TermsOfService.fromJson(Map<String, dynamic> json)  {
-    FormattedText? pre_text;
-    try{
-      pre_text=FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
-   }catch(_){}
-    text = pre_text;
-    int? pre_minUserAge;
-    try{
-      pre_minUserAge=json['min_user_age'];
-   }catch(_){}
-    minUserAge = pre_minUserAge;
-    bool? pre_showPopup;
-    try{
-      pre_showPopup=json['show_popup'];
-   }catch(_){}
-    showPopup = pre_showPopup;
+    text = json['text'] == null ? null : FormattedText.fromJson(json['text'] ?? <String, dynamic>{});
+    minUserAge = json['min_user_age'] == null ? null : json['min_user_age'];
+    showPopup = json['show_popup'] == null ? null : json['show_popup'];
   }
 
   @override

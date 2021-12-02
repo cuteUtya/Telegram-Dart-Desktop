@@ -30,36 +30,12 @@ class InputIdentityDocument extends TdObject {
 
   /// Parse from a json
   InputIdentityDocument.fromJson(Map<String, dynamic> json)  {
-    String? pre_number;
-    try{
-      pre_number=json['number'];
-   }catch(_){}
-    number = pre_number;
-    Date? pre_expiryDate;
-    try{
-      pre_expiryDate=Date.fromJson(json['expiry_date'] ?? <String, dynamic>{});
-   }catch(_){}
-    expiryDate = pre_expiryDate;
-    InputFile? pre_frontSide;
-    try{
-      pre_frontSide=InputFile.fromJson(json['front_side'] ?? <String, dynamic>{});
-   }catch(_){}
-    frontSide = pre_frontSide;
-    InputFile? pre_reverseSide;
-    try{
-      pre_reverseSide=InputFile.fromJson(json['reverse_side'] ?? <String, dynamic>{});
-   }catch(_){}
-    reverseSide = pre_reverseSide;
-    InputFile? pre_selfie;
-    try{
-      pre_selfie=InputFile.fromJson(json['selfie'] ?? <String, dynamic>{});
-   }catch(_){}
-    selfie = pre_selfie;
-    List<InputFile>? pre_translation;
-    try{
-      pre_translation=List<InputFile>.from((json['translation'] ?? [])!.map((item) => InputFile.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    translation = pre_translation;
+    number = json['number'] == null ? null : json['number'];
+    expiryDate = json['expiry_date'] == null ? null : Date.fromJson(json['expiry_date'] ?? <String, dynamic>{});
+    frontSide = json['front_side'] == null ? null : InputFile.fromJson(json['front_side'] ?? <String, dynamic>{});
+    reverseSide = json['reverse_side'] == null ? null : InputFile.fromJson(json['reverse_side'] ?? <String, dynamic>{});
+    selfie = json['selfie'] == null ? null : InputFile.fromJson(json['selfie'] ?? <String, dynamic>{});
+    translation = json['translation'] == null ? null : List<InputFile>.from((json['translation'] ?? [])!.map((item) => InputFile.fromJson(item ?? <String, dynamic>{})).toList());
   }
 
   @override

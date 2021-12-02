@@ -26,31 +26,11 @@ class MessageForwardInfo extends TdObject {
 
   /// Parse from a json
   MessageForwardInfo.fromJson(Map<String, dynamic> json)  {
-    MessageForwardOrigin? pre_origin;
-    try{
-      pre_origin=MessageForwardOrigin.fromJson(json['origin'] ?? <String, dynamic>{});
-   }catch(_){}
-    origin = pre_origin;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
-    String? pre_publicServiceAnnouncementType;
-    try{
-      pre_publicServiceAnnouncementType=json['public_service_announcement_type'];
-   }catch(_){}
-    publicServiceAnnouncementType = pre_publicServiceAnnouncementType;
-    int? pre_fromChatId;
-    try{
-      pre_fromChatId=json['from_chat_id'];
-   }catch(_){}
-    fromChatId = pre_fromChatId;
-    int? pre_fromMessageId;
-    try{
-      pre_fromMessageId=json['from_message_id'];
-   }catch(_){}
-    fromMessageId = pre_fromMessageId;
+    origin = json['origin'] == null ? null : MessageForwardOrigin.fromJson(json['origin'] ?? <String, dynamic>{});
+    date = json['date'] == null ? null : json['date'];
+    publicServiceAnnouncementType = json['public_service_announcement_type'] == null ? null : json['public_service_announcement_type'];
+    fromChatId = json['from_chat_id'] == null ? null : json['from_chat_id'];
+    fromMessageId = json['from_message_id'] == null ? null : json['from_message_id'];
   }
 
   @override

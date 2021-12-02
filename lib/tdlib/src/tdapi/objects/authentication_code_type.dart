@@ -49,11 +49,7 @@ class AuthenticationCodeTypeTelegramMessage extends AuthenticationCodeType {
 
   /// Parse from a json
   AuthenticationCodeTypeTelegramMessage.fromJson(Map<String, dynamic> json)  {
-    int? pre_length;
-    try{
-      pre_length=json['length'];
-   }catch(_){}
-    length = pre_length;
+    length = json['length'] == null ? null : json['length'];
   }
 
   @override
@@ -80,11 +76,7 @@ class AuthenticationCodeTypeSms extends AuthenticationCodeType {
 
   /// Parse from a json
   AuthenticationCodeTypeSms.fromJson(Map<String, dynamic> json)  {
-    int? pre_length;
-    try{
-      pre_length=json['length'];
-   }catch(_){}
-    length = pre_length;
+    length = json['length'] == null ? null : json['length'];
   }
 
   @override
@@ -111,11 +103,7 @@ class AuthenticationCodeTypeCall extends AuthenticationCodeType {
 
   /// Parse from a json
   AuthenticationCodeTypeCall.fromJson(Map<String, dynamic> json)  {
-    int? pre_length;
-    try{
-      pre_length=json['length'];
-   }catch(_){}
-    length = pre_length;
+    length = json['length'] == null ? null : json['length'];
   }
 
   @override
@@ -142,11 +130,7 @@ class AuthenticationCodeTypeFlashCall extends AuthenticationCodeType {
 
   /// Parse from a json
   AuthenticationCodeTypeFlashCall.fromJson(Map<String, dynamic> json)  {
-    String? pre_pattern;
-    try{
-      pre_pattern=json['pattern'];
-   }catch(_){}
-    pattern = pre_pattern;
+    pattern = json['pattern'] == null ? null : json['pattern'];
   }
 
   @override

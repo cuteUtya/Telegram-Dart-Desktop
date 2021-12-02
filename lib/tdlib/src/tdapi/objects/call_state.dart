@@ -59,16 +59,8 @@ class CallStatePending extends CallState {
 
   /// Parse from a json
   CallStatePending.fromJson(Map<String, dynamic> json)  {
-    bool? pre_isCreated;
-    try{
-      pre_isCreated=json['is_created'];
-   }catch(_){}
-    isCreated = pre_isCreated;
-    bool? pre_isReceived;
-    try{
-      pre_isReceived=json['is_received'];
-   }catch(_){}
-    isReceived = pre_isReceived;
+    isCreated = json['is_created'] == null ? null : json['is_created'];
+    isReceived = json['is_received'] == null ? null : json['is_received'];
   }
 
   @override
@@ -139,36 +131,12 @@ class CallStateReady extends CallState {
 
   /// Parse from a json
   CallStateReady.fromJson(Map<String, dynamic> json)  {
-    CallProtocol? pre_protocol;
-    try{
-      pre_protocol=CallProtocol.fromJson(json['protocol'] ?? <String, dynamic>{});
-   }catch(_){}
-    protocol = pre_protocol;
-    List<CallServer>? pre_servers;
-    try{
-      pre_servers=List<CallServer>.from((json['servers'] ?? [])!.map((item) => CallServer.fromJson(item ?? <String, dynamic>{})).toList());
-   }catch(_){}
-    servers = pre_servers;
-    String? pre_config;
-    try{
-      pre_config=json['config'];
-   }catch(_){}
-    config = pre_config;
-    String? pre_encryptionKey;
-    try{
-      pre_encryptionKey=json['encryption_key'];
-   }catch(_){}
-    encryptionKey = pre_encryptionKey;
-    List<String>? pre_emojis;
-    try{
-      pre_emojis=List<String>.from((json['emojis'] ?? [])!.map((item) => item).toList());
-   }catch(_){}
-    emojis = pre_emojis;
-    bool? pre_allowP2p;
-    try{
-      pre_allowP2p=json['allow_p2p'];
-   }catch(_){}
-    allowP2p = pre_allowP2p;
+    protocol = json['protocol'] == null ? null : CallProtocol.fromJson(json['protocol'] ?? <String, dynamic>{});
+    servers = json['servers'] == null ? null : List<CallServer>.from((json['servers'] ?? [])!.map((item) => CallServer.fromJson(item ?? <String, dynamic>{})).toList());
+    config = json['config'] == null ? null : json['config'];
+    encryptionKey = json['encryption_key'] == null ? null : json['encryption_key'];
+    emojis = json['emojis'] == null ? null : List<String>.from((json['emojis'] ?? [])!.map((item) => item).toList());
+    allowP2p = json['allow_p2p'] == null ? null : json['allow_p2p'];
   }
 
   @override
@@ -231,21 +199,9 @@ class CallStateDiscarded extends CallState {
 
   /// Parse from a json
   CallStateDiscarded.fromJson(Map<String, dynamic> json)  {
-    CallDiscardReason? pre_reason;
-    try{
-      pre_reason=CallDiscardReason.fromJson(json['reason'] ?? <String, dynamic>{});
-   }catch(_){}
-    reason = pre_reason;
-    bool? pre_needRating;
-    try{
-      pre_needRating=json['need_rating'];
-   }catch(_){}
-    needRating = pre_needRating;
-    bool? pre_needDebugInformation;
-    try{
-      pre_needDebugInformation=json['need_debug_information'];
-   }catch(_){}
-    needDebugInformation = pre_needDebugInformation;
+    reason = json['reason'] == null ? null : CallDiscardReason.fromJson(json['reason'] ?? <String, dynamic>{});
+    needRating = json['need_rating'] == null ? null : json['need_rating'];
+    needDebugInformation = json['need_debug_information'] == null ? null : json['need_debug_information'];
   }
 
   @override
@@ -274,11 +230,7 @@ class CallStateError extends CallState {
 
   /// Parse from a json
   CallStateError.fromJson(Map<String, dynamic> json)  {
-    TdError? pre_error;
-    try{
-      pre_error=TdError.fromJson(json['error'] ?? <String, dynamic>{});
-   }catch(_){}
-    error = pre_error;
+    error = json['error'] == null ? null : TdError.fromJson(json['error'] ?? <String, dynamic>{});
   }
 
   @override

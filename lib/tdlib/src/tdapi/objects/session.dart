@@ -69,81 +69,21 @@ class Session extends TdObject {
 
   /// Parse from a json
   Session.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    bool? pre_isCurrent;
-    try{
-      pre_isCurrent=json['is_current'];
-   }catch(_){}
-    isCurrent = pre_isCurrent;
-    bool? pre_isPasswordPending;
-    try{
-      pre_isPasswordPending=json['is_password_pending'];
-   }catch(_){}
-    isPasswordPending = pre_isPasswordPending;
-    int? pre_apiId;
-    try{
-      pre_apiId=json['api_id'];
-   }catch(_){}
-    apiId = pre_apiId;
-    String? pre_applicationName;
-    try{
-      pre_applicationName=json['application_name'];
-   }catch(_){}
-    applicationName = pre_applicationName;
-    String? pre_applicationVersion;
-    try{
-      pre_applicationVersion=json['application_version'];
-   }catch(_){}
-    applicationVersion = pre_applicationVersion;
-    bool? pre_isOfficialApplication;
-    try{
-      pre_isOfficialApplication=json['is_official_application'];
-   }catch(_){}
-    isOfficialApplication = pre_isOfficialApplication;
-    String? pre_deviceModel;
-    try{
-      pre_deviceModel=json['device_model'];
-   }catch(_){}
-    deviceModel = pre_deviceModel;
-    String? pre_platform;
-    try{
-      pre_platform=json['platform'];
-   }catch(_){}
-    platform = pre_platform;
-    String? pre_systemVersion;
-    try{
-      pre_systemVersion=json['system_version'];
-   }catch(_){}
-    systemVersion = pre_systemVersion;
-    int? pre_logInDate;
-    try{
-      pre_logInDate=json['log_in_date'];
-   }catch(_){}
-    logInDate = pre_logInDate;
-    int? pre_lastActiveDate;
-    try{
-      pre_lastActiveDate=json['last_active_date'];
-   }catch(_){}
-    lastActiveDate = pre_lastActiveDate;
-    String? pre_ip;
-    try{
-      pre_ip=json['ip'];
-   }catch(_){}
-    ip = pre_ip;
-    String? pre_country;
-    try{
-      pre_country=json['country'];
-   }catch(_){}
-    country = pre_country;
-    String? pre_region;
-    try{
-      pre_region=json['region'];
-   }catch(_){}
-    region = pre_region;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    isCurrent = json['is_current'] == null ? null : json['is_current'];
+    isPasswordPending = json['is_password_pending'] == null ? null : json['is_password_pending'];
+    apiId = json['api_id'] == null ? null : json['api_id'];
+    applicationName = json['application_name'] == null ? null : json['application_name'];
+    applicationVersion = json['application_version'] == null ? null : json['application_version'];
+    isOfficialApplication = json['is_official_application'] == null ? null : json['is_official_application'];
+    deviceModel = json['device_model'] == null ? null : json['device_model'];
+    platform = json['platform'] == null ? null : json['platform'];
+    systemVersion = json['system_version'] == null ? null : json['system_version'];
+    logInDate = json['log_in_date'] == null ? null : json['log_in_date'];
+    lastActiveDate = json['last_active_date'] == null ? null : json['last_active_date'];
+    ip = json['ip'] == null ? null : json['ip'];
+    country = json['country'] == null ? null : json['country'];
+    region = json['region'] == null ? null : json['region'];
     extra = json['@extra'];
   }
 

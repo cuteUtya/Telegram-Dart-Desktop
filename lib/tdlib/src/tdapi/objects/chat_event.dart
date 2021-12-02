@@ -22,26 +22,10 @@ class ChatEvent extends TdObject {
 
   /// Parse from a json
   ChatEvent.fromJson(Map<String, dynamic> json)  {
-    int? pre_id;
-    try{
-      pre_id=int.tryParse(json['id'] ?? "");
-   }catch(_){}
-    id = pre_id;
-    int? pre_date;
-    try{
-      pre_date=json['date'];
-   }catch(_){}
-    date = pre_date;
-    int? pre_userId;
-    try{
-      pre_userId=json['user_id'];
-   }catch(_){}
-    userId = pre_userId;
-    ChatEventAction? pre_action;
-    try{
-      pre_action=ChatEventAction.fromJson(json['action'] ?? <String, dynamic>{});
-   }catch(_){}
-    action = pre_action;
+    id = json['id'] == null ? null : int.tryParse(json['id'] ?? "");
+    date = json['date'] == null ? null : json['date'];
+    userId = json['user_id'] == null ? null : json['user_id'];
+    action = json['action'] == null ? null : ChatEventAction.fromJson(json['action'] ?? <String, dynamic>{});
   }
 
   @override

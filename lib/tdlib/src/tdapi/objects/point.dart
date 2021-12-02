@@ -14,16 +14,8 @@ class Point extends TdObject {
 
   /// Parse from a json
   Point.fromJson(Map<String, dynamic> json)  {
-    double? pre_x;
-    try{
-      pre_x=json['x'];
-   }catch(_){}
-    x = pre_x;
-    double? pre_y;
-    try{
-      pre_y=json['y'];
-   }catch(_){}
-    y = pre_y;
+    x = json['x'] == null ? null : json['x'];
+    y = json['y'] == null ? null : json['y'];
   }
 
   @override

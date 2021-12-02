@@ -128,11 +128,7 @@ class ChatActionUploadingVideo extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingVideo.fromJson(Map<String, dynamic> json)  {
-    int? pre_progress;
-    try{
-      pre_progress=json['progress'];
-   }catch(_){}
-    progress = pre_progress;
+    progress = json['progress'] == null ? null : json['progress'];
   }
 
   @override
@@ -182,11 +178,7 @@ class ChatActionUploadingVoiceNote extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingVoiceNote.fromJson(Map<String, dynamic> json)  {
-    int? pre_progress;
-    try{
-      pre_progress=json['progress'];
-   }catch(_){}
-    progress = pre_progress;
+    progress = json['progress'] == null ? null : json['progress'];
   }
 
   @override
@@ -213,11 +205,7 @@ class ChatActionUploadingPhoto extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingPhoto.fromJson(Map<String, dynamic> json)  {
-    int? pre_progress;
-    try{
-      pre_progress=json['progress'];
-   }catch(_){}
-    progress = pre_progress;
+    progress = json['progress'] == null ? null : json['progress'];
   }
 
   @override
@@ -244,11 +232,7 @@ class ChatActionUploadingDocument extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingDocument.fromJson(Map<String, dynamic> json)  {
-    int? pre_progress;
-    try{
-      pre_progress=json['progress'];
-   }catch(_){}
-    progress = pre_progress;
+    progress = json['progress'] == null ? null : json['progress'];
   }
 
   @override
@@ -390,11 +374,7 @@ class ChatActionUploadingVideoNote extends ChatAction {
 
   /// Parse from a json
   ChatActionUploadingVideoNote.fromJson(Map<String, dynamic> json)  {
-    int? pre_progress;
-    try{
-      pre_progress=json['progress'];
-   }catch(_){}
-    progress = pre_progress;
+    progress = json['progress'] == null ? null : json['progress'];
   }
 
   @override
@@ -421,11 +401,7 @@ class ChatActionWatchingAnimations extends ChatAction {
 
   /// Parse from a json
   ChatActionWatchingAnimations.fromJson(Map<String, dynamic> json)  {
-    String? pre_emoji;
-    try{
-      pre_emoji=json['emoji'];
-   }catch(_){}
-    emoji = pre_emoji;
+    emoji = json['emoji'] == null ? null : json['emoji'];
   }
 
   @override

@@ -14,16 +14,8 @@ class GroupCallRecentSpeaker extends TdObject {
 
   /// Parse from a json
   GroupCallRecentSpeaker.fromJson(Map<String, dynamic> json)  {
-    MessageSender? pre_participantId;
-    try{
-      pre_participantId=MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
-   }catch(_){}
-    participantId = pre_participantId;
-    bool? pre_isSpeaking;
-    try{
-      pre_isSpeaking=json['is_speaking'];
-   }catch(_){}
-    isSpeaking = pre_isSpeaking;
+    participantId = json['participant_id'] == null ? null : MessageSender.fromJson(json['participant_id'] ?? <String, dynamic>{});
+    isSpeaking = json['is_speaking'] == null ? null : json['is_speaking'];
   }
 
   @override

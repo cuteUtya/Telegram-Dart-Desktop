@@ -25,26 +25,10 @@ class OrderInfo extends TdObject {
 
   /// Parse from a json
   OrderInfo.fromJson(Map<String, dynamic> json)  {
-    String? pre_name;
-    try{
-      pre_name=json['name'];
-   }catch(_){}
-    name = pre_name;
-    String? pre_phoneNumber;
-    try{
-      pre_phoneNumber=json['phone_number'];
-   }catch(_){}
-    phoneNumber = pre_phoneNumber;
-    String? pre_emailAddress;
-    try{
-      pre_emailAddress=json['email_address'];
-   }catch(_){}
-    emailAddress = pre_emailAddress;
-    Address? pre_shippingAddress;
-    try{
-      pre_shippingAddress=Address.fromJson(json['shipping_address'] ?? <String, dynamic>{});
-   }catch(_){}
-    shippingAddress = pre_shippingAddress;
+    name = json['name'] == null ? null : json['name'];
+    phoneNumber = json['phone_number'] == null ? null : json['phone_number'];
+    emailAddress = json['email_address'] == null ? null : json['email_address'];
+    shippingAddress = json['shipping_address'] == null ? null : Address.fromJson(json['shipping_address'] ?? <String, dynamic>{});
     extra = json['@extra'];
   }
 
