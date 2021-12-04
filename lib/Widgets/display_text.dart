@@ -63,5 +63,6 @@ enum TextColor {
   AdditionalTextColor,
   RegularText,
   DangerColor,
-  Transparent
+  Transparent,
+  ChatLastTimeMessage
 }
