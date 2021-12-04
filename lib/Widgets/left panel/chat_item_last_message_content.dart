@@ -52,6 +52,15 @@ class ChatItemLastMessageContent extends StatelessWidget {
               showFrom = false;
             }
 
+            if (chat.lastMessage!.sender.runtimeType == MessageSenderUser) {
+              if ((chat.lastMessage!.sender as MessageSenderUser).userId ==
+                      client.me &&
+                  chat.id != client.me) {
+                t = "${client.getTranslation("lng_from_you")}: ";
+                showFrom = true;
+              }
+            }
+
             TextSpan content = showFrom
                 ? TextSpan(children: [
                     TextSpan(
