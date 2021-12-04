@@ -1,19 +1,16 @@
 part of '../tdapi.dart';
 
 class ReplyMarkup extends TdObject {
-
   /// Contains a description of a custom keyboard and actions that can be done with it to quickly reply to bots
   ReplyMarkup();
-
-  
 
   /// a ReplyMarkup return type can be :
   /// * ReplyMarkupRemoveKeyboard
   /// * ReplyMarkupForceReply
   /// * ReplyMarkupShowKeyboard
   /// * ReplyMarkupInlineKeyboard
-  factory ReplyMarkup.fromJson(Map<String, dynamic> json)  {
-    switch(json["@type"]) {
+  factory ReplyMarkup.fromJson(Map<String, dynamic> json) {
+    switch (json["@type"]) {
       case ReplyMarkupRemoveKeyboard.CONSTRUCTOR:
         return ReplyMarkupRemoveKeyboard.fromJson(json);
       case ReplyMarkupForceReply.CONSTRUCTOR:
@@ -28,19 +25,16 @@ class ReplyMarkup extends TdObject {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      
-    };
+    return {};
   }
 
   static const CONSTRUCTOR = 'replyMarkup';
-  
+
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class ReplyMarkupRemoveKeyboard extends ReplyMarkup {
-
   /// Instructs application to remove the keyboard once this message has been received. This kind of keyboard can't be received in an incoming message; instead, UpdateChatReplyMarkup with message_id == 0 will be sent
   ReplyMarkupRemoveKeyboard({this.isPersonal});
 
@@ -48,7 +42,7 @@ class ReplyMarkupRemoveKeyboard extends ReplyMarkup {
   bool? isPersonal;
 
   /// Parse from a json
-  ReplyMarkupRemoveKeyboard.fromJson(Map<String, dynamic> json)  {
+  ReplyMarkupRemoveKeyboard.fromJson(Map<String, dynamic> json) {
     isPersonal = json['is_personal'] == null ? null : json['is_personal'];
   }
 
@@ -61,16 +55,14 @@ class ReplyMarkupRemoveKeyboard extends ReplyMarkup {
   }
 
   static const CONSTRUCTOR = 'replyMarkupRemoveKeyboard';
-  
+
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class ReplyMarkupForceReply extends ReplyMarkup {
-
   /// Instructs application to force a reply to this message
-  ReplyMarkupForceReply({this.isPersonal,
-    this.inputFieldPlaceholder});
+  ReplyMarkupForceReply({this.isPersonal, this.inputFieldPlaceholder});
 
   /// [isPersonal] True, if a forced reply must automatically be shown to the current user. For outgoing messages, specify true to show the forced reply only for the mentioned users and for the target user of a reply
   bool? isPersonal;
@@ -79,9 +71,11 @@ class ReplyMarkupForceReply extends ReplyMarkup {
   String? inputFieldPlaceholder;
 
   /// Parse from a json
-  ReplyMarkupForceReply.fromJson(Map<String, dynamic> json)  {
+  ReplyMarkupForceReply.fromJson(Map<String, dynamic> json) {
     isPersonal = json['is_personal'] == null ? null : json['is_personal'];
-    inputFieldPlaceholder = json['input_field_placeholder'] == null ? null : json['input_field_placeholder'];
+    inputFieldPlaceholder = json['input_field_placeholder'] == null
+        ? null
+        : json['input_field_placeholder'];
   }
 
   @override
@@ -94,19 +88,19 @@ class ReplyMarkupForceReply extends ReplyMarkup {
   }
 
   static const CONSTRUCTOR = 'replyMarkupForceReply';
-  
+
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class ReplyMarkupShowKeyboard extends ReplyMarkup {
-
   /// Contains a custom keyboard layout to quickly reply to bots
-  ReplyMarkupShowKeyboard({this.rows,
-    this.resizeKeyboard,
-    this.oneTime,
-    this.isPersonal,
-    this.inputFieldPlaceholder});
+  ReplyMarkupShowKeyboard(
+      {this.rows,
+      this.resizeKeyboard,
+      this.oneTime,
+      this.isPersonal,
+      this.inputFieldPlaceholder});
 
   /// [rows] A list of rows of bot keyboard buttons
   List<List<KeyboardButton>>? rows;
@@ -124,19 +118,29 @@ class ReplyMarkupShowKeyboard extends ReplyMarkup {
   String? inputFieldPlaceholder;
 
   /// Parse from a json
-  ReplyMarkupShowKeyboard.fromJson(Map<String, dynamic> json)  {
-    rows = json['rows'] == null ? null : List<List<KeyboardButton>>.from((json['rows'] ?? [])!.map((item) => List<KeyboardButton>.from((item ?? [])!.map((innerItem) => KeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList())).toList());
-    resizeKeyboard = json['resize_keyboard'] == null ? null : json['resize_keyboard'];
+  ReplyMarkupShowKeyboard.fromJson(Map<String, dynamic> json) {
+    rows = json['rows'] == null
+        ? null
+        : List<List<KeyboardButton>>.from((json['rows'] ?? [])!
+            .map((item) => List<KeyboardButton>.from((item ?? [])!
+                .map((innerItem) =>
+                    KeyboardButton.fromJson(innerItem ?? <String, dynamic>{}))
+                .toList()))
+            .toList());
+    resizeKeyboard =
+        json['resize_keyboard'] == null ? null : json['resize_keyboard'];
     oneTime = json['one_time'] == null ? null : json['one_time'];
     isPersonal = json['is_personal'] == null ? null : json['is_personal'];
-    inputFieldPlaceholder = json['input_field_placeholder'] == null ? null : json['input_field_placeholder'];
+    inputFieldPlaceholder = json['input_field_placeholder'] == null
+        ? null
+        : json['input_field_placeholder'];
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "rows": rows?.map((i) => i?.map((ii) => ii.toJson()).toList()).toList(),
+      "rows": rows?.map((i) => i.map((ii) => ii.toJson()).toList()).toList(),
       "resize_keyboard": resizeKeyboard,
       "one_time": oneTime,
       "is_personal": isPersonal,
@@ -145,13 +149,12 @@ class ReplyMarkupShowKeyboard extends ReplyMarkup {
   }
 
   static const CONSTRUCTOR = 'replyMarkupShowKeyboard';
-  
+
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class ReplyMarkupInlineKeyboard extends ReplyMarkup {
-
   /// Contains an inline keyboard layout
   ReplyMarkupInlineKeyboard({this.rows});
 
@@ -159,20 +162,27 @@ class ReplyMarkupInlineKeyboard extends ReplyMarkup {
   List<List<InlineKeyboardButton>>? rows;
 
   /// Parse from a json
-  ReplyMarkupInlineKeyboard.fromJson(Map<String, dynamic> json)  {
-    rows = json['rows'] == null ? null : List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!.map((item) => List<InlineKeyboardButton>.from((item ?? [])!.map((innerItem) => InlineKeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList())).toList());
+  ReplyMarkupInlineKeyboard.fromJson(Map<String, dynamic> json) {
+    rows = json['rows'] == null
+        ? null
+        : List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!
+            .map((item) => List<InlineKeyboardButton>.from((item ?? [])!
+                .map((innerItem) => InlineKeyboardButton.fromJson(
+                    innerItem ?? <String, dynamic>{}))
+                .toList()))
+            .toList());
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "rows": rows?.map((i) => i?.map((ii) => ii.toJson()).toList()).toList(),
+      "rows": rows?.map((i) => i.map((ii) => ii.toJson()).toList()).toList(),
     };
   }
 
   static const CONSTRUCTOR = 'replyMarkupInlineKeyboard';
-  
+
   @override
   String getConstructor() => CONSTRUCTOR;
 }

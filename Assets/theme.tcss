@@ -1,9 +1,11 @@
 #Base fields#
-Accent: #40A7E3;
-AccentHalfTransparent: linear(ref(Accent), #00FFFFFF, 0.5);
+Accent: #4E94CB;
+AccentHalfTransparent: #E0EEFD;
 BaseColor: #FAFAFA;
 DangerColor: #DF1E1E; 
 DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
+
+BorderLineColor: #DADADA;
 
 Transparent: #00000000;
 
@@ -28,6 +30,8 @@ DataInputEmtyColor: #EBEBEB;
 
 ButtonAccentBackColor: ref(AccentHalfTransparent);
 ButtonDangerBackColor: ref(DangerHalfTransparent);
+
+SearchBackground: #EBEBEB;
 
 LoadScreenBackgroundColor: ref(BaseColor);
 LoadScreenShadowColor: #AAAAAA

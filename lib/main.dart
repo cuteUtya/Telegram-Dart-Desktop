@@ -8,7 +8,7 @@ import 'package:myapp/tdlib/td_api.dart';
 void main() async {
   var client = TelegramClient();
   await client.init();
-  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 3));
+  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 0));
 
   runApp(MaterialApp(home: Material(child: App(client: client))));
 }

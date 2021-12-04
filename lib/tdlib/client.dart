@@ -164,7 +164,7 @@ class TelegramClient {
       .where((u) => u is UpdateConnectionState)
       .map((a) => (a as UpdateConnectionState).state!);
 
-  Stream<UpdateDeleteMessages> get updateDeleteDessages => updates
+  Stream<UpdateDeleteMessages> get updateDeleteMessages => updates
       .where((u) => u is UpdateDeleteMessages)
       .map((a) => (a as UpdateDeleteMessages));
 
@@ -415,6 +415,10 @@ class TelegramClient {
     return Text(text, style: style);
   }
 
+  Widget _buildImage(String path, {double? width, double? heigth}) {
+    return Image.file(io.File(path), width: width, height: heigth);
+  }
+
   String? _dbPath;
   String? _filesPath;
 
@@ -431,7 +435,7 @@ class TelegramClient {
       String? systemLanguageCode,
       String? deviceModel,
       String? systemVersion}) async {
-    useTestDc ??= true;
+    useTestDc ??= false;
     databaseDirectory ??= getDatabaseDirectory();
     filesDirectory ??= getFilesDirectory();
     apiHash ??= secrets.appHash;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 
 class TextDisplay {
-  static String _getEmojiFont() => "TwitterColorEmoji";
+  static String _getEmojiFont() => "AppleColorEmoji";
 
   static TextStyle get title => create(
       size: 24, fontWeight: FontWeight.w600, textColor: TextColor.HeaderMain);
@@ -15,6 +15,10 @@ class TextDisplay {
   static TextStyle get regular20 => create(size: 20);
   static TextStyle get bold18 => create(size: 20, fontWeight: FontWeight.bold);
   static TextStyle get bold20 => create(size: 20, fontWeight: FontWeight.bold);
+  static TextStyle get chatTittle => create(
+      size: 20,
+      fontWeight: FontWeight.bold,
+      fontFamily: TextFont.greaterImportance);
 
   static InlineSpan emoji(String emoji, double size) {
     return TextSpan(

@@ -119,7 +119,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                 break;
 
               case AuthorizationStateReady:
-                return AppMain();
+                return AppMain(client: getClient());
             }
           }
           return const LoadScreen();
