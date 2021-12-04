@@ -14,6 +14,6 @@ class _AppMainState extends State<AppMain> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.topLeft,
-        child: SizedBox(width: 600, child: LeftPanel(client: widget.client)));
+        child: SizedBox(width: 700, child: LeftPanel(client: widget.client)));
   }
 }
