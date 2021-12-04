@@ -396,6 +396,7 @@ class TelegramClient {
       .map((a) => (a as UpdateUserStatus).status!);
 
   late TdlibParameters tdlibParameters;
+  int me = 0;
   String userLocale = "en";
   String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
@@ -477,6 +478,11 @@ class TelegramClient {
         systemVersion: systemVersion);
 
     await send(SetTdlibParameters(parameters: tdlibParameters));
+    updateOption.listen((UpdateOption event) {
+      if (event.name! == "my_id") {
+        me = (event.value as OptionValueInteger).value!;
+      }
+    });
   }
 
   static final Map<String, String> _400errorMessages = {
