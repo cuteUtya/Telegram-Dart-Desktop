@@ -19,9 +19,13 @@ double lerp(double a, double b, double t) {
 }
 
 String getUserLocale() => "ru";
-String getDatabaseDirectory() => "/home/timur/tdDb";
-String getFilesDirectory() => "/home/timur/tdFiles";
-String getLanguagePackDatabasePath() => "/home/timur/tdTranslate.db";
+String getDatabaseDirectory() =>
+    Platform.isLinux ? "/home/timur/tdDb" : "D:/tdclient/tddb";
+String getFilesDirectory() =>
+    Platform.isLinux ? "/home/timur/tdFiles" : "D:/tdclient/tdFiles";
+String getLanguagePackDatabasePath() => Platform.isLinux
+    ? "/home/timur/tdTranslate.db"
+    : "D:/tdclient/TDtranslates.db";
 
 String getDeviceName() => Platform.localHostname;
 String getSystemVersion() => Platform.operatingSystem;

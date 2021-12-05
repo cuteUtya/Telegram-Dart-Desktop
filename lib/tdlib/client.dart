@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io' as io;
+import "package:path/path.dart" as path;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
 import 'package:myapp/secrets.dart' as secrets;
@@ -532,9 +533,10 @@ class TelegramClient {
     var receive = await initIsolate();
     receive.listen((message) {
       if (message is int) {
+        print("RECEIVE POINTER FROM ISOLATE ${message}");
         Pointer<Void> pointer = Pointer.fromAddress(message);
-        _sendClient =
-            JsonClient.create("Assets/bin/tdlib", clientPointer: pointer);
+        _sendClient = JsonClient.create(path.join("Assets", "bin", "tdlib"),
+            clientPointer: pointer);
         completer.complete();
       }
 
@@ -586,7 +588,7 @@ class TelegramClient {
 void _tdlib_listen(SendPort isolateToMainStream) {
   ReceivePort mainToIsolateStream = ReceivePort();
   isolateToMainStream.send(mainToIsolateStream.sendPort);
-  var client = JsonClient.create("Assets/bin/tdlib");
+  var client = JsonClient.create(path.join("Assets", "bin", "tdlib"));
   isolateToMainStream.send(client.client.address);
   client.incomingString().listen((update) {
     isolateToMainStream.send(update);

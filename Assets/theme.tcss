@@ -35,4 +35,4 @@ ButtonDangerBackColor: ref(DangerHalfTransparent);
 SearchBackground: #EBEBEB;
 
 LoadScreenBackgroundColor: ref(BaseColor);
-LoadScreenShadowColor: #AAAAAA
+LoadScreenShadowColor: #AAAAAA;

@@ -15,13 +15,12 @@ class LangFunction {
 
 class ClientTheme {
   static ClientTheme currentTheme = ClientTheme("");
-  static final ClientTheme _defaultTheme =
-      ClientTheme(File("Assets/theme.tcss").readAsStringSync());
+  static late ClientTheme _defaultTheme;
 
   static const String linesSeparator = ';';
   static const String valueSeparator = ':';
-  final Map<String, Function> environmentVariables = {"theme": () => "light"};
   final Map<String, String> lines = Map<String, String>();
+  final Map<String, Function> environmentVariables = {"theme": () => "light"};
   final List<LangFunction> functions = [
     LangFunction("linear", [3], linear),
     LangFunction("max", [2], max_inter),
@@ -29,20 +28,30 @@ class ClientTheme {
   ];
 
   ClientTheme(String themeContent) {
-    themeContent.split('\n').forEach((element) {
+    themeContent.split('\n').join().split("\r").forEach((element) {
       if (element.isEmpty) return;
       if (element[0] == "#") {
         themeContent = themeContent.replaceAll(element, '');
       }
     });
 
-    themeContent.replaceAll('\n', '').split(linesSeparator).forEach((element) {
+    themeContent
+        .replaceAll('\n', '')
+        .replaceAll('\r', '')
+        .split(linesSeparator)
+        .forEach((element) {
       if (element.isEmpty) return;
 
       var val = element.split(valueSeparator);
       lines[val[0].replaceAll(" ", '')] = val[1].replaceAll(" ", "");
     });
   }
+
+  static Future init() async {
+    var file = await rootBundle.loadString("Assets/theme.tcss");
+    _defaultTheme = ClientTheme(file);
+  }
+
   String doFuntions(String value) {
     while (true) {
       bool findFunctions = false;
@@ -131,8 +140,8 @@ class ClientTheme {
         "Error while linear interpolation: wrong type of t, should be double");
   }
 
-  String getRawField(String name) {
-    return lines[name] ?? "";
+  String? getRawField(String name) {
+    return lines[name];
   }
 
   List<String> findAllRefsInField(String fieldName) {
@@ -140,24 +149,22 @@ class ClientTheme {
 
     var refRegex = RegExp(r"ref\([a-z,A-Z]{0,64}\)");
     var rawFieldValue = getRawField(fieldName);
-    refRegex.allMatches(rawFieldValue).forEach((element) {
-      var ref = rawFieldValue.substring(element.start, element.end);
-      ref = ref.substring(4, ref.length - 1);
-      results.add(ref);
-    });
+    if (rawFieldValue != null) {
+      refRegex.allMatches(rawFieldValue).forEach((element) {
+        var ref = rawFieldValue.substring(element.start, element.end);
+        ref = ref.substring(4, ref.length - 1);
+        results.add(ref);
+      });
 
-    return results;
+      return results;
+    }
+    return [];
   }
 
   String _getFieldString(String name) {
-    String value = "";
+    String? value = getRawField(name);
 
-    environmentVariables.forEach((key, val) {
-      value = getRawField("$name($key=" + val.call().toString() + ")");
-    });
-    if (value == "") value = getRawField(name);
-    if (value == "") return _defaultTheme._getFieldString(name);
-
+    if (value == null) return _defaultTheme._getFieldString(name);
     /*
     detect "infinity references"
     generate tree "branches" like this:

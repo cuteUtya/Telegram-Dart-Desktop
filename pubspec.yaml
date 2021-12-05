@@ -25,9 +25,10 @@ dev_dependencies:
 
 flutter:
   assets:
+    - Assets/
     - Assets/Introduction/
     - Assets/bin/tdlib/
-    - Assets/
+    - Assets/theme.tcss
   fonts:
   - family: Ubuntu
     fonts:
