@@ -16,6 +16,7 @@ class ChatPhotoDisplay extends StatefulWidget {
 
 class _ChatPhotoDisplayState extends State<ChatPhotoDisplay> {
   late String? path = getPath(widget.info);
+  String photoId = "";
 
   String? getPath(ChatPhotoInfo i) {
     if (widget.useBig) {
@@ -27,7 +28,7 @@ class _ChatPhotoDisplayState extends State<ChatPhotoDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    if (path!.isEmpty) {
+    if (path!.isEmpty || photoId != getPath(widget.info)) {
       widget.client
           .send(DownloadFile(
               fileId:
@@ -38,6 +39,7 @@ class _ChatPhotoDisplayState extends State<ChatPhotoDisplay> {
           setState(() => path = (value as File).local!.path!);
         }
       });
+      photoId = getPath(widget.info) ?? "";
     }
 
     return Container(

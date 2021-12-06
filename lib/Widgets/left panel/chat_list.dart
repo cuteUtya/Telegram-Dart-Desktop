@@ -22,18 +22,16 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   void updateChats() =>
       widget.client.send(LoadChats(chatList: ChatListMain(), limit: 25));
 
-  void rebuildChats() {
-    List<Widget> result = [];
+  void rebuildChats() async {
+    List<Chat> result = [];
     List<_chatAndPositionPair> pairs = [];
     orderedChats
         .forEach((key, value) => pairs.add(_chatAndPositionPair(key, value)));
     pairs.sort((a, b) => b.order.compareTo(a.order));
-    int order = 0;
-    pairs.forEach((element) => result.add(ChatItemDisplay(
-          id: element.chat,
-          client: widget.client,
-          order: order++,
-        )));
+    for (int i = 0; i < pairs.length; i++) {
+      result.add(
+          await widget.client.send(GetChat(chatId: pairs[i].chat)) as Chat);
+    }
     setState(() => chats = result);
   }
 
@@ -53,15 +51,15 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   }
 
   Map<int, int> orderedChats = {};
-  List<Widget> chats = [];
+  List<Chat> chats = [];
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(children: chats),
-    ));
+        child: ListView.builder(
+            cacheExtent: 400,
+            itemCount: chats.length,
+            itemBuilder: (context, index) =>
+                ChatItemDisplay(chat: chats[index], client: widget.client)));
   }
 }

@@ -19,7 +19,7 @@ class ClientTheme {
 
   static const String linesSeparator = ';';
   static const String valueSeparator = ':';
-  final Map<String, String> lines = Map<String, String>();
+  final Map<String, String> lines = {};
   final Map<String, Function> environmentVariables = {"theme": () => "light"};
   final List<LangFunction> functions = [
     LangFunction("linear", [3], linear),
@@ -28,7 +28,7 @@ class ClientTheme {
   ];
 
   ClientTheme(String themeContent) {
-    themeContent.split('\n').join().split("\r").forEach((element) {
+    themeContent.replaceAll("\n", "\r").split("\r").forEach((element) {
       if (element.isEmpty) return;
       if (element[0] == "#") {
         themeContent = themeContent.replaceAll(element, '');
@@ -36,14 +36,14 @@ class ClientTheme {
     });
 
     themeContent
-        .replaceAll('\n', '')
-        .replaceAll('\r', '')
+        .replaceAll("\n", "\r")
+        .split("\r")
+        .join()
         .split(linesSeparator)
         .forEach((element) {
       if (element.isEmpty) return;
-
       var val = element.split(valueSeparator);
-      lines[val[0].replaceAll(" ", '')] = val[1].replaceAll(" ", "");
+      lines[val[0].replaceAll(" ", "")] = val[1].replaceAll(" ", "");
     });
   }
 
