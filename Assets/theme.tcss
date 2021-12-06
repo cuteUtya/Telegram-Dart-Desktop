@@ -36,3 +36,28 @@ SearchBackground: #EBEBEB;
 
 LoadScreenBackgroundColor: ref(BaseColor);
 LoadScreenShadowColor: #AAAAAA;
+
+#red#
+PeerColor1a: #B9238F;
+PeerColor1b: #DB6C6C;
+#green#
+PeerColor2a: #23B971;
+PeerColor2b: #A4DB6C;
+#yellow#
+PeerColor3a: #B9B323;
+PeerColor3b: #B8DB6C;
+#blue#
+PeerColor4a: #23A7B9;
+PeerColor4b: #6C7EDB;
+#purple#
+PeerColor5a: #B623B9;
+PeerColor5b: #9D6CDB;
+#pink#
+PeerColor6a: #B92323;
+PeerColor6b: #DB6CC9;
+#lazur blue#
+PeerColor7a: #238CB9;
+PeerColor7b: #6CDBDB;
+#orange#
+PeerColor8a: #B97423;
+PeerColor8b: #DBD76C;
