@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/left%20panel/chat_photo_display.dart';
-import 'package:myapp/Widgets/left%20panel/userpic_empty.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
-import 'package:myapp/utils.dart';
 
 class ChatItemDisplay extends StatelessWidget {
   const ChatItemDisplay({Key? key, required this.chat, required this.client})

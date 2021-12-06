@@ -48,7 +48,7 @@ class ChatPhotoDisplay extends StatelessWidget {
     var words = chat.title!.split(" ");
     var result = "";
     for (int i = 0; i < words.length && i < 2; i++) {
-      result += words[i][0];
+      if (words[i].isNotEmpty) result += words[i][0];
     }
     return result.toUpperCase();
   }
