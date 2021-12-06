@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 
 class TextDisplay {
-  static String _getEmojiFont() => "AppleColorEmoji";
+  static String _getEmojiFont() => "TwitterColorEmoji";
 
   static TextStyle get title => create(
       size: 24, fontWeight: FontWeight.w600, textColor: TextColor.HeaderMain);
@@ -43,6 +43,7 @@ class TextDisplay {
     var font = ClientTheme.currentTheme.getField(fontFamily == TextFont.regular
         ? "RegularFontFamily"
         : "HeaderFontFamily");
+    if (fontFamily == TextFont.emoji) font = _getEmojiFont();
     return TextStyle(
       overflow: overflow,
       color: color,
@@ -55,7 +56,7 @@ class TextDisplay {
   }
 }
 
-enum TextFont { regular, greaterImportance }
+enum TextFont { regular, greaterImportance, emoji }
 enum TextColor {
   Accent,
   HeaderMain,
@@ -64,5 +65,6 @@ enum TextColor {
   RegularText,
   DangerColor,
   Transparent,
-  ChatLastTimeMessage
+  ChatLastTimeMessage,
+  PeerNameTextColor
 }

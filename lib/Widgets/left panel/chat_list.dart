@@ -57,7 +57,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   Widget build(BuildContext context) {
     return Expanded(
         child: ListView.builder(
-            cacheExtent: 400,
+            cacheExtent: 800,
             itemCount: chats.length,
             itemBuilder: (context, index) =>
                 ChatItemDisplay(chat: chats[index], client: widget.client)));

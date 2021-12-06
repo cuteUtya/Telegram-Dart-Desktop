@@ -38,26 +38,25 @@ LoadScreenBackgroundColor: ref(BaseColor);
 LoadScreenShadowColor: #AAAAAA;
 
 #red#
-PeerColor1a: #B9238F;
-PeerColor1b: #DB6C6C;
+PeerColor1a: #A3558D;
+PeerColor1b: #C98484;
 #green#
-PeerColor2a: #23B971;
-PeerColor2b: #A4DB6C;
-#yellow#
-PeerColor3a: #B9B323;
-PeerColor3b: #B8DB6C;
-#blue#
-PeerColor4a: #23A7B9;
-PeerColor4b: #6C7EDB;
+PeerColor2a: #55A38B;
+PeerColor2b: #84C993;
 #purple#
-PeerColor5a: #B623B9;
-PeerColor5b: #9D6CDB;
+PeerColor3a: #8555A3;
+PeerColor3b: #C884C9;
+#blue#
+PeerColor4a: #5561A3;
+PeerColor4b: #84A8C9;
 #pink#
-PeerColor6a: #B92323;
-PeerColor6b: #DB6CC9;
+PeerColor5a: #A35555;
+PeerColor5b: #C984AE;
 #lazur blue#
-PeerColor7a: #238CB9;
-PeerColor7b: #6CDBDB;
+PeerColor6a: #5587A3;
+PeerColor6b: #84C9BD;
 #orange#
-PeerColor8a: #B97423;
-PeerColor8b: #DBD76C;
+PeerColor7a: #A38855;
+PeerColor7b: #C9C684;
+
+PeerNameTextColor: #FFFFFF;

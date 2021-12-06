@@ -13,6 +13,21 @@ int clampInt(int value, int min, int max) {
   return value;
 }
 
+var emojiRegex = RegExp(
+    r'[\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}\u{1F9B0}-\u{1F9B3}]',
+    unicode: true);
+
+List<String> extractEmojisAsList(String text) {
+  List<String> res = [];
+  emojiRegex.allMatches(text).forEach(
+      (element) => res.add(text.substring(element.start, element.end)));
+  return res;
+}
+
+String extractEmojis(String text) {
+  return emojiRegex.allMatches(text).map((z) => z.group(0)).toList().join("");
+}
+
 //linear interpolation beetwen two numbers
 double lerp(double a, double b, double t) {
   return a + t * (b - a);

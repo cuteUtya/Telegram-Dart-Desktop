@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/display_text.dart';
 
 class UserpicEmpty extends StatelessWidget {
-  const UserpicEmpty({Key? key, required this.chatId}) : super(key: key);
+  const UserpicEmpty(
+      {Key? key, required this.chatId, required this.displayLetters})
+      : super(key: key);
   final int chatId;
+  final String displayLetters;
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  getPeerColor(chatId, "a"),
-                  getPeerColor(chatId, "b")
-                ])));
+    return Stack(alignment: Alignment.center, children: [
+      Container(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    getPeerColor(chatId, "a"),
+                    getPeerColor(chatId, "b")
+                  ]))),
+      Text(displayLetters,
+          style: TextDisplay.create(
+              textColor: TextColor.PeerNameTextColor,
+              fontFamily: containEmoji(displayLetters)
+                  ? TextFont.emoji
+                  : TextFont.greaterImportance,
+              size: 24,
+              fontWeight: FontWeight.w500))
+    ]);
+  }
+
+  static bool containEmoji(String str) {
+    RegExp regex = RegExp(r'[a-zA-Z0-9]');
+    return !regex.hasMatch(str);
   }
 
   static Color getPeerColor(int id, [String component = "a"]) {
-    //TODO colors don't match with tdesktop
-    var index = id % 7;
-    var map = [0, 7, 4, 1, 6, 3, 5];
-    return ClientTheme.currentTheme
-        .getField("PeerColor${map[index]}$component");
+    var index = id % 6;
+    return ClientTheme.currentTheme.getField("PeerColor${index + 1}$component");
   }
 }
