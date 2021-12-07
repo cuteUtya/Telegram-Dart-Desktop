@@ -13,64 +13,67 @@ class ChatItemLastMessageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     if (chat.lastMessage == null) return const Center();
     var content = chat.lastMessage!.content!;
-    TextSpan? text;
+    String text = "";
     switch (content.runtimeType) {
       case MessageText:
-        //TODO: display formatted text, support bold italic links and other
-        text = TextSpan(
-          text: (content as MessageText).text!.text!,
-          style: TextDisplay.create(textColor: TextColor.RegularText, size: 18),
-        );
+        text = (content as MessageText).text!.text!;
         break;
 
       case MessageAnimatedEmoji:
-        text = TextDisplay.emoji((content as MessageAnimatedEmoji).emoji!, 18)
-            as TextSpan;
+        text = (content as MessageAnimatedEmoji).emoji!;
+        break;
+
+      case MessageCall:
         break;
 
       default:
-        text = TextSpan(
-            text: "{${content.runtimeType.toString()}}",
-            style: TextDisplay.create(size: 18, textColor: TextColor.Accent));
+        text = content.runtimeType.toString();
         break;
     }
 
     return FutureBuilder(
         builder: (context, data) {
           if (data.hasData) {
-            String t = data.data is Chat
-                ? "${(data.data as Chat).title!}: "
-                : "${(data.data as User).firstName!} ${(data.data as User).lastName!}: ";
+            bool showFrom = false;
 
-            bool showFrom = true;
-            if (chat.type!.getConstructor() == ChatTypeSupergroup.CONSTRUCTOR) {
-              if ((chat.type! as ChatTypeSupergroup).isChannel!) {
-                showFrom = false;
-              }
-            } else if (chat.type!.getConstructor() ==
-                ChatTypePrivate.CONSTRUCTOR) {
-              showFrom = false;
-            }
+            String author = data.data is Chat
+                ? "${(data.data as Chat).title}: "
+                : "${(data.data as User).firstName} ${(data.data as User).lastName}: ";
 
-            if (chat.lastMessage!.sender.runtimeType == MessageSenderUser) {
-              if ((chat.lastMessage!.sender as MessageSenderUser).userId ==
-                      client.me &&
-                  chat.id != client.me) {
-                t = "${client.getTranslation("lng_from_you")}: ";
+            if (chat.type is ChatTypeSupergroup ||
+                chat.type is ChatTypeBasicGroup) showFrom = true;
+
+            if (chat.lastMessage!.sender is MessageSenderUser) {
+              if (chat.lastMessage!.isOutgoing!) {
                 showFrom = true;
+                if (chat.lastMessage!.forwardInfo == null) {
+                  author = "${client.getTranslation("lng_from_you")}: ";
+                } else {
+                  //TODO find author here
+                  //author = chat.lastMessage.
+                }
               }
             }
 
-            TextSpan content = showFrom
-                ? TextSpan(children: [
-                    TextSpan(
-                        text: t,
-                        style: TextDisplay.create(
-                            size: 18, textColor: TextColor.Accent)),
-                    text!
-                  ])
-                : TextSpan(children: [text!]);
-            return RichText(maxLines: 2, text: content);
+            return RichText(
+                maxLines: 2,
+                text: TextSpan(
+                    text: showFrom ? author : "",
+                    children: [
+                      WidgetSpan(
+                          child: chat.lastMessage!.forwardInfo != null
+                              ? Container(
+                                  child: const Icon(Icons.reply),
+                                  margin:
+                                      const EdgeInsets.only(left: 2, right: 2))
+                              : const SizedBox.shrink()),
+                      TextSpan(
+                          text: text,
+                          style: TextDisplay.create(
+                              textColor: TextColor.RegularText, size: 18))
+                    ],
+                    style: TextDisplay.create(
+                        size: 18, textColor: TextColor.Accent)));
           }
           return const Center();
         },

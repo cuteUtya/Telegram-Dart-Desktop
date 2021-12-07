@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_last_message_content.dart';
-import 'package:myapp/Widgets/left%20panel/chat_photo_display.dart';
+import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 
@@ -31,11 +31,13 @@ class ChatItemDisplay extends StatelessWidget {
                     const SizedBox(height: 8),
                     Expanded(
                         child: Stack(children: [
-                      Text(chat.title!,
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.left,
-                          style: TextDisplay.chatTittle),
+                      Padding(
+                          padding: const EdgeInsets.only(right: 60),
+                          child: Text(chat.title!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: TextDisplay.chatTittle)),
                       Container(
                           margin: const EdgeInsets.only(top: 26),
                           child: Padding(

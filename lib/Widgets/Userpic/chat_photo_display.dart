@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/Widgets/left%20panel/userpic_empty.dart';
+import 'package:myapp/Widgets/Userpic/userpic_empty.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'dart:io' as io;

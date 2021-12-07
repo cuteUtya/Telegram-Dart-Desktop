@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 
 class TextDisplay {
-  static String _getEmojiFont() => "TwitterColorEmoji";
+  static String _getEmojiFont() => "AppleColorEmoji";
 
   static TextStyle get title => create(
       size: 24, fontWeight: FontWeight.w600, textColor: TextColor.HeaderMain);
