@@ -39,6 +39,9 @@ class ChatItemLastMessageContent extends StatelessWidget {
                     client: client,
                     width: 20,
                     height: 20))));
+        externalElements.add(TextSpan(
+            text: client.getTranslation("lng_attach_photo"),
+            style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
         break;
 
       default:
