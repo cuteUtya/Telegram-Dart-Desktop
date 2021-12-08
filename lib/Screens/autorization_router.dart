@@ -12,7 +12,6 @@ import 'package:myapp/Screens/registration.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide File;
-import 'package:myapp/utils.dart';
 
 class AutorizationRouter extends StatefulWidget {
   const AutorizationRouter({Key? key, required this.client}) : super(key: key);

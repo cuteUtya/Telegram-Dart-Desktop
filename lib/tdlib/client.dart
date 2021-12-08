@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
-import 'dart:io' as io;
 import "package:path/path.dart" as path;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
@@ -417,10 +416,6 @@ class TelegramClient {
     return Text(text, style: style);
   }
 
-  Widget _buildImage(String path, {double? width, double? heigth}) {
-    return Image.file(io.File(path), width: width, height: heigth);
-  }
-
   String? _dbPath;
   String? _filesPath;
 
@@ -533,7 +528,6 @@ class TelegramClient {
     var receive = await initIsolate();
     receive.listen((message) {
       if (message is int) {
-        print("RECEIVE POINTER FROM ISOLATE ${message}");
         Pointer<Void> pointer = Pointer.fromAddress(message);
         _sendClient = JsonClient.create(path.join("Assets", "bin", "tdlib"),
             clientPointer: pointer);
