@@ -12,11 +12,11 @@ class ChatItemDisplay extends StatelessWidget {
       {Key? key,
       required this.chat,
       required this.client,
-      required this.status})
+      required this.interlocutor})
       : super(key: key);
   final Chat chat;
+  final User? interlocutor;
   final TelegramClient client;
-  final UserStatus? status;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +41,9 @@ class ChatItemDisplay extends StatelessWidget {
                             width: 20,
                             alignment: Alignment.bottomRight,
                             child: OnlineIndicatorDidplay(
-                                online: status is UserStatusOnline))
+                                online:
+                                    (interlocutor?.status is UserStatusOnline &&
+                                        interlocutor?.type is UserTypeRegular)))
                       ]),
                       const SizedBox(width: 16),
                       Flexible(

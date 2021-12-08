@@ -10,11 +10,14 @@ class ChatItemLastMessageContent extends StatelessWidget {
       : super(key: key);
   final Chat chat;
   final TelegramClient client;
+
+  contentEntetyesMargin() => const WidgetSpan(child: SizedBox(width: 8));
+
   @override
   Widget build(BuildContext context) {
     if (chat.lastMessage == null) return const Center();
     var content = chat.lastMessage!.content!;
-    FormattedText text;
+    FormattedText text = FormattedText(text: "");
     List<InlineSpan> externalElements = [];
     switch (content.runtimeType) {
       case MessageText:
@@ -26,22 +29,31 @@ class ChatItemLastMessageContent extends StatelessWidget {
         text = FormattedText(text: emoji);
         break;
 
+      case MessageSticker:
+        externalElements.add(
+            TextDisplay.emoji((content as MessageSticker).sticker!.emoji!, 18));
+        externalElements.add(contentEntetyesMargin());
+        externalElements.add(TextSpan(
+            text: client.getTranslation("lng_in_dlg_sticker"),
+            style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+        break;
+
       case MessagePhoto:
         text = (content as MessagePhoto).caption!;
         var sizes = content.photo!.sizes!;
         sizes.sort((a, b) =>
             a.width! > b.width! ? -1 : (a.width! == b.width! ? 0 : 1));
         externalElements.add(WidgetSpan(
-            child: Container(
-                margin: const EdgeInsets.only(right: 8),
-                child: FileImageDisplay(
-                    id: sizes.last.photo!.id!,
-                    client: client,
-                    width: 20,
-                    height: 20))));
+            child: FileImageDisplay(
+                id: sizes.last.photo!.id!,
+                client: client,
+                width: 20,
+                height: 20)));
+        externalElements.add(contentEntetyesMargin());
         externalElements.add(TextSpan(
             text: client.getTranslation("lng_attach_photo"),
             style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+        externalElements.add(contentEntetyesMargin());
         break;
 
       default:
@@ -75,7 +87,8 @@ class ChatItemLastMessageContent extends StatelessWidget {
               }
             }
             //TODO if forwardInfo != null show original message author
-
+            text.text = text.text!.replaceAll("\n", " ");
+            text.text = text.text!.replaceAll("\r", " ");
             return RichText(
                 maxLines: 2,
                 text: TextSpan(

@@ -19,9 +19,9 @@ class _ChatAndPositionPair {
 }
 
 class _ChatFullInfo {
-  _ChatFullInfo({required this.chat, this.status});
+  _ChatFullInfo({required this.chat, this.interlocutor});
   Chat chat;
-  UserStatus? status;
+  User? interlocutor;
 }
 
 class _ChatListDisplayState extends State<ChatListDisplay> {
@@ -37,25 +37,17 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
     for (int i = 0; i < pairs.length; i++) {
       var chat =
           await widget.client.send(GetChat(chatId: pairs[i].chat)) as Chat;
-      result.add(_ChatFullInfo(chat: chat, status: await getUserStatus(chat)));
+      result.add(_ChatFullInfo(
+        chat: chat,
+      ));
     }
     setState(() => chats = result);
   }
 
-  Future<UserStatus?> getUserStatus(Chat chat) async {
-    int? id;
-
-    switch (chat.type.runtimeType) {
-      case ChatTypeSecret:
-        id = (chat.type as ChatTypeSecret).userId;
-        break;
-      case ChatTypePrivate:
-        id = (chat.type as ChatTypePrivate).userId;
-        break;
-    }
-
-    if (id != null) {
-      return (await widget.client.send(GetUser(userId: id)) as User).status;
+  Future<User?> getUser(Chat chat) async {
+    if (chat.lastMessage!.sender is MessageSenderUser) {
+      var id = (chat.lastMessage!.sender as MessageSenderUser).userId;
+      return (await widget.client.send(GetUser(userId: id))) as User;
     }
   }
 
@@ -74,6 +66,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
     widget.client.updateUserStatus.listen((event) {
       setState(() => chats
           .firstWhereOrNull((element) => element.chat.id == event.userId)
+          ?.interlocutor
           ?.status = event.status);
     });
     super.initState();
@@ -90,7 +83,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
             itemCount: chats.length,
             itemBuilder: (context, index) => ChatItemDisplay(
                 chat: chats[index].chat,
-                status: chats[index].status,
+                interlocutor: chats[index].interlocutor,
                 client: widget.client)));
   }
 }
