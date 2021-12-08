@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Userpic/userpic_empty.dart';
+import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
-import 'dart:io' as io;
 
 import 'package:myapp/utils.dart';
 
@@ -17,27 +17,18 @@ class ChatPhotoDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (chat.photo == null) {
-      return UserpicEmpty(
-          chatId: chat.id!, displayLetters: getPeerNameLetters());
+      return emptyUserpic();
     }
 
-    return FutureBuilder(
-        builder: (context, data) {
-          if (data.hasData) {
-            return Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: FileImage(
-                            io.File((data.data as File).local!.path!)))));
-          }
-          return UserpicEmpty(
-              chatId: chat.id!, displayLetters: getPeerNameLetters());
-        },
-        future: client.send(DownloadFile(
-            fileId: useBig ? chat.photo!.big!.id : chat.photo!.small!.id,
-            priority: 3)));
+    return FileImageDisplay(
+        containerShape: BoxShape.circle,
+        client: client,
+        id: useBig ? chat.photo!.big!.id! : chat.photo!.small!.id!,
+        emptyReplacer: emptyUserpic());
   }
+
+  Widget emptyUserpic() =>
+      UserpicEmpty(chatId: chat.id!, displayLetters: getPeerNameLetters());
 
   String getPeerNameLetters() {
     var emojis = extractEmojisAsList(chat.title!);

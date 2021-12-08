@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/tdlib/td_api.dart' hide Text;
 
 class TextDisplay {
   static String _getEmojiFont() => "AppleColorEmoji";
@@ -27,6 +28,12 @@ class TextDisplay {
             fontFamily: _getEmojiFont(),
             fontSize: size,
             decoration: TextDecoration.none));
+  }
+
+  static List<InlineSpan> parseFormattedText(FormattedText text,
+      [double size = 20]) {
+    //TODO implement FormattedText parsing
+    return [TextSpan(text: text.text!, style: create(size: 20))];
   }
 
   static TextStyle create(
