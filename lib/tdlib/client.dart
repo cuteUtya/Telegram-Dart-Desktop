@@ -392,9 +392,9 @@ class TelegramClient {
       .where((u) => u is UpdateUsersNearby)
       .map((a) => (a as UpdateUsersNearby).usersNearby!);
 
-  Stream<UserStatus> get updateUserStatus => updates
+  Stream<UpdateUserStatus> get updateUserStatus => updates
       .where((u) => u is UpdateUserStatus)
-      .map((a) => (a as UpdateUserStatus).status!);
+      .map((a) => (a as UpdateUserStatus));
 
   late TdlibParameters tdlibParameters;
   int me = 0;

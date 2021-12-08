@@ -32,8 +32,10 @@ DataInputEmtyColor: #EBEBEB;
 ButtonAccentBackColor: ref(AccentHalfTransparent);
 ButtonDangerBackColor: ref(DangerHalfTransparent);
 
+OnlineColor: #0BA628;
+OnlineStatusColor: ref(OnlineColor);
 SearchBackground: #EBEBEB;
-
+ChatUnselectedColor: ref(BaseColor);
 LoadScreenBackgroundColor: ref(BaseColor);
 LoadScreenShadowColor: #AAAAAA;
 
