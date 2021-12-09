@@ -36,6 +36,7 @@ OnlineColor: #0BA628;
 OnlineStatusColor: ref(OnlineColor);
 SearchBackground: #EBEBEB;
 ChatUnselectedColor: ref(BaseColor);
+ChatSelectedColor: #EAEAEA;
 LoadScreenBackgroundColor: ref(BaseColor);
 LoadScreenShadowColor: #AAAAAA;
 

@@ -99,6 +99,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+        //TODO make scroll more "soft" when Google implement this — https://github.com/flutter/flutter/issues/32120
         child: ListView.builder(
             cacheExtent: 800,
             itemCount: chats.length,
