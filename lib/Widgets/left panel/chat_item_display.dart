@@ -67,14 +67,12 @@ class ChatItemDisplay extends StatelessWidget {
                                   )),
                               //TODO not just positions[0]
                               chat.positions![0].isPinned!
-                                  ? Expanded(
-                                      child: Container(
-                                          child: Icon(Icons.push_pin,
-                                              color: ClientTheme.currentTheme
-                                                  .getField(
-                                                      "ChatPinIconColor")),
-                                          alignment: Alignment.centerRight))
-                                  : SizedBox.shrink(),
+                                  ? Container(
+                                      child: Icon(Icons.push_pin,
+                                          color: ClientTheme.currentTheme
+                                              .getField("ChatPinIconColor")),
+                                      alignment: Alignment.centerRight)
+                                  : const SizedBox.shrink(),
                               Row(children: [
                                 const Spacer(),
                                 Text(getMessageTime(),

@@ -61,15 +61,12 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
 
   Future<User?> getUser(Chat chat) async {
     int? userId;
-
     if (chat.type is ChatTypePrivate) {
       userId = (chat.type as ChatTypePrivate).userId;
     }
-
     if (chat.type is ChatTypeSecret) {
       userId = (chat.type as ChatTypeSecret).userId;
     }
-
     if (userId != null) {
       return (await widget.client.send(GetUser(userId: userId))) as User;
     }
