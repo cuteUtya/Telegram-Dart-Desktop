@@ -405,13 +405,7 @@ class TelegramClient {
       {Map<String, String>? replacing, String? languagePackId}) {
     languagePackId ??= userLangPackId;
 
-    String text = getTranslation(key);
-
-    if (replacing != null) {
-      replacing.forEach((key, value) {
-        text = text.replaceAll(key, value);
-      });
-    }
+    String text = getTranslation(key, replacing: replacing);
 
     return Text(text, style: style);
   }
@@ -506,7 +500,8 @@ class TelegramClient {
   String getTranslation(String key,
       {String? languagePackDatabasePath,
       String? languagePackId,
-      String? localizationTarget}) {
+      String? localizationTarget,
+      Map<String, String>? replacing}) {
     languagePackDatabasePath ??= getLanguagePackDatabasePath();
     languagePackId ??= userLangPackId;
     localizationTarget ??= TelegramClient.localizationTarget;
@@ -517,10 +512,20 @@ class TelegramClient {
         languagePackId: languagePackId,
         languagePackDatabasePath: languagePackDatabasePath));
 
+    String translate = "";
+
     if (result is LanguagePackStringValueDeleted) {
-      return getTranslation(key, languagePackId: "en");
+      translate = getTranslation(key, languagePackId: "en");
     }
-    return (result as LanguagePackStringValueOrdinary).value!;
+    translate = (result as LanguagePackStringValueOrdinary).value!;
+
+    if (replacing != null) {
+      replacing.forEach((key, value) {
+        translate = translate.replaceAll(key, value);
+      });
+    }
+
+    return translate;
   }
 
   Future<void> init() async {
