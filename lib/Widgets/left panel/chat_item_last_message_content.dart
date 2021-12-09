@@ -7,10 +7,16 @@ import 'package:myapp/Widgets/display_text.dart';
 
 class ChatItemLastMessageContent extends StatelessWidget {
   const ChatItemLastMessageContent(
-      {Key? key, required this.chat, required this.client})
+      {Key? key,
+      required this.chat,
+      required this.client,
+      required this.addedInChatUsers,
+      required this.lastMessageAuthor})
       : super(key: key);
   final Chat chat;
+  final String lastMessageAuthor;
   final TelegramClient client;
+  final List<User>? addedInChatUsers;
 
   contentEntetyesMargin() => const WidgetSpan(child: SizedBox(width: 8));
 
@@ -18,11 +24,14 @@ class ChatItemLastMessageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     if (chat.lastMessage == null) return const Center();
     var content = chat.lastMessage!.content!;
+    bool messageTypeAllowShowFrom = true;
     FormattedText text = FormattedText(text: "");
     List<InlineSpan> externalElements = [];
     switch (content.runtimeType) {
       case MessageText:
         text = (content as MessageText).text!;
+        text.text = text.text!.replaceAll("\n", " ");
+        text.text = text.text!.replaceAll("\r", " ");
         break;
 
       case MessageAnimatedEmoji:
@@ -37,6 +46,24 @@ class ChatItemLastMessageContent extends StatelessWidget {
         externalElements.add(TextSpan(
             text: client.getTranslation("lng_in_dlg_sticker"),
             style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+        break;
+
+      case MessageChatAddMembers:
+        String names = "";
+        addedInChatUsers!
+            .forEach((element) => names += "${element.firstName!}, ");
+        names = names.substring(0, names.length - 2);
+        messageTypeAllowShowFrom = false;
+        text = FormattedText(
+            text: client.getTranslation(
+                addedInChatUsers!.length > 1
+                    ? "lng_action_add_users_many"
+                    : "lng_action_add_user",
+                replacing: {
+              "{user}": names,
+              "{users}": names,
+              "{from}": lastMessageSenderName
+            }));
         break;
 
       case MessagePhoto:
@@ -63,63 +90,48 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
     }
 
-    return FutureBuilder(
-        builder: (context, data) {
-          if (data.hasData) {
-            bool showFrom = false;
+    return RichText(
+        maxLines: 2,
+        text: TextSpan(
+            text: (!messageTypeAllowShowFrom ? false : showAuthor)
+                ? "$lastMessageSenderName: "
+                : "",
+            children: <InlineSpan>[
+                  WidgetSpan(
+                      child: chat.lastMessage!.forwardInfo != null
+                          ? Container(
+                              child: Icon(
+                                Icons.reply,
+                                color: ClientTheme.currentTheme
+                                    .getField("TextInlineIconsColor"),
+                              ),
+                              margin: const EdgeInsets.only(left: 2, right: 2))
+                          : const SizedBox.shrink()),
+                ] +
+                externalElements +
+                TextDisplay.parseFormattedText(text),
+            style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+  }
 
-            String author = data.data is Chat
-                ? "${(data.data as Chat).title}: "
-                : "${(data.data as User).firstName}: ";
+  String get lastMessageSenderName {
+    if ((chat.lastMessage!.sender! as MessageSenderUser).userId == client.me) {
+      return client.getTranslation("lng_from_you");
+    }
+    return lastMessageAuthor;
+  }
 
-            if (chat.type is ChatTypeSupergroup) {
-              if (!(chat.type as ChatTypeSupergroup).isChannel!) {
-                showFrom = true;
-              }
-            }
-
-            if (chat.lastMessage!.sender is MessageSenderUser) {
-              showFrom = true;
-              if ((chat.lastMessage!.sender! as MessageSenderUser).userId ==
-                  client.me) {
-                author = "${client.getTranslation("lng_from_you")}: ";
-              }
-              if (chat.id == client.me) {
-                showFrom = false;
-              }
-            }
-            //TODO if forwardInfo != null show original message author
-            text.text = text.text!.replaceAll("\n", " ");
-            text.text = text.text!.replaceAll("\r", " ");
-            return RichText(
-                maxLines: 2,
-                text: TextSpan(
-                    text: showFrom ? author : "",
-                    children: <InlineSpan>[
-                          WidgetSpan(
-                              child: chat.lastMessage!.forwardInfo != null
-                                  ? Container(
-                                      child: Icon(
-                                        Icons.reply,
-                                        color: ClientTheme.currentTheme
-                                            .getField("TextInlineIconsColor"),
-                                      ),
-                                      margin: const EdgeInsets.only(
-                                          left: 2, right: 2))
-                                  : const SizedBox.shrink()),
-                        ] +
-                        externalElements +
-                        TextDisplay.parseFormattedText(text),
-                    style: TextDisplay.create(
-                        size: 18, textColor: TextColor.Accent)));
-          }
-          return const Center();
-        },
-        future: client.send(chat.lastMessage!.sender! is MessageSenderUser
-            ? GetUser(
-                userId: (chat.lastMessage!.sender! as MessageSenderUser).userId)
-            : GetChat(
-                chatId:
-                    (chat.lastMessage!.sender! as MessageSenderChat).chatId)));
+  bool get showAuthor {
+    if (chat.type is ChatTypeSupergroup) {
+      if (!(chat.type as ChatTypeSupergroup).isChannel!) {
+        return true;
+      }
+    }
+    if (chat.lastMessage!.sender is MessageSenderUser) {
+      if (chat.id == client.me) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 }

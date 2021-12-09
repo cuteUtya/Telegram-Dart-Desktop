@@ -14,11 +14,15 @@ class ChatItemDisplay extends StatefulWidget {
       required this.chat,
       required this.client,
       required this.interlocutor,
-      required this.supergroup})
+      required this.supergroup,
+      required this.addedInChatMembers,
+      required this.lastMessageSender})
       : super(key: key);
   final Chat chat;
   final User? interlocutor;
   final Supergroup? supergroup;
+  final List<User>? addedInChatMembers;
+  final String lastMessageSender;
   final TelegramClient client;
 
   @override
@@ -89,6 +93,10 @@ class _ChatItemDisplayState extends State<ChatItemDisplay> {
                                         padding:
                                             const EdgeInsets.only(right: 40),
                                         child: ChatItemLastMessageContent(
+                                            lastMessageAuthor:
+                                                widget.lastMessageSender,
+                                            addedInChatUsers:
+                                                widget.addedInChatMembers,
                                             chat: widget.chat,
                                             client: widget.client),
                                       )),

@@ -19,7 +19,12 @@ class _ChatAndPositionPair {
 }
 
 class _ChatFullInfo {
-  _ChatFullInfo({required this.chat, this.interlocutor, this.supergroup});
+  _ChatFullInfo(
+      {required this.chat,
+      this.interlocutor,
+      this.supergroup,
+      this.addedUsers,
+      this.lastMessageSenderName = ""});
   Chat chat;
 
   ///person with whom there is a dialogue
@@ -28,6 +33,12 @@ class _ChatFullInfo {
 
   ///supergroup, null if chat.type != ChatTypeSupergroup
   Supergroup? supergroup;
+
+  ///users, what was added to chat. Non-null if lastMessage.content is MessageChatAddMembers
+  List<User>? addedUsers;
+
+  ///Name of user, what send last message in chat
+  String lastMessageSenderName;
 }
 
 class _ChatListDisplayState extends State<ChatListDisplay> {
@@ -43,10 +54,17 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
     for (int i = 0; i < pairs.length; i++) {
       var chat =
           await widget.client.send(GetChat(chatId: pairs[i].chat)) as Chat;
+      List<User>? addedUsers;
+      if (chat.lastMessage?.content is MessageChatAddMembers) {
+        addedUsers = await getUsersById(
+            (chat.lastMessage?.content as MessageChatAddMembers).memberUserIds);
+      }
       result.add(_ChatFullInfo(
           chat: chat,
           interlocutor: await getUser(chat),
-          supergroup: await getSupergroup(chat)));
+          supergroup: await getSupergroup(chat),
+          addedUsers: addedUsers,
+          lastMessageSenderName: await getLastMessageAuthor(chat) ?? ""));
     }
     setState(() => chats = result);
   }
@@ -56,6 +74,34 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
       return (await widget.client.send(GetSupergroup(
               supergroupId: (chat.type as ChatTypeSupergroup).supergroupId)))
           as Supergroup;
+    }
+  }
+
+  Future<List<User>?> getUsersById(List<int>? id) async {
+    if (id != null) {
+      List<User> usrs = [];
+      for (int i = 0; i < id.length; i++) {
+        usrs.add(await widget.client.send(GetUser(userId: id[i])) as User);
+      }
+
+      return usrs;
+    }
+  }
+
+  Future<String?> getLastMessageAuthor(Chat chat) async {
+    var sender = chat.lastMessage!.sender! is MessageSenderUser;
+    if (sender is MessageSenderChat) {
+      return (await widget.client
+                  .send(GetChat(chatId: (sender as MessageSenderChat).chatId))
+              as Chat)
+          .title!;
+    }
+
+    if (sender is MessageSenderUser) {
+      return (await widget.client
+                  .send(GetUser(userId: (sender as MessageSenderUser).userId))
+              as User)
+          .firstName!;
     }
   }
 
@@ -107,6 +153,8 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
                 chat: chats[index].chat,
                 supergroup: chats[index].supergroup,
                 interlocutor: chats[index].interlocutor,
+                addedInChatMembers: chats[index].addedUsers,
+                lastMessageSenderName: chats[index].lastMessageSenderName,
                 client: widget.client)));
   }
 }
