@@ -26,7 +26,7 @@ class _ChatFullInfo {
   ///not null if chat.type is ChatTypePrivate or ChatTypeSecret
   User? interlocutor;
 
-  ///supergroup, may be null if chat.type != ChatTypeSuperGroup
+  ///supergroup, null if chat.type != ChatTypeSupergroup
   Supergroup? supergroup;
 }
 
