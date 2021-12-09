@@ -3,6 +3,7 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
@@ -12,10 +13,12 @@ class ChatItemDisplay extends StatelessWidget {
       {Key? key,
       required this.chat,
       required this.client,
-      required this.interlocutor})
+      required this.interlocutor,
+      required this.supergroup})
       : super(key: key);
   final Chat chat;
   final User? interlocutor;
+  final Supergroup? supergroup;
   final TelegramClient client;
   @override
   Widget build(BuildContext context) {
@@ -40,10 +43,7 @@ class ChatItemDisplay extends StatelessWidget {
                             height: 20,
                             width: 20,
                             alignment: Alignment.bottomRight,
-                            child: OnlineIndicatorDidplay(
-                                online:
-                                    (interlocutor?.status is UserStatusOnline &&
-                                        interlocutor?.type is UserTypeRegular)))
+                            child: OnlineIndicatorDidplay(online: isOnline))
                       ]),
                       const SizedBox(width: 16),
                       Flexible(
@@ -55,11 +55,10 @@ class ChatItemDisplay extends StatelessWidget {
                                 child: Stack(children: [
                               Padding(
                                   padding: const EdgeInsets.only(right: 60),
-                                  child: Text(chat.title!,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.left,
-                                      style: TextDisplay.chatTittle)),
+                                  child: ChatItemTitle(
+                                      title: chat.title!,
+                                      isScam: isScam,
+                                      isVerifed: isVerifed)),
                               Container(
                                   margin: const EdgeInsets.only(top: 26),
                                   child: Padding(
@@ -78,6 +77,25 @@ class ChatItemDisplay extends StatelessWidget {
                             ])),
                           ]))
                     ]))));
+  }
+
+  bool get isOnline {
+    if (interlocutor != null) {
+      return interlocutor!.status is UserStatusOnline;
+    }
+    return false;
+  }
+
+  bool get isScam {
+    if (supergroup?.isScam ?? false) return true;
+    if (interlocutor?.isScam ?? false) return true;
+
+    return false;
+  }
+
+  bool get isVerifed {
+    if (supergroup?.isVerified ?? false) return true;
+    return false;
   }
 
   String getMessageTime() {

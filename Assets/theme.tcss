@@ -62,3 +62,6 @@ PeerColor7a: #A38855;
 PeerColor7b: #C9C684;
 
 PeerNameTextColor: #FFFFFF;
+
+VerifedSupergoupIconColor: ref(Accent);
+ScamIconColor: #E37B40;

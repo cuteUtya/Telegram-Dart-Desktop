@@ -19,9 +19,15 @@ class _ChatAndPositionPair {
 }
 
 class _ChatFullInfo {
-  _ChatFullInfo({required this.chat, this.interlocutor});
+  _ChatFullInfo({required this.chat, this.interlocutor, this.supergroup});
   Chat chat;
+
+  ///person with whom there is a dialogue
+  ///not null if chat.type is ChatTypePrivate or ChatTypeSecret
   User? interlocutor;
+
+  ///supergroup, may be null if chat.type != ChatTypeSuperGroup
+  Supergroup? supergroup;
 }
 
 class _ChatListDisplayState extends State<ChatListDisplay> {
@@ -37,19 +43,35 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
     for (int i = 0; i < pairs.length; i++) {
       var chat =
           await widget.client.send(GetChat(chatId: pairs[i].chat)) as Chat;
-      User? user;
-      if (chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) {
-        user = await widget.client.send(GetUser(userId: chat.id)) as User;
-      }
-      result.add(_ChatFullInfo(chat: chat, interlocutor: user));
+      result.add(_ChatFullInfo(
+          chat: chat,
+          interlocutor: await getUser(chat),
+          supergroup: await getSupergroup(chat)));
     }
     setState(() => chats = result);
   }
 
+  Future<Supergroup?> getSupergroup(Chat chat) async {
+    if (chat.type is ChatTypeSupergroup) {
+      return (await widget.client.send(GetSupergroup(
+              supergroupId: (chat.type as ChatTypeSupergroup).supergroupId)))
+          as Supergroup;
+    }
+  }
+
   Future<User?> getUser(Chat chat) async {
-    if (chat.lastMessage!.sender is MessageSenderUser) {
-      var id = (chat.lastMessage!.sender as MessageSenderUser).userId;
-      return (await widget.client.send(GetUser(userId: id))) as User;
+    int? userId;
+
+    if (chat.type is ChatTypePrivate) {
+      userId = (chat.type as ChatTypePrivate).userId;
+    }
+
+    if (chat.type is ChatTypeSecret) {
+      userId = (chat.type as ChatTypeSecret).userId;
+    }
+
+    if (userId != null) {
+      return (await widget.client.send(GetUser(userId: userId))) as User;
     }
   }
 
@@ -85,6 +107,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
             itemCount: chats.length,
             itemBuilder: (context, index) => ChatItemDisplay(
                 chat: chats[index].chat,
+                supergroup: chats[index].supergroup,
                 interlocutor: chats[index].interlocutor,
                 client: widget.client)));
   }
