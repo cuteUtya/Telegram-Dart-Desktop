@@ -20,7 +20,6 @@ class ChatItemDisplay extends StatelessWidget {
   final User? interlocutor;
   final Supergroup? supergroup;
   final TelegramClient client;
-  @override
   Widget build(BuildContext context) {
     return Container(
         color: ClientTheme.currentTheme.getField("ChatUnselectedColor"),
@@ -66,6 +65,16 @@ class ChatItemDisplay extends StatelessWidget {
                                     child: ChatItemLastMessageContent(
                                         chat: chat, client: client),
                                   )),
+                              //TODO not just positions[0]
+                              chat.positions![0].isPinned!
+                                  ? Expanded(
+                                      child: Container(
+                                          child: Icon(Icons.push_pin,
+                                              color: ClientTheme.currentTheme
+                                                  .getField(
+                                                      "ChatPinIconColor")),
+                                          alignment: Alignment.centerRight))
+                                  : SizedBox.shrink(),
                               Row(children: [
                                 const Spacer(),
                                 Text(getMessageTime(),

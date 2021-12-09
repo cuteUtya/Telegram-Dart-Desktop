@@ -19,6 +19,7 @@ class TextDisplay {
   static TextStyle get chatTittle => create(
       size: 20,
       fontWeight: FontWeight.bold,
+      textColor: TextColor.HeaderMain,
       fontFamily: TextFont.greaterImportance);
 
   static InlineSpan emoji(String emoji, double size) {

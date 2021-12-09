@@ -15,8 +15,8 @@ RegularFontFamily: Roboto;
 HeaderMain: #181818;
 HeaderSecondary: #464646;
 AdditionalTextColor: #BABABA;
-RegularText: #333333;
-ChatLastTimeMessage: #7F7F7F;
+RegularText: #696969;
+ChatLastTimeMessage: ref(RegularText);
 
 #Introduction screen fields#
 CarouselIndicatorActive: ref(Accent);
@@ -66,3 +66,4 @@ PeerNameTextColor: #FFFFFF;
 VerifedSupergoupIconColor: ref(Accent);
 ScamIconColor: #E37B40;
 TextInlineIconsColor: ref(RegularText);
+ChatPinIconColor: ref(RegularText);
