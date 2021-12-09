@@ -37,9 +37,11 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
     for (int i = 0; i < pairs.length; i++) {
       var chat =
           await widget.client.send(GetChat(chatId: pairs[i].chat)) as Chat;
-      result.add(_ChatFullInfo(
-        chat: chat,
-      ));
+      User? user;
+      if (chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) {
+        user = await widget.client.send(GetUser(userId: chat.id)) as User;
+      }
+      result.add(_ChatFullInfo(chat: chat, interlocutor: user));
     }
     setState(() => chats = result);
   }
