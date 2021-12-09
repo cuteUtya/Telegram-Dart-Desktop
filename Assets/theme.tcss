@@ -65,3 +65,4 @@ PeerNameTextColor: #FFFFFF;
 
 VerifedSupergoupIconColor: ref(Accent);
 ScamIconColor: #E37B40;
+TextInlineIconsColor: ref(RegularText);

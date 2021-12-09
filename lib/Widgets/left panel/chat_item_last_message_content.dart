@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
@@ -97,7 +98,11 @@ class ChatItemLastMessageContent extends StatelessWidget {
                           WidgetSpan(
                               child: chat.lastMessage!.forwardInfo != null
                                   ? Container(
-                                      child: const Icon(Icons.reply),
+                                      child: Icon(
+                                        Icons.reply,
+                                        color: ClientTheme.currentTheme
+                                            .getField("TextInlineIconsColor"),
+                                      ),
                                       margin: const EdgeInsets.only(
                                           left: 2, right: 2))
                                   : const SizedBox.shrink()),
