@@ -90,6 +90,7 @@ class ChatItemDisplay extends StatelessWidget {
 
   bool get isOnline {
     if (interlocutor != null) {
+      if (interlocutor!.type is! UserTypeRegular) return false;
       return interlocutor!.status is UserStatusOnline;
     }
     return false;
