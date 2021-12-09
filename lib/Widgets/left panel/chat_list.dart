@@ -21,10 +21,10 @@ class _ChatAndPositionPair {
 class _ChatFullInfo {
   _ChatFullInfo(
       {required this.chat,
+      required this.lastMessageSenderName,
       this.interlocutor,
       this.supergroup,
-      this.addedUsers,
-      this.lastMessageSenderName = ""});
+      this.addedUsers});
   Chat chat;
 
   ///person with whom there is a dialogue
@@ -59,12 +59,13 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         addedUsers = await getUsersById(
             (chat.lastMessage?.content as MessageChatAddMembers).memberUserIds);
       }
+      print("name is ${await getLastMessageAuthor(chat)}");
       result.add(_ChatFullInfo(
           chat: chat,
           interlocutor: await getUser(chat),
           supergroup: await getSupergroup(chat),
           addedUsers: addedUsers,
-          lastMessageSenderName: await getLastMessageAuthor(chat) ?? ""));
+          lastMessageSenderName: (await getLastMessageAuthor(chat))!));
     }
     setState(() => chats = result);
   }
@@ -89,18 +90,14 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   }
 
   Future<String?> getLastMessageAuthor(Chat chat) async {
-    var sender = chat.lastMessage!.sender! is MessageSenderUser;
+    var sender = chat.lastMessage!.sender!;
     if (sender is MessageSenderChat) {
-      return (await widget.client
-                  .send(GetChat(chatId: (sender as MessageSenderChat).chatId))
-              as Chat)
+      return (await widget.client.send(GetChat(chatId: sender.chatId)) as Chat)
           .title!;
     }
 
     if (sender is MessageSenderUser) {
-      return (await widget.client
-                  .send(GetUser(userId: (sender as MessageSenderUser).userId))
-              as User)
+      return (await widget.client.send(GetUser(userId: sender.userId)) as User)
           .firstName!;
     }
   }

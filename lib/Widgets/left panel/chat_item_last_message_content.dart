@@ -50,6 +50,14 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
       case MessageChatAddMembers:
         String names = "";
+        externalElements.add(WidgetSpan(
+            child: Icon(
+                addedInChatUsers!.length > 1
+                    ? Icons.group
+                    : Icons.person_add_alt_1,
+                color: inlineIconsColor,
+                size: 20)));
+        externalElements.add(contentEntetyesMargin());
         addedInChatUsers!
             .forEach((element) => names += "${element.firstName!}, ");
         names = names.substring(0, names.length - 2);
@@ -102,8 +110,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
                           ? Container(
                               child: Icon(
                                 Icons.reply,
-                                color: ClientTheme.currentTheme
-                                    .getField("TextInlineIconsColor"),
+                                color: inlineIconsColor,
                               ),
                               margin: const EdgeInsets.only(left: 2, right: 2))
                           : const SizedBox.shrink()),
@@ -114,11 +121,17 @@ class ChatItemLastMessageContent extends StatelessWidget {
   }
 
   String get lastMessageSenderName {
-    if ((chat.lastMessage!.sender! as MessageSenderUser).userId == client.me) {
-      return client.getTranslation("lng_from_you");
+    if (chat.lastMessage!.sender! is MessageSenderUser) {
+      if ((chat.lastMessage!.sender! as MessageSenderUser).userId ==
+          client.me) {
+        return client.getTranslation("lng_from_you");
+      }
     }
     return lastMessageAuthor;
   }
+
+  Color get inlineIconsColor =>
+      ClientTheme.currentTheme.getField("TextInlineIconsColor");
 
   bool get showAuthor {
     if (chat.type is ChatTypeSupergroup) {
