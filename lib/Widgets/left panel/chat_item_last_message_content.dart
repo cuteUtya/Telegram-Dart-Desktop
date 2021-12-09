@@ -48,6 +48,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
             child: FileImageDisplay(
                 id: sizes.last.photo!.id!,
                 client: client,
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
                 width: 20,
                 height: 20)));
         externalElements.add(contentEntetyesMargin());

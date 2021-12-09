@@ -8,6 +8,7 @@ class FileImageDisplay extends StatelessWidget {
       {Key? key,
       required this.id,
       required this.client,
+      this.borderRadius,
       this.containerShape = BoxShape.rectangle,
       this.height,
       this.width,
@@ -21,6 +22,7 @@ class FileImageDisplay extends StatelessWidget {
   final double? height;
   final Widget emptyReplacer;
   final TelegramClient client;
+  final BorderRadius? borderRadius;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -30,6 +32,7 @@ class FileImageDisplay extends StatelessWidget {
                 width: width,
                 height: height,
                 decoration: BoxDecoration(
+                    borderRadius: borderRadius,
                     shape: containerShape,
                     image: DecorationImage(
                         fit: BoxFit.cover,
