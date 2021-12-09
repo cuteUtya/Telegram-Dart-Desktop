@@ -28,6 +28,9 @@ class ChatItemDisplay extends StatefulWidget {
 class _ChatItemDisplayState extends State<ChatItemDisplay> {
   bool mouseOver = false;
 
+  Color get containerColor => ClientTheme.currentTheme
+      .getField(mouseOver ? "ChatSelectedColor" : "ChatUnselectedColor");
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
@@ -36,9 +39,12 @@ class _ChatItemDisplayState extends State<ChatItemDisplay> {
         child: AnimatedContainer(
             duration: const Duration(milliseconds: 100),
             decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                color: ClientTheme.currentTheme.getField(
-                    mouseOver ? "ChatSelectedColor" : "ChatUnselectedColor")),
+                borderRadius: const BorderRadius.all(Radius.circular(12))
+                /*borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(12),
+                    bottomRight: Radius.circular(12))*/
+                ,
+                color: containerColor),
             child: SizedBox(
                 height: 88,
                 child: Padding(
@@ -59,7 +65,9 @@ class _ChatItemDisplayState extends State<ChatItemDisplay> {
                                 height: 20,
                                 width: 20,
                                 alignment: Alignment.bottomRight,
-                                child: OnlineIndicatorDidplay(online: isOnline))
+                                child: OnlineIndicatorDidplay(
+                                    online: isOnline,
+                                    aroundOnlineColor: containerColor))
                           ]),
                           const SizedBox(width: 16),
                           Flexible(
