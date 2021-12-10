@@ -25,17 +25,12 @@ class UserpicEmpty extends StatelessWidget {
       Text(displayLetters,
           style: TextDisplay.create(
               textColor: TextColor.PeerNameTextColor,
-              fontFamily: containEmoji(displayLetters)
+              fontFamily: extractEmojis(displayLetters).isNotEmpty
                   ? TextFont.emoji
                   : TextFont.greaterImportance,
               size: 24,
               fontWeight: FontWeight.w500))
     ]);
-  }
-
-  static bool containEmoji(String str) {
-    RegExp regex = RegExp(r'[a-zA-Z0-9]');
-    return !regex.hasMatch(str);
   }
 
   static Color getPeerColor(int id, [String component = "a"]) {

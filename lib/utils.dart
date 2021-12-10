@@ -14,7 +14,7 @@ int clampInt(int value, int min, int max) {
 }
 
 var emojiRegex = RegExp(
-    r'[\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}\u{1F9B0}-\u{1F9B3}]',
+    r'[\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}\u{1F9B0}-\u{1F9B3}|\u{2F18F}]',
     unicode: true);
 
 List<String> extractEmojisAsList(String text) {
