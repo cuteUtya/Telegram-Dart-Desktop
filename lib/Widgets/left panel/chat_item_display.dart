@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
@@ -16,7 +17,8 @@ class ChatItemDisplay extends StatefulWidget {
       required this.interlocutor,
       required this.supergroup,
       required this.addedInChatMembers,
-      required this.lastMessageSenderName})
+      required this.lastMessageSenderName,
+      required this.order})
       : super(key: key);
   final Chat chat;
   final User? interlocutor;
@@ -24,31 +26,39 @@ class ChatItemDisplay extends StatefulWidget {
   final List<User>? addedInChatMembers;
   final String lastMessageSenderName;
   final TelegramClient client;
+  final int order;
 
   @override
-  State<StatefulWidget> createState() => _ChatItemDisplayState();
+  State<StatefulWidget> createState() => ChatItemDisplayState();
 }
 
-class _ChatItemDisplayState extends State<ChatItemDisplay> {
-  bool mouseOver = false;
+class ChatItemDisplayState extends State<ChatItemDisplay> {
+  late int order = widget.order;
+  late Chat chat = widget.chat;
+  bool _mouseOver = false;
 
   Color get containerColor => ClientTheme.currentTheme
-      .getField(mouseOver ? "ChatSelectedColor" : "ChatUnselectedColor");
+      .getField(_mouseOver ? "ChatSelectedColor" : "ChatUnselectedColor");
+
+  void reOrder(int newOrder) => setState(() => order = newOrder);
+  void updateChatInfo(Chat newChat) => setState(() => chat = newChat);
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-        onEnter: (_) => setState(() => mouseOver = true),
-        onExit: (_) => setState(() => mouseOver = false),
-        child: AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(12))
-                /*borderRadius: const BorderRadius.only(
+    return AnimatedContainer(
+        curve: Curves.decelerate /*Curves.elasticOut*/,
+        margin: EdgeInsets.only(top: order * 88),
+        duration: const Duration(milliseconds: 400),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(12))
+            /*borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(12),
                     bottomRight: Radius.circular(12))*/
-                ,
-                color: containerColor),
+            ,
+            color: containerColor),
+        child: MouseRegion(
+            onEnter: (_) => setState(() => _mouseOver = true),
+            onExit: (_) => setState(() => _mouseOver = false),
             child: SizedBox(
                 height: 88,
                 child: Padding(
@@ -62,7 +72,7 @@ class _ChatItemDisplayState extends State<ChatItemDisplay> {
                                 height: 64,
                                 width: 64,
                                 child: ChatPhotoDisplay(
-                                    chat: widget.chat, client: widget.client)),
+                                    chat: chat, client: widget.client)),
                             Container(
                                 margin:
                                     const EdgeInsets.only(left: 44, top: 44),
@@ -84,7 +94,7 @@ class _ChatItemDisplayState extends State<ChatItemDisplay> {
                                   Padding(
                                       padding: const EdgeInsets.only(right: 60),
                                       child: ChatItemTitle(
-                                          title: widget.chat.title!,
+                                          title: chat.title!,
                                           isScam: isScam,
                                           isVerifed: isVerifed)),
                                   Container(
@@ -97,11 +107,11 @@ class _ChatItemDisplayState extends State<ChatItemDisplay> {
                                                 widget.lastMessageSenderName,
                                             addedInChatUsers:
                                                 widget.addedInChatMembers,
-                                            chat: widget.chat,
+                                            chat: chat,
                                             client: widget.client),
                                       )),
                                   //TODO not just positions[0]
-                                  widget.chat.positions![0].isPinned!
+                                  chat.positions![0].isPinned!
                                       ? Container(
                                           child: Icon(Icons.push_pin,
                                               color: ClientTheme.currentTheme
@@ -143,9 +153,9 @@ class _ChatItemDisplayState extends State<ChatItemDisplay> {
   }
 
   String getMessageTime() {
-    if (widget.chat.lastMessage != null) {
-      var time = DateTime.fromMillisecondsSinceEpoch(
-          widget.chat.lastMessage!.date! * 1000);
+    if (chat.lastMessage != null) {
+      var time =
+          DateTime.fromMillisecondsSinceEpoch(chat.lastMessage!.date! * 1000);
       var minutes = time.minute.toString();
       var hours = time.hour.toString();
 

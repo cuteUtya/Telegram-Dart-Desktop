@@ -87,10 +87,13 @@ class ChatItemLastMessageContent extends StatelessWidget {
                 width: 20,
                 height: 20)));
         externalElements.add(contentEntetyesMargin());
-        externalElements.add(TextSpan(
-            text: client.getTranslation("lng_attach_photo"),
-            style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
-        externalElements.add(contentEntetyesMargin());
+        if ((text.text ?? "").isEmpty) {
+          externalElements.add(TextSpan(
+              text: client.getTranslation("lng_attach_photo"),
+              style:
+                  TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+          externalElements.add(contentEntetyesMargin());
+        }
         break;
 
       default:

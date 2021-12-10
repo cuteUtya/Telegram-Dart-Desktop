@@ -12,19 +12,15 @@ class ChatListDisplay extends StatefulWidget {
   State<ChatListDisplay> createState() => _ChatListDisplayState();
 }
 
-class _ChatAndPositionPair {
-  const _ChatAndPositionPair(this.chat, this.order);
-  final int chat;
-  final int order;
-}
-
 class _ChatFullInfo {
   _ChatFullInfo(
       {required this.chat,
       required this.lastMessageSenderName,
+      required this.key,
       this.interlocutor,
       this.supergroup,
-      this.addedUsers});
+      this.addedUsers,
+      this.order = 0});
   Chat chat;
 
   ///person with whom there is a dialogue
@@ -39,36 +35,15 @@ class _ChatFullInfo {
 
   ///Name of user, what send last message in chat
   String lastMessageSenderName;
+
+  int order;
+
+  GlobalKey<ChatItemDisplayState> key;
 }
 
 class _ChatListDisplayState extends State<ChatListDisplay> {
   void updateChats() =>
       widget.client.send(LoadChats(chatList: ChatListMain(), limit: 25));
-
-  void rebuildChats() async {
-    List<_ChatFullInfo> result = [];
-    List<_ChatAndPositionPair> pairs = [];
-    orderedChats
-        .forEach((key, value) => pairs.add(_ChatAndPositionPair(key, value)));
-    pairs.sort((a, b) => b.order.compareTo(a.order));
-    for (int i = 0; i < pairs.length; i++) {
-      var chat =
-          await widget.client.send(GetChat(chatId: pairs[i].chat)) as Chat;
-      List<User>? addedUsers;
-      if (chat.lastMessage?.content is MessageChatAddMembers) {
-        addedUsers = await getUsersById(
-            (chat.lastMessage?.content as MessageChatAddMembers).memberUserIds);
-      }
-      print("name is ${await getLastMessageAuthor(chat)}");
-      result.add(_ChatFullInfo(
-          chat: chat,
-          interlocutor: await getUser(chat),
-          supergroup: await getSupergroup(chat),
-          addedUsers: addedUsers,
-          lastMessageSenderName: (await getLastMessageAuthor(chat))!));
-    }
-    setState(() => chats = result);
-  }
 
   Future<Supergroup?> getSupergroup(Chat chat) async {
     if (chat.type is ChatTypeSupergroup) {
@@ -90,6 +65,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   }
 
   Future<String?> getLastMessageAuthor(Chat chat) async {
+    if (chat.lastMessage == null) return null;
     var sender = chat.lastMessage!.sender!;
     if (sender is MessageSenderChat) {
       return (await widget.client.send(GetChat(chatId: sender.chatId)) as Chat)
@@ -115,43 +91,86 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
     }
   }
 
+  Future<_ChatFullInfo> getFullChatInfo(int chatid) async {
+    var chat = await widget.client.send(GetChat(chatId: chatid)) as Chat;
+    List<User>? addedUsers;
+    if (chat.lastMessage?.content is MessageChatAddMembers) {
+      addedUsers = await getUsersById(
+          (chat.lastMessage?.content as MessageChatAddMembers).memberUserIds);
+    }
+    return _ChatFullInfo(
+        key: GlobalKey<ChatItemDisplayState>(),
+        chat: chat,
+        interlocutor: await getUser(chat),
+        supergroup: await getSupergroup(chat),
+        addedUsers: addedUsers,
+        lastMessageSenderName: (await getLastMessageAuthor(chat)) ?? "");
+  }
+
+  void sortItems() {
+    //TODO not just positions![0]
+    chats.sort((a, b) =>
+        b.chat.positions![0].order!.compareTo(a.chat.positions![0].order!));
+    for (int order = 0; order < chats.length; order++) {
+      if (order != chats[order].order) {
+        chats[order].order = order;
+        chats[order].key.currentState?.reOrder(order);
+      }
+    }
+  }
+
   @override
   void initState() {
     updateChats();
-    widget.client.updateChatPosition.listen((UpdateChatPosition event) {
-      orderedChats[event.chatId!] = event.position!.order!;
-      rebuildChats();
+    widget.client.updateChatPosition.listen((UpdateChatPosition event) async {
+      _ChatFullInfo? updatesChat =
+          chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      if (updatesChat == null) {
+        chats.add(await getFullChatInfo(event.chatId!));
+        sortItems();
+        setState(() => chatsCount = chats.length);
+      } else {
+        //TODO not just positions![0]
+        updatesChat.chat.positions![0] = event.position!;
+        sortItems();
+      }
     });
+
     widget.client.updateChatLastMessage.listen((UpdateChatLastMessage event) {
-      event.positions?.forEach((ChatPosition position) =>
-          orderedChats[event.chatId!] = position.order!);
-      rebuildChats();
-    });
-    widget.client.updateUserStatus.listen((event) {
-      setState(() => chats
-          .firstWhereOrNull((element) => element.chat.id == event.userId)
-          ?.interlocutor
-          ?.status = event.status);
+      _ChatFullInfo? updatesChat =
+          chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      if (updatesChat != null) {
+        updatesChat.chat.positions = event.positions!;
+        updatesChat.chat.lastMessage = event.lastMessage;
+        updatesChat.key.currentState?.updateChatInfo(updatesChat.chat);
+        sortItems();
+      }
     });
     super.initState();
   }
 
-  Map<int, int> orderedChats = {};
   List<_ChatFullInfo> chats = [];
+  int chatsCount = 0;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
         //TODO make scroll more "soft" when Google implement this — https://github.com/flutter/flutter/issues/32120
-        child: ListView.builder(
-            cacheExtent: 800,
-            itemCount: chats.length,
-            itemBuilder: (context, index) => ChatItemDisplay(
-                chat: chats[index].chat,
-                supergroup: chats[index].supergroup,
-                interlocutor: chats[index].interlocutor,
-                addedInChatMembers: chats[index].addedUsers,
-                lastMessageSenderName: chats[index].lastMessageSenderName,
-                client: widget.client)));
+        child: ListView(children: [
+      /*My friend, if you read this - know i load ALL chats in RAM with all images,
+          if you don't find this message here (?what?) i optimized this moment*/
+      Stack(
+          children: chats
+              .map((chat) => ChatItemDisplay(
+                  key: chat.key,
+                  order: chat.order,
+                  chat: chat.chat,
+                  supergroup: chat.supergroup,
+                  interlocutor: chat.interlocutor,
+                  addedInChatMembers: chat.addedUsers,
+                  lastMessageSenderName: chat.lastMessageSenderName,
+                  client: widget.client))
+              .toList())
+    ]));
   }
 }

@@ -2722,7 +2722,7 @@ class UpdateInstalledStickerSets extends Update {
   bool? isMasks;
 
   /// [stickerSetIds] The new list of installed ordinary sticker sets
-  List<int>? stickerSetIds;
+  List<String>? stickerSetIds;
 
   /// callback sign
   dynamic extra;
@@ -2730,7 +2730,7 @@ class UpdateInstalledStickerSets extends Update {
   /// Parse from a json
   UpdateInstalledStickerSets.fromJson(Map<String, dynamic> json)  {
     isMasks = json['is_masks'] == null ? null : json['is_masks'];
-    stickerSetIds = json['sticker_set_ids'] == null ? null : List<int>.from((json['sticker_set_ids'] ?? [])!.map((item) => item).toList());
+    stickerSetIds = json['sticker_set_ids'] == null ? null : List<String>.from((json['sticker_set_ids'] ?? [])!.map((item) => item).toList());
     extra = json['@extra'];
   }
 

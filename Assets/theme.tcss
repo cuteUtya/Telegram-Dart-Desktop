@@ -35,8 +35,9 @@ ButtonDangerBackColor: ref(DangerHalfTransparent);
 OnlineColor: #0BA628;
 OnlineStatusColor: ref(OnlineColor);
 SearchBackground: #EBEBEB;
+#Color(128, ref(BaseColor).r, ref(BaseColor).g, ref(BaseColor).b)#
 ChatUnselectedColor: ref(BaseColor);
-ChatSelectedColor: #EAEAEA;
+ChatSelectedColor: #FFEAEAEA;
 LoadScreenBackgroundColor: ref(BaseColor);
 LoadScreenShadowColor: #AAAAAA;
 
