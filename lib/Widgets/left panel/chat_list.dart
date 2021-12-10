@@ -136,13 +136,17 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
       }
     });
 
-    widget.client.updateChatLastMessage.listen((UpdateChatLastMessage event) {
+    widget.client.updateChatLastMessage
+        .listen((UpdateChatLastMessage event) async {
       _ChatFullInfo? updatesChat =
           chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (updatesChat != null) {
         updatesChat.chat.positions = event.positions!;
         updatesChat.chat.lastMessage = event.lastMessage;
         updatesChat.key.currentState?.updateChatInfo(updatesChat.chat);
+        updatesChat.key.currentState?.updateLastMessageSenderName(
+            await getLastMessageAuthor(updatesChat.chat) ?? "");
+
         sortItems();
       }
     });

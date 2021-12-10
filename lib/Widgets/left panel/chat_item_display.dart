@@ -35,6 +35,7 @@ class ChatItemDisplay extends StatefulWidget {
 class ChatItemDisplayState extends State<ChatItemDisplay> {
   late int order = widget.order;
   late Chat chat = widget.chat;
+  late String lastMessageSenderName = widget.lastMessageSenderName;
   bool _mouseOver = false;
 
   Color get containerColor => ClientTheme.currentTheme
@@ -42,6 +43,8 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
 
   void reOrder(int newOrder) => setState(() => order = newOrder);
   void updateChatInfo(Chat newChat) => setState(() => chat = newChat);
+  void updateLastMessageSenderName(String newLastName) =>
+      setState(() => lastMessageSenderName = newLastName);
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +107,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                             const EdgeInsets.only(right: 40),
                                         child: ChatItemLastMessageContent(
                                             lastMessageAuthor:
-                                                widget.lastMessageSenderName,
+                                                lastMessageSenderName,
                                             addedInChatUsers:
                                                 widget.addedInChatMembers,
                                             chat: chat,
