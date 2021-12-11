@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
+import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/Widgets/display_text.dart';
@@ -10,13 +11,13 @@ class ChatItemLastMessageContent extends StatelessWidget {
       {Key? key,
       required this.chat,
       required this.client,
-      required this.addedInChatUsers,
+      required this.joinInfo,
       required this.lastMessageAuthor})
       : super(key: key);
   final Chat chat;
   final String lastMessageAuthor;
+  final UsersJoinedGroupInfo? joinInfo;
   final TelegramClient client;
-  final List<User>? addedInChatUsers;
 
   contentEntetyesMargin() => const WidgetSpan(child: SizedBox(width: 8));
 
@@ -48,31 +49,28 @@ class ChatItemLastMessageContent extends StatelessWidget {
             style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
         break;
 
+      join:
       case MessageChatAddMembers:
-        String names = "";
+        messageTypeAllowShowFrom = false;
         externalElements.add(WidgetSpan(
-            child: Icon(
-                addedInChatUsers!.length > 1
-                    ? Icons.group
-                    : Icons.person_add_alt_1,
-                color: inlineIconsColor,
-                size: 20)));
+            child:
+                Icon(joinInfo!.isJoin ? Icons.person_add_alt_1 : Icons.group)));
         externalElements.add(contentEntetyesMargin());
-        addedInChatUsers!
+        String names = "";
+        joinInfo!.addedUsers
             .forEach((element) => names += "${element.firstName!}, ");
         names = names.substring(0, names.length - 2);
-        messageTypeAllowShowFrom = false;
         text = FormattedText(
-            text: client.getTranslation(
-                addedInChatUsers!.length > 1
-                    ? "lng_action_add_users_many"
-                    : "lng_action_add_user",
-                replacing: {
-              "{user}": names,
-              "{users}": names,
-              "{from}": lastMessageSenderName
-            }));
+            text: client.getTranslation(joinInfo!.langKey, replacing: {
+          "{user}": names,
+          "{users}": names,
+          "{from}": lastMessageAuthor
+        }));
         break;
+      case MessageChatJoinByLink:
+        continue join;
+      case MessageChatJoinByRequest:
+        continue join;
 
       case MessagePhoto:
         text = (content as MessagePhoto).caption!;

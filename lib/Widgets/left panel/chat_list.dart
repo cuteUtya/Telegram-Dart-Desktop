@@ -12,6 +12,18 @@ class ChatListDisplay extends StatefulWidget {
   State<ChatListDisplay> createState() => _ChatListDisplayState();
 }
 
+class UsersJoinedGroupInfo {
+  UsersJoinedGroupInfo(
+      {required this.addedUsers, required this.langKey, required this.isJoin});
+
+  ///users, what was added to chat. Non-null if lastMessage.content is MessageChatAddMembers
+  List<User> addedUsers;
+
+  bool isJoin;
+
+  String langKey;
+}
+
 class _ChatFullInfo {
   _ChatFullInfo(
       {required this.chat,
@@ -19,7 +31,7 @@ class _ChatFullInfo {
       required this.key,
       this.interlocutor,
       this.supergroup,
-      this.addedUsers,
+      this.joinInfo,
       this.order = 0});
   Chat chat;
 
@@ -30,12 +42,13 @@ class _ChatFullInfo {
   ///supergroup, null if chat.type != ChatTypeSupergroup
   Supergroup? supergroup;
 
-  ///users, what was added to chat. Non-null if lastMessage.content is MessageChatAddMembers
-  List<User>? addedUsers;
-
   ///Name of user, what send last message in chat
   String lastMessageSenderName;
 
+  //info about MessageChatAddMembers or MessageChatJoinByLink or MessageChatJoinByRequest message
+  UsersJoinedGroupInfo? joinInfo;
+
+  //order in chatlist
   int order;
 
   GlobalKey<ChatItemDisplayState> key;
@@ -59,19 +72,42 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
       for (int i = 0; i < id.length; i++) {
         usrs.add(await widget.client.send(GetUser(userId: id[i])) as User);
       }
-
       return usrs;
     }
   }
 
+  Future<UsersJoinedGroupInfo?> getUsersJoinInfo(Message? message) async {
+    if (message?.content != null) {
+      switch (message?.content.runtimeType) {
+        case MessageChatJoinByRequest:
+          return UsersJoinedGroupInfo(
+              addedUsers: [], isJoin: true, langKey: "lng_action_user_joined");
+        case MessageChatJoinByLink:
+          return UsersJoinedGroupInfo(
+              addedUsers: [],
+              isJoin: true,
+              langKey: "lng_action_user_joined_by_link");
+        case MessageChatAddMembers:
+          var members = await getUsersById(
+              (message?.content as MessageChatAddMembers).memberUserIds);
+          bool isJoin = (members ?? []).firstWhereOrNull((e) =>
+                  (e.id == (message?.sender as MessageSenderUser).userId)) !=
+              null;
+          return UsersJoinedGroupInfo(
+              addedUsers: members ?? [],
+              isJoin: isJoin,
+              langKey:
+                  isJoin ? "lng_action_user_joined" : "lng_action_add_user");
+      }
+    }
+  }
+
   Future<String?> getLastMessageAuthor(Chat chat) async {
-    if (chat.lastMessage == null) return null;
-    var sender = chat.lastMessage!.sender!;
+    var sender = chat.lastMessage?.sender;
     if (sender is MessageSenderChat) {
       return (await widget.client.send(GetChat(chatId: sender.chatId)) as Chat)
           .title!;
     }
-
     if (sender is MessageSenderUser) {
       return (await widget.client.send(GetUser(userId: sender.userId)) as User)
           .firstName!;
@@ -93,17 +129,12 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
 
   Future<_ChatFullInfo> getFullChatInfo(int chatid) async {
     var chat = await widget.client.send(GetChat(chatId: chatid)) as Chat;
-    List<User>? addedUsers;
-    if (chat.lastMessage?.content is MessageChatAddMembers) {
-      addedUsers = await getUsersById(
-          (chat.lastMessage?.content as MessageChatAddMembers).memberUserIds);
-    }
     return _ChatFullInfo(
         key: GlobalKey<ChatItemDisplayState>(),
         chat: chat,
+        joinInfo: await getUsersJoinInfo(chat.lastMessage),
         interlocutor: await getUser(chat),
         supergroup: await getSupergroup(chat),
-        addedUsers: addedUsers,
         lastMessageSenderName: (await getLastMessageAuthor(chat)) ?? "");
   }
 
@@ -169,9 +200,9 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
                   key: chat.key,
                   order: chat.order,
                   chat: chat.chat,
+                  joinInfo: chat.joinInfo,
                   supergroup: chat.supergroup,
                   interlocutor: chat.interlocutor,
-                  addedInChatMembers: chat.addedUsers,
                   lastMessageSenderName: chat.lastMessageSenderName,
                   client: widget.client))
               .toList())

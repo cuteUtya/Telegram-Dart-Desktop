@@ -5,6 +5,7 @@ import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
+import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
@@ -16,14 +17,14 @@ class ChatItemDisplay extends StatefulWidget {
       required this.client,
       required this.interlocutor,
       required this.supergroup,
-      required this.addedInChatMembers,
+      required this.joinInfo,
       required this.lastMessageSenderName,
       required this.order})
       : super(key: key);
   final Chat chat;
   final User? interlocutor;
   final Supergroup? supergroup;
-  final List<User>? addedInChatMembers;
+  final UsersJoinedGroupInfo? joinInfo;
   final String lastMessageSenderName;
   final TelegramClient client;
   final int order;
@@ -106,10 +107,9 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                         padding:
                                             const EdgeInsets.only(right: 40),
                                         child: ChatItemLastMessageContent(
+                                            joinInfo: widget.joinInfo,
                                             lastMessageAuthor:
                                                 lastMessageSenderName,
-                                            addedInChatUsers:
-                                                widget.addedInChatMembers,
                                             chat: chat,
                                             client: widget.client),
                                       )),
