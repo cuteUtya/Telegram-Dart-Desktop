@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/check_mark.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item_action_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
@@ -42,6 +44,8 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
   late String lastMessageSenderName = widget.lastMessageSenderName;
   late UsersJoinedGroupInfo? joinInfo = widget.joinInfo;
   late User? interlocutor = widget.interlocutor;
+  ChatActionInfo chatAction =
+      ChatActionInfo(action: ChatActionCancel(), who: User());
 
   bool _mouseOver = false;
 
@@ -56,6 +60,8 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
       setState(() => joinInfo = newjoinInfo);
   void updateInterlocutor(User? newUser) =>
       setState(() => interlocutor = newUser);
+  void updateChatAction(ChatActionInfo newChatAction) =>
+      setState(() => chatAction = newChatAction);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +92,10 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                 height: 64,
                                 width: 64,
                                 child: ChatPhotoDisplay(
-                                    chat: chat, client: widget.client)),
+                                    photo: chat.photo,
+                                    chatId: chat.id!,
+                                    chatTitle: chat.title!,
+                                    client: widget.client)),
                             Container(
                                 margin:
                                     const EdgeInsets.only(left: 44, top: 44),
@@ -110,12 +119,17 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                       child: Padding(
                                         padding:
                                             const EdgeInsets.only(right: 40),
-                                        child: ChatItemLastMessageContent(
-                                            joinInfo: joinInfo,
-                                            lastMessageAuthor:
-                                                lastMessageSenderName,
-                                            chat: chat,
-                                            client: widget.client),
+                                        child: chatAction.action
+                                                is! ChatActionCancel
+                                            ? ChatItemActionDisplay(
+                                                client: widget.client,
+                                                action: chatAction)
+                                            : ChatItemLastMessageContent(
+                                                joinInfo: joinInfo,
+                                                lastMessageAuthor:
+                                                    lastMessageSenderName,
+                                                chat: chat,
+                                                client: widget.client),
                                       )),
                                   //TODO not just positions[0]
                                   chat.positions![0].isPinned!
@@ -136,6 +150,14 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                                 : chat.title!,
                                             isScam: isScam,
                                             isVerifed: isVerifed)),
+                                    chat.lastMessage?.isOutgoing ?? false
+                                        ? CheckMark(
+                                            isReaded: (chat.lastMessage?.id ??
+                                                    0) <=
+                                                (chat.lastReadOutboxMessageId ??
+                                                    0))
+                                        : const SizedBox.shrink(),
+                                    const SizedBox(width: 2),
                                     Text(getMessageTime(),
                                         textAlign: TextAlign.right,
                                         style: TextDisplay.create(

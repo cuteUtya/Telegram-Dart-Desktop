@@ -24,6 +24,12 @@ class UsersJoinedGroupInfo {
   String langKey;
 }
 
+class ChatActionInfo {
+  const ChatActionInfo({required this.action, required this.who});
+  final ChatAction action;
+  final User who;
+}
+
 class _ChatFullInfo {
   _ChatFullInfo(
       {required this.chat,
@@ -154,45 +160,63 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   void initState() {
     updateChats();
     widget.client.updateChatPosition.listen((event) async {
-      _ChatFullInfo? updatesChat =
+      _ChatFullInfo? chat =
           chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
-      if (updatesChat == null) {
+      if (chat == null) {
         chats.add(await getFullChatInfo(event.chatId!));
         sortItems();
         setState(() => chatsCount = chats.length);
       } else {
         //TODO not just positions![0]
-        updatesChat.chat.positions![0] = event.position!;
+        chat.chat.positions![0] = event.position!;
         sortItems();
       }
     });
 
     widget.client.updateChatLastMessage.listen((event) async {
-      _ChatFullInfo? updatesChat =
+      _ChatFullInfo? chat =
           chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
-      if (updatesChat != null) {
-        updatesChat.chat.positions = event.positions!;
-        updatesChat.chat.lastMessage = event.lastMessage;
-        updatesChat.key.currentState?.updateChatInfo(updatesChat.chat);
+      if (chat != null) {
+        chat.chat.positions = event.positions!;
+        chat.chat.lastMessage = event.lastMessage;
+        chat.key.currentState?.updateChatInfo(chat.chat);
         var joinInfo = await getUsersJoinInfo(event.lastMessage);
-        print(joinInfo?.addedUsers.toString());
-        if (updatesChat.joinInfo != joinInfo) {
-          updatesChat.key.currentState?.updateJoinInfo(joinInfo);
+        if (chat.joinInfo != joinInfo) {
+          chat.key.currentState?.updateJoinInfo(joinInfo);
         }
-        updatesChat.key.currentState?.updateLastMessageSenderName(
-            await getLastMessageAuthor(updatesChat.chat) ?? "");
+        chat.key.currentState?.updateLastMessageSenderName(
+            await getLastMessageAuthor(chat.chat) ?? "");
 
         sortItems();
       }
     });
 
     widget.client.updateUserStatus.listen((event) async {
-      _ChatFullInfo? updatesChat =
+      _ChatFullInfo? chat =
           chats.firstWhereOrNull((element) => element.chat.id == event.userId);
-      if (updatesChat != null) {
-        updatesChat.interlocutor?.status = event.status;
-        updatesChat.key.currentState
-            ?.updateInterlocutor(updatesChat.interlocutor);
+      if (chat != null) {
+        chat.interlocutor?.status = event.status;
+        chat.key.currentState?.updateInterlocutor(chat.interlocutor);
+      }
+    });
+
+    widget.client.updateUserChatAction.listen((event) async {
+      _ChatFullInfo? chat =
+          chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      if (chat != null) {
+        chat.key.currentState?.updateChatAction(ChatActionInfo(
+            action: event.action!,
+            who: (await widget.client.send(GetUser(userId: event.userId)))
+                as User));
+      }
+    });
+
+    widget.client.updateChatReadOutbox.listen((event) {
+      _ChatFullInfo? chat =
+          chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      if (chat != null) {
+        chat.chat.lastReadOutboxMessageId = event.lastReadOutboxMessageId;
+        chat.key.currentState?.updateChatInfo(chat.chat);
       }
     });
     super.initState();
@@ -203,6 +227,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    print("REDRAW Chat list");
     return Expanded(
         //TODO make scroll more "soft" when Google implement this — https://github.com/flutter/flutter/issues/32120
         child: ListView(children: [
