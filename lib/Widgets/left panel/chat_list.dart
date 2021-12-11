@@ -153,7 +153,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   @override
   void initState() {
     updateChats();
-    widget.client.updateChatPosition.listen((UpdateChatPosition event) async {
+    widget.client.updateChatPosition.listen((event) async {
       _ChatFullInfo? updatesChat =
           chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (updatesChat == null) {
@@ -167,8 +167,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
       }
     });
 
-    widget.client.updateChatLastMessage
-        .listen((UpdateChatLastMessage event) async {
+    widget.client.updateChatLastMessage.listen((event) async {
       _ChatFullInfo? updatesChat =
           chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (updatesChat != null) {
@@ -184,6 +183,16 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
             await getLastMessageAuthor(updatesChat.chat) ?? "");
 
         sortItems();
+      }
+    });
+
+    widget.client.updateUserStatus.listen((event) async {
+      _ChatFullInfo? updatesChat =
+          chats.firstWhereOrNull((element) => element.chat.id == event.userId);
+      if (updatesChat != null) {
+        updatesChat.interlocutor?.status = event.status;
+        updatesChat.key.currentState
+            ?.updateInterlocutor(updatesChat.interlocutor);
       }
     });
     super.initState();

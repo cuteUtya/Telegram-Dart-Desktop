@@ -41,6 +41,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
   late Chat chat = widget.chat;
   late String lastMessageSenderName = widget.lastMessageSenderName;
   late UsersJoinedGroupInfo? joinInfo = widget.joinInfo;
+  late User? interlocutor = widget.interlocutor;
 
   bool _mouseOver = false;
 
@@ -53,6 +54,8 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
       setState(() => lastMessageSenderName = newLastName);
   void updateJoinInfo(UsersJoinedGroupInfo? newjoinInfo) =>
       setState(() => joinInfo = newjoinInfo);
+  void updateInterlocutor(User? newUser) =>
+      setState(() => interlocutor = newUser);
 
   @override
   Widget build(BuildContext context) {
