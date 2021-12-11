@@ -36,9 +36,12 @@ class ChatItemDisplay extends StatefulWidget {
 
 class ChatItemDisplayState extends State<ChatItemDisplay> {
   static const bool USE_HORIZONTAL_SEPARATOR = true;
+
   late int order = widget.order;
   late Chat chat = widget.chat;
   late String lastMessageSenderName = widget.lastMessageSenderName;
+  late UsersJoinedGroupInfo? joinInfo = widget.joinInfo;
+
   bool _mouseOver = false;
 
   Color get containerColor => ClientTheme.currentTheme
@@ -48,6 +51,8 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
   void updateChatInfo(Chat newChat) => setState(() => chat = newChat);
   void updateLastMessageSenderName(String newLastName) =>
       setState(() => lastMessageSenderName = newLastName);
+  void updateJoinInfo(UsersJoinedGroupInfo? newjoinInfo) =>
+      setState(() => joinInfo = newjoinInfo);
 
   @override
   Widget build(BuildContext context) {
@@ -97,23 +102,13 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                 const SizedBox(height: 8),
                                 Expanded(
                                     child: Stack(children: [
-                                  Padding(
-                                      padding: const EdgeInsets.only(right: 60),
-                                      child: ChatItemTitle(
-                                          title: (widget.interlocutor?.type
-                                                  is UserTypeDeleted)
-                                              ? widget.client
-                                                  .getTranslation("lng_deleted")
-                                              : chat.title!,
-                                          isScam: isScam,
-                                          isVerifed: isVerifed)),
                                   Container(
                                       margin: const EdgeInsets.only(top: 26),
                                       child: Padding(
                                         padding:
                                             const EdgeInsets.only(right: 40),
                                         child: ChatItemLastMessageContent(
-                                            joinInfo: widget.joinInfo,
+                                            joinInfo: joinInfo,
                                             lastMessageAuthor:
                                                 lastMessageSenderName,
                                             chat: chat,
@@ -129,8 +124,17 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                           alignment: Alignment.centerRight)
                                       : const SizedBox.shrink(),
                                   Row(children: [
-                                    const Spacer(),
+                                    Expanded(
+                                        child: ChatItemTitle(
+                                            title: (widget.interlocutor?.type
+                                                    is UserTypeDeleted)
+                                                ? widget.client.getTranslation(
+                                                    "lng_deleted")
+                                                : chat.title!,
+                                            isScam: isScam,
+                                            isVerifed: isVerifed)),
                                     Text(getMessageTime(),
+                                        textAlign: TextAlign.right,
                                         style: TextDisplay.create(
                                             size: 18,
                                             textColor:

@@ -175,6 +175,11 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         updatesChat.chat.positions = event.positions!;
         updatesChat.chat.lastMessage = event.lastMessage;
         updatesChat.key.currentState?.updateChatInfo(updatesChat.chat);
+        var joinInfo = await getUsersJoinInfo(event.lastMessage);
+        print(joinInfo?.addedUsers.toString());
+        if (updatesChat.joinInfo != joinInfo) {
+          updatesChat.key.currentState?.updateJoinInfo(joinInfo);
+        }
         updatesChat.key.currentState?.updateLastMessageSenderName(
             await getLastMessageAuthor(updatesChat.chat) ?? "");
 

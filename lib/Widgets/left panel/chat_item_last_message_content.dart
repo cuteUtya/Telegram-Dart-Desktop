@@ -55,20 +55,25 @@ class ChatItemLastMessageContent extends StatelessWidget {
       case MessageChatAddMembers:
         messageTypeAllowShowFrom = false;
         externalElements.add(WidgetSpan(
-            child:
-                Icon(joinInfo!.isJoin ? Icons.person_add_alt_1 : Icons.group)));
+            child: Icon(
+                (joinInfo?.isJoin ?? true)
+                    ? Icons.person_add_alt_1
+                    : Icons.group,
+                color: inlineIconsColor)));
         externalElements.add(contentEntetyesMargin());
         String names = "";
-        joinInfo!.addedUsers
+        joinInfo?.addedUsers
             .forEach((element) => names += "${element.firstName!}, ");
-        names = names.substring(0, names.length - 2);
+        if (names.isNotEmpty) names = names.substring(0, names.length - 2);
         externalElements.add(TextSpan(
             style: TextDisplay.chatItemAccent,
-            text: client.getTranslation(joinInfo!.langKey, replacing: {
-              "{user}": names,
-              "{users}": names,
-              "{from}": lastMessageAuthor
-            })));
+            text: client.getTranslation(
+                joinInfo?.langKey ?? "lng_profile_loading",
+                replacing: {
+                  "{user}": names,
+                  "{users}": names,
+                  "{from}": lastMessageAuthor
+                })));
         break;
       case MessageChatJoinByLink:
         continue join;
