@@ -100,7 +100,11 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                   Padding(
                                       padding: const EdgeInsets.only(right: 60),
                                       child: ChatItemTitle(
-                                          title: chat.title!,
+                                          title: (widget.interlocutor?.type
+                                                  is UserTypeDeleted)
+                                              ? widget.client
+                                                  .getTranslation("lng_deleted")
+                                              : chat.title!,
                                           isScam: isScam,
                                           isVerifed: isVerifed)),
                                   Container(
