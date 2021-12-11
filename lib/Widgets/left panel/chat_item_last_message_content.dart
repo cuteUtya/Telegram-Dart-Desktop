@@ -161,7 +161,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
   bool get showAuthor {
     if (chat.type is ChatTypeSupergroup) {
-      if (isChannel) {
+      if (!isChannel) {
         return true;
       }
     }

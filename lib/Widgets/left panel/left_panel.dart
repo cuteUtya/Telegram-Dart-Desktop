@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/tdlib/client.dart';
 
@@ -47,9 +48,7 @@ class _LeftPanelState extends State<LeftPanel> {
                             const BorderRadius.all(Radius.circular(12))))),
           ]),
           const SizedBox(height: 44),
-          Container(
-              height: 1,
-              color: ClientTheme.currentTheme.getField("BorderLineColor")),
+          const HorizontalSeparatorLine(),
           ChatListDisplay(client: widget.client)
         ],
       ),

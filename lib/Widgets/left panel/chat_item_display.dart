@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
@@ -34,6 +35,7 @@ class ChatItemDisplay extends StatefulWidget {
 }
 
 class ChatItemDisplayState extends State<ChatItemDisplay> {
+  static const bool USE_HORIZONTAL_SEPARATOR = true;
   late int order = widget.order;
   late Chat chat = widget.chat;
   late String lastMessageSenderName = widget.lastMessageSenderName;
@@ -131,6 +133,9 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                                 TextColor.ChatLastTimeMessage))
                                   ])
                                 ])),
+                                USE_HORIZONTAL_SEPARATOR
+                                    ? const HorizontalSeparatorLine()
+                                    : const SizedBox.shrink()
                               ]))
                         ])))));
   }
