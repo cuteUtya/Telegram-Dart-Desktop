@@ -8,35 +8,42 @@ import 'package:myapp/utils.dart';
 
 class ChatPhotoDisplay extends StatelessWidget {
   const ChatPhotoDisplay(
-      {Key? key, required this.chat, required this.client, this.useBig = false})
+      {Key? key,
+      required this.photo,
+      required this.chatId,
+      required this.chatTitle,
+      required this.client,
+      this.useBig = false})
       : super(key: key);
-  final Chat chat;
+  final ChatPhotoInfo? photo;
+  final String chatTitle;
+  final int chatId;
   final TelegramClient client;
   final bool useBig;
 
   @override
   Widget build(BuildContext context) {
-    if (chat.photo == null) {
+    if (photo == null) {
       return emptyUserpic();
     }
 
     return FileImageDisplay(
         containerShape: BoxShape.circle,
         client: client,
-        id: useBig ? chat.photo!.big!.id! : chat.photo!.small!.id!,
+        id: useBig ? photo!.big!.id! : photo!.small!.id!,
         emptyReplacer: emptyUserpic());
   }
 
   Widget emptyUserpic() =>
-      UserpicEmpty(chatId: chat.id!, displayLetters: getPeerNameLetters());
+      UserpicEmpty(chatId: chatId, displayLetters: getPeerNameLetters());
 
   String getPeerNameLetters() {
-    var emojis = extractEmojisAsList(chat.title!);
+    var emojis = extractEmojisAsList(chatTitle);
     if (emojis.isNotEmpty) {
       if (emojis.length > 2) emojis.removeRange(2, emojis.length);
       return emojis.join();
     }
-    var words = chat.title!.split(" ");
+    var words = chatTitle.split(" ");
     var result = "";
     for (int i = 0; i < words.length && i < 2; i++) {
       if (words[i].isNotEmpty) result += words[i][0];
