@@ -170,6 +170,18 @@ class ChatItemLastMessageContent extends StatelessWidget {
         return true;
       }
     }
+
+    if (chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) {
+      if (chat.id == client.me) {
+        return false;
+      } else {
+        if ((chat.lastMessage?.sender as MessageSenderUser).userId !=
+            client.me) {
+          return false;
+        }
+      }
+    }
+
     if (chat.lastMessage!.sender is MessageSenderUser) {
       if (chat.id == client.me) {
         return false;
