@@ -62,12 +62,13 @@ class ChatItemLastMessageContent extends StatelessWidget {
         joinInfo!.addedUsers
             .forEach((element) => names += "${element.firstName!}, ");
         names = names.substring(0, names.length - 2);
-        text = FormattedText(
+        externalElements.add(TextSpan(
+            style: TextDisplay.chatItemAccent,
             text: client.getTranslation(joinInfo!.langKey, replacing: {
-          "{user}": names,
-          "{users}": names,
-          "{from}": lastMessageAuthor
-        }));
+              "{user}": names,
+              "{users}": names,
+              "{from}": lastMessageAuthor
+            })));
         break;
       case MessageChatJoinByLink:
         continue join;
