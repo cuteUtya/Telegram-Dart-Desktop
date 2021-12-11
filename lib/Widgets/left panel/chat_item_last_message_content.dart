@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/chat_item_photo_minithumbnail.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/utils.dart';
 
 class ChatItemLastMessageContent extends StatelessWidget {
   const ChatItemLastMessageContent(
@@ -74,24 +76,37 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
       case MessagePhoto:
         text = (content as MessagePhoto).caption!;
-        var sizes = content.photo!.sizes!;
-        sizes.sort((a, b) =>
-            a.width! > b.width! ? -1 : (a.width! == b.width! ? 0 : 1));
         externalElements.add(WidgetSpan(
-            child: FileImageDisplay(
-                id: sizes.last.photo!.id!,
+            child: ChatItemPhotoMinithumbnail(
                 client: client,
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
-                width: 20,
-                height: 20)));
+                id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!)));
         externalElements.add(contentEntetyesMargin());
         if ((text.text ?? "").isEmpty) {
           externalElements.add(TextSpan(
               text: client.getTranslation("lng_attach_photo"),
-              style:
-                  TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+              style: TextDisplay.chatItemAccent));
           externalElements.add(contentEntetyesMargin());
         }
+        break;
+
+      case MessageChatChangePhoto:
+        messageTypeAllowShowFrom = false;
+        externalElements.add(WidgetSpan(
+            child: ChatItemPhotoMinithumbnail(
+                client: client,
+                id: sortPhotoSizes(
+                        (content as MessageChatChangePhoto).photo!.sizes!)
+                    .last
+                    .photo!
+                    .id!)));
+        externalElements.add(contentEntetyesMargin());
+        externalElements.add(TextSpan(
+            text: client.getTranslation(
+                isChannel
+                    ? "lng_action_changed_photo_channel"
+                    : "lng_action_changed_photo",
+                replacing: {"{from}": lastMessageAuthor}),
+            style: TextDisplay.chatItemAccent));
         break;
 
       default:
@@ -134,9 +149,18 @@ class ChatItemLastMessageContent extends StatelessWidget {
   Color get inlineIconsColor =>
       ClientTheme.currentTheme.getField("TextInlineIconsColor");
 
+  bool get isChannel {
+    if (chat.type is ChatTypeSupergroup) {
+      if ((chat.type as ChatTypeSupergroup).isChannel!) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   bool get showAuthor {
     if (chat.type is ChatTypeSupergroup) {
-      if (!(chat.type as ChatTypeSupergroup).isChannel!) {
+      if (isChannel) {
         return true;
       }
     }

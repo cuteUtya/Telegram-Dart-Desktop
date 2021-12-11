@@ -1,6 +1,8 @@
 import 'dart:async';
 import "dart:io" show Platform;
 
+import 'package:myapp/tdlib/td_api.dart';
+
 double clamp(double value, double min, double max) {
   if (value > max) return max;
   if (value < min) return min;
@@ -16,6 +18,13 @@ int clampInt(int value, int min, int max) {
 var emojiRegex = RegExp(
     r'[\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}\u{1F9B0}-\u{1F9B3}|\u{2F18F}]',
     unicode: true);
+
+///Sort photos from smallest to largest
+List<PhotoSize> sortPhotoSizes(List<PhotoSize> sizes) {
+  sizes.sort(
+      (a, b) => a.width! > b.width! ? -1 : (a.width! == b.width! ? 0 : 1));
+  return sizes;
+}
 
 List<String> extractEmojisAsList(String text) {
   List<String> res = [];
