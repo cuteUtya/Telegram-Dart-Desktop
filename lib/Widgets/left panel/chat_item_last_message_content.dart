@@ -21,7 +21,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
   final UsersJoinedGroupInfo? joinInfo;
   final TelegramClient client;
 
-  contentEntetyesMargin() => const WidgetSpan(child: SizedBox(width: 8));
+  contentEntetyesMargin() => const WidgetSpan(child: SizedBox(width: 4));
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +93,20 @@ class ChatItemLastMessageContent extends StatelessWidget {
               style: TextDisplay.chatItemAccent));
           externalElements.add(contentEntetyesMargin());
         }
+        break;
+
+      case MessageDocument:
+        var document = (content as MessageDocument);
+        externalElements.add(WidgetSpan(
+            child: Icon(Icons.description, color: inlineIconsColor)));
+        externalElements.add(contentEntetyesMargin());
+        externalElements.add(TextSpan(
+            text: "${bytesToSize(document.document!.document!.size!)} —",
+            style: TextDisplay.bold18));
+        externalElements.add(contentEntetyesMargin());
+        externalElements.add(TextSpan(
+            text: document.document?.fileName,
+            style: TextDisplay.chatItemAccent));
         break;
 
       case MessageChatChangePhoto:

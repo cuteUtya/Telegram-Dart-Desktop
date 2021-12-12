@@ -1,6 +1,5 @@
-import 'dart:async';
 import "dart:io" show Platform;
-
+import "dart:math";
 import 'package:myapp/tdlib/td_api.dart';
 
 double clamp(double value, double min, double max) {
@@ -40,6 +39,13 @@ String extractEmojis(String text) {
 //linear interpolation beetwen two numbers
 double lerp(double a, double b, double t) {
   return a + t * (b - a);
+}
+
+String bytesToSize(int bytes) {
+  var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes == 0) return '0 Byte';
+  var i = (log(bytes) / log(1024)).floor().toInt();
+  return "${(bytes / pow(1024, i)).toStringAsFixed(2)} ${sizes[i]}";
 }
 
 String getUserLocale() => "ru";
