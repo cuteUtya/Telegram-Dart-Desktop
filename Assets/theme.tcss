@@ -69,3 +69,4 @@ VerifedSupergoupIconColor: ref(Accent);
 ScamIconColor: #E37B40;
 TextInlineIconsColor: ref(RegularText);
 ChatPinIconColor: ref(RegularText);
+CheckMarkChatListColor: ref(OnlineColor);

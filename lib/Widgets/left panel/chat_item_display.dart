@@ -122,6 +122,8 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                         child: chatAction.action
                                                 is! ChatActionCancel
                                             ? ChatItemActionDisplay(
+                                                isPrivate: interlocutor != null,
+                                                chatid: chat.id!,
                                                 client: widget.client,
                                                 action: chatAction)
                                             : ChatItemLastMessageContent(
