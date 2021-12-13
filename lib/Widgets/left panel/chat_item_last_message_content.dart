@@ -131,6 +131,18 @@ class ChatItemLastMessageContent extends StatelessWidget {
             style: TextDisplay.chatItemAccent));
         break;
 
+      case MessageExpiredPhoto:
+        externalElements.add(WidgetSpan(
+            child: Icon(Icons.local_fire_department,
+                color: ClientTheme.currentTheme
+                    .getField("ExpiredPhotoChatListIconColor"))));
+        externalElements.add(contentEntetyesMargin());
+        externalElements.add(TextSpan(
+            text: client.getTranslation("lng_attach_photo"),
+            style: TextDisplay.chatItemAccent));
+
+        break;
+
       default:
         text = FormattedText(text: content.runtimeType.toString());
         break;
