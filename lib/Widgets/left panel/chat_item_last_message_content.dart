@@ -107,6 +107,8 @@ class ChatItemLastMessageContent extends StatelessWidget {
         externalElements.add(TextSpan(
             text: document.document?.fileName,
             style: TextDisplay.chatItemAccent));
+        externalElements.add(contentEntetyesMargin());
+        text = document.caption!;
         break;
 
       case MessageChatChangePhoto:
