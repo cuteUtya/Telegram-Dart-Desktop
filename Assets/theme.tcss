@@ -7,6 +7,7 @@ DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
 
 BorderLineColor: #DADADA;
 
+#change this color is bad idea :D#
 Transparent: #00000000;
 
 #Typography fields#
@@ -70,3 +71,4 @@ ScamIconColor: #E37B40;
 TextInlineIconsColor: ref(RegularText);
 ChatPinIconColor: ref(RegularText);
 CheckMarkChatListColor: ref(OnlineColor);
+ExpiredPhotoChatListIconColor: #F65B6D;

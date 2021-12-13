@@ -48,7 +48,7 @@ class _LeftPanelState extends State<LeftPanel> {
                             const BorderRadius.all(Radius.circular(12))))),
           ]),
           const SizedBox(height: 44),
-          const HorizontalSeparatorLine(),
+          const SeparatorLine(),
           ChatListDisplay(client: widget.client)
         ],
       ),

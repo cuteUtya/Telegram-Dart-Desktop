@@ -1,11 +1,23 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 
-class HorizontalSeparatorLine extends StatelessWidget {
-  const HorizontalSeparatorLine({Key? key}) : super(key: key);
+class SeparatorLine extends StatelessWidget {
+  const SeparatorLine(
+      {Key? key, this.useGradient = false, this.isHorizontal = true})
+      : super(key: key);
+  final bool useGradient;
+  final bool isHorizontal;
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 1, color: ClientTheme.currentTheme.getField("BorderLineColor"));
+        color: useGradient ? null : lineColor,
+        decoration: useGradient ? BoxDecoration(gradient: gradient) : null,
+        height: isHorizontal ? 1 : null,
+        width: isHorizontal ? null : 1);
   }
+
+  Color get lineColor => ClientTheme.currentTheme.getField("BorderLineColor");
+
+  LinearGradient get gradient => LinearGradient(
+      colors: [Colors.transparent, lineColor, Colors.transparent]);
 }
