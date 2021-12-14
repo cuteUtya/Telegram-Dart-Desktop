@@ -199,14 +199,34 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
     if (chat.lastMessage != null) {
       var time =
           DateTime.fromMillisecondsSinceEpoch(chat.lastMessage!.date! * 1000);
-      var minutes = time.minute.toString();
-      var hours = time.hour.toString();
 
-      if (minutes.length <= 1) minutes = "0$minutes";
-      if (hours.length <= 1) hours = "0$hours";
+      var now = DateTime.now();
+      var deltaInDays = (DateTime.now().difference(time) +
+              (const Duration(days: 1) -
+                  Duration(
+                      hours: now.hour,
+                      minutes: now.minute,
+                      seconds: now.second,
+                      milliseconds: now.millisecond)))
+          .inDays;
 
-      return "$hours:$minutes";
+      if (deltaInDays <= 0) {
+        return getHHMM(time);
+      } else if (deltaInDays <= 7 && time.weekday < now.weekday) {
+        return "${widget.client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time)})";
+      }
+
+      return "${validateDataComponent(time.day.toString())}.${validateDataComponent(time.month.toString())}.${time.year}";
     }
     return "";
+  }
+
+  String getHHMM(DateTime time) {
+    return "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())}";
+  }
+
+  String validateDataComponent(String compenent) {
+    if (compenent.length <= 1) return "0$compenent";
+    return compenent;
   }
 }
