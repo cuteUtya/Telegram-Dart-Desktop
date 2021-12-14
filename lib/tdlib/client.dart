@@ -469,7 +469,7 @@ class TelegramClient {
 
     await send(SetTdlibParameters(parameters: tdlibParameters));
     updateOption.listen((UpdateOption event) {
-      if (event.name! == "my_id") {
+      if (event.name! == "my_id" && event.value is OptionValueInteger) {
         me = (event.value as OptionValueInteger).value!;
       }
     });
