@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chat_item_photo_minithumbnail.dart';
-import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_icon_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_photo_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
@@ -46,12 +45,13 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
       case MessageSticker:
         //TODO in future just pass emoji before "Sticker" text
-        displayContent.add(
-            TextDisplay.emoji((content as MessageSticker).sticker!.emoji!, 18));
-        displayContent.add(contentEntetyesMargin());
-        displayContent.add(TextSpan(
-            text: client.getTranslation("lng_in_dlg_sticker"),
-            style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+        displayContent.addAll([
+          TextDisplay.emoji((content as MessageSticker).sticker!.emoji!, 18),
+          contentEntetyesMargin(),
+          TextSpan(
+              text: client.getTranslation("lng_in_dlg_sticker"),
+              style: TextDisplay.create(size: 18, textColor: TextColor.Accent))
+        ]);
         break;
 
       join:
@@ -89,12 +89,14 @@ class ChatItemLastMessageContent extends StatelessWidget {
       case MessageDocument:
         var document = (content as MessageDocument);
         displayContent.addAll(ChatItemContentIconText.build(Icons.description,
-            "${bytesToSize(document.document!.document!.size!)} —"));
-        displayContent.add(contentEntetyesMargin());
-        displayContent.add(TextSpan(
-            text: document.document?.fileName,
-            style: TextDisplay.chatItemAccent));
-        displayContent.add(contentEntetyesMargin());
+                "${bytesToSize(document.document!.document!.size!)} —") +
+            [
+              contentEntetyesMargin(),
+              TextSpan(
+                  text: document.document?.fileName,
+                  style: TextDisplay.chatItemAccent),
+              contentEntetyesMargin()
+            ]);
         text = document.caption!;
         break;
 
