@@ -5,7 +5,7 @@ import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_action_display.dart';
-import 'package:myapp/Widgets/left%20panel/chat_item_last_message_content.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';

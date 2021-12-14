@@ -13,14 +13,13 @@ class AppMain extends StatefulWidget {
 class _AppMainState extends State<AppMain> {
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-        child: Row(children: [
+    return Row(children: [
       Container(
           alignment: Alignment.topLeft,
           child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.33,
               child: LeftPanel(client: widget.client))),
       const SeparatorLine(isHorizontal: false)
-    ]));
+    ]);
   }
 }

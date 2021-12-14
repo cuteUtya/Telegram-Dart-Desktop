@@ -49,7 +49,7 @@ class _LeftPanelState extends State<LeftPanel> {
           ]),
           const SizedBox(height: 44),
           const SeparatorLine(),
-          ChatListDisplay(client: widget.client)
+          Expanded(child: ChatListDisplay(client: widget.client))
         ],
       ),
     );

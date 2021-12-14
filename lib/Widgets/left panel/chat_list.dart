@@ -227,10 +227,9 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    print("REDRAW Chat list");
-    return Expanded(
+    return
         //TODO make scroll more "soft" when Google implement this — https://github.com/flutter/flutter/issues/32120
-        child: ListView(children: [
+        ListView(children: [
       /*My friend, if you read this - know i load ALL chats in RAM with all images,
           if you don't find this message here (?what?) i optimized this moment*/
       Stack(
@@ -245,6 +244,6 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
                   lastMessageSenderName: chat.lastMessageSenderName,
                   client: widget.client))
               .toList())
-    ]));
+    ]);
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chat_item_photo_minithumbnail.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_icon_text.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_photo_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
@@ -29,7 +31,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
     var content = chat.lastMessage!.content!;
     bool messageTypeAllowShowFrom = true;
     FormattedText text = FormattedText(text: "");
-    List<InlineSpan> externalElements = [];
+    List<InlineSpan> displayContent = [];
     switch (content.runtimeType) {
       case MessageText:
         text = (content as MessageText).text!;
@@ -43,10 +45,11 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case MessageSticker:
-        externalElements.add(
+        //TODO in future just pass emoji before "Sticker" text
+        displayContent.add(
             TextDisplay.emoji((content as MessageSticker).sticker!.emoji!, 18));
-        externalElements.add(contentEntetyesMargin());
-        externalElements.add(TextSpan(
+        displayContent.add(contentEntetyesMargin());
+        displayContent.add(TextSpan(
             text: client.getTranslation("lng_in_dlg_sticker"),
             style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
         break;
@@ -54,26 +57,18 @@ class ChatItemLastMessageContent extends StatelessWidget {
       join:
       case MessageChatAddMembers:
         messageTypeAllowShowFrom = false;
-        externalElements.add(WidgetSpan(
-            child: Icon(
-                (joinInfo?.isJoin ?? true)
-                    ? Icons.person_add_alt_1
-                    : Icons.group,
-                color: inlineIconsColor)));
-        externalElements.add(contentEntetyesMargin());
         String names = "";
         joinInfo?.addedUsers
             .forEach((element) => names += "${element.firstName!}, ");
         if (names.isNotEmpty) names = names.substring(0, names.length - 2);
-        externalElements.add(TextSpan(
-            style: TextDisplay.chatItemAccent,
-            text: client.getTranslation(
-                joinInfo?.langKey ?? "lng_profile_loading",
+        displayContent = ChatItemContentIconText.build(
+            (joinInfo?.isJoin ?? true) ? Icons.person_add_alt_1 : Icons.group,
+            client.getTranslation(joinInfo?.langKey ?? "lng_profile_loading",
                 replacing: {
                   "{user}": names,
                   "{users}": names,
                   "{from}": lastMessageAuthor
-                })));
+                }));
         break;
       case MessageChatJoinByLink:
         continue join;
@@ -82,65 +77,73 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
       case MessagePhoto:
         text = (content as MessagePhoto).caption!;
-        externalElements.add(WidgetSpan(
-            child: ChatItemPhotoMinithumbnail(
+        displayContent = ChatItemContentPhotoText.build(
+            ChatItemPhotoMinithumbnail(
                 client: client,
-                id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!)));
-        externalElements.add(contentEntetyesMargin());
-        if ((text.text ?? "").isEmpty) {
-          externalElements.add(TextSpan(
-              text: client.getTranslation("lng_attach_photo"),
-              style: TextDisplay.chatItemAccent));
-          externalElements.add(contentEntetyesMargin());
-        }
+                id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!),
+            (text.text ?? "").isNotEmpty
+                ? ""
+                : client.getTranslation("lng_attach_photo"));
         break;
 
       case MessageDocument:
         var document = (content as MessageDocument);
-        externalElements.add(WidgetSpan(
-            child: Icon(Icons.description, color: inlineIconsColor)));
-        externalElements.add(contentEntetyesMargin());
-        externalElements.add(TextSpan(
-            text: "${bytesToSize(document.document!.document!.size!)} —",
-            style: TextDisplay.bold18));
-        externalElements.add(contentEntetyesMargin());
-        externalElements.add(TextSpan(
+        displayContent.addAll(ChatItemContentIconText.build(Icons.description,
+            "${bytesToSize(document.document!.document!.size!)} —"));
+        displayContent.add(contentEntetyesMargin());
+        displayContent.add(TextSpan(
             text: document.document?.fileName,
             style: TextDisplay.chatItemAccent));
-        externalElements.add(contentEntetyesMargin());
+        displayContent.add(contentEntetyesMargin());
         text = document.caption!;
         break;
 
       case MessageChatChangePhoto:
         messageTypeAllowShowFrom = false;
-        externalElements.add(WidgetSpan(
-            child: ChatItemPhotoMinithumbnail(
-                client: client,
-                id: sortPhotoSizes(
-                        (content as MessageChatChangePhoto).photo!.sizes!)
-                    .last
-                    .photo!
-                    .id!)));
-        externalElements.add(contentEntetyesMargin());
-        externalElements.add(TextSpan(
-            text: client.getTranslation(
+        displayContent = ChatItemContentIconText.build(
+            Icons.brush,
+            client.getTranslation(
                 isChannel
                     ? "lng_action_changed_photo_channel"
                     : "lng_action_changed_photo",
-                replacing: {"{from}": lastMessageAuthor}),
-            style: TextDisplay.chatItemAccent));
+                replacing: {"{from}": lastMessageAuthor}));
         break;
 
       case MessageExpiredPhoto:
-        externalElements.add(WidgetSpan(
-            child: Icon(Icons.local_fire_department,
-                color: ClientTheme.currentTheme
-                    .getField("ExpiredPhotoChatListIconColor"))));
-        externalElements.add(contentEntetyesMargin());
-        externalElements.add(TextSpan(
-            text: client.getTranslation("lng_attach_photo"),
-            style: TextDisplay.chatItemAccent));
+        displayContent = ChatItemContentIconText.build(
+            Icons.local_fire_department,
+            client.getTranslation("lng_attach_photo"),
+            iconColor: ClientTheme.currentTheme
+                .getField("ExpiredPhotoChatListIconColor"));
+        break;
 
+      case MessageAnimation:
+        var fileId =
+            (content as MessageAnimation).animation?.thumbnail?.file?.id;
+        Widget? mith;
+        if (fileId != null) {
+          mith = ChatItemPhotoMinithumbnail(client: client, id: fileId);
+        }
+        displayContent = ChatItemContentPhotoText.build(mith, "GIF");
+        break;
+
+      case MessageContactRegistered:
+        displayContent = ChatItemContentIconText.build(
+            Icons.celebration,
+            client.getTranslation("lng_action_user_registered",
+                replacing: {"{from}": lastMessageAuthor}));
+        break;
+
+      case MessageChatChangeTitle:
+        displayContent = ChatItemContentIconText.build(
+            Icons.edit,
+            client.getTranslation("lng_action_changed_title_channel",
+                replacing: {"{title}": chat.title!}));
+        break;
+
+      case MessageSupergroupChatCreate:
+        displayContent = ChatItemContentIconText.build(
+            Icons.create, client.getTranslation("lng_action_created_channel"));
         break;
 
       default:
@@ -160,28 +163,34 @@ class ChatItemLastMessageContent extends StatelessWidget {
                           ? Container(
                               child: Icon(
                                 Icons.reply,
-                                color: inlineIconsColor,
+                                color: ChatItemContentIconText.iconClr,
                               ),
                               margin: const EdgeInsets.only(left: 2, right: 2))
                           : const SizedBox.shrink()),
                 ] +
-                externalElements +
+                displayContent +
                 TextDisplay.parseFormattedText(text),
             style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
   }
 
+  int get lastMessageSenderId {
+    if (chat.lastMessage!.sender! is MessageSenderUser) {
+      return (chat.lastMessage!.sender! as MessageSenderUser).userId!;
+    }
+    if (chat.lastMessage!.sender! is MessageSenderChat) {
+      return (chat.lastMessage!.sender! as MessageSenderChat).chatId!;
+    }
+    return 0;
+  }
+
   String get lastMessageSenderName {
     if (chat.lastMessage!.sender! is MessageSenderUser) {
-      if ((chat.lastMessage!.sender! as MessageSenderUser).userId ==
-          client.me) {
+      if (lastMessageSenderId == client.me) {
         return client.getTranslation("lng_from_you");
       }
     }
     return lastMessageAuthor;
   }
-
-  Color get inlineIconsColor =>
-      ClientTheme.currentTheme.getField("TextInlineIconsColor");
 
   bool get isChannel {
     if (chat.type is ChatTypeSupergroup) {
@@ -192,30 +201,6 @@ class ChatItemLastMessageContent extends StatelessWidget {
     return false;
   }
 
-  bool get showAuthor {
-    if (chat.type is ChatTypeSupergroup) {
-      if (!isChannel) {
-        return true;
-      }
-    }
-
-    if (chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) {
-      if (chat.id == client.me) {
-        return false;
-      } else {
-        if ((chat.lastMessage?.sender as MessageSenderUser).userId !=
-            client.me) {
-          return false;
-        }
-      }
-    }
-
-    if (chat.lastMessage!.sender is MessageSenderUser) {
-      if (chat.id == client.me) {
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }
+  bool get showAuthor =>
+      !(chat.id == client.me || (chat.type is ChatTypeSupergroup && isChannel));
 }
