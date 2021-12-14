@@ -73,6 +73,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
     var myPosition = -widget.scrollOffset + order * 88;
     if (myPosition - cachedItems > MediaQuery.of(context).size.height ||
         myPosition + 88 + cachedItems < 0) {
+      _mouseOver = false;
       return Container(height: 88, margin: EdgeInsets.only(top: order * 88));
     }
     return AnimatedContainer(
