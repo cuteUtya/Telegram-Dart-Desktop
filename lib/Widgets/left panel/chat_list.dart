@@ -219,19 +219,20 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         chat.key.currentState?.updateChatInfo(chat.chat);
       }
     });
+    listViewContoller.addListener(
+        () => setState(() => scrollOffset = listViewContoller.offset));
     super.initState();
   }
 
   List<_ChatFullInfo> chats = [];
   int chatsCount = 0;
-
+  ScrollController listViewContoller = ScrollController();
+  double scrollOffset = 0;
   @override
   Widget build(BuildContext context) {
     return
         //TODO make scroll more "soft" when Google implement this — https://github.com/flutter/flutter/issues/32120
-        ListView(children: [
-      /*My friend, if you read this - know i load ALL chats in RAM with all images,
-          if you don't find this message here (?what?) i optimized this moment*/
+        ListView(controller: listViewContoller, children: [
       Stack(
           children: chats
               .map((chat) => ChatItemDisplay(
@@ -242,7 +243,8 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
                   supergroup: chat.supergroup,
                   interlocutor: chat.interlocutor,
                   lastMessageSenderName: chat.lastMessageSenderName,
-                  client: widget.client))
+                  client: widget.client,
+                  scrollOffset: scrollOffset))
               .toList())
     ]);
   }

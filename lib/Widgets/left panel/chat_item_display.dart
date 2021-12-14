@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/check_mark.dart';
+import 'package:myapp/global_key_extenstion.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
@@ -22,7 +23,8 @@ class ChatItemDisplay extends StatefulWidget {
       required this.supergroup,
       required this.joinInfo,
       required this.lastMessageSenderName,
-      required this.order})
+      required this.order,
+      required this.scrollOffset})
       : super(key: key);
   final Chat chat;
   final User? interlocutor;
@@ -31,6 +33,7 @@ class ChatItemDisplay extends StatefulWidget {
   final String lastMessageSenderName;
   final TelegramClient client;
   final int order;
+  final double scrollOffset;
 
   @override
   State<StatefulWidget> createState() => ChatItemDisplayState();
@@ -63,8 +66,15 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
   void updateChatAction(ChatActionInfo newChatAction) =>
       setState(() => chatAction = newChatAction);
 
+  static const double cachedItems = 240;
+
   @override
   Widget build(BuildContext context) {
+    var myPosition = -widget.scrollOffset + order * 88;
+    if (myPosition - cachedItems > MediaQuery.of(context).size.height ||
+        myPosition + 88 + cachedItems < 0) {
+      return Container(height: 88, margin: EdgeInsets.only(top: order * 88));
+    }
     return AnimatedContainer(
         curve: Curves.decelerate /*Curves.elasticOut*/,
         margin: EdgeInsets.only(top: order * 88),
