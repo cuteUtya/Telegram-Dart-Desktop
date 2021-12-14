@@ -130,6 +130,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case MessageContactRegistered:
+        messageTypeAllowShowFrom = false;
         displayContent = ChatItemContentIconText.build(
             Icons.celebration,
             client.getTranslation("lng_action_user_registered",
@@ -203,6 +204,8 @@ class ChatItemLastMessageContent extends StatelessWidget {
     return false;
   }
 
-  bool get showAuthor =>
-      !(chat.id == client.me || (chat.type is ChatTypeSupergroup && isChannel));
+  bool get showAuthor => !((chat.id == client.me ||
+          (chat.type is ChatTypeSupergroup && isChannel)) ||
+      ((chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) &&
+          lastMessageSenderId != client.me));
 }
