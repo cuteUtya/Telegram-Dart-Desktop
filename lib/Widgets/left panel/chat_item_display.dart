@@ -228,8 +228,20 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
     return "";
   }
 
+  //TODO show it in settings
+  bool useUSAStyle = true;
+
   String getHHMM(DateTime time) {
-    return "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())}";
+    String afterTime = "";
+    if (useUSAStyle) {
+      if (time.hour > 12) {
+        time = time.subtract(const Duration(hours: 12));
+        afterTime = "PM";
+      } else {
+        afterTime = "AM";
+      }
+    }
+    return "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())} $afterTime";
   }
 
   String validateDataComponent(String compenent) {
