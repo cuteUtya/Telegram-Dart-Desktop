@@ -26,7 +26,6 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
   bool recover = false;
   @override
   Widget build(BuildContext context) {
-    print(recover);
     return SizedBox(
         width: 340,
         child: Column(

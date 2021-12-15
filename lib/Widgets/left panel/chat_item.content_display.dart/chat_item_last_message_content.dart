@@ -44,7 +44,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case MessageSticker:
-        //TODO in future just pass emoji before "Sticker" text
+        //TODO in future just pass emoji before "Sticker" text ("${emoji} Sticker")
         displayContent.addAll([
           TextDisplay.emoji((content as MessageSticker).sticker!.emoji!, 18),
           contentEntetyesMargin(),

@@ -157,7 +157,6 @@ class _DataInputState extends State<DataInput> {
             ? DataState.valid
             : DataState.invalid);
       } else if (widget.asyncValidationCallback != null) {
-        print("VALIDATION CALLBACK");
         widget.asyncValidationCallback!(input)!.then((value) => setState(
             () => dataState = value ? DataState.valid : DataState.invalid));
       }

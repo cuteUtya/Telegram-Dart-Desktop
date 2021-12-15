@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
-import 'package:myapp/tdlib/td_api.dart' hide Text;
 
 typedef TapCallback = void Function();
 enum ButtonColor { ButtonAccentBackColor, ButtonDangerBackColor, Transparent }
