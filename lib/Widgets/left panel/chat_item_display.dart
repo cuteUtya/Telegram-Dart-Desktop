@@ -23,8 +23,7 @@ class ChatItemDisplay extends StatefulWidget {
       required this.supergroup,
       required this.joinInfo,
       required this.lastMessageSenderName,
-      required this.order,
-      required this.scrollOffset})
+      required this.order})
       : super(key: key);
   final Chat chat;
   final User? interlocutor;
@@ -33,7 +32,6 @@ class ChatItemDisplay extends StatefulWidget {
   final String lastMessageSenderName;
   final TelegramClient client;
   final int order;
-  final double scrollOffset;
 
   @override
   State<StatefulWidget> createState() => ChatItemDisplayState();
@@ -42,6 +40,7 @@ class ChatItemDisplay extends StatefulWidget {
 class ChatItemDisplayState extends State<ChatItemDisplay> {
   static const bool USE_HORIZONTAL_SEPARATOR = true;
 
+  late bool shouldDraw = false;
   late int order = widget.order;
   late Chat chat = widget.chat;
   late String lastMessageSenderName = widget.lastMessageSenderName;
@@ -65,14 +64,11 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
       setState(() => interlocutor = newUser);
   void updateChatAction(ChatActionInfo newChatAction) =>
       setState(() => chatAction = newChatAction);
-
-  static const double cachedItems = 240;
+  void updateShouldDrawOption(bool value) => setState(() => shouldDraw = value);
 
   @override
   Widget build(BuildContext context) {
-    var myPosition = -widget.scrollOffset + order * 88;
-    if (myPosition - cachedItems > MediaQuery.of(context).size.height ||
-        myPosition + 88 + cachedItems < 0) {
+    if (!shouldDraw) {
       _mouseOver = false;
       return Container(height: 88, margin: EdgeInsets.only(top: order * 88));
     }

@@ -144,6 +144,15 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         lastMessageSenderName: (await getLastMessageAuthor(chat)) ?? "");
   }
 
+  void updateShouldDraw() {
+    chats.forEach((element) {
+      var draw = shouldDraw(element.order);
+      if (element.key.currentState?.shouldDraw != draw) {
+        element.key.currentState?.updateShouldDrawOption(draw);
+      }
+    });
+  }
+
   void sortItems() {
     //TODO not just positions![0]
     chats.sort((a, b) =>
@@ -154,6 +163,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         chats[order].key.currentState?.reOrder(order);
       }
     }
+    updateShouldDraw();
   }
 
   @override
@@ -219,33 +229,38 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         chat.key.currentState?.updateChatInfo(chat.chat);
       }
     });
-    listViewContoller.addListener(
-        () => setState(() => scrollOffset = listViewContoller.offset));
+    listViewContoller.addListener(updateShouldDraw);
     super.initState();
+  }
+
+  static const double cachedItems = 240;
+
+  bool shouldDraw(int order) {
+    var myPosition = -listViewContoller.offset + order * 88;
+    return !(myPosition - cachedItems > MediaQuery.of(context).size.height ||
+        myPosition + 88 + cachedItems < 0);
   }
 
   List<_ChatFullInfo> chats = [];
   int chatsCount = 0;
   ScrollController listViewContoller = ScrollController();
-  double scrollOffset = 0;
   @override
   Widget build(BuildContext context) {
     return
         //TODO make scroll more "soft" when Google implement this — https://github.com/flutter/flutter/issues/32120
-        ListView(controller: listViewContoller, children: [
-      Stack(
-          children: chats
-              .map((chat) => ChatItemDisplay(
-                  key: chat.key,
-                  order: chat.order,
-                  chat: chat.chat,
-                  joinInfo: chat.joinInfo,
-                  supergroup: chat.supergroup,
-                  interlocutor: chat.interlocutor,
-                  lastMessageSenderName: chat.lastMessageSenderName,
-                  client: widget.client,
-                  scrollOffset: scrollOffset))
-              .toList())
-    ]);
+        SingleChildScrollView(
+            controller: listViewContoller,
+            child: Stack(
+                children: chats
+                    .map((chat) => ChatItemDisplay(
+                        key: chat.key,
+                        order: chat.order,
+                        chat: chat.chat,
+                        joinInfo: chat.joinInfo,
+                        supergroup: chat.supergroup,
+                        interlocutor: chat.interlocutor,
+                        lastMessageSenderName: chat.lastMessageSenderName,
+                        client: widget.client))
+                    .toList()));
   }
 }
