@@ -3,7 +3,7 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 
 class TextDisplay {
-  static String _getEmojiFont() => "TwitterColorEmoji";
+  static String _getEmojiFont() => "AppleColorEmoji";
 
   static TextStyle get title => create(
       size: 24, fontWeight: FontWeight.w600, textColor: TextColor.HeaderMain);
@@ -77,9 +77,7 @@ class TextDisplay {
 
     var matches = RegExp(r"(?=(.))\1{1,}", unicode: true).allMatches(str);
     matches.forEach((element) {
-      print(str[element.end - 1]);
       var style = stylePairs[str[element.start]];
-      print(text.text!.substring(element.start, element.end));
       result.addAll(parseEmojiInString(
           text.text!.substring(element.start, element.end),
           style == null ? create(size: 18) : style(18)));
@@ -129,6 +127,7 @@ class TextDisplay {
       TextAlign? textAlign = TextAlign.left,
       TextOverflow? overflow,
       TextDecoration decoration = TextDecoration.none}) {
+    fontFamily ??= regular;
     textColor ??= TextColor.RegularText;
     var color = getColor(textColor);
     if (fontFamily == "emoji") {
