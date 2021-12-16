@@ -5,7 +5,7 @@ import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/Widgets/smooth_number_counter.dart';
 import 'package:myapp/Widgets/text_animation.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/td_api.dart' hide Text;
+import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 
 class ChatItemActionDisplay extends StatelessWidget {
   const ChatItemActionDisplay(
@@ -72,14 +72,15 @@ class ChatItemActionDisplay extends StatelessWidget {
         : actionTransitionsChat)[action.action.runtimeType];
 
     return Row(children: [
-      Text(
-          transitionStr != null
-              ? client.getTranslation(transitionStr, replacing: {
-                  "{user}": action.who.firstName!,
-                  "{emoji}": emoji ?? "🍆"
-                })
-              : "¯\\_(ツ)_/¯",
-          style: TextDisplay.chatItemAccent),
+      RichText(
+          text: TextSpan(
+              children: TextDisplay.parseEmojiInString(transitionStr != null
+                  ? client.getTranslation(transitionStr, replacing: {
+                      "{user}": action.who.firstName!,
+                      "{emoji}": emoji ?? "🍆"
+                    })
+                  : "¯\\_(ツ)_/¯"),
+              style: TextDisplay.chatItemAccent)),
       const SizedBox(width: 2),
       animation ?? TextAnimation.fourPoints()
     ]);

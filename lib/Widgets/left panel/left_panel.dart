@@ -39,7 +39,7 @@ class _LeftPanelState extends State<LeftPanel> {
                               "lng_dlg_filter",
                               TextDisplay.create(
                                   size: 18,
-                                  fontFamily: TextFont.greaterImportance)),
+                                  fontFamily: TextDisplay.greaterImportance)),
                         ]),
                     decoration: BoxDecoration(
                         color: ClientTheme.currentTheme

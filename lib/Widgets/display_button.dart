@@ -31,7 +31,7 @@ class DesktopButton extends StatefulWidget {
   final ButtonColor backColor;
   final Color? pressColor;
   final Color? customColor;
-  final TextFont? font;
+  final String? font;
   final TextColor textColor;
   final double fontSize;
   final EdgeInsets padding;

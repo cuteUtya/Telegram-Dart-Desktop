@@ -18,22 +18,26 @@ class ChatItemTitle extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.left,
-        text: TextSpan(text: title, style: TextDisplay.chatTittle, children: [
-          WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Container(
-                  margin: const EdgeInsets.only(left: 4),
-                  child: isScam
-                      ? Icon(Icons.warning,
-                          size: 24,
-                          color: ClientTheme.currentTheme
-                              .getField("ScamIconColor"))
-                      : (isVerifed
-                          ? Icon(Icons.verified,
-                              color: ClientTheme.currentTheme
-                                  .getField("VerifedSupergoupIconColor"),
-                              size: 24)
-                          : const SizedBox.shrink())))
-        ]));
+        text: TextSpan(
+            children:
+                TextDisplay.parseEmojiInString(title, TextDisplay.chatTittle) +
+                    [
+                      WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: Container(
+                              margin: const EdgeInsets.only(left: 4),
+                              child: isScam
+                                  ? Icon(Icons.warning,
+                                      size: 24,
+                                      color: ClientTheme.currentTheme
+                                          .getField("ScamIconColor"))
+                                  : (isVerifed
+                                      ? Icon(Icons.verified,
+                                          color: ClientTheme.currentTheme
+                                              .getField(
+                                                  "VerifedSupergoupIconColor"),
+                                          size: 24)
+                                      : const SizedBox.shrink())))
+                    ]));
   }
 }

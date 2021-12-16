@@ -39,8 +39,8 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case MessageAnimatedEmoji:
-        var emoji = (content as MessageAnimatedEmoji).emoji!;
-        text = FormattedText(text: emoji);
+        displayContent.add(
+            TextDisplay.emoji((content as MessageAnimatedEmoji).emoji!, 18));
         break;
 
       case MessageSticker:
@@ -157,23 +157,23 @@ class ChatItemLastMessageContent extends StatelessWidget {
     return RichText(
         maxLines: 2,
         text: TextSpan(
-            text: (!messageTypeAllowShowFrom ? false : showAuthor)
-                ? "$lastMessageSenderName: "
-                : "",
-            children: <InlineSpan>[
-                  WidgetSpan(
-                      child: chat.lastMessage!.forwardInfo != null
-                          ? Container(
-                              child: Icon(
-                                Icons.reply,
-                                color: ChatItemContentIconText.iconClr,
-                              ),
-                              margin: const EdgeInsets.only(left: 2, right: 2))
-                          : const SizedBox.shrink()),
-                ] +
-                displayContent +
-                TextDisplay.parseFormattedText(text),
-            style: TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+          children: TextDisplay.parseEmojiInString(
+                  showAuthor ? "$lastMessageSenderName: " : "",
+                  TextDisplay.create(size: 18, textColor: TextColor.Accent)) +
+              [
+                WidgetSpan(
+                    child: chat.lastMessage!.forwardInfo != null
+                        ? Container(
+                            child: Icon(
+                              Icons.reply,
+                              color: ChatItemContentIconText.iconClr,
+                            ),
+                            margin: const EdgeInsets.only(left: 2, right: 2))
+                        : const SizedBox.shrink()),
+              ] +
+              displayContent +
+              TextDisplay.parseFormattedText(text),
+        ));
   }
 
   int get lastMessageSenderId {
