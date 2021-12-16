@@ -11,6 +11,7 @@ class ChatItemPhotoMinithumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FileImageDisplay(
+        key: Key("$id"),
         id: id,
         client: client,
         borderRadius: const BorderRadius.all(Radius.circular(4)),

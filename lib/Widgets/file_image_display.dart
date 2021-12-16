@@ -3,7 +3,7 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'dart:io' as io;
 
-class FileImageDisplay extends StatelessWidget {
+class FileImageDisplay extends StatefulWidget {
   const FileImageDisplay(
       {Key? key,
       required this.id,
@@ -23,24 +23,49 @@ class FileImageDisplay extends StatelessWidget {
   final Widget emptyReplacer;
   final TelegramClient client;
   final BorderRadius? borderRadius;
+
+  @override
+  State<StatefulWidget> createState() => FileImageDisplayState();
+}
+
+class FileImageDisplayState extends State<FileImageDisplay> {
+  String? path; //late Widget toDisplay = widget.emptyReplacer;
+  int? downloadedId;
+
+  void changeFile(File file) {
+    downloadedId = downloadedId;
+    if (mounted) {
+      setState(() => path = file.local!.path!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        builder: (context, data) {
-          if (data.hasData) {
-            return Container(
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                    borderRadius: borderRadius,
-                    shape: containerShape,
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: FileImage(
-                            io.File((data.data as File).local!.path!)))));
-          }
-          return emptyReplacer;
-        },
-        future: client.send(DownloadFile(fileId: id, priority: priority)));
+    if (downloadedId == null) {
+      widget.client.send(GetFile(fileId: widget.id)).then((fileInfo) {
+        fileInfo as File;
+        if ((fileInfo.local?.path ?? "").isEmpty) {
+          widget.client
+              .send(DownloadFile(fileId: widget.id, priority: 4))
+              .then((downloadedFile) {
+            changeFile(downloadedFile as File);
+          });
+        } else {
+          changeFile(fileInfo);
+        }
+      });
+    }
+
+    if ((path ?? "").isNotEmpty) {
+      return Container(
+          width: widget.width,
+          height: widget.height,
+          decoration: BoxDecoration(
+              borderRadius: widget.borderRadius,
+              shape: widget.containerShape,
+              image: DecorationImage(
+                  fit: BoxFit.cover, image: FileImage(io.File(path!)))));
+    }
+    return widget.emptyReplacer;
   }
 }
