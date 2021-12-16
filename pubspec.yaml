@@ -59,6 +59,10 @@ flutter:
         - asset: fonts/Emoji/GoogleColorEmoji.ttf
         - asset: fonts/Emoji/GoogleColorEmoji.ttf
           style: italic
+  - family: CodeSourcePro
+    fonts: 
+        - asset: fonts/SourceCodePro-Regular.ttf
+          style: italic
     
   uses-material-design: true
 
