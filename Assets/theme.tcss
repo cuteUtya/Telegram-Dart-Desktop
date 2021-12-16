@@ -11,8 +11,6 @@ BorderLineColor: #DADADA;
 Transparent: #00000000;
 
 #Typography fields#
-HeaderFontFamily: Ubuntu;
-RegularFontFamily: Roboto;
 HeaderMain: #181818;
 HeaderSecondary: #464646;
 AdditionalTextColor: #BABABA;
