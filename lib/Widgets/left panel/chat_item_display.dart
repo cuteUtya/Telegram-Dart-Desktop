@@ -157,7 +157,8 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                                 : chat.title!,
                                             isScam: isScam,
                                             isVerifed: isVerifed)),
-                                    chat.lastMessage?.isOutgoing ?? false
+                                    (chat.lastMessage?.isOutgoing ?? false) &&
+                                            chat.draftMessage == null
                                         ? CheckMark(
                                             isReaded: (chat.lastMessage?.id ??
                                                     0) <=
