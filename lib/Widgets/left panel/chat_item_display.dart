@@ -126,20 +126,26 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
   }
 
   Widget _buildAva() {
-    return Stack(alignment: Alignment.bottomRight, children: [
-      SizedBox(
-          height: 64,
-          width: 64,
-          child: ChatPhotoDisplay(
-              photo: chat.photo,
-              chatId: chat.id!,
-              chatTitle: chat.title!,
-              client: widget.client)),
-      OnlineIndicatorDidplay(
-          heigth: 20,
-          width: 20,
-          online: isOnline,
-          aroundOnlineColor: containerColor)
+    return Stack(children: [
+      Stack(alignment: Alignment.bottomRight, children: [
+        SizedBox(
+            height: 64,
+            width: 64,
+            child: ChatPhotoDisplay(
+                photo: chat.photo,
+                chatId: chat.id!,
+                chatTitle: chat.title!,
+                client: widget.client)),
+        OnlineIndicatorDidplay(
+            heigth: 20,
+            width: 20,
+            online: isOnline,
+            aroundOnlineColor: containerColor)
+      ]),
+      UnreadMentionBubble(
+          count: chat.unreadMentionCount ?? 0,
+          color:
+              ClientTheme.currentTheme.getField("UnreadMentionChatBubbleColor"))
     ]);
   }
 

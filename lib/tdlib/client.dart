@@ -151,7 +151,7 @@ class TelegramClient {
       .where((u) => u is UpdateChatTitle)
       .map((a) => (a as UpdateChatTitle));
 
-  Stream<UpdateChatUnreadMentionCount> get updateChatUnreaMentionCount =>
+  Stream<UpdateChatUnreadMentionCount> get updateChatUnreadMentionCount =>
       updates
           .where((u) => u is UpdateChatUnreadMentionCount)
           .map((a) => (a as UpdateChatUnreadMentionCount));

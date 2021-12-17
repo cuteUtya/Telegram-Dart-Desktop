@@ -11,7 +11,9 @@ class ChatItemContentIconText {
     return [
       WidgetSpan(child: Icon(icon, color: iconColor ?? iconClr)),
       const WidgetSpan(child: SizedBox(width: 4)),
-      TextSpan(text: text, style: TextDisplay.chatItemAccent)
+      TextSpan(
+          children:
+              TextDisplay.parseEmojiInString(text, TextDisplay.chatItemAccent))
     ];
   }
 }
