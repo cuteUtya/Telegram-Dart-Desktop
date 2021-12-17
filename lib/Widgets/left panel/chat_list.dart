@@ -259,6 +259,15 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         chat.key.currentState?.updateChatInfo(chat.chat);
       }
     });
+
+    widget.client.updateMessageMentionRead.listen((event) {
+      _ChatFullInfo? chat =
+          chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      if (chat != null) {
+        chat.chat.unreadMentionCount = event.unreadMentionCount;
+        chat.key.currentState?.updateChatInfo(chat.chat);
+      }
+    });
     listViewContoller.addListener(updateShouldDraw);
     super.initState();
   }
