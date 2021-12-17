@@ -56,6 +56,14 @@ class ChatItemLastMessageContent extends StatelessWidget {
         ]);
         break;
 
+      case MessageChatDeletePhoto:
+        messageTypeAllowShowFrom = false;
+        displayContent.addAll(ChatItemContentIconText.build(
+            Icons.delete,
+            client.getTranslation("lng_action_removed_photo",
+                replacing: {"{from}": lastMessageAuthor})));
+        break;
+
       join:
       case MessageChatAddMembers:
         messageTypeAllowShowFrom = false;
@@ -140,6 +148,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case MessageChatChangeTitle:
+        messageTypeAllowShowFrom = false;
         displayContent = ChatItemContentIconText.build(
             Icons.edit,
             client.getTranslation("lng_action_changed_title_channel",
