@@ -99,7 +99,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                       Flexible(
                           child: Column(children: [
                         _buildStatePanel(),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

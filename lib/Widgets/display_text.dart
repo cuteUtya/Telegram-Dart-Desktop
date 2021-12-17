@@ -22,7 +22,7 @@ class TextDisplay {
   static const String emojiFont = "emoji";
 
   static TextStyle get chatTittle => create(
-      size: 20,
+      size: 18,
       fontWeight: FontWeight.bold,
       textColor: TextColor.HeaderMain,
       fontFamily: greaterImportance);

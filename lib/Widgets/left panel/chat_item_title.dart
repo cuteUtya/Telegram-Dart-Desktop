@@ -28,15 +28,13 @@ class ChatItemTitle extends StatelessWidget {
                               margin: const EdgeInsets.only(left: 4),
                               child: isScam
                                   ? Icon(Icons.warning,
-                                      size: 24,
                                       color: ClientTheme.currentTheme
                                           .getField("ScamIconColor"))
                                   : (isVerifed
                                       ? Icon(Icons.verified,
                                           color: ClientTheme.currentTheme
                                               .getField(
-                                                  "VerifedSupergoupIconColor"),
-                                          size: 24)
+                                                  "VerifedSupergoupIconColor"))
                                       : const SizedBox.shrink())))
                     ]));
   }
