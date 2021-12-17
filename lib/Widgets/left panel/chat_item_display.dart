@@ -86,30 +86,43 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
         child: MouseRegion(
           onEnter: (_) => setState(() => _mouseOver = true),
           onExit: (_) => setState(() => _mouseOver = false),
-          child: SizedBox(
-              height: 88,
-              child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  child: Row(children: [
-                    _buildAva(),
-                    const SizedBox(width: 16),
-                    Flexible(
-                        child: Column(children: [
-                      Column(children: [
+          child: Column(children: [
+            USE_HORIZONTAL_SEPARATOR
+                ? const SeparatorLine()
+                : const SizedBox.shrink(),
+            SizedBox(
+                height: 88 - (USE_HORIZONTAL_SEPARATOR ? 1 : 0),
+                child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    child: Row(children: [
+                      _buildAva(),
+                      const SizedBox(width: 16),
+                      Flexible(
+                          child: Column(children: [
                         _buildStatePanel(),
-                        Row(children: [
-                          _buildMessageContent(),
-                          UnreadMentionBubble(count: chat.unreadCount ?? 0),
-                          pinned
-                              ? Icon(Icons.push_pin,
-                                  color: ClientTheme.currentTheme
-                                      .getField("ChatPinIconColor"))
-                              : const SizedBox.shrink()
-                        ]),
-                      ])
-                    ]))
-                  ]))),
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildMessageContent(),
+                              Container(
+                                  margin: const EdgeInsets.only(top: 8),
+                                  child: Row(children: [
+                                    UnreadMentionBubble(
+                                        count: chat.unreadCount ?? 0),
+                                    pinned
+                                        ? Icon(Icons.push_pin,
+                                            color: ClientTheme.currentTheme
+                                                .getField("ChatPinIconColor"))
+                                        : const SizedBox.shrink()
+                                  ])),
+                            ])
+                      ]))
+                    ]))),
+            USE_HORIZONTAL_SEPARATOR
+                ? const SeparatorLine()
+                : const SizedBox.shrink(),
+          ]),
         ));
   }
 
@@ -155,17 +168,19 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
 
   Widget _buildMessageContent() {
     return Expanded(
-        child: chatAction.action is! ChatActionCancel
-            ? ChatItemActionDisplay(
-                isPrivate: interlocutor != null,
-                chatid: chat.id!,
-                client: widget.client,
-                action: chatAction)
-            : ChatItemLastMessageContent(
-                joinInfo: joinInfo,
-                lastMessageAuthor: lastMessageSenderName,
-                chat: chat,
-                client: widget.client));
+        child: Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: chatAction.action is! ChatActionCancel
+                ? ChatItemActionDisplay(
+                    isPrivate: interlocutor != null,
+                    chatid: chat.id!,
+                    client: widget.client,
+                    action: chatAction)
+                : ChatItemLastMessageContent(
+                    joinInfo: joinInfo,
+                    lastMessageAuthor: lastMessageSenderName,
+                    chat: chat,
+                    client: widget.client)));
   }
 
   bool get isOnline {
