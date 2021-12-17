@@ -80,9 +80,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
         curve: Curves.decelerate,
         margin: EdgeInsets.only(top: margin),
         duration: const Duration(milliseconds: 400),
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-            color: containerColor),
+        color: containerColor,
         child: MouseRegion(
           onEnter: (_) => setState(() => _mouseOver = true),
           onExit: (_) => setState(() => _mouseOver = false),
@@ -91,7 +89,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                 ? const SeparatorLine()
                 : const SizedBox.shrink(),
             SizedBox(
-                height: 88 - (USE_HORIZONTAL_SEPARATOR ? 1 : 0),
+                height: 88,
                 child: Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -101,6 +99,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                       Flexible(
                           child: Column(children: [
                         _buildStatePanel(),
+                        SizedBox(height: 2),
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -115,7 +114,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                             color: ClientTheme.currentTheme
                                                 .getField("ChatPinIconColor"))
                                         : const SizedBox.shrink()
-                                  ])),
+                                  ]))
                             ])
                       ]))
                     ]))),
