@@ -98,7 +98,6 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                         child: Column(children: [
                       Column(children: [
                         _buildStatePanel(),
-                        const SizedBox(height: 2),
                         Row(children: [
                           _buildMessageContent(),
                           UnreadMentionBubble(count: chat.unreadCount ?? 0),

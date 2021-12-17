@@ -240,6 +240,16 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         chat.key.currentState?.updateChatInfo(chat.chat);
       }
     });
+
+    widget.client.updateChatReadinbox.listen((event) {
+      _ChatFullInfo? chat =
+          chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      if (chat != null) {
+        chat.chat.unreadCount = event.unreadCount;
+        chat.chat.lastReadInboxMessageId = event.lastReadInboxMessageId;
+        chat.key.currentState?.updateChatInfo(chat.chat);
+      }
+    });
     listViewContoller.addListener(updateShouldDraw);
     super.initState();
   }
