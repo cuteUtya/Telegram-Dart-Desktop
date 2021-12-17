@@ -158,7 +158,8 @@ enum TextColor {
   Transparent,
   ChatLastTimeMessage,
   PeerNameTextColor,
-  Draft
+  Draft,
+  White
 }
 
 class _textSection {

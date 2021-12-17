@@ -48,6 +48,24 @@ String bytesToSize(int bytes) {
   return "${(bytes / pow(1024, i)).toStringAsFixed(2)} ${sizes[i]}";
 }
 
+String getHHMM(DateTime time, bool useUSAStyle) {
+  String afterTime = "";
+  if (useUSAStyle) {
+    if (time.hour > 12) {
+      time = time.subtract(const Duration(hours: 12));
+      afterTime = "PM";
+    } else {
+      afterTime = "AM";
+    }
+  }
+  return "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())} $afterTime";
+}
+
+String validateDataComponent(String compenent) {
+  if (compenent.length <= 1) return "0$compenent";
+  return compenent;
+}
+
 String getUserLocale() => "ru";
 String getDatabaseDirectory() =>
     Platform.isLinux ? "/home/timur/tdDb" : "D:/tdclient/tddb";

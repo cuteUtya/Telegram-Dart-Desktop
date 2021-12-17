@@ -9,8 +9,10 @@ import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
+import 'package:myapp/Widgets/unread_mention_bubble.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
+import 'package:myapp/utils.dart';
 
 class ChatItemDisplay extends StatefulWidget {
   const ChatItemDisplay(
@@ -73,118 +75,98 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
       _mouseOver = false;
       return Container(height: 88, margin: EdgeInsets.only(top: margin));
     }
+
     return AnimatedContainer(
-        curve: Curves.decelerate /*Curves.elasticOut*/,
+        curve: Curves.decelerate,
         margin: EdgeInsets.only(top: margin),
         duration: const Duration(milliseconds: 400),
         decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12))
-            /*borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(12),
-                    bottomRight: Radius.circular(12))*/
-            ,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
             color: containerColor),
         child: MouseRegion(
-            onEnter: (_) => setState(() => _mouseOver = true),
-            onExit: (_) => setState(() => _mouseOver = false),
-            child: SizedBox(
-                height: 88,
-                child: Padding(
-                    padding: const EdgeInsets.only(right: 12, left: 12),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          //user pic
-                          Stack(children: [
-                            SizedBox(
-                                height: 64,
-                                width: 64,
-                                child: ChatPhotoDisplay(
-                                    photo: chat.photo,
-                                    chatId: chat.id!,
-                                    chatTitle: chat.title!,
-                                    client: widget.client)),
-                            Container(
-                                margin:
-                                    const EdgeInsets.only(left: 44, top: 44),
-                                height: 20,
-                                width: 20,
-                                alignment: Alignment.bottomRight,
-                                child: OnlineIndicatorDidplay(
-                                    online: isOnline,
-                                    aroundOnlineColor: containerColor))
-                          ]),
-                          const SizedBox(width: 16),
-                          Flexible(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                USE_HORIZONTAL_SEPARATOR && !pinned
-                                    ? const SeparatorLine()
-                                    : const SizedBox.shrink(),
-                                const SizedBox(height: 8),
-                                Expanded(
-                                    child: Stack(children: [
-                                  Container(
-                                      margin: const EdgeInsets.only(top: 26),
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 40),
-                                        child: chatAction.action
-                                                is! ChatActionCancel
-                                            ? ChatItemActionDisplay(
-                                                isPrivate: interlocutor != null,
-                                                chatid: chat.id!,
-                                                client: widget.client,
-                                                action: chatAction)
-                                            : ChatItemLastMessageContent(
-                                                joinInfo: joinInfo,
-                                                lastMessageAuthor:
-                                                    lastMessageSenderName,
-                                                chat: chat,
-                                                client: widget.client),
-                                      )),
-                                  //TODO not just positions[0]
-                                  pinned
-                                      ? Container(
-                                          child: Icon(Icons.push_pin,
-                                              color: ClientTheme.currentTheme
-                                                  .getField(
-                                                      "ChatPinIconColor")),
-                                          alignment: Alignment.centerRight)
-                                      : const SizedBox.shrink(),
-                                  Row(children: [
-                                    Expanded(
-                                        child: ChatItemTitle(
-                                            title: (widget.interlocutor?.type
-                                                    is UserTypeDeleted)
-                                                ? widget.client.getTranslation(
-                                                    "lng_deleted")
-                                                : chat.title!,
-                                            isScam: isScam,
-                                            isVerifed: isVerifed)),
-                                    (chat.lastMessage?.isOutgoing ?? false) &&
-                                            chat.draftMessage == null
-                                        ? CheckMark(
-                                            isReaded: (chat.lastMessage?.id ??
-                                                    0) <=
-                                                (chat.lastReadOutboxMessageId ??
-                                                    0))
-                                        : const SizedBox.shrink(),
-                                    const SizedBox(width: 2),
-                                    Text(getMessageTime(),
-                                        textAlign: TextAlign.right,
-                                        style: TextDisplay.create(
-                                            size: 18,
-                                            textColor:
-                                                TextColor.ChatLastTimeMessage))
-                                  ])
-                                ])),
-                                USE_HORIZONTAL_SEPARATOR && pinned
-                                    ? const SeparatorLine()
-                                    : const SizedBox.shrink()
-                              ]))
-                        ])))));
+          onEnter: (_) => setState(() => _mouseOver = true),
+          onExit: (_) => setState(() => _mouseOver = false),
+          child: SizedBox(
+              height: 88,
+              child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(children: [
+                    _buildAva(),
+                    const SizedBox(width: 16),
+                    Flexible(
+                        child: Column(children: [
+                      Column(children: [
+                        _buildStatePanel(),
+                        const SizedBox(height: 2),
+                        Row(children: [
+                          _buildMessageContent(),
+                          UnreadMentionBubble(count: chat.unreadCount ?? 0),
+                          pinned
+                              ? Icon(Icons.push_pin,
+                                  color: ClientTheme.currentTheme
+                                      .getField("ChatPinIconColor"))
+                              : const SizedBox.shrink()
+                        ]),
+                      ])
+                    ]))
+                  ]))),
+        ));
+  }
+
+  Widget _buildAva() {
+    return Stack(alignment: Alignment.bottomRight, children: [
+      SizedBox(
+          height: 64,
+          width: 64,
+          child: ChatPhotoDisplay(
+              photo: chat.photo,
+              chatId: chat.id!,
+              chatTitle: chat.title!,
+              client: widget.client)),
+      OnlineIndicatorDidplay(
+          heigth: 20,
+          width: 20,
+          online: isOnline,
+          aroundOnlineColor: containerColor)
+    ]);
+  }
+
+  Widget _buildStatePanel() {
+    return Row(children: [
+      Expanded(
+          child: ChatItemTitle(
+              title: (widget.interlocutor?.type is UserTypeDeleted)
+                  ? widget.client.getTranslation("lng_deleted")
+                  : chat.title!,
+              isScam: isScam,
+              isVerifed: isVerifed)),
+      (chat.lastMessage?.isOutgoing ?? false) && chat.draftMessage == null
+          ? CheckMark(
+              isReaded: (chat.lastMessage?.id ?? 0) <=
+                  (chat.lastReadOutboxMessageId ?? 0))
+          : const SizedBox.shrink(),
+      const SizedBox(width: 2),
+      Text(getMessageTime(),
+          textAlign: TextAlign.right,
+          style: TextDisplay.create(
+              size: 18, textColor: TextColor.ChatLastTimeMessage))
+    ]);
+  }
+
+  Widget _buildMessageContent() {
+    return Expanded(
+        child: chatAction.action is! ChatActionCancel
+            ? ChatItemActionDisplay(
+                isPrivate: interlocutor != null,
+                chatid: chat.id!,
+                client: widget.client,
+                action: chatAction)
+            : ChatItemLastMessageContent(
+                joinInfo: joinInfo,
+                lastMessageAuthor: lastMessageSenderName,
+                chat: chat,
+                client: widget.client));
   }
 
   bool get isOnline {
@@ -223,9 +205,9 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
           .inDays;
 
       if (deltaInDays <= 0) {
-        return getHHMM(time);
+        return getHHMM(time, useUSAStyle);
       } else if (deltaInDays <= 7 && time.weekday < now.weekday) {
-        return "${widget.client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time)})";
+        return "${widget.client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time, useUSAStyle)})";
       }
 
       return "${validateDataComponent(time.day.toString())}.${validateDataComponent(time.month.toString())}.${time.year}";
@@ -235,22 +217,4 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
 
   //TODO show it in settings
   bool useUSAStyle = true;
-
-  String getHHMM(DateTime time) {
-    String afterTime = "";
-    if (useUSAStyle) {
-      if (time.hour > 12) {
-        time = time.subtract(const Duration(hours: 12));
-        afterTime = "PM";
-      } else {
-        afterTime = "AM";
-      }
-    }
-    return "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())} $afterTime";
-  }
-
-  String validateDataComponent(String compenent) {
-    if (compenent.length <= 1) return "0$compenent";
-    return compenent;
-  }
 }
