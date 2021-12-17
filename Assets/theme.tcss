@@ -70,3 +70,4 @@ TextInlineIconsColor: ref(RegularText);
 ChatPinIconColor: ref(RegularText);
 CheckMarkChatListColor: ref(OnlineColor);
 ExpiredPhotoChatListIconColor: #F65B6D;
+Draft: ref(DangerColor);

@@ -27,7 +27,10 @@ class ChatItemLastMessageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (chat.lastMessage == null) return const Center();
-    var content = chat.lastMessage!.content!;
+
+    var content = draft
+        ? chat.draftMessage!.inputMessageText
+        : chat.lastMessage!.content!;
     bool messageTypeAllowShowFrom = true;
     FormattedText text = FormattedText(text: "");
     List<InlineSpan> displayContent = [];
@@ -149,6 +152,11 @@ class ChatItemLastMessageContent extends StatelessWidget {
             Icons.create, client.getTranslation("lng_action_created_channel"));
         break;
 
+      case InputMessageText:
+        content as InputMessageText;
+        text = content.text!;
+        break;
+
       default:
         text = FormattedText(text: content.runtimeType.toString());
         break;
@@ -158,8 +166,12 @@ class ChatItemLastMessageContent extends StatelessWidget {
         maxLines: 2,
         text: TextSpan(
           children: TextDisplay.parseEmojiInString(
-                  showAuthor ? "$lastMessageSenderName: " : "",
-                  TextDisplay.create(size: 18, textColor: TextColor.Accent)) +
+                  messageTypeAllowShowFrom
+                      ? (showAuthor ? "$lastMessageSenderName: " : "")
+                      : "",
+                  TextDisplay.create(
+                      size: 18,
+                      textColor: draft ? TextColor.Draft : TextColor.Accent)) +
               [
                 WidgetSpan(
                     child: chat.lastMessage!.forwardInfo != null
@@ -187,6 +199,9 @@ class ChatItemLastMessageContent extends StatelessWidget {
   }
 
   String get lastMessageSenderName {
+    if (draft) {
+      return client.getTranslation("lng_from_draft");
+    }
     if (chat.lastMessage!.sender! is MessageSenderUser) {
       if (lastMessageSenderId == client.me) {
         return client.getTranslation("lng_from_you");
@@ -204,8 +219,12 @@ class ChatItemLastMessageContent extends StatelessWidget {
     return false;
   }
 
-  bool get showAuthor => !((chat.id == client.me ||
-          (chat.type is ChatTypeSupergroup && isChannel)) ||
-      ((chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) &&
-          lastMessageSenderId != client.me));
+  bool get showAuthor => draft
+      ? true
+      : !((chat.id == client.me ||
+              (chat.type is ChatTypeSupergroup && isChannel)) ||
+          ((chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) &&
+              lastMessageSenderId != client.me));
+
+  bool get draft => chat.draftMessage != null;
 }
