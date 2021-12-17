@@ -64,15 +64,18 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
       setState(() => chatAction = newChatAction);
   void updateShouldDrawOption(bool value) => setState(() => shouldDraw = value);
 
+  bool get pinned => chat.positions?[0].isPinned ?? false;
+  double get margin => order * 88;
+
   @override
   Widget build(BuildContext context) {
     if (!shouldDraw) {
       _mouseOver = false;
-      return Container(height: 88, margin: EdgeInsets.only(top: order * 88));
+      return Container(height: 88, margin: EdgeInsets.only(top: margin));
     }
     return AnimatedContainer(
         curve: Curves.decelerate /*Curves.elasticOut*/,
-        margin: EdgeInsets.only(top: order * 88),
+        margin: EdgeInsets.only(top: margin),
         duration: const Duration(milliseconds: 400),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12))
@@ -116,6 +119,9 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                USE_HORIZONTAL_SEPARATOR && !pinned
+                                    ? const SeparatorLine()
+                                    : const SizedBox.shrink(),
                                 const SizedBox(height: 8),
                                 Expanded(
                                     child: Stack(children: [
@@ -139,7 +145,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                                 client: widget.client),
                                       )),
                                   //TODO not just positions[0]
-                                  chat.positions![0].isPinned!
+                                  pinned
                                       ? Container(
                                           child: Icon(Icons.push_pin,
                                               color: ClientTheme.currentTheme
@@ -174,8 +180,8 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                                 TextColor.ChatLastTimeMessage))
                                   ])
                                 ])),
-                                USE_HORIZONTAL_SEPARATOR
-                                    ? const SeparatorLine(useGradient: true)
+                                USE_HORIZONTAL_SEPARATOR && pinned
+                                    ? const SeparatorLine()
                                     : const SizedBox.shrink()
                               ]))
                         ])))));

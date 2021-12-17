@@ -37,8 +37,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
     switch (content.runtimeType) {
       case MessageText:
         text = (content as MessageText).text!;
-        text.text = text.text!.replaceAll("\n", " ");
-        text.text = text.text!.replaceAll("\r", " ");
+        text.text = text.text!.replaceAll(RegExp(r"\n"), " ");
         break;
 
       case MessageAnimatedEmoji:
