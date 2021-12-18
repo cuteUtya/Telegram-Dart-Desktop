@@ -61,8 +61,10 @@ class _ChatFullInfo {
 }
 
 class _ChatListDisplayState extends State<ChatListDisplay> {
-  void updateChats() =>
-      widget.client.send(LoadChats(chatList: ChatListMain(), limit: 25));
+  void updateChats() {
+    widget.client.send(LoadChats(chatList: ChatListMain(), limit: 25));
+    widget.client.send(LoadChats(chatList: ChatListArchive(), limit: 25));
+  }
 
   Future<Supergroup?> getSupergroup(Chat chat) async {
     if (chat.type is ChatTypeSupergroup) {
@@ -166,10 +168,8 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
     updateShouldDraw();
   }
 
-  @override
-  void initState() {
-    updateChats();
-    widget.client.updateChatPosition.listen((event) async {
+  void listenChatPosition() async {
+    await for (final event in widget.client.updateChatPosition) {
       _ChatFullInfo? chat =
           chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat == null) {
@@ -181,7 +181,13 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         chat.chat.positions![0] = event.position!;
         sortItems();
       }
-    });
+    }
+  }
+
+  @override
+  void initState() {
+    updateChats();
+    listenChatPosition();
 
     widget.client.updateChatLastMessage.listen((event) async {
       _ChatFullInfo? chat =
