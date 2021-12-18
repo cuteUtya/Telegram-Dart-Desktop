@@ -10,6 +10,9 @@ void main() async {
   await ClientTheme.init();
   var client = TelegramClient();
   await client.init();
+  await client.send(SetLogStream(
+      logStream: LogStreamFile(
+          maxFileSize: 100000000, path: "/home/timur/tdlib_logs.txt")));
   await client.send(SetLogVerbosityLevel(newVerbosityLevel: 0));
 
   runApp(MaterialApp(home: Material(child: App(client: client))));
