@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 
-class UnreadMentionBubble extends StatelessWidget {
-  const UnreadMentionBubble({Key? key, required this.count, this.color})
+class UnreadCountBubble extends StatelessWidget {
+  const UnreadCountBubble({Key? key, required this.count, this.color})
       : super(key: key);
   final int count;
   final Color? color;
