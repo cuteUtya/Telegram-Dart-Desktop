@@ -3,10 +3,14 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 
 class SeparatorLine extends StatelessWidget {
   const SeparatorLine(
-      {Key? key, this.useGradient = false, this.isHorizontal = true})
+      {Key? key,
+      this.useGradient = false,
+      this.isHorizontal = true,
+      this.color})
       : super(key: key);
   final bool useGradient;
   final bool isHorizontal;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,7 +20,8 @@ class SeparatorLine extends StatelessWidget {
         width: isHorizontal ? null : 1);
   }
 
-  Color get lineColor => ClientTheme.currentTheme.getField("BorderLineColor");
+  Color get lineColor =>
+      color ?? ClientTheme.currentTheme.getField("BorderLineColor");
 
   LinearGradient get gradient => LinearGradient(
       colors: [Colors.transparent, lineColor, Colors.transparent]);
