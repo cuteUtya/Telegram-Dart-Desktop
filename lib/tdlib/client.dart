@@ -68,9 +68,9 @@ class TelegramClient {
       .where((u) => u is UpdateChatDraftMessage)
       .map((a) => (a as UpdateChatDraftMessage));
 
-  Stream<List<ChatFilterInfo>> get updateChatFilters => updates
+  Stream<UpdateChatFilters> get updateChatFilters => updates
       .where((u) => u is UpdateChatFilters)
-      .map((a) => (a as UpdateChatFilters).chatFilters!);
+      .map((a) => (a as UpdateChatFilters));
 
   Stream<UpdateChatHasScheduledMessages> get updateChatHasScheduledMessages =>
       updates
@@ -528,6 +528,8 @@ class TelegramClient {
     return translate;
   }
 
+  List<ChatFilterInfo>? chatFilterInfo;
+
   Future<void> init() async {
     Completer completer = Completer<void>();
     var receive = await initIsolate();
@@ -544,6 +546,9 @@ class TelegramClient {
         var extra = json.decode(message)["@extra"];
         if (extra == null) {
           _updates.add(tdobject as Update);
+          if (tdobject is UpdateChatFilters){
+            chatFilterInfo = tdobject.chatFilters;
+          }
         } else {
           _requestsQueue[extra as int]!(tdobject);
           _requestsQueue.remove(extra);
