@@ -107,7 +107,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                               Container(
                                   margin: const EdgeInsets.only(top: 8),
                                   child: Row(children: [
-                                    UnreadMentionBubble(
+                                    UnreadCountBubble(
                                         count: chat.unreadCount ?? 0),
                                     pinned
                                         ? Icon(Icons.push_pin,
@@ -142,7 +142,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
             online: isOnline,
             aroundOnlineColor: containerColor)
       ]),
-      UnreadMentionBubble(
+      UnreadCountBubble(
           count: chat.unreadMentionCount ?? 0,
           color:
               ClientTheme.currentTheme.getField("UnreadMentionChatBubbleColor"))

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
@@ -47,7 +48,8 @@ class _LeftPanelState extends State<LeftPanel> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(12))))),
           ]),
-          const SizedBox(height: 44),
+          const SizedBox(height: 12),
+          ChatFilterHorizontal(client: widget.client),
           const SeparatorLine(),
           Expanded(child: ChatListDisplay(client: widget.client))
         ],
