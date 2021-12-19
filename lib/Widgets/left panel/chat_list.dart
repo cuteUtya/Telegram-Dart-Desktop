@@ -35,7 +35,6 @@ class ChatListDisplay extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (context, index) {
           return ChatItemDisplay(
-              key: UniqueKey(),
               chat: list[index].chat,
               client: client,
               interlocutor: list[index].interlocutor,
