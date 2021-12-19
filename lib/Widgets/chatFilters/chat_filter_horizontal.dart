@@ -93,7 +93,6 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
               dragDevices: PointerDeviceKind.values.toSet(),
             ),
             child: ListView(
-                shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 children: filters
                     .map((filter) => ChatFilterItemHorizontal(
