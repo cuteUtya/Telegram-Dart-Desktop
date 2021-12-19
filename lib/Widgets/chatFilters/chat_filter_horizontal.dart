@@ -54,7 +54,10 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     setState(() {});
   }
 
+  bool _init = false;
+
   void _subcribeOnUpdates() {
+    _init = true;
     rebuildFilters(widget.client.chatFilterInfo ?? []);
     widget.client.updateChatFilters.listen((event) {
       rebuildFilters(event.chatFilters!);
@@ -78,7 +81,9 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _subcribeOnUpdates());
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      if (!_init) _subcribeOnUpdates();
+    });
     if (filters.length <= 1) return const SizedBox.shrink();
     return Container(
         height: 36,
