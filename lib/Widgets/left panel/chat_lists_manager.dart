@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -139,6 +141,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
   }
 
   PageController pageController = PageController();
+  List<StreamSubscription> _subscriptions = [];
 
   void _updateChats() {
     widget.client.send(LoadChats(chatList: ChatListMain(), limit: 25));
@@ -149,7 +152,8 @@ class ChatListsManagerState extends State<ChatListsManager> {
   void initState() {
     _updateChats();
     _listenChatPosition();
-    widget.client.updateChatLastMessage.listen((event) async {
+    _subscriptions
+        .add(widget.client.updateChatLastMessage.listen((event) async {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
@@ -163,18 +167,18 @@ class ChatListsManagerState extends State<ChatListsManager> {
             await getLastMessageAuthor(chat.chat) ?? "";
         setState(() {});
       }
-    });
+    }));
 
-    widget.client.updateUserStatus.listen((event) async {
+    _subscriptions.add(widget.client.updateUserStatus.listen((event) async {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.userId);
       if (chat != null) {
         chat.interlocutor?.status = event.status;
         setState(() {});
       }
-    });
+    }));
 
-    widget.client.updateUserChatAction.listen((event) async {
+    _subscriptions.add(widget.client.updateUserChatAction.listen((event) async {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
@@ -184,18 +188,18 @@ class ChatListsManagerState extends State<ChatListsManager> {
                 as User);
         setState(() {});
       }
-    });
+    }));
 
-    widget.client.updateChatReadOutbox.listen((event) {
+    _subscriptions.add(widget.client.updateChatReadOutbox.listen((event) {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
         chat.chat.lastReadOutboxMessageId = event.lastReadOutboxMessageId;
         setState(() {});
       }
-    });
+    }));
 
-    widget.client.updateChatDraftMessage.listen((event) {
+    _subscriptions.add(widget.client.updateChatDraftMessage.listen((event) {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
@@ -203,9 +207,9 @@ class ChatListsManagerState extends State<ChatListsManager> {
         chat.chat.positions = event.positions;
         setState(() {});
       }
-    });
+    }));
 
-    widget.client.updateChatReadinbox.listen((event) {
+    _subscriptions.add(widget.client.updateChatReadinbox.listen((event) {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
@@ -213,26 +217,35 @@ class ChatListsManagerState extends State<ChatListsManager> {
         chat.chat.lastReadInboxMessageId = event.lastReadInboxMessageId;
         setState(() {});
       }
-    });
+    }));
 
-    widget.client.updateChatUnreadMentionCount.listen((event) {
+    _subscriptions
+        .add(widget.client.updateChatUnreadMentionCount.listen((event) {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
         chat.chat.unreadMentionCount = event.unreadMentionCount;
         setState(() {});
       }
-    });
+    }));
 
-    widget.client.updateMessageMentionRead.listen((event) {
+    _subscriptions.add(widget.client.updateMessageMentionRead.listen((event) {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
         chat.chat.unreadMentionCount = event.unreadMentionCount;
         setState(() {});
       }
-    });
+    }));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _subscriptions.forEach((element) {
+      element.cancel();
+    });
+    super.dispose();
   }
 
   @override
