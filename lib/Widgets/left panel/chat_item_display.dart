@@ -8,6 +8,7 @@ import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_i
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
+import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -23,7 +24,8 @@ class ChatItemDisplay extends StatefulWidget {
       required this.supergroup,
       required this.joinInfo,
       required this.lastMessageSenderName,
-      required this.order})
+      required this.order,
+      required this.chatList})
       : super(key: key);
   final Chat chat;
   final User? interlocutor;
@@ -31,6 +33,7 @@ class ChatItemDisplay extends StatefulWidget {
   final UsersJoinedGroupInfo? joinInfo;
   final String lastMessageSenderName;
   final TelegramClient client;
+  final ChatList chatList;
   final int order;
 
   @override
@@ -40,7 +43,7 @@ class ChatItemDisplay extends StatefulWidget {
 class ChatItemDisplayState extends State<ChatItemDisplay> {
   static const bool USE_HORIZONTAL_SEPARATOR = true;
 
-  late bool shouldDraw = false;
+  late bool shouldDraw = true;
   late int order = widget.order;
   late Chat chat = widget.chat;
   late String lastMessageSenderName = widget.lastMessageSenderName;
@@ -66,19 +69,24 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
       setState(() => chatAction = newChatAction);
   void updateShouldDrawOption(bool value) => setState(() => shouldDraw = value);
 
-  bool get pinned => chat.positions?[0].isPinned ?? false;
-  double get margin => order * 88;
+  bool get pinned =>
+      chat.positions
+          ?.firstWhere(
+              (element) => compareChatlists(element.list!, widget.chatList))
+          .isPinned ??
+      false;
+  //double get margin => order * 88;
 
   @override
   Widget build(BuildContext context) {
-    if (!shouldDraw) {
+    /*  if (!shouldDraw) {
       _mouseOver = false;
       return Container(height: 88, margin: EdgeInsets.only(top: margin));
-    }
+    }*/
 
     return AnimatedContainer(
         curve: Curves.decelerate,
-        margin: EdgeInsets.only(top: margin),
+        //margin: EdgeInsets.only(top: margin),
         duration: const Duration(milliseconds: 400),
         color: containerColor,
         child: MouseRegion(

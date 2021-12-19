@@ -3,19 +3,16 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
-import 'package:myapp/Widgets/left%20panel/chat_list.dart';
+import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
 
-class LeftPanel extends StatefulWidget {
+class LeftPanel extends StatelessWidget {
   const LeftPanel({Key? key, required this.client}) : super(key: key);
   final TelegramClient client;
-  @override
-  State<LeftPanel> createState() => _LeftPanelState();
-}
 
-class _LeftPanelState extends State<LeftPanel> {
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
+    GlobalKey<ChatListsManagerState> key = GlobalKey<ChatListsManagerState>();
     return Padding(
       padding: const EdgeInsets.only(top: 12),
       child: Column(
@@ -36,7 +33,7 @@ class _LeftPanelState extends State<LeftPanel> {
                         children: [
                           const Icon(Icons.search, size: 18),
                           const SizedBox(width: 2),
-                          widget.client.buildTextByKey(
+                          client.buildTextByKey(
                               "lng_dlg_filter",
                               TextDisplay.create(
                                   size: 18,
@@ -49,9 +46,9 @@ class _LeftPanelState extends State<LeftPanel> {
                             const BorderRadius.all(Radius.circular(12))))),
           ]),
           const SizedBox(height: 12),
-          ChatFilterHorizontal(client: widget.client),
+          ChatFilterHorizontal(client: client, chatListState: key),
           const SeparatorLine(),
-          Expanded(child: ChatListDisplay(client: widget.client))
+          Expanded(child: ChatListsManager(key: key, client: client))
         ],
       ),
     );

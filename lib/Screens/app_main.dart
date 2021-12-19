@@ -14,11 +14,9 @@ class _AppMainState extends State<AppMain> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Container(
-          alignment: Alignment.topLeft,
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.33,
-              child: LeftPanel(client: widget.client))),
+      SizedBox(
+          width: MediaQuery.of(context).size.width * 0.33,
+          child: LeftPanel(client: widget.client)),
       const SeparatorLine(isHorizontal: false)
     ]);
   }

@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_item_horizontal.dart';
+import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
@@ -19,21 +18,27 @@ class ChatFilterFullInfo {
 }
 
 class ChatFilterHorizontal extends StatefulWidget {
-  const ChatFilterHorizontal({Key? key, required this.client})
+  const ChatFilterHorizontal(
+      {Key? key,
+      required this.client,
+      //required this.onChatListChange,
+      required this.chatListState})
       : super(key: key);
   final TelegramClient client;
+  //final Function(ChatList list) onChatListChange;
+  final GlobalKey<ChatListsManagerState> chatListState;
   @override
   State<StatefulWidget> createState() => ChatFilterHorizontalState();
 }
 
 class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
-  List<ChatFilterFullInfo> filters = [];
-  int active = 0;
+  static List<ChatFilterFullInfo> filters = [];
+  static int active = -1;
 
   void rebuildFilters(List<ChatFilterInfo> folders) {
     filters.clear();
     filters.add(ChatFilterFullInfo(
-        id: 0,
+        id: -1,
         title: widget.client.getTranslation("lng_filters_all"),
         unread: 0,
         unreadImportante: 0));
@@ -44,17 +49,17 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
           unread: 0,
           unreadImportante: 0));
     });
+    widget.chatListState.currentState?.setChatLists(<ChatList>[ChatListMain()] +
+        folders.map((e) => ChatListFilter(chatFilterId: e.id)).toList());
     setState(() {});
   }
 
-  @override
-  void initState() {
+  void _subcribeOnUpdates() {
     rebuildFilters(widget.client.chatFilterInfo ?? []);
     widget.client.updateChatFilters.listen((event) {
       rebuildFilters(event.chatFilters!);
     });
     widget.client.updateUnreadChatCount.listen((event) {
-      print(json.encode(event));
       if (event.chatList is ChatListMain) {
         setState(() {
           filters[0].unread = event.unreadCount!;
@@ -69,27 +74,36 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
         });
       }
     });
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) => _subcribeOnUpdates());
     if (filters.length <= 1) return const SizedBox.shrink();
     return Container(
         height: 36,
         margin: const EdgeInsets.only(left: 12),
-        child: Expanded(
-            child: ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  dragDevices: PointerDeviceKind.values.toSet(),
-                ),
-                child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: filters
-                        .map((filter) => ChatFilterItemHorizontal(
-                            onClick: (id) => setState(() => active = id),
-                            info: filter,
-                            active: filter.id == active))
-                        .toList()))));
+        child: ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(
+              dragDevices: PointerDeviceKind.values.toSet(),
+            ),
+            child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: filters
+                    .map((filter) => ChatFilterItemHorizontal(
+                        onClick: (id) {
+                          setState(() => active = id);
+                          widget.chatListState.currentState?.setCurrentChatList(
+                              id == -1
+                                  ? ChatListMain()
+                                  : ChatListFilter(chatFilterId: id));
+                          /*widget.onChatListChange(id == 0
+                              ? ChatListMain()
+                              : ChatListFilter(chatFilterId: id));*/
+                        },
+                        info: filter,
+                        active: filter.id == active))
+                    .toList())));
   }
 }

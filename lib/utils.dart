@@ -48,6 +48,25 @@ String bytesToSize(int bytes) {
   return "${(bytes / pow(1024, i)).toStringAsFixed(2)} ${sizes[i]}";
 }
 
+bool showChatInChatList(List<ChatPosition> poss, ChatList list) {
+  bool result = false;
+  poss.forEach((pos) {
+    if (compareChatlists(pos.list!, list)) {
+      result = true;
+    }
+  });
+  return result;
+}
+
+bool compareChatlists(ChatList a, ChatList b) {
+  return chatListToString(a) == chatListToString(b);
+}
+
+String chatListToString(ChatList list) {
+  if (list is! ChatListFilter) return list.runtimeType.toString();
+  return "${list.runtimeType.toString()} ${list.chatFilterId}";
+}
+
 String getHHMM(DateTime time, bool useUSAStyle) {
   String afterTime = "";
   if (useUSAStyle) {
