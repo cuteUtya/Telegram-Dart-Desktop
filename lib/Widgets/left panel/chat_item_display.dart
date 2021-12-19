@@ -97,10 +97,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                   ]))
                             ])
                       ]))
-                    ]))),
-            USE_HORIZONTAL_SEPARATOR
-                ? const SeparatorLine()
-                : const SizedBox.shrink(),
+                    ])))
           ]),
         ));
   }
