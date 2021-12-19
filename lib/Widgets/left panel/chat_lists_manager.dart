@@ -111,7 +111,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
           }
         }
       }
-      if (!mounted) setState(() {});
+      setState(() {});
     }
   }
 
@@ -135,7 +135,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   void _changeCurrentPage(int index) {
     pageController.animateToPage(index,
-        duration: const Duration(seconds: 1), curve: Curves.decelerate);
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   PageController pageController = PageController();
@@ -237,9 +237,6 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      //_changeCurrentPage(_currentPage);
-    });
     if (_chats.isEmpty) return Container();
     return PageView(
         controller: pageController,

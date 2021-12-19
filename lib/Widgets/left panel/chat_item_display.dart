@@ -7,7 +7,6 @@ import 'package:myapp/Widgets/left%20panel/chat_item_action_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
-import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
@@ -25,7 +24,8 @@ class ChatItemDisplay extends StatefulWidget {
       required this.joinInfo,
       required this.lastMessageSenderName,
       required this.order,
-      required this.chatList})
+      required this.chatList,
+      required this.actionInfo})
       : super(key: key);
   final Chat chat;
   final User? interlocutor;
@@ -35,6 +35,7 @@ class ChatItemDisplay extends StatefulWidget {
   final TelegramClient client;
   final ChatList chatList;
   final int order;
+  final ChatActionInfo? actionInfo;
 
   @override
   State<StatefulWidget> createState() => ChatItemDisplayState();
@@ -43,50 +44,21 @@ class ChatItemDisplay extends StatefulWidget {
 class ChatItemDisplayState extends State<ChatItemDisplay> {
   static const bool USE_HORIZONTAL_SEPARATOR = true;
 
-  late bool shouldDraw = true;
-  late int order = widget.order;
-  late Chat chat = widget.chat;
-  late String lastMessageSenderName = widget.lastMessageSenderName;
-  late UsersJoinedGroupInfo? joinInfo = widget.joinInfo;
-  late User? interlocutor = widget.interlocutor;
-  ChatActionInfo chatAction =
-      ChatActionInfo(action: ChatActionCancel(), who: User());
-
   bool _mouseOver = false;
-
   Color get containerColor => ClientTheme.currentTheme
       .getField(_mouseOver ? "ChatSelectedColor" : "ChatUnselectedColor");
 
-  void reOrder(int newOrder) => setState(() => order = newOrder);
-  void updateChatInfo(Chat newChat) => setState(() => chat = newChat);
-  void updateLastMessageSenderName(String newLastName) =>
-      setState(() => lastMessageSenderName = newLastName);
-  void updateJoinInfo(UsersJoinedGroupInfo? newjoinInfo) =>
-      setState(() => joinInfo = newjoinInfo);
-  void updateInterlocutor(User? newUser) =>
-      setState(() => interlocutor = newUser);
-  void updateChatAction(ChatActionInfo newChatAction) =>
-      setState(() => chatAction = newChatAction);
-  void updateShouldDrawOption(bool value) => setState(() => shouldDraw = value);
-
   bool get pinned =>
-      chat.positions
+      widget.chat.positions
           ?.firstWhere(
               (element) => compareChatlists(element.list!, widget.chatList))
           .isPinned ??
       false;
-  //double get margin => order * 88;
 
   @override
   Widget build(BuildContext context) {
-    /*  if (!shouldDraw) {
-      _mouseOver = false;
-      return Container(height: 88, margin: EdgeInsets.only(top: margin));
-    }*/
-
     return AnimatedContainer(
         curve: Curves.decelerate,
-        //margin: EdgeInsets.only(top: margin),
         duration: const Duration(milliseconds: 400),
         color: containerColor,
         child: MouseRegion(
@@ -116,7 +88,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
                                   margin: const EdgeInsets.only(top: 8),
                                   child: Row(children: [
                                     UnreadCountBubble(
-                                        count: chat.unreadCount ?? 0),
+                                        count: widget.chat.unreadCount ?? 0),
                                     pinned
                                         ? Icon(Icons.push_pin,
                                             color: ClientTheme.currentTheme
@@ -140,9 +112,9 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
             height: 64,
             width: 64,
             child: ChatPhotoDisplay(
-                photo: chat.photo,
-                chatId: chat.id!,
-                chatTitle: chat.title!,
+                photo: widget.chat.photo,
+                chatId: widget.chat.id!,
+                chatTitle: widget.chat.title!,
                 client: widget.client)),
         OnlineIndicatorDidplay(
             heigth: 20,
@@ -151,7 +123,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
             aroundOnlineColor: containerColor)
       ]),
       UnreadCountBubble(
-          count: chat.unreadMentionCount ?? 0,
+          count: widget.chat.unreadMentionCount ?? 0,
           color:
               ClientTheme.currentTheme.getField("UnreadMentionChatBubbleColor"))
     ]);
@@ -163,13 +135,14 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
           child: ChatItemTitle(
               title: (widget.interlocutor?.type is UserTypeDeleted)
                   ? widget.client.getTranslation("lng_deleted")
-                  : chat.title!,
+                  : widget.chat.title!,
               isScam: isScam,
               isVerifed: isVerifed)),
-      (chat.lastMessage?.isOutgoing ?? false) && chat.draftMessage == null
+      (widget.chat.lastMessage?.isOutgoing ?? false) &&
+              widget.chat.draftMessage == null
           ? CheckMark(
-              isReaded: (chat.lastMessage?.id ?? 0) <=
-                  (chat.lastReadOutboxMessageId ?? 0))
+              isReaded: (widget.chat.lastMessage?.id ?? 0) <=
+                  (widget.chat.lastReadOutboxMessageId ?? 0))
           : const SizedBox.shrink(),
       const SizedBox(width: 2),
       Text(getMessageTime(),
@@ -183,16 +156,17 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: chatAction.action is! ChatActionCancel
+            child: widget.actionInfo?.action is! ChatActionCancel &&
+                    widget.actionInfo != null
                 ? ChatItemActionDisplay(
-                    isPrivate: interlocutor != null,
-                    chatid: chat.id!,
+                    isPrivate: widget.interlocutor != null,
+                    chatid: widget.chat.id!,
                     client: widget.client,
-                    action: chatAction)
+                    action: widget.actionInfo!)
                 : ChatItemLastMessageContent(
-                    joinInfo: joinInfo,
-                    lastMessageAuthor: lastMessageSenderName,
-                    chat: chat,
+                    joinInfo: widget.joinInfo,
+                    lastMessageAuthor: widget.lastMessageSenderName,
+                    chat: widget.chat,
                     client: widget.client)));
   }
 
@@ -217,9 +191,9 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
   }
 
   String getMessageTime() {
-    if (chat.lastMessage != null) {
-      var time =
-          DateTime.fromMillisecondsSinceEpoch(chat.lastMessage!.date! * 1000);
+    if (widget.chat.lastMessage != null) {
+      var time = DateTime.fromMillisecondsSinceEpoch(
+          widget.chat.lastMessage!.date! * 1000);
 
       var now = DateTime.now();
       var deltaInDays = (DateTime.now().difference(time) +

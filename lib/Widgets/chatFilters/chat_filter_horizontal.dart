@@ -98,9 +98,6 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                               id == -1
                                   ? ChatListMain()
                                   : ChatListFilter(chatFilterId: id));
-                          /*widget.onChatListChange(id == 0
-                              ? ChatListMain()
-                              : ChatListFilter(chatFilterId: id));*/
                         },
                         info: filter,
                         active: filter.id == active))
