@@ -68,7 +68,6 @@ class ChatListDisplayState extends State<ChatListDisplay> {
         _init = true;
       }
     });
-    print("$virtualScrollOffset virtual scroll");
     var list = widget.chats
         .where((element) =>
             showChatInChatList(element.chat.positions!, widget.chatList))
@@ -78,21 +77,21 @@ class ChatListDisplayState extends State<ChatListDisplay> {
             .compareTo(b.chat.positions!
                 .firstWhere((e) => compareChatlists(e.list!, widget.chatList))
                 .order!));
-    int order = -1;
 
     for (final chat in list) {
       if (keys[_getGlobalIdenteficator(chat.chat)] == null) {
         keys[_getGlobalIdenteficator(chat.chat)] = GlobalKey();
       }
     }
-    var top =
-        max(max((virtualScrollOffset[widget.chatList] ?? 0) ~/ 88, 0) - 5, 0);
-    var bottom = min(min(top + 40, list.length) + 5, list.length);
+    var top = max(((virtualScrollOffset[widget.chatList] ?? 0) ~/ 88) - 4, 0);
+    var bottom =
+        min((top + MediaQuery.of(context).size.height ~/ 88) + 8, list.length);
 
-    list = list.sublist(top, bottom);
+    var sublist = list.sublist(top, bottom);
+    int order = -1;
     return ListView(controller: listViewContoller, children: [
       Stack(children: [
-        for (final chat in list)
+        for (final chat in sublist)
           AnimatedContainer(
               key: Key(chat.hashCode.toString()),
               curve: Curves.decelerate,
@@ -108,10 +107,7 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                   lastMessageSenderName: chat.lastMessageSenderName,
                   chatList: widget.chatList,
                   actionInfo: chat.action)),
-        Container(
-            margin: EdgeInsets.only(
-                top: max(0, (list.length + bottom - 88 * 2) * 88)),
-            height: 1)
+        Container(height: max(0, (list.length) * 88))
       ])
     ]);
   }
