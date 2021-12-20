@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/check_mark.dart';
+import 'package:myapp/Widgets/clickable_object.dart';
+import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_action_display.dart';
@@ -14,8 +18,8 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
 
-class ChatItemDisplay extends StatefulWidget {
-  const ChatItemDisplay(
+class ChatItemDisplay extends StatelessWidget {
+  ChatItemDisplay(
       {Key? key,
       required this.chat,
       required this.client,
@@ -23,7 +27,6 @@ class ChatItemDisplay extends StatefulWidget {
       required this.supergroup,
       required this.joinInfo,
       required this.lastMessageSenderName,
-      required this.order,
       required this.chatList,
       required this.actionInfo})
       : super(key: key);
@@ -34,72 +37,50 @@ class ChatItemDisplay extends StatefulWidget {
   final String lastMessageSenderName;
   final TelegramClient client;
   final ChatList chatList;
-  final int order;
   final ChatActionInfo? actionInfo;
-
-  @override
-  State<StatefulWidget> createState() => ChatItemDisplayState();
-}
-
-class ChatItemDisplayState extends State<ChatItemDisplay> {
-  static const bool USE_HORIZONTAL_SEPARATOR = true;
-
-  bool _mouseOver = false;
   Color get containerColor => ClientTheme.currentTheme
-      .getField(_mouseOver ? "ChatSelectedColor" : "ChatUnselectedColor");
+      .getField(/*_mouseOver ? "ChatSelectedColor" : */ "ChatUnselectedColor");
 
+  static const bool USE_HORIZONTAL_SEPARATOR = true;
   bool get pinned =>
-      widget.chat.positions
-          ?.firstWhere(
-              (element) => compareChatlists(element.list!, widget.chatList))
+      chat.positions
+          ?.firstWhere((element) => compareChatlists(element.list!, chatList))
           .isPinned ??
       false;
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-        curve: Curves.decelerate,
-        duration: const Duration(milliseconds: 400),
-        color: containerColor,
-        child: MouseRegion(
-          onEnter: (_) => setState(() => _mouseOver = true),
-          onExit: (_) => setState(() => _mouseOver = false),
-          child: Column(children: [
-            USE_HORIZONTAL_SEPARATOR
-                ? const SeparatorLine()
-                : const SizedBox.shrink(),
-            SizedBox(
-                height: 88,
-                child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    child: Row(children: [
-                      _buildAva(),
-                      const SizedBox(width: 16),
-                      Flexible(
-                          child: Column(children: [
-                        _buildStatePanel(),
-                        const SizedBox(height: 2),
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildMessageContent(),
-                              Container(
-                                  margin: const EdgeInsets.only(top: 8),
-                                  child: Row(children: [
-                                    UnreadCountBubble(
-                                        count: widget.chat.unreadCount ?? 0),
-                                    pinned
-                                        ? Icon(Icons.push_pin,
-                                            color: ClientTheme.currentTheme
-                                                .getField("ChatPinIconColor"))
-                                        : const SizedBox.shrink()
-                                  ]))
-                            ])
-                      ]))
-                    ])))
-          ]),
-        ));
+    return Column(children: [
+      USE_HORIZONTAL_SEPARATOR
+          ? const SeparatorLine()
+          : const SizedBox.shrink(),
+      SizedBox(
+          height: 88,
+          child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              child: Row(children: [
+                _buildAva(),
+                const SizedBox(width: 16),
+                Flexible(
+                    child: Column(children: [
+                  _buildStatePanel(),
+                  const SizedBox(height: 2),
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    _buildMessageContent(),
+                    Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        child: Row(children: [
+                          UnreadCountBubble(count: chat.unreadCount ?? 0),
+                          pinned
+                              ? Icon(Icons.push_pin,
+                                  color: ClientTheme.currentTheme
+                                      .getField("ChatPinIconColor"))
+                              : const SizedBox.shrink()
+                        ]))
+                  ])
+                ]))
+              ])))
+    ]);
   }
 
   Widget _buildAva() {
@@ -109,10 +90,10 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
             height: 64,
             width: 64,
             child: ChatPhotoDisplay(
-                photo: widget.chat.photo,
-                chatId: widget.chat.id!,
-                chatTitle: widget.chat.title!,
-                client: widget.client)),
+                photo: chat.photo,
+                chatId: chat.id!,
+                chatTitle: chat.title!,
+                client: client)),
         OnlineIndicatorDidplay(
             heigth: 20,
             width: 20,
@@ -120,7 +101,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
             aroundOnlineColor: containerColor)
       ]),
       UnreadCountBubble(
-          count: widget.chat.unreadMentionCount ?? 0,
+          count: chat.unreadMentionCount ?? 0,
           color:
               ClientTheme.currentTheme.getField("UnreadMentionChatBubbleColor"))
     ]);
@@ -130,16 +111,15 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
     return Row(children: [
       Expanded(
           child: ChatItemTitle(
-              title: (widget.interlocutor?.type is UserTypeDeleted)
-                  ? widget.client.getTranslation("lng_deleted")
-                  : widget.chat.title!,
+              title: (interlocutor?.type is UserTypeDeleted)
+                  ? client.getTranslation("lng_deleted")
+                  : chat.title!,
               isScam: isScam,
               isVerifed: isVerifed)),
-      (widget.chat.lastMessage?.isOutgoing ?? false) &&
-              widget.chat.draftMessage == null
+      (chat.lastMessage?.isOutgoing ?? false) && chat.draftMessage == null
           ? CheckMark(
-              isReaded: (widget.chat.lastMessage?.id ?? 0) <=
-                  (widget.chat.lastReadOutboxMessageId ?? 0))
+              isReaded: (chat.lastMessage?.id ?? 0) <=
+                  (chat.lastReadOutboxMessageId ?? 0))
           : const SizedBox.shrink(),
       const SizedBox(width: 2),
       Text(getMessageTime(),
@@ -153,44 +133,43 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: widget.actionInfo?.action is! ChatActionCancel &&
-                    widget.actionInfo != null
+            child: actionInfo?.action is! ChatActionCancel && actionInfo != null
                 ? ChatItemActionDisplay(
-                    isPrivate: widget.interlocutor != null,
-                    chatid: widget.chat.id!,
-                    client: widget.client,
-                    action: widget.actionInfo!)
+                    isPrivate: interlocutor != null,
+                    chatid: chat.id!,
+                    client: client,
+                    action: actionInfo!)
                 : ChatItemLastMessageContent(
-                    joinInfo: widget.joinInfo,
-                    lastMessageAuthor: widget.lastMessageSenderName,
-                    chat: widget.chat,
-                    client: widget.client)));
+                    joinInfo: joinInfo,
+                    lastMessageAuthor: lastMessageSenderName,
+                    chat: chat,
+                    client: client)));
   }
 
   bool get isOnline {
-    if (widget.interlocutor != null) {
-      if (widget.interlocutor!.type is! UserTypeRegular) return false;
-      return widget.interlocutor!.status is UserStatusOnline;
+    if (interlocutor != null) {
+      if (interlocutor!.type is! UserTypeRegular) return false;
+      return interlocutor!.status is UserStatusOnline;
     }
     return false;
   }
 
   bool get isScam {
-    if (widget.supergroup?.isScam ?? false) return true;
-    if (widget.interlocutor?.isScam ?? false) return true;
+    if (supergroup?.isScam ?? false) return true;
+    if (interlocutor?.isScam ?? false) return true;
 
     return false;
   }
 
   bool get isVerifed {
-    if (widget.supergroup?.isVerified ?? false) return true;
+    if (supergroup?.isVerified ?? false) return true;
     return false;
   }
 
   String getMessageTime() {
-    if (widget.chat.lastMessage != null) {
-      var time = DateTime.fromMillisecondsSinceEpoch(
-          widget.chat.lastMessage!.date! * 1000);
+    if (chat.lastMessage != null) {
+      var time =
+          DateTime.fromMillisecondsSinceEpoch(chat.lastMessage!.date! * 1000);
 
       var now = DateTime.now();
       var deltaInDays = (DateTime.now().difference(time) +
@@ -205,7 +184,7 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
       if (deltaInDays <= 0) {
         return getHHMM(time, useUSAStyle);
       } else if (deltaInDays <= 7 && time.weekday < now.weekday) {
-        return "${widget.client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time, useUSAStyle)})";
+        return "${client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time, useUSAStyle)})";
       }
 
       return "${validateDataComponent(time.day.toString())}.${validateDataComponent(time.month.toString())}.${time.year}";
@@ -215,4 +194,14 @@ class ChatItemDisplayState extends State<ChatItemDisplay> {
 
   //TODO show it in settings
   bool useUSAStyle = true;
+  /*@override
+  State<StatefulWidget> createState() => ChatItemDisplayState();*/
 }
+
+/*class ChatItemDisplayState extends State<ChatItemDisplay> {
+  
+
+  bool _mouseOver = false;
+
+}
+*/
