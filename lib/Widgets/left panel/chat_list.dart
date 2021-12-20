@@ -34,13 +34,6 @@ class ChatListDisplayState extends State<ChatListDisplay> {
   static Map<ChatList, double> lastRealScrollOffset = {};
   static Map<ChatList, double> virtualScrollOffset = {};
 
-  bool _shouldDraw(int order) {
-    if (!listViewContoller.hasClients) return true;
-    var myPosition = -listViewContoller.offset + order * 88;
-    return !(myPosition - cachedItemspx > MediaQuery.of(context).size.height ||
-        myPosition + 88 + cachedItemspx < 0);
-  }
-
   @override
   void initState() {
     listViewContoller.addListener(() {
@@ -58,7 +51,7 @@ class ChatListDisplayState extends State<ChatListDisplay> {
     virtualScrollOffset[widget.chatList] = 0;
     lastRealScrollOffset[widget.chatList] = 0;
     listViewContoller.animateTo(0,
-        duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
+        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 
   String _getGlobalIdenteficator(Chat chat) {

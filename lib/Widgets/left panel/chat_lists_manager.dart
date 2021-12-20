@@ -148,7 +148,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   void _changeCurrentPage(int index) {
     pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   PageController pageController = PageController();
