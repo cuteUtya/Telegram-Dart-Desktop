@@ -25,14 +25,16 @@ class ChatListDisplay extends StatefulWidget {
 }
 
 class ChatListDisplayState extends State<ChatListDisplay> {
+  //TODO maybe good idea sometime clean this structure
   static Map<String, GlobalKey> keys = {};
 
   static const double cachedItemspx = 100;
-  ScrollController listViewContoller = ScrollController();
+  late ScrollController listViewContoller = ScrollController(
+      initialScrollOffset: lastRealScrollOffset[widget.chatList] ?? 0);
   static Map<ChatList, double> lastRealScrollOffset = {};
   static Map<ChatList, double> virtualScrollOffset = {};
 
-  bool shouldDraw(int order) {
+  bool _shouldDraw(int order) {
     if (!listViewContoller.hasClients) return true;
     var myPosition = -listViewContoller.offset + order * 88;
     return !(myPosition - cachedItemspx > MediaQuery.of(context).size.height ||
@@ -52,22 +54,19 @@ class ChatListDisplayState extends State<ChatListDisplay> {
     super.initState();
   }
 
+  void jumpToStart() {
+    virtualScrollOffset[widget.chatList] = 0;
+    lastRealScrollOffset[widget.chatList] = 0;
+    listViewContoller.animateTo(0,
+        duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
+  }
+
   String _getGlobalIdenteficator(Chat chat) {
     return "${chat.id!} ${widget.chatList} ${widget.chatList is ChatListFilter ? (widget.chatList as ChatListFilter).chatFilterId : 0}";
   }
 
-  bool _init = false;
-
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (!_init) {
-        listViewContoller.animateTo(lastRealScrollOffset[widget.chatList] ?? 0,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.decelerate);
-        _init = true;
-      }
-    });
     var list = widget.chats
         .where((element) =>
             showChatInChatList(element.chat.positions!, widget.chatList))

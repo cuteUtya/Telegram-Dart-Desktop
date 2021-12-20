@@ -140,6 +140,10 @@ class ChatListsManagerState extends State<ChatListsManager> {
       _currentPage = index;
       _changeCurrentPage(index);
     }
+
+    if (lastPage == _currentPage) {
+      _displayLists[_lists[_currentPage]]?.currentState?.jumpToStart();
+    }
   }
 
   void _changeCurrentPage(int index) {
@@ -257,6 +261,8 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   bool _init = false;
 
+  Map<ChatList, GlobalKey<ChatListDisplayState>> _displayLists = {};
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -270,8 +276,14 @@ class ChatListsManagerState extends State<ChatListsManager> {
     return PageView.builder(
         itemCount: _lists.length,
         controller: pageController,
-        itemBuilder: (_, i) => ChatListDisplay(
-            client: widget.client, chatList: _lists[i], chats: _chats));
+        itemBuilder: (_, i) {
+          _displayLists[_lists[i]] = GlobalKey<ChatListDisplayState>();
+          return ChatListDisplay(
+              key: _displayLists[_lists[i]],
+              client: widget.client,
+              chatList: _lists[i],
+              chats: _chats);
+        });
   }
 }
 
