@@ -113,7 +113,11 @@ class ChatListsManagerState extends State<ChatListsManager> {
           }
         }
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      } else {
+        break;
+      }
     }
   }
 
@@ -122,8 +126,10 @@ class ChatListsManagerState extends State<ChatListsManager> {
   }
 
   void setCurrentChatList(ChatList list) {
+    var lastPage = _currentPage;
     if (list is ChatListMain) {
       _changeCurrentPage(0);
+      _currentPage = 0;
     } else {
       var index = _lists.indexOf(_lists.firstWhere((element) {
         if (element is ChatListFilter) {
@@ -131,6 +137,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
         }
         return false;
       }));
+      _currentPage = index;
       _changeCurrentPage(index);
     }
   }
@@ -248,15 +255,23 @@ class ChatListsManagerState extends State<ChatListsManager> {
     super.dispose();
   }
 
+  bool _init = false;
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (!_init) {
+        pageController.jumpToPage(_currentPage);
+        _init = true;
+      }
+    });
+
     if (_chats.isEmpty) return Container();
-    return PageView(
+    return PageView.builder(
+        itemCount: _lists.length,
         controller: pageController,
-        children: _lists
-            .map((e) => ChatListDisplay(
-                client: widget.client, chatList: e, chats: _chats))
-            .toList());
+        itemBuilder: (_, i) => ChatListDisplay(
+            client: widget.client, chatList: _lists[i], chats: _chats));
   }
 }
 
