@@ -84,21 +84,17 @@ class ChatListDisplayState extends State<ChatListDisplay> {
     return ListView(controller: listViewContoller, children: [
       Stack(children: [
         for (final chat in sublist)
-          AnimatedContainer(
-              key: Key(chat.hashCode.toString()),
-              curve: Curves.decelerate,
-              duration: const Duration(milliseconds: 400),
-              margin: EdgeInsets.only(top: (++order + top) * 88),
-              child: ChatItemDisplay(
-                  key: keys[_getGlobalIdenteficator(chat.chat)],
-                  chat: chat.chat,
-                  client: widget.client,
-                  interlocutor: chat.interlocutor,
-                  supergroup: chat.supergroup,
-                  joinInfo: chat.joinInfo,
-                  lastMessageSenderName: chat.lastMessageSenderName,
-                  chatList: widget.chatList,
-                  actionInfo: chat.action)),
+          ChatItemDisplay(
+              order: ++order + top,
+              key: keys[_getGlobalIdenteficator(chat.chat)],
+              chat: chat.chat,
+              client: widget.client,
+              interlocutor: chat.interlocutor,
+              supergroup: chat.supergroup,
+              joinInfo: chat.joinInfo,
+              lastMessageSenderName: chat.lastMessageSenderName,
+              chatList: widget.chatList,
+              actionInfo: chat.action),
         Container(height: max(0, (list.length) * 88))
       ])
     ]);

@@ -28,9 +28,11 @@ class ChatItemDisplay extends StatelessWidget {
       required this.joinInfo,
       required this.lastMessageSenderName,
       required this.chatList,
-      required this.actionInfo})
+      required this.actionInfo,
+      required this.order})
       : super(key: key);
   final Chat chat;
+  final int order;
   final User? interlocutor;
   final Supergroup? supergroup;
   final UsersJoinedGroupInfo? joinInfo;
@@ -50,37 +52,50 @@ class ChatItemDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      USE_HORIZONTAL_SEPARATOR
-          ? const SeparatorLine()
-          : const SizedBox.shrink(),
-      SizedBox(
-          height: 88,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              child: Row(children: [
-                _buildAva(),
-                const SizedBox(width: 16),
-                Flexible(
-                    child: Column(children: [
-                  _buildStatePanel(),
-                  const SizedBox(height: 2),
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    _buildMessageContent(),
-                    Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        child: Row(children: [
-                          UnreadCountBubble(count: chat.unreadCount ?? 0),
-                          pinned
-                              ? Icon(Icons.push_pin,
-                                  color: ClientTheme.currentTheme
-                                      .getField("ChatPinIconColor"))
-                              : const SizedBox.shrink()
-                        ]))
-                  ])
-                ]))
-              ])))
-    ]);
+    return AnimatedContainer(
+        curve: Curves.decelerate,
+        duration: const Duration(milliseconds: 400),
+        decoration: BoxDecoration(color: containerColor),
+        margin: EdgeInsets.only(top: order * 88),
+        child: Column(children: [
+          USE_HORIZONTAL_SEPARATOR
+              ? const SeparatorLine()
+              : const SizedBox.shrink(),
+          SizedBox(
+              height: 88,
+              child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(children: [
+                    _buildAva(),
+                    const SizedBox(width: 16),
+                    Flexible(
+                        child: Column(children: [
+                      _buildStatePanel(),
+                      const SizedBox(height: 2),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildMessageContent(),
+                            Container(
+                                margin: const EdgeInsets.only(top: 8),
+                                child: Row(children: [
+                                  UnreadCountBubble(
+                                      count: chat.unreadCount ?? 0,
+                                      color: chat.unreadMentionCount! <= 0
+                                          ? null
+                                          : ClientTheme.currentTheme.getField(
+                                              "UnreadMentionChatBubbleColor")),
+                                  pinned
+                                      ? Icon(Icons.push_pin,
+                                          color: ClientTheme.currentTheme
+                                              .getField("ChatPinIconColor"))
+                                      : const SizedBox.shrink()
+                                ]))
+                          ])
+                    ]))
+                  ])))
+        ]));
   }
 
   Widget _buildAva() {
@@ -115,7 +130,8 @@ class ChatItemDisplay extends StatelessWidget {
                   ? client.getTranslation("lng_deleted")
                   : chat.title!,
               isScam: isScam,
-              isVerifed: isVerifed)),
+              isVerifed: isVerifed,
+              isSupport: isSupport)),
       (chat.lastMessage?.isOutgoing ?? false) && chat.draftMessage == null
           ? CheckMark(
               isReaded: (chat.lastMessage?.id ?? 0) <=
@@ -166,6 +182,11 @@ class ChatItemDisplay extends StatelessWidget {
     return false;
   }
 
+  bool get isSupport {
+    if (interlocutor?.isSupport ?? false) return true;
+    return false;
+  }
+
   String getMessageTime() {
     if (chat.lastMessage != null) {
       var time =
@@ -194,14 +215,4 @@ class ChatItemDisplay extends StatelessWidget {
 
   //TODO show it in settings
   bool useUSAStyle = true;
-  /*@override
-  State<StatefulWidget> createState() => ChatItemDisplayState();*/
 }
-
-/*class ChatItemDisplayState extends State<ChatItemDisplay> {
-  
-
-  bool _mouseOver = false;
-
-}
-*/
