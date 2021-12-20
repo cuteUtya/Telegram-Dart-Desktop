@@ -7,11 +7,13 @@ class ChatItemTitle extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.isScam,
-      required this.isVerifed})
+      required this.isVerifed,
+      required this.isSupport})
       : super(key: key);
   final String title;
   final bool isScam;
   final bool isVerifed;
+  final bool isSupport;
   @override
   Widget build(BuildContext context) {
     return RichText(
@@ -26,16 +28,20 @@ class ChatItemTitle extends StatelessWidget {
                           alignment: PlaceholderAlignment.middle,
                           child: Container(
                               margin: const EdgeInsets.only(left: 4),
-                              child: isScam
-                                  ? Icon(Icons.warning,
-                                      color: ClientTheme.currentTheme
-                                          .getField("ScamIconColor"))
-                                  : (isVerifed
-                                      ? Icon(Icons.verified,
+                              child: isSupport
+                                  ? Icon(Icons.privacy_tip,
+                                      color: ClientTheme.currentTheme.getField(
+                                          "VerifedSupergoupIconColor"))
+                                  : isScam
+                                      ? Icon(Icons.warning,
                                           color: ClientTheme.currentTheme
-                                              .getField(
-                                                  "VerifedSupergoupIconColor"))
-                                      : const SizedBox.shrink())))
+                                              .getField("ScamIconColor"))
+                                      : (isVerifed
+                                          ? Icon(Icons.verified,
+                                              color: ClientTheme.currentTheme
+                                                  .getField(
+                                                      "VerifedSupergoupIconColor"))
+                                          : const SizedBox.shrink())))
                     ]));
   }
 }
