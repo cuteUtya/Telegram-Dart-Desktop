@@ -46,14 +46,9 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case MessageSticker:
-        //TODO in future just pass emoji before "Sticker" text ("${emoji} Sticker")
-        displayContent.addAll([
-          TextDisplay.emoji((content as MessageSticker).sticker!.emoji!, 18),
-          contentEntetyesMargin(),
-          TextSpan(
-              text: client.getTranslation("lng_in_dlg_sticker"),
-              style: TextDisplay.create(size: 18, textColor: TextColor.Accent))
-        ]);
+        displayContent.addAll(TextDisplay.parseEmojiInString(
+            "${(content as MessageSticker).sticker!.emoji!} ${client.getTranslation("lng_in_dlg_sticker")}",
+            TextDisplay.create(size: 18, textColor: TextColor.Accent)));
         break;
 
       case MessageChatDeletePhoto:
