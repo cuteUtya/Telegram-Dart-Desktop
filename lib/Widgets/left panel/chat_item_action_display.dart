@@ -74,13 +74,14 @@ class ChatItemActionDisplay extends StatelessWidget {
     return Row(children: [
       RichText(
           text: TextSpan(
-              children: TextDisplay.parseEmojiInString(transitionStr != null
-                  ? client.getTranslation(transitionStr, replacing: {
-                      "{user}": action.who.firstName!,
-                      "{emoji}": emoji ?? "🍆"
-                    })
-                  : "¯\\_(ツ)_/¯"),
-              style: TextDisplay.chatItemAccent)),
+              children: TextDisplay.parseEmojiInString(
+                  transitionStr != null
+                      ? client.getTranslation(transitionStr, replacing: {
+                          "{user}": action.who.firstName!,
+                          "{emoji}": emoji ?? "🍆"
+                        })
+                      : "¯\\_(ツ)_/¯",
+                  TextDisplay.chatItemAccent))),
       const SizedBox(width: 2),
       animation ?? TextAnimation.fourPoints()
     ]);
