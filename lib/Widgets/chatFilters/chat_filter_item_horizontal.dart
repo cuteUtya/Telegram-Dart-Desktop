@@ -41,7 +41,7 @@ class ChatFilterItemHorizontal extends StatelessWidget {
                                         : TextColor.RegularText)))),
                     const SizedBox(width: 4),
                     UnreadCountBubble(
-                        count: info.unread + info.unreadImportante,
+                        count: info.unread,
                         color: ClientTheme.currentTheme.getField(
                             info.unreadImportante <= 0
                                 ? "UnreadFilterBubbleColor"
