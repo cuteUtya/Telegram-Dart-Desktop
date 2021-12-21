@@ -47,7 +47,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
       case MessageSticker:
         displayContent.addAll(TextDisplay.parseEmojiInString(
-            "${(content as MessageSticker).sticker!.emoji!} ${client.getTranslation("lng_in_dlg_sticker")}",
+            "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ",
             TextDisplay.create(size: 18, textColor: TextColor.Accent)));
         break;
 
