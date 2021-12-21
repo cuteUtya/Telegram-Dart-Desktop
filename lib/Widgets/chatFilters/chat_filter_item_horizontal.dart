@@ -18,43 +18,35 @@ class ChatFilterItemHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        curve: Curves.easeInOutCirc,
-        duration: const Duration(milliseconds: 250),
-        height: 2,
-        child: GestureDetector(
-            onTap: () => onClick(info.id),
-            child: Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Column(mainAxisSize: MainAxisSize.max, children: [
-                  Row(children: [
-                    RichText(
-                        text: TextSpan(
-                            children: TextDisplay.parseEmojiInString(
-                                info.title,
-                                TextDisplay.create(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: TextDisplay.greaterImportance,
-                                    size: 20,
-                                    textColor: active
-                                        ? TextColor.Accent
-                                        : TextColor.RegularText)))),
-                    const SizedBox(width: 4),
-                    UnreadCountBubble(
-                        count: info.unread,
-                        color: ClientTheme.currentTheme.getField(
-                            info.unreadImportante <= 0
-                                ? "UnreadFilterBubbleColor"
-                                : "UnreadFilterMentionBubbleColor")),
-                  ]),
-                ]))),
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    width: 3,
-                    color: active
-                        ? ClientTheme.currentTheme
-                            .getField("ChatFilterActiveColor")
-                        : Colors.transparent))));
+      curve: Curves.easeInOutCirc,
+      duration: const Duration(milliseconds: 250),
+      height: 2,
+      child: GestureDetector(
+          onTap: () => onClick(info.id),
+          child: Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Column(mainAxisSize: MainAxisSize.max, children: [
+                Row(children: [
+                  RichText(
+                      text: TextSpan(
+                          children: TextDisplay.parseEmojiInString(
+                              info.title,
+                              TextDisplay.create(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: TextDisplay.greaterImportance,
+                                  size: 20,
+                                  textColor: active
+                                      ? TextColor.Accent
+                                      : TextColor.RegularText)))),
+                  const SizedBox(width: 4),
+                  UnreadCountBubble(
+                      count: info.unread,
+                      color: ClientTheme.currentTheme.getField(
+                          info.unreadImportante <= 0
+                              ? "UnreadFilterBubbleColor"
+                              : "UnreadFilterMentionBubbleColor")),
+                ]),
+              ]))),
+    );
   }
 }
