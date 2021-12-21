@@ -40,10 +40,8 @@ class ChatItemDisplay extends StatelessWidget {
   final TelegramClient client;
   final ChatList chatList;
   final ChatActionInfo? actionInfo;
-  Color get containerColor => ClientTheme.currentTheme
-      .getField(/*_mouseOver ? "ChatSelectedColor" : */ "ChatUnselectedColor");
 
-  static const bool USE_HORIZONTAL_SEPARATOR = true;
+  static const bool USE_HORIZONTAL_SEPARATOR = false;
   bool get pinned =>
       chat.positions
           ?.firstWhere((element) => compareChatlists(element.list!, chatList))
@@ -55,46 +53,67 @@ class ChatItemDisplay extends StatelessWidget {
     return AnimatedContainer(
         curve: Curves.decelerate,
         duration: const Duration(milliseconds: 400),
-        decoration: BoxDecoration(color: containerColor),
         margin: EdgeInsets.only(top: order * 88),
         child: Column(children: [
-          USE_HORIZONTAL_SEPARATOR
-              ? const SeparatorLine()
-              : const SizedBox.shrink(),
-          SizedBox(
-              height: 88,
-              child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  child: Row(children: [
-                    _buildAva(),
-                    const SizedBox(width: 16),
-                    Flexible(
-                        child: Column(children: [
-                      _buildStatePanel(),
-                      const SizedBox(height: 2),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildMessageContent(),
-                            Container(
-                                margin: const EdgeInsets.only(top: 8),
-                                child: Row(children: [
-                                  UnreadCountBubble(
-                                      count: chat.unreadCount ?? 0,
-                                      color: chat.unreadMentionCount! <= 0
-                                          ? null
-                                          : ClientTheme.currentTheme.getField(
-                                              "UnreadMentionChatBubbleColor")),
-                                  pinned
-                                      ? Icon(Icons.push_pin,
-                                          color: ClientTheme.currentTheme
-                                              .getField("ChatPinIconColor"))
-                                      : const SizedBox.shrink()
-                                ]))
-                          ])
-                    ]))
-                  ])))
+          const Padding(
+              padding: EdgeInsets.only(left: 88, right: 16),
+              child: USE_HORIZONTAL_SEPARATOR
+                  ? SeparatorLine()
+                  : SizedBox.shrink()),
+          TextButton(
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0))),
+                  animationDuration: const Duration(milliseconds: 200),
+                  padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                  overlayColor: MaterialStateProperty.resolveWith((states) {
+                    String themeStr = "ChatUnselectedColor";
+                    if (states.contains(MaterialState.pressed)) {
+                      themeStr = "Accent";
+                    } else if (states.contains(MaterialState.hovered)) {
+                      themeStr = "ChatSelectedColor";
+                    }
+                    return ClientTheme.currentTheme.getField(themeStr);
+                  })),
+              onPressed: () {},
+              child: Column(children: [
+                SizedBox(
+                    height: 88,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 12),
+                        child: Row(children: [
+                          _buildAva(),
+                          const SizedBox(width: 16),
+                          Flexible(
+                              child: Column(children: [
+                            _buildStatePanel(),
+                            const SizedBox(height: 2),
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildMessageContent(),
+                                  Container(
+                                      margin: const EdgeInsets.only(top: 8),
+                                      child: Row(children: [
+                                        UnreadCountBubble(
+                                            count: chat.unreadCount ?? 0,
+                                            color: chat.unreadMentionCount! <= 0
+                                                ? null
+                                                : ClientTheme.currentTheme.getField(
+                                                    "UnreadMentionChatBubbleColor")),
+                                        pinned
+                                            ? Icon(Icons.push_pin,
+                                                color: ClientTheme.currentTheme
+                                                    .getField(
+                                                        "ChatPinIconColor"))
+                                            : const SizedBox.shrink()
+                                      ]))
+                                ])
+                          ]))
+                        ])))
+              ]))
         ]));
   }
 
@@ -109,11 +128,7 @@ class ChatItemDisplay extends StatelessWidget {
                 chatId: chat.id!,
                 chatTitle: chat.title!,
                 client: client)),
-        OnlineIndicatorDidplay(
-            heigth: 20,
-            width: 20,
-            online: isOnline,
-            aroundOnlineColor: containerColor)
+        OnlineIndicatorDidplay(heigth: 20, width: 20, online: isOnline)
       ]),
       UnreadCountBubble(
           count: chat.unreadMentionCount ?? 0,
