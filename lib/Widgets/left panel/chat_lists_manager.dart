@@ -16,7 +16,7 @@ class ChatListsManager extends StatefulWidget {
 
 class ChatListsManagerState extends State<ChatListsManager> {
   static List<ChatFullInfo> _chats = [];
-  static List<ChatList> _lists = []; //[ChatListFilter(chatFilterId: 3)];
+  static List<ChatList> _lists = [];
   static int _currentPage = 0;
 
   Future<Supergroup?> getSupergroup(Chat chat) async {
@@ -122,6 +122,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
   }
 
   void setChatLists(List<ChatList> lists) {
+    lists.forEach((e) => _displayLists[e] = GlobalKey<ChatListDisplayState>());
     setState(() => _lists = lists);
   }
 
@@ -142,7 +143,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
     }
 
     if (lastPage == _currentPage) {
-      _displayLists[_lists[_currentPage]]?.currentState?.jumpToStart();
+      _displayLists[_lists[_currentPage]]!.currentState?.jumpToStart();
     }
   }
 
@@ -261,7 +262,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   bool _init = false;
 
-  Map<ChatList, GlobalKey<ChatListDisplayState>> _displayLists = {};
+  static Map<ChatList, GlobalKey<ChatListDisplayState>> _displayLists = {};
 
   @override
   Widget build(BuildContext context) {
@@ -273,17 +274,14 @@ class ChatListsManagerState extends State<ChatListsManager> {
     });
 
     if (_chats.isEmpty) return Container();
-    return PageView.builder(
-        itemCount: _lists.length,
-        controller: pageController,
-        itemBuilder: (_, i) {
-          _displayLists[_lists[i]] = GlobalKey<ChatListDisplayState>();
-          return ChatListDisplay(
-              key: _displayLists[_lists[i]],
-              client: widget.client,
-              chatList: _lists[i],
-              chats: _chats);
-        });
+    return PageView(controller: pageController, children: [
+      for (final list in _lists)
+        ChatListDisplay(
+            key: _displayLists[list]!,
+            client: widget.client,
+            chatList: list,
+            chats: _chats)
+    ]);
   }
 }
 

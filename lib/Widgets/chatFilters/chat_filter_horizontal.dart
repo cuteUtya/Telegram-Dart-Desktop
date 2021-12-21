@@ -51,11 +51,11 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     });
     widget.chatListState.currentState?.setChatLists(<ChatList>[ChatListMain()] +
         folders.map((e) => ChatListFilter(chatFilterId: e.id)).toList());
-    setState(() {});
     _filtersKeys.clear();
     for (int i = 0; i < folders.length + 1; i++) {
       _filtersKeys.add(GlobalKey());
     }
+    setState(() {});
   }
 
   void _subcribeOnUpdates() {
