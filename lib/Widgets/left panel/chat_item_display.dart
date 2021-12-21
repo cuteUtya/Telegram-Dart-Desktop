@@ -70,8 +70,9 @@ class ChatItemDisplay extends StatelessWidget {
                   overlayColor: MaterialStateProperty.resolveWith((states) {
                     String themeStr = "ChatUnselectedColor";
                     if (states.contains(MaterialState.pressed)) {
-                      themeStr = "Accent";
-                    } else if (states.contains(MaterialState.hovered)) {
+                      themeStr = "ChatClickAnimationEffectColor";
+                    } else if (states.contains(MaterialState.hovered) ||
+                        states.contains(MaterialState.focused)) {
                       themeStr = "ChatSelectedColor";
                     }
                     return ClientTheme.currentTheme.getField(themeStr);

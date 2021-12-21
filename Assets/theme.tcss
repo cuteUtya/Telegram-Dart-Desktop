@@ -79,3 +79,5 @@ UnreadMentionChatBubbleColor: #E64D4D;
 UnreadFilterBubbleColor: ref(UnreadChatBubbleColor);
 UnreadFilterMentionBubbleColor: ref(UnreadMentionChatBubbleColor);
 ChatFilterActiveColor: ref(Accent);
+
+ChatClickAnimationEffectColor: ref(Accent);
