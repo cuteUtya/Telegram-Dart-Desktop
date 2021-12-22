@@ -274,14 +274,14 @@ class ChatListsManagerState extends State<ChatListsManager> {
     });
 
     if (_chats.isEmpty) return Container();
-    return PageView(controller: pageController, children: [
-      for (final list in _lists)
-        ChatListDisplay(
-            key: _displayLists[list]!,
+    return PageView.builder(
+        controller: pageController,
+        itemCount: _lists.length,
+        itemBuilder: (context, index) => ChatListDisplay(
+            key: _displayLists[_lists[index]]!,
             client: widget.client,
-            chatList: list,
-            chats: _chats)
-    ]);
+            chatList: _lists[index],
+            chats: _chats));
   }
 }
 
