@@ -26,8 +26,7 @@ class ChatListDisplay extends StatefulWidget {
 }
 
 class ChatListDisplayState extends State<ChatListDisplay> {
-  //TODO maybe good idea sometime clean this structure
-  static Map<String, GlobalKey> keys = {};
+  Map<String, GlobalKey> keys = {};
   static const double cachedItemspx = 100;
   late ScrollController listViewContoller = ScrollController(
       initialScrollOffset: lastRealScrollOffset[widget.chatList] ?? 0);
