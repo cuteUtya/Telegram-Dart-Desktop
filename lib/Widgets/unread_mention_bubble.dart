@@ -19,7 +19,10 @@ class UnreadCountBubble extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
             child: Text(
               count.toString(),
-              style: TextDisplay.create(size: 18, textColor: TextColor.White),
+              style: TextDisplay.create(
+                  size: 18,
+                  textColor: TextColor.White,
+                  fontFamily: TextDisplay.greaterImportance),
             )));
   }
 }
