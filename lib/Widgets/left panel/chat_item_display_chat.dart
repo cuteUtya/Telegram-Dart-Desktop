@@ -86,9 +86,7 @@ class ChatItemDisplay extends StatelessWidget {
             OnlineIndicatorDidplay(heigth: 20, width: 20, online: isOnline)
           ]),
           UnreadCountBubble(
-              count: chat.unreadMentionCount ?? 0,
-              color: ClientTheme.currentTheme
-                  .getField("UnreadMentionChatBubbleColor"))
+              count: chat.unreadMentionCount ?? 0, important: true)
         ]),
         unread: chat.unreadCount ?? 0,
         unreadMention: chat.unreadMentionCount ?? 0,

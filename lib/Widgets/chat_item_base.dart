@@ -77,10 +77,7 @@ class ChatItemBase extends StatelessWidget {
                                       child: Row(children: [
                                         UnreadCountBubble(
                                             count: unread,
-                                            color: unreadMention <= 0
-                                                ? null
-                                                : ClientTheme.currentTheme.getField(
-                                                    "UnreadMentionChatBubbleColor")),
+                                            important: unreadMention > 0),
                                         icon ?? const SizedBox.shrink()
                                       ]))
                                 ])

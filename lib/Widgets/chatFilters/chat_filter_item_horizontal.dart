@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
@@ -40,11 +39,7 @@ class ChatFilterItemHorizontal extends StatelessWidget {
                                       : TextColor.RegularText)))),
                   const SizedBox(width: 4),
                   UnreadCountBubble(
-                      count: info.unread,
-                      color: ClientTheme.currentTheme.getField(
-                          info.unreadImportante <= 0
-                              ? "UnreadFilterBubbleColor"
-                              : "UnreadFilterMentionBubbleColor")),
+                      count: info.unread, important: info.unreadImportante > 0),
                 ]),
               ]))),
     );
