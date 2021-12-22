@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
-import 'package:myapp/Widgets/chat_item_base.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/check_mark.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
@@ -51,64 +51,69 @@ class ChatItemDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChatItemBase(
-        title: Row(children: [
-          Expanded(
-              child: ChatItemTitle(
-                  title: (interlocutor?.type is UserTypeDeleted)
-                      ? client.getTranslation("lng_deleted")
-                      : chat.title!,
-                  isScam: isScam,
-                  isVerifed: isVerifed,
-                  isSupport: isSupport)),
-          (chat.lastMessage?.isOutgoing ?? false) && chat.draftMessage == null
-              ? CheckMark(
-                  isReaded: (chat.lastMessage?.id ?? 0) <=
-                      (chat.lastReadOutboxMessageId ?? 0))
-              : const SizedBox.shrink(),
-          const SizedBox(width: 2),
-          Text(getMessageTime(),
-              textAlign: TextAlign.right,
-              style: TextDisplay.create(
-                  size: 18, textColor: TextColor.ChatLastTimeMessage))
-        ]),
+    return AnimatedContainer(
+        curve: Curves.decelerate,
+        duration: const Duration(milliseconds: 400),
         margin: EdgeInsets.only(top: order * 88),
-        chatPic: Stack(children: [
-          Stack(alignment: Alignment.bottomRight, children: [
-            SizedBox(
-                height: 64,
-                width: 64,
-                child: ChatPhotoDisplay(
-                    photo: chat.photo,
-                    chatId: chat.id!,
-                    chatTitle: chat.title!,
-                    client: client)),
-            OnlineIndicatorDidplay(heigth: 20, width: 20, online: isOnline)
-          ]),
-          UnreadCountBubble(
-              count: chat.unreadMentionCount ?? 0, important: true)
-        ]),
-        unread: chat.unreadCount ?? 0,
-        unreadMention: chat.unreadMentionCount ?? 0,
-        content: Expanded(
-            child: Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: actionInfo?.action is! ChatActionCancel &&
-                        actionInfo != null
-                    ? ChatItemActionDisplay(
-                        isPrivate: interlocutor != null,
-                        chatid: chat.id!,
-                        client: client,
-                        action: actionInfo!)
-                    : ChatItemLastMessageContent(
-                        joinInfo: joinInfo,
-                        lastMessageAuthor: lastMessageSenderName,
-                        chat: chat,
-                        client: client))),
-        icon: pinned
-            ? Icon(Icons.push_pin,
-                color: ClientTheme.currentTheme.getField("ChatPinIconColor"))
-            : null);
+        child: ChatItemBase(
+            title: Row(children: [
+              Expanded(
+                  child: ChatItemTitle(
+                      title: (interlocutor?.type is UserTypeDeleted)
+                          ? client.getTranslation("lng_deleted")
+                          : chat.title!,
+                      isScam: isScam,
+                      isVerifed: isVerifed,
+                      isSupport: isSupport)),
+              (chat.lastMessage?.isOutgoing ?? false) &&
+                      chat.draftMessage == null
+                  ? CheckMark(
+                      isReaded: (chat.lastMessage?.id ?? 0) <=
+                          (chat.lastReadOutboxMessageId ?? 0))
+                  : const SizedBox.shrink(),
+              const SizedBox(width: 2),
+              Text(getMessageTime(),
+                  textAlign: TextAlign.right,
+                  style: TextDisplay.create(
+                      size: 18, textColor: TextColor.ChatLastTimeMessage))
+            ]),
+            chatPic: Stack(children: [
+              Stack(alignment: Alignment.bottomRight, children: [
+                SizedBox(
+                    height: 64,
+                    width: 64,
+                    child: ChatPhotoDisplay(
+                        photo: chat.photo,
+                        chatId: chat.id!,
+                        chatTitle: chat.title!,
+                        client: client)),
+                OnlineIndicatorDidplay(heigth: 20, width: 20, online: isOnline)
+              ]),
+              UnreadCountBubble(
+                  count: chat.unreadMentionCount ?? 0, important: true)
+            ]),
+            unread: chat.unreadCount ?? 0,
+            unreadMention: chat.unreadMentionCount ?? 0,
+            content: Expanded(
+                child: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: actionInfo?.action is! ChatActionCancel &&
+                            actionInfo != null
+                        ? ChatItemActionDisplay(
+                            isPrivate: interlocutor != null,
+                            chatid: chat.id!,
+                            client: client,
+                            action: actionInfo!)
+                        : ChatItemLastMessageContent(
+                            joinInfo: joinInfo,
+                            lastMessageAuthor: lastMessageSenderName,
+                            chat: chat,
+                            client: client))),
+            icon: pinned
+                ? Icon(Icons.push_pin,
+                    color:
+                        ClientTheme.currentTheme.getField("ChatPinIconColor"))
+                : null));
   }
 
   bool get isOnline {
