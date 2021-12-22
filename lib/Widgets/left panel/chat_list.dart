@@ -26,9 +26,6 @@ class ChatListDisplay extends StatefulWidget {
 }
 
 class ChatListDisplayState extends State<ChatListDisplay> {
-  //TODO maybe good idea sometime clean this structure
-  static Map<String, GlobalKey> keys = {};
-
   static const double cachedItemspx = 100;
   late ScrollController listViewContoller = ScrollController(
       initialScrollOffset: lastRealScrollOffset[widget.chatList] ?? 0);
@@ -71,11 +68,6 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                 .firstWhere((e) => compareChatlists(e.list!, widget.chatList))
                 .order!));
 
-    for (final chat in list) {
-      if (keys[_getGlobalIdenteficator(chat.chat)] == null) {
-        keys[_getGlobalIdenteficator(chat.chat)] = GlobalKey();
-      }
-    }
     var top = max(((virtualScrollOffset[widget.chatList] ?? 0) ~/ 88) - 4, 0);
     var bottom =
         min((top + MediaQuery.of(context).size.height ~/ 88) + 8, list.length);
@@ -96,7 +88,6 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                       order: ++order +
                           top +
                           ((widget.chatList is ChatListMain) ? 1 : 0),
-                      key: keys[_getGlobalIdenteficator(chat.chat)],
                       chat: chat.chat,
                       client: widget.client,
                       interlocutor: chat.interlocutor,
