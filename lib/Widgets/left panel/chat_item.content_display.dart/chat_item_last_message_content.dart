@@ -187,7 +187,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
                         : const SizedBox.shrink()),
               ] +
               displayContent +
-              TextDisplay.parseFormattedText(text),
+              TextDisplay.parseFormattedText(text, 18),
         ));
   }
 
