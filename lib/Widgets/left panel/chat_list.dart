@@ -26,6 +26,8 @@ class ChatListDisplay extends StatefulWidget {
 }
 
 class ChatListDisplayState extends State<ChatListDisplay> {
+  //TODO maybe good idea sometime clean this structure
+  static Map<String, GlobalKey> keys = {};
   static const double cachedItemspx = 100;
   late ScrollController listViewContoller = ScrollController(
       initialScrollOffset: lastRealScrollOffset[widget.chatList] ?? 0);
@@ -35,12 +37,14 @@ class ChatListDisplayState extends State<ChatListDisplay> {
   @override
   void initState() {
     listViewContoller.addListener(() {
-      var delta = listViewContoller.offset -
-          (lastRealScrollOffset[widget.chatList] ?? 0);
-      virtualScrollOffset[widget.chatList] =
-          (virtualScrollOffset[widget.chatList] ?? 0) + delta;
-      setState(() {});
-      lastRealScrollOffset[widget.chatList] = listViewContoller.offset;
+      setState(() {
+        var delta = listViewContoller.offset -
+            (lastRealScrollOffset[widget.chatList] ?? 0);
+        virtualScrollOffset[widget.chatList] =
+            (virtualScrollOffset[widget.chatList] ?? 0) + delta;
+
+        lastRealScrollOffset[widget.chatList] = listViewContoller.offset;
+      });
     });
     super.initState();
   }
@@ -72,6 +76,12 @@ class ChatListDisplayState extends State<ChatListDisplay> {
     var bottom =
         min((top + MediaQuery.of(context).size.height ~/ 88) + 8, list.length);
 
+    for (final chat in list) {
+      if (keys[_getGlobalIdenteficator(chat.chat)] == null) {
+        keys[_getGlobalIdenteficator(chat.chat)] = GlobalKey();
+      }
+    }
+
     var sublist = list.sublist(top, bottom);
     int order = -1;
     return ListView(controller: listViewContoller, children: [
@@ -88,6 +98,7 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                       order: ++order +
                           top +
                           ((widget.chatList is ChatListMain) ? 1 : 0),
+                      key: keys[_getGlobalIdenteficator(chat.chat)],
                       chat: chat.chat,
                       client: widget.client,
                       interlocutor: chat.interlocutor,
