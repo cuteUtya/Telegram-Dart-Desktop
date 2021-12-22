@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:myapp/Widgets/left%20panel/chat_item_display.dart';
+import 'package:myapp/Widgets/chat_item_display_archive_not_hidden.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item_display_chat.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
@@ -82,21 +83,30 @@ class ChatListDisplayState extends State<ChatListDisplay> {
     var sublist = list.sublist(top, bottom);
     int order = -1;
     return ListView(controller: listViewContoller, children: [
-      Stack(children: [
-        for (final chat in sublist)
-          ChatItemDisplay(
-              order: ++order + top,
-              key: keys[_getGlobalIdenteficator(chat.chat)],
-              chat: chat.chat,
-              client: widget.client,
-              interlocutor: chat.interlocutor,
-              supergroup: chat.supergroup,
-              joinInfo: chat.joinInfo,
-              lastMessageSenderName: chat.lastMessageSenderName,
-              chatList: widget.chatList,
-              actionInfo: chat.action),
-        Container(height: max(0, (list.length) * 88))
-      ])
+      Stack(
+          children: [
+                ((widget.chatList is ChatListMain)
+                    ? ChatItemDisplayArchiveNotHidden(
+                        client: widget.client, chats: widget.chats)
+                    : const SizedBox.shrink())
+              ] +
+              [
+                for (final chat in sublist)
+                  ChatItemDisplay(
+                      order: ++order +
+                          top +
+                          ((widget.chatList is ChatListMain) ? 1 : 0),
+                      key: keys[_getGlobalIdenteficator(chat.chat)],
+                      chat: chat.chat,
+                      client: widget.client,
+                      interlocutor: chat.interlocutor,
+                      supergroup: chat.supergroup,
+                      joinInfo: chat.joinInfo,
+                      lastMessageSenderName: chat.lastMessageSenderName,
+                      chatList: widget.chatList,
+                      actionInfo: chat.action),
+                Container(height: max(0, (list.length) * 88))
+              ])
     ]);
   }
 }

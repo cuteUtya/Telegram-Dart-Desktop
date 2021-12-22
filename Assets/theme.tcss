@@ -81,3 +81,5 @@ UnreadFilterMentionBubbleColor: ref(UnreadMentionChatBubbleColor);
 ChatFilterActiveColor: ref(Accent);
 
 ChatClickAnimationEffectColor: ref(Accent);
+ArchiveNotHiddenBackColor: #BCBCBC;
+ArchoveNotHiddenIconColor: ref(BaseColor);
