@@ -63,7 +63,6 @@ class TextDisplay {
 
   static List<InlineSpan> parseFormattedText(FormattedText text,
       [double size = 20]) {
-    List<_textSection> textMap = [];
     String str = "-" * text.text!.length;
     for (int i = 0; i < (text.entities?.length ?? 0); i++) {
       str = str.replaceRange(
