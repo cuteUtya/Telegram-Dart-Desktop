@@ -4,10 +4,14 @@ import 'package:myapp/Widgets/display_text.dart';
 
 class UnreadCountBubble extends StatelessWidget {
   const UnreadCountBubble(
-      {Key? key, required this.count, this.important = false})
+      {Key? key,
+      required this.count,
+      this.important = false,
+      this.fontSize = 18})
       : super(key: key);
   final int count;
   final bool important;
+  final double? fontSize;
   @override
   Widget build(BuildContext context) {
     if (count <= 0) return const SizedBox.shrink();
@@ -22,7 +26,7 @@ class UnreadCountBubble extends StatelessWidget {
             child: Text(
               count.toString(),
               style: TextDisplay.create(
-                  size: 18,
+                  size: fontSize ?? 18,
                   textColor: TextColor.White,
                   fontFamily: TextDisplay.greaterImportance),
             )));
