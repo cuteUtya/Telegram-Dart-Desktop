@@ -78,18 +78,20 @@ class ChatItemActionDisplay extends StatelessWidget {
           text: TextSpan(
               children: TextDisplay.parseEmojiInString(
                   transitionStr != null
-                      ? client.getTranslation(transitionStr, replacing: {
-                          "{user}": actions[0].who.firstName!,
-                          "{emoji}": (actions[0].action
-                                  is ChatActionWatchingAnimations)
-                              ? (actions[0].action
-                                          as ChatActionWatchingAnimations)
-                                      .emoji ??
-                                  "🍆"
-                              : "",
-                          "{second_user}": second_user,
-                          "{count}": actions.length.toString()
-                        })
+                      ? client.getTranslation(transitionStr,
+                          replacing: {
+                            "{user}": actions[0].who.firstName!,
+                            "{emoji}": (actions[0].action
+                                    is ChatActionWatchingAnimations)
+                                ? (actions[0].action
+                                            as ChatActionWatchingAnimations)
+                                        .emoji ??
+                                    "🍆"
+                                : "",
+                            "{second_user}": second_user,
+                            "{count}": actions.length.toString()
+                          },
+                          itemsCount: actions.length)
                       : "¯\\_(ツ)_/¯",
                   TextDisplay.chatItemAccent))),
       const SizedBox(width: 2),

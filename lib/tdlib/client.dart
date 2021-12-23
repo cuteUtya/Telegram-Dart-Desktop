@@ -501,7 +501,8 @@ class TelegramClient {
       {String? languagePackDatabasePath,
       String? languagePackId,
       String? localizationTarget,
-      Map<String, String>? replacing}) {
+      Map<String, String>? replacing,
+      int? itemsCount}) {
     languagePackDatabasePath ??= getLanguagePackDatabasePath();
     languagePackId ??= userLangPackId;
     localizationTarget ??= TelegramClient.localizationTarget;
@@ -517,7 +518,18 @@ class TelegramClient {
     if (result is LanguagePackStringValueDeleted) {
       translate = getTranslation(key, languagePackId: "en");
     }
-    translate = (result as LanguagePackStringValueOrdinary).value!;
+    if (result is LanguagePackStringValueOrdinary) {
+      translate = result.value!;
+    }
+    if (result is LanguagePackStringValuePluralized) {
+      if (itemsCount == 0) translate = result.zeroValue!;
+      if (itemsCount == 1) translate = result.oneValue!;
+      if (itemsCount! <= 3) {
+        translate = result.fewValue!;
+      } else {
+        translate = result.manyValue!;
+      }
+    }
 
     if (replacing != null) {
       replacing.forEach((key, value) {
@@ -546,7 +558,7 @@ class TelegramClient {
         var extra = json.decode(message)["@extra"];
         if (extra == null) {
           _updates.add(tdobject as Update);
-          if (tdobject is UpdateChatFilters){
+          if (tdobject is UpdateChatFilters) {
             chatFilterInfo = tdobject.chatFilters;
           }
         } else {
