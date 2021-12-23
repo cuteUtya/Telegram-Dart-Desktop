@@ -51,8 +51,10 @@ class ChatListDisplayState extends State<ChatListDisplay> {
   void jumpToStart() {
     virtualScrollOffset[widget.chatList] = 0;
     lastRealScrollOffset[widget.chatList] = 0;
-    listViewContoller.animateTo(0,
-        duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+    if (listViewContoller.hasClients) {
+      listViewContoller.animateTo(0,
+          duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+    }
   }
 
   String _getGlobalIdenteficator(Chat chat) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
-import 'package:myapp/Widgets/chat_item_base.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
@@ -39,7 +39,6 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
           if (element.chat.unreadCount! > 0)
             TextSpan(text: ", ", style: TextDisplay.create(size: 18)),
         ]));
-    print("REDRAW ARCHIVE");
     return ChatItemBase(
         key: UniqueKey(),
         title: Row(children: [
