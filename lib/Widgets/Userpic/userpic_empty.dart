@@ -11,6 +11,7 @@ class UserpicEmpty extends StatelessWidget {
   final String displayLetters;
   @override
   Widget build(BuildContext context) {
+    var i = chatId;
     return Stack(alignment: Alignment.center, children: [
       Container(
           decoration: BoxDecoration(
@@ -34,7 +35,9 @@ class UserpicEmpty extends StatelessWidget {
   }
 
   static Color getPeerColor(int id, [String component = "a"]) {
-    var index = id % 6;
-    return ClientTheme.currentTheme.getField("PeerColor${index + 1}$component");
+    id = int.parse(id.toString().replaceAll("-100", "-"));
+    if (id < 0) id = -id;
+    return ClientTheme.currentTheme
+        .getField("PeerColor${[0, 7, 4, 1, 6, 3, 5][(id % 7)] + 1}$component");
   }
 }

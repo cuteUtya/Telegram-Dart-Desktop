@@ -47,21 +47,24 @@ PeerColor1b: #C98484;
 #green#
 PeerColor2a: #55A38B;
 PeerColor2b: #84C993;
-#purple#
-PeerColor3a: #8555A3;
-PeerColor3b: #C884C9;
+#yellow#
+PeerColor3a: #A38855;
+PeerColor3b: #C9C684;
 #blue#
 PeerColor4a: #5561A3;
 PeerColor4b: #84A8C9;
+#purple#
+PeerColor5a: #8555A3;
+PeerColor5b: #C884C9;
 #pink#
-PeerColor5a: #A35555;
-PeerColor5b: #C984AE;
+PeerColor6a: #A35555;
+PeerColor6b: #C984AE;
 #lazur blue#
-PeerColor6a: #5587A3;
-PeerColor6b: #84C9BD;
+PeerColor7a: #5587A3;
+PeerColor7b: #84C9BD;
 #orange#
-PeerColor7a: #A38855;
-PeerColor7b: #C9C684;
+PeerColor8a: #A35E55;
+PeerColor8b: #CFBA82;
 
 PeerNameTextColor: #FFFFFF;
 
