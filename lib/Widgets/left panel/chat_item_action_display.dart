@@ -10,12 +10,12 @@ import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 class ChatItemActionDisplay extends StatelessWidget {
   const ChatItemActionDisplay(
       {Key? key,
-      required this.action,
+      required this.actions,
       required this.client,
       required this.isPrivate,
       required this.chatid})
       : super(key: key);
-  final ChatActionInfo action;
+  final List<ChatActionInfo> actions;
   final TelegramClient client;
   final int chatid;
   final bool isPrivate;
@@ -56,20 +56,22 @@ class ChatItemActionDisplay extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    String? transitionStr;
     Widget? animation;
-
-    if (typesWithProgress.contains(action.action.runtimeType)) {
-      animation = createUploadAnimation(action.action.runtimeType,
-          (action.action as dynamic).progress, chatid);
+    String second_user = "";
+    if (actions.length <= 1) {
+      if (typesWithProgress.contains(actions[0].action.runtimeType)) {
+        animation = createUploadAnimation(actions[0].action.runtimeType,
+            (actions[0].action as dynamic).progress, chatid);
+      }
+      transitionStr = (isPrivate
+          ? actionTransitionPrivate
+          : actionTransitionsChat)[actions[0].action.runtimeType];
+    } else {
+      transitionStr =
+          actions.length == 2 ? "lng_users_typing" : "lng_many_typing";
+      second_user = actions[1].who.firstName!;
     }
-
-    var emoji = (action.action is ChatActionWatchingAnimations)
-        ? (action.action as ChatActionWatchingAnimations).emoji
-        : null;
-
-    String? transitionStr = (isPrivate
-        ? actionTransitionPrivate
-        : actionTransitionsChat)[action.action.runtimeType];
 
     return Row(children: [
       RichText(
@@ -77,8 +79,16 @@ class ChatItemActionDisplay extends StatelessWidget {
               children: TextDisplay.parseEmojiInString(
                   transitionStr != null
                       ? client.getTranslation(transitionStr, replacing: {
-                          "{user}": action.who.firstName!,
-                          "{emoji}": emoji ?? "🍆"
+                          "{user}": actions[0].who.firstName!,
+                          "{emoji}": (actions[0].action
+                                  is ChatActionWatchingAnimations)
+                              ? (actions[0].action
+                                          as ChatActionWatchingAnimations)
+                                      .emoji ??
+                                  "🍆"
+                              : "",
+                          "{second_user}": second_user,
+                          "{count}": actions.length.toString()
                         })
                       : "¯\\_(ツ)_/¯",
                   TextDisplay.chatItemAccent))),

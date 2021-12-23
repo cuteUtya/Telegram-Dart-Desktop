@@ -92,6 +92,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
     var chat = await widget.client.send(GetChat(chatId: chatid)) as Chat;
     return ChatFullInfo(
         chat: chat,
+        actions: [],
         joinInfo: await getUsersJoinInfo(chat.lastMessage),
         interlocutor: await getUser(chat),
         supergroup: await getSupergroup(chat),
@@ -194,10 +195,20 @@ class ChatListsManagerState extends State<ChatListsManager> {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
-        chat.action = ChatActionInfo(
-            action: event.action!,
-            who: (await widget.client.send(GetUser(userId: event.userId)))
-                as User);
+        var lastAction = chat.actions
+            .firstWhereOrNull((element) => element.who.id == event.userId);
+        if (lastAction == null) {
+          chat.actions.add(ChatActionInfo(
+              action: event.action!,
+              who: (await widget.client.send(GetUser(userId: event.userId))
+                  as User)));
+        } else {
+          if (event.action is ChatActionCancel) {
+            chat.actions.remove(lastAction);
+          } else {
+            lastAction.action = event.action!;
+          }
+        }
         setState(() {});
       }
     }));
@@ -298,20 +309,20 @@ class UsersJoinedGroupInfo {
 }
 
 class ChatActionInfo {
-  const ChatActionInfo({required this.action, required this.who});
-  final ChatAction action;
-  final User who;
+  ChatActionInfo({required this.action, required this.who});
+  ChatAction action;
+  User who;
 }
 
 class ChatFullInfo {
   ChatFullInfo(
       {required this.chat,
       required this.lastMessageSenderName,
+      required this.actions,
       this.interlocutor,
       this.supergroup,
       this.joinInfo,
-      this.order = 0,
-      this.action});
+      this.order = 0});
   Chat chat;
 
   ///person with whom there is a dialogue
@@ -330,5 +341,5 @@ class ChatFullInfo {
   //order in chatlist
   int order;
 
-  ChatActionInfo? action;
+  List<ChatActionInfo> actions = [];
 }

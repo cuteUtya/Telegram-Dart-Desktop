@@ -29,7 +29,7 @@ class ChatItemDisplay extends StatelessWidget {
       required this.joinInfo,
       required this.lastMessageSenderName,
       required this.chatList,
-      required this.actionInfo,
+      required this.actionsInfo,
       required this.order})
       : super(key: key);
   final Chat chat;
@@ -40,7 +40,7 @@ class ChatItemDisplay extends StatelessWidget {
   final String lastMessageSenderName;
   final TelegramClient client;
   final ChatList chatList;
-  final ChatActionInfo? actionInfo;
+  final List<ChatActionInfo>? actionsInfo;
 
   static const bool USE_HORIZONTAL_SEPARATOR = false;
   bool get pinned =>
@@ -97,13 +97,12 @@ class ChatItemDisplay extends StatelessWidget {
             content: Expanded(
                 child: Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: actionInfo?.action is! ChatActionCancel &&
-                            actionInfo != null
+                    child: actionsInfo?.isNotEmpty ?? false
                         ? ChatItemActionDisplay(
                             isPrivate: interlocutor != null,
                             chatid: chat.id!,
                             client: client,
-                            action: actionInfo!)
+                            actions: actionsInfo!)
                         : ChatItemLastMessageContent(
                             joinInfo: joinInfo,
                             lastMessageAuthor: lastMessageSenderName,

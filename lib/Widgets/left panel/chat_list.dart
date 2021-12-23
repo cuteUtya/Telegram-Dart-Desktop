@@ -107,7 +107,7 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                       joinInfo: chat.joinInfo,
                       lastMessageSenderName: chat.lastMessageSenderName,
                       chatList: widget.chatList,
-                      actionInfo: chat.action),
+                      actionsInfo: chat.actions),
                 Container(height: max(0, (list.length) * 88))
               ])
     ]);
