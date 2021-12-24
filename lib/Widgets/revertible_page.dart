@@ -21,7 +21,7 @@ class RevertiblePage extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all(
                   ClientTheme.currentTheme.getField("BaseColor")),
               overlayColor: MaterialStateProperty.all(ClientTheme.currentTheme
-                  .getField("RevertiblePageHoverColor"))),
+                  .getField("PageHeaderBackgroundColor"))),
           onPressed: onRevert,
           child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
