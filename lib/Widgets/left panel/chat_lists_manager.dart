@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
+import 'package:myapp/Widgets/revertible_page.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:collection/collection.dart';
@@ -316,15 +317,15 @@ class ChatListsManagerState extends State<ChatListsManager> {
             ]);
           }
 
-          return Column(children: [
-            TextButton(
-                onPressed: () => _switchLists(0), child: Text("go to main")),
-            Expanded(
+          return RevertiblePage(
+            onRevert: () => _switchLists(0),
+            title: widget.client.getTranslation("lng_archived_name"),
+            content: Expanded(
                 child: ChatListDisplay(
                     client: widget.client,
                     chatList: ChatListArchive(),
-                    chats: _chats))
-          ]);
+                    chats: _chats)),
+          );
         });
   }
 }

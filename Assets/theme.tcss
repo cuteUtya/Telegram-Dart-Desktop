@@ -4,6 +4,7 @@ AccentHalfTransparent: #E0EEFD;
 BaseColor: #FAFAFA;
 DangerColor: #DF1E1E; 
 DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
+HoveredObject: #E0E0E0;
 
 BorderLineColor: #DADADA;
 
@@ -37,7 +38,7 @@ OnlineStatusColor: ref(OnlineColor);
 SearchBackground: #EBEBEB;
 #Color(128, ref(BaseColor).r, ref(BaseColor).g, ref(BaseColor).b)#
 ChatUnselectedColor: ref(BaseColor);
-ChatSelectedColor: #FFEAEAEA;
+ChatSelectedColor: ref(HoveredObject);
 LoadScreenBackgroundColor: ref(BaseColor);
 LoadScreenShadowColor: #AAAAAA;
 
@@ -83,6 +84,11 @@ UnreadFilterBubbleColor: ref(UnreadChatBubbleColor);
 UnreadFilterMentionBubbleColor: ref(UnreadMentionChatBubbleColor);
 ChatFilterActiveColor: ref(Accent);
 
-ChatClickAnimationEffectColor: ref(Accent);
+ChatClickAnimationEffectColor: #D2D2D2;
 ArchiveNotHiddenBackColor: #BCBCBC;
 ArchoveNotHiddenIconColor: ref(BaseColor);
+
+PageHeaderBackgroundColor: #EAEAEA;
+
+GenericUIIconsColor: #7F7F7F;
+RevertiblePageHoverColor: ref(HoveredObject);
