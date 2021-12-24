@@ -15,11 +15,13 @@ class ChatListDisplay extends StatefulWidget {
       {Key? key,
       required this.client,
       required this.chatList,
-      required this.chats})
+      required this.chats,
+      this.onArchiveClick})
       : super(key: key);
   final TelegramClient client;
   final ChatList chatList;
   final List<ChatFullInfo> chats;
+  final Function()? onArchiveClick;
 
   @override
   State<StatefulWidget> createState() => ChatListDisplayState();
@@ -90,12 +92,15 @@ class ChatListDisplayState extends State<ChatListDisplay> {
           children: [
                 ((widget.chatList is ChatListMain)
                     ? ChatItemDisplayArchiveNotHidden(
-                        client: widget.client, chats: widget.chats)
+                        onClick: widget.onArchiveClick,
+                        client: widget.client,
+                        chats: widget.chats)
                     : const SizedBox.shrink())
               ] +
               [
                 for (final chat in sublist)
                   ChatItemDisplay(
+                      onClick: () => print("CLICK ON ${chat.chat.id}"),
                       order: ++order +
                           top +
                           ((widget.chatList is ChatListMain) ? 1 : 0),

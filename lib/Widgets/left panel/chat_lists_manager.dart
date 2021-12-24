@@ -1,9 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
+import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/td_api.dart';
+import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:collection/collection.dart';
 import 'package:myapp/utils.dart';
 
@@ -148,12 +150,18 @@ class ChatListsManagerState extends State<ChatListsManager> {
     }
   }
 
+  void _switchLists(int index) {
+    mainArchiveContoller.animateToPage(index,
+        duration: const Duration(milliseconds: 400), curve: Curves.decelerate);
+  }
+
   void _changeCurrentPage(int index) {
-    pageController.animateToPage(index,
+    mainContoller.animateToPage(index,
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
-  PageController pageController = PageController();
+  PageController mainContoller = PageController();
+  PageController mainArchiveContoller = PageController();
   List<StreamSubscription> _subscriptions = [];
 
   void _updateChats() {
@@ -279,20 +287,45 @@ class ChatListsManagerState extends State<ChatListsManager> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (!_init) {
-        pageController.jumpToPage(_currentPage);
+        //mainContoller.jumpToPage(_currentPage);
         _init = true;
       }
     });
 
     if (_chats.isEmpty) return Container();
     return PageView.builder(
-        controller: pageController,
-        itemCount: _lists.length,
-        itemBuilder: (context, index) => ChatListDisplay(
-            key: _displayLists[_lists[index]]!,
-            client: widget.client,
-            chatList: _lists[index],
-            chats: _chats));
+        controller: mainArchiveContoller,
+        itemBuilder: (_, i) {
+          if (i == 0) {
+            return Column(children: [
+              ChatFilterHorizontal(
+                  client: widget.client,
+                  onChatFiltersChange: (c) => setChatLists(c),
+                  onChatListSelect: (l) => setCurrentChatList(l)),
+              const SeparatorLine(),
+              Expanded(
+                  child: PageView.builder(
+                      controller: mainContoller,
+                      itemCount: _lists.length,
+                      itemBuilder: (context, index) => ChatListDisplay(
+                          onArchiveClick: () => _switchLists(1),
+                          key: _displayLists[_lists[index]]!,
+                          client: widget.client,
+                          chatList: _lists[index],
+                          chats: _chats)))
+            ]);
+          }
+
+          return Column(children: [
+            TextButton(
+                onPressed: () => _switchLists(0), child: Text("go to main")),
+            Expanded(
+                child: ChatListDisplay(
+                    client: widget.client,
+                    chatList: ChatListArchive(),
+                    chats: _chats))
+          ]);
+        });
   }
 }
 

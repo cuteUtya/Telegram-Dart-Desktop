@@ -12,11 +12,9 @@ class LeftPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<ChatListsManagerState> key = GlobalKey<ChatListsManagerState>();
     return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Column(
-        children: [
+        padding: const EdgeInsets.only(top: 12),
+        child: Column(children: [
           //settings and search
           Row(mainAxisSize: MainAxisSize.max, children: [
             const SizedBox(width: 12),
@@ -46,11 +44,7 @@ class LeftPanel extends StatelessWidget {
                             const BorderRadius.all(Radius.circular(12))))),
           ]),
           const SizedBox(height: 12),
-          ChatFilterHorizontal(client: client, chatListState: key),
-          const SeparatorLine(),
           Expanded(child: ChatListsManager(key: key, client: client))
-        ],
-      ),
-    );
+        ]));
   }
 }

@@ -30,7 +30,8 @@ class ChatItemDisplay extends StatelessWidget {
       required this.lastMessageSenderName,
       required this.chatList,
       required this.actionsInfo,
-      required this.order})
+      required this.order,
+      this.onClick})
       : super(key: key);
   final Chat chat;
   final int order;
@@ -41,6 +42,7 @@ class ChatItemDisplay extends StatelessWidget {
   final TelegramClient client;
   final ChatList chatList;
   final List<ChatActionInfo>? actionsInfo;
+  final Function()? onClick;
 
   static const bool USE_HORIZONTAL_SEPARATOR = false;
   bool get pinned =>
@@ -56,6 +58,7 @@ class ChatItemDisplay extends StatelessWidget {
         duration: const Duration(milliseconds: 400),
         margin: EdgeInsets.only(top: order * 88),
         child: ChatItemBase(
+            onClick: onClick,
             title: Row(children: [
               Expanded(
                   child: ChatItemTitle(

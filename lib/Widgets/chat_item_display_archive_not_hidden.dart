@@ -10,10 +10,11 @@ import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
 
 class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
   const ChatItemDisplayArchiveNotHidden(
-      {Key? key, required this.client, required this.chats})
+      {Key? key, required this.client, required this.chats, this.onClick})
       : super(key: key);
   final TelegramClient client;
   final List<ChatFullInfo> chats;
+  final Function()? onClick;
   @override
   Widget build(BuildContext context) {
     List<InlineSpan> content = [];
@@ -40,6 +41,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
             TextSpan(text: ", ", style: TextDisplay.create(size: 18)),
         ]));
     return ChatItemBase(
+        onClick: onClick,
         key: UniqueKey(),
         title: Row(children: [
           Text(client.getTranslation("lng_archived_name"),

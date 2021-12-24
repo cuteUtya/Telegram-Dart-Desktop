@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
@@ -12,7 +11,8 @@ class ChatItemBase extends StatelessWidget {
       this.title,
       this.unread = 0,
       this.unreadMention = 0,
-      this.chatPic})
+      this.chatPic,
+      this.onClick})
       : super(key: key);
   final Icon? icon;
   final int unread;
@@ -20,6 +20,7 @@ class ChatItemBase extends StatelessWidget {
   final Widget? content;
   final Widget? title;
   final Widget? chatPic;
+  final Function()? onClick;
 
   static const bool USE_HORIZONTAL_SEPARATOR = false;
 
@@ -47,7 +48,7 @@ class ChatItemBase extends StatelessWidget {
                 }
                 return ClientTheme.currentTheme.getField(themeStr);
               })),
-          onPressed: () {},
+          onPressed: onClick,
           child: Column(children: [
             SizedBox(
                 height: 88,

@@ -4,7 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_item_horizontal.dart';
-import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/global_key_extenstion.dart';
@@ -14,19 +13,25 @@ class ChatFilterFullInfo {
       {required this.id,
       required this.title,
       required this.unread,
-      required this.unreadImportante});
+      required this.unreadImportante,
+      required this.key});
   String title;
   int unread;
   int unreadImportante;
   int id;
+  GlobalKey key;
 }
 
 class ChatFilterHorizontal extends StatefulWidget {
   const ChatFilterHorizontal(
-      {Key? key, required this.client, required this.chatListState})
+      {Key? key,
+      required this.client,
+      required this.onChatFiltersChange,
+      required this.onChatListSelect})
       : super(key: key);
   final TelegramClient client;
-  final GlobalKey<ChatListsManagerState> chatListState;
+  final Function(List<ChatList>) onChatFiltersChange;
+  final Function(ChatList) onChatListSelect;
   @override
   State<StatefulWidget> createState() => ChatFilterHorizontalState();
 }
@@ -41,20 +46,18 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
         id: -1,
         title: widget.client.getTranslation("lng_filters_all"),
         unread: 0,
-        unreadImportante: 0));
+        unreadImportante: 0,
+        key: GlobalKey()));
     folders.forEach((element) {
       filters.add(ChatFilterFullInfo(
           id: element.id!,
           title: element.title!,
           unread: 0,
-          unreadImportante: 0));
+          unreadImportante: 0,
+          key: GlobalKey()));
     });
-    widget.chatListState.currentState?.setChatLists(<ChatList>[ChatListMain()] +
+    widget.onChatFiltersChange(<ChatList>[ChatListMain()] +
         folders.map((e) => ChatListFilter(chatFilterId: e.id)).toList());
-    _filtersKeys.clear();
-    for (int i = 0; i < folders.length + 1; i++) {
-      _filtersKeys.add(GlobalKey());
-    }
     setState(() {});
   }
 
@@ -80,7 +83,6 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     });
   }
 
-  List<GlobalKey> _filtersKeys = [];
   ScrollController _scrollController = ScrollController();
 
   bool _init = false;
@@ -111,13 +113,12 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                       Container(
                           margin: const EdgeInsets.symmetric(horizontal: 16),
                           child: ChatFilterItemHorizontal(
-                              key: _filtersKeys[filters.indexOf(filter)],
+                              key: filter.key,
                               onClick: (id) {
                                 setState(() => active = id);
-                                widget.chatListState.currentState
-                                    ?.setCurrentChatList(id == -1
-                                        ? ChatListMain()
-                                        : ChatListFilter(chatFilterId: id));
+                                widget.onChatListSelect(id == -1
+                                    ? ChatListMain()
+                                    : ChatListFilter(chatFilterId: id));
                               },
                               info: filter,
                               active: filter.id == active))
@@ -142,11 +143,11 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     var margin = _getCurrentFolderLeftMargin();
     return max(
         0,
-        ((_filtersKeys[max(active - 1, 0)].globalPaintBounds?.width) ?? 0) +
+        ((filters[max(active - 1, 0)].key.globalPaintBounds?.width) ?? 0) +
             (margin < 0 ? margin : 0));
   }
 
   double _getCurrentFolderLeftMargin() {
-    return (_filtersKeys[max(active - 1, 0)].globalPaintBounds?.left ?? 0) - 16;
+    return (filters[max(active - 1, 0)].key.globalPaintBounds?.left ?? 0) - 16;
   }
 }
