@@ -91,4 +91,3 @@ ArchoveNotHiddenIconColor: ref(BaseColor);
 PageHeaderBackgroundColor: #EAEAEA;
 
 GenericUIIconsColor: #7F7F7F;
-RevertiblePageHoverColor: ref(HoveredObject);

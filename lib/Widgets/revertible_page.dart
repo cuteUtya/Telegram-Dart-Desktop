@@ -18,9 +18,8 @@ class RevertiblePage extends StatelessWidget {
     return Column(children: [
       TextButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(ClientTheme
-                  .currentTheme
-                  .getField("PageHeaderBackgroundColor")),
+              backgroundColor: MaterialStateProperty.all(
+                  ClientTheme.currentTheme.getField("BaseColor")),
               overlayColor: MaterialStateProperty.all(ClientTheme.currentTheme
                   .getField("RevertiblePageHoverColor"))),
           onPressed: onRevert,
