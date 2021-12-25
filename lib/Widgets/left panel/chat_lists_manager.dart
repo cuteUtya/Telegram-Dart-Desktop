@@ -295,7 +295,9 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
     if (_chats.isEmpty) return Container();
     return PageView.builder(
+        reverse: true,
         controller: mainArchiveContoller,
+        itemCount: 2,
         itemBuilder: (_, i) {
           if (i == 0) {
             return Column(children: [
