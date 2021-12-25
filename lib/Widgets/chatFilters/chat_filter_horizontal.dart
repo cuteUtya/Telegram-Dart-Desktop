@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/gestures.dart';
@@ -66,18 +67,26 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     }
   }
 
+  List<StreamSubscription> _subsciptions = [];
+
   void _subcribeOnUpdates() {
     rebuildFilters(widget.client.chatFilterInfo ?? []);
-    widget.client.updateChatFilters.listen((event) {
+    _subsciptions.add(widget.client.updateChatFilters.listen((event) {
       rebuildFilters(event.chatFilters!);
-    });
+    }));
     widget.client.cachedUnreadChatCountUpdates
         .forEach((element) => _processUnreadChatCountUpdates(element));
     widget.client.cacheUnreadChatCountUpdates = false;
     widget.client.cachedUnreadChatCountUpdates.clear();
 
-    widget.client.updateUnreadChatCount
-        .listen((event) => _processUnreadChatCountUpdates(event));
+    _subsciptions.add(widget.client.updateUnreadChatCount
+        .listen((event) => _processUnreadChatCountUpdates(event)));
+  }
+
+  @override
+  void dispose() {
+    _subsciptions.forEach((element) => element.cancel());
+    super.dispose();
   }
 
   ScrollController _scrollController = ScrollController();
