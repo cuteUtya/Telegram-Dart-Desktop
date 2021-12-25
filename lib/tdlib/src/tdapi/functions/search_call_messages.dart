@@ -13,7 +13,7 @@ class SearchCallMessages extends TdFunction {
   /// [limit] The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit
   int? limit;
 
-  /// [onlyMissed] If true, returns only messages with missed calls
+  /// [onlyMissed] If true, returns only messages with missed/declined calls
   bool? onlyMissed;
 
   /// callback sign

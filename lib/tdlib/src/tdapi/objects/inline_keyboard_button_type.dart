@@ -15,6 +15,7 @@ class InlineKeyboardButtonType extends TdObject {
   /// * InlineKeyboardButtonTypeCallbackGame
   /// * InlineKeyboardButtonTypeSwitchInline
   /// * InlineKeyboardButtonTypeBuy
+  /// * InlineKeyboardButtonTypeUser
   factory InlineKeyboardButtonType.fromJson(Map<String, dynamic> json)  {
     switch(json["@type"]) {
       case InlineKeyboardButtonTypeUrl.CONSTRUCTOR:
@@ -31,6 +32,8 @@ class InlineKeyboardButtonType extends TdObject {
         return InlineKeyboardButtonTypeSwitchInline.fromJson(json);
       case InlineKeyboardButtonTypeBuy.CONSTRUCTOR:
         return InlineKeyboardButtonTypeBuy.fromJson(json);
+      case InlineKeyboardButtonTypeUser.CONSTRUCTOR:
+        return InlineKeyboardButtonTypeUser.fromJson(json);
     }
     throw new Exception('undefined type');
   }
@@ -242,6 +245,33 @@ class InlineKeyboardButtonTypeBuy extends InlineKeyboardButtonType {
   }
 
   static const CONSTRUCTOR = 'inlineKeyboardButtonTypeBuy';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class InlineKeyboardButtonTypeUser extends InlineKeyboardButtonType {
+
+  /// A button with a user reference to be handled in the same way as textEntityTypeMentionName entities
+  InlineKeyboardButtonTypeUser({this.userId});
+
+  /// [userId] User identifier
+  int? userId;
+
+  /// Parse from a json
+  InlineKeyboardButtonTypeUser.fromJson(Map<String, dynamic> json)  {
+    userId = json['user_id'] == null ? null : json['user_id'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "user_id": userId,
+    };
+  }
+
+  static const CONSTRUCTOR = 'inlineKeyboardButtonTypeUser';
   
   @override
   String getConstructor() => CONSTRUCTOR;

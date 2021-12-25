@@ -12,6 +12,7 @@ class AuthenticationCodeType extends TdObject {
   /// * AuthenticationCodeTypeSms
   /// * AuthenticationCodeTypeCall
   /// * AuthenticationCodeTypeFlashCall
+  /// * AuthenticationCodeTypeMissedCall
   factory AuthenticationCodeType.fromJson(Map<String, dynamic> json)  {
     switch(json["@type"]) {
       case AuthenticationCodeTypeTelegramMessage.CONSTRUCTOR:
@@ -22,6 +23,8 @@ class AuthenticationCodeType extends TdObject {
         return AuthenticationCodeTypeCall.fromJson(json);
       case AuthenticationCodeTypeFlashCall.CONSTRUCTOR:
         return AuthenticationCodeTypeFlashCall.fromJson(json);
+      case AuthenticationCodeTypeMissedCall.CONSTRUCTOR:
+        return AuthenticationCodeTypeMissedCall.fromJson(json);
     }
     throw new Exception('undefined type');
   }
@@ -122,7 +125,7 @@ class AuthenticationCodeTypeCall extends AuthenticationCodeType {
 
 class AuthenticationCodeTypeFlashCall extends AuthenticationCodeType {
 
-  /// An authentication code is delivered by an immediately canceled call to the specified phone number. The number from which the call was made is the code
+  /// An authentication code is delivered by an immediately canceled call to the specified phone number. The phone number that calls is the code that must be entered automatically
   AuthenticationCodeTypeFlashCall({this.pattern});
 
   /// [pattern] Pattern of the phone number from which the call will be made
@@ -142,6 +145,39 @@ class AuthenticationCodeTypeFlashCall extends AuthenticationCodeType {
   }
 
   static const CONSTRUCTOR = 'authenticationCodeTypeFlashCall';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class AuthenticationCodeTypeMissedCall extends AuthenticationCodeType {
+
+  /// An authentication code is delivered by an immediately canceled call to the specified phone number. The last digits of the phone number that calls are the code that must be entered manually by the user
+  AuthenticationCodeTypeMissedCall({this.phoneNumberPrefix,
+    this.length});
+
+  /// [phoneNumberPrefix] Prefix of the phone number from which the call will be made 
+  String? phoneNumberPrefix;
+
+  /// [length] Number of digits in the code, excluding the prefix
+  int? length;
+
+  /// Parse from a json
+  AuthenticationCodeTypeMissedCall.fromJson(Map<String, dynamic> json)  {
+    phoneNumberPrefix = json['phone_number_prefix'] == null ? null : json['phone_number_prefix'];
+    length = json['length'] == null ? null : json['length'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "phone_number_prefix": phoneNumberPrefix,
+      "length": length,
+    };
+  }
+
+  static const CONSTRUCTOR = 'authenticationCodeTypeMissedCall';
   
   @override
   String getConstructor() => CONSTRUCTOR;

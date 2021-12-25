@@ -2,14 +2,14 @@ part of '../tdapi.dart';
 
 class ChatInviteLinkMembers extends TdObject {
 
-  /// Contains a list of chat members joined a chat by an invite link
+  /// Contains a list of chat members joined a chat via an invite link
   ChatInviteLinkMembers({this.totalCount,
     this.members});
 
   /// [totalCount] Approximate total count of chat members found 
   int? totalCount;
 
-  /// [members] List of chat members, joined a chat by an invite link
+  /// [members] List of chat members, joined a chat via an invite link
   List<ChatInviteLinkMember>? members;
 
   /// callback sign

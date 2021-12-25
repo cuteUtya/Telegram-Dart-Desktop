@@ -3,11 +3,11 @@ part of '../tdapi.dart';
 class ToggleMessageSenderIsBlocked extends TdFunction {
 
   /// Changes the block state of a message sender. Currently, only users and supergroup chats can be blocked
-  ToggleMessageSenderIsBlocked({this.sender,
+  ToggleMessageSenderIsBlocked({this.senderId,
     this.isBlocked});
 
-  /// [sender] Message Sender 
-  MessageSender? sender;
+  /// [senderId] Identifier of a message sender to block/unblock 
+  MessageSender? senderId;
 
   /// [isBlocked] New value of is_blocked
   bool? isBlocked;
@@ -22,7 +22,7 @@ class ToggleMessageSenderIsBlocked extends TdFunction {
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "sender": sender == null ? null : sender?.toJson(),
+      "sender_id": senderId == null ? null : senderId?.toJson(),
       "is_blocked": isBlocked,
       "@extra": extra,
     };

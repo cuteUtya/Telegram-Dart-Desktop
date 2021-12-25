@@ -4,7 +4,7 @@ class Message extends TdObject {
 
   /// Describes a message
   Message({this.id,
-    this.sender,
+    this.senderId,
     this.chatId,
     this.sendingState,
     this.schedulingState,
@@ -12,6 +12,7 @@ class Message extends TdObject {
     this.isPinned,
     this.canBeEdited,
     this.canBeForwarded,
+    this.canBeSaved,
     this.canBeDeletedOnlyForSelf,
     this.canBeDeletedForAllUsers,
     this.canGetStatistics,
@@ -40,8 +41,8 @@ class Message extends TdObject {
   /// [id] Message identifier; unique for the chat to which the message belongs
   int? id;
 
-  /// [sender] The sender of the message
-  MessageSender? sender;
+  /// [senderId] Identifier of the sender of the message
+  MessageSender? senderId;
 
   /// [chatId] Chat identifier
   int? chatId;
@@ -63,6 +64,9 @@ class Message extends TdObject {
 
   /// [canBeForwarded] True, if the message can be forwarded
   bool? canBeForwarded;
+
+  /// [canBeSaved] True, if content of the message can be saved locally or copied
+  bool? canBeSaved;
 
   /// [canBeDeletedOnlyForSelf] True, if the message can be deleted only for the current user while other users will continue to see it
   bool? canBeDeletedOnlyForSelf;
@@ -142,7 +146,7 @@ class Message extends TdObject {
   /// Parse from a json
   Message.fromJson(Map<String, dynamic> json)  {
     id = json['id'] == null ? null : json['id'];
-    sender = json['sender'] == null ? null : MessageSender.fromJson(json['sender'] ?? <String, dynamic>{});
+    senderId = json['sender_id'] == null ? null : MessageSender.fromJson(json['sender_id'] ?? <String, dynamic>{});
     chatId = json['chat_id'] == null ? null : json['chat_id'];
     sendingState = json['sending_state'] == null ? null : MessageSendingState.fromJson(json['sending_state'] ?? <String, dynamic>{});
     schedulingState = json['scheduling_state'] == null ? null : MessageSchedulingState.fromJson(json['scheduling_state'] ?? <String, dynamic>{});
@@ -150,6 +154,7 @@ class Message extends TdObject {
     isPinned = json['is_pinned'] == null ? null : json['is_pinned'];
     canBeEdited = json['can_be_edited'] == null ? null : json['can_be_edited'];
     canBeForwarded = json['can_be_forwarded'] == null ? null : json['can_be_forwarded'];
+    canBeSaved = json['can_be_saved'] == null ? null : json['can_be_saved'];
     canBeDeletedOnlyForSelf = json['can_be_deleted_only_for_self'] == null ? null : json['can_be_deleted_only_for_self'];
     canBeDeletedForAllUsers = json['can_be_deleted_for_all_users'] == null ? null : json['can_be_deleted_for_all_users'];
     canGetStatistics = json['can_get_statistics'] == null ? null : json['can_get_statistics'];
@@ -182,7 +187,7 @@ class Message extends TdObject {
     return {
       "@type": CONSTRUCTOR,
       "id": id,
-      "sender": sender == null ? null : sender?.toJson(),
+      "sender_id": senderId == null ? null : senderId?.toJson(),
       "chat_id": chatId,
       "sending_state": sendingState == null ? null : sendingState?.toJson(),
       "scheduling_state": schedulingState == null ? null : schedulingState?.toJson(),
@@ -190,6 +195,7 @@ class Message extends TdObject {
       "is_pinned": isPinned,
       "can_be_edited": canBeEdited,
       "can_be_forwarded": canBeForwarded,
+      "can_be_saved": canBeSaved,
       "can_be_deleted_only_for_self": canBeDeletedOnlyForSelf,
       "can_be_deleted_for_all_users": canBeDeletedForAllUsers,
       "can_get_statistics": canGetStatistics,

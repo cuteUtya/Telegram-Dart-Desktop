@@ -207,11 +207,11 @@ class ChatItemLastMessageContent extends StatelessWidget {
   }
 
   int get lastMessageSenderId {
-    if (chat.lastMessage!.sender! is MessageSenderUser) {
-      return (chat.lastMessage!.sender! as MessageSenderUser).userId!;
+    if (chat.lastMessage!.senderId! is MessageSenderUser) {
+      return (chat.lastMessage!.senderId! as MessageSenderUser).userId!;
     }
-    if (chat.lastMessage!.sender! is MessageSenderChat) {
-      return (chat.lastMessage!.sender! as MessageSenderChat).chatId!;
+    if (chat.lastMessage!.senderId! is MessageSenderChat) {
+      return (chat.lastMessage!.senderId! as MessageSenderChat).chatId!;
     }
     return 0;
   }
@@ -220,7 +220,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
     if (draft) {
       return client.getTranslation("lng_from_draft");
     }
-    if (chat.lastMessage!.sender! is MessageSenderUser) {
+    if (chat.lastMessage!.senderId! is MessageSenderUser) {
       if (lastMessageSenderId == client.me) {
         return client.getTranslation("lng_from_you");
       }

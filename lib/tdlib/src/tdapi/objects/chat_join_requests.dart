@@ -2,7 +2,7 @@ part of '../tdapi.dart';
 
 class ChatJoinRequests extends TdObject {
 
-  /// Contains a list of chat join requests
+  /// Contains a list of requests to join a chat
   ChatJoinRequests({this.totalCount,
     this.requests});
 

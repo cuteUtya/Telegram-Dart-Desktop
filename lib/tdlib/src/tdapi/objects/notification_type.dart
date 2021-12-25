@@ -120,7 +120,7 @@ class NotificationTypeNewPushMessage extends NotificationType {
 
   /// New message was received through a push notification
   NotificationTypeNewPushMessage({this.messageId,
-    this.sender,
+    this.senderId,
     this.senderName,
     this.isOutgoing,
     this.content});
@@ -128,8 +128,8 @@ class NotificationTypeNewPushMessage extends NotificationType {
   /// [messageId] The message identifier. The message will not be available in the chat history, but the notificationTypeNewPushMessage can be used in viewMessages, or as reply_to_message_id
   int? messageId;
 
-  /// [sender] The sender of the message. Corresponding user or chat may be inaccessible
-  MessageSender? sender;
+  /// [senderId] Identifier of the sender of the message. Corresponding user or chat may be inaccessible
+  MessageSender? senderId;
 
   /// [senderName] Name of the sender
   String? senderName;
@@ -143,7 +143,7 @@ class NotificationTypeNewPushMessage extends NotificationType {
   /// Parse from a json
   NotificationTypeNewPushMessage.fromJson(Map<String, dynamic> json)  {
     messageId = json['message_id'] == null ? null : json['message_id'];
-    sender = json['sender'] == null ? null : MessageSender.fromJson(json['sender'] ?? <String, dynamic>{});
+    senderId = json['sender_id'] == null ? null : MessageSender.fromJson(json['sender_id'] ?? <String, dynamic>{});
     senderName = json['sender_name'] == null ? null : json['sender_name'];
     isOutgoing = json['is_outgoing'] == null ? null : json['is_outgoing'];
     content = json['content'] == null ? null : PushMessageContent.fromJson(json['content'] ?? <String, dynamic>{});
@@ -154,7 +154,7 @@ class NotificationTypeNewPushMessage extends NotificationType {
     return {
       "@type": CONSTRUCTOR,
       "message_id": messageId,
-      "sender": sender == null ? null : sender?.toJson(),
+      "sender_id": senderId == null ? null : senderId?.toJson(),
       "sender_name": senderName,
       "is_outgoing": isOutgoing,
       "content": content == null ? null : content?.toJson(),

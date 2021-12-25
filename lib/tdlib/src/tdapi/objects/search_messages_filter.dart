@@ -18,8 +18,6 @@ class SearchMessagesFilter extends TdObject {
   /// * SearchMessagesFilterPhotoAndVideo
   /// * SearchMessagesFilterUrl
   /// * SearchMessagesFilterChatPhoto
-  /// * SearchMessagesFilterCall
-  /// * SearchMessagesFilterMissedCall
   /// * SearchMessagesFilterVideoNote
   /// * SearchMessagesFilterVoiceAndVideoNote
   /// * SearchMessagesFilterMention
@@ -48,10 +46,6 @@ class SearchMessagesFilter extends TdObject {
         return SearchMessagesFilterUrl.fromJson(json);
       case SearchMessagesFilterChatPhoto.CONSTRUCTOR:
         return SearchMessagesFilterChatPhoto.fromJson(json);
-      case SearchMessagesFilterCall.CONSTRUCTOR:
-        return SearchMessagesFilterCall.fromJson(json);
-      case SearchMessagesFilterMissedCall.CONSTRUCTOR:
-        return SearchMessagesFilterMissedCall.fromJson(json);
       case SearchMessagesFilterVideoNote.CONSTRUCTOR:
         return SearchMessagesFilterVideoNote.fromJson(json);
       case SearchMessagesFilterVoiceAndVideoNote.CONSTRUCTOR:
@@ -306,52 +300,6 @@ class SearchMessagesFilterChatPhoto extends SearchMessagesFilter {
   }
 
   static const CONSTRUCTOR = 'searchMessagesFilterChatPhoto';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class SearchMessagesFilterCall extends SearchMessagesFilter {
-
-  /// Returns only call messages
-  SearchMessagesFilterCall();
-
-  
-
-  /// Parse from a json
-  SearchMessagesFilterCall.fromJson(Map<String, dynamic> json) ;
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-    };
-  }
-
-  static const CONSTRUCTOR = 'searchMessagesFilterCall';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class SearchMessagesFilterMissedCall extends SearchMessagesFilter {
-
-  /// Returns only incoming call messages with missed/declined discard reasons
-  SearchMessagesFilterMissedCall();
-
-  
-
-  /// Parse from a json
-  SearchMessagesFilterMissedCall.fromJson(Map<String, dynamic> json) ;
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-    };
-  }
-
-  static const CONSTRUCTOR = 'searchMessagesFilterMissedCall';
   
   @override
   String getConstructor() => CONSTRUCTOR;

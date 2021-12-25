@@ -14,6 +14,7 @@ class ChatActionBar extends TdObject {
   /// * ChatActionBarReportAddBlock
   /// * ChatActionBarAddContact
   /// * ChatActionBarSharePhoneNumber
+  /// * ChatActionBarJoinRequest
   factory ChatActionBar.fromJson(Map<String, dynamic> json)  {
     switch(json["@type"]) {
       case ChatActionBarReportSpam.CONSTRUCTOR:
@@ -28,6 +29,8 @@ class ChatActionBar extends TdObject {
         return ChatActionBarAddContact.fromJson(json);
       case ChatActionBarSharePhoneNumber.CONSTRUCTOR:
         return ChatActionBarSharePhoneNumber.fromJson(json);
+      case ChatActionBarJoinRequest.CONSTRUCTOR:
+        return ChatActionBarJoinRequest.fromJson(json);
     }
     throw new Exception('undefined type');
   }
@@ -97,7 +100,7 @@ class ChatActionBarReportUnrelatedLocation extends ChatActionBar {
 
 class ChatActionBarInviteMembers extends ChatActionBar {
 
-  /// The chat is a recently created group chat, to which new members can be invited
+  /// The chat is a recently created group chat to which new members can be invited
   ChatActionBarInviteMembers();
 
   
@@ -192,6 +195,45 @@ class ChatActionBarSharePhoneNumber extends ChatActionBar {
   }
 
   static const CONSTRUCTOR = 'chatActionBarSharePhoneNumber';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatActionBarJoinRequest extends ChatActionBar {
+
+  /// The chat is a private chat with an administrator of a chat to which the user sent join request
+  ChatActionBarJoinRequest({this.title,
+    this.isChannel,
+    this.requestDate});
+
+  /// [title] Title of the chat to which the join request was sent
+  String? title;
+
+  /// [isChannel] True, if the join request was sent to a channel chat
+  bool? isChannel;
+
+  /// [requestDate] Point in time (Unix timestamp) when the join request was sent
+  int? requestDate;
+
+  /// Parse from a json
+  ChatActionBarJoinRequest.fromJson(Map<String, dynamic> json)  {
+    title = json['title'] == null ? null : json['title'];
+    isChannel = json['is_channel'] == null ? null : json['is_channel'];
+    requestDate = json['request_date'] == null ? null : json['request_date'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "title": title,
+      "is_channel": isChannel,
+      "request_date": requestDate,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatActionBarJoinRequest';
   
   @override
   String getConstructor() => CONSTRUCTOR;

@@ -70,7 +70,7 @@ class WebPage extends TdObject {
   /// [audio] Preview of the content as an audio file, if available; may be null
   Audio? audio;
 
-  /// [document] Preview of the content as a document, if available (currently only available for small PDF files and ZIP archives); may be null
+  /// [document] Preview of the content as a document, if available; may be null
   Document? document;
 
   /// [sticker] Preview of the content as a sticker for small WEBP files, if available; may be null
@@ -85,7 +85,7 @@ class WebPage extends TdObject {
   /// [voiceNote] Preview of the content as a voice note, if available; may be null
   VoiceNote? voiceNote;
 
-  /// [instantViewVersion] Version of instant view, available for the web page (currently can be 1 or 2), 0 if none
+  /// [instantViewVersion] Version of instant view, available for the web page (currently, can be 1 or 2), 0 if none
   int? instantViewVersion;
 
   /// callback sign

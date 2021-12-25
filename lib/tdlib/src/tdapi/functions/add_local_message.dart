@@ -4,7 +4,7 @@ class AddLocalMessage extends TdFunction {
 
   /// Adds a local message to a chat. The message is persistent across application restarts only if the message database is used. Returns the added message
   AddLocalMessage({this.chatId,
-    this.sender,
+    this.senderId,
     this.replyToMessageId,
     this.disableNotification,
     this.inputMessageContent});
@@ -12,8 +12,8 @@ class AddLocalMessage extends TdFunction {
   /// [chatId] Target chat
   int? chatId;
 
-  /// [sender] The sender of the message
-  MessageSender? sender;
+  /// [senderId] Identifier of the sender of the message
+  MessageSender? senderId;
 
   /// [replyToMessageId] Identifier of the message to reply to or 0
   int? replyToMessageId;
@@ -35,7 +35,7 @@ class AddLocalMessage extends TdFunction {
     return {
       "@type": CONSTRUCTOR,
       "chat_id": chatId,
-      "sender": sender == null ? null : sender?.toJson(),
+      "sender_id": senderId == null ? null : senderId?.toJson(),
       "reply_to_message_id": replyToMessageId,
       "disable_notification": disableNotification,
       "input_message_content": inputMessageContent == null ? null : inputMessageContent?.toJson(),

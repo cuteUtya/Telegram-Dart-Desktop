@@ -28,8 +28,9 @@ class ChatEventAction extends TdObject {
   /// * ChatEventInvitesToggled
   /// * ChatEventLinkedChatChanged
   /// * ChatEventSlowModeDelayChanged
-  /// * ChatEventMessageTtlSettingChanged
+  /// * ChatEventMessageTtlChanged
   /// * ChatEventSignMessagesToggled
+  /// * ChatEventHasProtectedContentToggled
   /// * ChatEventStickerSetChanged
   /// * ChatEventLocationChanged
   /// * ChatEventIsAllHistoryAvailableToggled
@@ -37,7 +38,7 @@ class ChatEventAction extends TdObject {
   /// * ChatEventInviteLinkRevoked
   /// * ChatEventInviteLinkDeleted
   /// * ChatEventVideoChatCreated
-  /// * ChatEventVideoChatDiscarded
+  /// * ChatEventVideoChatEnded
   /// * ChatEventVideoChatParticipantIsMutedToggled
   /// * ChatEventVideoChatParticipantVolumeLevelChanged
   /// * ChatEventVideoChatMuteNewParticipantsToggled
@@ -83,10 +84,12 @@ class ChatEventAction extends TdObject {
         return ChatEventLinkedChatChanged.fromJson(json);
       case ChatEventSlowModeDelayChanged.CONSTRUCTOR:
         return ChatEventSlowModeDelayChanged.fromJson(json);
-      case ChatEventMessageTtlSettingChanged.CONSTRUCTOR:
-        return ChatEventMessageTtlSettingChanged.fromJson(json);
+      case ChatEventMessageTtlChanged.CONSTRUCTOR:
+        return ChatEventMessageTtlChanged.fromJson(json);
       case ChatEventSignMessagesToggled.CONSTRUCTOR:
         return ChatEventSignMessagesToggled.fromJson(json);
+      case ChatEventHasProtectedContentToggled.CONSTRUCTOR:
+        return ChatEventHasProtectedContentToggled.fromJson(json);
       case ChatEventStickerSetChanged.CONSTRUCTOR:
         return ChatEventStickerSetChanged.fromJson(json);
       case ChatEventLocationChanged.CONSTRUCTOR:
@@ -101,8 +104,8 @@ class ChatEventAction extends TdObject {
         return ChatEventInviteLinkDeleted.fromJson(json);
       case ChatEventVideoChatCreated.CONSTRUCTOR:
         return ChatEventVideoChatCreated.fromJson(json);
-      case ChatEventVideoChatDiscarded.CONSTRUCTOR:
-        return ChatEventVideoChatDiscarded.fromJson(json);
+      case ChatEventVideoChatEnded.CONSTRUCTOR:
+        return ChatEventVideoChatEnded.fromJson(json);
       case ChatEventVideoChatParticipantIsMutedToggled.CONSTRUCTOR:
         return ChatEventVideoChatParticipantIsMutedToggled.fromJson(json);
       case ChatEventVideoChatParticipantVolumeLevelChanged.CONSTRUCTOR:
@@ -292,7 +295,7 @@ class ChatEventMemberJoined extends ChatEventAction {
 
 class ChatEventMemberJoinedByInviteLink extends ChatEventAction {
 
-  /// A new member joined the chat by an invite link
+  /// A new member joined the chat via an invite link
   ChatEventMemberJoinedByInviteLink({this.inviteLink});
 
   /// [inviteLink] Invite link used to join the chat
@@ -742,34 +745,34 @@ class ChatEventSlowModeDelayChanged extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventMessageTtlSettingChanged extends ChatEventAction {
+class ChatEventMessageTtlChanged extends ChatEventAction {
 
-  /// The message TTL setting was changed
-  ChatEventMessageTtlSettingChanged({this.oldMessageTtlSetting,
-    this.newMessageTtlSetting});
+  /// The message TTL was changed
+  ChatEventMessageTtlChanged({this.oldMessageTtl,
+    this.newMessageTtl});
 
-  /// [oldMessageTtlSetting] Previous value of message_ttl_setting 
-  int? oldMessageTtlSetting;
+  /// [oldMessageTtl] Previous value of message_ttl 
+  int? oldMessageTtl;
 
-  /// [newMessageTtlSetting] New value of message_ttl_setting
-  int? newMessageTtlSetting;
+  /// [newMessageTtl] New value of message_ttl
+  int? newMessageTtl;
 
   /// Parse from a json
-  ChatEventMessageTtlSettingChanged.fromJson(Map<String, dynamic> json)  {
-    oldMessageTtlSetting = json['old_message_ttl_setting'] == null ? null : json['old_message_ttl_setting'];
-    newMessageTtlSetting = json['new_message_ttl_setting'] == null ? null : json['new_message_ttl_setting'];
+  ChatEventMessageTtlChanged.fromJson(Map<String, dynamic> json)  {
+    oldMessageTtl = json['old_message_ttl'] == null ? null : json['old_message_ttl'];
+    newMessageTtl = json['new_message_ttl'] == null ? null : json['new_message_ttl'];
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "old_message_ttl_setting": oldMessageTtlSetting,
-      "new_message_ttl_setting": newMessageTtlSetting,
+      "old_message_ttl": oldMessageTtl,
+      "new_message_ttl": newMessageTtl,
     };
   }
 
-  static const CONSTRUCTOR = 'chatEventMessageTtlSettingChanged';
+  static const CONSTRUCTOR = 'chatEventMessageTtlChanged';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -797,6 +800,33 @@ class ChatEventSignMessagesToggled extends ChatEventAction {
   }
 
   static const CONSTRUCTOR = 'chatEventSignMessagesToggled';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventHasProtectedContentToggled extends ChatEventAction {
+
+  /// The has_protected_content setting of a channel was toggled
+  ChatEventHasProtectedContentToggled({this.hasProtectedContent});
+
+  /// [hasProtectedContent] New value of has_protected_content
+  bool? hasProtectedContent;
+
+  /// Parse from a json
+  ChatEventHasProtectedContentToggled.fromJson(Map<String, dynamic> json)  {
+    hasProtectedContent = json['has_protected_content'] == null ? null : json['has_protected_content'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "has_protected_content": hasProtectedContent,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventHasProtectedContentToggled';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -1009,16 +1039,16 @@ class ChatEventVideoChatCreated extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventVideoChatDiscarded extends ChatEventAction {
+class ChatEventVideoChatEnded extends ChatEventAction {
 
-  /// A video chat was discarded
-  ChatEventVideoChatDiscarded({this.groupCallId});
+  /// A video chat was ended
+  ChatEventVideoChatEnded({this.groupCallId});
 
   /// [groupCallId] Identifier of the video chat. The video chat can be received through the method getGroupCall
   int? groupCallId;
 
   /// Parse from a json
-  ChatEventVideoChatDiscarded.fromJson(Map<String, dynamic> json)  {
+  ChatEventVideoChatEnded.fromJson(Map<String, dynamic> json)  {
     groupCallId = json['group_call_id'] == null ? null : json['group_call_id'];
   }
 
@@ -1030,7 +1060,7 @@ class ChatEventVideoChatDiscarded extends ChatEventAction {
     };
   }
 
-  static const CONSTRUCTOR = 'chatEventVideoChatDiscarded';
+  static const CONSTRUCTOR = 'chatEventVideoChatEnded';
   
   @override
   String getConstructor() => CONSTRUCTOR;

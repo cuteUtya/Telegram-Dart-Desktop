@@ -53,7 +53,7 @@ class GroupCall extends TdObject {
   /// [loadedAllParticipants] True, if all group call participants are loaded
   bool? loadedAllParticipants;
 
-  /// [recentSpeakers] Recently speaking users in the group call
+  /// [recentSpeakers] At most 3 recently speaking users in the group call
   List<GroupCallRecentSpeaker>? recentSpeakers;
 
   /// [isMyVideoEnabled] True, if the current user's video is enabled

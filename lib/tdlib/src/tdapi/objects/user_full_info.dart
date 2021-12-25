@@ -8,6 +8,7 @@ class UserFullInfo extends TdObject {
     this.canBeCalled,
     this.supportsVideoCalls,
     this.hasPrivateCalls,
+    this.hasPrivateForwards,
     this.needPhoneNumberPrivacyException,
     this.bio,
     this.shareText,
@@ -29,6 +30,9 @@ class UserFullInfo extends TdObject {
 
   /// [hasPrivateCalls] True, if the user can't be called due to their privacy settings
   bool? hasPrivateCalls;
+
+  /// [hasPrivateForwards] True, if the user can't be linked in forwarded messages due to their privacy settings
+  bool? hasPrivateForwards;
 
   /// [needPhoneNumberPrivacyException] True, if the current user needs to explicitly allow to share their phone number with the user when the method addContact is used
   bool? needPhoneNumberPrivacyException;
@@ -58,6 +62,7 @@ class UserFullInfo extends TdObject {
     canBeCalled = json['can_be_called'] == null ? null : json['can_be_called'];
     supportsVideoCalls = json['supports_video_calls'] == null ? null : json['supports_video_calls'];
     hasPrivateCalls = json['has_private_calls'] == null ? null : json['has_private_calls'];
+    hasPrivateForwards = json['has_private_forwards'] == null ? null : json['has_private_forwards'];
     needPhoneNumberPrivacyException = json['need_phone_number_privacy_exception'] == null ? null : json['need_phone_number_privacy_exception'];
     bio = json['bio'] == null ? null : json['bio'];
     shareText = json['share_text'] == null ? null : json['share_text'];
@@ -76,6 +81,7 @@ class UserFullInfo extends TdObject {
       "can_be_called": canBeCalled,
       "supports_video_calls": supportsVideoCalls,
       "has_private_calls": hasPrivateCalls,
+      "has_private_forwards": hasPrivateForwards,
       "need_phone_number_privacy_exception": needPhoneNumberPrivacyException,
       "bio": bio,
       "share_text": shareText,

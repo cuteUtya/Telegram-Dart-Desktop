@@ -10,6 +10,8 @@ class Chat extends TdObject {
     this.permissions,
     this.lastMessage,
     this.positions,
+    this.messageSenderId,
+    this.hasProtectedContent,
     this.isMarkedAsUnread,
     this.isBlocked,
     this.hasScheduledMessages,
@@ -22,7 +24,7 @@ class Chat extends TdObject {
     this.lastReadOutboxMessageId,
     this.unreadMentionCount,
     this.notificationSettings,
-    this.messageTtlSetting,
+    this.messageTtl,
     this.themeName,
     this.actionBar,
     this.videoChat,
@@ -51,6 +53,12 @@ class Chat extends TdObject {
 
   /// [positions] Positions of the chat in chat lists
   List<ChatPosition>? positions;
+
+  /// [messageSenderId] Identifier of a user or chat that is selected to send messages in the chat; may be null if the user can't change message sender
+  MessageSender? messageSenderId;
+
+  /// [hasProtectedContent] True, if chat content can't be saved locally, forwarded, or copied
+  bool? hasProtectedContent;
 
   /// [isMarkedAsUnread] True, if the chat is marked as unread
   bool? isMarkedAsUnread;
@@ -88,8 +96,8 @@ class Chat extends TdObject {
   /// [notificationSettings] Notification settings for this chat
   ChatNotificationSettings? notificationSettings;
 
-  /// [messageTtlSetting] Current message Time To Live setting (self-destruct timer) for the chat; 0 if not defined. TTL is counted from the time message or its content is viewed in secret chats and from the send date in other chats
-  int? messageTtlSetting;
+  /// [messageTtl] Current message Time To Live setting (self-destruct timer) for the chat; 0 if not defined. TTL is counted from the time message or its content is viewed in secret chats and from the send date in other chats
+  int? messageTtl;
 
   /// [themeName] If non-empty, name of a theme, set for the chat
   String? themeName;
@@ -124,6 +132,8 @@ class Chat extends TdObject {
     permissions = json['permissions'] == null ? null : ChatPermissions.fromJson(json['permissions'] ?? <String, dynamic>{});
     lastMessage = json['last_message'] == null ? null : Message.fromJson(json['last_message'] ?? <String, dynamic>{});
     positions = json['positions'] == null ? null : List<ChatPosition>.from((json['positions'] ?? [])!.map((item) => ChatPosition.fromJson(item ?? <String, dynamic>{})).toList());
+    messageSenderId = json['message_sender_id'] == null ? null : MessageSender.fromJson(json['message_sender_id'] ?? <String, dynamic>{});
+    hasProtectedContent = json['has_protected_content'] == null ? null : json['has_protected_content'];
     isMarkedAsUnread = json['is_marked_as_unread'] == null ? null : json['is_marked_as_unread'];
     isBlocked = json['is_blocked'] == null ? null : json['is_blocked'];
     hasScheduledMessages = json['has_scheduled_messages'] == null ? null : json['has_scheduled_messages'];
@@ -136,7 +146,7 @@ class Chat extends TdObject {
     lastReadOutboxMessageId = json['last_read_outbox_message_id'] == null ? null : json['last_read_outbox_message_id'];
     unreadMentionCount = json['unread_mention_count'] == null ? null : json['unread_mention_count'];
     notificationSettings = json['notification_settings'] == null ? null : ChatNotificationSettings.fromJson(json['notification_settings'] ?? <String, dynamic>{});
-    messageTtlSetting = json['message_ttl_setting'] == null ? null : json['message_ttl_setting'];
+    messageTtl = json['message_ttl'] == null ? null : json['message_ttl'];
     themeName = json['theme_name'] == null ? null : json['theme_name'];
     actionBar = json['action_bar'] == null ? null : ChatActionBar.fromJson(json['action_bar'] ?? <String, dynamic>{});
     videoChat = json['video_chat'] == null ? null : VideoChat.fromJson(json['video_chat'] ?? <String, dynamic>{});
@@ -158,6 +168,8 @@ class Chat extends TdObject {
       "permissions": permissions == null ? null : permissions?.toJson(),
       "last_message": lastMessage == null ? null : lastMessage?.toJson(),
       "positions": positions?.map((i) => i.toJson()).toList(),
+      "message_sender_id": messageSenderId == null ? null : messageSenderId?.toJson(),
+      "has_protected_content": hasProtectedContent,
       "is_marked_as_unread": isMarkedAsUnread,
       "is_blocked": isBlocked,
       "has_scheduled_messages": hasScheduledMessages,
@@ -170,7 +182,7 @@ class Chat extends TdObject {
       "last_read_outbox_message_id": lastReadOutboxMessageId,
       "unread_mention_count": unreadMentionCount,
       "notification_settings": notificationSettings == null ? null : notificationSettings?.toJson(),
-      "message_ttl_setting": messageTtlSetting,
+      "message_ttl": messageTtl,
       "theme_name": themeName,
       "action_bar": actionBar == null ? null : actionBar?.toJson(),
       "video_chat": videoChat == null ? null : videoChat?.toJson(),

@@ -907,7 +907,7 @@ class PushMessageContentChatDeleteMember extends PushMessageContent {
 
 class PushMessageContentChatJoinByLink extends PushMessageContent {
 
-  /// A new member joined the chat by invite link
+  /// A new member joined the chat via an invite link
   PushMessageContentChatJoinByLink();
 
   

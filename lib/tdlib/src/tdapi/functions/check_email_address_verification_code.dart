@@ -5,7 +5,7 @@ class CheckEmailAddressVerificationCode extends TdFunction {
   /// Checks the email address verification code for Telegram Passport
   CheckEmailAddressVerificationCode({this.code});
 
-  /// [code] Verification code
+  /// [code] Verification code to check
   String? code;
 
   /// callback sign

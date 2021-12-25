@@ -11,8 +11,9 @@ class SuggestedAction extends TdObject {
   /// * SuggestedActionEnableArchiveAndMuteNewChats
   /// * SuggestedActionCheckPassword
   /// * SuggestedActionCheckPhoneNumber
-  /// * SuggestedActionSeeTicksHint
+  /// * SuggestedActionViewChecksHint
   /// * SuggestedActionConvertToBroadcastGroup
+  /// * SuggestedActionSetPassword
   factory SuggestedAction.fromJson(Map<String, dynamic> json)  {
     switch(json["@type"]) {
       case SuggestedActionEnableArchiveAndMuteNewChats.CONSTRUCTOR:
@@ -21,10 +22,12 @@ class SuggestedAction extends TdObject {
         return SuggestedActionCheckPassword.fromJson(json);
       case SuggestedActionCheckPhoneNumber.CONSTRUCTOR:
         return SuggestedActionCheckPhoneNumber.fromJson(json);
-      case SuggestedActionSeeTicksHint.CONSTRUCTOR:
-        return SuggestedActionSeeTicksHint.fromJson(json);
+      case SuggestedActionViewChecksHint.CONSTRUCTOR:
+        return SuggestedActionViewChecksHint.fromJson(json);
       case SuggestedActionConvertToBroadcastGroup.CONSTRUCTOR:
         return SuggestedActionConvertToBroadcastGroup.fromJson(json);
+      case SuggestedActionSetPassword.CONSTRUCTOR:
+        return SuggestedActionSetPassword.fromJson(json);
     }
     throw new Exception('undefined type');
   }
@@ -67,7 +70,7 @@ class SuggestedActionEnableArchiveAndMuteNewChats extends SuggestedAction {
 
 class SuggestedActionCheckPassword extends SuggestedAction {
 
-  /// Suggests the user to check whether 2-step verification password is still remembered
+  /// Suggests the user to check whether they still remember their 2-step verification password
   SuggestedActionCheckPassword();
 
   
@@ -111,15 +114,15 @@ class SuggestedActionCheckPhoneNumber extends SuggestedAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class SuggestedActionSeeTicksHint extends SuggestedAction {
+class SuggestedActionViewChecksHint extends SuggestedAction {
 
-  /// Suggests the user to see a hint about meaning of one and two ticks on sent message
-  SuggestedActionSeeTicksHint();
+  /// Suggests the user to view a hint about the meaning of one and two check marks on sent messages
+  SuggestedActionViewChecksHint();
 
   
 
   /// Parse from a json
-  SuggestedActionSeeTicksHint.fromJson(Map<String, dynamic> json) ;
+  SuggestedActionViewChecksHint.fromJson(Map<String, dynamic> json) ;
 
   @override
   Map<String, dynamic> toJson() {
@@ -128,7 +131,7 @@ class SuggestedActionSeeTicksHint extends SuggestedAction {
     };
   }
 
-  static const CONSTRUCTOR = 'suggestedActionSeeTicksHint';
+  static const CONSTRUCTOR = 'suggestedActionViewChecksHint';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -156,6 +159,33 @@ class SuggestedActionConvertToBroadcastGroup extends SuggestedAction {
   }
 
   static const CONSTRUCTOR = 'suggestedActionConvertToBroadcastGroup';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class SuggestedActionSetPassword extends SuggestedAction {
+
+  /// Suggests the user to set a 2-step verification password to be able to log in again
+  SuggestedActionSetPassword({this.authorizationDelay});
+
+  /// [authorizationDelay] The number of days to pass between consecutive authorizations if the user declines to set password
+  int? authorizationDelay;
+
+  /// Parse from a json
+  SuggestedActionSetPassword.fromJson(Map<String, dynamic> json)  {
+    authorizationDelay = json['authorization_delay'] == null ? null : json['authorization_delay'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "authorization_delay": authorizationDelay,
+    };
+  }
+
+  static const CONSTRUCTOR = 'suggestedActionSetPassword';
   
   @override
   String getConstructor() => CONSTRUCTOR;

@@ -5,7 +5,7 @@ class CreateChatInviteLink extends TdFunction {
   /// Creates a new invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right in the chat
   CreateChatInviteLink({this.chatId,
     this.name,
-    this.expireDate,
+    this.expirationDate,
     this.memberLimit,
     this.createsJoinRequest});
 
@@ -15,10 +15,10 @@ class CreateChatInviteLink extends TdFunction {
   /// [name] Invite link name; 0-32 characters
   String? name;
 
-  /// [expireDate] Point in time (Unix timestamp) when the link will expire; pass 0 if never
-  int? expireDate;
+  /// [expirationDate] Point in time (Unix timestamp) when the link will expire; pass 0 if never
+  int? expirationDate;
 
-  /// [memberLimit] The maximum number of chat members that can join the chat by the link simultaneously; 0-99999; pass 0 if not limited
+  /// [memberLimit] The maximum number of chat members that can join the chat via the link simultaneously; 0-99999; pass 0 if not limited
   int? memberLimit;
 
   /// [createsJoinRequest] True, if the link only creates join request. If true, member_limit must not be specified
@@ -36,7 +36,7 @@ class CreateChatInviteLink extends TdFunction {
       "@type": CONSTRUCTOR,
       "chat_id": chatId,
       "name": name,
-      "expire_date": expireDate,
+      "expiration_date": expirationDate,
       "member_limit": memberLimit,
       "creates_join_request": createsJoinRequest,
       "@extra": extra,

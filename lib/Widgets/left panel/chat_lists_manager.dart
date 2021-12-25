@@ -55,7 +55,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
           var members = await getUsersById(
               (message?.content as MessageChatAddMembers).memberUserIds);
           bool isJoin = (members ?? []).firstWhereOrNull((e) =>
-                  (e.id == (message?.sender as MessageSenderUser).userId)) !=
+                  (e.id == (message?.senderId as MessageSenderUser).userId)) !=
               null;
           return UsersJoinedGroupInfo(
               addedUsers: members ?? [],
@@ -67,7 +67,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
   }
 
   Future<String?> getLastMessageAuthor(Chat chat) async {
-    var sender = chat.lastMessage?.sender;
+    var sender = chat.lastMessage?.senderId;
     if (sender is MessageSenderChat) {
       return (await widget.client.send(GetChat(chatId: sender.chatId)) as Chat)
           .title!;
@@ -200,16 +200,18 @@ class ChatListsManagerState extends State<ChatListsManager> {
       }
     }));
 
-    _subscriptions.add(widget.client.updateUserChatAction.listen((event) async {
+    _subscriptions.add(widget.client.updateChatAction.listen((event) async {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
         var lastAction = chat.actions
-            .firstWhereOrNull((element) => element.who.id == event.userId);
+            .firstWhereOrNull((element) => element.who.id == event.chatId);
         if (lastAction == null) {
           chat.actions.add(ChatActionInfo(
               action: event.action!,
-              who: (await widget.client.send(GetUser(userId: event.userId))
+              //TODO support MessagSenderChat here
+              who: (await widget.client.send(GetUser(
+                      userId: (event.senderId as MessageSenderUser).userId))
                   as User)));
         } else {
           if (event.action is ChatActionCancel) {

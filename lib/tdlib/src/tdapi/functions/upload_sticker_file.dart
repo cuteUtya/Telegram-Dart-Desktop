@@ -2,7 +2,7 @@ part of '../tdapi.dart';
 
 class UploadStickerFile extends TdFunction {
 
-  /// Uploads a PNG image with a sticker; returns the uploaded file
+  /// Uploads a file with a sticker; returns the uploaded file
   UploadStickerFile({this.userId,
     this.sticker});
 

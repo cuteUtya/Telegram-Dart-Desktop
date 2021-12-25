@@ -5,7 +5,7 @@ class SearchChatMessages extends TdFunction {
   /// Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of decreasing message_id. Cannot be used in secret chats with a non-empty query. (searchSecretMessages must be used instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit
   SearchChatMessages({this.chatId,
     this.query,
-    this.sender,
+    this.senderId,
     this.fromMessageId,
     this.offset,
     this.limit,
@@ -18,8 +18,8 @@ class SearchChatMessages extends TdFunction {
   /// [query] Query to search for
   String? query;
 
-  /// [sender] Sender of messages to search for; pass null to search for messages from any sender. Not supported in secret chats
-  MessageSender? sender;
+  /// [senderId] Identifier of the sender of messages to search for; pass null to search for messages from any sender. Not supported in secret chats
+  MessageSender? senderId;
 
   /// [fromMessageId] Identifier of the message starting from which history must be fetched; use 0 to get results from the last message
   int? fromMessageId;
@@ -48,7 +48,7 @@ class SearchChatMessages extends TdFunction {
       "@type": CONSTRUCTOR,
       "chat_id": chatId,
       "query": query,
-      "sender": sender == null ? null : sender?.toJson(),
+      "sender_id": senderId == null ? null : senderId?.toJson(),
       "from_message_id": fromMessageId,
       "offset": offset,
       "limit": limit,

@@ -97,10 +97,6 @@ class TelegramClient {
       .where((u) => u is UpdateNewChatJoinRequest)
       .map((a) => (a as UpdateNewChatJoinRequest));
 
-  Stream<UpdateChatMessageTtlSetting> get updateChatMessageTTlSetting => updates
-      .where((u) => u is UpdateChatMessageTtlSetting)
-      .map((a) => (a as UpdateChatMessageTtlSetting));
-
   Stream<UpdateChatNotificationSettings> get updateChatNotificationSettings =>
       updates
           .where((u) => u is UpdateChatNotificationSettings)
@@ -374,9 +370,9 @@ class TelegramClient {
   Stream<UpdateUser> get updateuser =>
       updates.where((u) => u is UpdateUser).map((a) => (a as UpdateUser));
 
-  Stream<UpdateUserChatAction> get updateUserChatAction => updates
-      .where((u) => u is UpdateUserChatAction)
-      .map((a) => (a as UpdateUserChatAction));
+  Stream<UpdateChatAction> get updateChatAction => updates
+      .where((u) => u is UpdateChatAction)
+      .map((a) => (a as UpdateChatAction));
 
   Stream<UpdateUserFullInfo> get updateUserFulIinfo => updates
       .where((u) => u is UpdateUserFullInfo)

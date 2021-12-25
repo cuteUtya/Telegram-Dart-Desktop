@@ -2,14 +2,14 @@ part of '../tdapi.dart';
 
 class MessageCalendarDay extends TdObject {
 
-  /// Contains information about found messages sent in a specific day
+  /// Contains information about found messages sent on a specific day
   MessageCalendarDay({this.totalCount,
     this.message});
 
-  /// [totalCount] Total number of found messages sent in the day 
+  /// [totalCount] Total number of found messages sent on the day 
   int? totalCount;
 
-  /// [message] First message sent in the day
+  /// [message] First message sent on the day
   Message? message;
 
   /// Parse from a json

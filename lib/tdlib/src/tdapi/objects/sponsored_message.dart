@@ -8,7 +8,7 @@ class SponsoredMessage extends TdObject {
     this.link,
     this.content});
 
-  /// [id] Unique sponsored message identifier 
+  /// [id] Unique sponsored message identifier
   int? id;
 
   /// [sponsorChatId] Chat identifier
@@ -17,8 +17,11 @@ class SponsoredMessage extends TdObject {
   /// [link] An internal link to be opened when the sponsored message is clicked; may be null. If null, the sponsor chat needs to be opened instead
   InternalLinkType? link;
 
-  /// [content] Content of the message
+  /// [content] Content of the message. Currently, can be only of the type messageText
   MessageContent? content;
+
+  /// callback sign
+  dynamic extra;
 
   /// Parse from a json
   SponsoredMessage.fromJson(Map<String, dynamic> json)  {
@@ -26,6 +29,7 @@ class SponsoredMessage extends TdObject {
     sponsorChatId = json['sponsor_chat_id'] == null ? null : json['sponsor_chat_id'];
     link = json['link'] == null ? null : InternalLinkType.fromJson(json['link'] ?? <String, dynamic>{});
     content = json['content'] == null ? null : MessageContent.fromJson(json['content'] ?? <String, dynamic>{});
+    extra = json['@extra'];
   }
 
   @override

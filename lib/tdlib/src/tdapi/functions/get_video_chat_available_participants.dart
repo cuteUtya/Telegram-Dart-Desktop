@@ -2,7 +2,7 @@ part of '../tdapi.dart';
 
 class GetVideoChatAvailableParticipants extends TdFunction {
 
-  /// Returns list of participant identifiers, which can be used to join video chats in a chat
+  /// Returns list of participant identifiers, on whose behalf a video chat in the chat can be joined
   GetVideoChatAvailableParticipants({this.chatId});
 
   /// [chatId] Chat identifier

@@ -1184,7 +1184,7 @@ class MessageChatAddMembers extends MessageContent {
 
 class MessageChatJoinByLink extends MessageContent {
 
-  /// A new member joined the chat by invite link
+  /// A new member joined the chat via an invite link
   MessageChatJoinByLink();
 
   
@@ -1397,7 +1397,7 @@ class MessageChatSetTtl extends MessageContent {
   /// The TTL (Time To Live) setting for messages in the chat has been changed
   MessageChatSetTtl({this.ttl});
 
-  /// [ttl] New message TTL setting
+  /// [ttl] New message TTL
   int? ttl;
 
   /// Parse from a json
@@ -1706,23 +1706,23 @@ class MessagePassportDataReceived extends MessageContent {
 class MessageProximityAlertTriggered extends MessageContent {
 
   /// A user in the chat came within proximity alert range
-  MessageProximityAlertTriggered({this.traveler,
-    this.watcher,
+  MessageProximityAlertTriggered({this.travelerId,
+    this.watcherId,
     this.distance});
 
-  /// [traveler] The user or chat, which triggered the proximity alert 
-  MessageSender? traveler;
+  /// [travelerId] The identifier of a user or chat that triggered the proximity alert 
+  MessageSender? travelerId;
 
-  /// [watcher] The user or chat, which subscribed for the proximity alert 
-  MessageSender? watcher;
+  /// [watcherId] The identifier of a user or chat that subscribed for the proximity alert 
+  MessageSender? watcherId;
 
   /// [distance] The distance between the users
   int? distance;
 
   /// Parse from a json
   MessageProximityAlertTriggered.fromJson(Map<String, dynamic> json)  {
-    traveler = json['traveler'] == null ? null : MessageSender.fromJson(json['traveler'] ?? <String, dynamic>{});
-    watcher = json['watcher'] == null ? null : MessageSender.fromJson(json['watcher'] ?? <String, dynamic>{});
+    travelerId = json['traveler_id'] == null ? null : MessageSender.fromJson(json['traveler_id'] ?? <String, dynamic>{});
+    watcherId = json['watcher_id'] == null ? null : MessageSender.fromJson(json['watcher_id'] ?? <String, dynamic>{});
     distance = json['distance'] == null ? null : json['distance'];
   }
 
@@ -1730,8 +1730,8 @@ class MessageProximityAlertTriggered extends MessageContent {
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "traveler": traveler == null ? null : traveler?.toJson(),
-      "watcher": watcher == null ? null : watcher?.toJson(),
+      "traveler_id": travelerId == null ? null : travelerId?.toJson(),
+      "watcher_id": watcherId == null ? null : watcherId?.toJson(),
       "distance": distance,
     };
   }

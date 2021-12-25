@@ -38,7 +38,7 @@ class Poll extends TdObject {
   /// [openPeriod] Amount of time the poll will be active after creation, in seconds
   int? openPeriod;
 
-  /// [closeDate] Point in time (Unix timestamp) when the poll will be automatically closed 
+  /// [closeDate] Point in time (Unix timestamp) when the poll will automatically be closed 
   int? closeDate;
 
   /// [isClosed] True, if the poll is closed

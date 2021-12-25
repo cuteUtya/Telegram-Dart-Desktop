@@ -5,7 +5,7 @@ class CheckPhoneNumberConfirmationCode extends TdFunction {
   /// Checks phone number confirmation code
   CheckPhoneNumberConfirmationCode({this.code});
 
-  /// [code] The phone number confirmation code
+  /// [code] Confirmation code to check
   String? code;
 
   /// callback sign

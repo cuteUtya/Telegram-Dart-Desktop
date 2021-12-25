@@ -18,7 +18,7 @@ class DownloadFile extends TdFunction {
   /// [offset] The starting position from which the file needs to be downloaded
   int? offset;
 
-  /// [limit] Number of bytes which need to be downloaded starting from the "offset" position before the download will be automatically canceled; use 0 to download without a limit
+  /// [limit] Number of bytes which need to be downloaded starting from the "offset" position before the download will automatically be canceled; use 0 to download without a limit
   int? limit;
 
   /// [synchronous] If false, this request returns file state just after the download has been started. If true, this request returns file state only after. the download has succeeded, has failed, has been canceled or a new downloadFile request with different offset/limit parameters was sent

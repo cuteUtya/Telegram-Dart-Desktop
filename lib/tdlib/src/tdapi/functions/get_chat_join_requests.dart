@@ -21,7 +21,7 @@ class GetChatJoinRequests extends TdFunction {
   /// [offsetRequest] A chat join request from which to return next requests; pass null to get results from the beginning
   ChatJoinRequest? offsetRequest;
 
-  /// [limit] The maximum number of chat join requests to return
+  /// [limit] The maximum number of requests to join the chat to return
   int? limit;
 
   /// callback sign

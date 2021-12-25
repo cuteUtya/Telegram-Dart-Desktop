@@ -4,7 +4,7 @@ class MessageReplyInfo extends TdObject {
 
   /// Contains information about replies to a message
   MessageReplyInfo({this.replyCount,
-    this.recentRepliers,
+    this.recentReplierIds,
     this.lastReadInboxMessageId,
     this.lastReadOutboxMessageId,
     this.lastMessageId});
@@ -12,8 +12,8 @@ class MessageReplyInfo extends TdObject {
   /// [replyCount] Number of times the message was directly or indirectly replied
   int? replyCount;
 
-  /// [recentRepliers] Recent repliers to the message; available in channels with a discussion supergroup
-  List<MessageSender>? recentRepliers;
+  /// [recentReplierIds] Identifiers of at most 3 recent repliers to the message; available in channels with a discussion supergroup. The users and chats are expected to be inaccessible: only their photo and name will be available
+  List<MessageSender>? recentReplierIds;
 
   /// [lastReadInboxMessageId] Identifier of the last read incoming reply to the message
   int? lastReadInboxMessageId;
@@ -27,7 +27,7 @@ class MessageReplyInfo extends TdObject {
   /// Parse from a json
   MessageReplyInfo.fromJson(Map<String, dynamic> json)  {
     replyCount = json['reply_count'] == null ? null : json['reply_count'];
-    recentRepliers = json['recent_repliers'] == null ? null : List<MessageSender>.from((json['recent_repliers'] ?? [])!.map((item) => MessageSender.fromJson(item ?? <String, dynamic>{})).toList());
+    recentReplierIds = json['recent_replier_ids'] == null ? null : List<MessageSender>.from((json['recent_replier_ids'] ?? [])!.map((item) => MessageSender.fromJson(item ?? <String, dynamic>{})).toList());
     lastReadInboxMessageId = json['last_read_inbox_message_id'] == null ? null : json['last_read_inbox_message_id'];
     lastReadOutboxMessageId = json['last_read_outbox_message_id'] == null ? null : json['last_read_outbox_message_id'];
     lastMessageId = json['last_message_id'] == null ? null : json['last_message_id'];
@@ -38,7 +38,7 @@ class MessageReplyInfo extends TdObject {
     return {
       "@type": CONSTRUCTOR,
       "reply_count": replyCount,
-      "recent_repliers": recentRepliers?.map((i) => i.toJson()).toList(),
+      "recent_replier_ids": recentReplierIds?.map((i) => i.toJson()).toList(),
       "last_read_inbox_message_id": lastReadInboxMessageId,
       "last_read_outbox_message_id": lastReadOutboxMessageId,
       "last_message_id": lastMessageId,
