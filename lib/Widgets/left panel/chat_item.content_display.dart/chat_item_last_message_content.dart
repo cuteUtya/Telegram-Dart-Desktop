@@ -163,6 +163,18 @@ class ChatItemLastMessageContent extends StatelessWidget {
         text = content.text!;
         break;
 
+      case MessageAudio:
+        displayContent = TextDisplay.parseEmojiInString(
+            "🎵 ${client.getTranslation("lng_media_music_title")}",
+            TextDisplay.chatItemAccent);
+        break;
+
+      case MessageVoiceNote:
+        displayContent = TextDisplay.parseEmojiInString(
+            "🎤 ${client.getTranslation("lng_media_audio")}",
+            TextDisplay.chatItemAccent);
+        break;
+
       default:
         text = FormattedText(text: content.runtimeType.toString());
         break;
