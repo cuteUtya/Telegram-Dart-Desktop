@@ -541,6 +541,8 @@ class TelegramClient {
   }
 
   List<ChatFilterInfo>? chatFilterInfo;
+  List<UpdateUnreadChatCount> cachedUnreadChatCountUpdates = [];
+  bool cacheUnreadChatCountUpdates = true;
 
   Future<void> init() async {
     Completer completer = Completer<void>();
@@ -560,6 +562,10 @@ class TelegramClient {
           _updates.add(tdobject as Update);
           if (tdobject is UpdateChatFilters) {
             chatFilterInfo = tdobject.chatFilters;
+          }
+          if (tdobject is UpdateUnreadChatCount &&
+              cacheUnreadChatCountUpdates) {
+            cachedUnreadChatCountUpdates.add(tdobject);
           }
         } else {
           _requestsQueue[extra as int]!(tdobject);

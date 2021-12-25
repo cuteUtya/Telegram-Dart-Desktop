@@ -8,10 +8,14 @@ class ChatFilterItemHorizontal extends StatelessWidget {
       {Key? key,
       required this.info,
       required this.active,
-      required this.onClick})
+      required this.onClick,
+      required this.unread,
+      required this.unreadMention})
       : super(key: key);
   final ChatFilterFullInfo info;
   final bool active;
+  final int unread;
+  final int unreadMention;
   final Function(int id) onClick;
 
   @override
@@ -39,7 +43,7 @@ class ChatFilterItemHorizontal extends StatelessWidget {
                                       : TextColor.RegularText)))),
                   const SizedBox(width: 4),
                   UnreadCountBubble(
-                      count: info.unread, important: info.unreadImportante > 0),
+                      count: unread, important: unreadMention > 0),
                 ]),
               ]))),
     );

@@ -10,14 +10,8 @@ import 'package:myapp/global_key_extenstion.dart';
 
 class ChatFilterFullInfo {
   ChatFilterFullInfo(
-      {required this.id,
-      required this.title,
-      required this.unread,
-      required this.unreadImportante,
-      required this.key});
+      {required this.id, required this.title, required this.key});
   String title;
-  int unread;
-  int unreadImportante;
   int id;
   GlobalKey key;
 }
@@ -38,6 +32,8 @@ class ChatFilterHorizontal extends StatefulWidget {
 
 class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
   static List<ChatFilterFullInfo> filters = [];
+  static Map<int, int> unreadInFolders = {};
+  static Map<int, int> unreadImportantInFolders = {};
   static int active = -1;
 
   void rebuildFilters(List<ChatFilterInfo> folders) {
@@ -45,20 +41,29 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     filters.add(ChatFilterFullInfo(
         id: -1,
         title: widget.client.getTranslation("lng_filters_all"),
-        unread: 0,
-        unreadImportante: 0,
         key: GlobalKey()));
     folders.forEach((element) {
       filters.add(ChatFilterFullInfo(
-          id: element.id!,
-          title: element.title!,
-          unread: 0,
-          unreadImportante: 0,
-          key: GlobalKey()));
+          id: element.id!, title: element.title!, key: GlobalKey()));
     });
     widget.onChatFiltersChange(<ChatList>[ChatListMain()] +
         folders.map((e) => ChatListFilter(chatFilterId: e.id)).toList());
     setState(() {});
+  }
+
+  void _processUnreadChatCountUpdates(UpdateUnreadChatCount update) {
+    if (update.chatList is ChatListMain) {
+      setState(() {
+        unreadInFolders[-1] = update.unreadCount!;
+        unreadImportantInFolders[-1] = update.unreadUnmutedCount!;
+      });
+    } else if (update.chatList is ChatListFilter) {
+      setState(() {
+        var id = (update.chatList as ChatListFilter).chatFilterId!;
+        unreadInFolders[id] = update.unreadCount!;
+        unreadImportantInFolders[id] = update.unreadUnmutedCount!;
+      });
+    }
   }
 
   void _subcribeOnUpdates() {
@@ -66,21 +71,13 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     widget.client.updateChatFilters.listen((event) {
       rebuildFilters(event.chatFilters!);
     });
-    widget.client.updateUnreadChatCount.listen((event) {
-      if (event.chatList is ChatListMain) {
-        setState(() {
-          filters[0].unread = event.unreadCount!;
-          filters[0].unreadImportante = event.unreadUnmutedCount!;
-        });
-      } else if (event.chatList is ChatListFilter) {
-        setState(() {
-          var folder = filters.firstWhere(
-              (e) => e.id == (event.chatList as ChatListFilter).chatFilterId);
-          folder.unread = event.unreadCount!;
-          folder.unreadImportante = event.unreadUnmutedCount!;
-        });
-      }
-    });
+    widget.client.cachedUnreadChatCountUpdates
+        .forEach((element) => _processUnreadChatCountUpdates(element));
+    widget.client.cacheUnreadChatCountUpdates = false;
+    widget.client.cachedUnreadChatCountUpdates.clear();
+
+    widget.client.updateUnreadChatCount
+        .listen((event) => _processUnreadChatCountUpdates(event));
   }
 
   ScrollController _scrollController = ScrollController();
@@ -114,6 +111,9 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                           margin: const EdgeInsets.symmetric(horizontal: 16),
                           child: ChatFilterItemHorizontal(
                               key: filter.key,
+                              unread: unreadInFolders[filter.id] ?? 0,
+                              unreadMention:
+                                  unreadImportantInFolders[filter.id] ?? 0,
                               onClick: (id) {
                                 setState(() => active = id);
                                 widget.onChatListSelect(id == -1
