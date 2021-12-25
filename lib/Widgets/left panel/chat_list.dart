@@ -2,11 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/chat_item_display_archive_not_hidden.dart';
+import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_display_chat.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
-import 'package:myapp/tdlib/td_api.dart';
+import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:collection/collection.dart';
 import 'package:myapp/utils.dart';
 
@@ -113,6 +114,27 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                       lastMessageSenderName: chat.lastMessageSenderName,
                       chatList: widget.chatList,
                       actionsInfo: chat.actions),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(
+                      top: (++order +
+                              top +
+                              ((widget.chatList is ChatListMain) ? 1 : 0)) *
+                          88),
+                  child: Column(children: [
+                    const SeparatorLine(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
+                      child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Total chats: ${list.length}",
+                            style: TextDisplay.regular18,
+                          )),
+                    )
+                  ]),
+                ),
                 Container(height: max(0, (list.length) * 88))
               ])
     ]);
