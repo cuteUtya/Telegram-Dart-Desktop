@@ -64,8 +64,9 @@ class ChatItemDisplay extends StatelessWidget {
                   child: ChatItemTitle(
                       isBot: interlocutor?.type is UserTypeBot,
                       isChannel: (supergroup?.isChannel) ?? false,
-                      isChat: supergroup != null &&
-                          !(supergroup?.isChannel ?? true),
+                      isChat: (supergroup != null &&
+                              !(supergroup?.isChannel ?? true)) ||
+                          chat.type is ChatTypeBasicGroup,
                       title: (interlocutor?.type is UserTypeDeleted)
                           ? client.getTranslation("lng_deleted")
                           : chat.title!,
@@ -149,9 +150,7 @@ class ChatItemDisplay extends StatelessWidget {
 
   String getMessageTime() {
     if (chat.lastMessage != null) {
-      var time =
-          DateTime.fromMillisecondsSinceEpoch(chat.lastMessage!.date! * 1000);
-
+      var time = unixToDateTime(chat.lastMessage!.date!);
       var now = DateTime.now();
       var deltaInDays = (DateTime.now().difference(time) +
               (const Duration(days: 1) -
@@ -163,16 +162,13 @@ class ChatItemDisplay extends StatelessWidget {
           .inDays;
 
       if (deltaInDays <= 0) {
-        return getHHMM(time, useUSAStyle);
+        return getHHMM(time);
       } else if (deltaInDays <= 7 && time.weekday < now.weekday) {
-        return "${client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time, useUSAStyle)})";
+        return "${client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time)})";
       }
 
       return "${validateDataComponent(time.day.toString())}.${validateDataComponent(time.month.toString())}.${time.year}";
     }
     return "";
   }
-
-  //TODO show it in settings
-  bool useUSAStyle = true;
 }
