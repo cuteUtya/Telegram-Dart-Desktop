@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chat_item_photo_minithumbnail.dart';
+import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_icon_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_photo_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
@@ -123,14 +124,14 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case MessageAnimation:
-        var fileId =
-            (content as MessageAnimation).animation?.thumbnail?.file?.id;
+        var thumb = (content as MessageAnimation).animation?.thumbnail;
         Widget? mith;
-        if (fileId != null) {
-          mith = ChatItemPhotoMinithumbnail(client: client, id: fileId);
+        print(thumb?.format.runtimeType);
+        if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
           displayContent.addAll(TextDisplay.parseEmojiInString(
               "🖼 GIF", TextDisplay.chatItemAccent));
         } else {
+          mith = FileImageDisplay(id: thumb.file!.id!, client: client);
           displayContent += ChatItemContentPhotoText.build(mith, "GIF");
         }
         break;
