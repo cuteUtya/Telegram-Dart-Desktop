@@ -90,4 +90,5 @@ ArchoveNotHiddenIconColor: ref(BaseColor);
 
 PageHeaderBackgroundColor: #EAEAEA;
 
+TitleIconColor: ref(HeaderMain);
 GenericUIIconsColor: #7F7F7F;

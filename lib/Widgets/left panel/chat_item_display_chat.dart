@@ -62,6 +62,10 @@ class ChatItemDisplay extends StatelessWidget {
             title: Row(children: [
               Expanded(
                   child: ChatItemTitle(
+                      isBot: interlocutor?.type is UserTypeBot,
+                      isChannel: (supergroup?.isChannel) ?? false,
+                      isChat: supergroup != null &&
+                          !(supergroup?.isChannel ?? true),
                       title: (interlocutor?.type is UserTypeDeleted)
                           ? client.getTranslation("lng_deleted")
                           : chat.title!,
