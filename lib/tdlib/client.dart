@@ -518,12 +518,22 @@ class TelegramClient {
       translate = result.value!;
     }
     if (result is LanguagePackStringValuePluralized) {
-      if (itemsCount == 0) translate = result.zeroValue!;
-      if (itemsCount == 1) translate = result.oneValue!;
+      if (itemsCount == 0) {
+        translate = result.zeroValue ?? result.otherValue ?? "";
+      }
+      if (itemsCount == 1) {
+        translate = result.oneValue ?? result.otherValue ?? "";
+      }
+      if (itemsCount == 2) {
+        translate = result.twoValue ?? result.otherValue ?? "";
+      }
       if (itemsCount! <= 3) {
-        translate = result.fewValue!;
+        translate =
+            result.fewValue ?? result.manyValue ?? result.otherValue ?? "";
+      } else if (itemsCount <= 10) {
+        translate = result.manyValue ?? result.otherValue ?? "";
       } else {
-        translate = result.manyValue!;
+        translate = result.otherValue!;
       }
     }
 
