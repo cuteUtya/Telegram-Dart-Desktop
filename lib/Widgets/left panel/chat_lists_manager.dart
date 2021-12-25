@@ -204,8 +204,8 @@ class ChatListsManagerState extends State<ChatListsManager> {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
-        var lastAction = chat.actions
-            .firstWhereOrNull((element) => element.who.id == event.chatId);
+        var lastAction = chat.actions.firstWhereOrNull((element) =>
+            element.who.id == (event.senderId as MessageSenderUser).userId);
         if (lastAction == null) {
           chat.actions.add(ChatActionInfo(
               action: event.action!,
