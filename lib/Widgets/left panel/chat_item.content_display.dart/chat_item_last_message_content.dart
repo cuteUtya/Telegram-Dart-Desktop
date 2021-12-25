@@ -48,15 +48,16 @@ class ChatItemLastMessageContent extends StatelessWidget {
       case MessageSticker:
         displayContent.addAll(TextDisplay.parseEmojiInString(
             "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ",
-            TextDisplay.create(size: 18, textColor: TextColor.Accent)));
+            TextDisplay.chatItemAccent));
         break;
 
       case MessageChatDeletePhoto:
         messageTypeAllowShowFrom = false;
-        displayContent.addAll(ChatItemContentIconText.build(
-            Icons.delete,
-            client.getTranslation("lng_action_removed_photo",
-                replacing: {"{from}": lastMessageAuthor})));
+        displayContent.addAll(TextDisplay.parseEmojiInString(
+            "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {
+                  "{from}": lastMessageAuthor
+                })}",
+            TextDisplay.chatItemAccent));
         break;
 
       join:
@@ -93,8 +94,9 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
       case MessageDocument:
         var document = (content as MessageDocument);
-        displayContent.addAll(ChatItemContentIconText.build(Icons.description,
-                "${bytesToSize(document.document!.document!.size!)} —") +
+        displayContent.addAll(TextDisplay.parseEmojiInString(
+                "📁 ${bytesToSize(document.document!.document!.size!)} —",
+                TextDisplay.chatItemAccent) +
             [
               contentEntetyesMargin(),
               TextSpan(
@@ -107,21 +109,17 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
       case MessageChatChangePhoto:
         messageTypeAllowShowFrom = false;
-        displayContent = ChatItemContentIconText.build(
-            Icons.brush,
-            client.getTranslation(
-                isChannel
-                    ? "lng_action_changed_photo_channel"
-                    : "lng_action_changed_photo",
-                replacing: {"{from}": lastMessageAuthor}));
+        displayContent = TextDisplay.parseEmojiInString(
+            "📸 ${client.getTranslation(isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo", replacing: {
+                  "{from}": lastMessageAuthor
+                })}",
+            TextDisplay.chatItemAccent);
         break;
 
       case MessageExpiredPhoto:
-        displayContent = ChatItemContentIconText.build(
-            Icons.local_fire_department,
-            client.getTranslation("lng_attach_photo"),
-            iconColor: ClientTheme.currentTheme
-                .getField("ExpiredPhotoChatListIconColor"));
+        displayContent = TextDisplay.parseEmojiInString(
+            "🔥 ${client.getTranslation("lng_attach_photo")}",
+            TextDisplay.chatItemAccent);
         break;
 
       case MessageAnimation:
@@ -130,24 +128,29 @@ class ChatItemLastMessageContent extends StatelessWidget {
         Widget? mith;
         if (fileId != null) {
           mith = ChatItemPhotoMinithumbnail(client: client, id: fileId);
+          displayContent.addAll(TextDisplay.parseEmojiInString(
+              "🖼 GIF", TextDisplay.chatItemAccent));
+        } else {
+          displayContent += ChatItemContentPhotoText.build(mith, "GIF");
         }
-        displayContent = ChatItemContentPhotoText.build(mith, "GIF");
         break;
 
       case MessageContactRegistered:
         messageTypeAllowShowFrom = false;
-        displayContent = ChatItemContentIconText.build(
-            Icons.celebration,
-            client.getTranslation("lng_action_user_registered",
-                replacing: {"{from}": lastMessageAuthor}));
+        displayContent.addAll(TextDisplay.parseEmojiInString(
+            "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {
+                  "{from}": lastMessageAuthor
+                })}",
+            TextDisplay.chatItemAccent));
         break;
 
       case MessageChatChangeTitle:
         messageTypeAllowShowFrom = false;
-        displayContent = ChatItemContentIconText.build(
-            Icons.edit,
-            client.getTranslation("lng_action_changed_title_channel",
-                replacing: {"{title}": chat.title!}));
+        displayContent = TextDisplay.parseEmojiInString(
+            "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {
+                  "{title}": chat.title!
+                })}",
+            TextDisplay.chatItemAccent);
         break;
 
       case MessageSupergroupChatCreate:
