@@ -17,6 +17,7 @@ class UserpicEmpty extends StatelessWidget {
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
+                  transform: const GradientRotation(-25 * 3.14 / 180),
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
