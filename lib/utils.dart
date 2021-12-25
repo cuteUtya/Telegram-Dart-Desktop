@@ -67,7 +67,12 @@ String chatListToString(ChatList list) {
   return "${list.runtimeType.toString()} ${list.chatFilterId}";
 }
 
-String getHHMM(DateTime time, bool useUSAStyle) {
+DateTime unixToDateTime(int unix) =>
+    DateTime.fromMillisecondsSinceEpoch(unix * 1000);
+
+//TODO show it in settings
+bool useUSAStyle = true;
+String getHHMM(DateTime time) {
   String afterTime = "";
   if (useUSAStyle) {
     if (time.hour > 12) {
