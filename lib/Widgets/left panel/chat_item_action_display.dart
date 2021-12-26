@@ -80,10 +80,9 @@ class ChatItemActionDisplay extends StatelessWidget {
         ? TextDisplay.chatItemAccentSelected
         : TextDisplay.chatItemAccent;
 
-    return Row(children: [
-      RichText(
-          text: TextSpan(
-              children: TextDisplay.parseEmojiInString(
+    return RichText(
+      text: TextSpan(
+          children: TextDisplay.parseEmojiInString(
                   transitionStr != null
                       ? client.getTranslation(transitionStr,
                           replacing: {
@@ -97,10 +96,13 @@ class ChatItemActionDisplay extends StatelessWidget {
                           },
                           itemsCount: actions.length)
                       : "¯\\_(ツ)_/¯",
-                  textStyle))),
-      const SizedBox(width: 2),
-      animation ?? TextAnimation.fourPoints(textStyle)
-    ]);
+                  textStyle) +
+              [
+                const WidgetSpan(child: SizedBox(width: 2)),
+                WidgetSpan(
+                    child: animation ?? TextAnimation.fourPoints(textStyle))
+              ]),
+    );
   }
 
   Widget createUploadAnimation(Type action, int progress, int chatId) {
