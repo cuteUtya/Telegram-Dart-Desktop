@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
+import 'package:myapp/Widgets/Chat/input_field.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/Widgets/background_display.dart';
@@ -20,7 +21,7 @@ class ChatDisplayState extends State<ChatDisplay> {
   BasicGroup? _basicGroup;
 
   void changeChat(Chat newchat) async {
-    setState(() => chat = newchat);
+    chat = newchat;
     if (chat?.type is ChatTypePrivate) {
       _supergroup = null;
       _basicGroup = null;
@@ -46,6 +47,7 @@ class ChatDisplayState extends State<ChatDisplay> {
               supergroupId: (chat?.type as ChatTypeSupergroup).supergroupId)))
           as Supergroup;
     }
+    setState(() {});
   }
 
   @override
@@ -75,7 +77,12 @@ class ChatDisplayState extends State<ChatDisplay> {
               background: Background(
                   type: BackgroundTypeFill(
                       fill: BackgroundFillFreeformGradient(
-                          colors: [0xFF8CB58C, 0xFFC9D38B, 0xFF8CB58C]))))
+                          colors: [0xFF8CB58C, 0xFFC9D38B, 0xFF8CB58C])))),
+          Expanded(
+              child: Container(
+                  margin: const EdgeInsets.all(24),
+                  alignment: Alignment.bottomCenter,
+                  child: InputField(client: widget.client)))
         ]))
       ],
     );
