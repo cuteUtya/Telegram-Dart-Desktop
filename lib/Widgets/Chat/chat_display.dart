@@ -58,6 +58,7 @@ class ChatDisplayState extends State<ChatDisplay> {
           title: chat!.title!,
           status: _user?.status,
           isBot: _user?.type is UserTypeBot,
+          isChannel: _supergroup?.isChannel ?? false,
           members: ((_supergroup?.isChannel ?? false)
                   ? null
                   : _supergroup?.memberCount) ??

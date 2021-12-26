@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
@@ -10,6 +11,7 @@ class ActionBarDisplay extends StatelessWidget {
       {Key? key,
       required this.client,
       required this.title,
+      this.isChannel = false,
       this.status,
       this.isBot = false,
       this.members,
@@ -20,6 +22,7 @@ class ActionBarDisplay extends StatelessWidget {
   final String title;
   final UserStatus? status;
   final bool isBot;
+  final bool isChannel;
   final int? subscriptions;
   final int? members;
   final int? membersOnline;
@@ -31,14 +34,15 @@ class ActionBarDisplay extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 8),
             child: Column(children: [
-              RichText(
-                  text: TextSpan(
-                      children: TextDisplay.parseEmojiInString(
-                          title,
-                          TextDisplay.create(
-                              size: 18,
-                              fontWeight: FontWeight.bold,
-                              textColor: TextColor.HeaderMain)))),
+              ChatItemTitle(
+                  selected: false,
+                  isBot: isBot,
+                  isChannel: isChannel,
+                  isChat: members != null && membersOnline != null,
+                  title: title,
+                  isScam: false /**TODO isScam*/,
+                  isVerifed: false /**TODO isVerifed*/,
+                  isSupport: false /**TODO isSupport*/),
               const SizedBox(height: 2),
               _buildSecondLine()
             ])));
