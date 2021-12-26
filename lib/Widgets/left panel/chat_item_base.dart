@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
-import 'package:myapp/Widgets/unread_mention_bubble.dart';
-import 'package:async/async.dart' show StreamGroup;
 
 class ChatItemBase extends StatelessWidget {
   const ChatItemBase(

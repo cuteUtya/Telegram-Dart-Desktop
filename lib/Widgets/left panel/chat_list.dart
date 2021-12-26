@@ -117,10 +117,6 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                       key: keys[_getGlobalIdenteficator(chat.chat)],
                       chat: chat.chat,
                       client: widget.client,
-                      interlocutor: chat.interlocutor,
-                      supergroup: chat.supergroup,
-                      joinInfo: chat.joinInfo,
-                      lastMessageSenderName: chat.lastMessageSenderName,
                       chatList: widget.chatList),
                 Container(
                   alignment: Alignment.centerLeft,

@@ -20,10 +20,6 @@ class ChatItemDisplay extends StatelessWidget {
       required this.selected,
       required this.chat,
       required this.client,
-      required this.interlocutor,
-      required this.supergroup,
-      required this.joinInfo,
-      required this.lastMessageSenderName,
       required this.chatList,
       required this.order,
       this.onClick})
@@ -31,10 +27,6 @@ class ChatItemDisplay extends StatelessWidget {
   final bool selected;
   final Chat chat;
   final int order;
-  final User? interlocutor;
-  final Supergroup? supergroup;
-  final UsersJoinedGroupInfo? joinInfo;
-  final String lastMessageSenderName;
   final TelegramClient client;
   final ChatList chatList;
   final Function()? onClick;
@@ -164,8 +156,6 @@ class ChatItemDisplay extends StatelessWidget {
                           }
                           return ChatItemLastMessageContent(
                               chatSelected: selected,
-                              joinInfo: joinInfo,
-                              lastMessageAuthor: lastMessageSenderName,
                               chat: chat,
                               client: client);
                         }))),
@@ -175,6 +165,21 @@ class ChatItemDisplay extends StatelessWidget {
                         ? "SelectedChatPinIconColor"
                         : "ChatPinIconColor"))
                 : null));
+  }
+
+  Supergroup? get supergroup {
+    if (chat.type is ChatTypeSupergroup) {
+      return client
+          .getSupergroup((chat.type as ChatTypeSupergroup).supergroupId!);
+    }
+  }
+
+  User? get interlocutor {
+    if (chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) {
+      return client.getUser(chat.type is ChatTypePrivate
+          ? (chat.type as ChatTypePrivate).userId!
+          : (chat.type as ChatTypeSecret).userId!);
+    }
   }
 
   bool get isOnline {

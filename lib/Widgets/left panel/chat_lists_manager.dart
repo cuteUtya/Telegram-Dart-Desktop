@@ -26,92 +26,14 @@ class ChatListsManagerState extends State<ChatListsManager> {
   static List<ChatList> _lists = [];
   static int _currentPage = 0;
 
-  Future<Supergroup?> getSupergroup(Chat chat) async {
-    if (chat.type is ChatTypeSupergroup) {
-      return (await widget.client.send(GetSupergroup(
-              supergroupId: (chat.type as ChatTypeSupergroup).supergroupId)))
-          as Supergroup;
-    }
-  }
-
-  Future<List<User>?> getUsersById(List<int>? id) async {
-    if (id != null) {
-      List<User> usrs = [];
-      for (int i = 0; i < id.length; i++) {
-        usrs.add(await widget.client.send(GetUser(userId: id[i])) as User);
-      }
-      return usrs;
-    }
-  }
-
-  Future<UsersJoinedGroupInfo?> getUsersJoinInfo(Message? message) async {
-    if (message?.content != null) {
-      switch (message?.content.runtimeType) {
-        case MessageChatJoinByRequest:
-          return UsersJoinedGroupInfo(
-              addedUsers: [], isJoin: true, langKey: "lng_action_user_joined");
-        case MessageChatJoinByLink:
-          return UsersJoinedGroupInfo(
-              addedUsers: [],
-              isJoin: true,
-              langKey: "lng_action_user_joined_by_link");
-        case MessageChatAddMembers:
-          var members = await getUsersById(
-              (message?.content as MessageChatAddMembers).memberUserIds);
-          bool isJoin = (members ?? []).firstWhereOrNull((e) =>
-                  (e.id == (message?.senderId as MessageSenderUser).userId)) !=
-              null;
-          return UsersJoinedGroupInfo(
-              addedUsers: members ?? [],
-              isJoin: isJoin,
-              langKey:
-                  isJoin ? "lng_action_user_joined" : "lng_action_add_user");
-      }
-    }
-  }
-
-  Future<String?> getLastMessageAuthor(Chat chat) async {
-    var sender = chat.lastMessage?.senderId;
-    if (sender is MessageSenderChat) {
-      return (await widget.client.send(GetChat(chatId: sender.chatId)) as Chat)
-          .title!;
-    }
-    if (sender is MessageSenderUser) {
-      return (await widget.client.send(GetUser(userId: sender.userId)) as User)
-          .firstName!;
-    }
-  }
-
-  Future<User?> getUser(Chat chat) async {
-    int? userId;
-    if (chat.type is ChatTypePrivate) {
-      userId = (chat.type as ChatTypePrivate).userId;
-    }
-    if (chat.type is ChatTypeSecret) {
-      userId = (chat.type as ChatTypeSecret).userId;
-    }
-    if (userId != null) {
-      return (await widget.client.send(GetUser(userId: userId))) as User;
-    }
-  }
-
-  Future<ChatFullInfo> getFullChatInfo(int chatid) async {
-    var chat = await widget.client.send(GetChat(chatId: chatid)) as Chat;
-    return ChatFullInfo(
-        chat: chat,
-        // actions: [],
-        joinInfo: await getUsersJoinInfo(chat.lastMessage),
-        interlocutor: await getUser(chat),
-        supergroup: await getSupergroup(chat),
-        lastMessageSenderName: (await getLastMessageAuthor(chat)) ?? "");
-  }
-
   void _listenChatPosition() async {
     await for (final event in widget.client.updateChatPosition) {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat == null) {
-        _chats.add(await getFullChatInfo(event.chatId!));
+        _chats.add(ChatFullInfo(
+          chat: widget.client.getChat(event.chatId!),
+        ));
       } else {
         for (int i = 0; i < chat.chat.positions!.length; i++) {
           if (compareChatlists(
@@ -185,12 +107,6 @@ class ChatListsManagerState extends State<ChatListsManager> {
       if (chat != null) {
         chat.chat.positions = event.positions!;
         chat.chat.lastMessage = event.lastMessage;
-        var joinInfo = await getUsersJoinInfo(event.lastMessage);
-        if (chat.joinInfo != joinInfo) {
-          chat.joinInfo = joinInfo;
-        }
-        chat.lastMessageSenderName =
-            await getLastMessageAuthor(chat.chat) ?? "";
         setState(() {});
       }
     }));
@@ -296,29 +212,7 @@ class UsersJoinedGroupInfo {
 }
 
 class ChatFullInfo {
-  ChatFullInfo(
-      {required this.chat,
-      required this.lastMessageSenderName,
-      //required this.actions,
-      this.interlocutor,
-      this.supergroup,
-      this.joinInfo,
-      this.order = 0});
+  ChatFullInfo({required this.chat, this.order = 0});
   Chat chat;
-
-  ///person with whom there is a dialogue
-  ///not null if chat.type is ChatTypePrivate or ChatTypeSecret
-  User? interlocutor;
-
-  ///supergroup, null if chat.type != ChatTypeSupergroup
-  Supergroup? supergroup;
-
-  ///Name of user, what send last message in chat
-  String lastMessageSenderName;
-
-  //info about MessageChatAddMembers or MessageChatJoinByLink or MessageChatJoinByRequest message
-  UsersJoinedGroupInfo? joinInfo;
-
-  //order in chatlist
   int order;
 }

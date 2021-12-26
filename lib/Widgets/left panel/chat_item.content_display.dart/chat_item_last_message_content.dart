@@ -3,25 +3,21 @@ import 'package:myapp/Widgets/chat_item_photo_minithumbnail.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_icon_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_photo_text.dart';
-import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/utils.dart';
+import 'package:myapp/tdlib/tdlibUtils.dart';
 
 class ChatItemLastMessageContent extends StatelessWidget {
-  const ChatItemLastMessageContent(
-      {Key? key,
-      required this.chatSelected,
-      required this.chat,
-      required this.client,
-      required this.joinInfo,
-      required this.lastMessageAuthor})
-      : super(key: key);
+  const ChatItemLastMessageContent({
+    Key? key,
+    required this.chatSelected,
+    required this.chat,
+    required this.client,
+  }) : super(key: key);
   final bool chatSelected;
   final Chat chat;
-  final String lastMessageAuthor;
-  final UsersJoinedGroupInfo? joinInfo;
   final TelegramClient client;
 
   contentEntetyesMargin() => const WidgetSpan(child: SizedBox(width: 4));
@@ -39,6 +35,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
     TextStyle textStyle = chatSelected
         ? TextDisplay.chatItemAccentSelected
         : TextDisplay.chatItemAccent;
+    var author = getSenderName(chat.lastMessage!.senderId!, client);
     switch (content.runtimeType) {
       case MessageText:
         text = (content as MessageText).text!;
@@ -60,14 +57,14 @@ class ChatItemLastMessageContent extends StatelessWidget {
         messageTypeAllowShowFrom = false;
         displayContent.addAll(TextDisplay.parseEmojiInString(
             "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {
-                  "{from}": lastMessageAuthor
+                  "{from}": author
                 })}",
             textStyle));
         break;
 
       join:
       case MessageChatAddMembers:
-        messageTypeAllowShowFrom = false;
+        /*TODO messageTypeAllowShowFrom = false;
         String names = "";
         joinInfo?.addedUsers
             .forEach((element) => names += "${element.firstName!}, ");
@@ -78,8 +75,8 @@ class ChatItemLastMessageContent extends StatelessWidget {
                 replacing: {
                   "{user}": names,
                   "{users}": names,
-                  "{from}": lastMessageAuthor
-                }));
+                  "{from}": author
+                }));*/
         break;
       case MessageChatJoinByLink:
         continue join;
@@ -115,7 +112,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
         messageTypeAllowShowFrom = false;
         displayContent = TextDisplay.parseEmojiInString(
             "📸 ${client.getTranslation(isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo", replacing: {
-                  "{from}": lastMessageAuthor
+                  "{from}": getSenderName(chat.lastMessage!.senderId!, client)
                 })}",
             textStyle);
         break;
@@ -142,7 +139,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
         messageTypeAllowShowFrom = false;
         displayContent.addAll(TextDisplay.parseEmojiInString(
             "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {
-                  "{from}": lastMessageAuthor
+                  "{from}": author
                 })}",
             textStyle));
         break;
@@ -186,7 +183,9 @@ class ChatItemLastMessageContent extends StatelessWidget {
         text: TextSpan(
           children: TextDisplay.parseEmojiInString(
                   messageTypeAllowShowFrom
-                      ? (showAuthor ? "$lastMessageSenderName: " : "")
+                      ? (showAuthor
+                          ? "${lastMessageSenderName ?? author}: "
+                          : "")
                       : "",
                   draft ? TextDisplay.draftText : textStyle) +
               [
@@ -216,7 +215,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
     return 0;
   }
 
-  String get lastMessageSenderName {
+  String? get lastMessageSenderName {
     if (draft) {
       return client.getTranslation("lng_from_draft");
     }
@@ -225,7 +224,6 @@ class ChatItemLastMessageContent extends StatelessWidget {
         return client.getTranslation("lng_from_you");
       }
     }
-    return lastMessageAuthor;
   }
 
   bool get isChannel {

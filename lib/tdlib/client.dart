@@ -483,7 +483,34 @@ class TelegramClient {
         me = (event.value as OptionValueInteger).value!;
       }
     });
+
+    updateNewChat.listen((event) {
+      _chats[event.id!] = event;
+      chatStream(event.id!).listen((event) => _chats[event.id!] = event);
+    });
+    updateuser.listen((event) => _users[event.user!.id!] = event.user!);
+    updateBasicGroup.listen(
+        (event) => _basicGroups[event.basicGroup!.id!] = event.basicGroup!);
+    updateSupergroup.listen(
+        (event) => _supergroups[event.supergroup!.id!] = event.supergroup!);
+    updateSecretChat.listen(
+        (event) => _secretChats[event.secretChat!.id!] = event.secretChat!);
   }
+
+  final Map<int, SecretChat> _secretChats = {};
+  SecretChat getSecretChat(int id) => _secretChats[id]!;
+
+  final Map<int, Supergroup> _supergroups = {};
+  Supergroup getSupergroup(int id) => _supergroups[id]!;
+
+  final Map<int, BasicGroup> _basicGroups = {};
+  BasicGroup getBasicGroup(int id) => _basicGroups[id]!;
+
+  final Map<int, User> _users = {};
+  User getUser(int id) => _users[id]!;
+
+  final Map<int, Chat> _chats = {};
+  Chat getChat(int id) => _chats[id]!;
 
   static final Map<String, String> _400errorMessages = {
     "PHONE_NUMBER_INVALID": "lng_bad_phone",
@@ -594,9 +621,8 @@ class TelegramClient {
   }
 
   Stream<Chat> chatStream(int id) async* {
-    var base = (await send(GetChat(chatId: id))) as Chat;
+    var base = getChat(id);
     yield base;
-
     for (final update in _chatUpdates) {
       await for (final e in update) {
         var eventJson = e.toJson();
