@@ -401,9 +401,9 @@ class TelegramClient {
       .where((u) => u is UpdateChatMessageTtl)
       .map((a) => a as UpdateChatMessageTtl);
 
-  Stream<UpdateChatMessageTtl> get updateChatMessageSender => updates
-      .where((u) => u is UpdateChatMessageTtl)
-      .map((a) => a as UpdateChatMessageTtl);
+  Stream<UpdateChatMessageSender> get updateChatMessageSender => updates
+      .where((u) => u is UpdateChatMessageSender)
+      .map((a) => a as UpdateChatMessageSender);
 
   late TdlibParameters tdlibParameters;
   int me = 0;
@@ -486,7 +486,7 @@ class TelegramClient {
 
     updateNewChat.listen((event) {
       _chats[event.id!] = event;
-      chatStream(event.id!).listen((event) => _chats[event.id!] = event);
+      _subscribeChatOnUpdates(event.id!, (event) => _chats[event.id!] = event);
     });
     updateuser.listen((event) => _users[event.user!.id!] = event.user!);
     updateBasicGroup.listen(
@@ -496,6 +496,8 @@ class TelegramClient {
     updateSecretChat.listen(
         (event) => _secretChats[event.secretChat!.id!] = event.secretChat!);
   }
+
+  List<Chat> getChats() => _chats.values.toList();
 
   final Map<int, SecretChat> _secretChats = {};
   SecretChat getSecretChat(int id) => _secretChats[id]!;
@@ -534,30 +536,6 @@ class TelegramClient {
     if (key != null) return getTranslation(key);
   }
 
-  late final List<Stream<Update>> _chatUpdates = [
-    updateChatActionBar,
-    updateChatDefaultDisableNotification,
-    updateChatDraftMessage,
-    updateChatHasProtectedContent,
-    updateChatHasScheduledMessages,
-    updateChatIsBlocked,
-    updateChatisMarkedAsUnread,
-    updateChatLastMessage,
-    updateChatMessageSender,
-    updateChatMessageTtl,
-    updateChatNotificationSettings,
-    updateChatPendingJoinRequests,
-    updateChatPermissions,
-    _updateChatPhoto,
-    _updateChatReadInbox,
-    _updateChatReadOutbox,
-    updateChatReplyMarkup,
-    updateChatTheme,
-    _updateChatTitle,
-    _updateChatUnreadMentionCount,
-    updateChatVideoChat
-  ];
-
   Stream<Map<String, ChatAction>?> actionsOf(int chatId) async* {
     Map<int, ChatAction> actions = {};
     await for (var a in _updateChatAction) {
@@ -577,6 +555,12 @@ class TelegramClient {
           yield null;
         }
       }
+    }
+  }
+
+  Stream<List<ChatFilterInfo>> filters() async* {
+    await for (final f in updateChatFilters) {
+      yield f.chatFilters!;
     }
   }
 
@@ -620,24 +604,73 @@ class TelegramClient {
     }
   }
 
-  Stream<Chat> chatStream(int id) async* {
+  void _subscribeChatOnUpdates(int id, Function(Chat c) callback) {
     var base = getChat(id);
-    yield base;
-    for (final update in _chatUpdates) {
-      await for (final e in update) {
-        var eventJson = e.toJson();
-        if (eventJson["chatId"] == base.id) {
-          var chatjson = base.toJson();
-          eventJson.forEach((key, value) {
-            if (key != "chatId") {
-              chatjson[key] = value;
-            }
-          });
-          base = Chat.fromJson(chatjson);
-          yield base;
-        }
+    void updateChat(Update u, Function() f) {
+      if ((u as dynamic).chatId == id) {
+        f();
+        callback(base);
       }
     }
+
+    updateChatActionBar.listen(
+        (event) => updateChat(event, () => base.actionBar = event.actionBar));
+    updateChatDefaultDisableNotification.listen((event) => updateChat(
+        event,
+        () => base.defaultDisableNotification =
+            event.defaultDisableNotification));
+    updateChatDraftMessage.listen((event) => updateChat(event, () {
+          base.positions = event.positions;
+          base.draftMessage = event.draftMessage;
+        }));
+    updateChatHasProtectedContent.listen((event) => updateChat(
+        event, () => base.hasProtectedContent = event.hasProtectedContent));
+    updateChatHasScheduledMessages.listen((event) => updateChat(
+        event, () => base.hasScheduledMessages = event.hasScheduledMessages));
+    updateChatIsBlocked.listen(
+        (event) => updateChat(event, () => base.isBlocked = event.isBlocked));
+    updateChatisMarkedAsUnread.listen((event) => updateChat(
+        event, () => base.isMarkedAsUnread = event.isMarkedAsUnread));
+    updateChatLastMessage.listen((event) => updateChat(event, () {
+          base.positions = event.positions;
+          base.lastMessage = event.lastMessage;
+        }));
+    updateChatMessageSender.listen((event) =>
+        updateChat(event, () => base.messageSenderId = event.messageSenderId));
+    updateChatMessageTtl.listen(
+        (event) => updateChat(event, () => base.messageTtl = event.messageTtl));
+    updateChatNotificationSettings.listen((event) => updateChat(
+        event, () => base.notificationSettings = event.notificationSettings));
+    updateChatPendingJoinRequests.listen((event) => updateChat(
+        event, () => base.pendingJoinRequests = event.pendingJoinRequests));
+    updateChatPermissions.listen((event) =>
+        updateChat(event, () => base.permissions = event.permissions));
+    _updateChatPhoto
+        .listen((event) => updateChat(event, () => base.photo = event.photo));
+    _updateChatReadInbox.listen((event) => updateChat(event,
+        () => base.lastReadInboxMessageId = event.lastReadInboxMessageId));
+    _updateChatReadOutbox.listen((event) => updateChat(event,
+        () => base.lastReadOutboxMessageId = event.lastReadOutboxMessageId));
+    updateChatReplyMarkup.listen((event) => updateChat(
+        event, () => base.replyMarkupMessageId = event.replyMarkupMessageId));
+    updateChatTheme.listen(
+        (event) => updateChat(event, () => base.themeName = event.themeName));
+    _updateChatTitle
+        .listen((event) => updateChat(event, () => base.title = event.title));
+    _updateChatUnreadMentionCount.listen((event) => updateChat(
+        event, () => base.unreadMentionCount = event.unreadMentionCount));
+    updateChatVideoChat.listen(
+        (event) => updateChat(event, () => base.videoChat = event.videoChat));
+    updateChatPosition.listen((event) => updateChat(event, () {
+          bool finded = false;
+          for (int i = 0; i < base.positions!.length; i++) {
+            if (base.positions![i].list == event.position!.list) {
+              finded = true;
+              base.positions![i] = event.position!;
+            }
+          }
+          if (!finded) base.positions!.add(event.position!);
+        }));
   }
 
   String getTranslation(String key,
