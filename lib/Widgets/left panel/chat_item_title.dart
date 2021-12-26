@@ -6,13 +6,13 @@ class ChatItemTitle extends StatelessWidget {
   const ChatItemTitle(
       {Key? key,
       required this.selected,
-      required this.isBot,
-      required this.isChannel,
-      required this.isChat,
       required this.title,
-      required this.isScam,
-      required this.isVerifed,
-      required this.isSupport})
+      this.isBot = false,
+      this.isChannel = false,
+      this.isChat = false,
+      this.isScam = false,
+      this.isVerifed = false,
+      this.isSupport = false})
       : super(key: key);
   final bool selected;
   final bool isChat;

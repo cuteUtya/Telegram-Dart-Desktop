@@ -16,39 +16,8 @@ class ChatDisplay extends StatefulWidget {
 
 class ChatDisplayState extends State<ChatDisplay> {
   late Chat? chat = widget.chat;
-  User? _user;
-  Supergroup? _supergroup;
-  BasicGroup? _basicGroup;
 
-  void changeChat(Chat newchat) async {
-    chat = newchat;
-    if (chat?.type is ChatTypePrivate) {
-      _supergroup = null;
-      _basicGroup = null;
-      _user = (await widget.client
-              .send(GetUser(userId: (chat?.type as ChatTypePrivate).userId!)))
-          as User;
-    } else if (chat?.type is ChatTypeSecret) {
-      _supergroup = null;
-      _basicGroup = null;
-      _user = (await widget.client
-              .send(GetUser(userId: (chat?.type as ChatTypeSecret).userId!)))
-          as User;
-    } else if (chat?.type is ChatTypeBasicGroup) {
-      _supergroup = null;
-      _user = null;
-      _basicGroup = (await widget.client.send(GetBasicGroup(
-              basicGroupId: (chat?.type as ChatTypeBasicGroup).basicGroupId)))
-          as BasicGroup;
-    } else if (chat?.type is ChatTypeSupergroup) {
-      _user = null;
-      _basicGroup = null;
-      _supergroup = (await widget.client.send(GetSupergroup(
-              supergroupId: (chat?.type as ChatTypeSupergroup).supergroupId)))
-          as Supergroup;
-    }
-    setState(() {});
-  }
+  void changeChat(Chat newchat) => setState(() => chat = newchat);
 
   @override
   Widget build(BuildContext context) {
@@ -57,18 +26,7 @@ class ChatDisplayState extends State<ChatDisplay> {
       children: [
         ActionBarDisplay(
           client: widget.client,
-          title: chat!.title!,
-          status: _user?.status,
-          isBot: _user?.type is UserTypeBot,
-          isChannel: _supergroup?.isChannel ?? false,
-          members: ((_supergroup?.isChannel ?? false)
-                  ? null
-                  : _supergroup?.memberCount) ??
-              _basicGroup?.memberCount,
-          membersOnline: 0,
-          subscriptions: (_supergroup?.isChannel ?? false)
-              ? _supergroup?.memberCount
-              : null,
+          chat: chat!,
         ),
         Expanded(
             child: Stack(children: [
