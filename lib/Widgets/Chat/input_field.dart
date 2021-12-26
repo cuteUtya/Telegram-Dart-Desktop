@@ -26,7 +26,7 @@ class InputFieldState extends State<InputField> {
               const SizedBox(width: 12),
               Expanded(
                   child: Container(
-                      margin: EdgeInsets.only(bottom: 8),
+                      margin: const EdgeInsets.only(bottom: 8),
                       child: TextField(
                         decoration: InputDecoration.collapsed(
                             hintText:

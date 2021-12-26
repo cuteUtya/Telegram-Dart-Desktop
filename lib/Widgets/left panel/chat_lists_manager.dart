@@ -99,7 +99,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
     var chat = await widget.client.send(GetChat(chatId: chatid)) as Chat;
     return ChatFullInfo(
         chat: chat,
-        actions: [],
+        // actions: [],
         joinInfo: await getUsersJoinInfo(chat.lastMessage),
         interlocutor: await getUser(chat),
         supergroup: await getSupergroup(chat),
@@ -195,83 +195,12 @@ class ChatListsManagerState extends State<ChatListsManager> {
       }
     }));
 
-    _subscriptions.add(widget.client.updateUserStatus.listen((event) async {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.userId);
-      if (chat != null) {
-        chat.interlocutor?.status = event.status;
-        setState(() {});
-      }
-    }));
-
-    _subscriptions.add(widget.client.updateChatAction.listen((event) async {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
-      if (chat != null) {
-        var lastAction = chat.actions.firstWhereOrNull((element) =>
-            element.who.id == (event.senderId as MessageSenderUser).userId);
-        if (lastAction == null) {
-          chat.actions.add(ChatActionInfo(
-              action: event.action!,
-              //TODO support MessagSenderChat here
-              who: (await widget.client.send(GetUser(
-                      userId: (event.senderId as MessageSenderUser).userId))
-                  as User)));
-        } else {
-          if (event.action is ChatActionCancel) {
-            chat.actions.remove(lastAction);
-          } else {
-            lastAction.action = event.action!;
-          }
-        }
-        setState(() {});
-      }
-    }));
-
-    _subscriptions.add(widget.client.updateChatReadOutbox.listen((event) {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
-      if (chat != null) {
-        chat.chat.lastReadOutboxMessageId = event.lastReadOutboxMessageId;
-        setState(() {});
-      }
-    }));
-
     _subscriptions.add(widget.client.updateChatDraftMessage.listen((event) {
       ChatFullInfo? chat =
           _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
       if (chat != null) {
         chat.chat.draftMessage = event.draftMessage;
         chat.chat.positions = event.positions;
-        setState(() {});
-      }
-    }));
-
-    _subscriptions.add(widget.client.updateChatReadinbox.listen((event) {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
-      if (chat != null) {
-        chat.chat.unreadCount = event.unreadCount;
-        chat.chat.lastReadInboxMessageId = event.lastReadInboxMessageId;
-        setState(() {});
-      }
-    }));
-
-    _subscriptions
-        .add(widget.client.updateChatUnreadMentionCount.listen((event) {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
-      if (chat != null) {
-        chat.chat.unreadMentionCount = event.unreadMentionCount;
-        setState(() {});
-      }
-    }));
-
-    _subscriptions.add(widget.client.updateMessageMentionRead.listen((event) {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
-      if (chat != null) {
-        chat.chat.unreadMentionCount = event.unreadMentionCount;
         setState(() {});
       }
     }));
@@ -366,17 +295,11 @@ class UsersJoinedGroupInfo {
   String langKey;
 }
 
-class ChatActionInfo {
-  ChatActionInfo({required this.action, required this.who});
-  ChatAction action;
-  User who;
-}
-
 class ChatFullInfo {
   ChatFullInfo(
       {required this.chat,
       required this.lastMessageSenderName,
-      required this.actions,
+      //required this.actions,
       this.interlocutor,
       this.supergroup,
       this.joinInfo,
@@ -398,6 +321,4 @@ class ChatFullInfo {
 
   //order in chatlist
   int order;
-
-  List<ChatActionInfo> actions = [];
 }

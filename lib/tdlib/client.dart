@@ -8,6 +8,7 @@ import 'package:myapp/secrets.dart' as secrets;
 import 'package:myapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:isolate';
+import 'package:async/async.dart' show StreamGroup;
 
 import "src/td_json_client.dart" show JsonClient;
 import "src/tdapi/tdapi.dart" hide Text;
@@ -110,7 +111,7 @@ class TelegramClient {
       .where((u) => u is UpdateChatPermissions)
       .map((a) => (a as UpdateChatPermissions));
 
-  Stream<UpdateChatPhoto> get updateChatPhoto => updates
+  Stream<UpdateChatPhoto> get _updateChatPhoto => updates
       .where((u) => u is UpdateChatPhoto)
       .map((a) => (a as UpdateChatPhoto));
 
@@ -118,11 +119,11 @@ class TelegramClient {
       .where((u) => u is UpdateChatPosition)
       .map((a) => (a as UpdateChatPosition));
 
-  Stream<UpdateChatReadInbox> get updateChatReadinbox => updates
+  Stream<UpdateChatReadInbox> get _updateChatReadInbox => updates
       .where((u) => u is UpdateChatReadInbox)
       .map((a) => (a as UpdateChatReadInbox));
 
-  Stream<UpdateChatReadOutbox> get updateChatReadOutbox => updates
+  Stream<UpdateChatReadOutbox> get _updateChatReadOutbox => updates
       .where((u) => u is UpdateChatReadOutbox)
       .map((a) => (a as UpdateChatReadOutbox));
 
@@ -143,16 +144,16 @@ class TelegramClient {
           .where((u) => u is UpdateChatPendingJoinRequests)
           .map((a) => (a as UpdateChatPendingJoinRequests));
 
-  Stream<UpdateChatTitle> get updateChatTitle => updates
+  Stream<UpdateChatTitle> get _updateChatTitle => updates
       .where((u) => u is UpdateChatTitle)
       .map((a) => (a as UpdateChatTitle));
 
-  Stream<UpdateChatUnreadMentionCount> get updateChatUnreadMentionCount =>
+  Stream<UpdateChatUnreadMentionCount> get _updateChatUnreadMentionCount =>
       updates
           .where((u) => u is UpdateChatUnreadMentionCount)
           .map((a) => (a as UpdateChatUnreadMentionCount));
 
-  Stream<UpdateChatVideoChat> get updateChatVoiceChat => updates
+  Stream<UpdateChatVideoChat> get updateChatVideoChat => updates
       .where((u) => u is UpdateChatVideoChat)
       .map((a) => (a as UpdateChatVideoChat));
 
@@ -230,7 +231,7 @@ class TelegramClient {
           .where((u) => u is UpdateMessageLiveLocationViewed)
           .map((a) => (a as UpdateMessageLiveLocationViewed));
 
-  Stream<UpdateMessageMentionRead> get updateMessageMentionRead => updates
+  Stream<UpdateMessageMentionRead> get _updateMessageMentionRead => updates
       .where((u) => u is UpdateMessageMentionRead)
       .map((a) => (a as UpdateMessageMentionRead));
 
@@ -370,7 +371,7 @@ class TelegramClient {
   Stream<UpdateUser> get updateuser =>
       updates.where((u) => u is UpdateUser).map((a) => (a as UpdateUser));
 
-  Stream<UpdateChatAction> get updateChatAction => updates
+  Stream<UpdateChatAction> get _updateChatAction => updates
       .where((u) => u is UpdateChatAction)
       .map((a) => (a as UpdateChatAction));
 
@@ -387,9 +388,22 @@ class TelegramClient {
       .where((u) => u is UpdateUsersNearby)
       .map((a) => (a as UpdateUsersNearby).usersNearby!);
 
-  Stream<UpdateUserStatus> get updateUserStatus => updates
+  Stream<UpdateUserStatus> get _updateUserStatus => updates
       .where((u) => u is UpdateUserStatus)
       .map((a) => (a as UpdateUserStatus));
+
+  Stream<UpdateChatHasProtectedContent> get updateChatHasProtectedContent =>
+      updates
+          .where((u) => u is UpdateChatHasProtectedContent)
+          .map((a) => a as UpdateChatHasProtectedContent);
+
+  Stream<UpdateChatMessageTtl> get updateChatMessageTtl => updates
+      .where((u) => u is UpdateChatMessageTtl)
+      .map((a) => a as UpdateChatMessageTtl);
+
+  Stream<UpdateChatMessageTtl> get updateChatMessageSender => updates
+      .where((u) => u is UpdateChatMessageTtl)
+      .map((a) => a as UpdateChatMessageTtl);
 
   late TdlibParameters tdlibParameters;
   int me = 0;
@@ -491,6 +505,113 @@ class TelegramClient {
       return error.message;
     }
     if (key != null) return getTranslation(key);
+  }
+
+  late final List<Stream<Update>> _chatUpdates = [
+    updateChatActionBar,
+    updateChatDefaultDisableNotification,
+    updateChatDraftMessage,
+    updateChatHasProtectedContent,
+    updateChatHasScheduledMessages,
+    updateChatIsBlocked,
+    updateChatisMarkedAsUnread,
+    updateChatLastMessage,
+    updateChatMessageSender,
+    updateChatMessageTtl,
+    updateChatNotificationSettings,
+    updateChatPendingJoinRequests,
+    updateChatPermissions,
+    _updateChatPhoto,
+    _updateChatReadInbox,
+    _updateChatReadOutbox,
+    updateChatReplyMarkup,
+    updateChatTheme,
+    _updateChatTitle,
+    _updateChatUnreadMentionCount,
+    updateChatVideoChat
+  ];
+
+  Stream<Map<String, ChatAction>?> actionsOf(int chatId) async* {
+    Map<int, ChatAction> actions = {};
+    await for (var a in _updateChatAction) {
+      if (a.chatId == chatId) {
+        var id = a.senderId is MessageSenderChat
+            ? (a.senderId as MessageSenderChat).chatId
+            : (a.senderId as MessageSenderUser).userId;
+        actions[id!] = a.action!;
+        if (a.action is ChatActionCancel) actions.remove(id);
+        if (actions.isNotEmpty) {
+          Map<String, ChatAction> result = {};
+          actions.forEach((key, value) async =>
+              result[(await send(GetUser(userId: key)) as User).firstName!] =
+                  value);
+          yield result;
+        } else {
+          yield null;
+        }
+      }
+    }
+  }
+
+  Stream<String> titleOf(int chatId) async* {
+    await for (final title in _updateChatTitle) {
+      if (title.chatId == chatId) yield title.title!;
+    }
+  }
+
+  Stream<int> unreadMentionCountOf(int chatId) async* {
+    await for (final mentionUpdate in StreamGroup.merge(
+        [_updateChatUnreadMentionCount, _updateMessageMentionRead])) {
+      var d = mentionUpdate as dynamic;
+      if (d.chatId == chatId) {
+        yield (d.unreadMentionCount as int);
+      }
+    }
+  }
+
+  Stream<ChatPhotoInfo?> photoOf(int chatId) async* {
+    await for (final photo in _updateChatPhoto) {
+      if (photo.chatId == chatId) yield photo.photo;
+    }
+  }
+
+  Stream<int> unreadCountOf(int chatId) async* {
+    await for (final inbox in _updateChatReadInbox) {
+      if (inbox.chatId == chatId) yield inbox.unreadCount!;
+    }
+  }
+
+  Stream<int> chatReadOutboxOf(int chatId) async* {
+    await for (final outb in _updateChatReadOutbox) {
+      if (outb.chatId == chatId) yield outb.lastReadOutboxMessageId!;
+    }
+  }
+
+  Stream<UserStatus> statusOf(int userId) async* {
+    await for (final status in _updateUserStatus) {
+      if (status.userId == userId) yield status.status!;
+    }
+  }
+
+  Stream<Chat> chatStream(int id) async* {
+    var base = (await send(GetChat(chatId: id))) as Chat;
+    yield base;
+
+    for (final update in _chatUpdates) {
+      await for (final e in update) {
+        var eventJson = e.toJson();
+        if (eventJson["chatId"] == base.id) {
+          var chatjson = base.toJson();
+          eventJson.forEach((key, value) {
+            if (key != "chatId") {
+              chatjson[key] = value;
+            }
+          });
+          base = Chat.fromJson(chatjson);
+          yield base;
+        }
+      }
+    }
   }
 
   String getTranslation(String key,

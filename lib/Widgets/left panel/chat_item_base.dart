@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
+import 'package:async/async.dart' show StreamGroup;
 
 class ChatItemBase extends StatelessWidget {
   const ChatItemBase(
@@ -10,15 +11,13 @@ class ChatItemBase extends StatelessWidget {
       this.icon,
       this.content,
       this.title,
-      this.unread = 0,
-      this.unreadMention = 0,
+      this.unreadPlaceHolder,
       this.chatPic,
       this.onClick})
       : super(key: key);
   final bool selected;
   final Icon? icon;
-  final int unread;
-  final int unreadMention;
+  final Widget? unreadPlaceHolder;
   final Widget? content;
   final Widget? title;
   final Widget? chatPic;
@@ -79,9 +78,8 @@ class ChatItemBase extends StatelessWidget {
                               Container(
                                   margin: const EdgeInsets.only(top: 8),
                                   child: Row(children: [
-                                    UnreadCountBubble(
-                                        count: unread,
-                                        important: unreadMention > 0),
+                                    if (unreadPlaceHolder != null)
+                                      unreadPlaceHolder!,
                                     icon ?? const SizedBox.shrink()
                                   ]))
                             ])

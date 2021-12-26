@@ -25,7 +25,6 @@ class ChatItemDisplay extends StatelessWidget {
       required this.joinInfo,
       required this.lastMessageSenderName,
       required this.chatList,
-      required this.actionsInfo,
       required this.order,
       this.onClick})
       : super(key: key);
@@ -38,7 +37,6 @@ class ChatItemDisplay extends StatelessWidget {
   final String lastMessageSenderName;
   final TelegramClient client;
   final ChatList chatList;
-  final List<ChatActionInfo>? actionsInfo;
   final Function()? onClick;
 
   static const bool USE_HORIZONTAL_SEPARATOR = false;
@@ -59,25 +57,33 @@ class ChatItemDisplay extends StatelessWidget {
             onClick: onClick,
             title: Row(children: [
               Expanded(
-                  child: ChatItemTitle(
-                      selected: selected,
-                      isBot: interlocutor?.type is UserTypeBot,
-                      isChannel: (supergroup?.isChannel) ?? false,
-                      isChat: (supergroup != null &&
-                              !(supergroup?.isChannel ?? true)) ||
-                          chat.type is ChatTypeBasicGroup,
-                      title: (interlocutor?.type is UserTypeDeleted)
-                          ? client.getTranslation("lng_deleted")
-                          : chat.title!,
-                      isScam: isScam,
-                      isVerifed: isVerifed,
-                      isSupport: isSupport)),
-              (chat.lastMessage?.isOutgoing ?? false) &&
-                      chat.draftMessage == null
-                  ? CheckMark(
-                      isReaded: (chat.lastMessage?.id ?? 0) <=
-                          (chat.lastReadOutboxMessageId ?? 0))
-                  : const SizedBox.shrink(),
+                  child: StreamBuilder(
+                      stream: client.titleOf(chat.id!),
+                      initialData: chat.title,
+                      builder: (_, data) => ChatItemTitle(
+                          selected: selected,
+                          isBot: interlocutor?.type is UserTypeBot,
+                          isChannel: (supergroup?.isChannel) ?? false,
+                          isChat: (supergroup != null &&
+                                  !(supergroup?.isChannel ?? true)) ||
+                              chat.type is ChatTypeBasicGroup,
+                          title: (interlocutor?.type is UserTypeDeleted)
+                              ? client.getTranslation("lng_deleted")
+                              : (data.data ?? "").toString(),
+                          isScam: isScam,
+                          isVerifed: isVerifed,
+                          isSupport: isSupport))),
+              if (chat.lastMessage?.isOutgoing ?? false)
+                StreamBuilder(
+                    initialData: chat.lastReadOutboxMessageId,
+                    builder: (context, data) {
+                      var value = false;
+                      if (data.hasData) {
+                        value =
+                            (chat.lastMessage?.id ?? 0) <= (data.data as int);
+                      }
+                      return CheckMark(isReaded: value);
+                    }),
               const SizedBox(width: 2),
               Text(getMessageTime(),
                   textAlign: TextAlign.right,
@@ -92,34 +98,77 @@ class ChatItemDisplay extends StatelessWidget {
                 SizedBox(
                     height: 64,
                     width: 64,
-                    child: ChatPhotoDisplay(
-                        photo: chat.photo,
-                        chatId: chat.id!,
-                        chatTitle: chat.title!,
-                        client: client)),
-                OnlineIndicatorDidplay(heigth: 20, width: 20, online: isOnline)
+                    child: StreamBuilder(
+                        stream: client.photoOf(chat.id!),
+                        initialData: chat.photo,
+                        builder: (_, data) => ChatPhotoDisplay(
+                            photo: data.hasData
+                                ? data.data as ChatPhotoInfo
+                                : null,
+                            chatId: chat.id!,
+                            chatTitle: chat.title!,
+                            client: client))),
+                if (interlocutor != null &&
+                    interlocutor?.type is UserTypeRegular)
+                  StreamBuilder(
+                      stream: client.statusOf(interlocutor!.id!),
+                      initialData: interlocutor?.status,
+                      builder: (context, data) => OnlineIndicatorDidplay(
+                          heigth: 20,
+                          width: 20,
+                          online: data.data is UserStatusOnline))
               ]),
-              UnreadCountBubble(
-                  count: chat.unreadMentionCount ?? 0, important: true)
+              StreamBuilder(
+                  initialData: chat.unreadMentionCount!,
+                  stream: client.unreadMentionCountOf(chat.id!),
+                  builder: (context, data) => UnreadCountBubble(
+                      count: data.hasData ? data.data as int : 0,
+                      important: true))
             ]),
-            unread: chat.unreadCount ?? 0,
-            unreadMention: chat.unreadMentionCount ?? 0,
+            unreadPlaceHolder: StreamBuilder(
+                initialData: chat.unreadCount,
+                stream: client.unreadCountOf(chat.id!),
+                builder: (context, data) {
+                  if (data.hasData) {
+                    chat.unreadCount = data.data as int;
+                  }
+                  return StreamBuilder(
+                      initialData: chat.unreadMentionCount,
+                      stream: client.unreadMentionCountOf(chat.id!),
+                      builder: (context, data1) {
+                        if (data.hasData) {
+                          chat.unreadMentionCount = (data1.data as int);
+                        }
+                        return UnreadCountBubble(
+                            count: chat.unreadCount!,
+                            important: (chat.unreadMentionCount ?? 0) != 0);
+                      });
+                }),
             content: Expanded(
                 child: Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: actionsInfo?.isNotEmpty ?? false
-                        ? ChatItemActionDisplay(
-                            chatSelected: selected,
-                            isPrivate: interlocutor != null,
-                            chatid: chat.id!,
-                            client: client,
-                            actions: actionsInfo!)
-                        : ChatItemLastMessageContent(
-                            chatSelected: selected,
-                            joinInfo: joinInfo,
-                            lastMessageAuthor: lastMessageSenderName,
-                            chat: chat,
-                            client: client))),
+                    child: StreamBuilder(
+                        stream: client.actionsOf(chat.id!),
+                        builder: (_, data) {
+                          if (data.hasData && data.data != null) {
+                            if ((data.data as Map<String, ChatAction>)
+                                .isNotEmpty) {
+                              return ChatItemActionDisplay(
+                                  chatSelected: selected,
+                                  isPrivate: interlocutor != null,
+                                  chatid: chat.id!,
+                                  client: client,
+                                  actions:
+                                      data.data as Map<String, ChatAction>);
+                            }
+                          }
+                          return ChatItemLastMessageContent(
+                              chatSelected: selected,
+                              joinInfo: joinInfo,
+                              lastMessageAuthor: lastMessageSenderName,
+                              chat: chat,
+                              client: client);
+                        }))),
             icon: pinned
                 ? Icon(Icons.push_pin,
                     color: ClientTheme.currentTheme.getField(selected

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/display_text.dart';
-import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/Widgets/smooth_number_counter.dart';
 import 'package:myapp/Widgets/text_animation.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -17,7 +16,7 @@ class ChatItemActionDisplay extends StatelessWidget {
       required this.chatid})
       : super(key: key);
   final bool chatSelected;
-  final List<ChatActionInfo> actions;
+  final Map<String, ChatAction> actions;
   final TelegramClient client;
   final int chatid;
   final bool isPrivate;
@@ -60,19 +59,21 @@ class ChatItemActionDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     String? transitionStr;
     Widget? animation;
-    String second_user = "";
+    String secondUser = "";
+    var firstName = actions.keys.elementAt(0);
+    var firstAction = actions[firstName];
     if (actions.length <= 1) {
-      if (typesWithProgress.contains(actions[0].action.runtimeType)) {
-        animation = createUploadAnimation(actions[0].action.runtimeType,
-            (actions[0].action as dynamic).progress, chatid);
+      if (typesWithProgress.contains(firstAction.runtimeType)) {
+        animation = createUploadAnimation(
+            firstAction.runtimeType, (firstAction as dynamic).progress, chatid);
       }
       transitionStr = (isPrivate
           ? actionTransitionPrivate
-          : actionTransitionsChat)[actions[0].action.runtimeType];
+          : actionTransitionsChat)[firstAction.runtimeType];
     } else {
       transitionStr =
           actions.length == 2 ? "lng_users_typing" : "lng_many_typing";
-      second_user = actions[1].who.firstName!;
+      secondUser = actions.keys.elementAt(1);
     }
 
     var textStyle = chatSelected
@@ -86,15 +87,12 @@ class ChatItemActionDisplay extends StatelessWidget {
                   transitionStr != null
                       ? client.getTranslation(transitionStr,
                           replacing: {
-                            "{user}": actions[0].who.firstName!,
-                            "{emoji}": (actions[0].action
-                                    is ChatActionWatchingAnimations)
-                                ? (actions[0].action
-                                            as ChatActionWatchingAnimations)
-                                        .emoji ??
-                                    "🍆"
-                                : "",
-                            "{second_user}": second_user,
+                            "{user}": firstName,
+                            "{emoji}":
+                                (firstAction is ChatActionWatchingAnimations)
+                                    ? firstAction.emoji ?? "🍆"
+                                    : "",
+                            "{second_user}": secondUser,
                             "{count}": actions.length.toString()
                           },
                           itemsCount: actions.length)

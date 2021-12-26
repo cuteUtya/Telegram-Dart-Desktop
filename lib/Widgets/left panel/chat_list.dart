@@ -121,8 +121,7 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                       supergroup: chat.supergroup,
                       joinInfo: chat.joinInfo,
                       lastMessageSenderName: chat.lastMessageSenderName,
-                      chatList: widget.chatList,
-                      actionsInfo: chat.actions),
+                      chatList: widget.chatList),
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(
