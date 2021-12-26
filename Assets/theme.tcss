@@ -5,6 +5,7 @@ BaseColor: #FAFAFA;
 DangerColor: #DF1E1E; 
 DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
 HoveredObject: #E0E0E0;
+GenericUIIconsColor: #7F7F7F;
 
 BorderLineColor: #DADADA;
 
@@ -96,6 +97,7 @@ PageHeaderBackgroundColor: #EAEAEA;
 
 TitleIconColor: ref(HeaderMain);
 SelectedTitleIconColor: ref(BaseColor);
-GenericUIIconsColor: #7F7F7F;
+
 
 ActionBarColor: ref(BaseColor);
+ChatInputFieldBackgroundColor: ref(BaseColor);
