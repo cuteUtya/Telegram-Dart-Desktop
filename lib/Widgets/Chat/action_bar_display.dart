@@ -29,23 +29,23 @@ class ActionBarDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        height: 64,
         alignment: Alignment.center,
         color: ClientTheme.currentTheme.getField("ActionBarColor"),
-        child: Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 8),
-            child: Column(children: [
-              ChatItemTitle(
-                  selected: false,
-                  isBot: isBot,
-                  isChannel: isChannel,
-                  isChat: members != null && membersOnline != null,
-                  title: title,
-                  isScam: false /**TODO isScam*/,
-                  isVerifed: false /**TODO isVerifed*/,
-                  isSupport: false /**TODO isSupport*/),
-              const SizedBox(height: 2),
-              _buildSecondLine()
-            ])));
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const SizedBox(height: 4),
+          ChatItemTitle(
+              selected: false,
+              isBot: isBot,
+              isChannel: isChannel,
+              isChat: members != null && membersOnline != null,
+              title: title,
+              isScam: false /**TODO isScam*/,
+              isVerifed: false /**TODO isVerifed*/,
+              isSupport: false /**TODO isSupport*/),
+          const SizedBox(height: 2),
+          _buildSecondLine(),
+        ]));
   }
 
   Widget _buildSecondLine() {
