@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/Chat/chat_display.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
@@ -11,8 +12,11 @@ import 'package:collection/collection.dart';
 import 'package:myapp/utils.dart';
 
 class ChatListsManager extends StatefulWidget {
-  const ChatListsManager({Key? key, required this.client}) : super(key: key);
+  const ChatListsManager(
+      {Key? key, required this.client, required this.chatDisplayPointer})
+      : super(key: key);
   final TelegramClient client;
+  final GlobalKey<ChatDisplayState> chatDisplayPointer;
   @override
   State<StatefulWidget> createState() => ChatListsManagerState();
 }
@@ -282,6 +286,18 @@ class ChatListsManagerState extends State<ChatListsManager> {
     super.dispose();
   }
 
+  void _chatClickHandler(int id) async {
+    if (_selectedChatId != null) {
+      widget.client.send(CloseChat(chatId: _selectedChatId));
+    }
+    setState(() => _selectedChatId = id);
+    widget.client.send(OpenChat(chatId: id));
+    widget.chatDisplayPointer.currentState
+        ?.changeChat((await widget.client.send(GetChat(chatId: id))) as Chat);
+  }
+
+  int? _selectedChatId;
+
   bool _init = false;
 
   static Map<ChatList, GlobalKey<ChatListDisplayState>> _displayLists = {};
@@ -313,8 +329,10 @@ class ChatListsManagerState extends State<ChatListsManager> {
                       controller: mainContoller,
                       itemCount: _lists.length,
                       itemBuilder: (context, index) => ChatListDisplay(
+                          selectedChatId: _selectedChatId,
                           onArchiveClick: () => _switchLists(1),
                           key: _displayLists[_lists[index]]!,
+                          onChatClick: _chatClickHandler,
                           client: widget.client,
                           chatList: _lists[index],
                           chats: _chats)))
@@ -326,8 +344,10 @@ class ChatListsManagerState extends State<ChatListsManager> {
             title: widget.client.getTranslation("lng_archived_name"),
             content: Expanded(
                 child: ChatListDisplay(
+                    selectedChatId: _selectedChatId,
                     client: widget.client,
                     chatList: ChatListArchive(),
+                    onChatClick: _chatClickHandler,
                     chats: _chats)),
           );
         });

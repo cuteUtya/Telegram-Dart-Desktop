@@ -14,9 +14,9 @@ class TextAnimation extends StatefulWidget {
   final TextStyle textStyle;
   final Duration frameOffset;
 
-  static TextAnimation fourPoints() => TextAnimation(
+  static TextAnimation fourPoints(TextStyle textStyle) => TextAnimation(
       frames: const ["....", "...", "..", "."],
-      textStyle: TextDisplay.chatItemAccent,
+      textStyle: textStyle,
       frameOffset: const Duration(milliseconds: 500));
 
   @override

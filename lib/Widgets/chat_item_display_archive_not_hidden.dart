@@ -41,6 +41,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
             TextSpan(text: ", ", style: TextDisplay.create(size: 18)),
         ]));
     return ChatItemBase(
+        selected: false,
         onClick: onClick,
         key: UniqueKey(),
         title: Row(children: [

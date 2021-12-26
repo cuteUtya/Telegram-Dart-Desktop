@@ -17,12 +17,16 @@ class ChatListDisplay extends StatefulWidget {
       required this.client,
       required this.chatList,
       required this.chats,
+      required this.selectedChatId,
+      this.onChatClick,
       this.onArchiveClick})
       : super(key: key);
   final TelegramClient client;
   final ChatList chatList;
   final List<ChatFullInfo> chats;
   final Function()? onArchiveClick;
+  final Function(int id)? onChatClick;
+  final int? selectedChatId;
 
   @override
   State<StatefulWidget> createState() => ChatListDisplayState();
@@ -101,7 +105,12 @@ class ChatListDisplayState extends State<ChatListDisplay> {
               [
                 for (final chat in sublist)
                   ChatItemDisplay(
-                      onClick: () => print("CLICK ON ${chat.chat.id}"),
+                      selected: chat.chat.id == widget.selectedChatId,
+                      onClick: () {
+                        if (widget.onChatClick != null) {
+                          widget.onChatClick!(chat.chat.id!);
+                        }
+                      },
                       order: ++order +
                           top +
                           ((widget.chatList is ChatListMain) ? 1 : 0),

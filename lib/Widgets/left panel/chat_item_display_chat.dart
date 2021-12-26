@@ -1,13 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/check_mark.dart';
-import 'package:myapp/Widgets/clickable_object.dart';
-import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
-import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_action_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
@@ -22,6 +17,7 @@ import 'package:myapp/utils.dart';
 class ChatItemDisplay extends StatelessWidget {
   ChatItemDisplay(
       {Key? key,
+      required this.selected,
       required this.chat,
       required this.client,
       required this.interlocutor,
@@ -33,6 +29,7 @@ class ChatItemDisplay extends StatelessWidget {
       required this.order,
       this.onClick})
       : super(key: key);
+  final bool selected;
   final Chat chat;
   final int order;
   final User? interlocutor;
@@ -58,10 +55,12 @@ class ChatItemDisplay extends StatelessWidget {
         duration: const Duration(milliseconds: 400),
         margin: EdgeInsets.only(top: order * 88),
         child: ChatItemBase(
+            selected: selected,
             onClick: onClick,
             title: Row(children: [
               Expanded(
                   child: ChatItemTitle(
+                      selected: selected,
                       isBot: interlocutor?.type is UserTypeBot,
                       isChannel: (supergroup?.isChannel) ?? false,
                       isChat: (supergroup != null &&
@@ -83,7 +82,10 @@ class ChatItemDisplay extends StatelessWidget {
               Text(getMessageTime(),
                   textAlign: TextAlign.right,
                   style: TextDisplay.create(
-                      size: 18, textColor: TextColor.ChatLastTimeMessage))
+                      size: 18,
+                      textColor: selected
+                          ? TextColor.SelectedChatLastTimedMessage
+                          : TextColor.ChatLastTimeMessage))
             ]),
             chatPic: Stack(children: [
               Stack(alignment: Alignment.bottomRight, children: [
@@ -107,19 +109,22 @@ class ChatItemDisplay extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8),
                     child: actionsInfo?.isNotEmpty ?? false
                         ? ChatItemActionDisplay(
+                            chatSelected: selected,
                             isPrivate: interlocutor != null,
                             chatid: chat.id!,
                             client: client,
                             actions: actionsInfo!)
                         : ChatItemLastMessageContent(
+                            chatSelected: selected,
                             joinInfo: joinInfo,
                             lastMessageAuthor: lastMessageSenderName,
                             chat: chat,
                             client: client))),
             icon: pinned
                 ? Icon(Icons.push_pin,
-                    color:
-                        ClientTheme.currentTheme.getField("ChatPinIconColor"))
+                    color: ClientTheme.currentTheme.getField(selected
+                        ? "SelectedChatPinIconColor"
+                        : "ChatPinIconColor"))
                 : null));
   }
 

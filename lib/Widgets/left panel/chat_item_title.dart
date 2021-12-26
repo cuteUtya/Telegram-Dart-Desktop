@@ -5,6 +5,7 @@ import 'package:myapp/Widgets/display_text.dart';
 class ChatItemTitle extends StatelessWidget {
   const ChatItemTitle(
       {Key? key,
+      required this.selected,
       required this.isBot,
       required this.isChannel,
       required this.isChat,
@@ -13,6 +14,7 @@ class ChatItemTitle extends StatelessWidget {
       required this.isVerifed,
       required this.isSupport})
       : super(key: key);
+  final bool selected;
   final bool isChat;
   final bool isBot;
   final bool isChannel;
@@ -29,7 +31,8 @@ class ChatItemTitle extends StatelessWidget {
             child: Icon(
           isBot ? Icons.smart_toy : (isChannel ? Icons.campaign : Icons.group),
           size: 22,
-          color: ClientTheme.currentTheme.getField("TitleIconColor"),
+          color: ClientTheme.currentTheme
+              .getField(selected ? "SelectedTitleIconColor" : "TitleIconColor"),
         )),
         const WidgetSpan(child: SizedBox(width: 4))
       ]);
@@ -40,7 +43,11 @@ class ChatItemTitle extends StatelessWidget {
         textAlign: TextAlign.left,
         text: TextSpan(
             children: beforeTitle +
-                TextDisplay.parseEmojiInString(title, TextDisplay.chatTittle) +
+                TextDisplay.parseEmojiInString(
+                    title,
+                    selected
+                        ? TextDisplay.chatTittleSelected
+                        : TextDisplay.chatTittle) +
                 [
                   WidgetSpan(
                       alignment: PlaceholderAlignment.middle,

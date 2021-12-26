@@ -11,15 +11,25 @@ class TextDisplay {
       create(textColor: TextColor.AdditionalTextColor, size: 16);
   static TextStyle get introTitle =>
       create(size: 26, textColor: TextColor.Accent);
+  static TextStyle get draftText =>
+      create(size: 18, textColor: TextColor.Draft);
   static TextStyle get regular16 => create(size: 16);
   static TextStyle get regular18 => create(size: 18);
   static TextStyle get regular20 => create(size: 20);
   static TextStyle get bold18 => create(size: 18, fontWeight: FontWeight.bold);
   static TextStyle get bold20 => create(size: 20, fontWeight: FontWeight.bold);
+  static TextStyle get actionBarOffline =>
+      create(size: 16, textColor: TextColor.HeaderSecondary);
   static const String greaterImportance = "Ubuntu";
   static const String regular = "Roboto";
   static const String monospace = "CodeSourcePro";
   static const String emojiFont = "emoji";
+
+  static TextStyle get chatTittleSelected => create(
+      size: 18,
+      fontWeight: FontWeight.bold,
+      textColor: TextColor.SelectedHeaderMain,
+      fontFamily: greaterImportance);
 
   static TextStyle get chatTittle => create(
       size: 18,
@@ -28,6 +38,8 @@ class TextDisplay {
       fontFamily: greaterImportance);
   static TextStyle get chatItemAccent =>
       create(size: 18, textColor: TextColor.Accent);
+  static TextStyle get chatItemAccentSelected =>
+      create(size: 18, textColor: TextColor.White);
 
   static InlineSpan emoji(String emoji, double size,
       {FontWeight? weight, Color? color}) {
@@ -51,18 +63,20 @@ class TextDisplay {
     null: "-"
   };
 
-  static Map<String, TextStyle Function(double size)> stylePairs = {
-    "B": (s) => create(size: s, fontWeight: FontWeight.bold),
-    "-": (s) => create(size: s),
-    "M": (s) => create(size: s, fontFamily: monospace /*SOURCE CODE PRO*/
-        ),
-    "S": (s) => create(size: s, decoration: TextDecoration.lineThrough),
-    "U": (s) => create(size: s, decoration: TextDecoration.underline),
-    "I": (s) => create(size: s, fontStyle: FontStyle.italic)
+  static Map<String, TextStyle Function(double size, TextColor color)>
+      stylePairs = {
+    "B": (s, c) => create(size: s, fontWeight: FontWeight.bold, textColor: c),
+    "-": (s, c) => create(size: s, textColor: c),
+    "M": (s, c) => create(size: s, fontFamily: monospace, textColor: c),
+    "S": (s, c) =>
+        create(size: s, decoration: TextDecoration.lineThrough, textColor: c),
+    "U": (s, c) =>
+        create(size: s, decoration: TextDecoration.underline, textColor: c),
+    "I": (s, c) => create(size: s, fontStyle: FontStyle.italic, textColor: c)
   };
 
   static List<InlineSpan> parseFormattedText(FormattedText text,
-      [double size = 20]) {
+      [double size = 20, TextColor textColor = TextColor.RegularText]) {
     String str = "-" * text.text!.length;
     for (int i = 0; i < (text.entities?.length ?? 0); i++) {
       str = str.replaceRange(
@@ -79,7 +93,9 @@ class TextDisplay {
       var style = stylePairs[str[element.start]];
       result.addAll(parseEmojiInString(
           text.text!.substring(element.start, element.end),
-          style == null ? create(size: 18) : style(18)));
+          style == null
+              ? create(size: 18, textColor: textColor)
+              : style(18, textColor)));
     });
 
     return result;
@@ -150,15 +166,18 @@ class TextDisplay {
 enum TextColor {
   Accent,
   HeaderMain,
+  SelectedHeaderMain,
   HeaderSecondary,
   AdditionalTextColor,
   RegularText,
   DangerColor,
   Transparent,
   ChatLastTimeMessage,
+  SelectedChatLastTimedMessage,
   PeerNameTextColor,
   Draft,
-  White
+  White,
+  OnlineColor
 }
 
 class _textSection {

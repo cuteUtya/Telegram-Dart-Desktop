@@ -10,11 +10,13 @@ import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 class ChatItemActionDisplay extends StatelessWidget {
   const ChatItemActionDisplay(
       {Key? key,
+      required this.chatSelected,
       required this.actions,
       required this.client,
       required this.isPrivate,
       required this.chatid})
       : super(key: key);
+  final bool chatSelected;
   final List<ChatActionInfo> actions;
   final TelegramClient client;
   final int chatid;
@@ -73,6 +75,10 @@ class ChatItemActionDisplay extends StatelessWidget {
       second_user = actions[1].who.firstName!;
     }
 
+    var textStyle = chatSelected
+        ? TextDisplay.chatItemAccentSelected
+        : TextDisplay.chatItemAccent;
+
     return Row(children: [
       RichText(
           text: TextSpan(
@@ -93,9 +99,9 @@ class ChatItemActionDisplay extends StatelessWidget {
                           },
                           itemsCount: actions.length)
                       : "¯\\_(ツ)_/¯",
-                  TextDisplay.chatItemAccent))),
+                  textStyle))),
       const SizedBox(width: 2),
-      animation ?? TextAnimation.fourPoints()
+      animation ?? TextAnimation.fourPoints(textStyle)
     ]);
   }
 

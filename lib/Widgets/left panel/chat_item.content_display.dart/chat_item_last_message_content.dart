@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chat_item_photo_minithumbnail.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_icon_text.dart';
@@ -13,11 +12,13 @@ import 'package:myapp/utils.dart';
 class ChatItemLastMessageContent extends StatelessWidget {
   const ChatItemLastMessageContent(
       {Key? key,
+      required this.chatSelected,
       required this.chat,
       required this.client,
       required this.joinInfo,
       required this.lastMessageAuthor})
       : super(key: key);
+  final bool chatSelected;
   final Chat chat;
   final String lastMessageAuthor;
   final UsersJoinedGroupInfo? joinInfo;
@@ -35,6 +36,9 @@ class ChatItemLastMessageContent extends StatelessWidget {
     bool messageTypeAllowShowFrom = true;
     FormattedText text = FormattedText(text: "");
     List<InlineSpan> displayContent = [];
+    TextStyle textStyle = chatSelected
+        ? TextDisplay.chatItemAccentSelected
+        : TextDisplay.chatItemAccent;
     switch (content.runtimeType) {
       case MessageText:
         text = (content as MessageText).text!;
@@ -49,7 +53,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
       case MessageSticker:
         displayContent.addAll(TextDisplay.parseEmojiInString(
             "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ",
-            TextDisplay.chatItemAccent));
+            textStyle));
         break;
 
       case MessageChatDeletePhoto:
@@ -58,7 +62,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
             "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {
                   "{from}": lastMessageAuthor
                 })}",
-            TextDisplay.chatItemAccent));
+            textStyle));
         break;
 
       join:
@@ -90,19 +94,18 @@ class ChatItemLastMessageContent extends StatelessWidget {
                 id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!),
             (text.text ?? "").isNotEmpty
                 ? ""
-                : client.getTranslation("lng_attach_photo"));
+                : client.getTranslation("lng_attach_photo"),
+            textStyle);
         break;
 
       case MessageDocument:
         var document = (content as MessageDocument);
         displayContent.addAll(TextDisplay.parseEmojiInString(
                 "📁 ${bytesToSize(document.document!.document!.size!)} —",
-                TextDisplay.chatItemAccent) +
+                textStyle) +
             [
               contentEntetyesMargin(),
-              TextSpan(
-                  text: document.document?.fileName,
-                  style: TextDisplay.chatItemAccent),
+              TextSpan(text: document.document?.fileName, style: textStyle),
               contentEntetyesMargin()
             ]);
         text = document.caption!;
@@ -114,25 +117,24 @@ class ChatItemLastMessageContent extends StatelessWidget {
             "📸 ${client.getTranslation(isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo", replacing: {
                   "{from}": lastMessageAuthor
                 })}",
-            TextDisplay.chatItemAccent);
+            textStyle);
         break;
 
       case MessageExpiredPhoto:
         displayContent = TextDisplay.parseEmojiInString(
-            "🔥 ${client.getTranslation("lng_attach_photo")}",
-            TextDisplay.chatItemAccent);
+            "🔥 ${client.getTranslation("lng_attach_photo")}", textStyle);
         break;
 
       case MessageAnimation:
         var thumb = (content as MessageAnimation).animation?.thumbnail;
         Widget? mith;
-        print(thumb?.format.runtimeType);
         if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
-          displayContent.addAll(TextDisplay.parseEmojiInString(
-              "🖼 GIF", TextDisplay.chatItemAccent));
+          displayContent
+              .addAll(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
         } else {
           mith = FileImageDisplay(id: thumb.file!.id!, client: client);
-          displayContent += ChatItemContentPhotoText.build(mith, "GIF");
+          displayContent +=
+              ChatItemContentPhotoText.build(mith, "GIF", textStyle);
         }
         break;
 
@@ -142,7 +144,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
             "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {
                   "{from}": lastMessageAuthor
                 })}",
-            TextDisplay.chatItemAccent));
+            textStyle));
         break;
 
       case MessageChatChangeTitle:
@@ -151,7 +153,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
             "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {
                   "{title}": chat.title!
                 })}",
-            TextDisplay.chatItemAccent);
+            textStyle);
         break;
 
       case MessageSupergroupChatCreate:
@@ -166,14 +168,12 @@ class ChatItemLastMessageContent extends StatelessWidget {
 
       case MessageAudio:
         displayContent = TextDisplay.parseEmojiInString(
-            "🎵 ${client.getTranslation("lng_media_music_title")}",
-            TextDisplay.chatItemAccent);
+            "🎵 ${client.getTranslation("lng_media_music_title")}", textStyle);
         break;
 
       case MessageVoiceNote:
         displayContent = TextDisplay.parseEmojiInString(
-            "🎤 ${client.getTranslation("lng_media_audio")}",
-            TextDisplay.chatItemAccent);
+            "🎤 ${client.getTranslation("lng_media_audio")}", textStyle);
         break;
 
       default:
@@ -188,9 +188,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
                   messageTypeAllowShowFrom
                       ? (showAuthor ? "$lastMessageSenderName: " : "")
                       : "",
-                  TextDisplay.create(
-                      size: 18,
-                      textColor: draft ? TextColor.Draft : TextColor.Accent)) +
+                  draft ? TextDisplay.draftText : textStyle) +
               [
                 WidgetSpan(
                     child: chat.lastMessage!.forwardInfo != null
@@ -203,7 +201,8 @@ class ChatItemLastMessageContent extends StatelessWidget {
                         : const SizedBox.shrink()),
               ] +
               displayContent +
-              TextDisplay.parseFormattedText(text, 18),
+              TextDisplay.parseFormattedText(text, 18,
+                  chatSelected ? TextColor.White : TextColor.RegularText),
         ));
   }
 

@@ -6,6 +6,7 @@ import 'package:myapp/Widgets/unread_mention_bubble.dart';
 class ChatItemBase extends StatelessWidget {
   const ChatItemBase(
       {Key? key,
+      required this.selected,
       this.icon,
       this.content,
       this.title,
@@ -14,6 +15,7 @@ class ChatItemBase extends StatelessWidget {
       this.chatPic,
       this.onClick})
       : super(key: key);
+  final bool selected;
   final Icon? icon;
   final int unread;
   final int unreadMention;
@@ -38,13 +40,21 @@ class ChatItemBase extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0))),
               animationDuration: const Duration(milliseconds: 200),
               padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+              backgroundColor: selected
+                  ? MaterialStateProperty.all(ClientTheme.currentTheme
+                      .getField("ChatCurrentlySelectedColor"))
+                  : null,
               overlayColor: MaterialStateProperty.resolveWith((states) {
                 String themeStr = "ChatUnselectedColor";
-                if (states.contains(MaterialState.pressed)) {
-                  themeStr = "ChatClickAnimationEffectColor";
-                } else if (states.contains(MaterialState.hovered) ||
-                    states.contains(MaterialState.focused)) {
-                  themeStr = "ChatSelectedColor";
+                if (!selected) {
+                  if (states.contains(MaterialState.pressed)) {
+                    themeStr = "ChatClickAnimationEffectColor";
+                  } else if (states.contains(MaterialState.hovered) ||
+                      states.contains(MaterialState.focused)) {
+                    themeStr = "ChatSelectedColor";
+                  }
+                } else {
+                  themeStr = "ChatCurrentlySelectedColor";
                 }
                 return ClientTheme.currentTheme.getField(themeStr);
               })),
