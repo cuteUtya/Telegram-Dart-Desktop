@@ -9,6 +9,7 @@ import 'package:myapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:isolate';
 import 'package:async/async.dart' show StreamGroup;
+import 'dart:collection';
 
 import "src/td_json_client.dart" show JsonClient;
 import "src/tdapi/tdapi.dart" hide Text;
@@ -497,7 +498,7 @@ class TelegramClient {
         (event) => _secretChats[event.secretChat!.id!] = event.secretChat!);
   }
 
-  List<Chat> getChats() => _chats.values.toList();
+  Map<int, Chat> getChats() => _chats;
 
   final Map<int, SecretChat> _secretChats = {};
   SecretChat getSecretChat(int id) => _secretChats[id]!;
