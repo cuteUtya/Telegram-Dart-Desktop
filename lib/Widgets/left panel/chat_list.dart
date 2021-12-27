@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/chat_item_display_archive_not_hidden.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_display_chat.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
@@ -78,9 +79,13 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                 .firstWhere((e) => compareChatlists(e.list!, widget.chatList))
                 .order!));
 
-    var top = max(((virtualScrollOffset[widget.chatList] ?? 0) ~/ 88) - 4, 0);
-    var bottom =
-        min((top + MediaQuery.of(context).size.height ~/ 88) + 8, list.length);
+    var top = max(
+        ((virtualScrollOffset[widget.chatList] ?? 0) ~/ ChatItemBase.height) -
+            4,
+        0);
+    var bottom = min(
+        (top + MediaQuery.of(context).size.height ~/ ChatItemBase.height) + 8,
+        list.length);
 
     for (final chat in list) {
       if (keys[_getGlobalIdenteficator(chat)] == null) {
@@ -118,7 +123,8 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(
-                      top: (list.length + (isMain ? 1 : 0)) * 88),
+                      top: (list.length + (isMain ? 1 : 0)) *
+                          ChatItemBase.height),
                   child: Column(children: [
                     const SeparatorLine(),
                     Padding(
@@ -133,7 +139,7 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                     )
                   ]),
                 ),
-                Container(height: max(0, (list.length) * 88))
+                Container(height: max(0, (list.length) * ChatItemBase.height))
               ])
     ]);
   }

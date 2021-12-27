@@ -43,7 +43,7 @@ class ChatItemDisplay extends StatelessWidget {
     return AnimatedContainer(
         curve: Curves.decelerate,
         duration: const Duration(milliseconds: 400),
-        margin: EdgeInsets.only(top: order * 88),
+        margin: EdgeInsets.only(top: order * ChatItemBase.height),
         child: ChatItemBase(
             selected: selected,
             onClick: onClick,
