@@ -605,6 +605,12 @@ class TelegramClient {
     }
   }
 
+  Stream<int> onlineMemebersIn(int chatId) async* {
+    await for (final update in updateChatOnlineMemberCount) {
+      if (update.chatId == chatId) yield update.onlineMemberCount!;
+    }
+  }
+
   void _subscribeChatOnUpdates(int id, Function(Chat c) callback) {
     var base = getChat(id);
     void updateChat(Update u, Function() f) {

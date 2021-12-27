@@ -65,16 +65,28 @@ class ActionBarDisplay extends StatelessWidget {
                         data.data as UserStatus, user.type is UserTypeBot)
                     : const SizedBox.shrink())
           else
-            //TODO subscribe on memberscount update, show real online instead 0
-            Text(client
-                .getTranslation("lng_chat_status_members_online", replacing: {
-              "{members_count}": client.getTranslation(
-                  "lng_channel_members_link",
-                  replacing: {"{count}": membersCount.toString()},
-                  itemsCount: membersCount),
-              "{online_count}": client.getTranslation("lng_chat_status_online",
-                  replacing: {"{count}": 0.toString()}, itemsCount: 0)
-            })),
+            StreamBuilder(
+                key: UniqueKey(),
+                stream: client.onlineMemebersIn(chat.id!),
+                builder: (_, data) {
+                  var onlineCount = (data.data ?? 0) as int;
+                  return Text(client.getTranslation(
+                      onlineCount > 0
+                          ? "lng_chat_status_members_online"
+                          : "lng_chat_status_members",
+                      itemsCount: onlineCount,
+                      replacing: {
+                        "{count}": membersCount.toString(),
+                        "{members_count}": client.getTranslation(
+                            "lng_channel_members_link",
+                            replacing: {"{count}": membersCount.toString()},
+                            itemsCount: membersCount),
+                        "{online_count}": client.getTranslation(
+                            "lng_chat_status_online",
+                            replacing: {"{count}": onlineCount.toString()},
+                            itemsCount: onlineCount)
+                      }));
+                }),
         ]));
   }
 
