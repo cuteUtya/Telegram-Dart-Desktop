@@ -37,13 +37,6 @@ flutter:
        - asset: fonts/Ubuntu/Ubuntu-Bold.ttf
        - asset: fonts/Ubuntu/Ubuntu-Light.ttf
        - asset: fonts/Ubuntu/Ubuntu-Medium.ttf
-  - family: Roboto
-    fonts:
-       - asset: fonts/Roboto/Roboto-Regular.ttf
-       - asset: fonts/Roboto/Roboto-Italic.ttf
-       - asset: fonts/Roboto/Roboto-Bold.ttf
-       - asset: fonts/Roboto/Roboto-Light.ttf
-       - asset: fonts/Roboto/Roboto-Medium.ttf
   - family: TwitterColorEmoji
     fonts: 
         - asset: fonts/Emoji/TwitterColorEmoji.ttf
