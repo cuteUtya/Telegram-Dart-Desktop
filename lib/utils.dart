@@ -59,12 +59,9 @@ bool showChatInChatList(List<ChatPosition> poss, ChatList list) {
 }
 
 bool compareChatlists(ChatList a, ChatList b) {
-  return chatListToString(a) == chatListToString(b);
-}
-
-String chatListToString(ChatList list) {
-  if (list is! ChatListFilter) return list.runtimeType.toString();
-  return "${list.runtimeType.toString()} ${list.chatFilterId}";
+  return a.runtimeType == b.runtimeType &&
+      (a is ChatListFilter ? a.chatFilterId : 0) ==
+          (b is ChatListFilter ? b.chatFilterId : 0);
 }
 
 DateTime unixToDateTime(int unix) =>
