@@ -151,7 +151,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (!_init) {
-        mainContoller.jumpToPage(_currentPage);
+        if (_currentPage != 0) mainContoller.jumpToPage(_currentPage);
         _init = true;
       }
     });
