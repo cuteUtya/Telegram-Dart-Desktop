@@ -36,11 +36,10 @@ class ChatDisplayState extends State<ChatDisplay> {
                   type: BackgroundTypeFill(
                       fill: BackgroundFillFreeformGradient(
                           colors: [0xFF8CB58C, 0xFFC9D38B, 0xFF8CB58C])))),
-          Expanded(
-              child: Container(
-                  margin: const EdgeInsets.all(24),
-                  alignment: Alignment.bottomCenter,
-                  child: InputField(client: widget.client)))
+          Container(
+              margin: const EdgeInsets.all(24),
+              alignment: Alignment.bottomCenter,
+              child: InputField(client: widget.client))
         ]))
       ],
     );
