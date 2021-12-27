@@ -22,23 +22,23 @@ class ChatListsManager extends StatefulWidget {
 }
 
 class ChatListsManagerState extends State<ChatListsManager> {
-  static List<ChatFullInfo> _chats = [];
+  static List<Chat> _chats = [];
   static List<ChatList> _lists = [];
   static int _currentPage = 0;
 
   void _listenChatPosition() async {
     await for (final event in widget.client.updateChatPosition) {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      Chat? chat =
+          _chats.firstWhereOrNull((element) => element.id == event.chatId);
       if (chat == null) {
-        _chats.add(ChatFullInfo(
-          chat: widget.client.getChat(event.chatId!),
-        ));
+        _chats.add(
+          widget.client.getChat(event.chatId!),
+        );
       } else {
-        for (int i = 0; i < chat.chat.positions!.length; i++) {
+        for (int i = 0; i < chat.positions!.length; i++) {
           if (compareChatlists(
-              chat.chat.positions![i].list!, event.position!.list!)) {
-            chat.chat.positions![i] = event.position!;
+              chat.positions![i].list!, event.position!.list!)) {
+            chat.positions![i] = event.position!;
             break;
           }
         }
@@ -102,21 +102,21 @@ class ChatListsManagerState extends State<ChatListsManager> {
     _listenChatPosition();
     _subscriptions
         .add(widget.client.updateChatLastMessage.listen((event) async {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      Chat? chat =
+          _chats.firstWhereOrNull((element) => element.id == event.chatId);
       if (chat != null) {
-        chat.chat.positions = event.positions!;
-        chat.chat.lastMessage = event.lastMessage;
+        chat.positions = event.positions!;
+        chat.lastMessage = event.lastMessage;
         setState(() {});
       }
     }));
 
     _subscriptions.add(widget.client.updateChatDraftMessage.listen((event) {
-      ChatFullInfo? chat =
-          _chats.firstWhereOrNull((element) => element.chat.id == event.chatId);
+      Chat? chat =
+          _chats.firstWhereOrNull((element) => element.id == event.chatId);
       if (chat != null) {
-        chat.chat.draftMessage = event.draftMessage;
-        chat.chat.positions = event.positions;
+        chat.draftMessage = event.draftMessage;
+        chat.positions = event.positions;
         setState(() {});
       }
     }));
@@ -179,8 +179,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
                           key: _displayLists[_lists[index]]!,
                           onChatClick: _chatClickHandler,
                           client: widget.client,
-                          chatList: _lists[index],
-                          chats: _chats)))
+                          chatList: _lists[index])))
             ]);
           }
 
@@ -192,8 +191,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
                     selectedChatId: _selectedChatId,
                     client: widget.client,
                     chatList: ChatListArchive(),
-                    onChatClick: _chatClickHandler,
-                    chats: _chats)),
+                    onChatClick: _chatClickHandler)),
           );
         });
   }
@@ -209,10 +207,4 @@ class UsersJoinedGroupInfo {
   bool isJoin;
 
   String langKey;
-}
-
-class ChatFullInfo {
-  ChatFullInfo({required this.chat, this.order = 0});
-  Chat chat;
-  int order;
 }

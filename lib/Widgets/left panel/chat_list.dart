@@ -5,7 +5,6 @@ import 'package:myapp/Widgets/chat_item_display_archive_not_hidden.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_display_chat.dart';
-import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:collection/collection.dart';
@@ -16,14 +15,12 @@ class ChatListDisplay extends StatefulWidget {
       {Key? key,
       required this.client,
       required this.chatList,
-      required this.chats,
       required this.selectedChatId,
       this.onChatClick,
       this.onArchiveClick})
       : super(key: key);
   final TelegramClient client;
   final ChatList chatList;
-  final List<ChatFullInfo> chats;
   final Function()? onArchiveClick;
   final Function(int id)? onChatClick;
   final int? selectedChatId;
@@ -70,13 +67,14 @@ class ChatListDisplayState extends State<ChatListDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    var list = widget.chats
+    var allChats = widget.client.getChats().values.toList();
+    var list = allChats
         .where((element) =>
-            showChatInChatList(element.chat.positions!, widget.chatList))
-        .sorted((b, a) => a.chat.positions!
+            showChatInChatList(element.positions!, widget.chatList))
+        .sorted((b, a) => a.positions!
             .firstWhere((e) => compareChatlists(e.list!, widget.chatList))
             .order!
-            .compareTo(b.chat.positions!
+            .compareTo(b.positions!
                 .firstWhere((e) => compareChatlists(e.list!, widget.chatList))
                 .order!));
 
@@ -85,13 +83,14 @@ class ChatListDisplayState extends State<ChatListDisplay> {
         min((top + MediaQuery.of(context).size.height ~/ 88) + 8, list.length);
 
     for (final chat in list) {
-      if (keys[_getGlobalIdenteficator(chat.chat)] == null) {
-        keys[_getGlobalIdenteficator(chat.chat)] = GlobalKey();
+      if (keys[_getGlobalIdenteficator(chat)] == null) {
+        keys[_getGlobalIdenteficator(chat)] = GlobalKey();
       }
     }
 
     var sublist = list.sublist(top, bottom);
-    int order = -1;
+    bool isMain = (widget.chatList is ChatListMain);
+    int order = (isMain ? 0 : -1);
     return ListView(controller: listViewContoller, children: [
       Stack(
           children: [
@@ -99,32 +98,27 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                     ? ChatItemDisplayArchiveNotHidden(
                         onClick: widget.onArchiveClick,
                         client: widget.client,
-                        chats: widget.chats)
+                        chats: allChats)
                     : const SizedBox.shrink())
               ] +
               [
                 for (final chat in sublist)
                   ChatItemDisplay(
-                      selected: chat.chat.id == widget.selectedChatId,
+                      selected: chat.id == widget.selectedChatId,
                       onClick: () {
                         if (widget.onChatClick != null) {
-                          widget.onChatClick!(chat.chat.id!);
+                          widget.onChatClick!(chat.id!);
                         }
                       },
-                      order: ++order +
-                          top +
-                          ((widget.chatList is ChatListMain) ? 1 : 0),
-                      key: keys[_getGlobalIdenteficator(chat.chat)],
-                      chat: chat.chat,
+                      order: ++order + top,
+                      key: keys[_getGlobalIdenteficator(chat)],
+                      chat: chat,
                       client: widget.client,
                       chatList: widget.chatList),
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(
-                      top: (++order +
-                              top +
-                              ((widget.chatList is ChatListMain) ? 1 : 0)) *
-                          88),
+                      top: (list.length + (isMain ? 1 : 0)) * 88),
                   child: Column(children: [
                     const SeparatorLine(),
                     Padding(
