@@ -28,6 +28,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   void _listenChatPosition() async {
     await for (final event in widget.client.updateChatPosition) {
+      if (!mounted) break;
       Chat? chat =
           _chats.firstWhereOrNull((element) => element.id == event.chatId);
       if (chat == null) {
@@ -43,17 +44,13 @@ class ChatListsManagerState extends State<ChatListsManager> {
           }
         }
       }
-      if (mounted) {
-        setState(() {});
-      } else {
-        break;
-      }
+      setState(() {});
     }
   }
 
   void setChatLists(List<ChatList> lists) {
     lists.forEach((e) => _displayLists[e] = GlobalKey<ChatListDisplayState>());
-    setState(() => _lists = lists);
+    _lists = lists;
   }
 
   void setCurrentChatList(ChatList list) {
@@ -156,7 +153,6 @@ class ChatListsManagerState extends State<ChatListsManager> {
       }
     });
 
-    if (_chats.isEmpty) return Container();
     return PageView.builder(
         reverse: true,
         controller: mainArchiveContoller,
