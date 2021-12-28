@@ -13,6 +13,11 @@ class AppMain extends StatefulWidget {
 class _AppMainState extends State<AppMain> {
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      //start receive updates only if all UI elements was inited
+      widget.client.startReceiveUpdates();
+    });
+
     var chatKey = GlobalKey<ChatDisplayState>();
     return Row(children: [
       SizedBox(

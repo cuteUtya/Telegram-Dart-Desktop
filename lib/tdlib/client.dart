@@ -9,7 +9,6 @@ import 'package:myapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:isolate';
 import 'package:async/async.dart' show StreamGroup;
-import 'dart:collection';
 
 import "src/td_json_client.dart" show JsonClient;
 import "src/tdapi/tdapi.dart" hide Text;
@@ -729,9 +728,15 @@ class TelegramClient {
     return translate;
   }
 
-  List<ChatFilterInfo>? chatFilterInfo;
-  List<UpdateUnreadChatCount> cachedUnreadChatCountUpdates = [];
-  bool cacheUnreadChatCountUpdates = true;
+  List<Update> _cachedUpdates = [];
+  bool _shouldSendUpdates = false;
+
+  void startReceiveUpdates() {
+    _shouldSendUpdates = true;
+    for (var element in _cachedUpdates) {
+      _updates.add(element);
+    }
+  }
 
   Future<void> init() async {
     Completer completer = Completer<void>();
@@ -748,13 +753,11 @@ class TelegramClient {
         var tdobject = convertToObject(message);
         var extra = json.decode(message)["@extra"];
         if (extra == null) {
-          _updates.add(tdobject as Update);
-          if (tdobject is UpdateChatFilters) {
-            chatFilterInfo = tdobject.chatFilters;
-          }
-          if (tdobject is UpdateUnreadChatCount &&
-              cacheUnreadChatCountUpdates) {
-            cachedUnreadChatCountUpdates.add(tdobject);
+          tdobject as Update;
+          if (!_shouldSendUpdates && tdobject is! UpdateAuthorizationState) {
+            _cachedUpdates.add(tdobject);
+          } else {
+            _updates.add(tdobject);
           }
         } else {
           _requestsQueue[extra as int]!(tdobject);

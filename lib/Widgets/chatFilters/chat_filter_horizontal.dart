@@ -70,14 +70,9 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
   List<StreamSubscription> _subsciptions = [];
 
   void _subcribeOnUpdates() {
-    rebuildFilters(widget.client.chatFilterInfo ?? []);
     _subsciptions.add(widget.client.updateChatFilters.listen((event) {
       rebuildFilters(event.chatFilters!);
     }));
-    widget.client.cachedUnreadChatCountUpdates
-        .forEach((element) => _processUnreadChatCountUpdates(element));
-    widget.client.cacheUnreadChatCountUpdates = false;
-    widget.client.cachedUnreadChatCountUpdates.clear();
 
     _subsciptions.add(widget.client.updateUnreadChatCount
         .listen((event) => _processUnreadChatCountUpdates(event)));
