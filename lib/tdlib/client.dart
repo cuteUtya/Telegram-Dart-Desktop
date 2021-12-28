@@ -69,9 +69,9 @@ class TelegramClient {
       .where((u) => u is UpdateChatDraftMessage)
       .map((a) => (a as UpdateChatDraftMessage));
 
-  Stream<UpdateChatFilters> get updateChatFilters => updates
+  Stream<List<ChatFilterInfo>> get filters => updates
       .where((u) => u is UpdateChatFilters)
-      .map((a) => (a as UpdateChatFilters));
+      .map((a) => (a as UpdateChatFilters).chatFilters!);
 
   Stream<UpdateChatHasScheduledMessages> get updateChatHasScheduledMessages =>
       updates
@@ -328,7 +328,7 @@ class TelegramClient {
       .where((u) => u is UpdateSecretChat)
       .map((a) => (a as UpdateSecretChat));
 
-  Stream<UpdateSelectedBackground> get updateSelectedBackground => updates
+  Stream<UpdateSelectedBackground> get selectedBackground => updates
       .where((u) => u is UpdateSelectedBackground)
       .map((a) => (a as UpdateSelectedBackground));
 
@@ -558,12 +558,6 @@ class TelegramClient {
     }
   }
 
-  Stream<List<ChatFilterInfo>> filters() async* {
-    await for (final f in updateChatFilters) {
-      yield f.chatFilters!;
-    }
-  }
-
   Stream<String> titleOf(int chatId) async* {
     await for (final title in _updateChatTitle) {
       if (title.chatId == chatId) yield title.title!;
@@ -607,6 +601,20 @@ class TelegramClient {
   Stream<int> onlineMemebersIn(int chatId) async* {
     await for (final update in updateChatOnlineMemberCount) {
       if (update.chatId == chatId) yield update.onlineMemberCount!;
+    }
+  }
+
+  Stream<UpdateUnreadChatCount> unreadIn(ChatList chatList) async* {
+    int getChatListId(ChatList list) =>
+        list is ChatListFilter ? list.chatFilterId! : 0;
+    var listId = getChatListId(chatList);
+
+    await for (final update in updateUnreadChatCount) {
+      if (update.chatList.runtimeType == chatList.runtimeType) {
+        if (listId == getChatListId(update.chatList!)) {
+          yield update;
+        }
+      }
     }
   }
 

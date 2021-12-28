@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
 
 class ChatFilterItemHorizontal extends StatelessWidget {
   const ChatFilterItemHorizontal(
       {Key? key,
-      required this.info,
+      required this.id,
+      required this.title,
       required this.active,
       required this.onClick,
       required this.unread,
-      required this.unreadMention})
+      required this.unreadUnmuted})
       : super(key: key);
-  final ChatFilterFullInfo info;
+  final int id;
+  final String title;
   final bool active;
   final int unread;
-  final int unreadMention;
+  final int unreadUnmuted;
   final Function(int id) onClick;
 
   @override
@@ -25,7 +26,7 @@ class ChatFilterItemHorizontal extends StatelessWidget {
       duration: const Duration(milliseconds: 250),
       height: 2,
       child: GestureDetector(
-          onTap: () => onClick(info.id),
+          onTap: () => onClick(id),
           child: Padding(
               padding: const EdgeInsets.only(bottom: 4),
               child: Column(mainAxisSize: MainAxisSize.max, children: [
@@ -33,7 +34,7 @@ class ChatFilterItemHorizontal extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                           children: TextDisplay.parseEmojiInString(
-                              info.title,
+                              title,
                               TextDisplay.create(
                                   fontWeight: FontWeight.w400,
                                   fontFamily: TextDisplay.greaterImportance,
@@ -43,7 +44,7 @@ class ChatFilterItemHorizontal extends StatelessWidget {
                                       : TextColor.RegularText)))),
                   const SizedBox(width: 4),
                   UnreadCountBubble(
-                      count: unread, important: unreadMention > 0),
+                      count: unread, important: unreadUnmuted > 0),
                 ]),
               ]))),
     );

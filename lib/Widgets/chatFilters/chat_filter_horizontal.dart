@@ -11,9 +11,13 @@ import 'package:myapp/global_key_extenstion.dart';
 
 class ChatFilterFullInfo {
   ChatFilterFullInfo(
-      {required this.id, required this.title, required this.key});
+      {required this.id,
+      required this.title,
+      required this.list,
+      required this.key});
   String title;
   int id;
+  ChatList list;
   GlobalKey key;
 }
 
@@ -32,72 +36,12 @@ class ChatFilterHorizontal extends StatefulWidget {
 }
 
 class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
-  static List<ChatFilterFullInfo> filters = [];
-  static Map<int, int> unreadInFolders = {};
-  static Map<int, int> unreadImportantInFolders = {};
   static int active = -1;
-
-  void rebuildFilters(List<ChatFilterInfo> folders) {
-    filters.clear();
-    filters.add(ChatFilterFullInfo(
-        id: -1,
-        title: widget.client.getTranslation("lng_filters_all"),
-        key: GlobalKey()));
-    folders.forEach((element) {
-      filters.add(ChatFilterFullInfo(
-          id: element.id!, title: element.title!, key: GlobalKey()));
-    });
-    widget.onChatFiltersChange(<ChatList>[ChatListMain()] +
-        folders.map((e) => ChatListFilter(chatFilterId: e.id)).toList());
-    setState(() {});
-  }
-
-  void _processUnreadChatCountUpdates(UpdateUnreadChatCount update) {
-    if (update.chatList is ChatListMain) {
-      setState(() {
-        unreadInFolders[-1] = update.unreadCount!;
-        unreadImportantInFolders[-1] = update.unreadUnmutedCount!;
-      });
-    } else if (update.chatList is ChatListFilter) {
-      setState(() {
-        var id = (update.chatList as ChatListFilter).chatFilterId!;
-        unreadInFolders[id] = update.unreadCount!;
-        unreadImportantInFolders[id] = update.unreadUnmutedCount!;
-      });
-    }
-  }
-
-  List<StreamSubscription> _subsciptions = [];
-
-  void _subcribeOnUpdates() {
-    _subsciptions.add(widget.client.updateChatFilters.listen((event) {
-      rebuildFilters(event.chatFilters!);
-    }));
-
-    _subsciptions.add(widget.client.updateUnreadChatCount
-        .listen((event) => _processUnreadChatCountUpdates(event)));
-  }
-
-  @override
-  void dispose() {
-    _subsciptions.forEach((element) => element.cancel());
-    super.dispose();
-  }
-
   ScrollController _scrollController = ScrollController();
-
-  bool _init = false;
+  Map<int, GlobalKey> _filtersKeys = {};
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      if (!_init) {
-        _init = true;
-        _subcribeOnUpdates();
-        _scrollController.addListener(() => setState(() {}));
-      }
-    });
-    if (filters.length <= 1) return const SizedBox.shrink();
     return Container(
         height: 36,
         margin: const EdgeInsets.only(left: 12),
@@ -106,27 +50,59 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
               dragDevices: PointerDeviceKind.values.toSet(),
             ),
             child: Stack(children: [
-              ListView(
-                  controller: _scrollController,
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    for (final filter in filters)
-                      Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: ChatFilterItemHorizontal(
-                              key: filter.key,
-                              unread: unreadInFolders[filter.id] ?? 0,
-                              unreadMention:
-                                  unreadImportantInFolders[filter.id] ?? 0,
-                              onClick: (id) {
-                                setState(() => active = id);
-                                widget.onChatListSelect(id == -1
-                                    ? ChatListMain()
-                                    : ChatListFilter(chatFilterId: id));
-                              },
-                              info: filter,
-                              active: filter.id == active))
-                  ]),
+              StreamBuilder(
+                  stream: widget.client.filters,
+                  builder: (_, data) {
+                    var filters = <ChatFilterInfo>[
+                      ChatFilterInfo(
+                          id: -1,
+                          title:
+                              widget.client.getTranslation("lng_filters_all"))
+                    ];
+                    if (data.hasData) {
+                      filters.addAll(data.data as List<ChatFilterInfo>);
+                    }
+                    filters.forEach((e) {
+                      if (_filtersKeys[e.id!] == null) {
+                        _filtersKeys[e.id!] = GlobalKey();
+                      }
+                    });
+                    return ListView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          for (final filter in filters)
+                            Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: StreamBuilder(
+                                    stream: widget.client.unreadIn(
+                                        ChatListFilter(
+                                            chatFilterId: filter.id)),
+                                    builder: (_, data) {
+                                      var unreadUpdate = data.data == null
+                                          ? null
+                                          : data.data as UpdateUnreadChatCount;
+                                      return ChatFilterItemHorizontal(
+                                          key: _filtersKeys[filter.id!],
+                                          id: filter.id!,
+                                          title: filter.title!,
+                                          unread:
+                                              unreadUpdate?.unreadCount ?? 0,
+                                          unreadUnmuted: unreadUpdate
+                                                  ?.unreadUnmutedCount ??
+                                              0,
+                                          onClick: (id) {
+                                            setState(() => active = id);
+                                            widget.onChatListSelect(id == -1
+                                                ? ChatListMain()
+                                                : ChatListFilter(
+                                                    chatFilterId: id));
+                                          },
+                                          active: filter.id == active);
+                                    }))
+                        ]);
+                  }),
               AnimatedContainer(
                   curve: Curves.decelerate,
                   duration: const Duration(milliseconds: 300),
@@ -147,11 +123,11 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     var margin = _getCurrentFolderLeftMargin();
     return max(
         0,
-        ((filters[max(active - 1, 0)].key.globalPaintBounds?.width) ?? 0) +
+        ((_filtersKeys[active]?.globalPaintBounds?.width) ?? 0) +
             (margin < 0 ? margin : 0));
   }
 
   double _getCurrentFolderLeftMargin() {
-    return (filters[max(active - 1, 0)].key.globalPaintBounds?.left ?? 0) - 16;
+    return (_filtersKeys[active]?.globalPaintBounds?.left ?? 0) - 16;
   }
 }
