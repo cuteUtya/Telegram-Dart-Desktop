@@ -47,7 +47,12 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                               widget.client.getTranslation("lng_filters_all"))
                     ];
                     if (data.hasData) {
-                      filters.addAll(data.data as List<ChatFilterInfo>);
+                      var f = data.data as List<ChatFilterInfo>;
+                      widget.onChatFiltersChange(<ChatList>[ChatListMain()] +
+                          (f
+                              .map((e) => ChatListFilter(chatFilterId: e.id!))
+                              .toList()));
+                      filters.addAll(f);
                     }
                     for (var e in filters) {
                       if (_filtersKeys[e.id!] == null) {
