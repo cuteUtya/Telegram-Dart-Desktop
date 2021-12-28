@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/gestures.dart';
@@ -8,18 +7,6 @@ import 'package:myapp/Widgets/chatFilters/chat_filter_item_horizontal.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/global_key_extenstion.dart';
-
-class ChatFilterFullInfo {
-  ChatFilterFullInfo(
-      {required this.id,
-      required this.title,
-      required this.list,
-      required this.key});
-  String title;
-  int id;
-  ChatList list;
-  GlobalKey key;
-}
 
 class ChatFilterHorizontal extends StatefulWidget {
   const ChatFilterHorizontal(
@@ -37,8 +24,8 @@ class ChatFilterHorizontal extends StatefulWidget {
 
 class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
   static int active = -1;
-  ScrollController _scrollController = ScrollController();
-  Map<int, GlobalKey> _filtersKeys = {};
+  final ScrollController _scrollController = ScrollController();
+  final Map<int, GlobalKey> _filtersKeys = {};
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +49,11 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                     if (data.hasData) {
                       filters.addAll(data.data as List<ChatFilterInfo>);
                     }
-                    filters.forEach((e) {
+                    for (var e in filters) {
                       if (_filtersKeys[e.id!] == null) {
                         _filtersKeys[e.id!] = GlobalKey();
                       }
-                    });
+                    }
                     return ListView(
                         controller: _scrollController,
                         scrollDirection: Axis.horizontal,
