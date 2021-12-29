@@ -5,6 +5,7 @@ import 'package:myapp/Widgets/smooth_number_counter.dart';
 import 'package:myapp/Widgets/text_animation.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
+import 'package:myapp/tdlib/tdlibUtils.dart';
 
 class ChatItemActionDisplay extends StatelessWidget {
   const ChatItemActionDisplay(
@@ -16,7 +17,7 @@ class ChatItemActionDisplay extends StatelessWidget {
       required this.chatid})
       : super(key: key);
   final bool chatSelected;
-  final Map<String, ChatAction> actions;
+  final Map<MessageSender, ChatAction> actions;
   final TelegramClient client;
   final int chatid;
   final bool isPrivate;
@@ -60,8 +61,8 @@ class ChatItemActionDisplay extends StatelessWidget {
     String? transitionStr;
     Widget? animation;
     String secondUser = "";
-    var firstName = actions.keys.elementAt(0);
-    var firstAction = actions[firstName];
+    var firstName = getSenderName(actions.keys.elementAt(0), client);
+    var firstAction = actions[actions.keys.elementAt(0)];
     if (actions.length <= 1) {
       if (typesWithProgress.contains(firstAction.runtimeType)) {
         animation = createUploadAnimation(
@@ -73,7 +74,7 @@ class ChatItemActionDisplay extends StatelessWidget {
     } else {
       transitionStr =
           actions.length == 2 ? "lng_users_typing" : "lng_many_typing";
-      secondUser = actions.keys.elementAt(1);
+      secondUser = getSenderName(actions.keys.elementAt(1), client);
     }
 
     var textStyle = chatSelected

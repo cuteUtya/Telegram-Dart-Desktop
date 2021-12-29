@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:myapp/tdlib/tdlibUtils.dart';
 import "package:path/path.dart" as path;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
@@ -68,10 +69,6 @@ class TelegramClient {
   Stream<UpdateChatDraftMessage> get updateChatDraftMessage => updates
       .where((u) => u is UpdateChatDraftMessage)
       .map((a) => (a as UpdateChatDraftMessage));
-
-  Stream<List<ChatFilterInfo>> get filters => updates
-      .where((u) => u is UpdateChatFilters)
-      .map((a) => (a as UpdateChatFilters).chatFilters!);
 
   Stream<UpdateChatHasScheduledMessages> get updateChatHasScheduledMessages =>
       updates
@@ -536,24 +533,34 @@ class TelegramClient {
     if (key != null) return getTranslation(key);
   }
 
-  Stream<Map<String, ChatAction>?> actionsOf(int chatId) async* {
-    Map<int, ChatAction> actions = {};
+  Stream<Map<MessageSender, ChatAction>?> actionsOf(int chatId) async* {
+    int senderId(MessageSender s) {
+      return s is MessageSenderChat
+          ? s.chatId!
+          : (s as MessageSenderUser).userId!;
+    }
+
+    Map<MessageSender, ChatAction> actions = {};
     await for (var a in _updateChatAction) {
       if (a.chatId == chatId) {
-        var id = a.senderId is MessageSenderChat
-            ? (a.senderId as MessageSenderChat).chatId
-            : (a.senderId as MessageSenderUser).userId;
-        actions[id!] = a.action!;
-        if (a.action is ChatActionCancel) actions.remove(id);
-        if (actions.isNotEmpty) {
-          Map<String, ChatAction> result = {};
-          actions.forEach((key, value) async =>
-              result[(await send(GetUser(userId: key)) as User).firstName!] =
-                  value);
-          yield result;
-        } else {
-          yield null;
+        actions[a.senderId!] = a.action!;
+        if (a.action is ChatActionCancel) {
+          var keyList = actions.keys.toList();
+          for (int i = 0; i < actions.length; i++) {
+            if (senderId(keyList[i]) == senderId(a.senderId!)) {
+              actions.remove(keyList[i]);
+            }
+          }
         }
+        yield actions;
+      }
+    }
+  }
+
+  Stream<List<ChatFilterInfo>> filters() async* {
+    await for (final update in _updates) {
+      if (update is UpdateChatFilters) {
+        yield update.chatFilters!;
       }
     }
   }
@@ -736,7 +743,7 @@ class TelegramClient {
     return translate;
   }
 
-  List<Update> _cachedUpdates = [];
+  final List<Update> _cachedUpdates = [];
   bool _shouldSendUpdates = false;
 
   void startReceiveUpdates() {
