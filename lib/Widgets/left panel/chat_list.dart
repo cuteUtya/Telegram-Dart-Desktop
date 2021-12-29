@@ -31,7 +31,7 @@ class ChatListDisplay extends StatefulWidget {
 }
 
 class ChatListDisplayState extends State<ChatListDisplay> {
-  static Map<String, GlobalKey> keys = {};
+  Map<String, GlobalKey> keys = {};
   static const double cachedItemspx = 100;
   late ScrollController listViewContoller = ScrollController(
       initialScrollOffset: lastRealScrollOffset[widget.chatList] ?? 0);
@@ -117,7 +117,7 @@ class ChatListDisplayState extends State<ChatListDisplay> {
                       },
                       order: ++order + top,
                       key: keys[_getGlobalIdenteficator(chat)],
-                      chat: chat,
+                      chatId: chat.id!,
                       client: widget.client,
                       chatList: widget.chatList),
                 Container(

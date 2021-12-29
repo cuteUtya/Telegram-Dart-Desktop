@@ -7,7 +7,6 @@ import 'package:myapp/Widgets/left%20panel/chat_item_action_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_last_message_content.dart';
 import 'package:myapp/Widgets/Userpic/chat_photo_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
-import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -18,20 +17,22 @@ class ChatItemDisplay extends StatelessWidget {
   ChatItemDisplay(
       {Key? key,
       required this.selected,
-      required this.chat,
+      required this.chatId,
       required this.client,
       required this.chatList,
       required this.order,
       this.onClick})
       : super(key: key);
   final bool selected;
-  final Chat chat;
+  final int chatId;
   final int order;
   final TelegramClient client;
   final ChatList chatList;
   final Function()? onClick;
 
   static const bool USE_HORIZONTAL_SEPARATOR = false;
+  late Chat chat = client.getChat(chatId);
+
   bool get pinned =>
       chat.positions
           ?.firstWhere((element) => compareChatlists(element.list!, chatList))
@@ -142,16 +143,16 @@ class ChatItemDisplay extends StatelessWidget {
                     child: StreamBuilder(
                         stream: client.actionsOf(chat.id!),
                         builder: (_, data) {
-                          if (data.hasData && data.data != null) {
-                            if ((data.data as Map<String, ChatAction>)
-                                .isNotEmpty) {
+                          if (data.hasData) {
+                            var actions =
+                                data.data as Map<MessageSender, ChatAction>;
+                            if (actions.isNotEmpty) {
                               return ChatItemActionDisplay(
                                   chatSelected: selected,
                                   isPrivate: interlocutor != null,
                                   chatid: chat.id!,
                                   client: client,
-                                  actions:
-                                      data.data as Map<String, ChatAction>);
+                                  actions: actions);
                             }
                           }
                           return ChatItemLastMessageContent(
