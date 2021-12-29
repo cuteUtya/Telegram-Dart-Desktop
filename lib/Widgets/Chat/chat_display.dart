@@ -1,47 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
 import 'package:myapp/Widgets/Chat/input_field.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/Widgets/background_display.dart';
 
-class ChatDisplay extends StatefulWidget {
-  const ChatDisplay({Key? key, required this.client, this.chat})
-      : super(key: key);
+class ChatDisplay extends StatelessWidget {
+  const ChatDisplay({Key? key, required this.client}) : super(key: key);
   final TelegramClient client;
-  final Chat? chat;
-  @override
-  State<StatefulWidget> createState() => ChatDisplayState();
-}
-
-class ChatDisplayState extends State<ChatDisplay> {
-  late Chat? chat = widget.chat;
-
-  void changeChat(Chat newchat) => setState(() => chat = newchat);
 
   @override
   Widget build(BuildContext context) {
-    if (chat == null) return const SizedBox.shrink();
-    return Column(
-      children: [
-        ActionBarDisplay(
-          client: widget.client,
-          chat: chat!,
-        ),
-        Expanded(
-            child: Stack(children: [
-          BakgroundDisplay(
-              client: widget.client,
-              background: Background(
-                  type: BackgroundTypeFill(
-                      fill: BackgroundFillFreeformGradient(
-                          colors: [0xFF8CB58C, 0xFFC9D38B, 0xFF8CB58C])))),
-          Container(
-              margin: const EdgeInsets.all(24),
-              alignment: Alignment.bottomCenter,
-              child: InputField(client: widget.client))
-        ]))
-      ],
-    );
+    return StreamBuilder(
+        stream: UIEvents.selectedChat(),
+        builder: (_, data) {
+          var chat =
+              data.data != null ? client.getChat(data.data as int) : null;
+          return Column(
+            children: [
+              if (chat != null)
+                ActionBarDisplay(
+                  client: client,
+                  chat: chat,
+                ),
+              Expanded(
+                  child: Stack(children: [
+                StreamBuilder(
+                    stream: client.selectedBackground,
+                    builder: (_, data) => BakgroundDisplay(
+                        client: client,
+                        background:
+                            //TODO correct work with dark and light themes
+                            data.data == null
+                                ? null
+                                : (data.data as UpdateSelectedBackground)
+                                    .background)),
+                if (chat != null)
+                  Container(
+                      margin: const EdgeInsets.all(24),
+                      alignment: Alignment.bottomCenter,
+                      child: InputField(client: client))
+              ]))
+            ],
+          );
+        });
   }
 }

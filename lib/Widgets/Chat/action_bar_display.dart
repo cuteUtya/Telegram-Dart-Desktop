@@ -6,7 +6,6 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
 import 'package:myapp/tdlib/tdlibUtils.dart';
 import 'package:myapp/utils.dart';
-import 'package:path/path.dart';
 
 class ActionBarDisplay extends StatelessWidget {
   const ActionBarDisplay({Key? key, required this.client, required this.chat})
