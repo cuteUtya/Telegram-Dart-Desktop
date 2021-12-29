@@ -15,7 +15,8 @@ class _AppMainState extends State<AppMain> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       //start receive updates only if all UI elements was inited
-      widget.client.startReceiveUpdates();
+      Future.delayed(Duration.zero)
+          .then((value) => widget.client.startReceiveUpdates());
     });
 
     var chatKey = GlobalKey<ChatDisplayState>();
