@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Chat/chat_display.dart';
+import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
 
@@ -14,6 +16,7 @@ class LeftPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var listsManager = GlobalKey<ChatListsManagerState>();
     return Padding(
         padding: const EdgeInsets.only(top: 12),
         child: Column(children: [
@@ -46,9 +49,16 @@ class LeftPanel extends StatelessWidget {
                             const BorderRadius.all(Radius.circular(12))))),
           ]),
           const SizedBox(height: 12),
+          ChatFilterHorizontal(
+              client: client,
+              onChatFiltersChange: (c) =>
+                  listsManager.currentState?.setChatLists(c),
+              onChatListSelect: (l) =>
+                  listsManager.currentState?.setCurrentChatList(l)),
+          const SeparatorLine(),
           Expanded(
               child: ChatListsManager(
-                  key: key,
+                  key: listsManager,
                   client: client,
                   chatDisplayPointer: chatDisplayPointer))
         ]));

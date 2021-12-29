@@ -159,24 +159,15 @@ class ChatListsManagerState extends State<ChatListsManager> {
         itemCount: 2,
         itemBuilder: (_, i) {
           if (i == 0) {
-            return Column(children: [
-              ChatFilterHorizontal(
-                  client: widget.client,
-                  onChatFiltersChange: (c) => setChatLists(c),
-                  onChatListSelect: (l) => setCurrentChatList(l)),
-              const SeparatorLine(),
-              Expanded(
-                  child: PageView.builder(
-                      controller: mainContoller,
-                      itemCount: _lists.length,
-                      itemBuilder: (context, index) => ChatListDisplay(
-                          selectedChatId: _selectedChatId,
-                          onArchiveClick: () => _switchLists(1),
-                          key: _displayLists[_lists[index]]!,
-                          onChatClick: _chatClickHandler,
-                          client: widget.client,
-                          chatList: _lists[index])))
-            ]);
+            return PageView.builder(
+                controller: mainContoller,
+                itemCount: _lists.length,
+                itemBuilder: (context, index) => ChatListDisplay(
+                    selectedChatId: _selectedChatId,
+                    onArchiveClick: () => _switchLists(1),
+                    onChatClick: _chatClickHandler,
+                    client: widget.client,
+                    chatList: _lists[index]));
           }
 
           return RevertiblePage(

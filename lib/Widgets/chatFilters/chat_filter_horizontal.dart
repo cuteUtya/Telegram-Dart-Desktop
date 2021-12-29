@@ -38,7 +38,7 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
             ),
             child: Stack(children: [
               StreamBuilder(
-                  stream: widget.client.filters,
+                  stream: widget.client.filters(),
                   builder: (_, data) {
                     var filters = <ChatFilterInfo>[
                       ChatFilterInfo(
