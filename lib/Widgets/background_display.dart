@@ -9,18 +9,19 @@ class BakgroundDisplay extends StatelessWidget {
   const BakgroundDisplay(
       {Key? key, required this.background, required this.client})
       : super(key: key);
-  final Background background;
+  final Background? background;
   final TelegramClient client;
   @override
   Widget build(BuildContext context) {
-    switch (background.type.runtimeType) {
+    if (background == null) return const SizedBox.shrink();
+    switch (background!.type.runtimeType) {
       case BackgroundTypeWallpaper:
         return FileImageDisplay(
-            id: background.document!.document!.id!, client: client);
+            id: background!.document!.document!.id!, client: client);
       case BackgroundTypeFill:
-        if ((background.type as BackgroundTypeFill).fill
+        if ((background!.type as BackgroundTypeFill).fill
             is BackgroundFillFreeformGradient) {
-          var colors = ((background.type as BackgroundTypeFill).fill!
+          var colors = ((background!.type as BackgroundTypeFill).fill!
                   as BackgroundFillFreeformGradient)
               .colors!
               .map((n) => Color(n))
