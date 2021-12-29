@@ -19,12 +19,11 @@ class _AppMainState extends State<AppMain> {
           .then((value) => widget.client.startReceiveUpdates());
     });
 
-    var chatKey = GlobalKey<ChatDisplayState>();
     return Row(children: [
       SizedBox(
           width: MediaQuery.of(context).size.width * 0.25,
-          child: LeftPanel(client: widget.client, chatDisplayPointer: chatKey)),
-      Expanded(child: ChatDisplay(client: widget.client, key: chatKey))
+          child: LeftPanel(client: widget.client)),
+      Expanded(child: ChatDisplay(client: widget.client))
     ]);
   }
 }

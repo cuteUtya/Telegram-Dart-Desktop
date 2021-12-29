@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/Widgets/chat_item_display_archive_not_hidden.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
@@ -16,15 +17,11 @@ class ChatListDisplay extends StatefulWidget {
       {Key? key,
       required this.client,
       required this.chatList,
-      required this.selectedChatId,
-      this.onChatClick,
       this.onArchiveClick})
       : super(key: key);
   final TelegramClient client;
   final ChatList chatList;
   final Function()? onArchiveClick;
-  final Function(int id)? onChatClick;
-  final int? selectedChatId;
 
   @override
   State<StatefulWidget> createState() => ChatListDisplayState();
@@ -109,12 +106,7 @@ class ChatListDisplayState extends State<ChatListDisplay> {
               [
                 for (final chat in sublist)
                   ChatItemDisplay(
-                      selected: chat.id == widget.selectedChatId,
-                      onClick: () {
-                        if (widget.onChatClick != null) {
-                          widget.onChatClick!(chat.id!);
-                        }
-                      },
+                      onClick: () => UIEvents.selectChat(chat.id),
                       order: ++order + top,
                       key: keys[_getGlobalIdenteficator(chat)],
                       chatId: chat.id!,
