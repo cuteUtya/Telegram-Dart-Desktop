@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:meta/meta.dart';
 import 'package:myapp/tdlib/tdlibUtils.dart';
 import "package:path/path.dart" as path;
 import 'package:flutter/material.dart' hide ConnectionState;
@@ -622,6 +623,12 @@ class TelegramClient {
           yield update;
         }
       }
+    }
+  }
+
+  Stream<Message?> lastMessageIn(int chatId) async* {
+    await for (final update in updateChatLastMessage) {
+      if (update.chatId == chatId) yield update.lastMessage;
     }
   }
 

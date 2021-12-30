@@ -22,6 +22,12 @@ class ChatListDisplay extends StatelessWidget {
   final List<ChatOrder> chatsPositions;
   final ScrollController? scrollController;
 
+  String _chatListStr(ChatList obj) {
+    if (obj is ChatListMain) return "m";
+    if (obj is ChatListArchive) return "a";
+    return "f${(obj as ChatListFilter).chatFilterId}";
+  }
+
   @override
   Widget build(BuildContext context) {
     var sorted = sortChatsFor(chatsPositions, chatList);
@@ -56,7 +62,8 @@ class ChatListDisplay extends StatelessWidget {
           }
           var order = sorted[index];
           return ChatItemDisplay(
-              key: Key("ChatItemDisplay?id=${order.chatId}"),
+              key: Key(
+                  "ChatItemDisplay?id=${order.chatId}?chatList=${_chatListStr(chatList)}"),
               onClick: () => UIEvents.selectChat(order.chatId),
               chatId: order.chatId,
               client: client,

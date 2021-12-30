@@ -37,7 +37,6 @@ class ChatItemDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var chat = client.getChat(chatId);
     return StreamBuilder(
         stream: UIEvents.selectedChat(),
         builder: (_, data) {
@@ -48,40 +47,53 @@ class ChatItemDisplay extends StatelessWidget {
               title: Row(children: [
                 Expanded(
                     child: StreamBuilder(
-                        stream: client.titleOf(chat.id!),
-                        initialData: chat.title,
-                        builder: (_, data) => ChatItemTitle(
-                            selected: selected,
-                            isBot: interlocutor(chat)?.type is UserTypeBot,
-                            isChannel: (supergroup(chat)?.isChannel) ?? false,
-                            isChat: (supergroup(chat) != null &&
-                                    !(supergroup(chat)?.isChannel ?? true)) ||
-                                chat.type is ChatTypeBasicGroup,
-                            title: (interlocutor(chat)?.type is UserTypeDeleted)
-                                ? client.getTranslation("lng_deleted")
-                                : (data.data ?? "").toString(),
-                            isScam: isScam(chat),
-                            isVerifed: isVerifed(chat),
-                            isSupport: isSupport(chat)))),
-                if (chat.lastMessage?.isOutgoing ?? false)
-                  StreamBuilder(
-                      initialData: chat.lastReadOutboxMessageId,
-                      builder: (context, data) {
-                        var value = false;
-                        if (data.hasData) {
-                          value =
-                              (chat.lastMessage?.id ?? 0) <= (data.data as int);
-                        }
+                        stream: client.titleOf(client.getChat(chatId).id!),
+                        initialData: client.getChat(chatId).title,
+                        builder: (_, data) {
+                          var chat = client.getChat(chatId);
+                          return ChatItemTitle(
+                              selected: selected,
+                              isBot: interlocutor(chat)?.type is UserTypeBot,
+                              isChannel: (supergroup(chat)?.isChannel) ?? false,
+                              isChat: (supergroup(chat) != null &&
+                                      !(supergroup(chat)?.isChannel ?? true)) ||
+                                  chat.type is ChatTypeBasicGroup,
+                              title:
+                                  (interlocutor(chat)?.type is UserTypeDeleted)
+                                      ? client.getTranslation("lng_deleted")
+                                      : (data.data ?? "").toString(),
+                              isScam: isScam(chat),
+                              isVerifed: isVerifed(chat),
+                              isSupport: isSupport(chat));
+                        })),
+                StreamBuilder(
+                    initialData: client.getChat(chatId).lastReadOutboxMessageId,
+                    builder: (context, data) {
+                      var value = false;
+                      if (data.hasData) {
+                        value = (client.getChat(chatId).lastMessage?.id ?? 0) <=
+                            (data.data as int);
+                      }
+                      if (client.getChat(chatId).lastMessage?.isOutgoing ??
+                          false) {
                         return CheckMark(isReaded: value);
-                      }),
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }),
                 const SizedBox(width: 2),
-                Text(getMessageTime(chat),
-                    textAlign: TextAlign.right,
-                    style: TextDisplay.create(
-                        size: 18,
-                        textColor: selected
-                            ? TextColor.SelectedChatLastTimedMessage
-                            : TextColor.ChatLastTimeMessage))
+                StreamBuilder(
+                    initialData: client.getChat(chatId).lastMessage,
+                    stream: client.lastMessageIn(chatId),
+                    builder: (_, data) => Text(
+                        getMessageTime(
+                            data.data != null ? data.data as Message : null),
+                        textAlign: TextAlign.right,
+                        style: TextDisplay.create(
+                            size: 18,
+                            textColor: selected
+                                ? TextColor.SelectedChatLastTimedMessage
+                                : TextColor.ChatLastTimeMessage))),
               ]),
               chatPic: Stack(children: [
                 Stack(alignment: Alignment.bottomRight, children: [
@@ -89,36 +101,40 @@ class ChatItemDisplay extends StatelessWidget {
                       height: 64,
                       width: 64,
                       child: StreamBuilder(
-                          stream: client.photoOf(chat.id!),
-                          initialData: chat.photo,
+                          stream: client.photoOf(chatId),
+                          initialData: client.getChat(chatId).photo,
                           builder: (_, data) => ChatPhotoDisplay(
                               photo: data.hasData
                                   ? data.data as ChatPhotoInfo
                                   : null,
-                              chatId: chat.id!,
-                              chatTitle: chat.title!,
+                              chatId: chatId,
+                              chatTitle: client.getChat(chatId).title!,
                               client: client))),
-                  if (interlocutor(chat) != null &&
-                      interlocutor(chat)?.type is UserTypeRegular)
+                  if (interlocutor(client.getChat(chatId)) != null &&
+                      interlocutor(client.getChat(chatId))?.type
+                          is UserTypeRegular)
                     StreamBuilder(
-                        stream: client.statusOf(interlocutor(chat)!.id!),
-                        initialData: interlocutor(chat)!.status,
+                        stream: client.statusOf(
+                            interlocutor(client.getChat(chatId))!.id!),
+                        initialData:
+                            interlocutor(client.getChat(chatId))!.status,
                         builder: (context, data) => OnlineIndicatorDidplay(
                             heigth: 20,
                             width: 20,
                             online: data.data is UserStatusOnline))
                 ]),
                 StreamBuilder(
-                    initialData: chat.unreadMentionCount!,
-                    stream: client.unreadMentionCountOf(chat.id!),
+                    initialData: client.getChat(chatId).unreadMentionCount!,
+                    stream: client.unreadMentionCountOf(chatId),
                     builder: (context, data) => UnreadCountBubble(
                         count: data.hasData ? data.data as int : 0,
                         important: true))
               ]),
               unreadPlaceHolder: StreamBuilder(
-                  initialData: chat.unreadCount,
-                  stream: client.unreadCountOf(chat.id!),
+                  initialData: client.getChat(chatId).unreadCount,
+                  stream: client.unreadCountOf(chatId),
                   builder: (context, data) {
+                    var chat = client.getChat(chatId);
                     if (data.hasData) {
                       chat.unreadCount = data.data as int;
                     }
@@ -138,7 +154,7 @@ class ChatItemDisplay extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: StreamBuilder(
-                          stream: client.actionsOf(chat.id!),
+                          stream: client.actionsOf(chatId),
                           builder: (_, data) {
                             if (data.hasData) {
                               var actions =
@@ -147,17 +163,17 @@ class ChatItemDisplay extends StatelessWidget {
                                 return ChatItemActionDisplay(
                                     chatSelected: selected,
                                     isPrivate: interlocutor != null,
-                                    chatid: chat.id!,
+                                    chatid: chatId,
                                     client: client,
                                     actions: actions);
                               }
                             }
                             return ChatItemLastMessageContent(
                                 chatSelected: selected,
-                                chat: chat,
+                                chat: client.getChat(chatId),
                                 client: client);
                           }))),
-              icon: pinned(chat)
+              icon: pinned(client.getChat(chatId))
                   ? Icon(Icons.push_pin,
                       color: ClientTheme.currentTheme.getField(selected
                           ? "SelectedChatPinIconColor"
@@ -206,27 +222,25 @@ class ChatItemDisplay extends StatelessWidget {
     return false;
   }
 
-  String getMessageTime(Chat chat) {
-    if (chat.lastMessage != null) {
-      var time = unixToDateTime(chat.lastMessage!.date!);
-      var now = DateTime.now();
-      var deltaInDays = (DateTime.now().difference(time) +
-              (const Duration(days: 1) -
-                  Duration(
-                      hours: now.hour,
-                      minutes: now.minute,
-                      seconds: now.second,
-                      milliseconds: now.millisecond)))
-          .inDays;
+  String getMessageTime(Message? message) {
+    if (message == null) return "";
+    var time = unixToDateTime(message.date!);
+    var now = DateTime.now();
+    var deltaInDays = (DateTime.now().difference(time) +
+            (const Duration(days: 1) -
+                Duration(
+                    hours: now.hour,
+                    minutes: now.minute,
+                    seconds: now.second,
+                    milliseconds: now.millisecond)))
+        .inDays;
 
-      if (deltaInDays <= 0) {
-        return getHHMM(time);
-      } else if (deltaInDays <= 7 && time.weekday < now.weekday) {
-        return "${client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time)})";
-      }
-
-      return "${validateDataComponent(time.day.toString())}.${validateDataComponent(time.month.toString())}.${time.year}";
+    if (deltaInDays <= 0) {
+      return getHHMM(time);
+    } else if (deltaInDays <= 7 && time.weekday < now.weekday) {
+      return "${client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time)})";
     }
-    return "";
+
+    return "${validateDataComponent(time.day.toString())}.${validateDataComponent(time.month.toString())}.${time.year}";
   }
 }
