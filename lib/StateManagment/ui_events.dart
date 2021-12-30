@@ -17,4 +17,9 @@ class UIEvents {
   static void selectChatList(ChatList newChatList) =>
       _currentChatList.add(newChatList);
   static Stream<ChatList> currentChatList() => _currentChatList.stream;
+
+  static final BehaviorSubject<bool> _archiveOpened = BehaviorSubject<bool>();
+  static void openArchive() => _archiveOpened.add(true);
+  static void closeArchive() => _archiveOpened.add(false);
+  static Stream<bool> archiveState() => _archiveOpened.stream;
 }

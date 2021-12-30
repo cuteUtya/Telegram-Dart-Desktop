@@ -15,172 +15,165 @@ import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
 
 class ChatItemDisplay extends StatelessWidget {
-  ChatItemDisplay(
+  const ChatItemDisplay(
       {Key? key,
       required this.chatId,
       required this.client,
       required this.chatList,
-      required this.order,
       this.onClick})
       : super(key: key);
   final int chatId;
-  final int order;
   final TelegramClient client;
   final ChatList chatList;
   final Function()? onClick;
 
-  static const bool USE_HORIZONTAL_SEPARATOR = false;
-  late Chat chat = client.getChat(chatId);
-
-  bool get pinned =>
+  bool pinned(Chat chat) =>
       chat.positions
           ?.firstWhere((element) => compareChatlists(element.list!, chatList))
           .isPinned ??
       false;
 
+  static int i = 0;
+
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-        curve: Curves.decelerate,
-        duration: const Duration(milliseconds: 400),
-        margin: EdgeInsets.only(top: order * ChatItemBase.height),
-        child: StreamBuilder(
-            stream: UIEvents.selectedChat(),
-            builder: (_, data) {
-              var selected = data.data == chatId;
-              return ChatItemBase(
-                  selected: selected,
-                  onClick: onClick,
-                  title: Row(children: [
-                    Expanded(
-                        child: StreamBuilder(
-                            stream: client.titleOf(chat.id!),
-                            initialData: chat.title,
-                            builder: (_, data) => ChatItemTitle(
-                                selected: selected,
-                                isBot: interlocutor?.type is UserTypeBot,
-                                isChannel: (supergroup?.isChannel) ?? false,
-                                isChat: (supergroup != null &&
-                                        !(supergroup?.isChannel ?? true)) ||
-                                    chat.type is ChatTypeBasicGroup,
-                                title: (interlocutor?.type is UserTypeDeleted)
-                                    ? client.getTranslation("lng_deleted")
-                                    : (data.data ?? "").toString(),
-                                isScam: isScam,
-                                isVerifed: isVerifed,
-                                isSupport: isSupport))),
-                    if (chat.lastMessage?.isOutgoing ?? false)
-                      StreamBuilder(
-                          initialData: chat.lastReadOutboxMessageId,
-                          builder: (context, data) {
-                            var value = false;
-                            if (data.hasData) {
-                              value = (chat.lastMessage?.id ?? 0) <=
-                                  (data.data as int);
-                            }
-                            return CheckMark(isReaded: value);
-                          }),
-                    const SizedBox(width: 2),
-                    Text(getMessageTime(),
-                        textAlign: TextAlign.right,
-                        style: TextDisplay.create(
-                            size: 18,
-                            textColor: selected
-                                ? TextColor.SelectedChatLastTimedMessage
-                                : TextColor.ChatLastTimeMessage))
-                  ]),
-                  chatPic: Stack(children: [
-                    Stack(alignment: Alignment.bottomRight, children: [
-                      SizedBox(
-                          height: 64,
-                          width: 64,
-                          child: StreamBuilder(
-                              stream: client.photoOf(chat.id!),
-                              initialData: chat.photo,
-                              builder: (_, data) => ChatPhotoDisplay(
-                                  photo: data.hasData
-                                      ? data.data as ChatPhotoInfo
-                                      : null,
-                                  chatId: chat.id!,
-                                  chatTitle: chat.title!,
-                                  client: client))),
-                      if (interlocutor != null &&
-                          interlocutor?.type is UserTypeRegular)
-                        StreamBuilder(
-                            stream: client.statusOf(interlocutor!.id!),
-                            initialData: interlocutor?.status,
-                            builder: (context, data) => OnlineIndicatorDidplay(
-                                heigth: 20,
-                                width: 20,
-                                online: data.data is UserStatusOnline))
-                    ]),
-                    StreamBuilder(
-                        initialData: chat.unreadMentionCount!,
-                        stream: client.unreadMentionCountOf(chat.id!),
-                        builder: (context, data) => UnreadCountBubble(
-                            count: data.hasData ? data.data as int : 0,
-                            important: true))
-                  ]),
-                  unreadPlaceHolder: StreamBuilder(
-                      initialData: chat.unreadCount,
-                      stream: client.unreadCountOf(chat.id!),
+    var chat = client.getChat(chatId);
+    return StreamBuilder(
+        stream: UIEvents.selectedChat(),
+        builder: (_, data) {
+          var selected = data.data == chatId;
+          return ChatItemBase(
+              selected: selected,
+              onClick: onClick,
+              title: Row(children: [
+                Expanded(
+                    child: StreamBuilder(
+                        stream: client.titleOf(chat.id!),
+                        initialData: chat.title,
+                        builder: (_, data) => ChatItemTitle(
+                            selected: selected,
+                            isBot: interlocutor(chat)?.type is UserTypeBot,
+                            isChannel: (supergroup(chat)?.isChannel) ?? false,
+                            isChat: (supergroup(chat) != null &&
+                                    !(supergroup(chat)?.isChannel ?? true)) ||
+                                chat.type is ChatTypeBasicGroup,
+                            title: (interlocutor(chat)?.type is UserTypeDeleted)
+                                ? client.getTranslation("lng_deleted")
+                                : (data.data ?? "").toString(),
+                            isScam: isScam(chat),
+                            isVerifed: isVerifed(chat),
+                            isSupport: isSupport(chat)))),
+                if (chat.lastMessage?.isOutgoing ?? false)
+                  StreamBuilder(
+                      initialData: chat.lastReadOutboxMessageId,
                       builder: (context, data) {
+                        var value = false;
                         if (data.hasData) {
-                          chat.unreadCount = data.data as int;
+                          value =
+                              (chat.lastMessage?.id ?? 0) <= (data.data as int);
                         }
-                        return StreamBuilder(
-                            initialData: chat.unreadMentionCount,
-                            stream: client.unreadMentionCountOf(chat.id!),
-                            builder: (context, data1) {
-                              if (data.hasData) {
-                                chat.unreadMentionCount = (data1.data as int);
-                              }
-                              return UnreadCountBubble(
-                                  count: chat.unreadCount!,
-                                  important:
-                                      (chat.unreadMentionCount ?? 0) != 0);
-                            });
+                        return CheckMark(isReaded: value);
                       }),
-                  content: Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: StreamBuilder(
-                              stream: client.actionsOf(chat.id!),
-                              builder: (_, data) {
-                                if (data.hasData) {
-                                  var actions = data.data
-                                      as Map<MessageSender, ChatAction>;
-                                  if (actions.isNotEmpty) {
-                                    return ChatItemActionDisplay(
-                                        chatSelected: selected,
-                                        isPrivate: interlocutor != null,
-                                        chatid: chat.id!,
-                                        client: client,
-                                        actions: actions);
-                                  }
-                                }
-                                return ChatItemLastMessageContent(
+                const SizedBox(width: 2),
+                Text(getMessageTime(chat),
+                    textAlign: TextAlign.right,
+                    style: TextDisplay.create(
+                        size: 18,
+                        textColor: selected
+                            ? TextColor.SelectedChatLastTimedMessage
+                            : TextColor.ChatLastTimeMessage))
+              ]),
+              chatPic: Stack(children: [
+                Stack(alignment: Alignment.bottomRight, children: [
+                  SizedBox(
+                      height: 64,
+                      width: 64,
+                      child: StreamBuilder(
+                          stream: client.photoOf(chat.id!),
+                          initialData: chat.photo,
+                          builder: (_, data) => ChatPhotoDisplay(
+                              photo: data.hasData
+                                  ? data.data as ChatPhotoInfo
+                                  : null,
+                              chatId: chat.id!,
+                              chatTitle: chat.title!,
+                              client: client))),
+                  if (interlocutor(chat) != null &&
+                      interlocutor(chat)?.type is UserTypeRegular)
+                    StreamBuilder(
+                        stream: client.statusOf(interlocutor(chat)!.id!),
+                        initialData: interlocutor(chat)!.status,
+                        builder: (context, data) => OnlineIndicatorDidplay(
+                            heigth: 20,
+                            width: 20,
+                            online: data.data is UserStatusOnline))
+                ]),
+                StreamBuilder(
+                    initialData: chat.unreadMentionCount!,
+                    stream: client.unreadMentionCountOf(chat.id!),
+                    builder: (context, data) => UnreadCountBubble(
+                        count: data.hasData ? data.data as int : 0,
+                        important: true))
+              ]),
+              unreadPlaceHolder: StreamBuilder(
+                  initialData: chat.unreadCount,
+                  stream: client.unreadCountOf(chat.id!),
+                  builder: (context, data) {
+                    if (data.hasData) {
+                      chat.unreadCount = data.data as int;
+                    }
+                    return StreamBuilder(
+                        initialData: chat.unreadMentionCount,
+                        stream: client.unreadMentionCountOf(chat.id!),
+                        builder: (context, data1) {
+                          if (data.hasData) {
+                            chat.unreadMentionCount = (data1.data as int);
+                          }
+                          return UnreadCountBubble(
+                              count: chat.unreadCount!,
+                              important: (chat.unreadMentionCount ?? 0) != 0);
+                        });
+                  }),
+              content: Expanded(
+                  child: Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: StreamBuilder(
+                          stream: client.actionsOf(chat.id!),
+                          builder: (_, data) {
+                            if (data.hasData) {
+                              var actions =
+                                  data.data as Map<MessageSender, ChatAction>;
+                              if (actions.isNotEmpty) {
+                                return ChatItemActionDisplay(
                                     chatSelected: selected,
-                                    chat: chat,
-                                    client: client);
-                              }))),
-                  icon: pinned
-                      ? Icon(Icons.push_pin,
-                          color: ClientTheme.currentTheme.getField(selected
-                              ? "SelectedChatPinIconColor"
-                              : "ChatPinIconColor"))
-                      : null);
-            }));
+                                    isPrivate: interlocutor != null,
+                                    chatid: chat.id!,
+                                    client: client,
+                                    actions: actions);
+                              }
+                            }
+                            return ChatItemLastMessageContent(
+                                chatSelected: selected,
+                                chat: chat,
+                                client: client);
+                          }))),
+              icon: pinned(chat)
+                  ? Icon(Icons.push_pin,
+                      color: ClientTheme.currentTheme.getField(selected
+                          ? "SelectedChatPinIconColor"
+                          : "ChatPinIconColor"))
+                  : null);
+        });
   }
 
-  Supergroup? get supergroup {
+  Supergroup? supergroup(Chat chat) {
     if (chat.type is ChatTypeSupergroup) {
       return client
           .getSupergroup((chat.type as ChatTypeSupergroup).supergroupId!);
     }
   }
 
-  User? get interlocutor {
+  User? interlocutor(Chat chat) {
     if (chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) {
       return client.getUser(chat.type is ChatTypePrivate
           ? (chat.type as ChatTypePrivate).userId!
@@ -188,32 +181,32 @@ class ChatItemDisplay extends StatelessWidget {
     }
   }
 
-  bool get isOnline {
+  bool isOnline(Chat chat) {
     if (interlocutor != null) {
-      if (interlocutor!.type is! UserTypeRegular) return false;
-      return interlocutor!.status is UserStatusOnline;
+      if (interlocutor(chat)?.type is! UserTypeRegular) return false;
+      return interlocutor(chat)?.status is UserStatusOnline;
     }
     return false;
   }
 
-  bool get isScam {
-    if (supergroup?.isScam ?? false) return true;
-    if (interlocutor?.isScam ?? false) return true;
+  bool isScam(Chat chat) {
+    if (supergroup(chat)?.isScam ?? false) return true;
+    if (interlocutor(chat)?.isScam ?? false) return true;
 
     return false;
   }
 
-  bool get isVerifed {
-    if (supergroup?.isVerified ?? false) return true;
+  bool isVerifed(Chat chat) {
+    if (supergroup(chat)?.isVerified ?? false) return true;
     return false;
   }
 
-  bool get isSupport {
-    if (interlocutor?.isSupport ?? false) return true;
+  bool isSupport(Chat chat) {
+    if (interlocutor(chat)?.isSupport ?? false) return true;
     return false;
   }
 
-  String getMessageTime() {
+  String getMessageTime(Chat chat) {
     if (chat.lastMessage != null) {
       var time = unixToDateTime(chat.lastMessage!.date!);
       var now = DateTime.now();

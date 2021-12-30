@@ -42,10 +42,8 @@ class ChatListsManagerState extends State<ChatListsManager> {
     }
   }
 
-  //TODO listen in UIEvents
   void setChatLists(List<ChatList> lists) => setState(() => _lists = lists);
 
-//TODO listen in UIEvents
   void setCurrentChatList(ChatList list) {
     var lastPage = _currentPage;
     if (list is ChatListMain) {
@@ -63,7 +61,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
     }
 
     if (lastPage == _currentPage) {
-      //jump to start
+      //TODO jump to start
     }
   }
 
@@ -79,7 +77,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   PageController mainContoller = PageController();
   PageController mainArchiveContoller = PageController();
-  List<StreamSubscription> _subscriptions = [];
+  final List<StreamSubscription> _subscriptions = [];
 
   void _updateChats() {
     widget.client.send(LoadChats(chatList: ChatListMain(), limit: 25));
@@ -108,6 +106,8 @@ class ChatListsManagerState extends State<ChatListsManager> {
         .listen((event) => setCurrentChatList(event)));
     _subscriptions
         .add(UIEvents.chatLists().listen((event) => setChatLists(event)));
+    _subscriptions.add(UIEvents.archiveState()
+        .listen((opened) => _switchLists(opened ? 1 : 0)));
     super.initState();
   }
 
@@ -131,8 +131,8 @@ class ChatListsManagerState extends State<ChatListsManager> {
     });
 
     return PageView.builder(
-        reverse: true,
         controller: mainArchiveContoller,
+        reverse: true,
         itemCount: 2,
         itemBuilder: (_, i) {
           if (i == 0) {
@@ -141,13 +141,12 @@ class ChatListsManagerState extends State<ChatListsManager> {
                 itemCount: _lists.length,
                 itemBuilder: (context, index) => ChatListDisplay(
                     chatsPositions: _chats,
-                    onArchiveClick: () => _switchLists(1),
                     client: widget.client,
                     chatList: _lists[index]));
           }
 
           return RevertiblePage(
-            onRevert: () => _switchLists(0),
+            onRevert: () => UIEvents.closeArchive(),
             title: widget.client.getTranslation("lng_archived_name"),
             content: Expanded(
                 child: ChatListDisplay(

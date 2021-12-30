@@ -1,5 +1,6 @@
 import "dart:io" show Platform;
 import "dart:math";
+import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
 double clamp(double value, double min, double max) {
@@ -56,6 +57,28 @@ bool showChatInChatList(List<ChatPosition> poss, ChatList list) {
     }
   });
   return result;
+}
+
+List<ChatOrder> sortChatsFor(List<ChatOrder> chats, ChatList forList) {
+  List<ChatOrder> list = chats
+      .where((element) => showChatInChatList(element.positions, forList))
+      .toList();
+  list.sort((b, a) => a.positions
+      .firstWhere((element) => compareChatlists(element.list!, forList))
+      .order!
+      .compareTo(b.positions
+          .firstWhere((element) => compareChatlists(element.list!, forList))
+          .order!));
+  for (int i = list.length - 1; i > 0; i--) {
+    var order = list[i]
+        .positions
+        .firstWhere((element) => compareChatlists(element.list!, forList))
+        .order;
+    if (order == 0) {
+      list.removeAt(i);
+    }
+  }
+  return list;
 }
 
 bool compareChatlists(ChatList a, ChatList b) {
