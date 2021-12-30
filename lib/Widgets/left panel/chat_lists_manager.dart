@@ -19,6 +19,7 @@ class ChatListsManager extends StatefulWidget {
 class ChatListsManagerState extends State<ChatListsManager> {
   static List<ChatOrder> _chats = [];
   static List<ChatList> _lists = [];
+  static Map<int, ScrollController> _scrollContollers = {};
   static int _currentPage = 0;
 
   void _listenChatPosition() async {
@@ -61,7 +62,7 @@ class ChatListsManagerState extends State<ChatListsManager> {
     }
 
     if (lastPage == _currentPage) {
-      //TODO jump to start
+      _scrollContollers[lastPage]?.jumpTo(0);
     }
   }
 
@@ -139,10 +140,16 @@ class ChatListsManagerState extends State<ChatListsManager> {
             return PageView.builder(
                 controller: mainContoller,
                 itemCount: _lists.length,
-                itemBuilder: (context, index) => ChatListDisplay(
-                    chatsPositions: _chats,
-                    client: widget.client,
-                    chatList: _lists[index]));
+                itemBuilder: (context, index) {
+                  if (_scrollContollers[index] == null) {
+                    _scrollContollers[index] = ScrollController();
+                  }
+                  return ChatListDisplay(
+                      scrollController: _scrollContollers[index],
+                      chatsPositions: _chats,
+                      client: widget.client,
+                      chatList: _lists[index]);
+                });
           }
 
           return RevertiblePage(

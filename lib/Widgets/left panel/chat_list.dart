@@ -3,7 +3,6 @@ import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/Widgets/chat_item_display_archive_not_hidden.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
-import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_display_chat.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -15,17 +14,20 @@ class ChatListDisplay extends StatelessWidget {
       {Key? key,
       required this.client,
       required this.chatList,
-      required this.chatsPositions})
+      required this.chatsPositions,
+      this.scrollController})
       : super(key: key);
   final TelegramClient client;
   final ChatList chatList;
   final List<ChatOrder> chatsPositions;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     var sorted = sortChatsFor(chatsPositions, chatList);
     bool isMain = chatList is ChatListMain;
     return ListView.builder(
+        controller: scrollController,
         itemCount: sorted.length + (isMain ? 1 : 0) + 1,
         itemBuilder: (_, index) {
           if (isMain) {
