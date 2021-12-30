@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_item_horizontal.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -9,15 +10,9 @@ import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/global_key_extenstion.dart';
 
 class ChatFilterHorizontal extends StatefulWidget {
-  const ChatFilterHorizontal(
-      {Key? key,
-      required this.client,
-      required this.onChatFiltersChange,
-      required this.onChatListSelect})
+  const ChatFilterHorizontal({Key? key, required this.client})
       : super(key: key);
   final TelegramClient client;
-  final Function(List<ChatList>) onChatFiltersChange;
-  final Function(ChatList) onChatListSelect;
   @override
   State<StatefulWidget> createState() => ChatFilterHorizontalState();
 }
@@ -48,7 +43,7 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                     ];
                     if (data.hasData) {
                       var f = data.data as List<ChatFilterInfo>;
-                      widget.onChatFiltersChange(<ChatList>[ChatListMain()] +
+                      UIEvents.changeChatList(<ChatList>[ChatListMain()] +
                           (f
                               .map((e) => ChatListFilter(chatFilterId: e.id!))
                               .toList()));
@@ -86,7 +81,7 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                                               0,
                                           onClick: (id) {
                                             setState(() => active = id);
-                                            widget.onChatListSelect(id == -1
+                                            UIEvents.selectChatList(id == -1
                                                 ? ChatListMain()
                                                 : ChatListFilter(
                                                     chatFilterId: id));

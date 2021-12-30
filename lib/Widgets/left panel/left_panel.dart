@@ -45,12 +45,7 @@ class LeftPanel extends StatelessWidget {
                             const BorderRadius.all(Radius.circular(12))))),
           ]),
           const SizedBox(height: 12),
-          ChatFilterHorizontal(
-              client: client,
-              onChatFiltersChange: (c) =>
-                  listsManager.currentState?.setChatLists(c),
-              onChatListSelect: (l) =>
-                  listsManager.currentState?.setCurrentChatList(l)),
+          ChatFilterHorizontal(client: client),
           const SeparatorLine(),
           Expanded(child: ChatListsManager(key: listsManager, client: client))
         ]));
