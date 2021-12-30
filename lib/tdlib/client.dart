@@ -481,18 +481,6 @@ class TelegramClient {
         me = (event.value as OptionValueInteger).value!;
       }
     });
-
-    updateNewChat.listen((event) {
-      _chats[event.id!] = event;
-      _subscribeChatOnUpdates(event.id!, (event) => _chats[event.id!] = event);
-    });
-    updateuser.listen((event) => _users[event.user!.id!] = event.user!);
-    updateBasicGroup.listen(
-        (event) => _basicGroups[event.basicGroup!.id!] = event.basicGroup!);
-    updateSupergroup.listen(
-        (event) => _supergroups[event.supergroup!.id!] = event.supergroup!);
-    updateSecretChat.listen(
-        (event) => _secretChats[event.secretChat!.id!] = event.secretChat!);
   }
 
   Map<int, Chat> getChats() => _chats;
@@ -632,75 +620,6 @@ class TelegramClient {
     }
   }
 
-  void _subscribeChatOnUpdates(int id, Function(Chat c) callback) {
-    var base = getChat(id);
-    void updateChat(Update u, Function() f) {
-      if ((u as dynamic).chatId == id) {
-        f();
-        callback(base);
-      }
-    }
-
-    updateChatActionBar.listen(
-        (event) => updateChat(event, () => base.actionBar = event.actionBar));
-    updateChatDefaultDisableNotification.listen((event) => updateChat(
-        event,
-        () => base.defaultDisableNotification =
-            event.defaultDisableNotification));
-    updateChatDraftMessage.listen((event) => updateChat(event, () {
-          base.positions = event.positions;
-          base.draftMessage = event.draftMessage;
-        }));
-    updateChatHasProtectedContent.listen((event) => updateChat(
-        event, () => base.hasProtectedContent = event.hasProtectedContent));
-    updateChatHasScheduledMessages.listen((event) => updateChat(
-        event, () => base.hasScheduledMessages = event.hasScheduledMessages));
-    updateChatIsBlocked.listen(
-        (event) => updateChat(event, () => base.isBlocked = event.isBlocked));
-    updateChatisMarkedAsUnread.listen((event) => updateChat(
-        event, () => base.isMarkedAsUnread = event.isMarkedAsUnread));
-    updateChatLastMessage.listen((event) => updateChat(event, () {
-          base.positions = event.positions;
-          base.lastMessage = event.lastMessage;
-        }));
-    updateChatMessageSender.listen((event) =>
-        updateChat(event, () => base.messageSenderId = event.messageSenderId));
-    updateChatMessageTtl.listen(
-        (event) => updateChat(event, () => base.messageTtl = event.messageTtl));
-    updateChatNotificationSettings.listen((event) => updateChat(
-        event, () => base.notificationSettings = event.notificationSettings));
-    updateChatPendingJoinRequests.listen((event) => updateChat(
-        event, () => base.pendingJoinRequests = event.pendingJoinRequests));
-    updateChatPermissions.listen((event) =>
-        updateChat(event, () => base.permissions = event.permissions));
-    _updateChatPhoto
-        .listen((event) => updateChat(event, () => base.photo = event.photo));
-    _updateChatReadInbox.listen((event) => updateChat(event,
-        () => base.lastReadInboxMessageId = event.lastReadInboxMessageId));
-    _updateChatReadOutbox.listen((event) => updateChat(event,
-        () => base.lastReadOutboxMessageId = event.lastReadOutboxMessageId));
-    updateChatReplyMarkup.listen((event) => updateChat(
-        event, () => base.replyMarkupMessageId = event.replyMarkupMessageId));
-    updateChatTheme.listen(
-        (event) => updateChat(event, () => base.themeName = event.themeName));
-    _updateChatTitle
-        .listen((event) => updateChat(event, () => base.title = event.title));
-    _updateChatUnreadMentionCount.listen((event) => updateChat(
-        event, () => base.unreadMentionCount = event.unreadMentionCount));
-    updateChatVideoChat.listen(
-        (event) => updateChat(event, () => base.videoChat = event.videoChat));
-    updateChatPosition.listen((event) => updateChat(event, () {
-          bool finded = false;
-          for (int i = 0; i < base.positions!.length; i++) {
-            if (base.positions![i].list == event.position!.list) {
-              finded = true;
-              base.positions![i] = event.position!;
-            }
-          }
-          if (!finded) base.positions!.add(event.position!);
-        }));
-  }
-
   String getTranslation(String key,
       {String? languagePackDatabasePath,
       String? languagePackId,
@@ -773,9 +692,139 @@ class TelegramClient {
 
       if (message is String) {
         var tdobject = convertToObject(message);
-        var extra = json.decode(message)["@extra"];
-        if (extra == null) {
-          tdobject as Update;
+        var extra = (tdobject as dynamic).extra;
+        if (tdobject is Update) {
+          switch (tdobject.runtimeType) {
+            case UpdateChatActionBar:
+              tdobject as UpdateChatActionBar;
+              _chats[tdobject.chatId!]!.actionBar = tdobject.actionBar;
+              break;
+            case UpdateChatDefaultDisableNotification:
+              tdobject as UpdateChatDefaultDisableNotification;
+              _chats[tdobject.chatId]!.defaultDisableNotification =
+                  tdobject.defaultDisableNotification;
+              break;
+            case UpdateChatDraftMessage:
+              tdobject as UpdateChatDraftMessage;
+              _chats[tdobject.chatId!]!.draftMessage = tdobject.draftMessage;
+              _chats[tdobject.chatId!]!.positions = tdobject.positions;
+              break;
+            case UpdateChatHasProtectedContent:
+              tdobject as UpdateChatHasProtectedContent;
+              _chats[tdobject.chatId!]!.hasProtectedContent =
+                  tdobject.hasProtectedContent;
+              break;
+            case UpdateChatHasScheduledMessages:
+              tdobject as UpdateChatHasScheduledMessages;
+              _chats[tdobject.chatId!]!.hasScheduledMessages =
+                  tdobject.hasScheduledMessages;
+              break;
+            case UpdateChatIsBlocked:
+              tdobject as UpdateChatIsBlocked;
+              _chats[tdobject.chatId!]!.isBlocked = tdobject.isBlocked;
+              break;
+            case UpdateChatIsMarkedAsUnread:
+              tdobject as UpdateChatIsMarkedAsUnread;
+              _chats[tdobject.chatId!]!.isMarkedAsUnread =
+                  tdobject.isMarkedAsUnread;
+              break;
+            case UpdateChatLastMessage:
+              tdobject as UpdateChatLastMessage;
+              _chats[tdobject.chatId!]!.positions = tdobject.positions;
+              _chats[tdobject.chatId!]!.lastMessage = tdobject.lastMessage;
+              break;
+            case UpdateChatMessageSender:
+              tdobject as UpdateChatMessageSender;
+              _chats[tdobject.chatId!]!.messageSenderId =
+                  tdobject.messageSenderId;
+              break;
+            case UpdateChatMessageTtl:
+              tdobject as UpdateChatMessageTtl;
+              _chats[tdobject.chatId!]!.messageTtl = tdobject.messageTtl;
+              break;
+            case UpdateChatNotificationSettings:
+              tdobject as UpdateChatNotificationSettings;
+              _chats[tdobject.chatId!]!.notificationSettings =
+                  tdobject.notificationSettings;
+              break;
+            case UpdateChatPendingJoinRequests:
+              tdobject as UpdateChatPendingJoinRequests;
+              _chats[tdobject.chatId!]!.pendingJoinRequests =
+                  tdobject.pendingJoinRequests;
+              break;
+            case UpdateChatPermissions:
+              tdobject as UpdateChatPermissions;
+              _chats[tdobject.chatId!]!.permissions = tdobject.permissions;
+              break;
+            case UpdateChatPhoto:
+              tdobject as UpdateChatPhoto;
+              _chats[tdobject.chatId!]!.photo = tdobject.photo;
+              break;
+            case UpdateChatReadInbox:
+              tdobject as UpdateChatReadInbox;
+              _chats[tdobject.chatId!]!.lastReadInboxMessageId =
+                  tdobject.lastReadInboxMessageId;
+              break;
+            case UpdateChatReadOutbox:
+              tdobject as UpdateChatReadOutbox;
+              _chats[tdobject.chatId!]!.lastReadOutboxMessageId =
+                  tdobject.lastReadOutboxMessageId;
+              break;
+            case UpdateChatReplyMarkup:
+              tdobject as UpdateChatReplyMarkup;
+              _chats[tdobject.chatId!]!.replyMarkupMessageId =
+                  tdobject.replyMarkupMessageId;
+              break;
+            case UpdateChatTheme:
+              tdobject as UpdateChatTheme;
+              _chats[tdobject.chatId!]!.themeName = tdobject.themeName;
+              break;
+            case UpdateChatTitle:
+              tdobject as UpdateChatTitle;
+              _chats[tdobject.chatId!]!.title = tdobject.title;
+              break;
+            case UpdateChatUnreadMentionCount:
+              tdobject as UpdateChatUnreadMentionCount;
+              _chats[tdobject.chatId!]!.unreadMentionCount =
+                  tdobject.unreadMentionCount;
+              break;
+            case UpdateChatVideoChat:
+              tdobject as UpdateChatVideoChat;
+              _chats[tdobject.chatId!]!.videoChat = tdobject.videoChat;
+              break;
+            case UpdateChatPosition:
+              tdobject as UpdateChatPosition;
+              bool finded = false;
+              var base = _chats[tdobject.chatId]!;
+              for (int i = 0; i < base.positions!.length; i++) {
+                if (base.positions![i].list == tdobject.position!.list) {
+                  finded = true;
+                  base.positions![i] = tdobject.position!;
+                }
+              }
+              if (!finded) base.positions!.add(tdobject.position!);
+              break;
+            case UpdateUser:
+              tdobject as UpdateUser;
+              _users[tdobject.user!.id!] = tdobject.user!;
+              break;
+            case UpdateNewChat:
+              tdobject as UpdateNewChat;
+              _chats[tdobject.chat!.id!] = tdobject.chat!;
+              break;
+            case UpdateBasicGroup:
+              tdobject as UpdateBasicGroup;
+              _basicGroups[tdobject.basicGroup!.id!] = tdobject.basicGroup!;
+              break;
+            case UpdateSupergroup:
+              tdobject as UpdateSupergroup;
+              _supergroups[tdobject.supergroup!.id!] = tdobject.supergroup!;
+              break;
+            case UpdateSecretChat:
+              tdobject as UpdateSecretChat;
+              _secretChats[tdobject.secretChat!.id!] = tdobject.secretChat!;
+              break;
+          }
           if (!_shouldSendUpdates && tdobject is! UpdateAuthorizationState) {
             _cachedUpdates.add(tdobject);
           } else {
