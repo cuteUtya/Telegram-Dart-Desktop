@@ -804,6 +804,11 @@ class TelegramClient {
               }
               if (!finded) base.positions!.add(tdobject.position!);
               break;
+            case UpdateMessageMentionRead:
+              tdobject as UpdateMessageMentionRead;
+              _chats[tdobject.chatId!]!.unreadMentionCount =
+                  tdobject.unreadMentionCount;
+              break;
             case UpdateUser:
               tdobject as UpdateUser;
               _users[tdobject.user!.id!] = tdobject.user!;
