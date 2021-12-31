@@ -404,7 +404,6 @@ class TelegramClient {
       .map((a) => a as UpdateChatMessageSender);
 
   late TdlibParameters tdlibParameters;
-  int me = 0;
   String userLocale = "en";
   String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
@@ -420,6 +419,15 @@ class TelegramClient {
 
   String? _dbPath;
   String? _filesPath;
+
+  Map<String, OptionValue> _optionsValue = {};
+  T? getOptionValue<T>(String name) {
+    assert(_optionsValue[name] == null);
+    var option = _optionsValue[name];
+    if (option is OptionValueEmpty) return null;
+    assert(option.runtimeType == T);
+    return option as T;
+  }
 
   Future setTdlibParameters(
       {bool? useTestDc,
@@ -476,11 +484,8 @@ class TelegramClient {
         systemVersion: systemVersion);
 
     await send(SetTdlibParameters(parameters: tdlibParameters));
-    updateOption.listen((UpdateOption event) {
-      if (event.name! == "my_id" && event.value is OptionValueInteger) {
-        me = (event.value as OptionValueInteger).value!;
-      }
-    });
+    updateOption.listen(
+        (UpdateOption event) => _optionsValue[event.name!] = event.value!);
   }
 
   Map<int, Chat> getChats() => _chats;

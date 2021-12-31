@@ -220,7 +220,8 @@ class ChatItemLastMessageContent extends StatelessWidget {
       return client.getTranslation("lng_from_draft");
     }
     if (chat.lastMessage!.senderId! is MessageSenderUser) {
-      if (lastMessageSenderId == client.me) {
+      if (lastMessageSenderId ==
+          client.getOptionValue<OptionValueInteger>("my_id")?.value) {
         return client.getTranslation("lng_from_you");
       }
     }
@@ -235,12 +236,14 @@ class ChatItemLastMessageContent extends StatelessWidget {
     return false;
   }
 
-  bool get showAuthor => draft
-      ? true
-      : !((chat.id == client.me ||
-              (chat.type is ChatTypeSupergroup && isChannel)) ||
-          ((chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) &&
-              lastMessageSenderId != client.me));
+  bool get showAuthor {
+    var me = client.getOptionValue<OptionValueInteger>("my_id")?.value ?? 0;
+    return draft
+        ? true
+        : !((chat.id == me || (chat.type is ChatTypeSupergroup && isChannel)) ||
+            ((chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) &&
+                lastMessageSenderId != me));
+  }
 
   bool get draft => chat.draftMessage != null;
 }
