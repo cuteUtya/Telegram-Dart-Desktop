@@ -162,7 +162,9 @@ class ChatItemDisplay extends StatelessWidget {
                               if (actions.isNotEmpty) {
                                 return ChatItemActionDisplay(
                                     chatSelected: selected,
-                                    isPrivate: interlocutor != null,
+                                    isPrivate:
+                                        interlocutor(client.getChat(chatId)) !=
+                                            null,
                                     chatid: chatId,
                                     client: client,
                                     actions: actions);
@@ -198,7 +200,7 @@ class ChatItemDisplay extends StatelessWidget {
   }
 
   bool isOnline(Chat chat) {
-    if (interlocutor != null) {
+    if (interlocutor(chat) != null) {
       if (interlocutor(chat)?.type is! UserTypeRegular) return false;
       return interlocutor(chat)?.status is UserStatusOnline;
     }
