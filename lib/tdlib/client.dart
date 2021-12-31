@@ -769,6 +769,7 @@ class TelegramClient {
               tdobject as UpdateChatReadInbox;
               _chats[tdobject.chatId!]!.lastReadInboxMessageId =
                   tdobject.lastReadInboxMessageId;
+              _chats[tdobject.chatId!]!.unreadCount = tdobject.unreadCount;
               break;
             case UpdateChatReadOutbox:
               tdobject as UpdateChatReadOutbox;
