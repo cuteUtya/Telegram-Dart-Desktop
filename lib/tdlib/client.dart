@@ -422,7 +422,7 @@ class TelegramClient {
 
   Map<String, OptionValue> _optionsValue = {};
   T? getOptionValue<T>(String name) {
-    assert(_optionsValue[name] == null);
+    assert(_optionsValue[name] != null);
     var option = _optionsValue[name];
     if (option is OptionValueEmpty) return null;
     assert(option.runtimeType == T);
