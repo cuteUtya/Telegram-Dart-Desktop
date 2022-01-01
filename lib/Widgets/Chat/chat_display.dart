@@ -17,33 +17,48 @@ class ChatDisplay extends StatelessWidget {
         builder: (_, data) {
           var chat =
               data.data != null ? client.getChat(data.data as int) : null;
-          return Column(
-            children: [
-              if (chat != null)
-                ActionBarDisplay(
-                  client: client,
-                  chat: chat,
-                ),
-              Expanded(
-                  child: Stack(children: [
-                StreamBuilder(
-                    stream: client.selectedBackground,
-                    builder: (_, data) => BakgroundDisplay(
+          return Stack(children: [
+            StreamBuilder(
+                //TODO correct work with dark and light themes
+                initialData: client.getCachedBackground(false),
+                stream: client.selectedBackground,
+                builder: (_, data) {
+                  if (data.hasData) {
+                    var update = data.data == null
+                        ? null
+                        : data.data as UpdateSelectedBackground;
+                    print(update?.background);
+                    if (update?.background == null) {
+                      client.send(GetBackgrounds()).then((backs) => client.send(
+                          SetBackground(
+                              forDarkTheme: update?.forDarkTheme,
+                              background: InputBackgroundRemote(
+                                  backgroundId: (backs as Backgrounds)
+                                      .backgrounds![0]
+                                      .id!))));
+                      return const SizedBox.shrink();
+                    }
+                    return BakgroundDisplay(
                         client: client,
-                        background:
-                            //TODO correct work with dark and light themes
-                            data.data == null
-                                ? null
-                                : (data.data as UpdateSelectedBackground)
-                                    .background)),
-                if (chat != null)
-                  Container(
-                      margin: const EdgeInsets.all(24),
-                      alignment: Alignment.bottomCenter,
-                      child: InputField(client: client))
-              ]))
-            ],
-          );
+                        //TODO correct work with dark and light themes
+                        background: (data.data as UpdateSelectedBackground)
+                            .background!);
+                  }
+                  return const SizedBox.shrink();
+                }),
+            if (chat != null)
+              Container(
+                  alignment: Alignment.topCenter,
+                  child: ActionBarDisplay(
+                    client: client,
+                    chat: chat,
+                  )),
+            if (chat != null)
+              Container(
+                  margin: const EdgeInsets.all(24),
+                  alignment: Alignment.bottomCenter,
+                  child: InputField(client: client))
+          ]);
         });
   }
 }

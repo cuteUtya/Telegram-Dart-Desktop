@@ -684,6 +684,14 @@ class TelegramClient {
     }
   }
 
+  Background? _cacheDarkBackground;
+  Background? _cacheLightBackground;
+
+  Background? getCachedBackground(bool forDark) {
+    if (forDark) return _cacheDarkBackground;
+    return _cacheLightBackground;
+  }
+
   Future<void> init() async {
     Completer completer = Completer<void>();
     var receive = await initIsolate();
@@ -700,6 +708,14 @@ class TelegramClient {
         var extra = (tdobject as dynamic).extra;
         if (tdobject is Update) {
           switch (tdobject.runtimeType) {
+            case UpdateSelectedBackground:
+              tdobject as UpdateSelectedBackground;
+              if (tdobject.forDarkTheme!) {
+                _cacheDarkBackground = tdobject.background;
+              } else {
+                _cacheLightBackground = tdobject.background;
+              }
+              break;
             case UpdateChatActionBar:
               tdobject as UpdateChatActionBar;
               _chats[tdobject.chatId!]!.actionBar = tdobject.actionBar;

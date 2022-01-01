@@ -1,4 +1,6 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'dart:io' as io;
@@ -12,6 +14,8 @@ class FileImageDisplay extends StatefulWidget {
       this.containerShape = BoxShape.rectangle,
       this.height,
       this.width,
+      this.isTGV = false,
+      this.tgvColor,
       this.priority = 5,
       this.emptyReplacer = const Center()})
       : super(key: key);
@@ -20,6 +24,8 @@ class FileImageDisplay extends StatefulWidget {
   final int priority;
   final double? width;
   final double? height;
+  final bool isTGV;
+  final Color? tgvColor;
   final Widget emptyReplacer;
   final TelegramClient client;
   final BorderRadius? borderRadius;
@@ -29,7 +35,7 @@ class FileImageDisplay extends StatefulWidget {
 }
 
 class FileImageDisplayState extends State<FileImageDisplay> {
-  String? path; //late Widget toDisplay = widget.emptyReplacer;
+  String? path;
   int? downloadedId;
 
   void changeFile(File file) {
@@ -57,14 +63,23 @@ class FileImageDisplayState extends State<FileImageDisplay> {
     }
 
     if ((path ?? "").isNotEmpty) {
-      return Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-              borderRadius: widget.borderRadius,
-              shape: widget.containerShape,
-              image: DecorationImage(
-                  fit: BoxFit.cover, image: FileImage(io.File(path!)))));
+      var file = io.File(path!);
+      return widget.isTGV
+          ? SvgPicture.memory(
+              Uint8List.fromList(
+                  io.gzip.decode(file.readAsBytesSync().toList())),
+              height: widget.height,
+              width: widget.width,
+              color: widget.tgvColor,
+              fit: BoxFit.cover)
+          : Container(
+              width: widget.width,
+              height: widget.height,
+              decoration: BoxDecoration(
+                  borderRadius: widget.borderRadius,
+                  shape: widget.containerShape,
+                  image: DecorationImage(
+                      fit: BoxFit.cover, image: FileImage(file))));
     }
     return widget.emptyReplacer;
   }
