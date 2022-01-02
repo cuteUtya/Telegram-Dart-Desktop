@@ -851,6 +851,10 @@ class TelegramClient {
               tdobject as UpdateSecretChat;
               _secretChats[tdobject.secretChat!.id!] = tdobject.secretChat!;
               break;
+            case UpdateUserStatus:
+              tdobject as UpdateUserStatus;
+              _users[tdobject.userId!]!.status = tdobject.status;
+              break;
           }
           if (!_shouldSendUpdates && tdobject is! UpdateAuthorizationState) {
             _cachedUpdates.add(tdobject);
