@@ -33,9 +33,9 @@ class ChatDisplay extends StatelessWidget {
                           SetBackground(
                               forDarkTheme: update?.forDarkTheme,
                               background: InputBackgroundRemote(
-                                  backgroundId: (backs as Backgrounds)
-                                      .backgrounds![0]
-                                      .id!))));
+                                  backgroundId: backs is Backgrounds
+                                      ? backs.backgrounds![0].id!
+                                      : (backs as Background).id!))));
                       return const SizedBox.shrink();
                     }
                     return BakgroundDisplay(
