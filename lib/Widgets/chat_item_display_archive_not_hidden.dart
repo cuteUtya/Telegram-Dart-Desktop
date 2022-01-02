@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/Userpic/userpic_icon.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
@@ -56,14 +57,11 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 0),
                     child: RichText(
                         maxLines: 2, text: TextSpan(children: content))))),
-        chatPic: Container(
-            child: Icon(Icons.archive,
-                size: 36,
-                color: ClientTheme.currentTheme
-                    .getField("ArchoveNotHiddenIconColor")),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: ClientTheme.currentTheme
-                    .getField("ArchiveNotHiddenBackColor"))));
+        chatPic: UserpicIcon(
+            color:
+                ClientTheme.currentTheme.getField("ArchiveNotHiddenBackColor"),
+            icon: Icons.archive,
+            iconColor: ClientTheme.currentTheme
+                .getField("ArchoveNotHiddenIconColor")));
   }
 }

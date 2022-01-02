@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/Userpic/userpic_icon.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/check_mark.dart';
 import 'package:myapp/Widgets/display_text.dart';
@@ -37,6 +38,12 @@ class ChatItemDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isSavedMessages =
+        chatId == client.getOptionValue<OptionValueInteger>("my_id")?.value;
+    bool isReplieChat = chatId ==
+        (client
+            .getOptionValue<OptionValueInteger>("replies_bot_chat_id")
+            ?.value);
     return StreamBuilder(
         stream: UIEvents.selectedChat(),
         builder: (_, data) {
@@ -47,19 +54,24 @@ class ChatItemDisplay extends StatelessWidget {
               title: Row(children: [
                 Expanded(
                     child: StreamBuilder(
-                        stream: client.titleOf(client.getChat(chatId).id!),
+                        stream: isSavedMessages
+                            ? null
+                            : client.titleOf(client.getChat(chatId).id!),
                         initialData: client.getChat(chatId).title,
                         builder: (_, data) {
                           var chat = client.getChat(chatId);
                           return ChatItemTitle(
                               selected: selected,
-                              isBot: interlocutor(chat)?.type is UserTypeBot,
+                              isBot: interlocutor(chat)?.type is UserTypeBot &&
+                                  !isReplieChat,
                               isChannel: (supergroup(chat)?.isChannel) ?? false,
                               isChat: (supergroup(chat) != null &&
                                       !(supergroup(chat)?.isChannel ?? true)) ||
                                   chat.type is ChatTypeBasicGroup,
-                              title:
-                                  (interlocutor(chat)?.type is UserTypeDeleted)
+                              title: isSavedMessages
+                                  ? client.getTranslation("lng_saved_messages")
+                                  : (interlocutor(chat)?.type
+                                          is UserTypeDeleted)
                                       ? client.getTranslation("lng_deleted")
                                       : (data.data ?? "").toString(),
                               isScam: isScam(chat),
@@ -74,8 +86,9 @@ class ChatItemDisplay extends StatelessWidget {
                         value = (client.getChat(chatId).lastMessage?.id ?? 0) <=
                             (data.data as int);
                       }
-                      if (client.getChat(chatId).lastMessage?.isOutgoing ??
-                          false) {
+                      if (!isSavedMessages &&
+                          (client.getChat(chatId).lastMessage?.isOutgoing ??
+                              false)) {
                         return CheckMark(isReaded: value);
                       } else {
                         return const SizedBox.shrink();
@@ -95,41 +108,61 @@ class ChatItemDisplay extends StatelessWidget {
                                 ? TextColor.SelectedChatLastTimedMessage
                                 : TextColor.ChatLastTimeMessage))),
               ]),
-              chatPic: Stack(children: [
-                Stack(alignment: Alignment.bottomRight, children: [
-                  SizedBox(
-                      height: 64,
-                      width: 64,
-                      child: StreamBuilder(
-                          stream: client.photoOf(chatId),
-                          initialData: client.getChat(chatId).photo,
-                          builder: (_, data) => ChatPhotoDisplay(
-                              photo: data.hasData
-                                  ? data.data as ChatPhotoInfo
-                                  : null,
-                              chatId: chatId,
-                              chatTitle: client.getChat(chatId).title!,
-                              client: client))),
-                  if (interlocutor(client.getChat(chatId)) != null &&
-                      interlocutor(client.getChat(chatId))?.type
-                          is UserTypeRegular)
-                    StreamBuilder(
-                        stream: client.statusOf(
-                            interlocutor(client.getChat(chatId))!.id!),
-                        initialData:
-                            interlocutor(client.getChat(chatId))!.status,
-                        builder: (context, data) => OnlineIndicatorDidplay(
-                            heigth: 20,
-                            width: 20,
-                            online: data.data is UserStatusOnline))
-                ]),
-                StreamBuilder(
-                    initialData: client.getChat(chatId).unreadMentionCount!,
-                    stream: client.unreadMentionCountOf(chatId),
-                    builder: (context, data) => UnreadCountBubble(
-                        count: data.hasData ? data.data as int : 0,
-                        important: true))
-              ]),
+              chatPic: isSavedMessages
+                  ? UserpicIcon(
+                      color: ClientTheme.currentTheme
+                          .getField("SaveMessagesBackColor"),
+                      iconColor: ClientTheme.currentTheme
+                          .getField("SaveMessageIconColor"),
+                      icon: Icons.bookmarks_outlined)
+                  : isReplieChat
+                      ? UserpicIcon(
+                          color: ClientTheme.currentTheme
+                              .getField("RepliesMessagesBackColor"),
+                          iconColor: ClientTheme.currentTheme
+                              .getField("RepliesMessageIconColor"),
+                          icon: Icons.question_answer)
+                      : Stack(children: [
+                          Stack(alignment: Alignment.bottomRight, children: [
+                            SizedBox(
+                                height: 64,
+                                width: 64,
+                                child: StreamBuilder(
+                                    stream: client.photoOf(chatId),
+                                    initialData: client.getChat(chatId).photo,
+                                    builder: (_, data) => ChatPhotoDisplay(
+                                        photo: data.hasData
+                                            ? data.data as ChatPhotoInfo
+                                            : null,
+                                        chatId: chatId,
+                                        chatTitle:
+                                            client.getChat(chatId).title!,
+                                        client: client))),
+                            if (interlocutor(client.getChat(chatId)) != null &&
+                                interlocutor(client.getChat(chatId))?.type
+                                    is UserTypeRegular)
+                              StreamBuilder(
+                                  stream: client.statusOf(
+                                      interlocutor(client.getChat(chatId))!
+                                          .id!),
+                                  initialData:
+                                      interlocutor(client.getChat(chatId))!
+                                          .status,
+                                  builder: (context, data) =>
+                                      OnlineIndicatorDidplay(
+                                          heigth: 20,
+                                          width: 20,
+                                          online:
+                                              data.data is UserStatusOnline))
+                          ]),
+                          StreamBuilder(
+                              initialData:
+                                  client.getChat(chatId).unreadMentionCount!,
+                              stream: client.unreadMentionCountOf(chatId),
+                              builder: (context, data) => UnreadCountBubble(
+                                  count: data.hasData ? data.data as int : 0,
+                                  important: true))
+                        ]),
               unreadPlaceHolder: StreamBuilder(
                   initialData: client.getChat(chatId).unreadCount,
                   stream: client.unreadCountOf(chatId),

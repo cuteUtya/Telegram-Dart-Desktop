@@ -101,3 +101,9 @@ SelectedTitleIconColor: ref(BaseColor);
 
 ActionBarColor: ref(BaseColor);
 ChatInputFieldBackgroundColor: ref(BaseColor);
+
+SaveMessagesBackColor: ref(Accent);
+SaveMessageIconColor: #FFFFFFFF;
+
+RepliesMessagesBackColor: ref(Accent);
+RepliesMessageIconColor: #FFFFFFFF;
