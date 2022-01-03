@@ -5,8 +5,11 @@ import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_c
 import 'package:myapp/tdlib/td_api.dart' hide RichText;
 
 class MessageDisplayText extends StatelessWidget {
-  const MessageDisplayText({Key? key, required this.message}) : super(key: key);
+  const MessageDisplayText(
+      {Key? key, required this.message, required this.lastReadOutboxMessageId})
+      : super(key: key);
   final Message message;
+  final int lastReadOutboxMessageId;
   @override
   Widget build(BuildContext context) {
     var text = message.content as MessageText;
@@ -17,7 +20,10 @@ class MessageDisplayText extends StatelessWidget {
         text: TextSpan(children: TextDisplay.parseFormattedText(text.text!)),
       ),
       infoWidget: MessageInfoBubbleCheckMarkTime(
-          checkMarkValue: false, time: "${time.hour}:${time.minute}"),
+          checkMarkValue: message.isOutgoing!
+              ? message.id! <= lastReadOutboxMessageId
+              : null,
+          time: "${time.hour}:${time.minute}"),
     );
   }
 }

@@ -25,12 +25,35 @@ class _MessageListState extends State<MessageList> {
         reverse: true,
         itemCount: messages?.totalCount ?? 0,
         itemBuilder: (context, index) {
-          if (messages!.messages![index].content is MessageText) {
-            return Container(
-                margin: const EdgeInsets.only(top: 16),
-                child: MessageDisplayText(message: messages!.messages![index]));
-          }
-          return const SizedBox.shrink();
+          var msg = messages!.messages![index];
+          var content = msg.content;
+          return Row(
+            children: [
+              if (msg.isOutgoing!) const Spacer(),
+              Expanded(
+                  flex: 2,
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: MessageDisplayText(
+                          lastReadOutboxMessageId: widget.client
+                              .getChat(widget.chatId)
+                              .lastReadOutboxMessageId!,
+                          message: content is MessageText
+                              ? messages!.messages![index]
+                              : Message(
+                                  id: 0,
+                                  isOutgoing: msg.isOutgoing,
+                                  date: 11111111,
+                                  content: MessageText(
+                                      text: FormattedText(entities: [
+                                    TextEntity(
+                                        offset: 0,
+                                        length: 50,
+                                        type: TextEntityTypeItalic())
+                                  ], text: "Supported sheme object, but don't impemented yet \n😞😞😞 \n{${content.runtimeType.toString()}}")))))),
+              if (!msg.isOutgoing!) const Spacer()
+            ],
+          );
         });
   }
 }
