@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
 import 'package:myapp/Widgets/Chat/input_field.dart';
+import 'package:myapp/Widgets/Chat/message_list.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
@@ -49,20 +50,14 @@ class ChatDisplay extends StatelessWidget {
                   }
                   return const SizedBox.shrink();
                 }),
-            Container(
-                margin: const EdgeInsets.only(bottom: 96, left: 24),
-                alignment: Alignment.bottomLeft,
-                child: MacMessageBubble(
-                  left: false,
-                  content: RichText(
-                      textAlign: TextAlign.start,
-                      text: TextSpan(
-                          children: TextDisplay.parseEmojiInString(
-                              "You should see my 'Unsorted' folder 📸",
-                              TextDisplay.create(size: 18)))),
-                  infoWidget: const MessageInfoBubbleCheckMarkTime(
-                      checkMarkValue: false, time: "18:12"),
-                )),
+            if (chat != null)
+              Container(
+                  margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                  child: Column(children: [
+                    Expanded(
+                        child: MessageList(chatId: chat.id!, client: client)),
+                    InputField(client: client)
+                  ])),
             if (chat != null)
               Container(
                   alignment: Alignment.topCenter,
@@ -70,11 +65,6 @@ class ChatDisplay extends StatelessWidget {
                     client: client,
                     chat: chat,
                   )),
-            if (chat != null)
-              Container(
-                  margin: const EdgeInsets.all(24),
-                  alignment: Alignment.bottomCenter,
-                  child: InputField(client: client)),
           ]);
         });
   }

@@ -50,7 +50,10 @@ class ChatItemDisplay extends StatelessWidget {
           var selected = data.data == chatId;
           return ChatItemBase(
               selected: selected,
-              onClick: onClick,
+              onClick: () {
+                client.send(OpenChat(chatId: chatId));
+                onClick?.call();
+              },
               title: Row(children: [
                 Expanded(
                     child: StreamBuilder(
