@@ -55,7 +55,10 @@ class ChatDisplay extends StatelessWidget {
                   margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
                   child: Column(children: [
                     Expanded(
-                        child: MessageList(chatId: chat.id!, client: client)),
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child:
+                                MessageList(chatId: chat.id!, client: client))),
                     InputField(client: client)
                   ])),
             if (chat != null)
