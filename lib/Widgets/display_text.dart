@@ -141,7 +141,8 @@ class TextDisplay {
       FontWeight? fontWeight = FontWeight.normal,
       TextAlign? textAlign = TextAlign.left,
       TextOverflow? overflow,
-      TextDecoration decoration = TextDecoration.none}) {
+      TextDecoration decoration = TextDecoration.none,
+      Color? customTextColor}) {
     fontFamily ??= regular;
     textColor ??= TextColor.RegularText;
     var color = getColor(textColor);
@@ -150,7 +151,7 @@ class TextDisplay {
     }
     return TextStyle(
       overflow: overflow,
-      color: color,
+      color: customTextColor ?? color,
       fontSize: size,
       fontWeight: fontWeight,
       fontStyle: fontStyle,

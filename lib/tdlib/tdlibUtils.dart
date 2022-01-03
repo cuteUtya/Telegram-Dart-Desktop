@@ -8,6 +8,11 @@ String getSenderName(MessageSender sender, TelegramClient client) {
   return client.getChat((sender as MessageSenderChat).chatId!).title!;
 }
 
+int getSenderId(MessageSender sender) {
+  if (sender is MessageSenderUser) return sender.userId!;
+  return (sender as MessageSenderChat).chatId!;
+}
+
 User? getInterlocutor(Chat chat, TelegramClient client) {
   int? id;
   if (chat.type is ChatTypeSecret) {

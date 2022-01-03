@@ -1,5 +1,7 @@
 import "dart:io" show Platform;
 import "dart:math";
+import 'package:flutter/material.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
@@ -108,6 +110,13 @@ String getHHMM(DateTime time) {
 String validateDataComponent(String compenent) {
   if (compenent.length <= 1) return "0$compenent";
   return compenent;
+}
+
+Color getPeerColor(int id, [String component = "a"]) {
+  id = int.parse(id.toString().replaceAll("-100", "-"));
+  if (id < 0) id = -id;
+  return ClientTheme.currentTheme
+      .getField("PeerColor${[0, 7, 4, 1, 6, 3, 5][(id % 7)] + 1}$component");
 }
 
 String getUserLocale() => "ru";

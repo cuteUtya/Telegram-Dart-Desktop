@@ -34,11 +34,4 @@ class UserpicEmpty extends StatelessWidget {
               fontWeight: FontWeight.w500))
     ]);
   }
-
-  static Color getPeerColor(int id, [String component = "a"]) {
-    id = int.parse(id.toString().replaceAll("-100", "-"));
-    if (id < 0) id = -id;
-    return ClientTheme.currentTheme
-        .getField("PeerColor${[0, 7, 4, 1, 6, 3, 5][(id % 7)] + 1}$component");
-  }
 }

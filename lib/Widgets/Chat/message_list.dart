@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
+import 'package:myapp/tdlib/tdlibUtils.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({Key? key, required this.chatId, required this.client})
@@ -21,6 +22,7 @@ class _MessageListState extends State<MessageList> {
         .then((mess) {
       setState(() => messages = mess as Messages);
     });
+    var chat = widget.client.getChat(widget.chatId);
     return ListView.builder(
         reverse: true,
         itemCount: messages?.totalCount ?? 0,
@@ -35,9 +37,14 @@ class _MessageListState extends State<MessageList> {
                   child: Container(
                       margin: const EdgeInsets.only(bottom: 16),
                       child: MessageDisplayText(
-                          lastReadOutboxMessageId: widget.client
-                              .getChat(widget.chatId)
-                              .lastReadOutboxMessageId!,
+                          sender: (chat.type is ChatTypeSupergroup ||
+                                      chat.type is ChatTypeBasicGroup) &&
+                                  !msg.isOutgoing!
+                              ? getSenderName(msg.senderId!, widget.client)
+                              : null,
+                          senderId: getSenderId(msg.senderId!),
+                          lastReadOutboxMessageId:
+                              chat.lastReadOutboxMessageId!,
                           message: content is MessageText
                               ? messages!.messages![index]
                               : Message(
