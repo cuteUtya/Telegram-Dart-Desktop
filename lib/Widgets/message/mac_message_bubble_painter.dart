@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
 class MacMessageBubblePainter extends CustomPainter {
-  const MacMessageBubblePainter(
-      {required this.color, this.left = true, this.horizontalOffset = 0});
+  const MacMessageBubblePainter({required this.color, this.left = true});
   final Color color;
   final bool left;
-  final double horizontalOffset;
 
   //https://github.com/overtake/TelegramSwift/blob/4e59c11547132d8a7fa49a4c586ab8c2359d0c3f/Telegram-Mac/ChatMessageBubbleImages.swift#L71
   @override
   void paint(Canvas canvas, Size size) {
     if (!left) {
       canvas.scale(-1, 1);
-      canvas.translate(-size.width + horizontalOffset, 0);
+      canvas.translate(-size.width, 0);
     }
     Path path_0 = Path();
     path_0.moveTo(size.width * 0.1463414, size.height / 2);

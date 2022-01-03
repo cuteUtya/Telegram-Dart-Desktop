@@ -20,16 +20,13 @@ class MacMessageBubble extends StatelessWidget {
         alignment: left ? Alignment.bottomLeft : Alignment.bottomRight,
         children: [
           CustomPaint(
-              painter: MacMessageBubblePainter(
-                  color: bubbleColor,
-                  left: left,
-                  horizontalOffset: left ? 0 : -6),
+              painter: MacMessageBubblePainter(color: bubbleColor, left: left),
               child: const SizedBox(
                 width: 41,
                 height: 35,
               )),
           Container(
-              margin: EdgeInsets.only(left: left ? 6 : 0),
+              margin: EdgeInsets.only(left: left ? 6 : 0, right: left ? 0 : 6),
               decoration: BoxDecoration(
                   color: bubbleColor,
                   borderRadius: const BorderRadius.all(Radius.circular(24))),
@@ -37,7 +34,8 @@ class MacMessageBubble extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                      left ? CrossAxisAlignment.start : CrossAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     content,
