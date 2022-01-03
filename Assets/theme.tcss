@@ -107,3 +107,7 @@ SaveMessageIconColor: #FFFFFFFF;
 
 RepliesMessagesBackColor: ref(Accent);
 RepliesMessageIconColor: #FFFFFFFF;
+
+MessageBubbleMineColor: #E6FEE4;
+MessageBubbleOtherColor: ref(BaseColor);
+MessageInfoBubbleColor: #4D151515;
