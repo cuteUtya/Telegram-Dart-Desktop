@@ -47,7 +47,8 @@ class MessageDisplayText extends StatelessWidget {
           checkMarkValue: message.isOutgoing!
               ? message.id! <= lastReadOutboxMessageId
               : null,
-          time: "${time.hour}:${time.minute}"),
+          time:
+              "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())}"),
     );
   }
 }
