@@ -34,8 +34,7 @@ class MacMessageBubble extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 child: Column(
-                  crossAxisAlignment:
-                      left ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     content,
