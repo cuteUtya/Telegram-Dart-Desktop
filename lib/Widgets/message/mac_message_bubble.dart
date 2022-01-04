@@ -24,7 +24,7 @@ class MacMessageBubble extends StatelessWidget {
               margin: EdgeInsets.only(left: left ? 6 : 0, right: left ? 0 : 6),
               decoration: BoxDecoration(
                   color: bubbleColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(24))),
+                  borderRadius: const BorderRadius.all(Radius.circular(18))),
               child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
