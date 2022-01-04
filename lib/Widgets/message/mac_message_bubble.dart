@@ -27,7 +27,7 @@ class MacMessageBubble extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(24))),
               child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                   child: content)),
         ]);
   }

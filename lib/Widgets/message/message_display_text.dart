@@ -38,8 +38,9 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     });
     var text = widget.message.content as MessageText;
     var time = DateTime.fromMillisecondsSinceEpoch(widget.message.date! * 1000);
-    var parsedEntetiyes =
-        TextSpan(children: TextDisplay.parseFormattedText(text.text!, 22));
+    var parsedEntetiyes = TextSpan(
+        children: TextDisplay.parseFormattedText(
+            text.text!, 24, TextColor.MessageTextColor));
     var boxes = calcLines(
         context,
         BoxConstraints(
@@ -71,7 +72,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
             ),
             Positioned(
                 right: 0,
-                bottom: -4,
+                bottom: -2,
                 child: MessageInfoBubbleCheckMarkTime(
                     key: _timeKey,
                     isOutgoing: widget.message.isOutgoing!,

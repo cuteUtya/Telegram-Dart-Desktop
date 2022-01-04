@@ -178,7 +178,8 @@ enum TextColor {
   PeerNameTextColor,
   Draft,
   White,
-  OnlineColor
+  OnlineColor,
+  MessageTextColor
 }
 
 class _textSection {
