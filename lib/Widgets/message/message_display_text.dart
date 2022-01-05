@@ -13,9 +13,11 @@ class MessageDisplayText extends StatefulWidget {
       required this.message,
       required this.lastReadOutboxMessageId,
       this.senderId,
-      this.sender})
+      this.senderName,
+      this.userPost})
       : super(key: key);
-  final String? sender;
+  final String? senderName;
+  final String? userPost;
   final int? senderId;
   final Message message;
   final int lastReadOutboxMessageId;
@@ -65,17 +67,24 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (widget.sender != null)
-                      Text.rich(TextSpan(
-                          children: TextDisplay.parseEmojiInString(
-                              widget.sender!,
-                              TextDisplay.create(
-                                  customTextColor:
-                                      getPeerColor(widget.senderId!, 'b'),
-                                  fontWeight: FontWeight.bold,
-                                  size: 18,
-                                  textColor: TextColor.HeaderMain,
-                                  fontFamily: TextDisplay.greaterImportance)))),
+                    if (widget.senderName != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(TextSpan(
+                              children: TextDisplay.parseEmojiInString(
+                                  widget.senderName!,
+                                  TextDisplay.create(
+                                      customTextColor:
+                                          getPeerColor(widget.senderId!, 'b'),
+                                      fontWeight: FontWeight.bold,
+                                      size: 18,
+                                      textColor: TextColor.HeaderMain,
+                                      fontFamily:
+                                          TextDisplay.greaterImportance))))
+                        ],
+                      ),
                     Text.rich(parsedEntetiyes)
                   ]),
               margin: EdgeInsets.only(
@@ -85,6 +94,16 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                           12
                       : 0),
             ),
+            if (widget.userPost != null)
+              Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        widget.userPost!,
+                        style: TextDisplay.regular16,
+                      ))),
             Positioned(
                 right: 0,
                 bottom: -2,

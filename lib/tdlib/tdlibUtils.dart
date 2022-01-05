@@ -1,9 +1,15 @@
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 
-String getSenderName(MessageSender sender, TelegramClient client) {
+String getSenderName(MessageSender sender, TelegramClient client,
+    [bool includeLastName = false]) {
   if (sender is MessageSenderUser) {
-    return client.getUser(sender.userId!).firstName!;
+    var user = client.getUser(sender.userId!);
+    var result = user.firstName!;
+    if (includeLastName && (user.lastName?.isNotEmpty ?? false)) {
+      result += " ${user.lastName}";
+    }
+    return result;
   }
   return client.getChat((sender as MessageSenderChat).chatId!).title!;
 }
