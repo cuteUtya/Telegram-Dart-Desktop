@@ -18,8 +18,7 @@ int clampInt(int value, int min, int max) {
 }
 
 var emojiRegex = RegExp(
-    r'([^ABCČĆDĐEFGHIJKLMNOPQRSŠTUVWXYZŽabcčćdđefghijklmnopqrsštuvwxyzžАБВГҐДЂЕЁЄЖЗЅИІЇЙЈКЛЉМНЊОПРСТЋУЎФХЦЧЏШЩЪЫЬЭЮЯабвгґдђеёєжзѕиіїйјклљмнњопрстћуўфхцчџшщъыьэюяΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψωάΆέΈέΉίϊΐΊόΌύΰϋΎΫὰάὲέὴήὶίὸόὺύὼώΏ1234567890‘?’“!”(%)\[#\]{@}\/&\<\-+÷×=>®©$€£¥¢:;,.*\n ]){1,}',
-    unicode: true);
+    r"([^ABCČĆDĐEFGHIJKLMNOPQRSŠTUVWXYZŽabcčćdđefghijklmnopqrsštuvwxyzžАБВГҐДЂЕЁЄЖЗЅИІЇЙЈКЛЉМНЊОПРСТЋУЎФХЦЧЏШЩЪЫЬЭЮЯабвгґдђеёєжзѕиіїйјклљмнњопрстћуўфхцчџшщъыьэюяΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψωάΆέΈέΉίϊΐΊόΌύΰϋΎΫὰάὲέὴήὶίὸόὺύὼώΏ1234567890‘?’“!”(%)\[#\]{@}\/&\<\-+÷×=>®©$€£¥¢:;,.*\n ]){1,}");
 
 ///Sort photos from smallest to largest
 List<PhotoSize> sortPhotoSizes(List<PhotoSize> sizes) {
@@ -104,10 +103,10 @@ String getHHMM(DateTime time) {
       afterTime = "AM";
     }
   }
-  return "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())} $afterTime";
+  return "${to00format(time.hour.toString())}:${to00format(time.minute.toString())} $afterTime";
 }
 
-String validateDataComponent(String compenent) {
+String to00format(String compenent) {
   if (compenent.length <= 1) return "0$compenent";
   return compenent;
 }
