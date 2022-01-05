@@ -65,16 +65,17 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text.rich(TextSpan(
-                        children: TextDisplay.parseEmojiInString(
-                            widget.sender!,
-                            TextDisplay.create(
-                                customTextColor:
-                                    getPeerColor(widget.senderId!, 'b'),
-                                fontWeight: FontWeight.bold,
-                                size: 18,
-                                textColor: TextColor.HeaderMain,
-                                fontFamily: TextDisplay.greaterImportance)))),
+                    if (widget.sender != null)
+                      Text.rich(TextSpan(
+                          children: TextDisplay.parseEmojiInString(
+                              widget.sender!,
+                              TextDisplay.create(
+                                  customTextColor:
+                                      getPeerColor(widget.senderId!, 'b'),
+                                  fontWeight: FontWeight.bold,
+                                  size: 18,
+                                  textColor: TextColor.HeaderMain,
+                                  fontFamily: TextDisplay.greaterImportance)))),
                     Text.rich(parsedEntetiyes)
                   ]),
               margin: EdgeInsets.only(
