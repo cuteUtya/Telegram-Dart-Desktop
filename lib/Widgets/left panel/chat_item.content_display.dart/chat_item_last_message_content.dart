@@ -43,8 +43,8 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case MessageAnimatedEmoji:
-        displayContent.add(
-            TextDisplay.emoji((content as MessageAnimatedEmoji).emoji!, 18));
+        displayContent.add(TextDisplay.emoji(
+            (content as MessageAnimatedEmoji).emoji!, TextDisplay.regular18));
         break;
 
       case MessageSticker:
