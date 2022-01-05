@@ -6,16 +6,18 @@ import 'package:myapp/tdlib/td_api.dart';
 
 import 'package:myapp/utils.dart';
 
-class ChatPhotoDisplay extends StatelessWidget {
-  const ChatPhotoDisplay(
+class Userpic extends StatelessWidget {
+  const Userpic(
       {Key? key,
-      required this.photo,
+      this.chatPhoto,
+      this.profilePhoto,
       required this.chatId,
       required this.chatTitle,
       required this.client,
       this.useBig = false})
       : super(key: key);
-  final ChatPhotoInfo? photo;
+  final ChatPhotoInfo? chatPhoto;
+  final ProfilePhoto? profilePhoto;
   final String chatTitle;
   final int chatId;
   final TelegramClient client;
@@ -23,14 +25,19 @@ class ChatPhotoDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (photo == null) {
+    if (chatPhoto == null && profilePhoto == null) {
       return emptyUserpic();
     }
 
+    var photo = chatPhoto == null
+        ? (useBig ? profilePhoto!.big : profilePhoto!.small)
+        : (useBig ? chatPhoto!.big : chatPhoto!.small);
+
+    //TODO if profilePhoto has animations animate photo on mouse hover
     return FileImageDisplay(
         containerShape: BoxShape.circle,
         client: client,
-        id: useBig ? photo!.big!.id! : photo!.small!.id!,
+        id: photo!.id!,
         emptyReplacer: emptyUserpic());
   }
 
