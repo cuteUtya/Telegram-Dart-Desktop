@@ -42,16 +42,16 @@ class TextDisplay {
   static TextStyle get chatItemAccentSelected =>
       create(size: 18, textColor: TextColor.White);
 
-  static InlineSpan emoji(String emoji, double size,
-      {FontWeight? weight, Color? color}) {
+  static InlineSpan emoji(String emoji, TextStyle style) {
     return TextSpan(
         text: emoji,
         style: TextStyle(
-            fontWeight: weight,
-            color: color,
+            fontWeight: style.fontWeight,
+            color: style.color,
             fontFamily: _getEmojiFont(),
-            fontSize: size,
-            decoration: TextDecoration.none));
+            fontSize: style.fontSize,
+            shadows: style.shadows,
+            decoration: style.decoration));
   }
 
   static Map<Type?, String> replacementPairs = {
@@ -102,6 +102,33 @@ class TextDisplay {
     return result;
   }
 
+  /// Outlines a text using shadows.
+  static List<Shadow> outlinedText(
+      {double strokeWidth = 2,
+      Color strokeColor = Colors.black,
+      int precision = 5}) {
+    List<Shadow> result = [];
+    for (int x = 1; x < strokeWidth + precision; x++) {
+      for (int y = 1; y < strokeWidth + precision; y++) {
+        double offsetX = x.toDouble();
+        double offsetY = y.toDouble();
+        result.add(Shadow(
+            offset: Offset(-strokeWidth / offsetX, -strokeWidth / offsetY),
+            color: strokeColor));
+        result.add(Shadow(
+            offset: Offset(-strokeWidth / offsetX, strokeWidth / offsetY),
+            color: strokeColor));
+        result.add(Shadow(
+            offset: Offset(strokeWidth / offsetX, -strokeWidth / offsetY),
+            color: strokeColor));
+        result.add(Shadow(
+            offset: Offset(strokeWidth / offsetX, strokeWidth / offsetY),
+            color: strokeColor));
+      }
+    }
+    return result.toList();
+  }
+
   static List<InlineSpan> parseEmojiInString(String text, [TextStyle? style]) {
     style ??= create();
     List<InlineSpan> result = [];
@@ -118,9 +145,7 @@ class TextDisplay {
             TextSpan(text: text.substring(pos, element.start), style: style));
         pos = element.start;
       }
-      result.add(emoji(
-          text.substring(element.start, element.end), style!.fontSize!,
-          weight: style.fontWeight!, color: style.color));
+      result.add(emoji(text.substring(element.start, element.end), style!));
       pos = element.end;
     });
 
