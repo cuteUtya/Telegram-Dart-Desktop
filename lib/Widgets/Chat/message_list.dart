@@ -38,7 +38,7 @@ class _MessageListState extends State<MessageList> {
             children: [
               if (msg.isOutgoing!) const Spacer(),
               Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Container(
                       margin: const EdgeInsets.only(bottom: 16),
                       child: MessageDisplay(

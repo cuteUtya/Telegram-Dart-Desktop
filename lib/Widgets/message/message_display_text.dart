@@ -35,8 +35,12 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      timeBubbleSize = _timeKey.currentContext!.size!;
-      bubleSize ??= _bubbleKey.globalPaintBounds?.size;
+      if (mounted) {
+        setState(() {
+          timeBubbleSize = _timeKey.currentContext?.size ?? timeBubbleSize;
+          bubleSize = _bubbleKey.currentContext?.size;
+        });
+      }
     });
     var text = widget.message.content as MessageText;
     var time = DateTime.fromMillisecondsSinceEpoch(widget.message.date! * 1000);
@@ -46,8 +50,9 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     var boxes = calcLines(
         context,
         BoxConstraints(
-            maxWidth: bubleSize?.width ?? 100,
-            maxHeight: bubleSize?.height ?? 0),
+            //24 and 12 is bubble padding
+            maxWidth: (bubleSize?.width ?? 100) - 24,
+            maxHeight: (bubleSize?.height ?? 32) - 12),
         parsedEntetiyes);
     TextBox? biggestBox;
     boxes.forEach((element) {
@@ -88,11 +93,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                     Text.rich(parsedEntetiyes)
                   ]),
               margin: EdgeInsets.only(
-                  right: !fitsLastLine
-                      ? timeBubbleSize.width -
-                          ((biggestBox?.right ?? 0) - lastBox.right) +
-                          12
-                      : 0),
+                  right: !fitsLastLine ? timeBubbleSize.width + 12 : 0),
             ),
             if (widget.userPost != null)
               Positioned(
