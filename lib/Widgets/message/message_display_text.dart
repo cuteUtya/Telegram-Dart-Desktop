@@ -62,7 +62,21 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
         content: Stack(
           children: [
             Container(
-              child: Text.rich(parsedEntetiyes),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text.rich(TextSpan(
+                        children: TextDisplay.parseEmojiInString(
+                            widget.sender!,
+                            TextDisplay.create(
+                                customTextColor:
+                                    getPeerColor(widget.senderId!, 'b'),
+                                fontWeight: FontWeight.bold,
+                                size: 18,
+                                textColor: TextColor.HeaderMain,
+                                fontFamily: TextDisplay.greaterImportance)))),
+                    Text.rich(parsedEntetiyes)
+                  ]),
               margin: EdgeInsets.only(
                   right: !fitsLastLine
                       ? timeBubbleSize.width -
