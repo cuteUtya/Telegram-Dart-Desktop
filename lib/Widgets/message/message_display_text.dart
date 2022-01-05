@@ -58,7 +58,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
         (biggestBox?.right ?? 0) - lastBox.right > timeBubbleSize.width;
     return MacMessageBubble(
         key: _bubbleKey,
-        left: !widget.message.isOutgoing!,
+        side: widget.message.isOutgoing! ? Side.right : Side.left,
         content: Stack(
           children: [
             Container(

@@ -8,3 +8,5 @@ List<TextBox> calcLines(
   return renderObject.getBoxesForSelection(
       TextSelection(baseOffset: 0, extentOffset: text.toPlainText().length));
 }
+
+enum Side { right, left }

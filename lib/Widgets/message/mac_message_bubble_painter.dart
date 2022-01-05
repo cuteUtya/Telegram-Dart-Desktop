@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/message/bubble_utils.dart';
 
 class MacMessageBubblePainter extends CustomPainter {
-  const MacMessageBubblePainter({required this.color, this.left = true});
+  const MacMessageBubblePainter({required this.color, this.side = Side.left});
   final Color color;
-  final bool left;
+  final Side side;
 
   //https://github.com/overtake/TelegramSwift/blob/4e59c11547132d8a7fa49a4c586ab8c2359d0c3f/Telegram-Mac/ChatMessageBubbleImages.swift#L71
   @override
   void paint(Canvas canvas, Size size) {
-    if (!left) {
+    if (side == Side.right) {
       canvas.scale(-1, 1);
       canvas.translate(-size.width, 0);
     }

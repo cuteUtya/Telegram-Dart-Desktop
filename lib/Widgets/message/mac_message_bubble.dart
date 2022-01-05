@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble_painter.dart';
 
 class MacMessageBubble extends StatelessWidget {
-  const MacMessageBubble({Key? key, required this.content, required this.left})
+  const MacMessageBubble({Key? key, required this.content, required this.side})
       : super(key: key);
   final Widget content;
-  final bool left;
+  final Side side;
   @override
   Widget build(BuildContext context) {
-    var bubbleColor = ClientTheme.currentTheme
-        .getField(left ? "MessageBubbleOtherColor" : "MessageBubbleMineColor");
+    var bubbleColor = ClientTheme.currentTheme.getField(side == Side.left
+        ? "MessageBubbleOtherColor"
+        : "MessageBubbleMineColor");
     return Stack(
-        alignment: left ? Alignment.bottomLeft : Alignment.bottomRight,
+        alignment:
+            side == Side.left ? Alignment.bottomLeft : Alignment.bottomRight,
         children: [
           CustomPaint(
-              painter: MacMessageBubblePainter(color: bubbleColor, left: left),
+              painter: MacMessageBubblePainter(color: bubbleColor, side: side),
               child: const SizedBox(
                 width: 41,
                 height: 35,
               )),
           Container(
-              margin: EdgeInsets.only(left: left ? 6 : 0, right: left ? 0 : 6),
+              margin: EdgeInsets.only(
+                  left: side == Side.left ? 6 : 0,
+                  right: side == Side.left ? 0 : 6),
               decoration: BoxDecoration(
                   color: bubbleColor,
                   borderRadius: const BorderRadius.all(Radius.circular(18))),
