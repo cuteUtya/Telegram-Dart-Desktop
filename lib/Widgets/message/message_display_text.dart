@@ -5,7 +5,7 @@ import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/utils.dart';
-import 'package:myapp/global_key_extenstion.dart';
+import 'package:collection/collection.dart';
 
 class MessageDisplayText extends StatefulWidget {
   const MessageDisplayText(
@@ -27,10 +27,8 @@ class MessageDisplayText extends StatefulWidget {
 }
 
 class _MessageDisplayTextState extends State<MessageDisplayText> {
-  Size timeBubbleSize = const Size(60, 20);
+  Size timeBubbleSize = const Size(30, 10);
   GlobalKey _timeKey = GlobalKey();
-  Size? bubleSize;
-  GlobalKey _bubbleKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +36,6 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
       if (mounted) {
         setState(() {
           timeBubbleSize = _timeKey.currentContext?.size ?? timeBubbleSize;
-          bubleSize = _bubbleKey.currentContext?.size;
         });
       }
     });
@@ -47,29 +44,40 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(
             text.text!, 24, TextColor.MessageTextColor));
-    var boxes = calcLines(
-        context,
-        BoxConstraints(
-            //24 and 12 is bubble padding
-            maxWidth: (bubleSize?.width ?? 100) - 24,
-            maxHeight: (bubleSize?.height ?? 32) - 12),
-        parsedEntetiyes);
-    TextBox? biggestBox;
-    boxes.forEach((element) {
-      if (element.right > (biggestBox?.right ?? 0)) {
-        biggestBox = element;
-      }
-    });
-    final lastBox = boxes.last;
-    final fitsLastLine =
-        (biggestBox?.right ?? 0) - lastBox.right > timeBubbleSize.width;
+
     return MacMessageBubble(
-        key: _bubbleKey,
         side: widget.message.isOutgoing! ? Side.right : Side.left,
-        content: Stack(
-          children: [
-            Container(
-              child: Column(
+        content: LayoutBuilder(builder: (context, boxCons) {
+          var paragraph = calcLines(context, boxCons, parsedEntetiyes);
+          var boxes = paragraph.getBoxesForSelection(TextSelection(
+              baseOffset: 0,
+              extentOffset: parsedEntetiyes.toPlainText().length));
+          final lastBox = boxes.last;
+          final fitsLastLine =
+              boxCons.maxWidth - lastBox.right > timeBubbleSize.width;
+          return Stack(
+            children: [
+              if (widget.userPost != null)
+                Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Text(
+                      widget.userPost!,
+                      style: TextDisplay.regular16,
+                    )),
+              Positioned(
+                  right: 0,
+                  bottom: -2,
+                  child: MessageInfoBubbleCheckMarkTime(
+                      key: _timeKey,
+                      isOutgoing: widget.message.isOutgoing!,
+                      checkMarkValue: widget.message.isOutgoing!
+                          ? widget.message.id! <= widget.lastReadOutboxMessageId
+                          : null,
+                      time:
+                          "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())}")),
+              Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (widget.senderName != null)
@@ -90,33 +98,21 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                                           TextDisplay.greaterImportance))))
                         ],
                       ),
-                    Text.rich(parsedEntetiyes)
+                    Container(
+                      child: Text.rich(parsedEntetiyes),
+                      margin: EdgeInsets.only(
+                          bottom: boxCons.maxWidth - lastBox.right <
+                                  timeBubbleSize.width
+                              ? 12
+                              : 0),
+                    ),
                   ]),
-              margin: EdgeInsets.only(
-                  right: !fitsLastLine ? timeBubbleSize.width + 12 : 0),
-            ),
-            if (widget.userPost != null)
-              Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        widget.userPost!,
-                        style: TextDisplay.regular16,
-                      ))),
-            Positioned(
-                right: 0,
-                bottom: -2,
-                child: MessageInfoBubbleCheckMarkTime(
-                    key: _timeKey,
-                    isOutgoing: widget.message.isOutgoing!,
-                    checkMarkValue: widget.message.isOutgoing!
-                        ? widget.message.id! <= widget.lastReadOutboxMessageId
-                        : null,
-                    time:
-                        "${validateDataComponent(time.hour.toString())}:${validateDataComponent(time.minute.toString())}")),
-          ],
-        ));
+              SizedBox(
+                width: lastBox.right +
+                    (!fitsLastLine ? 0 : timeBubbleSize.width + 12),
+              )
+            ],
+          );
+        }));
   }
 }
