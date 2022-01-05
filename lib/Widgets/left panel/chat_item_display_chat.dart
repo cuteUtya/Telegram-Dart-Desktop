@@ -133,8 +133,8 @@ class ChatItemDisplay extends StatelessWidget {
                                 child: StreamBuilder(
                                     stream: client.photoOf(chatId),
                                     initialData: client.getChat(chatId).photo,
-                                    builder: (_, data) => ChatPhotoDisplay(
-                                        photo: data.hasData
+                                    builder: (_, data) => Userpic(
+                                        chatPhoto: data.hasData
                                             ? data.data as ChatPhotoInfo
                                             : null,
                                         chatId: chatId,
