@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
+import 'package:myapp/utils.dart';
 
 class TextDisplay {
   static String _getEmojiFont() => "AppleColorEmoji";
@@ -104,9 +105,7 @@ class TextDisplay {
   static List<InlineSpan> parseEmojiInString(String text, [TextStyle? style]) {
     style ??= create();
     List<InlineSpan> result = [];
-    var matches = RegExp(
-            r"([^ABCČĆDĐEFGHIJKLMNOPQRSŠTUVWXYZŽabcčćdđefghijklmnopqrsštuvwxyzžАБВГҐДЂЕЁЄЖЗЅИІЇЙЈКЛЉМНЊОПРСТЋУЎФХЦЧЏШЩЪЫЬЭЮЯабвгґдђеёєжзѕиіїйјклљмнњопрстћуўфхцчџшщъыьэюяΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψωάΆέΈέΉίϊΐΊόΌύΰϋΎΫὰάὲέὴήὶίὸόὺύὼώΏ1234567890‘?’“!”(%)\[#\]{@}\/&\<\-+÷×=>®©$€£¥¢:;,.*\n ]){1,}")
-        .allMatches(text);
+    var matches = emojiRegex.allMatches(text);
 
     int pos = 0;
     if (matches.isEmpty) {
