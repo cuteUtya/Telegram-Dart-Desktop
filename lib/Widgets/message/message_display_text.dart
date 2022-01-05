@@ -43,8 +43,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     var time = DateTime.fromMillisecondsSinceEpoch(widget.message.date! * 1000);
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(
-            text.text!, 24, TextColor.MessageTextColor));
-
+            text.text!, 20, TextColor.MessageTextColor));
     return MacMessageBubble(
         side: widget.message.isOutgoing! ? Side.right : Side.left,
         content: LayoutBuilder(builder: (context, boxCons) {

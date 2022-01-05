@@ -94,8 +94,8 @@ class TextDisplay {
       result.addAll(parseEmojiInString(
           text.text!.substring(element.start, element.end),
           style == null
-              ? create(size: 18, textColor: textColor)
-              : style(18, textColor)));
+              ? create(size: size, textColor: textColor)
+              : style(size, textColor)));
     });
 
     return result;
