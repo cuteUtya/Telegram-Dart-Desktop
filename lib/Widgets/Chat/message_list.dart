@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -16,13 +17,17 @@ class MessageList extends StatefulWidget {
 
 class _MessageListState extends State<MessageList> {
   Messages? messages;
+  int _renderedChatId = 0;
   @override
   Widget build(BuildContext context) {
-    widget.client
-        .send(GetChatHistory(chatId: widget.chatId, limit: 100))
-        .then((mess) {
-      setState(() => messages = mess as Messages);
-    });
+    if (_renderedChatId != widget.chatId) {
+      widget.client
+          .send(GetChatHistory(chatId: widget.chatId, limit: 100))
+          .then((mess) {
+        setState(() => messages = mess as Messages);
+      });
+      _renderedChatId = widget.chatId;
+    }
     var chat = widget.client.getChat(widget.chatId);
     return ListView.builder(
         reverse: true,
