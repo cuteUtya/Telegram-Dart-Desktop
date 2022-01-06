@@ -114,3 +114,4 @@ MessageBubbleOtherColor: ref(BaseColor);
 MessageInfoBubbleColor: #4D151515;
 CheckMarkNotMineColor: #FF989898;
 CheckMarkMineColor: #FF65AF5F;
+CheckMarkInFlowContainer: #F6F6F6

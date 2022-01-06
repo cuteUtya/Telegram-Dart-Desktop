@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 
+/// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/macMessageBubble_example.png)
+/// [CustomPainter] bottom nib of mac-style-bubble
+/// * [color] color of bubble
+/// * [side] which way will look nib of bubble
 class MacMessageBubblePainter extends CustomPainter {
   const MacMessageBubblePainter({required this.color, this.side = Side.left});
   final Color color;

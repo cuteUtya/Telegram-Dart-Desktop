@@ -9,15 +9,15 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/tdlib/tdlibUtils.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 
+/// UI representation of [Message] object
+/// * [message] message object
+/// * [chat] chat from wich was sended message, may be null
 class MessageDisplay extends StatelessWidget {
   const MessageDisplay(
-      {Key? key,
-      required this.chat,
-      required this.client,
-      required this.message})
+      {Key? key, this.chat, required this.client, required this.message})
       : super(key: key);
   final Message message;
-  final Chat chat;
+  final Chat? chat;
   final TelegramClient client;
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,13 @@ class MessageDisplay extends StatelessWidget {
       case MessageText:
         contentWidget = MessageDisplayText(
           userPost: message.authorSignature,
-          senderName: (chat.type is ChatTypeSupergroup ||
-                      chat.type is ChatTypeBasicGroup) &&
+          senderName: (chat?.type is ChatTypeSupergroup ||
+                      chat?.type is ChatTypeBasicGroup) &&
                   !message.isOutgoing!
               ? getSenderName(message.senderId!, client, true)
               : null,
           senderId: getSenderId(message.senderId!),
-          lastReadOutboxMessageId: chat.lastReadOutboxMessageId!,
+          lastReadOutboxMessageId: chat?.lastReadOutboxMessageId ?? 0,
           message: message,
         );
         break;

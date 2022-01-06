@@ -4,21 +4,26 @@ import 'package:myapp/Widgets/check_mark.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 
+/// Widget, what displays time at which the message was sent and icon with read status
+/// * [checkMarkValue] is message was readed? If null, icon with read status will not be displayed
+/// * [time] time in wich message was sended
+/// * [isOutgoing] it's info about outgoing message? Affect on text and icon color
+/// * [useBackground] if true widget will be wrapped in [MessageInfoBubbleBase] use it if this info will be displayed outside bubble
 class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
   const MessageInfoBubbleCheckMarkTime(
       {Key? key,
-      this.checkMarkValue,
       required this.time,
+      this.checkMarkValue,
       this.isOutgoing = false,
-      this.hasBackground = false})
+      this.useBackground = false})
       : super(key: key);
   final bool? checkMarkValue;
   final String time;
   final bool isOutgoing;
-  final bool hasBackground;
+  final bool useBackground;
   @override
   Widget build(BuildContext context) {
-    var color = ClientTheme.currentTheme.getField(hasBackground
+    var color = ClientTheme.currentTheme.getField(useBackground
         ? "CheckMarkInFlowContainer"
         : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
     var content = Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -31,7 +36,7 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
         CheckMark(isReaded: checkMarkValue!, color: color, size: 20)
     ]);
 
-    if (hasBackground) return MessageInfoBubbleBase(content: content);
+    if (useBackground) return MessageInfoBubbleBase(content: content);
     return content;
   }
 }

@@ -279,6 +279,6 @@ class ChatItemDisplay extends StatelessWidget {
       return "${client.getTranslation("lng_weekday${time.weekday}")} (${getHHMM(time)})";
     }
 
-    return "${validateDataComponent(time.day.toString())}.${validateDataComponent(time.month.toString())}.${time.year}";
+    return "${to00format(time.day.toString())}.${to00format(time.month.toString())}.${time.year}";
   }
 }
