@@ -5,7 +5,7 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'dart:io' as io;
 
-class FileImageDisplay extends StatefulWidget {
+class FileImageDisplay extends StatelessWidget {
   const FileImageDisplay(
       {Key? key,
       required this.id,
@@ -31,56 +31,46 @@ class FileImageDisplay extends StatefulWidget {
   final BorderRadius? borderRadius;
 
   @override
-  State<StatefulWidget> createState() => FileImageDisplayState();
-}
-
-class FileImageDisplayState extends State<FileImageDisplay> {
-  String? path;
-  int? downloadedId;
-
-  void changeFile(File file) {
-    downloadedId = downloadedId;
-    if (mounted) {
-      setState(() => path = file.local!.path!);
-    }
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: client.send(GetFile(fileId: id)),
+        builder: (context, data) {
+          if (data.hasData) {
+            var fileInfo = data.data as File;
+            if (fileInfo.local!.isDownloadingCompleted! &&
+                (fileInfo.local!.path ?? "").isNotEmpty) {
+              return _build(fileInfo.local!.path!);
+            }
+            return FutureBuilder(
+              future: client.send(DownloadFile(fileId: id, priority: priority)),
+              builder: (context, downloaded) {
+                if (downloaded.hasData) {
+                  return _build((downloaded.data as File).local!.path!);
+                }
+                return emptyReplacer;
+              },
+            );
+          }
+          return emptyReplacer;
+        });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (downloadedId == null) {
-      widget.client.send(GetFile(fileId: widget.id)).then((fileInfo) {
-        fileInfo as File;
-        if ((fileInfo.local?.path ?? "").isEmpty) {
-          widget.client
-              .send(DownloadFile(fileId: widget.id, priority: 4))
-              .then((downloadedFile) {
-            changeFile(downloadedFile as File);
-          });
-        } else {
-          changeFile(fileInfo);
-        }
-      });
-    }
-
-    if ((path ?? "").isNotEmpty) {
-      var file = io.File(path!);
-      return widget.isTGV
-          ? SvgPicture.memory(
-              Uint8List.fromList(
-                  io.gzip.decode(file.readAsBytesSync().toList())),
-              height: widget.height,
-              width: widget.width,
-              color: widget.tgvColor,
-              fit: BoxFit.cover)
-          : Container(
-              width: widget.width,
-              height: widget.height,
-              decoration: BoxDecoration(
-                  borderRadius: widget.borderRadius,
-                  shape: widget.containerShape,
-                  image: DecorationImage(
-                      fit: BoxFit.cover, image: FileImage(file))));
-    }
-    return widget.emptyReplacer;
+  Widget _build(String path) {
+    var file = io.File(path);
+    return isTGV
+        ? SvgPicture.memory(
+            Uint8List.fromList(io.gzip.decode(file.readAsBytesSync().toList())),
+            height: height,
+            width: width,
+            color: tgvColor,
+            fit: BoxFit.cover)
+        : Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                shape: containerShape,
+                image: DecorationImage(
+                    fit: BoxFit.cover, image: FileImage(file))));
   }
 }
