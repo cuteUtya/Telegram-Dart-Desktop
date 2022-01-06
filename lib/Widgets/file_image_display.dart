@@ -42,7 +42,8 @@ class FileImageDisplay extends StatelessWidget {
               return _build(fileInfo.local!.path!);
             }
             return FutureBuilder(
-              future: client.send(DownloadFile(fileId: id, priority: priority)),
+              future: client.send(DownloadFile(
+                  fileId: id, priority: priority, synchronous: true)),
               builder: (context, downloaded) {
                 if (downloaded.hasData) {
                   return _build((downloaded.data as File).local!.path!);
