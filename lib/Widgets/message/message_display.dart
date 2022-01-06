@@ -95,6 +95,16 @@ class MessageDisplay extends StatelessWidget {
           client: client,
         );
         break;
+      case MessageSenderChat:
+        var senderChatId = (message.senderId as MessageSenderChat).chatId;
+        var senderChat = client.getChat(senderChatId!);
+        senderUserpic = Userpic(
+          chatPhoto: senderChat.photo,
+          chatId: senderChatId,
+          client: client,
+          chatTitle: senderChat.title!,
+        );
+        break;
     }
 
     return Row(
