@@ -41,12 +41,14 @@ class FileImageDisplay extends StatelessWidget {
                 (fileInfo.local!.path ?? "").isNotEmpty) {
               return _build(fileInfo.local!.path!);
             }
-            return FutureBuilder(
-              future: client.send(DownloadFile(
-                  fileId: id, priority: priority, synchronous: true)),
-              builder: (context, downloaded) {
-                if (downloaded.hasData) {
-                  return _build((downloaded.data as File).local!.path!);
+            client.send(DownloadFile(fileId: id, priority: priority));
+            return StreamBuilder(
+              stream: client.fileUpdates(id),
+              builder: (context, fileInfo) {
+                if (fileInfo.hasData) {
+                  if ((fileInfo.data as File).local!.isDownloadingCompleted!) {
+                    return _build((fileInfo.data as File).local!.path!);
+                  }
                 }
                 return emptyReplacer;
               },

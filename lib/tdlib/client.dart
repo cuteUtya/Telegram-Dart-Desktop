@@ -171,7 +171,7 @@ class TelegramClient {
       .where((u) => u is UpdateFavoriteStickers)
       .map((a) => (a as UpdateFavoriteStickers).stickerIds!);
 
-  Stream<File> get updateFile =>
+  Stream<File> get _updateFile =>
       updates.where((u) => u is UpdateFile).map((a) => (a as UpdateFile).file!);
 
   Stream<UpdateFileGenerationStart> get updateFileGenerationStart => updates
@@ -622,6 +622,12 @@ class TelegramClient {
   Stream<Message?> lastMessageIn(int chatId) async* {
     await for (final update in updateChatLastMessage) {
       if (update.chatId == chatId) yield update.lastMessage;
+    }
+  }
+
+  Stream<File> fileUpdates(int fileId) async* {
+    await for (final update in _updateFile) {
+      if (update.id == fileId) yield update;
     }
   }
 
