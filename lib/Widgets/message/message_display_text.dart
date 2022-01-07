@@ -4,7 +4,7 @@ import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
-import 'package:myapp/tdlib/tdlibUtils.dart';
+import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
 
 /// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/messageText_example.jpg).

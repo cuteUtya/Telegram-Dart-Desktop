@@ -637,7 +637,6 @@ class TelegramClient {
         localizationTarget: localizationTarget,
         languagePackId: languagePackId,
         languagePackDatabasePath: languagePackDatabasePath));
-    assert(result is LanguagePackStringValuePluralized && itemsCount != null);
     String translate = "";
 
     if (result is LanguagePackStringValueDeleted) {
@@ -647,6 +646,7 @@ class TelegramClient {
       translate = result.value!;
     }
     if (result is LanguagePackStringValuePluralized) {
+      assert(itemsCount != null);
       if (itemsCount == 0) {
         translate = result.zeroValue!;
       } else if (itemsCount == 1) {

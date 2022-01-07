@@ -4,7 +4,7 @@ import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
-import 'package:myapp/tdlib/tdlibUtils.dart';
+import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
 
 class ActionBarDisplay extends StatelessWidget {

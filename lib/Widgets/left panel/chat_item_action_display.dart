@@ -5,7 +5,7 @@ import 'package:myapp/Widgets/smooth_number_counter.dart';
 import 'package:myapp/Widgets/text_animation.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
-import 'package:myapp/tdlib/tdlibUtils.dart';
+import 'package:myapp/tdlib/tdlib_utils.dart';
 
 class ChatItemActionDisplay extends StatelessWidget {
   const ChatItemActionDisplay(

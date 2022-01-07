@@ -3,7 +3,7 @@ import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
-import 'package:myapp/tdlib/tdlibUtils.dart';
+import 'package:myapp/tdlib/tdlib_utils.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({Key? key, required this.chatId, required this.client})

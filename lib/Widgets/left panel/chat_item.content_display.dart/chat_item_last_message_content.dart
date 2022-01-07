@@ -7,7 +7,7 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/utils.dart';
-import 'package:myapp/tdlib/tdlibUtils.dart';
+import 'package:myapp/tdlib/tdlib_utils.dart';
 
 class ChatItemLastMessageContent extends StatelessWidget {
   const ChatItemLastMessageContent({
