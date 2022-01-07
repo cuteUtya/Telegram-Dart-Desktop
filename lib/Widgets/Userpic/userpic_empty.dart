@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/utils.dart';
 
@@ -11,7 +10,6 @@ class UserpicEmpty extends StatelessWidget {
   final String displayLetters;
   @override
   Widget build(BuildContext context) {
-    var i = chatId;
     return Stack(alignment: Alignment.center, children: [
       Container(
           decoration: BoxDecoration(

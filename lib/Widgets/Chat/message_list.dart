@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
-import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/tdlib/tdlibUtils.dart';

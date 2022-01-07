@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble_painter.dart';
-import 'package:myapp/tdlib/td_api.dart';
 
 /// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/macMessageBubble_example.jpg)
 /// message bubble that looks like bubble from telegram macOS version
@@ -26,7 +25,6 @@ class MacMessageBubble extends StatelessWidget {
     Radius radiusFree = const Radius.circular(18);
     Radius radiusClose = const Radius.circular(4);
     BorderRadius borderRadius = BorderRadius.all(radiusFree);
-    ;
     switch (position) {
       case BubbleRelativePosition.top:
         //borderRadius =

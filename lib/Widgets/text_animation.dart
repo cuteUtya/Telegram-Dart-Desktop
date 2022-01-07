@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/Widgets/display_text.dart';
 
 class TextAnimation extends StatefulWidget {
   const TextAnimation(

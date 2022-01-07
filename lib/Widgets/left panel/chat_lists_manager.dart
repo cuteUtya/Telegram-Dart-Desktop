@@ -114,9 +114,9 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   @override
   void dispose() {
-    _subscriptions.forEach((element) {
+    for (var element in _subscriptions) {
       element.cancel();
-    });
+    }
     super.dispose();
   }
 

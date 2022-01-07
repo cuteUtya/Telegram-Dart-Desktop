@@ -10,7 +10,6 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/utils.dart';
-import 'package:path/path.dart';
 
 /// UI representation of [Message] object
 /// * [message] message object

@@ -205,9 +205,3 @@ enum TextColor {
   OnlineColor,
   MessageTextColor
 }
-
-class _textSection {
-  const _textSection(this.text, this.type);
-  final String text;
-  final Type? type;
-}

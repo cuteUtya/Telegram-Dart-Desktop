@@ -52,11 +52,11 @@ String bytesToSize(int bytes) {
 
 bool showChatInChatList(List<ChatPosition> poss, ChatList list) {
   bool result = false;
-  poss.forEach((pos) {
+  for (var pos in poss) {
     if (compareChatlists(pos.list!, list) && pos.order! != 0) {
       result = true;
     }
-  });
+  }
   return result;
 }
 

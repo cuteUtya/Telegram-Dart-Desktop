@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:ffi';
-import 'package:meta/meta.dart';
-import 'package:myapp/tdlib/tdlibUtils.dart';
 import "package:path/path.dart" as path;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
@@ -417,10 +414,7 @@ class TelegramClient {
     return Text(text, style: style);
   }
 
-  String? _dbPath;
-  String? _filesPath;
-
-  Map<String, OptionValue> _optionsValue = {};
+  final Map<String, OptionValue> _optionsValue = {};
   T? getOptionValue<T>(String name) {
     assert(_optionsValue[name] != null);
     var option = _optionsValue[name];
@@ -454,9 +448,6 @@ class TelegramClient {
       deviceModel = getSystemVersion();
     }
     systemVersion ??= getSystemVersion();
-
-    _dbPath = databaseDirectory;
-    _filesPath = filesDirectory;
 
     send(SetOption(
         name: "localization_target",
@@ -646,7 +637,7 @@ class TelegramClient {
         localizationTarget: localizationTarget,
         languagePackId: languagePackId,
         languagePackDatabasePath: languagePackDatabasePath));
-
+    assert(result is LanguagePackStringValuePluralized && itemsCount != null);
     String translate = "";
 
     if (result is LanguagePackStringValueDeleted) {
@@ -656,7 +647,6 @@ class TelegramClient {
       translate = result.value!;
     }
     if (result is LanguagePackStringValuePluralized) {
-      assert(result is LanguagePackStringValuePluralized && itemsCount != null);
       if (itemsCount == 0) {
         translate = result.zeroValue!;
       } else if (itemsCount == 1) {

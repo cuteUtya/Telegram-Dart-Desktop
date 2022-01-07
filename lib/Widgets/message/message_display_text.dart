@@ -36,7 +36,7 @@ class MessageDisplayText extends StatefulWidget {
 
 class _MessageDisplayTextState extends State<MessageDisplayText> {
   Size? msgInfoBubbleSize;
-  GlobalKey _msgInfoWidgetKey = GlobalKey();
+  final GlobalKey _msgInfoWidgetKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {

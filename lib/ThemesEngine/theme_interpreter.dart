@@ -54,7 +54,7 @@ class ClientTheme {
   String doFuntions(String value) {
     while (true) {
       bool findFunctions = false;
-      functions.forEach((foo) {
+      for (var foo in functions) {
         var regex = foo.funcName;
         regex += "\\(";
         regex += "(((#[0-9a-zA-Z]{6,8})|([0-9]{1,20}([.,][0-9]{1,4})?)),?)";
@@ -76,7 +76,7 @@ class ClientTheme {
             value = value.replaceFirst(functionStr, foo.dartFunction(args));
           }
         }
-      });
+      }
       if (!findFunctions) {
         break;
       }
@@ -232,14 +232,16 @@ class ClientTheme {
           colors.add(255);
         } else if (colorsStr.length == 4) {
           try {
-            colorsStr.forEach((element) => colors.add(double.parse(element)));
+            for (var element in colorsStr) {
+              colors.add(double.parse(element));
+            }
           } catch (ex) {
             throw Exception(
                 "Error while initialization new Color: parsing arguments failed");
           }
           value = value.replaceFirst(
               match,
-              RGBAtoHEX(colors[0].toInt(), colors[1].toInt(), colors[2].toInt(),
+              rgbaTohex(colors[0].toInt(), colors[1].toInt(), colors[2].toInt(),
                   colors[3].toInt()));
         } else {
           throw Exception("Error while initialization new Color: received " +
@@ -265,12 +267,12 @@ class ClientTheme {
         List<String> components = [""];
         var allowOperation = ['+', '-', '*', '/'];
         var currentOperation = '';
-        allowOperation.forEach((element) {
+        for (var element in allowOperation) {
           if (operation.contains(element)) {
             components = operation.split(element);
             currentOperation = element;
           }
-        });
+        }
 
         double result = -1;
         double a;
@@ -369,14 +371,14 @@ class ClientTheme {
   }
 
   static String colorToHEX(Color clr) {
-    return RGBAtoHEX(clr.alpha, clr.red, clr.green, clr.blue);
+    return rgbaTohex(clr.alpha, clr.red, clr.green, clr.blue);
   }
 
   static Color hexToColor(String hexString, {String alphaChannel = 'FF'}) {
     return Color(int.parse(hexString.replaceFirst('#', '0x$alphaChannel')));
   }
 
-  static String RGBAtoHEX(int a, int r, int g, int b) {
+  static String rgbaTohex(int a, int r, int g, int b) {
     r = (r < 0) ? -r : r;
     g = (g < 0) ? -g : g;
     b = (b < 0) ? -b : b;

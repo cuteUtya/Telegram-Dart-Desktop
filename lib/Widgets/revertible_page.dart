@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
-import 'package:myapp/Widgets/horizontal_separator_line.dart';
 
 class RevertiblePage extends StatelessWidget {
   const RevertiblePage(

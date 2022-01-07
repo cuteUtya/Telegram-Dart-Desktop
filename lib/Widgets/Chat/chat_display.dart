@@ -3,13 +3,9 @@ import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
 import 'package:myapp/Widgets/Chat/input_field.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
-import 'package:myapp/Widgets/display_text.dart';
-import 'package:myapp/Widgets/message/mac_message_bubble.dart';
-import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/Widgets/background_display.dart';
-import 'package:flutter/painting.dart' as ui;
 
 class ChatDisplay extends StatelessWidget {
   const ChatDisplay({Key? key, required this.client}) : super(key: key);
@@ -24,8 +20,6 @@ class ChatDisplay extends StatelessWidget {
               data.data != null ? client.getChat(data.data as int) : null;
           return Stack(children: [
             StreamBuilder(
-                //TODO correct work with dark and light themes
-                initialData: client.getCachedBackground(false),
                 stream: client.selectedBackground,
                 builder: (_, data) {
                   if (data.hasData) {
@@ -56,7 +50,7 @@ class ChatDisplay extends StatelessWidget {
                   child: Column(children: [
                     Expanded(
                         child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             child:
                                 MessageList(chatId: chat.id!, client: client))),
                     InputField(client: client)

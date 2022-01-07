@@ -38,10 +38,10 @@ class DesktopButton extends StatefulWidget {
   final FontWeight weight;
 
   @override
-  State<DesktopButton> createState() => _desktopButtonState();
+  State<DesktopButton> createState() => _DesktopButtonState();
 }
 
-class _desktopButtonState extends State<DesktopButton> {
+class _DesktopButtonState extends State<DesktopButton> {
   bool isPressed = false;
   @override
   Widget build(BuildContext contex) {
