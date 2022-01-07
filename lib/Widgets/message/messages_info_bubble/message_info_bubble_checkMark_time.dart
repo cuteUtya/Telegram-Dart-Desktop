@@ -13,11 +13,13 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
   const MessageInfoBubbleCheckMarkTime(
       {Key? key,
       required this.time,
+      this.customInfo,
       this.checkMarkValue,
       this.isOutgoing = false,
       this.useBackground = false})
       : super(key: key);
   final bool? checkMarkValue;
+  final String? customInfo;
   final String time;
   final bool isOutgoing;
   final bool useBackground;
@@ -26,10 +28,17 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
     var color = ClientTheme.currentTheme.getField(useBackground
         ? "CheckMarkInFlowContainer"
         : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
+    var textStyle = TextDisplay.create(size: 16, customTextColor: color);
     var content = Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+      if (customInfo != null)
+        Text(
+          customInfo!,
+          style: textStyle,
+        ),
+      if (customInfo != null) const SizedBox(width: 4),
       Text(
         time,
-        style: TextDisplay.create(size: 16, customTextColor: color),
+        style: textStyle,
       ),
       if (checkMarkValue != null) const SizedBox(width: 4),
       if (checkMarkValue != null)

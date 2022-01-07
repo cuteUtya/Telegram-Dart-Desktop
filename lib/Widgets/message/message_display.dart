@@ -36,6 +36,16 @@ class MessageDisplay extends StatelessWidget {
         (bubbleRelativePosition == BubbleRelativePosition.top ||
             bubbleRelativePosition == BubbleRelativePosition.single);
     bool wrapInBubble = false;
+    var msgInfoWidget = MessageInfoBubbleCheckMarkTime(
+      customInfo:
+          message.editDate == 0 ? null : client.getTranslation("lng_edited"),
+      useBackground: true,
+      isOutgoing: message.isOutgoing!,
+      time: getHHMM(unixToDateTime(message.date!)),
+      checkMarkValue: message.isOutgoing!
+          ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
+          : null,
+    );
     switch (message.content.runtimeType) {
       case MessageText:
         var contentText = message.content as MessageText;
@@ -54,14 +64,7 @@ class MessageDisplay extends StatelessWidget {
                     : MainAxisAlignment.start,
                 emojis: textUnwhitespaced,
                 infoSide: message.isOutgoing! ? Side.left : Side.right,
-                messageInfo: MessageInfoBubbleCheckMarkTime(
-                  useBackground: true,
-                  isOutgoing: message.isOutgoing!,
-                  time: getHHMM(unixToDateTime(message.date!)),
-                  checkMarkValue: message.isOutgoing!
-                      ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
-                      : null,
-                ));
+                messageInfo: msgInfoWidget);
             break;
           }
         }

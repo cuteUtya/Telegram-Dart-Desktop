@@ -52,6 +52,9 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     var time = getHHMM(unixToDateTime(widget.message.date!));
     var msgInfoWidget = MessageInfoBubbleCheckMarkTime(
         key: _msgInfoWidgetKey,
+        customInfo: widget.message.editDate == 0
+            ? null
+            : widget.client.getTranslation("lng_edited"),
         isOutgoing: widget.message.isOutgoing!,
         checkMarkValue: widget.message.isOutgoing!
             ? widget.message.id! <=
