@@ -13,3 +13,8 @@ RenderParagraph calcLines(
 
 /// describes side 🗿
 enum Side { right, left }
+
+/// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/BubbleRelativePosition_example.jpg).
+/// Few messages in row from single user have different shape.
+/// This enum describe relative position of bubble in row
+enum BubbleRelativePosition { top, middle, bottom, single }

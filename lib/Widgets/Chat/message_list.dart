@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/StateManagment/ui_events.dart';
+import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -34,14 +35,40 @@ class _MessageListState extends State<MessageList> {
         itemCount: messages?.totalCount ?? 0,
         itemBuilder: (context, index) {
           var msg = messages!.messages![index];
+          var prevSender =
+              (index - 1 < 0 ? null : messages!.messages![index - 1])?.senderId;
+          var prevSenderId =
+              prevSender == null ? null : getSenderId(prevSender);
+          var nextSender = (index + 1 >= messages!.messages!.length
+                  ? null
+                  : messages!.messages![index + 1])
+              ?.senderId;
+          var nextSenderId =
+              nextSender == null ? null : getSenderId(nextSender);
+          var currSenderId = getSenderId(msg.senderId!);
+          var bubbleRelativePosition =
+              currSenderId == nextSenderId && currSenderId == prevSenderId
+                  ? BubbleRelativePosition.middle
+                  : currSenderId == prevSenderId
+                      ? BubbleRelativePosition.top
+                      : currSenderId == nextSenderId
+                          ? BubbleRelativePosition.bottom
+                          : BubbleRelativePosition.single;
           return Row(
             children: [
               if (msg.isOutgoing!) const Spacer(),
               Expanded(
                   flex: 1,
                   child: Container(
-                      margin: const EdgeInsets.only(bottom: 16),
+                      margin: EdgeInsets.only(
+                          bottom: (bubbleRelativePosition ==
+                                      BubbleRelativePosition.bottom ||
+                                  bubbleRelativePosition ==
+                                      BubbleRelativePosition.single)
+                              ? 16
+                              : 4),
                       child: MessageDisplay(
+                        bubbleRelativePosition: bubbleRelativePosition,
                         chat: chat,
                         message: msg,
                         client: widget.client,
