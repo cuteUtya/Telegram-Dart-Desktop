@@ -4,10 +4,14 @@ import 'package:myapp/utils.dart';
 
 class UserpicEmpty extends StatelessWidget {
   const UserpicEmpty(
-      {Key? key, required this.chatId, required this.displayLetters})
+      {Key? key,
+      required this.chatId,
+      required this.displayLetters,
+      this.fontSize})
       : super(key: key);
   final int chatId;
   final String displayLetters;
+  final double? fontSize;
   @override
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: [
@@ -28,7 +32,7 @@ class UserpicEmpty extends StatelessWidget {
               fontFamily: extractEmojis(displayLetters).isNotEmpty
                   ? TextDisplay.emojiFont
                   : TextDisplay.greaterImportance,
-              size: 24,
+              size: fontSize ?? 24,
               fontWeight: FontWeight.w500))
     ]);
   }

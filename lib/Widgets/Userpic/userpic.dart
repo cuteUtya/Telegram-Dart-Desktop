@@ -11,6 +11,7 @@ class Userpic extends StatelessWidget {
       {Key? key,
       this.chatPhoto,
       this.profilePhoto,
+      this.emptyUserpicFontSize,
       required this.chatId,
       required this.chatTitle,
       required this.client,
@@ -18,6 +19,7 @@ class Userpic extends StatelessWidget {
       : super(key: key);
   final ChatPhotoInfo? chatPhoto;
   final ProfilePhoto? profilePhoto;
+  final double? emptyUserpicFontSize;
   final String chatTitle;
   final int chatId;
   final TelegramClient client;
@@ -41,8 +43,11 @@ class Userpic extends StatelessWidget {
         emptyReplacer: emptyUserpic());
   }
 
-  Widget emptyUserpic() =>
-      UserpicEmpty(chatId: chatId, displayLetters: getPeerNameLetters());
+  Widget emptyUserpic() => UserpicEmpty(
+        chatId: chatId,
+        displayLetters: getPeerNameLetters(),
+        fontSize: emptyUserpicFontSize,
+      );
 
   String getPeerNameLetters() {
     var emojis = extractEmojisAsList(chatTitle);

@@ -108,21 +108,21 @@ class MessageDisplay extends StatelessWidget {
             var senderUserId = (message.senderId as MessageSenderUser).userId!;
             var senderUser = client.getUser(senderUserId);
             senderUserpic = Userpic(
-              profilePhoto: senderUser.profilePhoto,
-              chatId: senderUserId,
-              chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
-              client: client,
-            );
+                profilePhoto: senderUser.profilePhoto,
+                chatId: senderUserId,
+                chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
+                client: client,
+                emptyUserpicFontSize: 16);
             break;
           case MessageSenderChat:
             var senderChatId = (message.senderId as MessageSenderChat).chatId;
             var senderChat = client.getChat(senderChatId!);
             senderUserpic = Userpic(
-              chatPhoto: senderChat.photo,
-              chatId: senderChatId,
-              client: client,
-              chatTitle: senderChat.title!,
-            );
+                chatPhoto: senderChat.photo,
+                chatId: senderChatId,
+                client: client,
+                chatTitle: senderChat.title!,
+                emptyUserpicFontSize: 16);
             break;
         }
       }
