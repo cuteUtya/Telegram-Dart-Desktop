@@ -17,7 +17,7 @@ class DeleteChatMessagesByDate extends TdFunction {
   /// [maxDate] The maximum date of the messages to delete 
   int? maxDate;
 
-  /// [revoke] Pass true to try to delete chat messages for all users; private chats only
+  /// [revoke] Pass true to delete chat messages for all users; private chats only
   bool? revoke;
 
   /// callback sign

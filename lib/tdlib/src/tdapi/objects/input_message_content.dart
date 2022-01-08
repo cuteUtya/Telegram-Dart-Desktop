@@ -85,7 +85,7 @@ class InputMessageText extends InputMessageContent {
     this.disableWebPagePreview,
     this.clearDraft});
 
-  /// [text] Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually
+  /// [text] Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Spoiler, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually
   FormattedText? text;
 
   /// [disableWebPagePreview] True, if rich web page previews for URLs in the message text must be disabled
@@ -893,7 +893,7 @@ class InputMessageForwarded extends InputMessageContent {
   /// [inGameShare] True, if a game message is being shared from a launched game; applies only to game messages
   bool? inGameShare;
 
-  /// [copyOptions] Options to be used to copy content of the message without reference to the original sender; pass null to try to forward the message as usual
+  /// [copyOptions] Options to be used to copy content of the message without reference to the original sender; pass null to forward the message as usual
   MessageCopyOptions? copyOptions;
 
   /// Parse from a json

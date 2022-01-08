@@ -15,7 +15,7 @@ class LocalFile extends TdObject {
   /// [path] Local path to the locally available file part; may be empty
   String? path;
 
-  /// [canBeDownloaded] True, if it is possible to try to download or generate the file
+  /// [canBeDownloaded] True, if it is possible to download or generate the file
   bool? canBeDownloaded;
 
   /// [canBeDeleted] True, if the file can be deleted

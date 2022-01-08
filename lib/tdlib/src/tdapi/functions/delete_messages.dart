@@ -13,7 +13,7 @@ class DeleteMessages extends TdFunction {
   /// [messageIds] Identifiers of the messages to be deleted 
   List<int>? messageIds;
 
-  /// [revoke] Pass true to try to delete messages for all chat members. Always true for supergroups, channels and secret chats
+  /// [revoke] Pass true to delete messages for all chat members. Always true for supergroups, channels and secret chats
   bool? revoke;
 
   /// callback sign

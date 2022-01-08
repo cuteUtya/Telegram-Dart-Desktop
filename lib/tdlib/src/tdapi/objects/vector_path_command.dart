@@ -62,18 +62,34 @@ class VectorPathCommandLine extends VectorPathCommand {
 
 class VectorPathCommandCubicBezierCurve extends VectorPathCommand {
 
-  /// A cubic B
-  VectorPathCommandCubicBezierCurve();
+  /// A cubic B?zier curve to a given point
+  VectorPathCommandCubicBezierCurve({this.startControlPoint,
+    this.endControlPoint,
+    this.endPoint});
 
-  
+  /// [startControlPoint] The start control point of the curve 
+  Point? startControlPoint;
+
+  /// [endControlPoint] The end control point of the curve 
+  Point? endControlPoint;
+
+  /// [endPoint] The end point of the curve
+  Point? endPoint;
 
   /// Parse from a json
-  VectorPathCommandCubicBezierCurve.fromJson(Map<String, dynamic> json) ;
+  VectorPathCommandCubicBezierCurve.fromJson(Map<String, dynamic> json)  {
+    startControlPoint = json['start_control_point'] == null ? null : Point.fromJson(json['start_control_point'] ?? <String, dynamic>{});
+    endControlPoint = json['end_control_point'] == null ? null : Point.fromJson(json['end_control_point'] ?? <String, dynamic>{});
+    endPoint = json['end_point'] == null ? null : Point.fromJson(json['end_point'] ?? <String, dynamic>{});
+  }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
+      "start_control_point": startControlPoint == null ? null : startControlPoint?.toJson(),
+      "end_control_point": endControlPoint == null ? null : endControlPoint?.toJson(),
+      "end_point": endPoint == null ? null : endPoint?.toJson(),
     };
   }
 

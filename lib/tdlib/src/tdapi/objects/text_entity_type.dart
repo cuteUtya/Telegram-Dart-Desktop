@@ -20,6 +20,7 @@ class TextEntityType extends TdObject {
   /// * TextEntityTypeItalic
   /// * TextEntityTypeUnderline
   /// * TextEntityTypeStrikethrough
+  /// * TextEntityTypeSpoiler
   /// * TextEntityTypeCode
   /// * TextEntityTypePre
   /// * TextEntityTypePreCode
@@ -52,6 +53,8 @@ class TextEntityType extends TdObject {
         return TextEntityTypeUnderline.fromJson(json);
       case TextEntityTypeStrikethrough.CONSTRUCTOR:
         return TextEntityTypeStrikethrough.fromJson(json);
+      case TextEntityTypeSpoiler.CONSTRUCTOR:
+        return TextEntityTypeSpoiler.fromJson(json);
       case TextEntityTypeCode.CONSTRUCTOR:
         return TextEntityTypeCode.fromJson(json);
       case TextEntityTypePre.CONSTRUCTOR:
@@ -352,6 +355,29 @@ class TextEntityTypeStrikethrough extends TextEntityType {
   }
 
   static const CONSTRUCTOR = 'textEntityTypeStrikethrough';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class TextEntityTypeSpoiler extends TextEntityType {
+
+  /// A spoiler text. Not supported in secret chats
+  TextEntityTypeSpoiler();
+
+  
+
+  /// Parse from a json
+  TextEntityTypeSpoiler.fromJson(Map<String, dynamic> json) ;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+    };
+  }
+
+  static const CONSTRUCTOR = 'textEntityTypeSpoiler';
   
   @override
   String getConstructor() => CONSTRUCTOR;

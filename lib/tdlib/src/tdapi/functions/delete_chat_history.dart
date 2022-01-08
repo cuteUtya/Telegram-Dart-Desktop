@@ -13,7 +13,7 @@ class DeleteChatHistory extends TdFunction {
   /// [removeFromChatList] Pass true if the chat needs to be removed from the chat list 
   bool? removeFromChatList;
 
-  /// [revoke] Pass true to try to delete chat history for all users
+  /// [revoke] Pass true to delete chat history for all users
   bool? revoke;
 
   /// callback sign

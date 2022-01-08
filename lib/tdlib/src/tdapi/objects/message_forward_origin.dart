@@ -71,14 +71,14 @@ class MessageForwardOriginUser extends MessageForwardOrigin {
 
 class MessageForwardOriginChat extends MessageForwardOrigin {
 
-  /// The message was originally sent by an anonymous chat administrator on behalf of the chat
+  /// The message was originally sent on behalf of a chat
   MessageForwardOriginChat({this.senderChatId,
     this.authorSignature});
 
   /// [senderChatId] Identifier of the chat that originally sent the message
   int? senderChatId;
 
-  /// [authorSignature] Original message author signature
+  /// [authorSignature] For messages originally sent by an anonymous chat administrator, original message author signature
   String? authorSignature;
 
   /// Parse from a json
