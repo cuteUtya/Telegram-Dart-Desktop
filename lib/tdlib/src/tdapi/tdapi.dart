@@ -399,7 +399,6 @@ part 'functions/get_chat_message_count.dart';
 part 'functions/get_chat_scheduled_messages.dart';
 part 'functions/get_message_public_forwards.dart';
 part 'functions/get_chat_sponsored_message.dart';
-part 'functions/view_sponsored_message.dart';
 part 'functions/remove_notification.dart';
 part 'functions/remove_notification_group.dart';
 part 'functions/get_message_link.dart';
@@ -1235,6 +1234,7 @@ final Map<String, TdObject Function(Map<String, dynamic>)> allObjects = {
     'textEntityTypeItalic': (d) => TextEntityTypeItalic.fromJson(d),
     'textEntityTypeUnderline': (d) => TextEntityTypeUnderline.fromJson(d),
     'textEntityTypeStrikethrough': (d) => TextEntityTypeStrikethrough.fromJson(d),
+    'textEntityTypeSpoiler': (d) => TextEntityTypeSpoiler.fromJson(d),
     'textEntityTypeCode': (d) => TextEntityTypeCode.fromJson(d),
     'textEntityTypePre': (d) => TextEntityTypePre.fromJson(d),
     'textEntityTypePreCode': (d) => TextEntityTypePreCode.fromJson(d),
