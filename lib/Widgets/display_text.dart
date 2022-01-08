@@ -22,7 +22,7 @@ class TextDisplay {
   static TextStyle get actionBarOffline =>
       create(size: 16, textColor: TextColor.HeaderSecondary);
   static const String greaterImportance = "Ubuntu";
-  static const String regular = "Source Sans Pro";
+  static const String regular = "SourceSansPro";
   static const String monospace = "CodeSourcePro";
   static const String emojiFont = "emoji";
 
