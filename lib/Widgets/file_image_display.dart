@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'dart:io' as io;
@@ -32,48 +33,28 @@ class FileImageDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: client.send(GetFile(fileId: id)),
-        builder: (context, data) {
-          if (data.hasData) {
-            var fileInfo = data.data as File;
-            if (fileInfo.local!.isDownloadingCompleted! &&
-                (fileInfo.local!.path ?? "").isNotEmpty) {
-              return _build(fileInfo.local!.path!);
-            }
-            client.send(DownloadFile(fileId: id, priority: priority));
-            return StreamBuilder(
-              stream: client.fileUpdates(id),
-              builder: (context, fileInfo) {
-                if (fileInfo.hasData) {
-                  if ((fileInfo.data as File).local!.isDownloadingCompleted!) {
-                    return _build((fileInfo.data as File).local!.path!);
-                  }
-                }
-                return emptyReplacer;
-              },
-            );
-          }
-          return emptyReplacer;
-        });
-  }
-
-  Widget _build(String path) {
-    var file = io.File(path);
-    return isTGV
-        ? SvgPicture.memory(
-            Uint8List.fromList(io.gzip.decode(file.readAsBytesSync().toList())),
-            height: height,
-            width: width,
-            color: tgvColor,
-            fit: BoxFit.cover)
-        : Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(
-                borderRadius: borderRadius,
-                shape: containerShape,
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: FileImage(file))));
+    return RemoteFileBuilder(
+        emptyPlaceholder: emptyReplacer,
+        builder: (_, path) {
+          var file = io.File(path);
+          return isTGV
+              ? SvgPicture.memory(
+                  Uint8List.fromList(
+                      io.gzip.decode(file.readAsBytesSync().toList())),
+                  height: height,
+                  width: width,
+                  color: tgvColor,
+                  fit: BoxFit.cover)
+              : Container(
+                  width: width,
+                  height: height,
+                  decoration: BoxDecoration(
+                      borderRadius: borderRadius,
+                      shape: containerShape,
+                      image: DecorationImage(
+                          fit: BoxFit.cover, image: FileImage(file))));
+        },
+        fileId: id,
+        client: client);
   }
 }
