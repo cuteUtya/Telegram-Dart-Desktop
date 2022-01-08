@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/message/Stickers/sticker_outnline.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/rlottie/rlottie.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
+import 'dart:io' as io;
 
 /// UI representation of [MessageSticker]
 class MessageDisplaySticker extends StatelessWidget {
@@ -32,20 +34,25 @@ class MessageDisplaySticker extends StatelessWidget {
         height: sticker.height! * stickerSizeRatie,
         child: Stack(alignment: Alignment.bottomRight, children: [
           RemoteFileBuilder(
-              emptyPlaceholder: const SizedBox(
-                width: 256,
-                height: 256,
-              ),
+              emptyPlaceholder: sticker.isAnimated!
+                  ? const SizedBox.shrink()
+                  : Container(
+                      margin: EdgeInsets.only(
+                          right: 256,
+                          bottom: sticker.height! * stickerSizeRatie),
+                      child: CustomPaint(
+                        painter: StickerOutline(
+                          sticker.outline!,
+                          stickerSizeRatie,
+                        ),
+                      )),
               builder: (_, path) {
-                if (sticker.isAnimated!) {
-                  return MouseRegion(
-                      onEnter: (_) => hiderKey.currentState?.show(),
-                      onExit: (_) => hiderKey.currentState?.hide(),
-                      child: Rlottie.file(
-                          path: path, behavior: PlayBehavior.loop));
-                } else {
-                  return const SizedBox.shrink();
-                }
+                return MouseRegion(
+                    onEnter: (_) => hiderKey.currentState?.show(),
+                    onExit: (_) => hiderKey.currentState?.hide(),
+                    child: sticker.isAnimated!
+                        ? Rlottie.file(path: path, behavior: PlayBehavior.loop)
+                        : Image.file(io.File(path)));
               },
               fileId: sticker.sticker!.id!,
               client: client),

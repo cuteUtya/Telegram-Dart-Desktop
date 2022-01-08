@@ -11,6 +11,8 @@ class ChatDisplay extends StatelessWidget {
   const ChatDisplay({Key? key, required this.client}) : super(key: key);
   final TelegramClient client;
 
+  static const bool tw1nkleeModeEnable = true;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -19,31 +21,39 @@ class ChatDisplay extends StatelessWidget {
           var chat =
               data.data != null ? client.getChat(data.data as int) : null;
           return Stack(children: [
-            StreamBuilder(
-                stream: client.selectedBackground,
-                builder: (_, data) {
-                  if (data.hasData) {
-                    var update = data.data == null
-                        ? null
-                        : data.data as UpdateSelectedBackground;
-                    if (update?.background == null) {
-                      client.send(GetBackgrounds()).then((backs) => client.send(
-                          SetBackground(
-                              forDarkTheme: update?.forDarkTheme,
-                              background: InputBackgroundRemote(
-                                  backgroundId: backs is Backgrounds
-                                      ? backs.backgrounds![0].id!
-                                      : (backs as Background).id!))));
-                      return const SizedBox.shrink();
+            if (tw1nkleeModeEnable)
+              BakgroundDisplay(
+                background: Background(
+                    type: BackgroundTypeFill(
+                        fill: BackgroundFillSolid(color: 0xFFB3C98C))),
+                client: client,
+              )
+            else
+              StreamBuilder(
+                  stream: client.selectedBackground,
+                  builder: (_, data) {
+                    if (data.hasData) {
+                      var update = data.data == null
+                          ? null
+                          : data.data as UpdateSelectedBackground;
+                      if (update?.background == null) {
+                        client.send(GetBackgrounds()).then((backs) =>
+                            client.send(SetBackground(
+                                forDarkTheme: update?.forDarkTheme,
+                                background: InputBackgroundRemote(
+                                    backgroundId: backs is Backgrounds
+                                        ? backs.backgrounds![0].id!
+                                        : (backs as Background).id!))));
+                        return const SizedBox.shrink();
+                      }
+                      return BakgroundDisplay(
+                          client: client,
+                          //TODO correct work with dark and light themes
+                          background: (data.data as UpdateSelectedBackground)
+                              .background!);
                     }
-                    return BakgroundDisplay(
-                        client: client,
-                        //TODO correct work with dark and light themes
-                        background: (data.data as UpdateSelectedBackground)
-                            .background!);
-                  }
-                  return const SizedBox.shrink();
-                }),
+                    return const SizedBox.shrink();
+                  }),
             if (chat != null)
               Container(
                   margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
