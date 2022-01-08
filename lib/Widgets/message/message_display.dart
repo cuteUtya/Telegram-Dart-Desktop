@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
-import 'package:myapp/Widgets/message/Stickers/message_display_sticker.dart';
+import 'package:myapp/Widgets/message/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkmark_time.dart';
@@ -81,8 +81,13 @@ class MessageDisplay extends StatelessWidget {
         break;
 
       case MessageSticker:
-        contentWidget = MessageDisplaySticker(
-            client: client, message: message, infoWidget: msgInfoWidget);
+        contentWidget = StickerDisplay(
+            client: client,
+            alignment: message.isOutgoing!
+                ? Alignment.centerRight
+                : Alignment.centerLeft,
+            sticker: (message.content as MessageSticker).sticker!,
+            infoWidget: msgInfoWidget);
         break;
 
       default:
@@ -133,6 +138,10 @@ class MessageDisplay extends StatelessWidget {
           content: contentWidget,
           side: message.isOutgoing! ? Side.right : Side.left,
           position: bubbleRelativePosition);
+    } else {
+      contentWidget = Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          child: contentWidget);
     }
 
     return Row(

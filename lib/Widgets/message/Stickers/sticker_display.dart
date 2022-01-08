@@ -8,30 +8,32 @@ import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'dart:io' as io;
 
 /// UI representation of [MessageSticker]
-class MessageDisplaySticker extends StatelessWidget {
-  const MessageDisplaySticker({
+class StickerDisplay extends StatelessWidget {
+  const StickerDisplay({
     Key? key,
+    this.width,
+    this.height,
     required this.client,
-    required this.message,
+    required this.sticker,
+    this.alignment = Alignment.center,
     required this.infoWidget,
   }) : super(key: key);
-  final Message message;
-  final Widget infoWidget;
+  final double? width;
+  final double? height;
+  final Sticker sticker;
+  final Alignment alignment;
+  final Widget? infoWidget;
   final TelegramClient client;
 
   static const double stickerSizeRatie = 0.5;
 
   @override
   Widget build(BuildContext context) {
-    assert(message.content is MessageSticker);
-
-    var sticker = (message.content as MessageSticker).sticker!;
     var hiderKey = GlobalKey<WidgetHiderState>();
     return Container(
-        alignment:
-            message.isOutgoing! ? Alignment.centerRight : Alignment.centerLeft,
-        width: sticker.width! * stickerSizeRatie,
-        height: sticker.height! * stickerSizeRatie,
+        alignment: alignment,
+        width: width ?? (sticker.width! * stickerSizeRatie),
+        height: height ?? (sticker.height! * stickerSizeRatie),
         child: Stack(alignment: Alignment.bottomRight, children: [
           RemoteFileBuilder(
               emptyPlaceholder: sticker.isAnimated!
@@ -56,11 +58,12 @@ class MessageDisplaySticker extends StatelessWidget {
               },
               fileId: sticker.sticker!.id!,
               client: client),
-          WidgetHider(
-            key: hiderKey,
-            child: infoWidget,
-            hiddenOnInit: true,
-          )
+          if (infoWidget != null)
+            WidgetHider(
+              key: hiderKey,
+              child: infoWidget!,
+              hiddenOnInit: true,
+            )
         ]));
   }
 }
