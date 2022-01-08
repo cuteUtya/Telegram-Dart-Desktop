@@ -25,7 +25,9 @@ class MessageDisplaySticker extends StatelessWidget {
 
     var sticker = (message.content as MessageSticker).sticker!;
     var hiderKey = GlobalKey<WidgetHiderState>();
-    return SizedBox(
+    return Container(
+        alignment:
+            message.isOutgoing! ? Alignment.centerRight : Alignment.centerLeft,
         width: sticker.width! * stickerSizeRatie,
         height: sticker.height! * stickerSizeRatie,
         child: Stack(alignment: Alignment.bottomRight, children: [
@@ -40,11 +42,7 @@ class MessageDisplaySticker extends StatelessWidget {
                       onEnter: (_) => hiderKey.currentState?.show(),
                       onExit: (_) => hiderKey.currentState?.hide(),
                       child: Rlottie.file(
-                          path: path,
-                          aligment: message.isOutgoing!
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          behavior: PlayBehavior.loop));
+                          path: path, behavior: PlayBehavior.loop));
                 } else {
                   return const SizedBox.shrink();
                 }
