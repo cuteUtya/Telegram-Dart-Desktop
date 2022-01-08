@@ -92,7 +92,7 @@ class _TOSAgree extends StatelessWidget {
   Widget build(BuildContext context) {
     var tosText = client.getTranslation("lng_terms_signup");
     var tosLink = client.getTranslation("lng_terms_signup_link");
-    return ClickabeObject(
+    return ClickableObject(
         onTap: () => showDialog(
             context: context,
             builder: (_) =>

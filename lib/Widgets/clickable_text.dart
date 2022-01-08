@@ -16,7 +16,7 @@ class ClickableText extends StatelessWidget {
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    return ClickabeObject(
+    return ClickableObject(
         onTap: () => onTap?.call(),
         builder: (selected) => Text(data,
             style: TextDisplay.create(

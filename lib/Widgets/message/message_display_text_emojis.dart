@@ -25,7 +25,7 @@ class MessageDisplayTextEmojis extends StatelessWidget {
   final MainAxisAlignment alignment;
   @override
   Widget build(BuildContext context) {
-    return ClickabeObject(
+    return ClickableObject(
         builder: (hover) => Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: alignment,
