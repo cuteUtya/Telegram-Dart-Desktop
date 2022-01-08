@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
-import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
+import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkmark_time.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -121,9 +121,11 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                           : 0),
                 ),
               ]),
-          SizedBox(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeOutBack,
             width: lastBox.right +
-                (!fitsLastLine ? 0 : (msgInfoBubbleSize?.width ?? 30) + 12),
+                (!fitsLastLine ? 0 : (msgInfoBubbleSize?.width ?? 50) + 12),
           )
         ],
       );
