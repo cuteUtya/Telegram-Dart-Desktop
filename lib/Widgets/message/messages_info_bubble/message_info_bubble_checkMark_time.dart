@@ -29,21 +29,24 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
         ? "CheckMarkInFlowContainer"
         : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
     var textStyle = TextDisplay.create(size: 16, customTextColor: color);
-    var content = Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-      if (customInfo != null)
-        Text(
-          customInfo!,
-          style: textStyle,
-        ),
-      if (customInfo != null) const SizedBox(width: 4),
-      Text(
-        time,
-        style: textStyle,
-      ),
-      if (checkMarkValue != null) const SizedBox(width: 4),
-      if (checkMarkValue != null)
-        CheckMark(isReaded: checkMarkValue!, color: color, size: 20)
-    ]);
+    var content = Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (customInfo != null)
+            Text(
+              customInfo!,
+              style: textStyle,
+            ),
+          if (customInfo != null) const SizedBox(width: 4),
+          Text(
+            time,
+            style: textStyle,
+          ),
+          if (checkMarkValue != null) const SizedBox(width: 4),
+          if (checkMarkValue != null)
+            CheckMark(isReaded: checkMarkValue!, color: color, size: 20)
+        ]);
 
     if (useBackground) return MessageInfoBubbleBase(content: content);
     return content;
