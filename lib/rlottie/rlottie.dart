@@ -123,21 +123,24 @@ class RlottieState extends State<_Rlottie> {
   }
 
   Widget _build([bool animate = true, Key? key]) {
-    return Lottie.memory(
-      widget.bytes,
-      key: key,
-      animate: animate,
-      repeat: widget.behavior == PlayBehavior.loop,
-      width: widget.width,
-      height: widget.height,
-      alignment: widget.aligment,
-      fit: widget.fit,
-      frameRate: widget.frameRate,
-      reverse: widget.reverse,
-      delegates: widget.lottieDelegates,
-      options: widget.options,
-      addRepaintBoundary: widget.addRepaintBoundary,
-    );
+    return SizedBox(
+        width: widget.width,
+        height: widget.height,
+        child: Lottie.memory(
+          widget.bytes,
+          key: key,
+          animate: animate,
+          repeat: widget.behavior == PlayBehavior.loop,
+          width: widget.width,
+          height: widget.height,
+          alignment: widget.aligment,
+          fit: widget.fit,
+          frameRate: widget.frameRate,
+          reverse: widget.reverse,
+          delegates: widget.lottieDelegates,
+          options: widget.options,
+          addRepaintBoundary: widget.addRepaintBoundary,
+        ));
   }
 }
 
