@@ -16,27 +16,35 @@ class MessageDisplaySticker extends StatelessWidget {
   final Message message;
   final Widget infoWidget;
   final TelegramClient client;
+
+  static const double stickerSizeRatie = 0.5;
+
   @override
   Widget build(BuildContext context) {
     assert(message.content is MessageSticker);
 
     var sticker = (message.content as MessageSticker).sticker!;
     var hiderKey = GlobalKey<WidgetHiderState>();
-    return MouseRegion(
-        onEnter: (_) => hiderKey.currentState?.show(),
-        onExit: (_) => hiderKey.currentState?.hide(),
+    return SizedBox(
+        width: sticker.width! * stickerSizeRatie,
+        height: sticker.height! * stickerSizeRatie,
         child: Stack(alignment: Alignment.bottomRight, children: [
           RemoteFileBuilder(
+              emptyPlaceholder: const SizedBox(
+                width: 256,
+                height: 256,
+              ),
               builder: (_, path) {
                 if (sticker.isAnimated!) {
-                  return Rlottie.file(
-                      width: 256,
-                      height: 256,
-                      path: path,
-                      aligment: message.isOutgoing!
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      behavior: PlayBehavior.loop);
+                  return MouseRegion(
+                      onEnter: (_) => hiderKey.currentState?.show(),
+                      onExit: (_) => hiderKey.currentState?.hide(),
+                      child: Rlottie.file(
+                          path: path,
+                          aligment: message.isOutgoing!
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          behavior: PlayBehavior.loop));
                 } else {
                   return const SizedBox.shrink();
                 }
