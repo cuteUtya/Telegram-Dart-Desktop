@@ -4,9 +4,10 @@ import 'package:lottie/lottie.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
+import 'package:myapp/Widgets/message/message_display_sticker.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
-import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
+import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkmark_time.dart';
 import 'package:myapp/rlottie/rlottie.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
@@ -82,53 +83,10 @@ class MessageDisplay extends StatelessWidget {
         break;
 
       case MessageSticker:
-        //TODO test rlottie
-        var sticker = (message.content as MessageSticker).sticker!;
-        print("build sticker");
-        if (sticker.isAnimated!) {
-          print("build animated sticker");
-          contentWidget = FutureBuilder(
-              future: client.send(GetFile(fileId: sticker.sticker!.id!)),
-              builder: (_, fileBuilder) {
-                if (fileBuilder.hasData) {
-                  print("FILE IS ${(fileBuilder.data as File).toJson()}");
-                  var file = fileBuilder.data as File;
-                  print(
-                      "${!file.local!.isDownloadingCompleted!} && ${!file.local!.isDownloadingActive!}");
-                  if (!file.local!.isDownloadingCompleted! &&
-                      !file.local!.isDownloadingActive!) {
-                    print("SEND DownloadFile");
-                    client.send(DownloadFile(
-                        fileId: sticker.sticker!.id!, priority: 2));
-                  }
-                  return StreamBuilder(
-                      initialData: file,
-                      stream: client.fileUpdates(sticker.sticker!.id!),
-                      builder: (context, builder) {
-                        if (builder.hasData) {
-                          var file = (builder.data as File);
-                          if (file.local!.isDownloadingCompleted!) {
-                            print("builde  Rlottie.file");
-                            return Rlottie.file(
-                                width: 256,
-                                height: 256,
-                                path: file.local!.path!,
-                                aligment: message.isOutgoing!
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                behavior: PlayBehavior.loop);
-                          }
-                        }
-                        return const SizedBox.shrink();
-                      });
-                }
-                return const SizedBox.shrink();
-              });
-          break;
-        } else {
-          continue def;
-        }
-      def:
+        contentWidget = MessageDisplaySticker(
+            client: client, message: message, infoWidget: msgInfoWidget);
+        break;
+
       default:
         wrapInBubble = true;
         contentWidget = Text(
