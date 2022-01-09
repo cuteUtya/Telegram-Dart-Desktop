@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/message/Stickers/sticker_outnline.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
@@ -30,24 +32,25 @@ class StickerDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var hiderKey = GlobalKey<WidgetHiderState>();
+
     return Container(
         alignment: alignment,
         width: width ?? (sticker.width! * stickerSizeRatie),
         height: height ?? (sticker.height! * stickerSizeRatie),
         child: Stack(alignment: Alignment.bottomRight, children: [
           RemoteFileBuilder(
-              emptyPlaceholder: sticker.isAnimated!
+              emptyPlaceholder: sticker.outline == null
                   ? const SizedBox.shrink()
-                  : Container(
-                      margin: EdgeInsets.only(
-                          right: 256,
-                          bottom: sticker.height! * stickerSizeRatie),
-                      child: CustomPaint(
-                        painter: StickerOutline(
-                          sticker.outline!,
-                          stickerSizeRatie,
-                        ),
-                      )),
+                  : CustomPaint(
+                      painter: StickerOutline(
+                        sticker.outline!,
+                        stickerSizeRatie,
+                      ),
+                      child: Container(
+                          width: sticker.width!.toDouble() * stickerSizeRatie,
+                          height: sticker.height!.toDouble() * stickerSizeRatie,
+                          margin: EdgeInsets.only(
+                              bottom: sticker.height! * stickerSizeRatie))),
               builder: (_, path) {
                 return MouseRegion(
                     onEnter: (_) => hiderKey.currentState?.show(),
@@ -59,11 +62,13 @@ class StickerDisplay extends StatelessWidget {
               fileId: sticker.sticker!.id!,
               client: client),
           if (infoWidget != null)
-            WidgetHider(
-              key: hiderKey,
-              child: infoWidget!,
-              hiddenOnInit: true,
-            )
+            Container(
+                margin: const EdgeInsets.only(right: 8, bottom: 8),
+                child: WidgetHider(
+                  key: hiderKey,
+                  child: infoWidget!,
+                  hiddenOnInit: true,
+                ))
         ]));
   }
 }
