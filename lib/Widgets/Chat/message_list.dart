@@ -112,7 +112,9 @@ class _MessageListState extends State<MessageList> {
               if (prevDate.day != currDate.day ||
                   prevDate.month != currDate.month ||
                   prevDate.year != currDate.year)
-                DateBubble(client: widget.client, date: prevDate),
+                Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    child: DateBubble(client: widget.client, date: prevDate)),
           ]);
         });
   }
