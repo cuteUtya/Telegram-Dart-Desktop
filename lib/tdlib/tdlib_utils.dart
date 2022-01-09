@@ -14,7 +14,8 @@ String getSenderName(MessageSender sender, TelegramClient client,
   return client.getChat((sender as MessageSenderChat).chatId!).title!;
 }
 
-int getSenderId(MessageSender sender) {
+int? getSenderId(MessageSender? sender) {
+  if (sender == null) return null;
   if (sender is MessageSenderUser) return sender.userId!;
   return (sender as MessageSenderChat).chatId!;
 }

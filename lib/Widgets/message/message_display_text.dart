@@ -104,7 +104,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                                   widget.message.senderId!, widget.client),
                               TextDisplay.create(
                                   customTextColor: getPeerColor(
-                                      getSenderId(widget.message.senderId!),
+                                      getSenderId(widget.message.senderId!)!,
                                       'b'),
                                   fontWeight: FontWeight.bold,
                                   size: 18,
