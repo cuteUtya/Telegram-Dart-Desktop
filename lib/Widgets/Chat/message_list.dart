@@ -4,6 +4,7 @@ import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/tdlib/tdlib_utils.dart';
+import 'package:collection/collection.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({Key? key, required this.chatId, required this.client})
@@ -17,17 +18,35 @@ class MessageList extends StatefulWidget {
 class _MessageListState extends State<MessageList> {
   Messages? messages;
   int _renderedChatId = 0;
+  List<ChatAdministrator> admins = [];
   @override
   Widget build(BuildContext context) {
+    var chat = widget.client.getChat(widget.chatId);
     if (_renderedChatId != widget.chatId) {
       widget.client
           .send(GetChatHistory(chatId: widget.chatId, limit: 100))
           .then((mess) {
         setState(() => messages = mess as Messages);
       });
+      var isChannel = (chat.type is ChatTypeSupergroup
+                  ? chat.type as ChatTypeSupergroup
+                  : null)
+              ?.isChannel ??
+          false;
+      if (chat.type is ChatTypeBasicGroup ||
+          (chat.type is ChatTypeSupergroup && !isChannel)) {
+        widget.client
+            .send(GetChatAdministrators(chatId: widget.chatId))
+            .then((newAdmins) {
+          setState(
+              () => admins = (newAdmins as ChatAdministrators).administrators!);
+        });
+      } else {
+        admins = [];
+      }
       _renderedChatId = widget.chatId;
     }
-    var chat = widget.client.getChat(widget.chatId);
+
     return ListView.builder(
         reverse: true,
         itemCount: messages?.totalCount ?? 0,
@@ -52,6 +71,8 @@ class _MessageListState extends State<MessageList> {
                       : currSenderId == nextSenderId
                           ? BubbleRelativePosition.bottom
                           : BubbleRelativePosition.single;
+          var adminInfo = admins.firstWhereOrNull(
+              (element) => element.userId == getSenderId(msg.senderId!));
           return Row(
             children: [
               if (msg.isOutgoing!) const Spacer(),
@@ -70,6 +91,14 @@ class _MessageListState extends State<MessageList> {
                         chat: chat,
                         message: msg,
                         client: widget.client,
+                        adminTitle: adminInfo != null
+                            ? (adminInfo.customTitle?.isEmpty ?? true)
+                                ? widget.client.getTranslation(
+                                    adminInfo.isOwner!
+                                        ? "lng_owner_badge"
+                                        : "lng_admin_badge")
+                                : adminInfo.customTitle!
+                            : null,
                       ))),
               if (!msg.isOutgoing!) const Spacer()
             ],

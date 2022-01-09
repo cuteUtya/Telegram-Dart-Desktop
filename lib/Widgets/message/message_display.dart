@@ -21,11 +21,13 @@ class MessageDisplay extends StatelessWidget {
       this.chat,
       required this.client,
       required this.message,
-      required this.bubbleRelativePosition})
+      required this.bubbleRelativePosition,
+      this.adminTitle})
       : super(key: key);
   final BubbleRelativePosition bubbleRelativePosition;
   final Message message;
   final Chat? chat;
+  final String? adminTitle;
   final TelegramClient client;
 
   @override
@@ -47,6 +49,7 @@ class MessageDisplay extends StatelessWidget {
           ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
           : null,
     );
+
     switch (message.content.runtimeType) {
       case MessageText:
         var contentText = message.content as MessageText;
@@ -74,7 +77,10 @@ class MessageDisplay extends StatelessWidget {
           client: client,
           message: message,
           showSenderName: showMessageSender,
-          userPost: message.authorSignature,
+          userPost: bubbleRelativePosition == BubbleRelativePosition.top ||
+                  bubbleRelativePosition == BubbleRelativePosition.single
+              ? adminTitle
+              : "",
           fromChat: chat,
         );
 
@@ -99,39 +105,38 @@ class MessageDisplay extends StatelessWidget {
         break;
     }
 
-    Widget senderUserpic = const SizedBox.shrink();
-    if (!message.isOutgoing!) {
-      if (bubbleRelativePosition == BubbleRelativePosition.bottom ||
-          bubbleRelativePosition == BubbleRelativePosition.single) {
-        switch (message.senderId.runtimeType) {
-          case MessageSenderUser:
-            var senderUserId = (message.senderId as MessageSenderUser).userId!;
-            var senderUser = client.getUser(senderUserId);
-            senderUserpic = Userpic(
-                profilePhoto: senderUser.profilePhoto,
-                chatId: senderUserId,
-                chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
-                client: client,
-                emptyUserpicFontSize: 16);
-            break;
-          case MessageSenderChat:
-            var senderChatId = (message.senderId as MessageSenderChat).chatId;
-            var senderChat = client.getChat(senderChatId!);
-            senderUserpic = Userpic(
-                chatPhoto: senderChat.photo,
-                chatId: senderChatId,
-                client: client,
-                chatTitle: senderChat.title!,
-                emptyUserpicFontSize: 16);
-            break;
-        }
+    Widget? senderUserpic;
+    if (!message.isOutgoing! &&
+        (bubbleRelativePosition == BubbleRelativePosition.bottom ||
+            bubbleRelativePosition == BubbleRelativePosition.single)) {
+      switch (message.senderId.runtimeType) {
+        case MessageSenderUser:
+          var senderUserId = (message.senderId as MessageSenderUser).userId!;
+          var senderUser = client.getUser(senderUserId);
+          senderUserpic = Userpic(
+              profilePhoto: senderUser.profilePhoto,
+              chatId: senderUserId,
+              chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
+              client: client,
+              emptyUserpicFontSize: 16);
+          break;
+        case MessageSenderChat:
+          var senderChatId = (message.senderId as MessageSenderChat).chatId;
+          var senderChat = client.getChat(senderChatId!);
+          senderUserpic = Userpic(
+              chatPhoto: senderChat.photo,
+              chatId: senderChatId,
+              client: client,
+              chatTitle: senderChat.title!,
+              emptyUserpicFontSize: 16);
+          break;
       }
-      senderUserpic = SizedBox(
-        width: 40,
-        height: 40,
-        child: senderUserpic,
-      );
     }
+    senderUserpic = SizedBox(
+      width: 40,
+      height: 40,
+      child: senderUserpic,
+    );
 
     if (wrapInBubble) {
       contentWidget = MacMessageBubble(
