@@ -9,6 +9,8 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'dart:io' as io;
 
+import 'package:myapp/widget_sizer.dart';
+
 /// UI representation of [MessageSticker]
 class StickerDisplay extends StatelessWidget {
   const StickerDisplay({
@@ -32,43 +34,68 @@ class StickerDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var hiderKey = GlobalKey<WidgetHiderState>();
+    var sizerKey = GlobalKey<WidgetSizerState>();
 
-    return Container(
+    var stickerWidth = width ?? (sticker.width! * stickerSizeRatie);
+    var stickerHeight = height ?? (sticker.height! * stickerSizeRatie);
+
+    return WidgetSizer(
+        key: sizerKey,
+        resizeDuration: const Duration(milliseconds: 100),
         alignment: alignment,
-        width: width ?? (sticker.width! * stickerSizeRatie),
-        height: height ?? (sticker.height! * stickerSizeRatie),
-        child: Stack(alignment: Alignment.bottomRight, children: [
-          RemoteFileBuilder(
-              emptyPlaceholder: sticker.outline == null
-                  ? const SizedBox.shrink()
-                  : CustomPaint(
-                      painter: StickerOutline(
-                        sticker.outline!,
-                        stickerSizeRatie,
-                      ),
-                      child: Container(
-                          width: sticker.width!.toDouble() * stickerSizeRatie,
-                          height: sticker.height!.toDouble() * stickerSizeRatie,
-                          margin: EdgeInsets.only(
-                              bottom: sticker.height! * stickerSizeRatie))),
-              builder: (_, path) {
-                return MouseRegion(
-                    onEnter: (_) => hiderKey.currentState?.show(),
-                    onExit: (_) => hiderKey.currentState?.hide(),
-                    child: sticker.isAnimated!
-                        ? Rlottie.file(path: path, behavior: PlayBehavior.loop)
-                        : Image.file(io.File(path)));
-              },
-              fileId: sticker.sticker!.id!,
-              client: client),
-          if (infoWidget != null)
-            Container(
-                margin: const EdgeInsets.only(right: 8, bottom: 8),
-                child: WidgetHider(
-                  key: hiderKey,
-                  child: infoWidget!,
-                  hiddenOnInit: true,
-                ))
-        ]));
+        sizeOnInit: Size(
+          stickerWidth,
+          stickerHeight,
+        ),
+        child: GestureDetector(
+            onLongPress: () {
+              sizerKey.currentState
+                  ?.resize(Size(stickerWidth * 1.5, stickerHeight * 1.5));
+            },
+            onLongPressEnd: (_) {
+              sizerKey.currentState?.resize(Size(stickerWidth, stickerHeight));
+            },
+            child: Stack(alignment: Alignment.bottomRight, children: [
+              RemoteFileBuilder(
+                  emptyPlaceholder: sticker.outline == null
+                      ? const SizedBox.shrink()
+                      : CustomPaint(
+                          painter: StickerOutline(
+                            sticker.outline!,
+                            stickerSizeRatie,
+                          ),
+                          child: Container(
+                              width:
+                                  sticker.width!.toDouble() * stickerSizeRatie,
+                              height:
+                                  sticker.height!.toDouble() * stickerSizeRatie,
+                              margin: EdgeInsets.only(
+                                  bottom: sticker.height! * stickerSizeRatie))),
+                  builder: (_, path) {
+                    return MouseRegion(
+                        onEnter: (_) {
+                          hiderKey.currentState?.show();
+                        },
+                        onExit: (_) {
+                          hiderKey.currentState?.hide();
+                          sizerKey.currentState
+                              ?.resize(Size(stickerWidth, stickerHeight));
+                        },
+                        child: sticker.isAnimated!
+                            ? Rlottie.file(
+                                path: path, behavior: PlayBehavior.loop)
+                            : Image.file(io.File(path)));
+                  },
+                  fileId: sticker.sticker!.id!,
+                  client: client),
+              if (infoWidget != null)
+                Container(
+                    margin: const EdgeInsets.only(right: 8, bottom: 8),
+                    child: WidgetHider(
+                      key: hiderKey,
+                      child: infoWidget!,
+                      hiddenOnInit: true,
+                    ))
+            ])));
   }
 }
