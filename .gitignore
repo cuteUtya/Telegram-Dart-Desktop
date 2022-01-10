@@ -27,3 +27,7 @@ lib/secrets.dart
 .idea/
 .flutter-plugins-dependencies
 secrets.dart
+tddb/
+tdfiles/
+tdtranslates.db
+
