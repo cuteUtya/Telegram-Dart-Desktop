@@ -77,7 +77,7 @@ class MessageDisplay extends StatelessWidget {
           client: client,
           message: message,
           showSenderName: showMessageSender,
-          userPost: bubbleRelativePosition == BubbleRelativePosition.top ||
+          adminTitle: bubbleRelativePosition == BubbleRelativePosition.top ||
                   bubbleRelativePosition == BubbleRelativePosition.single
               ? adminTitle
               : "",

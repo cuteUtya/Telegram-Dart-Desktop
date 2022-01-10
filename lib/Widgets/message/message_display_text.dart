@@ -12,7 +12,7 @@ import 'package:myapp/utils.dart';
 /// UI representation of MessageText entetiy
 /// * [message] object of message, wich have [message.content] with type MessageText
 /// * [lastReadOutboxMessageId] lastReadOutboxMessageId in chat from wich was sended current message
-/// * [userPost] custom admin post wich be displayed in top right corner, can be null
+/// * [adminTitle] custom admin post wich be displayed in top right corner, can be null
 /// * [senderId] id of channel or user that send message
 /// * [senderName] name wich be displayed in bubble top left corner, can be null
 class MessageDisplayText extends StatefulWidget {
@@ -22,13 +22,13 @@ class MessageDisplayText extends StatefulWidget {
       required this.message,
       this.showSenderName = false,
       this.fromChat,
-      this.userPost})
+      this.adminTitle})
       : super(key: key);
   final TelegramClient client;
   final Message message;
   final bool showSenderName;
   final Chat? fromChat;
-  final String? userPost;
+  final String? adminTitle;
 
   @override
   State<StatefulWidget> createState() => _MessageDisplayTextState();
@@ -76,12 +76,28 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
           boxCons.maxWidth - lastBox.right > (msgInfoBubbleSize?.width ?? 30);
       return Stack(
         children: [
-          if (widget.userPost != null)
+          /// fake text with title and admin titles that stratch message bubble
+          if (widget.adminTitle != null)
+            Text.rich(TextSpan(children: [
+              TextSpan(
+                  text: getSenderName(widget.message.senderId!, widget.client),
+                  style:
+                      const TextStyle(fontSize: 18, color: Colors.transparent)),
+              const WidgetSpan(
+                  child: SizedBox(
+                width: 12,
+              )),
+              TextSpan(
+                text: widget.adminTitle,
+                style: const TextStyle(fontSize: 16, color: Colors.transparent),
+              )
+            ])),
+          if (widget.adminTitle != null)
             Positioned(
                 right: 0,
                 top: 0,
                 child: Text(
-                  widget.userPost!,
+                  widget.adminTitle!,
                   style: TextDisplay.regular16,
                 )),
           Positioned(
