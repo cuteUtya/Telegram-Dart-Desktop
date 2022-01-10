@@ -1,4 +1,4 @@
-import "dart:io" show Platform;
+import "dart:io";
 import "dart:math";
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
@@ -119,13 +119,10 @@ Color getPeerColor(int id, [String component = "a"]) {
 }
 
 String getUserLocale() => "ru";
-String getDatabaseDirectory() =>
-    Platform.isLinux ? "/home/timur/tdDb" : "D:/tdclient/tddb";
-String getFilesDirectory() =>
-    Platform.isLinux ? "/home/timur/tdFiles" : "D:/tdclient/tdFiles";
-String getLanguagePackDatabasePath() => Platform.isLinux
-    ? "/home/timur/tdTranslate.db"
-    : "D:/tdclient/TDtranslates.db";
+String getDatabaseDirectory() => "${Directory.current.path}/tddb/";
+String getFilesDirectory() => "${Directory.current.path}/tdfiles/";
+String getLanguagePackDatabasePath() =>
+    "${Directory.current.path}/tdtranslates.db";
 
 String getDeviceName() => Platform.localHostname;
 String getSystemVersion() => Platform.operatingSystem;
