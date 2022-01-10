@@ -64,7 +64,7 @@ class ChatListDisplay extends StatelessWidget {
           return ChatItemDisplay(
               key: Key(
                   "ChatItemDisplay?id=${order.chatId}?chatList=${_chatListStr(chatList)}"),
-              onClick: () => UIEvents.selectChat(order.chatId),
+              onClick: () => UIEvents.selectChat(order.chatId, client),
               chatId: order.chatId,
               client: client,
               chatList: chatList);

@@ -1,9 +1,18 @@
+import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:rxdart/subjects.dart';
 
 class UIEvents {
   static final BehaviorSubject<int?> _selectedChat = BehaviorSubject<int?>();
-  static void selectChat(int? id) => _selectedChat.add(id);
+  static int? _lastSelectedChat;
+  static void selectChat(int? id, TelegramClient client) {
+    if (_lastSelectedChat != null) {
+      client.send(CloseChat(chatId: id));
+    }
+    _lastSelectedChat = id;
+    _selectedChat.add(id);
+  }
+
   static Stream<int?> selectedChat() => _selectedChat.stream;
 
   static final BehaviorSubject<List<ChatList>> _chatLists =
