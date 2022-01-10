@@ -62,21 +62,46 @@ class _MessageListState extends State<MessageList> {
               ? null
               : messages!.messages![index + 1]);
 
+          var prevDate = previus == null ? null : unixToDateTime(previus.date!);
+          var currDate = unixToDateTime(msg.date!);
+          var nextDate = next == null ? null : unixToDateTime(next.date!);
+          bool showDateBelow = prevDate != null &&
+              (prevDate.day != currDate.day ||
+                  prevDate.month != currDate.month ||
+                  prevDate.year != currDate.year);
+
+          bool showDateAbove = nextDate != null &&
+              (nextDate.day != currDate.day ||
+                  nextDate.month != currDate.month ||
+                  nextDate.year != currDate.year);
+
           var prevSenderId = getSenderId(previus?.senderId);
           var nextSenderId = getSenderId(next?.senderId);
           var currSenderId = getSenderId(msg.senderId);
-          var bubbleRelativePosition =
-              currSenderId == nextSenderId && currSenderId == prevSenderId
-                  ? BubbleRelativePosition.middle
-                  : currSenderId == prevSenderId
-                      ? BubbleRelativePosition.top
-                      : currSenderId == nextSenderId
-                          ? BubbleRelativePosition.bottom
-                          : BubbleRelativePosition.single;
+          BubbleRelativePosition bubbleRelativePosition =
+              BubbleRelativePosition.single;
+          if (currSenderId == nextSenderId && currSenderId == prevSenderId) {
+            if (showDateAbove && showDateBelow) {
+              bubbleRelativePosition = BubbleRelativePosition.single;
+            } else if (showDateAbove) {
+              bubbleRelativePosition = BubbleRelativePosition.top;
+            } else if (showDateBelow) {
+              bubbleRelativePosition = BubbleRelativePosition.bottom;
+            } else {
+              bubbleRelativePosition = BubbleRelativePosition.middle;
+            }
+          } else if (currSenderId == prevSenderId) {
+            bubbleRelativePosition = BubbleRelativePosition.top;
+          } else if (currSenderId == nextSenderId) {
+            if (showDateAbove) {
+              bubbleRelativePosition = BubbleRelativePosition.single;
+            } else {
+              bubbleRelativePosition = BubbleRelativePosition.bottom;
+            }
+          }
+
           var adminInfo = admins.firstWhereOrNull(
               (element) => element.userId == getSenderId(msg.senderId!));
-          var prevDate = previus == null ? null : unixToDateTime(previus.date!);
-          var currDate = unixToDateTime(msg.date!);
           return Column(children: [
             Row(
               children: [
@@ -108,13 +133,10 @@ class _MessageListState extends State<MessageList> {
                 if (!msg.isOutgoing!) const Spacer()
               ],
             ),
-            if (prevDate != null)
-              if (prevDate.day != currDate.day ||
-                  prevDate.month != currDate.month ||
-                  prevDate.year != currDate.year)
-                Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    child: DateBubble(client: widget.client, date: prevDate)),
+            if (showDateBelow)
+              Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: DateBubble(client: widget.client, date: prevDate)),
           ]);
         });
   }
