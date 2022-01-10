@@ -124,7 +124,7 @@ class ChatItemDisplay extends StatelessWidget {
                               .getField("RepliesMessagesBackColor"),
                           iconColor: ClientTheme.currentTheme
                               .getField("RepliesMessageIconColor"),
-                          icon: Icons.question_answer)
+                          icon: Icons.question_answer_outlined)
                       : Stack(children: [
                           Stack(alignment: Alignment.bottomRight, children: [
                             SizedBox(
