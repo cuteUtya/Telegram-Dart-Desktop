@@ -77,7 +77,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
       return Stack(
         children: [
           /// fake text with title and admin titles that stratch message bubble
-          if (widget.adminTitle != null)
+          if (widget.adminTitle != null && !widget.message.isOutgoing!)
             Text.rich(TextSpan(children: [
               TextSpan(
                   text: getSenderName(widget.message.senderId!, widget.client),
@@ -92,7 +92,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                 style: const TextStyle(fontSize: 16, color: Colors.transparent),
               )
             ])),
-          if (widget.adminTitle != null)
+          if (widget.adminTitle != null && !widget.message.isOutgoing!)
             Positioned(
                 right: 0,
                 top: 0,
