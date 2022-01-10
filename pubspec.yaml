@@ -27,7 +27,6 @@ flutter:
   assets:
     - Assets/
     - Assets/Introduction/
-    - Assets/bin/tdlib/
     - Assets/theme.tcss
   fonts:
   - family: Ubuntu
