@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkmark_time.dart';
@@ -129,7 +130,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                     ],
                   ),
                 Container(
-                  child: Text.rich(parsedEntetiyes),
+                  child: CopyableText(parsedEntetiyes),
                   margin: EdgeInsets.only(
                       bottom: boxCons.maxWidth - lastBox.right <
                               (msgInfoBubbleSize?.width ?? 30)
