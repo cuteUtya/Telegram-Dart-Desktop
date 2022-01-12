@@ -105,13 +105,17 @@ class ChatListsManagerState extends State<ChatListsManager> {
             .positions = event.positions!)));
     _subscriptions
         .add(widget.client.updateChatPosition.listen((event) => setState(() {
-              var base = _chats
-                  .firstWhere((element) => element.chatId == event.chatId);
-              for (int i = 0; i < base.positions.length; i++) {
-                if (compareChatlists(
-                    base.positions[i].list!, event.position!.list!)) {
-                  base.positions[i] = event.position!;
+              var base = _chats.firstWhereOrNull(
+                  (element) => element.chatId == event.chatId);
+              if (base != null) {
+                for (int i = 0; i < base.positions.length; i++) {
+                  if (compareChatlists(
+                      base.positions[i].list!, event.position!.list!)) {
+                    base.positions[i] = event.position!;
+                  }
                 }
+              } else {
+                _chats.add(ChatOrder(event.chatId!, [event.position!]));
               }
             })));
     _subscriptions.add(UIEvents.currentChatList()
