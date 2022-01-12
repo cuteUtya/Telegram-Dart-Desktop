@@ -36,7 +36,8 @@ class MessageStickerDisplay extends StatelessWidget {
         child: Stack(alignment: Alignment.bottomRight, children: [
           WidgetSizer(
               key: sizerKey,
-              resizeDuration: const Duration(milliseconds: 100),
+              curve: Curves.easeOutBack,
+              resizeDuration: const Duration(milliseconds: 200),
               alignment: alignment,
               sizeOnInit: Size(
                 stickerWidth,

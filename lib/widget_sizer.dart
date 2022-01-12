@@ -6,11 +6,13 @@ class WidgetSizer extends StatefulWidget {
     Key? key,
     required this.child,
     required this.sizeOnInit,
+    this.curve = Curves.easeIn,
     this.resizeDuration = Duration.zero,
     this.alignment,
   }) : super(key: key);
   final Widget child;
   final Size sizeOnInit;
+  final Curve curve;
   final Duration resizeDuration;
   final Alignment? alignment;
   @override
@@ -26,7 +28,7 @@ class WidgetSizerState extends State<WidgetSizer> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: widget.resizeDuration,
-      curve: Curves.easeIn,
+      curve: widget.curve,
       width: _size.width,
       height: _size.height,
       child: widget.child,
