@@ -814,7 +814,8 @@ class TelegramClient {
               bool finded = false;
               var base = _chats[tdobject.chatId]!;
               for (int i = 0; i < base.positions!.length; i++) {
-                if (base.positions![i].list == tdobject.position!.list) {
+                if (compareChatlists(
+                    base.positions![i].list!, tdobject.position!.list!)) {
                   finded = true;
                   base.positions![i] = tdobject.position!;
                 }
