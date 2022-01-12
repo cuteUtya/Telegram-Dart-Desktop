@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
-import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkmark_time.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -12,24 +11,24 @@ import 'package:myapp/utils.dart';
 /// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/messageText_example_mine.jpg).
 /// UI representation of MessageText entetiy
 /// * [message] object of message, wich have [message.content] with type MessageText
-/// * [lastReadOutboxMessageId] lastReadOutboxMessageId in chat from wich was sended current message
 /// * [adminTitle] custom admin post wich be displayed in top right corner, can be null
-/// * [senderId] id of channel or user that send message
-/// * [senderName] name wich be displayed in bubble top left corner, can be null
+/// * [infoWidget] widget what contain info about message
+/// * [showSenderName] if true [message.senderId] name (or title if message.senderId is SenderChat) be displayed
+/// * [adminTitle] title of admin, can be null
 class MessageDisplayText extends StatefulWidget {
-  const MessageDisplayText(
-      {Key? key,
-      required this.client,
-      required this.message,
-      this.showSenderName = false,
-      this.fromChat,
-      this.adminTitle})
-      : super(key: key);
+  const MessageDisplayText({
+    Key? key,
+    required this.client,
+    required this.message,
+    required this.infoWidget,
+    this.showSenderName = false,
+    this.adminTitle,
+  }) : super(key: key);
   final TelegramClient client;
   final Message message;
   final bool showSenderName;
-  final Chat? fromChat;
   final String? adminTitle;
+  final Widget? infoWidget;
 
   @override
   State<StatefulWidget> createState() => _MessageDisplayTextState();
@@ -50,19 +49,6 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
       }
     });
 
-    var time = getHHMM(unixToDateTime(widget.message.date!));
-    var msgInfoWidget = MessageInfoBubbleCheckMarkTime(
-        key: _msgInfoWidgetKey,
-        customInfo: widget.message.editDate == 0
-            ? null
-            : widget.client.getTranslation("lng_edited"),
-        isOutgoing: widget.message.isOutgoing!,
-        checkMarkValue: widget.message.isOutgoing!
-            ? widget.message.id! <=
-                (widget.fromChat?.lastReadOutboxMessageId ?? 0)
-            : null,
-        time: time);
-
     var contentText = widget.message.content as MessageText;
 
     var parsedEntetiyes = TextSpan(
@@ -77,7 +63,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
           boxCons.maxWidth - lastBox.right > (msgInfoBubbleSize?.width ?? 30);
       return Stack(
         children: [
-          /// fake text with title and admin titles that stratch message bubble
+          /// fake text with title and admin titles that stratch message bubble1
           if (widget.adminTitle != null && !widget.message.isOutgoing!)
             Text.rich(TextSpan(children: [
               TextSpan(
@@ -104,7 +90,10 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
           Positioned(
             right: 0,
             bottom: -2,
-            child: msgInfoWidget,
+            child: Container(
+              child: widget.infoWidget,
+              key: _msgInfoWidgetKey,
+            ),
           ),
           Column(
               mainAxisSize: MainAxisSize.min,

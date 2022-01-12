@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
-import 'package:myapp/Widgets/message/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
+import 'package:myapp/Widgets/message/message_sticker.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkmark_time.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
@@ -30,6 +30,8 @@ class MessageDisplay extends StatelessWidget {
   final String? adminTitle;
   final TelegramClient client;
 
+  static const List<Type> messageTypesWithInlineMessageInfo = [MessageText];
+
   @override
   Widget build(BuildContext context) {
     Widget contentWidget;
@@ -39,10 +41,11 @@ class MessageDisplay extends StatelessWidget {
         (bubbleRelativePosition == BubbleRelativePosition.top ||
             bubbleRelativePosition == BubbleRelativePosition.single);
     bool wrapInBubble = false;
-    var msgInfoWidget = MessageInfoBubbleCheckMarkTime(
+    var messageInfoWidget = MessageInfoBubbleCheckMarkTime(
       customInfo:
           message.editDate == 0 ? null : client.getTranslation("lng_edited"),
-      useBackground: true,
+      useBackground: !messageTypesWithInlineMessageInfo
+          .contains(message.content.runtimeType),
       isOutgoing: message.isOutgoing!,
       time: getHHMM(unixToDateTime(message.date!)),
       checkMarkValue: message.isOutgoing!
@@ -68,7 +71,7 @@ class MessageDisplay extends StatelessWidget {
                     : MainAxisAlignment.start,
                 emojis: textUnwhitespaced,
                 infoSide: message.isOutgoing! ? Side.left : Side.right,
-                messageInfo: msgInfoWidget);
+                messageInfo: messageInfoWidget);
             break;
           }
         }
@@ -76,24 +79,24 @@ class MessageDisplay extends StatelessWidget {
         contentWidget = MessageDisplayText(
           client: client,
           message: message,
+          infoWidget: messageInfoWidget,
           showSenderName: showMessageSender,
           adminTitle: bubbleRelativePosition == BubbleRelativePosition.top ||
                   bubbleRelativePosition == BubbleRelativePosition.single
               ? adminTitle
               : "",
-          fromChat: chat,
         );
 
         break;
 
       case MessageSticker:
-        contentWidget = StickerDisplay(
+        contentWidget = MessageStickerDisplay(
             client: client,
             alignment: message.isOutgoing!
                 ? Alignment.centerRight
                 : Alignment.centerLeft,
-            sticker: (message.content as MessageSticker).sticker!,
-            infoWidget: msgInfoWidget);
+            message: message,
+            infoWidget: messageInfoWidget);
         break;
 
       default:
