@@ -31,3 +31,5 @@ tddb/
 tdfiles/
 tdtranslates.db
 
+tdtranslates.db-shm
+tdtranslates.db-wal
