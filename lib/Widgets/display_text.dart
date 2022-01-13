@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
@@ -61,6 +62,8 @@ class TextDisplay {
     TextEntityTypeItalic: "I",
     TextEntityTypePre: "M",
     TextEntityTypeCode: "M",
+    TextEntityTypeTextUrl: "L",
+    TextEntityTypeUrl: "R",
     null: "-"
   };
 
@@ -73,13 +76,34 @@ class TextDisplay {
         create(size: s, decoration: TextDecoration.lineThrough, textColor: c),
     "U": (s, c) =>
         create(size: s, decoration: TextDecoration.underline, textColor: c),
-    "I": (s, c) => create(size: s, fontStyle: FontStyle.italic, textColor: c)
+    "I": (s, c) => create(size: s, fontStyle: FontStyle.italic, textColor: c),
+    "L": (s, c) => create(
+        size: s,
+        decoration: TextDecoration.underline,
+        customTextColor: ClientTheme.currentTheme.getField("HyperlinkColor")),
+    "R": (s, c) => create(
+        size: s,
+        decoration: TextDecoration.underline,
+        customTextColor: ClientTheme.currentTheme.getField("HyperlinkColor")),
   };
 
+  static final List<Type> _interactiveTextEnteties = [
+    TextEntityTypeTextUrl,
+    TextEntityTypeUrl,
+  ];
+
   static List<InlineSpan> parseFormattedText(FormattedText text,
-      [double size = 20, TextColor textColor = TextColor.RegularText]) {
+      [double size = 20,
+      TextColor textColor = TextColor.RegularText,
+      bool interactiveEnable = false,
+      Function(String)? onUrlClick]) {
     String str = "-" * text.text!.length;
     for (int i = 0; i < (text.entities?.length ?? 0); i++) {
+      if (!interactiveEnable &&
+          _interactiveTextEnteties
+              .contains(text.entities![i].type.runtimeType)) {
+        text.entities![i].type = null;
+      }
       str = str.replaceRange(
           text.entities![i].offset!,
           text.entities![i].offset! + text.entities![i].length!,
@@ -90,59 +114,60 @@ class TextDisplay {
     List<InlineSpan> result = [];
 
     var matches = RegExp(r"(?=(.))\1{1,}", unicode: true).allMatches(str);
-    matches.forEach((element) {
+    int entetieIndex = 0;
+    for (var element in matches) {
+      var textEntety =
+          str[element.start] == "-" ? null : (text.entities![entetieIndex]);
       var style = stylePairs[str[element.start]];
-      result.addAll(parseEmojiInString(
+      var recognizer = textEntety?.type is TextEntityTypeTextUrl ||
+              textEntety?.type is TextEntityTypeUrl
+          ? (TapGestureRecognizer()
+            ..onTap = () {
+              if (onUrlClick != null) {
+                switch (textEntety!.type.runtimeType) {
+                  case TextEntityTypeTextUrl:
+                    onUrlClick((textEntety.type as TextEntityTypeTextUrl).url!);
+                    break;
+                  case TextEntityTypeUrl:
+                    onUrlClick(text.text!.substring(textEntety.offset!,
+                        textEntety.offset! + textEntety.length!));
+                    break;
+                }
+              }
+            })
+          : null;
+      var parsedStr = parseEmojiInString(
           text.text!.substring(element.start, element.end),
           style == null
               ? create(size: size, textColor: textColor)
-              : style(size, textColor)));
-    });
+              : style(size, textColor),
+          recognizer);
+      result.addAll(parsedStr);
+      if (str[element.start] != "-") {
+        entetieIndex++;
+      }
+    }
 
     return result;
   }
 
-  /// Outlines a text using shadows.
-  static List<Shadow> outlinedText(
-      {double strokeWidth = 2,
-      Color strokeColor = Colors.black,
-      int precision = 5}) {
-    List<Shadow> result = [];
-    for (int x = 1; x < strokeWidth + precision; x++) {
-      for (int y = 1; y < strokeWidth + precision; y++) {
-        double offsetX = x.toDouble();
-        double offsetY = y.toDouble();
-        result.add(Shadow(
-            offset: Offset(-strokeWidth / offsetX, -strokeWidth / offsetY),
-            color: strokeColor));
-        result.add(Shadow(
-            offset: Offset(-strokeWidth / offsetX, strokeWidth / offsetY),
-            color: strokeColor));
-        result.add(Shadow(
-            offset: Offset(strokeWidth / offsetX, -strokeWidth / offsetY),
-            color: strokeColor));
-        result.add(Shadow(
-            offset: Offset(strokeWidth / offsetX, strokeWidth / offsetY),
-            color: strokeColor));
-      }
-    }
-    return result.toList();
-  }
-
-  static List<InlineSpan> parseEmojiInString(String text, [TextStyle? style]) {
+  static List<InlineSpan> parseEmojiInString(String text,
+      [TextStyle? style, GestureRecognizer? recognizer]) {
     style ??= create();
     List<InlineSpan> result = [];
     var matches = emojiRegex.allMatches(text);
 
     int pos = 0;
     if (matches.isEmpty) {
-      result.add(TextSpan(text: text, style: style));
+      result.add(TextSpan(text: text, style: style, recognizer: recognizer));
       pos = text.length;
     }
     matches.forEach((element) {
       if (pos != element.start) {
-        result.add(
-            TextSpan(text: text.substring(pos, element.start), style: style));
+        result.add(TextSpan(
+            text: text.substring(pos, element.start),
+            style: style,
+            recognizer: recognizer));
         pos = element.start;
       }
       result.add(emoji(text.substring(element.start, element.end), style!));
@@ -150,8 +175,10 @@ class TextDisplay {
     });
 
     if (pos != text.length) {
-      result
-          .add(TextSpan(text: text.substring(pos, text.length), style: style));
+      result.add(TextSpan(
+          text: text.substring(pos, text.length),
+          style: style,
+          recognizer: recognizer));
     }
 
     return result;

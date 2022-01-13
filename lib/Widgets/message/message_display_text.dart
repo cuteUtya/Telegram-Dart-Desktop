@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
+import 'package:myapp/links%20utils/linksOpener.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -53,7 +54,11 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
 
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(
-            contentText.text!, 20, TextColor.MessageTextColor));
+            contentText.text!,
+            20,
+            TextColor.MessageTextColor,
+            true,
+            (s) => HttpUrlsUtils.openLink(s)));
     return LayoutBuilder(builder: (context, boxCons) {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
       var boxes = paragraph.getBoxesForSelection(TextSelection(
@@ -104,18 +109,21 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text.rich(TextSpan(
-                          children: TextDisplay.parseEmojiInString(
-                              getSenderName(
-                                  widget.message.senderId!, widget.client),
-                              TextDisplay.create(
-                                  customTextColor: getPeerColor(
-                                      getSenderId(widget.message.senderId!)!,
-                                      'b'),
-                                  fontWeight: FontWeight.bold,
-                                  size: 18,
-                                  textColor: TextColor.HeaderMain,
-                                  fontFamily: TextDisplay.greaterImportance))))
+                      Text.rich(
+                        TextSpan(
+                            children: TextDisplay.parseEmojiInString(
+                                getSenderName(
+                                    widget.message.senderId!, widget.client),
+                                TextDisplay.create(
+                                    customTextColor: getPeerColor(
+                                        getSenderId(widget.message.senderId!)!,
+                                        'b'),
+                                    fontWeight: FontWeight.bold,
+                                    size: 18,
+                                    textColor: TextColor.HeaderMain,
+                                    fontFamily:
+                                        TextDisplay.greaterImportance))),
+                      )
                     ],
                   ),
                 Container(

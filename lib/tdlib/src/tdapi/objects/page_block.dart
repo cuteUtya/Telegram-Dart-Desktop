@@ -992,7 +992,7 @@ class PageBlockTable extends PageBlock {
     return {
       "@type": CONSTRUCTOR,
       "caption": caption == null ? null : caption?.toJson(),
-      "cells": cells?.map((i) => i?.map((ii) => ii.toJson()).toList()).toList(),
+      "cells": cells?.map((i) => i.map((ii) => ii.toJson()).toList()).toList(),
       "is_bordered": isBordered,
       "is_striped": isStriped,
     };

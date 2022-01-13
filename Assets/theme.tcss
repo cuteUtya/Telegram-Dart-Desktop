@@ -121,3 +121,4 @@ DialogDateTextColor: #FFFFFFFF;
 
 CloseChatIconColor: ref(GenericUIIconsColor);
 CloseChatClickColor: ref(HoveredObject);
+HyperlinkColor: ref(Accent);
