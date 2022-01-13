@@ -71,7 +71,7 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                               setPhone(number);
                             } else {
                               _phoneNumber = number;
-                              initNewClient();
+                              initNewClient(sessionName: session);
                             }
                             return phoneEnterScreenResultHandler!.future;
                           });
