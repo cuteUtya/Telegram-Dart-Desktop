@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
@@ -22,71 +24,93 @@ class ActionBarDisplay extends StatelessWidget {
         ? client.getBasicGroup((chat.type as ChatTypeBasicGroup).basicGroupId!)
         : null;
     int membersCount = (group?.memberCount ?? supergroup?.memberCount) ?? 0;
-    return Container(
-        height: 64,
-        alignment: Alignment.center,
-        color: ClientTheme.currentTheme.getField("ActionBarColor"),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const SizedBox(height: 4),
-          StreamBuilder(
-              key: UniqueKey(),
-              initialData: chat.title,
-              stream: client.titleOf(chat.id!),
-              builder: (_, data) => ChatItemTitle(
-                    selected: false,
-                    isBot: user?.type is UserTypeBot,
-                    isChannel: supergroup?.isChannel ?? false,
-                    isChat: !(supergroup?.isChannel ?? true),
-                    title: data.data.toString(),
-                    isScam:
-                        user?.isScam ?? false || (supergroup?.isScam ?? false),
-                    isVerifed: supergroup?.isVerified ?? false,
-                    isSupport: user?.isSupport ?? false,
-                  )),
-          const SizedBox(height: 2),
-          if (supergroup?.isChannel ?? false)
-            Text(
-                client.getTranslation(
-                  "lng_chat_status_subscribers",
-                  replacing: {
-                    "{count}": (supergroup?.memberCount ?? 0).toString()
-                  },
-                  itemsCount: supergroup?.memberCount ?? 0,
-                ),
-                style: TextDisplay.actionBarOffline)
-          else if (user?.status != null)
+    return Stack(alignment: Alignment.centerLeft, children: [
+      Container(
+          height: 64,
+          alignment: Alignment.center,
+          color: ClientTheme.currentTheme.getField("ActionBarColor"),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const SizedBox(height: 4),
             StreamBuilder(
                 key: UniqueKey(),
-                initialData: user!.status,
-                stream: client.statusOf(user.id!),
-                builder: (_, data) => data.hasData
-                    ? _buildStatusText(
-                        data.data as UserStatus, user.type is UserTypeBot)
-                    : const SizedBox.shrink())
-          else
-            StreamBuilder(
-                key: UniqueKey(),
-                stream: client.onlineMemebersIn(chat.id!),
-                builder: (_, data) {
-                  var onlineCount = (data.data ?? 0) as int;
-                  return Text(client.getTranslation(
-                      onlineCount > 0
-                          ? "lng_chat_status_members_online"
-                          : "lng_chat_status_members",
-                      itemsCount: onlineCount,
-                      replacing: {
-                        "{count}": membersCount.toString(),
-                        "{members_count}": client.getTranslation(
-                            "lng_channel_members_link",
-                            replacing: {"{count}": membersCount.toString()},
-                            itemsCount: membersCount),
-                        "{online_count}": client.getTranslation(
-                            "lng_chat_status_online",
-                            replacing: {"{count}": onlineCount.toString()},
-                            itemsCount: onlineCount)
-                      }));
+                initialData: chat.title,
+                stream: client.titleOf(chat.id!),
+                builder: (_, data) => ChatItemTitle(
+                      selected: false,
+                      isBot: user?.type is UserTypeBot,
+                      isChannel: supergroup?.isChannel ?? false,
+                      isChat: !(supergroup?.isChannel ?? true),
+                      title: data.data.toString(),
+                      isScam: user?.isScam ??
+                          false || (supergroup?.isScam ?? false),
+                      isVerifed: supergroup?.isVerified ?? false,
+                      isSupport: user?.isSupport ?? false,
+                    )),
+            const SizedBox(height: 2),
+            if (supergroup?.isChannel ?? false)
+              Text(
+                  client.getTranslation(
+                    "lng_chat_status_subscribers",
+                    replacing: {
+                      "{count}": (supergroup?.memberCount ?? 0).toString()
+                    },
+                    itemsCount: supergroup?.memberCount ?? 0,
+                  ),
+                  style: TextDisplay.actionBarOffline)
+            else if (user?.status != null)
+              StreamBuilder(
+                  key: UniqueKey(),
+                  initialData: user!.status,
+                  stream: client.statusOf(user.id!),
+                  builder: (_, data) => data.hasData
+                      ? _buildStatusText(
+                          data.data as UserStatus, user.type is UserTypeBot)
+                      : const SizedBox.shrink())
+            else
+              StreamBuilder(
+                  key: UniqueKey(),
+                  stream: client.onlineMemebersIn(chat.id!),
+                  builder: (_, data) {
+                    var onlineCount = (data.data ?? 0) as int;
+                    return Text(client.getTranslation(
+                        onlineCount > 0
+                            ? "lng_chat_status_members_online"
+                            : "lng_chat_status_members",
+                        itemsCount: onlineCount,
+                        replacing: {
+                          "{count}": membersCount.toString(),
+                          "{members_count}": client.getTranslation(
+                              "lng_channel_members_link",
+                              replacing: {"{count}": membersCount.toString()},
+                              itemsCount: membersCount),
+                          "{online_count}": client.getTranslation(
+                              "lng_chat_status_online",
+                              replacing: {"{count}": onlineCount.toString()},
+                              itemsCount: onlineCount)
+                        }));
+                  }),
+          ])),
+      Container(
+        width: 48,
+        height: 48,
+        margin: const EdgeInsets.only(left: 12),
+        child: TextButton(
+            style: ButtonStyle(
+                overlayColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.pressed)) {
+                    return ClientTheme.currentTheme
+                        .getField("CloseChatClickColor");
+                  }
+                  return Colors.transparent;
                 }),
-        ]));
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0)))),
+            child: Icon(Icons.arrow_back,
+                color: ClientTheme.currentTheme.getField("CloseChatIconColor")),
+            onPressed: () => UIEvents.popChat(client)),
+      )
+    ]);
   }
 
   Widget _buildStatusText(UserStatus status, bool isBot) {

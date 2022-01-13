@@ -118,3 +118,6 @@ CheckMarkInFlowContainer: #F6F6F6;
 
 StickerOutlineColor: #1E000000;
 DialogDateTextColor: #FFFFFFFF;
+
+CloseChatIconColor: ref(GenericUIIconsColor);
+CloseChatClickColor: ref(HoveredObject);
