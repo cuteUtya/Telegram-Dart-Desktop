@@ -89,7 +89,7 @@ class TextDisplay {
 
   static List<InlineSpan> parseFormattedText(FormattedText text,
       [double size = 20,
-      Color textColor = Colors.white,
+      Color? textColor,
       bool interactiveEnable = false,
       Function(String)? onUrlClick]) {
     String str = "-" * text.text!.length;
@@ -134,8 +134,7 @@ class TextDisplay {
       var textStyle = style == null
           ? create(size: size, customTextColor: textColor)
           : style();
-      textStyle = textStyle.copyWith(
-          color: textStyle.color == null ? textColor : null, fontSize: size);
+      textStyle = textStyle.copyWith(color: textColor, fontSize: size);
       var parsedStr = parseEmojiInString(
           text.text!.substring(element.start, element.end),
           textStyle,
