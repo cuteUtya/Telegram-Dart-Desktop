@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
@@ -22,6 +23,7 @@ class MessageDisplayText extends StatefulWidget {
     required this.client,
     required this.message,
     required this.infoWidget,
+    required this.replieWidget,
     this.showSenderName = false,
     this.adminTitle,
   }) : super(key: key);
@@ -30,6 +32,7 @@ class MessageDisplayText extends StatefulWidget {
   final bool showSenderName;
   final String? adminTitle;
   final Widget? infoWidget;
+  final Widget? replieWidget;
 
   @override
   State<StatefulWidget> createState() => _MessageDisplayTextState();
@@ -56,7 +59,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
         children: TextDisplay.parseFormattedText(
             contentText.text!,
             20,
-            TextColor.MessageTextColor,
+            ClientTheme.currentTheme.getField("MessageTextColor"),
             true,
             (s) => HttpUrlsUtils.openLink(s)));
     return LayoutBuilder(builder: (context, boxCons) {
@@ -126,6 +129,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                       )
                     ],
                   ),
+                if (widget.replieWidget != null) widget.replieWidget!,
                 Container(
                   child: CopyableText(parsedEntetiyes),
                   margin: EdgeInsets.only(

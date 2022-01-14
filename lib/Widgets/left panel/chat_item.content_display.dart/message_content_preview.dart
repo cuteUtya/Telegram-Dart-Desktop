@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chat_item_photo_minithumbnail.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_icon_text.dart';
@@ -9,33 +10,45 @@ import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/utils.dart';
 import 'package:myapp/tdlib/tdlib_utils.dart';
 
-class ChatItemLastMessageContent extends StatelessWidget {
-  const ChatItemLastMessageContent({
-    Key? key,
-    required this.chatSelected,
-    required this.chat,
-    required this.client,
-  }) : super(key: key);
-  final bool chatSelected;
-  final Chat chat;
+class MessageContentPreview extends StatelessWidget {
+  const MessageContentPreview(
+      {Key? key,
+      required this.client,
+      this.message,
+      this.draftMessage,
+      this.fromChatType,
+      this.chatSelected = false,
+      this.showAuthor,
+      this.style = MessageContentPreviewStyle.noLineBreaks,
+      this.authorColor,
+      this.textColor})
+      : super(key: key);
+  final Message? message;
+  final DraftMessage? draftMessage;
+  final ChatType? fromChatType;
   final TelegramClient client;
+  final MessageContentPreviewStyle style;
+  final bool chatSelected;
+  final bool? showAuthor;
+  final Color? authorColor;
+  final Color? textColor;
 
   contentEntetyesMargin() => const WidgetSpan(child: SizedBox(width: 4));
 
   @override
   Widget build(BuildContext context) {
-    if (chat.lastMessage == null) return const Center();
-
-    var content = draft
-        ? chat.draftMessage!.inputMessageText
-        : chat.lastMessage!.content!;
+    assert(message != null || draftMessage != null);
+    var content = draftMessage == null
+        ? message!.content!
+        : draftMessage!.inputMessageText;
     bool messageTypeAllowShowFrom = true;
     FormattedText text = FormattedText(text: "");
     List<InlineSpan> displayContent = [];
     TextStyle textStyle = chatSelected
-        ? TextDisplay.chatItemAccentSelected
-        : TextDisplay.chatItemAccent;
-    var author = getSenderName(chat.lastMessage!.senderId!, client);
+        ? TextDisplay.chatItemAccentSelected.copyWith(color: textColor)
+        : TextDisplay.chatItemAccent.copyWith(color: textColor);
+    var author =
+        message == null ? "" : getSenderName(message!.senderId!, client);
     switch (content.runtimeType) {
       case MessageText:
         text = (content as MessageText).text!;
@@ -112,7 +125,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
         messageTypeAllowShowFrom = false;
         displayContent = TextDisplay.parseEmojiInString(
             "📸 ${client.getTranslation(isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo", replacing: {
-                  "{from}": getSenderName(chat.lastMessage!.senderId!, client)
+                  "{from}": getSenderName(message!.senderId!, client)
                 })}",
             textStyle);
         break;
@@ -148,7 +161,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
         messageTypeAllowShowFrom = false;
         displayContent = TextDisplay.parseEmojiInString(
             "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {
-                  "{title}": chat.title!
+                  "{title}": author
                 })}",
             textStyle);
         break;
@@ -159,8 +172,7 @@ class ChatItemLastMessageContent extends StatelessWidget {
         break;
 
       case InputMessageText:
-        content as InputMessageText;
-        text = content.text!;
+        text = (content as InputMessageText).text!;
         break;
 
       case MessageAudio:
@@ -183,14 +195,16 @@ class ChatItemLastMessageContent extends StatelessWidget {
         text: TextSpan(
           children: TextDisplay.parseEmojiInString(
                   messageTypeAllowShowFrom
-                      ? (showAuthor
-                          ? "${lastMessageSenderName ?? author}: "
+                      ? (_showAuthor
+                          ? (style == MessageContentPreviewStyle.noLineBreaks
+                              ? "${lastMessageSenderName ?? author}: "
+                              : "${lastMessageSenderName ?? author}\n")
                           : "")
                       : "",
-                  draft ? TextDisplay.draftText : textStyle) +
+                  draftMessage != null ? TextDisplay.draftText : textStyle) +
               [
                 WidgetSpan(
-                    child: chat.lastMessage!.forwardInfo != null
+                    child: message?.forwardInfo != null
                         ? Container(
                             child: Icon(
                               Icons.reply,
@@ -200,26 +214,31 @@ class ChatItemLastMessageContent extends StatelessWidget {
                         : const SizedBox.shrink()),
               ] +
               displayContent +
-              TextDisplay.parseFormattedText(text, 18,
-                  chatSelected ? TextColor.White : TextColor.RegularText),
+              TextDisplay.parseFormattedText(
+                  text,
+                  18,
+                  textColor ??
+                      (chatSelected
+                          ? Colors.white
+                          : ClientTheme.currentTheme.getField("RegularText"))),
         ));
   }
 
   int get lastMessageSenderId {
-    if (chat.lastMessage!.senderId! is MessageSenderUser) {
-      return (chat.lastMessage!.senderId! as MessageSenderUser).userId!;
+    if (message?.senderId is MessageSenderUser) {
+      return (message?.senderId as MessageSenderUser).userId!;
     }
-    if (chat.lastMessage!.senderId! is MessageSenderChat) {
-      return (chat.lastMessage!.senderId! as MessageSenderChat).chatId!;
+    if (message?.senderId is MessageSenderChat) {
+      return (message?.senderId as MessageSenderChat).chatId!;
     }
     return 0;
   }
 
   String? get lastMessageSenderName {
-    if (draft) {
+    if (draftMessage != null) {
       return client.getTranslation("lng_from_draft");
     }
-    if (chat.lastMessage!.senderId! is MessageSenderUser) {
+    if (message?.senderId is MessageSenderUser) {
       if (lastMessageSenderId ==
           client.getOptionValue<OptionValueInteger>("my_id")?.value) {
         return client.getTranslation("lng_from_you");
@@ -228,22 +247,24 @@ class ChatItemLastMessageContent extends StatelessWidget {
   }
 
   bool get isChannel {
-    if (chat.type is ChatTypeSupergroup) {
-      if ((chat.type as ChatTypeSupergroup).isChannel!) {
+    if (fromChatType is ChatTypeSupergroup) {
+      if ((fromChatType as ChatTypeSupergroup).isChannel!) {
         return true;
       }
     }
     return false;
   }
 
-  bool get showAuthor {
+  bool get _showAuthor {
     var me = client.getOptionValue<OptionValueInteger>("my_id")?.value ?? 0;
-    return draft
+    return (draftMessage != null
         ? true
-        : !((chat.id == me || (chat.type is ChatTypeSupergroup && isChannel)) ||
-            ((chat.type is ChatTypePrivate || chat.type is ChatTypeSecret) &&
-                lastMessageSenderId != me));
+        : !(((fromChatType is ChatTypeSupergroup && isChannel)) ||
+                ((fromChatType is ChatTypePrivate ||
+                        fromChatType is ChatTypeSecret) &&
+                    lastMessageSenderId != me)) ||
+            (showAuthor ?? false));
   }
-
-  bool get draft => chat.draftMessage != null;
 }
+
+enum MessageContentPreviewStyle { lineBreakeAfterAuthorName, noLineBreaks }

@@ -6,7 +6,7 @@ import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/check_mark.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_action_display.dart';
-import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_last_message_content.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/message_content_preview.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
@@ -209,9 +209,14 @@ class ChatItemDisplay extends StatelessWidget {
                                     actions: actions);
                               }
                             }
-                            return ChatItemLastMessageContent(
+                            var chat = client.getChat(chatId);
+                            if (chat.lastMessage == null) return Center();
+                            return MessageContentPreview(
                                 chatSelected: selected,
-                                chat: client.getChat(chatId),
+                                message: chat.draftMessage == null
+                                    ? chat.lastMessage
+                                    : null,
+                                fromChatType: chat.type!,
                                 client: client);
                           }))),
               icon: pinned(client.getChat(chatId))

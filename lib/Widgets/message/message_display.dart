@@ -7,6 +7,7 @@ import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
 import 'package:myapp/Widgets/message/message_sticker.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkmark_time.dart';
+import 'package:myapp/Widgets/message/replies_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
@@ -21,16 +22,19 @@ class MessageDisplay extends StatelessWidget {
       this.chat,
       required this.client,
       required this.message,
+      required this.replieOn,
       required this.bubbleRelativePosition,
       this.adminTitle})
       : super(key: key);
   final BubbleRelativePosition bubbleRelativePosition;
   final Message message;
+  final Message? replieOn;
   final Chat? chat;
   final String? adminTitle;
   final TelegramClient client;
 
   static const List<Type> messageTypesWithInlineMessageInfo = [MessageText];
+  static const List<Type> messageTypeWithInlineReplie = [MessageText];
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +56,15 @@ class MessageDisplay extends StatelessWidget {
           ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
           : null,
     );
+
+    var replieInfo = replieOn != null
+        ? ReplieDisplay(
+            message: replieOn!,
+            client: client,
+            inlineStyle: messageTypeWithInlineReplie
+                .contains(message.content.runtimeType),
+          )
+        : null;
 
     switch (message.content.runtimeType) {
       case MessageText:
@@ -80,6 +93,7 @@ class MessageDisplay extends StatelessWidget {
           client: client,
           message: message,
           infoWidget: messageInfoWidget,
+          replieWidget: replieInfo,
           showSenderName: showMessageSender,
           adminTitle: bubbleRelativePosition == BubbleRelativePosition.top ||
                   bubbleRelativePosition == BubbleRelativePosition.single
@@ -96,6 +110,7 @@ class MessageDisplay extends StatelessWidget {
                 ? Alignment.centerRight
                 : Alignment.centerLeft,
             message: message,
+            replieWidget: replieInfo,
             infoWidget: messageInfoWidget);
         break;
 

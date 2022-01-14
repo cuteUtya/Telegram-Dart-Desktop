@@ -5,7 +5,7 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/utils.dart';
 
 class TextDisplay {
-  static String _getEmojiFont() => "AppleColorEmoji";
+  static String _getEmojiFont() => "TwitterColorEmoji";
 
   static TextStyle get title => create(
       size: 24, fontWeight: FontWeight.w600, textColor: TextColor.HeaderMain);
@@ -67,22 +67,17 @@ class TextDisplay {
     null: "-"
   };
 
-  static Map<String, TextStyle Function(double size, TextColor color)>
-      stylePairs = {
-    "B": (s, c) => create(size: s, fontWeight: FontWeight.bold, textColor: c),
-    "-": (s, c) => create(size: s, textColor: c),
-    "M": (s, c) => create(size: s, fontFamily: monospace, textColor: c),
-    "S": (s, c) =>
-        create(size: s, decoration: TextDecoration.lineThrough, textColor: c),
-    "U": (s, c) =>
-        create(size: s, decoration: TextDecoration.underline, textColor: c),
-    "I": (s, c) => create(size: s, fontStyle: FontStyle.italic, textColor: c),
-    "L": (s, c) => create(
-        size: s,
+  static Map<String, TextStyle Function()> stylePairs = {
+    "B": () => create(fontWeight: FontWeight.bold),
+    "-": () => create(),
+    "M": () => create(fontFamily: monospace),
+    "S": () => create(decoration: TextDecoration.lineThrough),
+    "U": () => create(decoration: TextDecoration.underline),
+    "I": () => create(fontStyle: FontStyle.italic),
+    "L": () => create(
         decoration: TextDecoration.underline,
         customTextColor: ClientTheme.currentTheme.getField("HyperlinkColor")),
-    "R": (s, c) => create(
-        size: s,
+    "R": () => create(
         decoration: TextDecoration.underline,
         customTextColor: ClientTheme.currentTheme.getField("HyperlinkColor")),
   };
@@ -94,7 +89,7 @@ class TextDisplay {
 
   static List<InlineSpan> parseFormattedText(FormattedText text,
       [double size = 20,
-      TextColor textColor = TextColor.RegularText,
+      Color textColor = Colors.white,
       bool interactiveEnable = false,
       Function(String)? onUrlClick]) {
     String str = "-" * text.text!.length;
@@ -139,8 +134,8 @@ class TextDisplay {
       var parsedStr = parseEmojiInString(
           text.text!.substring(element.start, element.end),
           style == null
-              ? create(size: size, textColor: textColor)
-              : style(size, textColor),
+              ? create(size: size, customTextColor: textColor)
+              : style().copyWith(color: textColor, fontSize: size),
           recognizer);
       result.addAll(parsedStr);
       if (str[element.start] != "-") {

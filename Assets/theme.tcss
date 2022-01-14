@@ -6,6 +6,7 @@ DangerColor: #DF1E1E;
 DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
 HoveredObject: #E0E0E0;
 GenericUIIconsColor: #7F7F7F;
+InfoOutsideMessageColor: #F6F6F6;
 
 BorderLineColor: #DADADA;
 
@@ -114,7 +115,7 @@ MessageBubbleOtherColor: ref(BaseColor);
 MessageInfoBubbleColor: #4D151515;
 CheckMarkNotMineColor: #FF989898;
 CheckMarkMineColor: #FF65AF5F;
-CheckMarkInFlowContainer: #F6F6F6;
+CheckMarkInFlowContainer: ref(InfoOutsideMessageColor);
 
 StickerOutlineColor: #1E000000;
 DialogDateTextColor: #FFFFFFFF;
@@ -122,3 +123,7 @@ DialogDateTextColor: #FFFFFFFF;
 CloseChatIconColor: ref(GenericUIIconsColor);
 CloseChatClickColor: ref(HoveredObject);
 HyperlinkColor: ref(Accent);
+
+ReplieOnMessageInlineVerticalLineColor: ref(Accent);
+ReplieOnMessageBubbleVerticalLineColor: ref(InfoOutsideMessageColor);
+ReplieOnMessageBubbleTextColor: ref(InfoOutsideMessageColor);

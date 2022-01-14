@@ -11,12 +11,14 @@ class MessageStickerDisplay extends StatelessWidget {
       required this.alignment,
       required this.message,
       required this.client,
-      required this.infoWidget})
+      required this.infoWidget,
+      required this.replieWidget})
       : super(key: key);
   final Alignment alignment;
   final Message message;
   final TelegramClient client;
   final Widget infoWidget;
+  final Widget? replieWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -33,39 +35,54 @@ class MessageStickerDisplay extends StatelessWidget {
     return Align(
         alignment:
             message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-        child: Stack(alignment: Alignment.bottomRight, children: [
-          WidgetSizer(
-              key: sizerKey,
-              curve: Curves.easeOutBack,
-              resizeDuration: const Duration(milliseconds: 200),
-              alignment: alignment,
-              sizeOnInit: Size(
-                stickerWidth,
-                stickerHeight,
-              ),
-              child: GestureDetector(
-                  onLongPress: () {
-                    sizerKey.currentState
-                        ?.resize(Size(stickerWidth * 1.5, stickerHeight * 1.5));
-                  },
-                  onLongPressEnd: (_) {
-                    sizerKey.currentState
-                        ?.resize(Size(stickerWidth, stickerHeight));
-                  },
-                  child: MouseRegion(
-                      onEnter: (_) => hiderKey.currentState?.show(),
-                      onExit: (_) => hiderKey.currentState?.hide(),
-                      child: StickerDisplay(
-                        client: client,
-                        sticker: sticker,
-                      )))),
-          Container(
-              margin: const EdgeInsets.only(right: 8, bottom: 8),
-              child: WidgetHider(
-                key: hiderKey,
-                child: infoWidget,
-                hiddenOnInit: true,
-              ))
-        ]));
+        child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (replieWidget != null && message.isOutgoing!)
+                Container(
+                  child: replieWidget!,
+                  margin: const EdgeInsets.only(right: 8),
+                ),
+              Stack(alignment: Alignment.bottomRight, children: [
+                WidgetSizer(
+                    key: sizerKey,
+                    curve: Curves.easeOutBack,
+                    resizeDuration: const Duration(milliseconds: 200),
+                    alignment: alignment,
+                    sizeOnInit: Size(
+                      stickerWidth,
+                      stickerHeight,
+                    ),
+                    child: GestureDetector(
+                        onLongPress: () {
+                          sizerKey.currentState?.resize(
+                              Size(stickerWidth * 1.5, stickerHeight * 1.5));
+                        },
+                        onLongPressEnd: (_) {
+                          sizerKey.currentState
+                              ?.resize(Size(stickerWidth, stickerHeight));
+                        },
+                        child: MouseRegion(
+                            onEnter: (_) => hiderKey.currentState?.show(),
+                            onExit: (_) => hiderKey.currentState?.hide(),
+                            child: StickerDisplay(
+                              client: client,
+                              sticker: sticker,
+                            )))),
+                Container(
+                    margin: const EdgeInsets.only(right: 8, bottom: 8),
+                    child: WidgetHider(
+                      key: hiderKey,
+                      child: infoWidget,
+                      hiddenOnInit: true,
+                    ))
+              ]),
+              if (replieWidget != null && !message.isOutgoing!)
+                Container(
+                  child: replieWidget!,
+                  margin: const EdgeInsets.only(left: 8),
+                ),
+            ]));
   }
 }

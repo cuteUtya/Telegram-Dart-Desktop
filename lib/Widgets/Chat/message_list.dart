@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
@@ -107,29 +109,44 @@ class _MessageListState extends State<MessageList> {
               children: [
                 if (msg.isOutgoing!) const Spacer(),
                 Expanded(
-                    flex: 1,
-                    child: Container(
-                        margin: EdgeInsets.only(
-                            bottom: (bubbleRelativePosition ==
-                                        BubbleRelativePosition.bottom ||
-                                    bubbleRelativePosition ==
-                                        BubbleRelativePosition.single)
-                                ? 16
-                                : 4),
-                        child: MessageDisplay(
-                          bubbleRelativePosition: bubbleRelativePosition,
-                          chat: chat,
-                          message: msg,
-                          client: widget.client,
-                          adminTitle: adminInfo != null
-                              ? (adminInfo.customTitle?.isEmpty ?? true)
-                                  ? widget.client.getTranslation(
-                                      adminInfo.isOwner!
-                                          ? "lng_owner_badge"
-                                          : "lng_admin_badge")
-                                  : adminInfo.customTitle!
-                              : null,
-                        ))),
+                    flex: 2,
+                    child: FutureBuilder(
+                        key: UniqueKey(),
+                        future: msg.replyToMessageId == 0
+                            ? null
+                            : widget.client.send(GetMessage(
+                                chatId: msg.replyInChatId == 0
+                                    ? chat.id
+                                    : msg.replyInChatId,
+                                messageId: msg.replyToMessageId)),
+                        builder: (_, replieDate) {
+                          return Container(
+                              margin: EdgeInsets.only(
+                                  bottom: (bubbleRelativePosition ==
+                                              BubbleRelativePosition.bottom ||
+                                          bubbleRelativePosition ==
+                                              BubbleRelativePosition.single)
+                                      ? 16
+                                      : 4),
+                              child: MessageDisplay(
+                                bubbleRelativePosition: bubbleRelativePosition,
+                                chat: chat,
+                                message: msg,
+                                replieOn: replieDate.data == null ||
+                                        replieDate.data is! Message
+                                    ? null
+                                    : replieDate.data as Message,
+                                client: widget.client,
+                                adminTitle: adminInfo != null
+                                    ? (adminInfo.customTitle?.isEmpty ?? true)
+                                        ? widget.client.getTranslation(
+                                            adminInfo.isOwner!
+                                                ? "lng_owner_badge"
+                                                : "lng_admin_badge")
+                                        : adminInfo.customTitle!
+                                    : null,
+                              ));
+                        })),
                 if (!msg.isOutgoing!) const Spacer()
               ],
             ),
