@@ -210,7 +210,7 @@ class ChatItemDisplay extends StatelessWidget {
                               }
                             }
                             var chat = client.getChat(chatId);
-                            if (chat.lastMessage == null) return Center();
+                            if (chat.lastMessage == null) return const Center();
                             return MessageContentPreview(
                                 chatSelected: selected,
                                 message: chat.draftMessage == null

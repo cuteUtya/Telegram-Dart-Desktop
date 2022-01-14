@@ -17,9 +17,9 @@ class ChatListsManager extends StatefulWidget {
 }
 
 class ChatListsManagerState extends State<ChatListsManager> {
-  static List<ChatOrder> _chats = [];
+  static final List<ChatOrder> _chats = [];
   static List<ChatList> _lists = [];
-  static Map<int, ScrollController> _scrollContollers = {};
+  static final Map<int, ScrollController> _scrollContollers = {};
   static int _currentPage = 0;
 
   void _listenChatPosition() async {

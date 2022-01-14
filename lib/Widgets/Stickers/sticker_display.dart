@@ -1,15 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Stickers/sticker_outnline.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
-import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/rlottie/rlottie.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'dart:io' as io;
-
-import 'package:myapp/widget_sizer.dart';
 
 /// UI representation of [MessageSticker]
 class StickerDisplay extends StatelessWidget {

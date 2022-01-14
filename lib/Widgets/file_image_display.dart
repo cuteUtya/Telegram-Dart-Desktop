@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/td_api.dart';
 import 'dart:io' as io;
 
 class FileImageDisplay extends StatelessWidget {
