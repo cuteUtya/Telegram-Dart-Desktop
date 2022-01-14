@@ -216,6 +216,7 @@ class ChatItemDisplay extends StatelessWidget {
                                 message: chat.draftMessage == null
                                     ? chat.lastMessage
                                     : null,
+                                draftMessage: chat.draftMessage,
                                 fromChatType: chat.type!,
                                 client: client);
                           }))),
