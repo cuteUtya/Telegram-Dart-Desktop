@@ -24,6 +24,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
       content.addAll(TextDisplay.parseEmojiInString(
               chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
               TextDisplay.create(
+                  textColor: TextColor.RegularText,
                   size: 18,
                   fontWeight: (chat.unreadCount ?? 0) <= 0
                       ? FontWeight.normal

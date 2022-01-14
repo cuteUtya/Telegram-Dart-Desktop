@@ -6,7 +6,7 @@ import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
 import 'package:myapp/Widgets/message/message_sticker.dart';
-import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkmark_time.dart';
+import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
 import 'package:myapp/Widgets/message/replies_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;

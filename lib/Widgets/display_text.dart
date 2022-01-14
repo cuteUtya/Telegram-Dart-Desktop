@@ -134,7 +134,8 @@ class TextDisplay {
       var textStyle = style == null
           ? create(size: size, customTextColor: textColor)
           : style();
-      textStyle = textStyle.copyWith(color: textColor, fontSize: size);
+      textStyle = textStyle.copyWith(
+          color: textStyle.color == null ? textColor : null, fontSize: size);
       var parsedStr = parseEmojiInString(
           text.text!.substring(element.start, element.end),
           textStyle,
@@ -192,8 +193,8 @@ class TextDisplay {
       TextDecoration decoration = TextDecoration.none,
       Color? customTextColor}) {
     fontFamily ??= regular;
-    textColor ??= TextColor.RegularText;
-    var color = getColor(textColor);
+    Color? color;
+    if (textColor != null) color = getColor(textColor);
     if (fontFamily == "emoji") {
       fontFamily = _getEmojiFont();
     }
