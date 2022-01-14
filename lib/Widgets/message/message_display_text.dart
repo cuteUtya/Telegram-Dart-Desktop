@@ -75,11 +75,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
           if (widget.adminTitle != null && !widget.message.isOutgoing!)
             Text.rich(TextSpan(children: [
               TextSpan(
-                  text: getSenderName(
-                    widget.message.senderId!,
-                    widget.client,
-                    true,
-                  ),
+                  text: getSenderName(widget.message.senderId!, widget.client),
                   style:
                       const TextStyle(fontSize: 18, color: Colors.transparent)),
               const WidgetSpan(
