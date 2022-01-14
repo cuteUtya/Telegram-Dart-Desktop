@@ -131,11 +131,14 @@ class TextDisplay {
               }
             })
           : null;
+      var textStyle = style == null
+          ? create(size: size, customTextColor: textColor)
+          : style();
+      textStyle = textStyle.copyWith(
+          color: textStyle.color == null ? textColor : null, fontSize: size);
       var parsedStr = parseEmojiInString(
           text.text!.substring(element.start, element.end),
-          style == null
-              ? create(size: size, customTextColor: textColor)
-              : style().copyWith(color: textColor, fontSize: size),
+          textStyle,
           recognizer);
       result.addAll(parsedStr);
       if (str[element.start] != "-") {
