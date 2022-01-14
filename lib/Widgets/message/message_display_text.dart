@@ -115,8 +115,8 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                       Text.rich(
                         TextSpan(
                             children: TextDisplay.parseEmojiInString(
-                                getSenderName(
-                                    widget.message.senderId!, widget.client),
+                                getSenderName(widget.message.senderId!,
+                                    widget.client, true),
                                 TextDisplay.create(
                                     customTextColor: getPeerColor(
                                         getSenderId(widget.message.senderId!)!,
