@@ -18,7 +18,7 @@ class ReplieDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!inlineStyle) {
-      return MessageInfoBubbleBase(content: _build());
+      return MessageInfoBubbleBase.forBig(_build());
     }
     return _build();
   }

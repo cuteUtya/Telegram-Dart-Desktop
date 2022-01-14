@@ -14,6 +14,14 @@ class MessageInfoBubbleBase extends StatelessWidget {
   final Widget content;
   final BorderRadius radius;
   final EdgeInsets padding;
+
+  static Widget forBig(Widget content) {
+    return MessageInfoBubbleBase(
+        content: content,
+        radius: const BorderRadius.all(Radius.circular(12)),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

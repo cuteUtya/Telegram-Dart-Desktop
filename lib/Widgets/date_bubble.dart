@@ -11,24 +11,21 @@ class DateBubble extends StatelessWidget {
   final DateTime date;
   @override
   Widget build(BuildContext context) {
-    return MessageInfoBubbleBase(
-        radius: const BorderRadius.all(Radius.circular(16)),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        content: Text(
-          client.getTranslation(
-              (date.year != DateTime.now().year)
-                  ? "lng_month_day_year"
-                  : "lng_month_day",
-              replacing: {
-                "{month}": client.getTranslation("lng_month${date.month}"),
-                "{day}": date.day.toString(),
-                "{year}": date.year.toString()
-              }),
-          style: TextDisplay.create(
-              fontFamily: TextDisplay.greaterImportance,
-              size: 16,
-              customTextColor:
-                  ClientTheme.currentTheme.getField("DialogDateTextColor")),
-        ));
+    return MessageInfoBubbleBase.forBig(Text(
+      client.getTranslation(
+          (date.year != DateTime.now().year)
+              ? "lng_month_day_year"
+              : "lng_month_day",
+          replacing: {
+            "{month}": client.getTranslation("lng_month${date.month}"),
+            "{day}": date.day.toString(),
+            "{year}": date.year.toString()
+          }),
+      style: TextDisplay.create(
+          fontFamily: TextDisplay.greaterImportance,
+          size: 16,
+          customTextColor:
+              ClientTheme.currentTheme.getField("DialogDateTextColor")),
+    ));
   }
 }
