@@ -8,6 +8,7 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
+import 'package:collection/collection.dart';
 
 /// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/messageText_example.jpg).
 /// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/messageText_example_mine.jpg).
@@ -17,6 +18,8 @@ import 'package:myapp/utils.dart';
 /// * [infoWidget] widget what contain info about message
 /// * [showSenderName] if true [message.senderId] name (or title if message.senderId is SenderChat) be displayed
 /// * [adminTitle] title of admin, can be null
+/// * [additionalContent] additional content that displays under sender name, can be null
+/// * [text] custom text that can be used instead [message.content]
 class MessageDisplayText extends StatefulWidget {
   const MessageDisplayText({
     Key? key,
@@ -24,13 +27,19 @@ class MessageDisplayText extends StatefulWidget {
     required this.message,
     required this.infoWidget,
     required this.replieWidget,
+    this.additionalContent,
+    this.additionalContentPlace = AdditionalContentPlace.top,
+    this.text,
     this.showSenderName = false,
     this.adminTitle,
   }) : super(key: key);
   final TelegramClient client;
   final Message message;
+  final FormattedText? text;
   final bool showSenderName;
   final String? adminTitle;
+  final Widget? additionalContent;
+  final AdditionalContentPlace additionalContentPlace;
   final Widget? infoWidget;
   final Widget? replieWidget;
 
@@ -44,7 +53,6 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
 
   @override
   Widget build(BuildContext context) {
-    assert(widget.message.content is MessageText);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       if (mounted && msgInfoBubbleSize == null) {
         setState(() {
@@ -53,20 +61,29 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
       }
     });
 
-    var contentText = widget.message.content as MessageText;
+    var additionalInfo = widget.additionalContent == null
+        ? const SizedBox.shrink()
+        : Container(
+            margin: const EdgeInsets.symmetric(vertical: 6),
+            child: widget.additionalContent,
+          );
+
+    var contentText =
+        widget.text ?? (widget.message.content as MessageText).text!;
 
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(
-            contentText.text!,
+            contentText,
             20,
             ClientTheme.currentTheme.getField("MessageTextColor"),
             true,
             (s) => HttpUrlsUtils.openLink(s)));
     return LayoutBuilder(builder: (context, boxCons) {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
-      var boxes = paragraph.getBoxesForSelection(TextSelection(
-          baseOffset: 0, extentOffset: contentText.text!.text!.length));
-      final lastBox = boxes.last;
+      var boxes = paragraph.getBoxesForSelection(
+          TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));
+      final lastBox =
+          boxes.lastOrNull ?? TextBox.fromLTRBD(0, 0, 0, 0, TextDirection.ltr);
       final fitsLastLine =
           boxCons.maxWidth - lastBox.right > (msgInfoBubbleSize?.width ?? 30);
       return Stack(
@@ -134,14 +151,22 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                     ],
                   ),
                 if (widget.replieWidget != null) widget.replieWidget!,
-                Container(
-                  child: CopyableText(parsedEntetiyes),
-                  margin: EdgeInsets.only(
-                      bottom: boxCons.maxWidth - lastBox.right <
-                              (msgInfoBubbleSize?.width ?? 30)
-                          ? 16
-                          : 0),
-                ),
+                if (widget.additionalContent != null &&
+                    widget.additionalContentPlace == AdditionalContentPlace.top)
+                  additionalInfo,
+                if (contentText.text?.isNotEmpty ?? false)
+                  Container(
+                    child: CopyableText(parsedEntetiyes),
+                    margin: EdgeInsets.only(
+                        bottom: boxCons.maxWidth - lastBox.right <
+                                (msgInfoBubbleSize?.width ?? 30)
+                            ? 16
+                            : 0),
+                  ),
+                if (widget.additionalContent != null &&
+                    widget.additionalContentPlace ==
+                        AdditionalContentPlace.bottom)
+                  additionalInfo,
               ]),
           AnimatedContainer(
             duration: const Duration(milliseconds: 100),
@@ -154,3 +179,5 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     });
   }
 }
+
+enum AdditionalContentPlace { bottom, top }

@@ -106,6 +106,12 @@ String getHHMM(DateTime time) {
   return "${to00format(time.hour.toString())}:${to00format(time.minute.toString())} $afterTime";
 }
 
+String getMMSS(int seconds) {
+  var minutes = seconds ~/ 60;
+  var scnds = seconds % 60;
+  return "${to00format(minutes.toString())}:${to00format(scnds.toString())}";
+}
+
 String to00format(String compenent) {
   if (compenent.length <= 1) return "0$compenent";
   return compenent;

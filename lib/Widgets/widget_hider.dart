@@ -21,6 +21,7 @@ class WidgetHiderState extends State<WidgetHider> {
   void show() => setState(() => _hide = false);
   void hide() => setState(() => _hide = true);
 
+  @override
   Widget build(BuildContext context) {
     return _hide ? widget.emptyReplacer : widget.child;
   }

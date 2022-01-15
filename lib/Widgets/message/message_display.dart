@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
+import 'package:myapp/Widgets/message/message_display_audio.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
 import 'package:myapp/Widgets/message/message_sticker.dart';
@@ -33,8 +34,14 @@ class MessageDisplay extends StatelessWidget {
   final String? adminTitle;
   final TelegramClient client;
 
-  static const List<Type> messageTypesWithInlineMessageInfo = [MessageText];
-  static const List<Type> messageTypeWithInlineReplie = [MessageText];
+  static const List<Type> messageTypesWithInlineMessageInfo = [
+    MessageText,
+    MessageAudio
+  ];
+  static const List<Type> messageTypeWithInlineReplie = [
+    MessageText,
+    MessageAudio
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +107,15 @@ class MessageDisplay extends StatelessWidget {
               ? adminTitle
               : "",
         );
+        break;
 
+      case MessageAudio:
+        wrapInBubble = true;
+        contentWidget = MessageDisplayAudio(
+            message: message,
+            client: client,
+            infoWidget: messageInfoWidget,
+            replieWidget: replieInfo);
         break;
 
       case MessageSticker:
