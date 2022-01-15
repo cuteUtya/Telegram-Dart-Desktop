@@ -5,6 +5,7 @@ import 'dart:io' as io;
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/audio%20utils/id3_metatags_utils.dart';
+import 'package:myapp/audio%20utils/itunes_api.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/utils.dart';
@@ -45,17 +46,34 @@ class MessageDisplayAudio extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         RemoteFileBuilder(
-            builder: (_, path) => ClipRRect(
-                borderRadius: BorderRadius.circular(40),
-                child: Image(
-                    width: 52,
-                    height: 52,
-                    image: (haveThumbnail
-                        ? FileImage(io.File(path))
-                        : MemoryImage(base64Decode(
-                            MP3Instance(io.File(path).readAsBytesSync())
-                                .getMetaTag<Map<String, String>>(
-                                    "APIC")!["base64"]!)) as ImageProvider))),
+            builder: (_, path) {
+              var apic = MP3Instance(io.File(path).readAsBytesSync())
+                  .getMetaTag<Map<String, String>>("APIC")?["base64"];
+              return ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: apic != null || haveThumbnail
+                      ? Image(
+                          width: 52,
+                          height: 52,
+                          image: (haveThumbnail
+                              ? FileImage(io.File(path))
+                              : MemoryImage(base64Decode(apic!))
+                                  as ImageProvider))
+                      : FutureBuilder(
+                          builder: (_, data) =>
+                              data.hasData && data.data != null
+                                  ? Image.network(
+                                      (data.data as ITunesSearchResult)
+                                          .results![0]
+                                          .artworkUrl100!,
+                                      width: 52,
+                                      height: 52,
+                                    )
+                                  : Container(),
+                          future: ItunesAPI.findSong(
+                              name: audio.audio!.title!,
+                              perfomer: audio.audio!.performer!)));
+            },
             fileId: haveThumbnail
                 ? audio.audio!.albumCoverThumbnail!.file!.id!
                 : audio.audio!.audio!.id!,
