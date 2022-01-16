@@ -66,6 +66,7 @@ class Rlottie {
     var file = io.File(path);
     if (loadSync) {
       return _Rlottie(
+        key: key,
         bytes: unzipTGS(file.readAsBytesSync()),
         behavior: behavior,
         onClick: onClick,
@@ -86,6 +87,7 @@ class Rlottie {
           builder: (context, builder) {
             if (builder.hasData) {
               return _Rlottie(
+                key: key,
                 bytes: unzipTGS(builder.data as Uint8List),
                 behavior: behavior,
                 fitzpatrickType: fitzpatrickType,
@@ -145,6 +147,11 @@ class _Rlottie extends StatefulWidget {
 
 class RlottieState extends State<_Rlottie> {
   int _counter = 0;
+
+  void play() {
+    setState(() => _counter++);
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (widget.behavior) {
@@ -157,7 +164,7 @@ class RlottieState extends State<_Rlottie> {
             if (widget.onClick != null) {
               widget.onClick!();
             }
-            setState(() => _counter++);
+            play();
           },
           child: _build(_counter != 0, UniqueKey()),
         );

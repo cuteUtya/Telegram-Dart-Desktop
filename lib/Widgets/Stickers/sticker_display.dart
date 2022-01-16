@@ -10,6 +10,7 @@ import 'dart:io' as io;
 class StickerDisplay extends StatelessWidget {
   const StickerDisplay({
     Key? key,
+    this.rlottieKey,
     required this.client,
     required this.sticker,
     this.onClick,
@@ -17,6 +18,8 @@ class StickerDisplay extends StatelessWidget {
     this.size = 1.0,
     this.alignment = Alignment.center,
   }) : super(key: key);
+
+  final Key? rlottieKey;
   final double size;
   final Sticker sticker;
   final PlayBehavior playBehavior;
@@ -32,31 +35,30 @@ class StickerDisplay extends StatelessWidget {
         (stickerSizeRatie * size);
     var height = (sticker.height ?? sticker.height!).toDouble() *
         (stickerSizeRatie * size);
-    return SizedBox(
-        height: height,
-        width: width,
-        child: RemoteFileBuilder(
-            emptyPlaceholder: sticker.outline == null
-                ? const SizedBox.shrink()
-                : CustomPaint(
-                    painter: StickerOutline(
-                      sticker.outline!,
-                      stickerSizeRatie * size,
-                    ),
-                    child: SizedBox(
-                      width: width,
-                      height: height,
-                    )),
-            builder: (_, path) {
-              return sticker.isAnimated!
-                  ? Rlottie.file(
-                      path: path,
-                      behavior: playBehavior,
-                      onClick: onClick,
-                    )
-                  : Image.file(io.File(path));
-            },
-            fileId: sticker.sticker!.id!,
-            client: client));
+    return RemoteFileBuilder(
+        emptyPlaceholder: sticker.outline == null
+            ? const SizedBox.shrink()
+            : CustomPaint(
+                painter: StickerOutline(
+                  sticker.outline!,
+                  stickerSizeRatie * size,
+                ),
+                child: SizedBox(
+                  width: width,
+                  height: height,
+                )),
+        builder: (_, path) {
+          return sticker.isAnimated!
+              ? Rlottie.file(
+                  key: rlottieKey,
+                  path: path,
+                  behavior: playBehavior,
+                  onClick: onClick,
+                  width: width,
+                  height: height)
+              : Image.file(io.File(path));
+        },
+        fileId: sticker.sticker!.id!,
+        client: client);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/big_stickers_overlay.dart';
@@ -29,6 +31,46 @@ class MessageDisplayAnimatedEmoji extends StatefulWidget {
 
 class _MessageDisplayAnimtedEmojiState
     extends State<MessageDisplayAnimatedEmoji> {
+  void showBigAnimation({Sticker? sticker}) async {
+    var renderObject = _animationKey.currentContext?.findRenderObject();
+    var transition = renderObject?.getTransformTo(null).getTranslation();
+    var rect = renderObject?.paintBounds
+        .shift(Offset(transition?.x ?? 0, transition?.y ?? 0));
+    var animPosition = Offset(rect?.left ?? 0, rect?.top ?? 0);
+
+    if (sticker == null) {
+      var clickResult = await widget.client.send(ClickAnimatedEmojiMessage(
+          chatId: widget.chatId, messageId: widget.message.id!));
+      if (clickResult is Sticker) {
+        BigStickerOverlayState.animateSticker(clickResult, animPosition);
+      }
+    } else {
+      BigStickerOverlayState.animateSticker(sticker, animPosition);
+    }
+  }
+
+  final List<StreamSubscription> _streamSubscription = [];
+  final GlobalKey<RlottieState> _animationKey = GlobalKey<RlottieState>();
+
+  @override
+  void initState() {
+    _streamSubscription.add(widget.client
+        .animatedEmojiClick(widget.chatId, widget.message.id!)
+        .listen((event) {
+      _animationKey.currentState?.play();
+      showBigAnimation(sticker: event.sticker);
+    }));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (var element in _streamSubscription) {
+      element.cancel();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     assert(widget.message.content is MessageAnimatedEmoji);
@@ -37,14 +79,8 @@ class _MessageDisplayAnimtedEmojiState
             ? Alignment.bottomRight
             : Alignment.bottomLeft,
         child: StickerDisplay(
-          onClick: () async {
-            var clickResult = await widget.client.send(
-                ClickAnimatedEmojiMessage(
-                    chatId: widget.chatId, messageId: widget.message.id!));
-            if (clickResult is Sticker) {
-              BigStickerOverlayState.animateSticker(clickResult);
-            }
-          },
+          rlottieKey: _animationKey,
+          onClick: () => showBigAnimation(),
           sticker: (widget.message.content as MessageAnimatedEmoji)
               .animatedEmoji!
               .sticker!,

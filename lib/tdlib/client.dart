@@ -35,7 +35,7 @@ class TelegramClient {
       .map((a) => (a as UpdateActiveNotifications));
 
   Stream<UpdateAnimatedEmojiMessageClicked>
-      get updateAnimatedEmojiMessageClicked => updates
+      get _updateAnimatedEmojiMessageClicked => updates
           .where((u) => u is UpdateAnimatedEmojiMessageClicked)
           .map((a) => (a as UpdateAnimatedEmojiMessageClicked));
 
@@ -546,6 +546,15 @@ class TelegramClient {
     await for (final update in _updates) {
       if (update is UpdateChatFilters) {
         yield update.chatFilters!;
+      }
+    }
+  }
+
+  Stream<UpdateAnimatedEmojiMessageClicked> animatedEmojiClick(
+      int chatId, int messageId) async* {
+    await for (final update in _updateAnimatedEmojiMessageClicked) {
+      if (update.chatId == chatId && update.messageId == messageId) {
+        yield update;
       }
     }
   }
