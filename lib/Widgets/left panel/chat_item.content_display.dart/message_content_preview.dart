@@ -176,8 +176,11 @@ class MessageContentPreview extends StatelessWidget {
         break;
 
       case MessageAudio:
+        var audio = message!.content as MessageAudio;
         displayContent = TextDisplay.parseEmojiInString(
-            "🎵 ${client.getTranslation("lng_media_music_title")}", textStyle);
+            "🎵 ${audio.audio!.performer} - ${audio.audio!.title}, ",
+            textStyle);
+        text = audio.caption!;
         break;
 
       case MessageVoiceNote:
