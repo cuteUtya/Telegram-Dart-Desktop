@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
+import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
 import 'package:myapp/Widgets/message/message_display_audio.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
@@ -121,12 +122,19 @@ class MessageDisplay extends StatelessWidget {
       case MessageSticker:
         contentWidget = MessageStickerDisplay(
             client: client,
-            alignment: message.isOutgoing!
-                ? Alignment.centerRight
-                : Alignment.centerLeft,
             message: message,
             replieWidget: replieInfo,
             infoWidget: messageInfoWidget);
+        break;
+
+      case MessageAnimatedEmoji:
+        contentWidget = MessageDisplayAnimatedEmoji(
+          chatId: chat!.id!,
+          message: message,
+          client: client,
+          replieWidget: replieInfo,
+          infoWidget: messageInfoWidget,
+        );
         break;
 
       default:

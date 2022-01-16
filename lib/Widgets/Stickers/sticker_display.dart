@@ -12,13 +12,15 @@ class StickerDisplay extends StatelessWidget {
     Key? key,
     required this.client,
     required this.sticker,
-    this.width,
-    this.height,
+    this.onClick,
+    this.playBehavior = PlayBehavior.loop,
+    this.size = 1.0,
     this.alignment = Alignment.center,
   }) : super(key: key);
-  final double? width;
-  final double? height;
+  final double size;
   final Sticker sticker;
+  final PlayBehavior playBehavior;
+  final Function()? onClick;
   final Alignment alignment;
   final TelegramClient client;
 
@@ -26,27 +28,35 @@ class StickerDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width = (sticker.width ?? sticker.width!).toDouble() * stickerSizeRatie;
-    var height =
-        (sticker.height ?? sticker.height!).toDouble() * stickerSizeRatie;
-    return RemoteFileBuilder(
-        emptyPlaceholder: sticker.outline == null
-            ? const SizedBox.shrink()
-            : CustomPaint(
-                painter: StickerOutline(
-                  sticker.outline!,
-                  stickerSizeRatie,
-                ),
-                child: SizedBox(
-                  width: width,
-                  height: height,
-                )),
-        builder: (_, path) {
-          return sticker.isAnimated!
-              ? Rlottie.file(path: path, behavior: PlayBehavior.loop)
-              : Image.file(io.File(path));
-        },
-        fileId: sticker.sticker!.id!,
-        client: client);
+    var width = (sticker.width ?? sticker.width!).toDouble() *
+        (stickerSizeRatie * size);
+    var height = (sticker.height ?? sticker.height!).toDouble() *
+        (stickerSizeRatie * size);
+    return SizedBox(
+        height: height,
+        width: width,
+        child: RemoteFileBuilder(
+            emptyPlaceholder: sticker.outline == null
+                ? const SizedBox.shrink()
+                : CustomPaint(
+                    painter: StickerOutline(
+                      sticker.outline!,
+                      stickerSizeRatie * size,
+                    ),
+                    child: SizedBox(
+                      width: width,
+                      height: height,
+                    )),
+            builder: (_, path) {
+              return sticker.isAnimated!
+                  ? Rlottie.file(
+                      path: path,
+                      behavior: playBehavior,
+                      onClick: onClick,
+                    )
+                  : Image.file(io.File(path));
+            },
+            fileId: sticker.sticker!.id!,
+            client: client));
   }
 }

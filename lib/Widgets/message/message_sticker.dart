@@ -8,13 +8,11 @@ import 'package:myapp/widget_sizer.dart';
 class MessageStickerDisplay extends StatelessWidget {
   const MessageStickerDisplay(
       {Key? key,
-      required this.alignment,
       required this.message,
       required this.client,
       required this.infoWidget,
       required this.replieWidget})
       : super(key: key);
-  final Alignment alignment;
   final Message message;
   final TelegramClient client;
   final Widget infoWidget;
@@ -49,7 +47,9 @@ class MessageStickerDisplay extends StatelessWidget {
                     key: sizerKey,
                     curve: Curves.easeOutBack,
                     resizeDuration: const Duration(milliseconds: 200),
-                    alignment: alignment,
+                    alignment: message.isOutgoing!
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
                     sizeOnInit: Size(
                       stickerWidth,
                       stickerHeight,
