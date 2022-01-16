@@ -33,7 +33,8 @@ class MessageDisplayAudio extends StatelessWidget {
       additionalContentPlace: AdditionalContentPlace.top,
       additionalContent: Container(
         child: _audioItem(audio, client),
-        margin: const EdgeInsets.only(bottom: 6),
+        margin: EdgeInsets.only(
+            bottom: (audio.caption?.text?.isEmpty ?? true) ? 6 : 0),
       ),
       replieWidget: replieWidget,
       text: audio.caption,
