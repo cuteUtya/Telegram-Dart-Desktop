@@ -525,7 +525,6 @@ class TelegramClient {
     List<UpdateChatAction> actions = [];
     await for (var a in _updateChatAction) {
       if (a.chatId == chatId) {
-        print("new action ${a.action.runtimeType}");
         var previus = actions.firstWhereOrNull((element) =>
             getSenderId(element.senderId) == getSenderId(a.senderId));
         if (previus == null) {
@@ -539,7 +538,6 @@ class TelegramClient {
             actions[actions.indexOf(previus)] = a;
           }
         }
-        print(json.encode(actions));
         yield actions;
       }
     }

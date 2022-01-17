@@ -14,6 +14,7 @@ class StickerDisplay extends StatelessWidget {
     required this.client,
     required this.sticker,
     this.onClick,
+    this.onAnimPlayed,
     this.playBehavior = PlayBehavior.loop,
     this.size = 1.0,
     this.alignment = Alignment.center,
@@ -24,6 +25,7 @@ class StickerDisplay extends StatelessWidget {
   final Sticker sticker;
   final PlayBehavior playBehavior;
   final Function()? onClick;
+  final Function()? onAnimPlayed;
   final Alignment alignment;
   final TelegramClient client;
 
@@ -54,6 +56,7 @@ class StickerDisplay extends StatelessWidget {
                   path: path,
                   behavior: playBehavior,
                   onClick: onClick,
+                  onAnimPlayed: onAnimPlayed,
                   width: width,
                   height: height)
               : Image.file(io.File(path));

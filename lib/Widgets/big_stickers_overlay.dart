@@ -20,44 +20,43 @@ class BigStickerOverlay extends StatefulWidget {
 
 class BigStickerOverlayState extends State<BigStickerOverlay> {
   static BigStickerOverlayState? _state;
-  static Future<double> animateSticker(Sticker sticker, Offset position) {
+  static void animateSticker(
+      Sticker sticker, Offset position, Function() onAnimPlayed) async {
     assert(_state != null);
-    return _state!._animateSticker(sticker, position);
+    _state!._animateSticker(sticker, position, onAnimPlayed);
   }
 
-  Future<double> _animateSticker(Sticker sticker, Offset position) {
-    Completer<double> result = Completer<double>();
-    widget.client.send(GetFile(fileId: sticker.sticker!.id)).then((fileInfo) {
-      fileInfo as File;
-      void perform(String path) {
-        var lottieInfo = Rlottie.getRLottieInfo(path);
-        var pos =
-            position - Offset(lottieInfo.width / 2, lottieInfo.height / 4);
-        var stickerInfo = _AnimatedStickerInfo(
-            position: Offset(max(0, pos.dx), max(0, pos.dy)),
-            sticker: sticker,
-            size: Offset(lottieInfo.width, lottieInfo.height));
-        setState(() => playedStickers.add(stickerInfo));
-        result.complete(lottieInfo.duration);
-        Future.delayed(
-            Duration(
-                milliseconds: ((lottieInfo.duration * 1000) - 100).toInt()),
-            () => setState(() => playedStickers.remove(stickerInfo)));
-      }
+  void _animateSticker(
+      Sticker sticker, Offset position, Function() onAnimPlayed) async {
+    var fileInfo =
+        await widget.client.send(GetFile(fileId: sticker.sticker!.id)) as File;
+    String path;
 
-      if (fileInfo.local!.isDownloadingCompleted!) {
-        perform(fileInfo.local!.path!);
-      } else {
-        widget.client
-            .send(DownloadFile(
-                synchronous: true, priority: 1, fileId: sticker.sticker!.id))
-            .then((file) {
-          file as File;
-          perform(file.local!.path!);
-        });
-      }
-    });
-    return result.future;
+    if (fileInfo.local!.isDownloadingCompleted!) {
+      path = fileInfo.local!.path!;
+    } else {
+      path = ((await widget.client.send(DownloadFile(
+              synchronous: true,
+              priority: 1,
+              fileId: sticker.sticker!.id)) as File)
+          .local!
+          .path!);
+    }
+
+    var lottieInfo = Rlottie.getRLottieInfo(path);
+    var pos = position - Offset(lottieInfo.width / 2, lottieInfo.height / 4);
+
+    setState(() => playedStickers.add(_AnimatedStickerInfo(
+        position: Offset(max(0, pos.dx), max(0, pos.dy)),
+        sticker: StickerDisplay(
+          client: widget.client,
+          sticker: sticker,
+          onAnimPlayed: () {
+            setState(() => playedStickers.removeLast());
+            onAnimPlayed();
+          },
+        ),
+        size: Offset(lottieInfo.width, lottieInfo.height))));
   }
 
   List<_AnimatedStickerInfo> playedStickers = [];
@@ -72,10 +71,7 @@ class BigStickerOverlayState extends State<BigStickerOverlay> {
                 height: e.size.dy,
                 margin:
                     EdgeInsets.only(left: e.position.dx, top: e.position.dy),
-                child: StickerDisplay(
-                  client: widget.client,
-                  sticker: e.sticker,
-                ),
+                child: e.sticker,
               ))
           .toList(),
     );
@@ -89,7 +85,7 @@ class _AnimatedStickerInfo {
     required this.size,
   });
 
-  final Sticker sticker;
+  final Widget sticker;
   final Offset position;
   final Offset size;
 }
