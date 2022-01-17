@@ -158,9 +158,10 @@ class RlottieState extends State<_Rlottie> with TickerProviderStateMixin {
     super.initState();
     _controller = AnimationController(vsync: this);
     if (widget.onAnimPlayed != null) {
+      var lastValue = 0.0;
       _controller.addListener(() {
-        //TODO 0.98?
-        if (_controller.value >= 0.98) widget.onAnimPlayed!();
+        if (lastValue > _controller.value) widget.onAnimPlayed!();
+        lastValue = _controller.value;
       });
     }
   }
