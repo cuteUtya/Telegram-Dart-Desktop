@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -19,45 +20,45 @@ class BigStickerOverlay extends StatefulWidget {
 
 class BigStickerOverlayState extends State<BigStickerOverlay> {
   static BigStickerOverlayState? _state;
-  static void animateSticker(Sticker sticker, Offset position) {
-    _state?._animateSticker(sticker, position);
+  static Future<double> animateSticker(Sticker sticker, Offset position) {
+    assert(_state != null);
+    return _state!._animateSticker(sticker, position);
   }
 
-  void _animateSticker(Sticker sticker, Offset position) => setState(() {
-        widget.client
-            .send(GetFile(fileId: sticker.sticker!.id))
-            .then((fileInfo) {
-          fileInfo as File;
-          void perform(String path) {
-            var lottieInfo = Rlottie.getRLottieInfo(path);
-            var pos =
-                position - Offset(lottieInfo.width / 2, lottieInfo.height / 4);
-            var stickerInfo = _AnimatedStickerInfo(
-                position: Offset(max(0, pos.dx), max(0, pos.dy)),
-                sticker: sticker,
-                size: Offset(lottieInfo.width, lottieInfo.height));
-            playedStickers.add(stickerInfo);
-            Future.delayed(
-                Duration(
-                    milliseconds: ((lottieInfo.duration * 1000) - 100).toInt()),
-                () => setState(() => playedStickers.remove(stickerInfo)));
-          }
+  Future<double> _animateSticker(Sticker sticker, Offset position) {
+    Completer<double> result = Completer<double>();
+    widget.client.send(GetFile(fileId: sticker.sticker!.id)).then((fileInfo) {
+      fileInfo as File;
+      void perform(String path) {
+        var lottieInfo = Rlottie.getRLottieInfo(path);
+        var pos =
+            position - Offset(lottieInfo.width / 2, lottieInfo.height / 4);
+        var stickerInfo = _AnimatedStickerInfo(
+            position: Offset(max(0, pos.dx), max(0, pos.dy)),
+            sticker: sticker,
+            size: Offset(lottieInfo.width, lottieInfo.height));
+        setState(() => playedStickers.add(stickerInfo));
+        result.complete(lottieInfo.duration);
+        Future.delayed(
+            Duration(
+                milliseconds: ((lottieInfo.duration * 1000) - 100).toInt()),
+            () => setState(() => playedStickers.remove(stickerInfo)));
+      }
 
-          if (fileInfo.local!.isDownloadingCompleted!) {
-            perform(fileInfo.local!.path!);
-          } else {
-            widget.client
-                .send(DownloadFile(
-                    synchronous: true,
-                    priority: 1,
-                    fileId: sticker.sticker!.id))
-                .then((file) {
-              file as File;
-              perform(file.local!.path!);
-            });
-          }
+      if (fileInfo.local!.isDownloadingCompleted!) {
+        perform(fileInfo.local!.path!);
+      } else {
+        widget.client
+            .send(DownloadFile(
+                synchronous: true, priority: 1, fileId: sticker.sticker!.id))
+            .then((file) {
+          file as File;
+          perform(file.local!.path!);
         });
-      });
+      }
+    });
+    return result.future;
+  }
 
   List<_AnimatedStickerInfo> playedStickers = [];
 
