@@ -17,7 +17,7 @@ class ChatItemActionDisplay extends StatelessWidget {
       required this.chatid})
       : super(key: key);
   final bool chatSelected;
-  final Map<MessageSender, ChatAction> actions;
+  final List<UpdateChatAction> actions;
   final TelegramClient client;
   final int chatid;
   final bool isPrivate;
@@ -61,8 +61,8 @@ class ChatItemActionDisplay extends StatelessWidget {
     String? transitionStr;
     Widget? animation;
     String secondUser = "";
-    var firstName = getSenderName(actions.keys.elementAt(0), client);
-    var firstAction = actions[actions.keys.elementAt(0)];
+    var firstName = getSenderName(actions[0].senderId!, client);
+    var firstAction = actions[0].action;
     if (actions.length <= 1) {
       if (typesWithProgress.contains(firstAction.runtimeType)) {
         animation = createUploadAnimation(
@@ -74,7 +74,7 @@ class ChatItemActionDisplay extends StatelessWidget {
     } else {
       transitionStr =
           actions.length == 2 ? "lng_users_typing" : "lng_many_typing";
-      secondUser = getSenderName(actions.keys.elementAt(1), client);
+      secondUser = getSenderName(actions[1].senderId!, client);
     }
 
     var textStyle = chatSelected

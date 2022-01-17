@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
+import 'package:collection/collection.dart';
+import 'package:myapp/tdlib/tdlib_utils.dart';
 import "package:path/path.dart" as path;
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:myapp/constants.dart';
@@ -518,25 +521,25 @@ class TelegramClient {
     if (key != null) return getTranslation(key);
   }
 
-  Stream<Map<MessageSender, ChatAction>?> actionsOf(int chatId) async* {
-    int senderId(MessageSender s) {
-      return s is MessageSenderChat
-          ? s.chatId!
-          : (s as MessageSenderUser).userId!;
-    }
-
-    Map<MessageSender, ChatAction> actions = {};
+  Stream<List<UpdateChatAction>?> actionsOf(int chatId) async* {
+    List<UpdateChatAction> actions = [];
     await for (var a in _updateChatAction) {
       if (a.chatId == chatId) {
-        actions[a.senderId!] = a.action!;
-        if (a.action is ChatActionCancel) {
-          var keyList = actions.keys.toList();
-          for (int i = 0; i < actions.length; i++) {
-            if (senderId(keyList[i]) == senderId(a.senderId!)) {
-              actions.remove(keyList[i]);
-            }
+        print("new action ${a.action.runtimeType}");
+        var previus = actions.firstWhereOrNull((element) =>
+            getSenderId(element.senderId) == getSenderId(a.senderId));
+        if (previus == null) {
+          if (a.action.runtimeType != ChatActionCancel) {
+            actions.add(a);
+          }
+        } else {
+          if (a.action is ChatActionCancel) {
+            actions.remove(previus);
+          } else {
+            actions[actions.indexOf(previus)] = a;
           }
         }
+        print(json.encode(actions));
         yield actions;
       }
     }

@@ -196,8 +196,7 @@ class ChatItemDisplay extends StatelessWidget {
                           stream: client.actionsOf(chatId),
                           builder: (_, data) {
                             if (data.hasData) {
-                              var actions =
-                                  data.data as Map<MessageSender, ChatAction>;
+                              var actions = data.data as List<UpdateChatAction>;
                               if (actions.isNotEmpty) {
                                 return ChatItemActionDisplay(
                                     chatSelected: selected,
