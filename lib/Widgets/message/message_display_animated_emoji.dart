@@ -7,7 +7,6 @@ import 'package:myapp/rlottie/rlottie.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 
-/// TODO preload animation or don't show animation if time of him loading was more than N ms, i don't know best solution, but on first click user have big delayed in particles animation
 class MessageDisplayAnimatedEmoji extends StatefulWidget {
   const MessageDisplayAnimatedEmoji({
     Key? key,
