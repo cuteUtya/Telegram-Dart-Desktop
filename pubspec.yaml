@@ -19,6 +19,8 @@ dependencies:
   file_picker: ^4.2.4
   flutter_svg: ^1.0.0
   url_launcher: ^6.0.18 
+  libwinmedia: ^0.0.1
+
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:myapp/audio utils/audio_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/big_stickers_overlay.dart';
@@ -37,6 +38,17 @@ class _MessageDisplayAnimtedEmojiState
     var rect = renderObject?.paintBounds
         .shift(Offset(transition?.x ?? 0, transition?.y ?? 0));
     var animPosition = Offset(rect?.left ?? 0, rect?.top ?? 0);
+
+    var audio =
+        (widget.message.content as MessageAnimatedEmoji).animatedEmoji?.sound;
+    if (audio != null) {
+      widget.client
+          .send(DownloadFile(fileId: audio.id, priority: 1, synchronous: true))
+          .then((file) {
+        file as File;
+        AudioProvider.playOneTick(file.local!.path!);
+      });
+    }
 
     if (sticker == null) {
       var clickResult = await widget.client.send(ClickAnimatedEmojiMessage(

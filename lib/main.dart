@@ -5,9 +5,12 @@ import 'package:myapp/Widgets/big_stickers_overlay.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart';
+import 'package:libwinmedia/libwinmedia.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  LWM.initialize();
+
   await ClientTheme.init();
   var client = TelegramClient();
   await client.init();
