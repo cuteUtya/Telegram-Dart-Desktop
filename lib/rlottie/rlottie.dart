@@ -160,7 +160,11 @@ class RlottieState extends State<_Rlottie> with TickerProviderStateMixin {
     if (widget.onAnimPlayed != null) {
       var lastValue = 0.0;
       _controller.addListener(() {
-        if (lastValue > _controller.value) widget.onAnimPlayed!();
+        if (widget.behavior == PlayBehavior.loop
+            ? lastValue > _controller.value
+            : false || _controller.isCompleted) {
+          widget.onAnimPlayed!();
+        }
         lastValue = _controller.value;
       });
     }
@@ -202,6 +206,8 @@ class RlottieState extends State<_Rlottie> with TickerProviderStateMixin {
             _controller.stop();
           },
         );
+      case PlayBehavior.externalControl:
+        return _build(false);
     }
   }
 
@@ -245,8 +251,4 @@ class RLottieInfo {
   final double height;
 }
 
-enum PlayBehavior {
-  loop,
-  playOnClick,
-  playOnHover,
-}
+enum PlayBehavior { loop, playOnClick, playOnHover, externalControl }

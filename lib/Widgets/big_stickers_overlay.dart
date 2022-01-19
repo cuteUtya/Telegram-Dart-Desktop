@@ -20,14 +20,12 @@ class BigStickerOverlay extends StatefulWidget {
 
 class BigStickerOverlayState extends State<BigStickerOverlay> {
   static BigStickerOverlayState? _state;
-  static void animateSticker(
-      Sticker sticker, Offset position, Function() onAnimPlayed) async {
+  static void animateSticker(Sticker sticker, Offset position) async {
     assert(_state != null);
-    _state!._animateSticker(sticker, position, onAnimPlayed);
+    _state!._animateSticker(sticker, position);
   }
 
-  void _animateSticker(
-      Sticker sticker, Offset position, Function() onAnimPlayed) async {
+  void _animateSticker(Sticker sticker, Offset position) async {
     var fileInfo =
         await widget.client.send(GetFile(fileId: sticker.sticker!.id)) as File;
     String path;
@@ -53,7 +51,6 @@ class BigStickerOverlayState extends State<BigStickerOverlay> {
           sticker: sticker,
           onAnimPlayed: () {
             setState(() => playedStickers.removeLast());
-            onAnimPlayed();
           },
         ),
         size: Offset(lottieInfo.width, lottieInfo.height))));

@@ -31,41 +31,40 @@ class _MessageDisplayAnimtedEmojiState
     extends State<MessageDisplayAnimatedEmoji> {
   bool _canPlayAnim = true;
   void showBigAnimation({Sticker? sticker}) async {
-    if (!_canPlayAnim) return;
-    _canPlayAnim = false;
-    var renderObject = _animationKey.currentContext?.findRenderObject();
-    var transition = renderObject?.getTransformTo(null).getTranslation();
-    var rect = renderObject?.paintBounds
-        .shift(Offset(transition?.x ?? 0, transition?.y ?? 0));
-    var animPosition = Offset(rect?.left ?? 0, rect?.top ?? 0);
+    print(_canPlayAnim);
+    if (_canPlayAnim) {
+      _canPlayAnim = false;
+      _animationKey.currentState?.play();
+      var renderObject = _animationKey.currentContext?.findRenderObject();
+      var transition = renderObject?.getTransformTo(null).getTranslation();
+      var rect = renderObject?.paintBounds
+          .shift(Offset(transition?.x ?? 0, transition?.y ?? 0));
+      var animPosition = Offset(rect?.left ?? 0, rect?.top ?? 0);
 
-    var audio =
-        (widget.message.content as MessageAnimatedEmoji).animatedEmoji?.sound;
-    if (audio != null) {
-      widget.client
-          .send(DownloadFile(fileId: audio.id, priority: 1, synchronous: true))
-          .then((file) {
-        file as File;
-        AudioProvider.playOneTick(file.local!.path!);
-      });
-    }
-
-    if (sticker == null) {
-      var clickResult = await widget.client.send(ClickAnimatedEmojiMessage(
-          chatId: widget.chatId, messageId: widget.message.id!));
-      if (clickResult is Sticker) {
-        BigStickerOverlayState.animateSticker(
-          clickResult,
-          animPosition,
-          () => _canPlayAnim = true,
-        );
+      var audio =
+          (widget.message.content as MessageAnimatedEmoji).animatedEmoji?.sound;
+      if (audio != null) {
+        widget.client
+            .send(
+                DownloadFile(fileId: audio.id, priority: 1, synchronous: true))
+            .then((file) {
+          file as File;
+          AudioProvider.playOneTick(file.local!.path!);
+        });
       }
-    } else {
-      BigStickerOverlayState.animateSticker(
-        sticker,
-        animPosition,
-        () => _canPlayAnim = true,
-      );
+
+      if (sticker == null) {
+        var clickResult = await widget.client.send(ClickAnimatedEmojiMessage(
+            chatId: widget.chatId, messageId: widget.message.id!));
+        if (clickResult is Sticker) {
+          BigStickerOverlayState.animateSticker(
+            clickResult,
+            animPosition,
+          );
+        }
+      } else {
+        BigStickerOverlayState.animateSticker(sticker, animPosition);
+      }
     }
   }
 
@@ -97,19 +96,25 @@ class _MessageDisplayAnimtedEmojiState
   Widget build(BuildContext context) {
     assert(widget.message.content is MessageAnimatedEmoji);
     var emoji = (widget.message.content as MessageAnimatedEmoji).animatedEmoji!;
-    return Align(
-        alignment: widget.message.isOutgoing!
-            ? Alignment.bottomRight
-            : Alignment.bottomLeft,
-        child: SizedBox(
-            width: emoji.sticker!.width! * StickerDisplay.stickerSizeRatie,
-            height: emoji.sticker!.height! * StickerDisplay.stickerSizeRatie,
-            child: StickerDisplay(
-              rlottieKey: _animationKey,
-              onClick: () => showBigAnimation(),
-              sticker: emoji.sticker!,
-              playBehavior: PlayBehavior.playOnClick,
-              client: widget.client,
-            )));
+    return GestureDetector(
+        onTap: () => showBigAnimation(),
+        child: Align(
+            alignment: widget.message.isOutgoing!
+                ? Alignment.bottomRight
+                : Alignment.bottomLeft,
+            child: SizedBox(
+                width: emoji.sticker!.width! * StickerDisplay.stickerSizeRatie,
+                height:
+                    emoji.sticker!.height! * StickerDisplay.stickerSizeRatie,
+                child: StickerDisplay(
+                  rlottieKey: _animationKey,
+                  onClick: () => showBigAnimation(),
+                  onAnimPlayed: () {
+                    _canPlayAnim = true;
+                  },
+                  sticker: emoji.sticker!,
+                  playBehavior: PlayBehavior.externalControl,
+                  client: widget.client,
+                ))));
   }
 }
