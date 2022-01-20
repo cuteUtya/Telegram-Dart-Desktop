@@ -38,46 +38,51 @@ class MessageContentPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(message != null || draftMessage != null);
-    var content = draftMessage == null
-        ? message!.content!
-        : draftMessage!.inputMessageText;
-    bool messageTypeAllowShowFrom = true;
-    FormattedText text = FormattedText(text: "");
-    List<InlineSpan> displayContent = [];
-    TextStyle textStyle = chatSelected
-        ? TextDisplay.chatItemAccentSelected.copyWith(color: textColor)
-        : TextDisplay.chatItemAccent.copyWith(color: textColor);
-    var author =
-        message == null ? "" : getSenderName(message!.senderId!, client);
-    switch (content.runtimeType) {
-      case MessageText:
-        text = (content as MessageText).text!;
-        text.text = text.text!.replaceAll(RegExp(r"\n"), " ");
-        break;
+    return StreamBuilder(
+        stream: message?.senderId == null
+            ? null
+            : client.senderName(message!.senderId!),
+        builder: (_, senderData) {
+          var content = draftMessage == null
+              ? message!.content!
+              : draftMessage!.inputMessageText;
+          bool messageTypeAllowShowFrom = true;
+          FormattedText text = FormattedText(text: "");
+          List<InlineSpan> displayContent = [];
+          TextStyle textStyle = chatSelected
+              ? TextDisplay.chatItemAccentSelected.copyWith(color: textColor)
+              : TextDisplay.chatItemAccent.copyWith(color: textColor);
+          var author = message == null ? "" : senderData.data.toString();
+          switch (content.runtimeType) {
+            case MessageText:
+              text = (content as MessageText).text!;
+              text.text = text.text!.replaceAll(RegExp(r"\n"), " ");
+              break;
 
-      case MessageAnimatedEmoji:
-        displayContent.add(TextDisplay.emoji(
-            (content as MessageAnimatedEmoji).emoji!, TextDisplay.regular18));
-        break;
+            case MessageAnimatedEmoji:
+              displayContent.add(TextDisplay.emoji(
+                  (content as MessageAnimatedEmoji).emoji!,
+                  TextDisplay.regular18));
+              break;
 
-      case MessageSticker:
-        displayContent.addAll(TextDisplay.parseEmojiInString(
-            "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ",
-            textStyle));
-        break;
+            case MessageSticker:
+              displayContent.addAll(TextDisplay.parseEmojiInString(
+                  "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ",
+                  textStyle));
+              break;
 
-      case MessageChatDeletePhoto:
-        messageTypeAllowShowFrom = false;
-        displayContent.addAll(TextDisplay.parseEmojiInString(
-            "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {
-                  "{from}": author
-                })}",
-            textStyle));
-        break;
+            case MessageChatDeletePhoto:
+              messageTypeAllowShowFrom = false;
+              displayContent.addAll(TextDisplay.parseEmojiInString(
+                  "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {
+                        "{from}": author
+                      })}",
+                  textStyle));
+              break;
 
-      join:
-      case MessageChatAddMembers:
-        /*TODO messageTypeAllowShowFrom = false;
+            join:
+            case MessageChatAddMembers:
+              /*TODO messageTypeAllowShowFrom = false;
         String names = "";
         joinInfo?.addedUsers
             .forEach((element) => names += "${element.firstName!}, ");
@@ -90,141 +95,151 @@ class MessageContentPreview extends StatelessWidget {
                   "{users}": names,
                   "{from}": author
                 }));*/
-        break;
-      case MessageChatJoinByLink:
-        continue join;
-      case MessageChatJoinByRequest:
-        continue join;
+              break;
+            case MessageChatJoinByLink:
+              continue join;
+            case MessageChatJoinByRequest:
+              continue join;
 
-      case MessagePhoto:
-        text = (content as MessagePhoto).caption!;
-        displayContent = ChatItemContentPhotoText.build(
-            ChatItemPhotoMinithumbnail(
-                client: client,
-                id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!),
-            (text.text ?? "").isNotEmpty
-                ? ""
-                : client.getTranslation("lng_attach_photo"),
-            textStyle);
-        break;
+            case MessagePhoto:
+              text = (content as MessagePhoto).caption!;
+              displayContent = ChatItemContentPhotoText.build(
+                  ChatItemPhotoMinithumbnail(
+                      client: client,
+                      id: sortPhotoSizes(content.photo!.sizes!)
+                          .last
+                          .photo!
+                          .id!),
+                  (text.text ?? "").isNotEmpty
+                      ? ""
+                      : client.getTranslation("lng_attach_photo"),
+                  textStyle);
+              break;
 
-      case MessageDocument:
-        var document = (content as MessageDocument);
-        displayContent.addAll(TextDisplay.parseEmojiInString(
-                "📁 ${bytesToSize(document.document!.document!.size!)} —",
-                textStyle) +
-            [
-              contentEntetyesMargin(),
-              TextSpan(text: document.document?.fileName, style: textStyle),
-              contentEntetyesMargin()
-            ]);
-        text = document.caption!;
-        break;
+            case MessageDocument:
+              var document = (content as MessageDocument);
+              displayContent.addAll(TextDisplay.parseEmojiInString(
+                      "📁 ${bytesToSize(document.document!.document!.size!)} —",
+                      textStyle) +
+                  [
+                    contentEntetyesMargin(),
+                    TextSpan(
+                        text: document.document?.fileName, style: textStyle),
+                    contentEntetyesMargin()
+                  ]);
+              text = document.caption!;
+              break;
 
-      case MessageChatChangePhoto:
-        messageTypeAllowShowFrom = false;
-        displayContent = TextDisplay.parseEmojiInString(
-            "📸 ${client.getTranslation(isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo", replacing: {
-                  "{from}": getSenderName(message!.senderId!, client)
-                })}",
-            textStyle);
-        break;
+            case MessageChatChangePhoto:
+              messageTypeAllowShowFrom = false;
+              displayContent = TextDisplay.parseEmojiInString(
+                  "📸 ${client.getTranslation(isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo", replacing: {
+                        "{from}": author
+                      })}",
+                  textStyle);
+              break;
 
-      case MessageExpiredPhoto:
-        displayContent = TextDisplay.parseEmojiInString(
-            "🔥 ${client.getTranslation("lng_attach_photo")}", textStyle);
-        break;
+            case MessageExpiredPhoto:
+              displayContent = TextDisplay.parseEmojiInString(
+                  "🔥 ${client.getTranslation("lng_attach_photo")}", textStyle);
+              break;
 
-      case MessageAnimation:
-        var thumb = (content as MessageAnimation).animation?.thumbnail;
-        Widget? mith;
-        if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
-          displayContent
-              .addAll(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
-        } else {
-          mith = FileImageDisplay(id: thumb.file!.id!, client: client);
-          displayContent +=
-              ChatItemContentPhotoText.build(mith, "GIF", textStyle);
-        }
-        break;
+            case MessageAnimation:
+              var thumb = (content as MessageAnimation).animation?.thumbnail;
+              Widget? mith;
+              if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
+                displayContent.addAll(
+                    TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
+              } else {
+                mith = FileImageDisplay(id: thumb.file!.id!, client: client);
+                displayContent +=
+                    ChatItemContentPhotoText.build(mith, "GIF", textStyle);
+              }
+              break;
 
-      case MessageContactRegistered:
-        messageTypeAllowShowFrom = false;
-        displayContent.addAll(TextDisplay.parseEmojiInString(
-            "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {
-                  "{from}": author
-                })}",
-            textStyle));
-        break;
+            case MessageContactRegistered:
+              messageTypeAllowShowFrom = false;
+              displayContent.addAll(TextDisplay.parseEmojiInString(
+                  "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {
+                        "{from}": author
+                      })}",
+                  textStyle));
+              break;
 
-      case MessageChatChangeTitle:
-        messageTypeAllowShowFrom = false;
-        displayContent = TextDisplay.parseEmojiInString(
-            "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {
-                  "{title}": author
-                })}",
-            textStyle);
-        break;
+            case MessageChatChangeTitle:
+              messageTypeAllowShowFrom = false;
+              displayContent = TextDisplay.parseEmojiInString(
+                  "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {
+                        "{title}": author
+                      })}",
+                  textStyle);
+              break;
 
-      case MessageSupergroupChatCreate:
-        displayContent = ChatItemContentIconText.build(
-            Icons.create, client.getTranslation("lng_action_created_channel"));
-        break;
+            case MessageSupergroupChatCreate:
+              displayContent = ChatItemContentIconText.build(Icons.create,
+                  client.getTranslation("lng_action_created_channel"));
+              break;
 
-      case InputMessageText:
-        text = (content as InputMessageText).text!;
-        break;
+            case InputMessageText:
+              text = (content as InputMessageText).text!;
+              break;
 
-      case MessageAudio:
-        var audio = message!.content as MessageAudio;
-        displayContent = TextDisplay.parseEmojiInString(
-            "🎵 ${audio.audio!.performer} - ${audio.audio!.title}, ",
-            textStyle);
-        text = audio.caption!;
-        break;
+            case MessageAudio:
+              var audio = message!.content as MessageAudio;
+              displayContent = TextDisplay.parseEmojiInString(
+                  "🎵 ${audio.audio!.performer} - ${audio.audio!.title}, ",
+                  textStyle);
+              text = audio.caption!;
+              break;
 
-      case MessageVoiceNote:
-        displayContent = TextDisplay.parseEmojiInString(
-            "🎤 ${client.getTranslation("lng_media_audio")}", textStyle);
-        break;
+            case MessageVoiceNote:
+              displayContent = TextDisplay.parseEmojiInString(
+                  "🎤 ${client.getTranslation("lng_media_audio")}", textStyle);
+              break;
 
-      default:
-        text = FormattedText(text: content.runtimeType.toString());
-        break;
-    }
+            default:
+              text = FormattedText(text: content.runtimeType.toString());
+              break;
+          }
 
-    return RichText(
-        maxLines: 2,
-        text: TextSpan(
-          children: TextDisplay.parseEmojiInString(
-                  messageTypeAllowShowFrom
-                      ? (_showAuthor
-                          ? (style == MessageContentPreviewStyle.noLineBreaks
-                              ? "${lastMessageSenderName ?? author}: "
-                              : "${lastMessageSenderName ?? author}\n")
-                          : "")
-                      : "",
-                  draftMessage != null ? TextDisplay.draftText : textStyle) +
-              [
-                WidgetSpan(
-                    child: message?.forwardInfo != null
-                        ? Container(
-                            child: Icon(
-                              Icons.reply,
-                              color: ChatItemContentIconText.iconClr,
-                            ),
-                            margin: const EdgeInsets.only(left: 2, right: 2))
-                        : const SizedBox.shrink()),
-              ] +
-              displayContent +
-              TextDisplay.parseFormattedText(
-                  text,
-                  18,
-                  textColor ??
-                      (chatSelected
-                          ? Colors.white
-                          : ClientTheme.currentTheme.getField("RegularText"))),
-        ));
+          return RichText(
+              maxLines: 2,
+              text: TextSpan(
+                children: TextDisplay.parseEmojiInString(
+                        messageTypeAllowShowFrom
+                            ? (_showAuthor
+                                ? (style ==
+                                        MessageContentPreviewStyle.noLineBreaks
+                                    ? "${lastMessageSenderName ?? author}: "
+                                    : "${lastMessageSenderName ?? author}\n")
+                                : "")
+                            : "",
+                        draftMessage != null
+                            ? TextDisplay.draftText
+                            : textStyle) +
+                    [
+                      WidgetSpan(
+                          child: message?.forwardInfo != null
+                              ? Container(
+                                  child: Icon(
+                                    Icons.reply,
+                                    color: ChatItemContentIconText.iconClr,
+                                  ),
+                                  margin:
+                                      const EdgeInsets.only(left: 2, right: 2))
+                              : const SizedBox.shrink()),
+                    ] +
+                    displayContent +
+                    TextDisplay.parseFormattedText(
+                        text,
+                        18,
+                        textColor ??
+                            (chatSelected
+                                ? Colors.white
+                                : ClientTheme.currentTheme
+                                    .getField("RegularText"))),
+              ));
+        });
   }
 
   int get lastMessageSenderId {

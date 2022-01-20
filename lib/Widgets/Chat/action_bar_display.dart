@@ -32,8 +32,7 @@ class ActionBarDisplay extends StatelessWidget {
             const SizedBox(height: 4),
             StreamBuilder(
                 key: UniqueKey(),
-                initialData: chat.title,
-                stream: client.titleOf(chat.id!),
+                stream: client.senderName(MessageSenderChat(chatId: chat.id)),
                 builder: (_, data) => ChatItemTitle(
                       selected: false,
                       isBot: user?.type is UserTypeBot,

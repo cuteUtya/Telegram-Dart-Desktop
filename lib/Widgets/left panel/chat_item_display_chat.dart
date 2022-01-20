@@ -56,8 +56,7 @@ class ChatItemDisplay extends StatelessWidget {
                     child: StreamBuilder(
                         stream: isSavedMessages
                             ? null
-                            : client.titleOf(client.getChat(chatId).id!),
-                        initialData: client.getChat(chatId).title,
+                            : client.senderName(MessageSenderChat(chatId: chatId)),
                         builder: (_, data) {
                           var chat = client.getChat(chatId);
                           return ChatItemTitle(

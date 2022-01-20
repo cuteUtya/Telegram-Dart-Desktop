@@ -366,7 +366,7 @@ class TelegramClient {
       .where((u) => u is UpdateUnreadMessageCount)
       .map((a) => (a as UpdateUnreadMessageCount));
 
-  Stream<UpdateUser> get updateuser =>
+  Stream<UpdateUser> get updateUser =>
       updates.where((u) => u is UpdateUser).map((a) => (a as UpdateUser));
 
   Stream<UpdateChatAction> get _updateChatAction => updates
@@ -543,6 +543,47 @@ class TelegramClient {
     }
   }
 
+  Stream<String> senderName(MessageSender senderId) async* {
+    String buildUsername(String fname, String? lname) {
+      var result = fname;
+      if ((lname?.isNotEmpty) ?? false) {
+        result += " $lname";
+      }
+      return result;
+    }
+
+    String getSenderName(MessageSender sender) {
+      if (sender is MessageSenderUser) {
+        var user = getUser(sender.userId!);
+        return buildUsername(user.firstName!, user.lastName);
+      }
+      return getChat((sender as MessageSenderChat).chatId!).title!;
+    }
+
+    String name = getSenderName(senderId);
+
+    yield name;
+
+    if (senderId is MessageSenderChat) {
+      await for (var update in _updateChatTitle) {
+        if (update.chatId == senderId.chatId) {
+          yield update.title!;
+        }
+      }
+    } else if (senderId is MessageSenderUser) {
+      await for (var update in updateUser) {
+        if (update.user!.id == senderId.userId) {
+          var newName =
+              buildUsername(update.user!.firstName!, update.user!.lastName);
+          if (name != newName) {
+            name = newName;
+            yield newName;
+          }
+        }
+      }
+    }
+  }
+
   Stream<List<ChatFilterInfo>> filters() async* {
     await for (final update in _updates) {
       if (update is UpdateChatFilters) {
@@ -557,12 +598,6 @@ class TelegramClient {
       if (update.chatId == chatId && update.messageId == messageId) {
         yield update;
       }
-    }
-  }
-
-  Stream<String> titleOf(int chatId) async* {
-    await for (final title in _updateChatTitle) {
-      if (title.chatId == chatId) yield title.title!;
     }
   }
 

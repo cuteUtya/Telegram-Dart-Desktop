@@ -30,13 +30,13 @@ class MessageDisplayText extends StatefulWidget {
     this.additionalContent,
     this.additionalContentPlace = AdditionalContentPlace.top,
     this.text,
-    this.showSenderName = false,
+    this.senderName,
     this.adminTitle,
   }) : super(key: key);
   final TelegramClient client;
   final Message message;
   final FormattedText? text;
-  final bool showSenderName;
+  final String? senderName;
   final String? adminTitle;
   final Widget? additionalContent;
   final AdditionalContentPlace additionalContentPlace;
@@ -89,14 +89,12 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
       return Stack(
         children: [
           /// fake text with title and admin titles that stratch message bubble1
-          if (widget.adminTitle != null && !widget.message.isOutgoing!)
+          if (widget.adminTitle != null &&
+              !widget.message.isOutgoing! &&
+              widget.senderName != null)
             Text.rich(TextSpan(children: [
               TextSpan(
-                  text: getSenderName(
-                    widget.message.senderId!,
-                    widget.client,
-                    true,
-                  ),
+                  text: widget.senderName!,
                   style:
                       const TextStyle(fontSize: 18, color: Colors.transparent)),
               const WidgetSpan(
@@ -128,7 +126,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (widget.showSenderName)
+                if (widget.senderName != null)
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,8 +134,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                       Text.rich(
                         TextSpan(
                             children: TextDisplay.parseEmojiInString(
-                                getSenderName(widget.message.senderId!,
-                                    widget.client, true),
+                                widget.senderName!,
                                 TextDisplay.create(
                                     customTextColor: getPeerColor(
                                         getSenderId(widget.message.senderId!)!,
