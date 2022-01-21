@@ -32,7 +32,7 @@ class MessageDisplayPhoto extends StatelessWidget {
             alignment: message.isOutgoing!
                 ? Alignment.bottomRight
                 : Alignment.bottomLeft,
-            height: clamp((photoSize.height ?? 400).toDouble(), 40, 400),
+            height: clamp((photoSize.height ?? 600).toDouble(), 40, 600),
           );
         });
   }

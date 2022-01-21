@@ -199,8 +199,7 @@ class MessageDisplay extends StatelessWidget {
                                       .photo,
                               chatId: chat?.id ?? 0,
                               chatTitle: author,
-                              client: client))),
-                  const SizedBox(height: 16)
+                              client: client)))
                 ],
               );
               break;

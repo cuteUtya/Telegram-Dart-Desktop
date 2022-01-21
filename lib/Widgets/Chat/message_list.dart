@@ -118,18 +118,21 @@ class _MessageListState extends State<MessageList> {
                   margin: const EdgeInsets.only(bottom: 16),
                   child: DateBubble(client: widget.client, date: currDate)),
             if (isServiceMessage)
-              MessageDisplay(
-                bubbleRelativePosition: bubbleRelativePosition,
-                client: widget.client,
-                message: msg,
-                isServiceMessage: true,
-              )
+              Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: MessageDisplay(
+                    bubbleRelativePosition: bubbleRelativePosition,
+                    client: widget.client,
+                    message: msg,
+                    isServiceMessage: true,
+                  ))
             else
               Row(
                 children: [
                   if (msg.isOutgoing! && !isServiceMessage) const Spacer(),
                   Expanded(
-                      flex: 2,
+                      //photos may take more place
+                      flex: msg.content is MessagePhoto ? 3 : 2,
                       child: FutureBuilder(
                           key: UniqueKey(),
                           future: msg.replyToMessageId == 0
