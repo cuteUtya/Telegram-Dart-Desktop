@@ -31,7 +31,6 @@ class _MessageDisplayAnimtedEmojiState
     extends State<MessageDisplayAnimatedEmoji> {
   bool _canPlayAnim = true;
   void showBigAnimation({Sticker? sticker}) async {
-    print(_canPlayAnim);
     if (_canPlayAnim) {
       _canPlayAnim = false;
       _animationKey.currentState?.play();

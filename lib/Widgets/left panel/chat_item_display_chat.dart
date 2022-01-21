@@ -136,7 +136,7 @@ class ChatItemDisplay extends StatelessWidget {
                                       return Userpic(
                                           key: Key(
                                               "userpic#chatId?=${chatId}fileId?=${chatPhoto?.big?.id}"),
-                                          chatPhoto:
+                                          chatPhotoInfo:
                                               data.hasData ? chatPhoto : null,
                                           chatId: chatId,
                                           chatTitle:

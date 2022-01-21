@@ -9,16 +9,20 @@ import 'package:myapp/utils.dart';
 class Userpic extends StatelessWidget {
   const Userpic(
       {Key? key,
-      this.chatPhoto,
+      this.chatPhotoInfo,
       this.profilePhoto,
+      this.chatPhoto,
+      this.shape = BoxShape.circle,
       this.emptyUserpicFontSize,
       required this.chatId,
       required this.chatTitle,
       required this.client,
       this.useBig = false})
       : super(key: key);
-  final ChatPhotoInfo? chatPhoto;
+  final ChatPhotoInfo? chatPhotoInfo;
+  final ChatPhoto? chatPhoto;
   final ProfilePhoto? profilePhoto;
+  final BoxShape shape;
   final double? emptyUserpicFontSize;
   final String chatTitle;
   final int chatId;
@@ -27,17 +31,25 @@ class Userpic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (chatPhoto == null && profilePhoto == null) {
+    if (chatPhotoInfo == null && profilePhoto == null && chatPhoto == null) {
       return emptyUserpic();
     }
 
-    var photo = chatPhoto == null
-        ? (useBig ? profilePhoto!.big : profilePhoto!.small)
-        : (useBig ? chatPhoto!.big : chatPhoto!.small);
+    File? photo;
+
+    if (chatPhoto != null) {
+      photo = sortPhotoSizes(chatPhoto!.sizes!)[0].photo!;
+    } else if (chatPhotoInfo != null) {
+      photo = (useBig ? chatPhotoInfo!.big! : chatPhotoInfo!.small!);
+    } else if (profilePhoto != null) {
+      photo = useBig ? profilePhoto!.big! : profilePhoto!.small!;
+    }
+
+    assert(photo != null);
 
     //TODO if profilePhoto has animations animate photo on mouse hover
     return FileImageDisplay(
-        containerShape: BoxShape.circle,
+        containerShape: shape,
         client: client,
         id: photo!.id!,
         emptyReplacer: emptyUserpic());

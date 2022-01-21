@@ -21,6 +21,16 @@ class _MessageListState extends State<MessageList> {
   Messages? messages;
   int _renderedChatId = 0;
   List<ChatAdministrator> admins = [];
+  static const List<Type> serviceMessages = [
+    MessageVideoChatStarted,
+    MessageVideoChatEnded,
+    MessageBasicGroupChatCreate,
+    MessageSupergroupChatCreate,
+    MessageChatChangeTitle,
+    MessageChatChangePhoto,
+    MessageChatDeletePhoto
+  ];
+
   @override
   Widget build(BuildContext context) {
     var chat = widget.client.getChat(widget.chatId);
@@ -62,6 +72,7 @@ class _MessageListState extends State<MessageList> {
           var prevDate = previus == null ? null : unixToDateTime(previus.date!);
           var currDate = unixToDateTime(msg.date!);
           var nextDate = next == null ? null : unixToDateTime(next.date!);
+
           bool showDateBelow = prevDate != null &&
               (prevDate.day != currDate.day ||
                   prevDate.month != currDate.month ||
@@ -99,52 +110,67 @@ class _MessageListState extends State<MessageList> {
 
           var adminInfo = admins.firstWhereOrNull(
               (element) => element.userId == getSenderId(msg.senderId!));
+          bool isServiceMessage =
+              serviceMessages.contains(msg.content.runtimeType);
           return Column(children: [
-            Row(
-              children: [
-                if (msg.isOutgoing!) const Spacer(),
-                Expanded(
-                    flex: 2,
-                    child: FutureBuilder(
-                        key: UniqueKey(),
-                        future: msg.replyToMessageId == 0
-                            ? null
-                            : widget.client.send(GetMessage(
-                                chatId: msg.replyInChatId == 0
-                                    ? chat.id
-                                    : msg.replyInChatId,
-                                messageId: msg.replyToMessageId)),
-                        builder: (_, replieDate) {
-                          return Container(
-                              margin: EdgeInsets.only(
-                                  bottom: (bubbleRelativePosition ==
-                                              BubbleRelativePosition.bottom ||
-                                          bubbleRelativePosition ==
-                                              BubbleRelativePosition.single)
-                                      ? 16
-                                      : 4),
-                              child: MessageDisplay(
-                                bubbleRelativePosition: bubbleRelativePosition,
-                                chat: chat,
-                                message: msg,
-                                replieOn: replieDate.data == null ||
-                                        replieDate.data is! Message
-                                    ? null
-                                    : replieDate.data as Message,
-                                client: widget.client,
-                                adminTitle: adminInfo != null
-                                    ? (adminInfo.customTitle?.isEmpty ?? true)
-                                        ? widget.client.getTranslation(
-                                            adminInfo.isOwner!
-                                                ? "lng_owner_badge"
-                                                : "lng_admin_badge")
-                                        : adminInfo.customTitle!
-                                    : null,
-                              ));
-                        })),
-                if (!msg.isOutgoing!) const Spacer()
-              ],
-            ),
+            if (nextDate == null)
+              Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: DateBubble(client: widget.client, date: currDate)),
+            if (isServiceMessage)
+              MessageDisplay(
+                bubbleRelativePosition: bubbleRelativePosition,
+                client: widget.client,
+                message: msg,
+                isServiceMessage: true,
+              )
+            else
+              Row(
+                children: [
+                  if (msg.isOutgoing! && !isServiceMessage) const Spacer(),
+                  Expanded(
+                      flex: 2,
+                      child: FutureBuilder(
+                          key: UniqueKey(),
+                          future: msg.replyToMessageId == 0
+                              ? null
+                              : widget.client.send(GetMessage(
+                                  chatId: msg.replyInChatId == 0
+                                      ? chat.id
+                                      : msg.replyInChatId,
+                                  messageId: msg.replyToMessageId)),
+                          builder: (_, replieDate) {
+                            return Container(
+                                margin: EdgeInsets.only(
+                                    bottom: (bubbleRelativePosition ==
+                                                BubbleRelativePosition.bottom ||
+                                            bubbleRelativePosition ==
+                                                BubbleRelativePosition.single)
+                                        ? 16
+                                        : 4),
+                                child: MessageDisplay(
+                                  bubbleRelativePosition:
+                                      bubbleRelativePosition,
+                                  chat: chat,
+                                  message: msg,
+                                  replieOn: replieDate.data == null ||
+                                          replieDate.data is! Message
+                                      ? null
+                                      : replieDate.data as Message,
+                                  client: widget.client,
+                                  adminTitle: adminInfo != null
+                                      ? (adminInfo.customTitle?.isEmpty ?? true)
+                                          ? widget.client.getTranslation(
+                                              adminInfo.isOwner!
+                                                  ? "lng_owner_badge"
+                                                  : "lng_admin_badge")
+                                          : adminInfo.customTitle!
+                                      : null,
+                                ));
+                          })),
+                  if (!msg.isOutgoing! && !isServiceMessage) const Spacer()
+                ],
+              ),
             if (showDateBelow)
               Container(
                   margin: const EdgeInsets.only(bottom: 16),

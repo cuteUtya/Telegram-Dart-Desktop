@@ -118,7 +118,7 @@ CheckMarkMineColor: #FF65AF5F;
 CheckMarkInFlowContainer: ref(InfoOutsideMessageColor);
 
 StickerOutlineColor: #1E000000;
-DialogDateTextColor: #FFFFFFFF;
+ServiceMessageTextColor: #FFFFFFFF;
 
 CloseChatIconColor: ref(GenericUIIconsColor);
 CloseChatClickColor: ref(HoveredObject);

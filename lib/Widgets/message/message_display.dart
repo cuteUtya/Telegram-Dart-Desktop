@@ -9,11 +9,14 @@ import 'package:myapp/Widgets/message/message_display_photo.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
 import 'package:myapp/Widgets/message/message_sticker.dart';
+import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
 import 'package:myapp/Widgets/message/replies_display.dart';
+import 'package:myapp/Widgets/message/service_message.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
+import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
 
 /// UI representation of [Message] object
@@ -25,9 +28,10 @@ class MessageDisplay extends StatelessWidget {
       this.chat,
       required this.client,
       required this.message,
-      required this.replieOn,
       required this.bubbleRelativePosition,
-      this.adminTitle})
+      this.replieOn,
+      this.adminTitle,
+      this.isServiceMessage = false})
       : super(key: key);
   final BubbleRelativePosition bubbleRelativePosition;
   final Message message;
@@ -35,6 +39,7 @@ class MessageDisplay extends StatelessWidget {
   final Chat? chat;
   final String? adminTitle;
   final TelegramClient client;
+  final bool isServiceMessage;
 
   static const List<Type> messageTypesWithInlineMessageInfo = [
     MessageText,
@@ -48,171 +53,245 @@ class MessageDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: client.senderName(message.senderId!),
-      builder: (_, nameData) {
-        var author = nameData.data.toString();
-        Widget contentWidget;
-        bool showMessageSender = ((chat?.type is ChatTypeSupergroup ||
-                    chat?.type is ChatTypeBasicGroup) &&
-                !message.isOutgoing!) &&
-            (bubbleRelativePosition == BubbleRelativePosition.top ||
-                bubbleRelativePosition == BubbleRelativePosition.single);
-        bool wrapInBubble = false;
-        var messageInfoWidget = MessageInfoBubbleCheckMarkTime(
-          customInfo: message.editDate == 0
-              ? null
-              : client.getTranslation("lng_edited"),
-          useBackground: !messageTypesWithInlineMessageInfo
-              .contains(message.content.runtimeType),
-          isOutgoing: message.isOutgoing!,
-          time: getHHMM(unixToDateTime(message.date!)),
-          checkMarkValue: message.isOutgoing!
-              ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
-              : null,
-        );
+        stream: client.senderName(message.senderId!),
+        builder: (_, senderData) {
+          var author = senderData.data.toString();
+          Widget contentWidget;
+          bool showMessageSender = ((chat?.type is ChatTypeSupergroup ||
+                      chat?.type is ChatTypeBasicGroup) &&
+                  !message.isOutgoing!) &&
+              (bubbleRelativePosition == BubbleRelativePosition.top ||
+                  bubbleRelativePosition == BubbleRelativePosition.single);
+          bool wrapInBubble = false;
+          var messageInfoWidget = MessageInfoBubbleCheckMarkTime(
+            customInfo: message.editDate == 0
+                ? null
+                : client.getTranslation("lng_edited"),
+            useBackground: !messageTypesWithInlineMessageInfo
+                .contains(message.content.runtimeType),
+            isOutgoing: message.isOutgoing!,
+            time: getHHMM(unixToDateTime(message.date!)),
+            checkMarkValue: message.isOutgoing!
+                ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
+                : null,
+          );
 
-        var replieInfo = replieOn != null
-            ? ReplieDisplay(
-                message: replieOn!,
-                client: client,
-                inlineStyle: messageTypeWithInlineReplie
-                    .contains(message.content.runtimeType),
-              )
-            : null;
+          var replieInfo = replieOn != null
+              ? ReplieDisplay(
+                  message: replieOn!,
+                  client: client,
+                  inlineStyle: messageTypeWithInlineReplie
+                      .contains(message.content.runtimeType),
+                )
+              : null;
 
-        switch (message.content.runtimeType) {
-          case MessageText:
-            var contentText = message.content as MessageText;
-            var textUnwhitespaced = contentText.text!.text!.replaceAll(" ", "");
-            var emojiTest = emojiRegex.firstMatch(textUnwhitespaced);
-            if (emojiTest != null) {
-              /*
+          switch (message.content.runtimeType) {
+            case MessageText:
+              var contentText = message.content as MessageText;
+              var textUnwhitespaced =
+                  contentText.text!.text!.replaceAll(" ", "");
+              var emojiTest = emojiRegex.firstMatch(textUnwhitespaced);
+              if (emojiTest != null) {
+                /*
           if message contains only emojis and its count not much 
           show its without bubble and with big size, like Tdesktop or TelegramX
           */
-              var totalEmojis = emojiTest.end - emojiTest.start;
-              if (totalEmojis >= textUnwhitespaced.length && totalEmojis < 40) {
-                contentWidget = MessageDisplayTextEmojis(
-                    alignment: message.isOutgoing!
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    emojis: textUnwhitespaced,
-                    infoSide: message.isOutgoing! ? Side.left : Side.right,
-                    messageInfo: messageInfoWidget);
-                break;
+                var totalEmojis = emojiTest.end - emojiTest.start;
+                if (totalEmojis >= textUnwhitespaced.length &&
+                    totalEmojis < 40) {
+                  contentWidget = MessageDisplayTextEmojis(
+                      alignment: message.isOutgoing!
+                          ? MainAxisAlignment.end
+                          : MainAxisAlignment.start,
+                      emojis: textUnwhitespaced,
+                      infoSide: message.isOutgoing! ? Side.left : Side.right,
+                      messageInfo: messageInfoWidget);
+                  break;
+                }
               }
-            }
-            wrapInBubble = true;
-            contentWidget = MessageDisplayText(
-              client: client,
-              message: message,
-              infoWidget: messageInfoWidget,
-              replieWidget: replieInfo,
-              senderName: showMessageSender ? author : null,
-              adminTitle: bubbleRelativePosition ==
-                          BubbleRelativePosition.top ||
-                      bubbleRelativePosition == BubbleRelativePosition.single
-                  ? adminTitle
-                  : "",
-            );
-            break;
-
-          case MessageAudio:
-            wrapInBubble = true;
-            contentWidget = MessageDisplayAudio(
-                message: message,
+              wrapInBubble = true;
+              contentWidget = MessageDisplayText(
                 client: client,
+                message: message,
                 infoWidget: messageInfoWidget,
-                replieWidget: replieInfo);
-            break;
-
-          case MessageSticker:
-            contentWidget = MessageStickerDisplay(
-                client: client,
-                message: message,
                 replieWidget: replieInfo,
-                infoWidget: messageInfoWidget);
-            break;
-
-          case MessageAnimatedEmoji:
-            contentWidget = MessageDisplayAnimatedEmoji(
-              chatId: chat!.id!,
-              message: message,
-              client: client,
-              replieWidget: replieInfo,
-              infoWidget: messageInfoWidget,
-            );
-            break;
-          case MessagePhoto:
-            contentWidget =
-                MessageDisplayPhoto(client: client, message: message);
-            break;
-
-          default:
-            wrapInBubble = true;
-            contentWidget = Text(
-              "unsupported",
-              style: TextDisplay.create(size: 20),
-            );
-            break;
-        }
-
-        Widget? senderUserpic;
-        if (!message.isOutgoing! &&
-            (bubbleRelativePosition == BubbleRelativePosition.bottom ||
-                bubbleRelativePosition == BubbleRelativePosition.single)) {
-          switch (message.senderId.runtimeType) {
-            case MessageSenderUser:
-              var senderUserId =
-                  (message.senderId as MessageSenderUser).userId!;
-              var senderUser = client.getUser(senderUserId);
-              senderUserpic = Userpic(
-                  profilePhoto: senderUser.profilePhoto,
-                  chatId: senderUserId,
-                  chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
-                  client: client,
-                  emptyUserpicFontSize: 16);
+                senderName: showMessageSender ? author : null,
+                adminTitle: bubbleRelativePosition ==
+                            BubbleRelativePosition.top ||
+                        bubbleRelativePosition == BubbleRelativePosition.single
+                    ? adminTitle
+                    : "",
+              );
               break;
-            case MessageSenderChat:
-              var senderChatId = (message.senderId as MessageSenderChat).chatId;
-              var senderChat = client.getChat(senderChatId!);
-              senderUserpic = Userpic(
-                  chatPhoto: senderChat.photo,
-                  chatId: senderChatId,
+
+            case MessageAudio:
+              wrapInBubble = true;
+              contentWidget = MessageDisplayAudio(
+                  message: message,
                   client: client,
-                  chatTitle: senderChat.title!,
-                  emptyUserpicFontSize: 16);
+                  infoWidget: messageInfoWidget,
+                  replieWidget: replieInfo);
+              break;
+
+            case MessageSticker:
+              contentWidget = MessageStickerDisplay(
+                  client: client,
+                  message: message,
+                  replieWidget: replieInfo,
+                  infoWidget: messageInfoWidget);
+              break;
+
+            case MessageAnimatedEmoji:
+              contentWidget = MessageDisplayAnimatedEmoji(
+                chatId: chat!.id!,
+                message: message,
+                client: client,
+                replieWidget: replieInfo,
+                infoWidget: messageInfoWidget,
+              );
+              break;
+
+            case MessageVideoChatStarted:
+              contentWidget = ServiceMessage(
+                  text: client.getTranslation(
+                      "lng_action_group_call_started_group",
+                      replacing: {"{from}": author}));
+              break;
+
+            case MessageVideoChatEnded:
+              contentWidget = ServiceMessage(
+                  text: client.getTranslation(
+                      "lng_admin_log_discarded_group_call",
+                      replacing: {"from": author}));
+              break;
+
+            case MessageBasicGroupChatCreate:
+              contentWidget = ServiceMessage(
+                  text: client
+                      .getTranslation("lng_action_created_chat", replacing: {
+                "{title}":
+                    (message.content as MessageBasicGroupChatCreate).title!,
+                "{from}": author
+              }));
+              break;
+
+            case MessageSupergroupChatCreate:
+              contentWidget = ServiceMessage(
+                  text: client.getTranslation("lng_action_created_channel"));
+              break;
+
+            case MessageChatChangePhoto:
+              contentWidget = Column(
+                children: [
+                  ServiceMessage(
+                      text: client.getTranslation("lng_action_changed_photo",
+                          replacing: {"{from}": author})),
+                  const SizedBox(height: 16),
+                  ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      child: SizedBox(
+                          width: 240,
+                          height: 240,
+                          child: Userpic(
+                              shape: BoxShape.rectangle,
+                              chatPhoto:
+                                  (message.content as MessageChatChangePhoto)
+                                      .photo,
+                              chatId: chat?.id ?? 0,
+                              chatTitle: author,
+                              client: client))),
+                  const SizedBox(height: 16)
+                ],
+              );
+              break;
+
+            case MessageChatDeletePhoto:
+              contentWidget = ServiceMessage(
+                  text: client.getTranslation("lng_action_removed_photo",
+                      replacing: {"{from}": author}));
+              break;
+
+            case MessageChatChangeTitle:
+              contentWidget = ServiceMessage(
+                  text: client.getTranslation(
+                      "lng_action_changed_title_channel",
+                      replacing: {
+                    "{title}": (message as MessageChatChangeTitle).title!
+                  }));
+              break;
+
+            case MessagePhoto:
+              contentWidget =
+                  MessageDisplayPhoto(client: client, message: message);
+              break;
+
+            default:
+              wrapInBubble = true;
+              contentWidget = Text(
+                "unsupported",
+                style: TextDisplay.create(size: 20),
+              );
               break;
           }
-        }
-        senderUserpic = SizedBox(
-          width: 40,
-          height: 40,
-          child: senderUserpic,
-        );
 
-        if (wrapInBubble) {
-          contentWidget = MacMessageBubble(
-              content: contentWidget,
-              side: message.isOutgoing! ? Side.right : Side.left,
-              position: bubbleRelativePosition);
-        } else {
-          contentWidget = Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              child: contentWidget);
-        }
+          Widget? senderUserpic;
+          if (!message.isOutgoing! &&
+              (bubbleRelativePosition == BubbleRelativePosition.bottom ||
+                  bubbleRelativePosition == BubbleRelativePosition.single)) {
+            switch (message.senderId.runtimeType) {
+              case MessageSenderUser:
+                var senderUserId =
+                    (message.senderId as MessageSenderUser).userId!;
+                var senderUser = client.getUser(senderUserId);
+                senderUserpic = Userpic(
+                    profilePhoto: senderUser.profilePhoto,
+                    chatId: senderUserId,
+                    chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
+                    client: client,
+                    emptyUserpicFontSize: 16);
+                break;
+              case MessageSenderChat:
+                var senderChatId =
+                    (message.senderId as MessageSenderChat).chatId;
+                var senderChat = client.getChat(senderChatId!);
+                senderUserpic = Userpic(
+                    chatPhotoInfo: senderChat.photo,
+                    chatId: senderChatId,
+                    client: client,
+                    chatTitle: senderChat.title!,
+                    emptyUserpicFontSize: 16);
+                break;
+            }
+          }
+          senderUserpic = SizedBox(
+            width: 40,
+            height: 40,
+            child: senderUserpic,
+          );
 
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            senderUserpic,
-            Expanded(
-              child: contentWidget,
-            ),
-          ],
-        );
-      },
-    );
+          if (wrapInBubble) {
+            contentWidget = MacMessageBubble(
+                content: contentWidget,
+                side: message.isOutgoing! ? Side.right : Side.left,
+                position: bubbleRelativePosition);
+          } else {
+            contentWidget = Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                child: contentWidget);
+          }
+
+          return isServiceMessage
+              ? contentWidget
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    senderUserpic,
+                    Expanded(
+                      child: contentWidget,
+                    )
+                  ],
+                );
+        });
   }
 }

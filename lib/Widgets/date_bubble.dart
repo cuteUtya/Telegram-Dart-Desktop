@@ -25,7 +25,7 @@ class DateBubble extends StatelessWidget {
           fontFamily: TextDisplay.greaterImportance,
           size: 16,
           customTextColor:
-              ClientTheme.currentTheme.getField("DialogDateTextColor")),
+              ClientTheme.currentTheme.getField("ServiceMessageTextColor")),
     ));
   }
 }
