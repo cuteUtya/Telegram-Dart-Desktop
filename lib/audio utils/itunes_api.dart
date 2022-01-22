@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class ItunesAPI {
   static const _searchUri =
-      "https://itunes.apple.com/search?term=%name% %performer%&entity=song&limit=%limit%";
+      "https://itunes.apple.com/search?term=%name% - %performer%&entity=song&limit=%limit%";
   static Future<ITunesSearchResult?> findSong(
       {required String name,
       required String perfomer,
