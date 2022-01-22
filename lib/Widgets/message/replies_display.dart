@@ -36,14 +36,16 @@ class ReplieDisplay extends StatelessWidget {
             ? "ReplieOnMessageInlineVerticalLineColor"
             : "ReplieOnMessageBubbleVerticalLineColor"),
       ),
-      MessageContentPreview(
-        client: client,
-        message: message,
-        style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
-        showAuthor: true,
-        textColor: color,
-        authorColor: color,
-      )
+      LimitedBox(
+          maxWidth: 120,
+          child: MessageContentPreview(
+            client: client,
+            message: message,
+            style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
+            showAuthor: true,
+            textColor: color,
+            authorColor: color,
+          ))
     ]);
   }
 }
