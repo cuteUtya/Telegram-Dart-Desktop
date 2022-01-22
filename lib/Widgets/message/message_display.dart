@@ -203,7 +203,8 @@ class MessageDisplay extends StatelessWidget {
                   text: client.getTranslation(
                       "lng_action_changed_title_channel",
                       replacing: {
-                    "{title}": (message as MessageChatChangeTitle).title!
+                    "{title}":
+                        (message.content as MessageChatChangeTitle).title!
                   }));
               break;
 
