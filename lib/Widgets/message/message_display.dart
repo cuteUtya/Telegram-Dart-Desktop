@@ -215,6 +215,7 @@ class MessageDisplay extends StatelessWidget {
               contentWidget = MessageDisplayPhoto(
                 client: client,
                 message: message,
+                senderName: showMessageSender ? author : null,
                 infoWidget: _buildInfoWidget(haveText),
                 replieWidget: _buildReplieWidget(haveText),
               );

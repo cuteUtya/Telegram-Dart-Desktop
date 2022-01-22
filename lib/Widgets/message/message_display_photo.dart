@@ -13,11 +13,13 @@ class MessageDisplayPhoto extends StatelessWidget {
       {Key? key,
       required this.client,
       required this.message,
+      this.senderName,
       this.infoWidget,
       this.replieWidget})
       : super(key: key);
   final TelegramClient client;
   final Message message;
+  final String? senderName;
   final Widget? infoWidget;
   final Widget? replieWidget;
 
@@ -42,6 +44,7 @@ class MessageDisplayPhoto extends StatelessWidget {
                 ? MessageDisplayText(
                     client: client,
                     message: message,
+                    senderName: senderName,
                     additionalContent:
                         _buildImage(photoSize.photo!.id!, border),
                     infoWidget: infoWidget,
