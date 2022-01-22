@@ -27,25 +27,26 @@ class ReplieDisplay extends StatelessWidget {
     var color = inlineStyle
         ? null
         : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
-    return Row(mainAxisSize: MainAxisSize.min, children: [
-      Container(
-        width: 2,
-        height: 40,
-        margin: const EdgeInsets.only(right: 8),
-        color: ClientTheme.currentTheme.getField(inlineStyle
-            ? "ReplieOnMessageInlineVerticalLineColor"
-            : "ReplieOnMessageBubbleVerticalLineColor"),
-      ),
-      LimitedBox(
-          maxWidth: 120,
-          child: MessageContentPreview(
-            client: client,
-            message: message,
-            style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
-            showAuthor: true,
-            textColor: color,
-            authorColor: color,
-          ))
-    ]);
+    return LayoutBuilder(
+        builder: (_, box) => Row(mainAxisSize: MainAxisSize.min, children: [
+              Container(
+                width: 2,
+                height: 40,
+                margin: const EdgeInsets.only(right: 8),
+                color: ClientTheme.currentTheme.getField(inlineStyle
+                    ? "ReplieOnMessageInlineVerticalLineColor"
+                    : "ReplieOnMessageBubbleVerticalLineColor"),
+              ),
+              LimitedBox(
+                  maxWidth: inlineStyle ? box.maxWidth : 120,
+                  child: MessageContentPreview(
+                    client: client,
+                    message: message,
+                    style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
+                    showAuthor: true,
+                    textColor: color,
+                    authorColor: color,
+                  ))
+            ]));
   }
 }
