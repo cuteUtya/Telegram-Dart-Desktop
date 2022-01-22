@@ -131,8 +131,6 @@ class _MessageListState extends State<MessageList> {
                 children: [
                   if (msg.isOutgoing! && !isServiceMessage) const Spacer(),
                   Expanded(
-                      //photos may take more place
-                      flex: msg.content is MessagePhoto ? 3 : 2,
                       child: FutureBuilder(
                           key: UniqueKey(),
                           future: msg.replyToMessageId == 0

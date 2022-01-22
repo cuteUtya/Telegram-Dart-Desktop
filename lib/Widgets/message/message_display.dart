@@ -41,15 +41,24 @@ class MessageDisplay extends StatelessWidget {
   final TelegramClient client;
   final bool isServiceMessage;
 
-  static const List<Type> messageTypesWithInlineMessageInfo = [
-    MessageText,
-    MessageAudio
-  ];
-  static const List<Type> messageTypeWithInlineReplie = [
-    MessageText,
-    MessageAudio
-  ];
+  Widget _buildInfoWidget(bool inline) => MessageInfoBubbleCheckMarkTime(
+        customInfo:
+            message.editDate == 0 ? null : client.getTranslation("lng_edited"),
+        useBackground: !inline,
+        isOutgoing: message.isOutgoing!,
+        time: getHHMM(unixToDateTime(message.date!)),
+        checkMarkValue: message.isOutgoing!
+            ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
+            : null,
+      );
 
+  Widget? _buildReplieWidget(bool inline) => replieOn != null
+      ? ReplieDisplay(
+          message: replieOn!,
+          client: client,
+          inlineStyle: inline,
+        )
+      : null;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -63,27 +72,6 @@ class MessageDisplay extends StatelessWidget {
               (bubbleRelativePosition == BubbleRelativePosition.top ||
                   bubbleRelativePosition == BubbleRelativePosition.single);
           bool wrapInBubble = false;
-          var messageInfoWidget = MessageInfoBubbleCheckMarkTime(
-            customInfo: message.editDate == 0
-                ? null
-                : client.getTranslation("lng_edited"),
-            useBackground: !messageTypesWithInlineMessageInfo
-                .contains(message.content.runtimeType),
-            isOutgoing: message.isOutgoing!,
-            time: getHHMM(unixToDateTime(message.date!)),
-            checkMarkValue: message.isOutgoing!
-                ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
-                : null,
-          );
-
-          var replieInfo = replieOn != null
-              ? ReplieDisplay(
-                  message: replieOn!,
-                  client: client,
-                  inlineStyle: messageTypeWithInlineReplie
-                      .contains(message.content.runtimeType),
-                )
-              : null;
 
           switch (message.content.runtimeType) {
             case MessageText:
@@ -105,7 +93,7 @@ class MessageDisplay extends StatelessWidget {
                           : MainAxisAlignment.start,
                       emojis: textUnwhitespaced,
                       infoSide: message.isOutgoing! ? Side.left : Side.right,
-                      messageInfo: messageInfoWidget);
+                      messageInfo: _buildInfoWidget(false));
                   break;
                 }
               }
@@ -113,8 +101,8 @@ class MessageDisplay extends StatelessWidget {
               contentWidget = MessageDisplayText(
                 client: client,
                 message: message,
-                infoWidget: messageInfoWidget,
-                replieWidget: replieInfo,
+                infoWidget: _buildInfoWidget(true),
+                replieWidget: _buildReplieWidget(true),
                 senderName: showMessageSender ? author : null,
                 adminTitle: bubbleRelativePosition ==
                             BubbleRelativePosition.top ||
@@ -129,16 +117,16 @@ class MessageDisplay extends StatelessWidget {
               contentWidget = MessageDisplayAudio(
                   message: message,
                   client: client,
-                  infoWidget: messageInfoWidget,
-                  replieWidget: replieInfo);
+                  infoWidget: _buildInfoWidget(true),
+                  replieWidget: _buildReplieWidget(true));
               break;
 
             case MessageSticker:
               contentWidget = MessageStickerDisplay(
                   client: client,
                   message: message,
-                  replieWidget: replieInfo,
-                  infoWidget: messageInfoWidget);
+                  replieWidget: _buildReplieWidget(false),
+                  infoWidget: _buildInfoWidget(false));
               break;
 
             case MessageAnimatedEmoji:
@@ -146,8 +134,8 @@ class MessageDisplay extends StatelessWidget {
                 chatId: chat!.id!,
                 message: message,
                 client: client,
-                replieWidget: replieInfo,
-                infoWidget: messageInfoWidget,
+                replieWidget: _buildReplieWidget(true),
+                infoWidget: _buildInfoWidget(false),
               );
               break;
 
@@ -220,8 +208,16 @@ class MessageDisplay extends StatelessWidget {
               break;
 
             case MessagePhoto:
-              contentWidget =
-                  MessageDisplayPhoto(client: client, message: message);
+              bool haveText =
+                  ((message.content as MessagePhoto).caption?.text ?? "")
+                      .isNotEmpty;
+              wrapInBubble = haveText;
+              contentWidget = MessageDisplayPhoto(
+                client: client,
+                message: message,
+                infoWidget: _buildInfoWidget(haveText),
+                replieWidget: _buildReplieWidget(haveText),
+              );
               break;
 
             default:
