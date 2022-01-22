@@ -114,6 +114,10 @@ class _MessageListState extends State<MessageList> {
               (element) => element.userId == getSenderId(msg.senderId!));
           bool isServiceMessage =
               serviceMessages.contains(msg.content.runtimeType);
+          int spacerFlex =
+              msg.content is MessageContent && msg.replyToMessageId == 0
+                  ? 2
+                  : 1;
           return Column(children: [
             if (nextDate == null)
               Container(
@@ -131,7 +135,8 @@ class _MessageListState extends State<MessageList> {
             else
               Row(
                 children: [
-                  if (msg.isOutgoing! && !isServiceMessage) const Spacer(),
+                  if (msg.isOutgoing! && !isServiceMessage)
+                    Spacer(flex: spacerFlex),
                   Expanded(
                       child: FutureBuilder(
                           key: UniqueKey(),
@@ -171,7 +176,8 @@ class _MessageListState extends State<MessageList> {
                                       : null,
                                 ));
                           })),
-                  if (!msg.isOutgoing! && !isServiceMessage) const Spacer()
+                  if (!msg.isOutgoing! && !isServiceMessage)
+                    Spacer(flex: spacerFlex)
                 ],
               ),
             if (showDateBelow)
