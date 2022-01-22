@@ -5,12 +5,12 @@ class OnlineIndicatorDidplay extends StatelessWidget {
   const OnlineIndicatorDidplay(
       {Key? key,
       required this.online,
-      this.aroundOnlineColor,
+      this.selected = false,
       this.heigth,
       this.width})
       : super(key: key);
   final bool online;
-  final Color? aroundOnlineColor;
+  final bool selected;
   final double? width;
   final double? heigth;
   @override
@@ -25,8 +25,9 @@ class OnlineIndicatorDidplay extends StatelessWidget {
               duration: const Duration(milliseconds: 150),
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: aroundOnlineColor ??
-                      ClientTheme.currentTheme.getField("ChatUnselectedColor")),
+                  color: ClientTheme.currentTheme.getField(selected
+                      ? "OnlineColorOutlineSelected"
+                      : "OnlineColorOutline")),
               width: online ? 20 : 0,
               height: online ? 20 : 0)),
           (AnimatedContainer(
@@ -36,8 +37,8 @@ class OnlineIndicatorDidplay extends StatelessWidget {
               height: online ? 12 : 0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color:
-                      ClientTheme.currentTheme.getField("OnlineStatusColor"))))
+                  color: ClientTheme.currentTheme.getField(
+                      selected ? "OnlineColorSelected" : "OnlineStatusColor"))))
         ])));
   }
 }

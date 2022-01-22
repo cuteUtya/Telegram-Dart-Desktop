@@ -38,6 +38,9 @@ ButtonAccentBackColor: ref(AccentHalfTransparent);
 ButtonDangerBackColor: ref(DangerHalfTransparent);
 
 OnlineColor: #0BA628;
+OnlineColorSelected: ref(ChatUnselectedColor);
+OnlineColorOutline: ref(ChatUnselectedColor);
+OnlineColorOutlineSelected: ref(ChatCurrentlySelectedColor);
 OnlineStatusColor: ref(OnlineColor);
 SearchBackground: #EBEBEB;
 #Color(128, ref(BaseColor).r, ref(BaseColor).g, ref(BaseColor).b)#

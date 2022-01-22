@@ -56,7 +56,8 @@ class ChatItemDisplay extends StatelessWidget {
                     child: StreamBuilder(
                         stream: isSavedMessages
                             ? null
-                            : client.senderName(MessageSenderChat(chatId: chatId)),
+                            : client
+                                .senderName(MessageSenderChat(chatId: chatId)),
                         builder: (_, data) {
                           var chat = client.getChat(chatId);
                           return ChatItemTitle(
@@ -157,6 +158,7 @@ class ChatItemDisplay extends StatelessWidget {
                                       OnlineIndicatorDidplay(
                                           heigth: 20,
                                           width: 20,
+                                          selected: selected,
                                           online:
                                               data.data is UserStatusOnline))
                           ]),
