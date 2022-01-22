@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
+import 'package:myapp/Widgets/smooth_desktop_list_view.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -59,9 +60,10 @@ class _MessageListState extends State<MessageList> {
       _renderedChatId = widget.chatId;
     }
 
-    return ListView.builder(
+    return SmoothDesktopListView(
         reverse: true,
         itemCount: messages?.totalCount ?? 0,
+        cacheExtent: 1500,
         itemBuilder: (context, index) {
           var msg = messages!.messages![index];
           var previus = (index - 1 < 0 ? null : messages!.messages![index - 1]);

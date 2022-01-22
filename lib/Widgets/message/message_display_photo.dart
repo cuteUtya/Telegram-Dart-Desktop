@@ -47,11 +47,10 @@ class MessageDisplayPhoto extends StatelessWidget {
                     infoWidget: infoWidget,
                     replieWidget: replieWidget,
                     text: photo.caption)
-                : Expanded(
-                    child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                         if (message.isOutgoing! && replieWidget != null)
                           Container(
                             child: replieWidget!,
@@ -87,7 +86,7 @@ class MessageDisplayPhoto extends StatelessWidget {
                             child: replieWidget!,
                             margin: const EdgeInsets.only(left: 8),
                           ),
-                      ]))));
+                      ])));
   }
 
   Widget _buildImage(int fileId, BorderRadius border) =>

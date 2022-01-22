@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_item_horizontal.dart';
+import 'package:myapp/Widgets/smooth_desktop_list_view.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/global_key_extenstion.dart';
@@ -19,7 +20,6 @@ class ChatFilterHorizontal extends StatefulWidget {
 
 class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
   static int active = -1;
-  final ScrollController _scrollController = ScrollController();
   final Map<int, GlobalKey> _filtersKeys = {};
 
   @override
@@ -54,41 +54,39 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                         _filtersKeys[e.id!] = GlobalKey();
                       }
                     }
-                    return ListView(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          for (final filter in filters)
-                            Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: StreamBuilder(
-                                    stream: widget.client.unreadIn(
-                                        ChatListFilter(
-                                            chatFilterId: filter.id)),
-                                    builder: (_, data) {
-                                      var unreadUpdate = data.data == null
-                                          ? null
-                                          : data.data as UpdateUnreadChatCount;
-                                      return ChatFilterItemHorizontal(
-                                          key: _filtersKeys[filter.id!],
-                                          id: filter.id!,
-                                          title: filter.title!,
-                                          unread:
-                                              unreadUpdate?.unreadCount ?? 0,
-                                          unreadUnmuted: unreadUpdate
-                                                  ?.unreadUnmutedCount ??
-                                              0,
-                                          onClick: (id) {
-                                            setState(() => active = id);
-                                            UIEvents.selectChatList(id == -1
-                                                ? ChatListMain()
-                                                : ChatListFilter(
-                                                    chatFilterId: id));
-                                          },
-                                          active: filter.id == active);
-                                    }))
-                        ]);
+                    var items = [
+                      for (final filter in filters)
+                        Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            child: StreamBuilder(
+                                stream: widget.client.unreadIn(
+                                    ChatListFilter(chatFilterId: filter.id)),
+                                builder: (_, data) {
+                                  var unreadUpdate = data.data == null
+                                      ? null
+                                      : data.data as UpdateUnreadChatCount;
+                                  return ChatFilterItemHorizontal(
+                                      key: _filtersKeys[filter.id!],
+                                      id: filter.id!,
+                                      title: filter.title!,
+                                      unread: unreadUpdate?.unreadCount ?? 0,
+                                      unreadUnmuted:
+                                          unreadUpdate?.unreadUnmutedCount ?? 0,
+                                      onClick: (id) {
+                                        setState(() => active = id);
+                                        UIEvents.selectChatList(id == -1
+                                            ? ChatListMain()
+                                            : ChatListFilter(chatFilterId: id));
+                                      },
+                                      active: filter.id == active);
+                                }))
+                    ];
+                    return SmoothDesktopListView(
+                      reverseScroll: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (_, i) => items[i],
+                      itemCount: items.length,
+                    );
                   }),
               AnimatedContainer(
                   curve: Curves.decelerate,
