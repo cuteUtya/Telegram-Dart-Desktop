@@ -88,12 +88,14 @@ class MessageDisplay extends StatelessWidget {
                 if (totalEmojis >= textUnwhitespaced.length &&
                     totalEmojis < 40) {
                   contentWidget = MessageDisplayTextEmojis(
-                      alignment: message.isOutgoing!
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                      emojis: textUnwhitespaced,
-                      infoSide: message.isOutgoing! ? Side.left : Side.right,
-                      messageInfo: _buildInfoWidget(false));
+                    alignment: message.isOutgoing!
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    emojis: textUnwhitespaced,
+                    infoSide: message.isOutgoing! ? Side.left : Side.right,
+                    messageInfo: _buildInfoWidget(false),
+                    replieWidget: _buildReplieWidget(false),
+                  );
                   break;
                 }
               }
