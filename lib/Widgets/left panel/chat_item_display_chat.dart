@@ -86,6 +86,7 @@ class ChatItemDisplay extends StatelessWidget {
                   if (!isSavedMessages && (client.getChat(chatId).lastMessage?.isOutgoing ?? false)) {
                     return CheckMark(
                       isReaded: value,
+                      selected: selected,
                     );
                   } else {
                     return const SizedBox.shrink();

@@ -82,6 +82,7 @@ TextInlineIconsColor: ref(RegularText);
 ChatPinIconColor: ref(RegularText);
 SelectedChatPinIconColor: ref(BaseColor);
 CheckMarkChatListColor: ref(OnlineColor);
+CheckMarkChatSelectedListColor: ref(BaseColor);
 ExpiredPhotoChatListIconColor: #F65B6D;
 Draft: ref(DangerColor);
 
