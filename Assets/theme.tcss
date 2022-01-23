@@ -115,7 +115,7 @@ RepliesMessageIconColor: #FFFFFFFF;
 MessageTextColor: #151515;
 MessageBubbleMineColor: #E6FEE4;
 MessageBubbleOtherColor: ref(BaseColor);
-MessageInfoBubbleColor: #4D151515;
+MessageInfoBubbleColor: #2A151515;
 CheckMarkNotMineColor: #FF989898;
 CheckMarkMineColor: #FF65AF5F;
 CheckMarkInFlowContainer: ref(InfoOutsideMessageColor);
