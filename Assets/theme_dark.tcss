@@ -95,7 +95,7 @@ UnreadFilterBubbleColor: ref(UnreadChatBubbleColor);
 UnreadFilterMentionBubbleColor: ref(UnreadMentionChatBubbleColor);
 ChatFilterActiveColor: ref(Accent);
 
-ChatClickAnimationEffectColor: #343434;
+ChatClickAnimationEffectColor: #25313D;
 ChatListBackgroundColor: ref(BaseColor);
 ChatCurrentlySelectedColor: linear(ref(Accent), #000000, 0.25);
 ChatCurrentlyUnselectedColor: ref(BaseColor);
