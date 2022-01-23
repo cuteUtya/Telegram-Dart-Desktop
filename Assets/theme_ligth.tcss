@@ -142,3 +142,4 @@ ActionBarTextColor: ref(RegularText);
 
 tw1nkleeModeBackgroundColor: #B3C98C;
 InputFieldTextColor: ref(RegularText);
+AdminTitleColor: ref(RegularText);

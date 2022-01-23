@@ -108,7 +108,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                 top: 0,
                 child: Text(
                   widget.adminTitle!,
-                  style: TextDisplay.regular16,
+                  style: TextDisplay.create(size: 16, customTextColor: ClientTheme.currentTheme.getField("AdminTitleColor")),
                 )),
           Positioned(
             right: 0,

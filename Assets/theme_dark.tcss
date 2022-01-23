@@ -140,3 +140,4 @@ FoldersAndSearchBackgroundColor: ref(BaseColor);
 ActionBarTextColor: ref(RegularText);
 tw1nkleeModeBackgroundColor: #0E1621;
 InputFieldTextColor: ref(RegularText);
+AdminTitleColor: ref(RegularText);
