@@ -8,7 +8,6 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/utils.dart';
-import 'package:myapp/tdlib/tdlib_utils.dart';
 
 class MessageContentPreview extends StatelessWidget {
   const MessageContentPreview(
@@ -182,6 +181,39 @@ class MessageContentPreview extends StatelessWidget {
 
             case InputMessageText:
               text = (content as InputMessageText).text!;
+              break;
+
+            case MessageDice:
+              var dice = message?.content as MessageDice;
+              String diceresult;
+              const map = {
+                "AgAD0QgAAuN4BAAB": "🍋",
+                "AgADywgAAuN4BAAB": "🍋",
+                "AgAD1wgAAuN4BAAB": "🍋",
+                "AgADyAgAAuN4BAAB": "7️⃣",
+                "AgAD1AgAAuN4BAAB": "7️⃣",
+                "AgAD0wgAAuN4BAAB": "7️⃣",
+                "AgADzQgAAuN4BAAB": "7️⃣",
+                "AgADxwgAAuN4BAAB": "7️⃣",
+                "AgADzggAAuN4BAAB": "7️⃣",
+                "AgAD0AgAAuN4BAAB": "🍒",
+                "AgADyggAAuN4BAAB": "🍒",
+                "AgAD1ggAAuN4BAAB": "🍒",
+                "AgADyQgAAuN4BAAB": "🍻",
+                "AgADzwgAAuN4BAAB": "🍻",
+                "AgAD1QgAAuN4BAAB": "🍻"
+              };
+              if (dice.finalState is DiceStickersRegular) {
+                diceresult =
+                    (dice.finalState as DiceStickersRegular).sticker!.emoji!;
+              } else {
+                var slotMachine = (dice.finalState as DiceStickersSlotMachine);
+                diceresult =
+                    "${map[slotMachine.leftReel!.sticker!.remote!.uniqueId!]} ${map[slotMachine.centerReel!.sticker!.remote!.uniqueId!]} ${map[slotMachine.rightReel!.sticker!.remote!.uniqueId!]}";
+              }
+
+              displayContent = TextDisplay.parseEmojiInString(
+                  "${dice.emoji} ($diceresult)", textStyle);
               break;
 
             case MessageAudio:
