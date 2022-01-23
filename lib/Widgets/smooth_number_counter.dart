@@ -43,7 +43,9 @@ class SmoothNumberCounterState extends State<SmoothNumberCounter> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(widget.mask.replaceFirst("{value}", number.toString()),
-        style: widget.textStyle);
+    return Text(
+      widget.mask.replaceFirst("{value}", number.toString()),
+      style: widget.textStyle,
+    );
   }
 }

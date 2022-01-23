@@ -8,8 +8,7 @@ class LoadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-      child: SizedBox(
-          width: 186, height: 186, child: Lottie.asset("Assets/Load.json")),
+      child: SizedBox(width: 186, height: 186, child: Lottie.asset("Assets/Load.json")),
       width: 200,
       height: 200,
       decoration: BoxDecoration(

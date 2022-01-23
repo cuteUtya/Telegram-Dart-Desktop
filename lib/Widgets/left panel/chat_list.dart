@@ -11,13 +11,14 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/utils.dart';
 
 class ChatListDisplay extends StatelessWidget {
-  const ChatListDisplay(
-      {Key? key,
-      required this.client,
-      required this.chatList,
-      required this.chatsPositions,
-      this.scrollController})
-      : super(key: key);
+  const ChatListDisplay({
+    Key? key,
+    required this.client,
+    required this.chatList,
+    required this.chatsPositions,
+    this.scrollController,
+  }) : super(key: key);
+
   final TelegramClient client;
   final ChatList chatList;
   final List<ChatOrder> chatsPositions;
@@ -34,42 +35,44 @@ class ChatListDisplay extends StatelessWidget {
     var sorted = sortChatsFor(chatsPositions, chatList);
     bool isMain = chatList is ChatListMain;
     return SmoothDesktopListView(
-        reverseScroll: true,
-        // controller: scrollController,
-        itemCount: sorted.length + (isMain ? 1 : 0) + 1,
-        itemBuilder: (_, index) {
-          if (isMain) {
-            if (index == 0) {
-              return ChatItemDisplayArchiveNotHidden(
-                  client: client, chats: chatsPositions);
-            }
-            index--;
+      reverseScroll: true,
+      itemCount: sorted.length + (isMain ? 1 : 0) + 1,
+      itemBuilder: (_, index) {
+        if (isMain) {
+          if (index == 0) {
+            return ChatItemDisplayArchiveNotHidden(client: client, chats: chatsPositions);
           }
-          if (index >= sorted.length) {
-            return Container(
-                alignment: Alignment.centerLeft,
-                child: Column(children: [
-                  const SeparatorLine(),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Total chats: ${sorted.length}",
-                          style: TextDisplay.regular18,
-                        )),
-                  )
-                ]));
-          }
-          var order = sorted[index];
-          return ChatItemDisplay(
-              key: Key(
-                  "ChatItemDisplay?id=${order.chatId}?chatList=${_chatListStr(chatList)}"),
-              onClick: () => UIEvents.selectChat(order.chatId, client),
-              chatId: order.chatId,
-              client: client,
-              chatList: chatList);
-        });
+          index--;
+        }
+        if (index >= sorted.length) {
+          return Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              children: [
+                const SeparatorLine(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Total chats: ${sorted.length}",
+                      style: TextDisplay.regular18,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        var order = sorted[index];
+        return ChatItemDisplay(
+          key: Key("ChatItemDisplay?id=${order.chatId}?chatList=${_chatListStr(chatList)}"),
+          onClick: () => UIEvents.selectChat(order.chatId, client),
+          chatId: order.chatId,
+          client: client,
+          chatList: chatList,
+        );
+      },
+    );
   }
 }

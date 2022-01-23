@@ -10,9 +10,7 @@ import 'package:myapp/utils.dart';
 import 'package:myapp/tdlib/client.dart';
 
 class IntroductionScreen extends StatefulWidget {
-  const IntroductionScreen(
-      {required this.client, required this.onNextClick, Key? key})
-      : super(key: key);
+  const IntroductionScreen({required this.client, required this.onNextClick, Key? key}) : super(key: key);
 
   final void Function() onNextClick;
   final TelegramClient client;
@@ -33,10 +31,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             text: TextSpan(children: [
               TextSpan(text: "An ", style: TextDisplay.regular20),
               TextSpan(text: "unofficial ", style: TextDisplay.bold20),
-              TextSpan(
-                  text:
-                      "Telegram client. Have additional features and nice look.",
-                  style: TextDisplay.regular20)
+              TextSpan(text: "Telegram client. Have additional features and nice look.", style: TextDisplay.regular20)
             ])),
         "Assets/Introduction/Logo.json"),
     _IntroductionScreenInfo(
@@ -44,11 +39,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
             textAlign: TextAlign.center,
             text: TextSpan(children: [
-              TextSpan(
-                  text: "Telegram messages are ", style: TextDisplay.regular20),
+              TextSpan(text: "Telegram messages are ", style: TextDisplay.regular20),
               TextSpan(text: "heavily encrypted ", style: TextDisplay.bold20),
-              TextSpan(
-                  text: "and can self-destruct.", style: TextDisplay.regular20)
+              TextSpan(text: "and can self-destruct.", style: TextDisplay.regular20)
             ])),
         "Assets/Introduction/Private.json"),
     _IntroductionScreenInfo(
@@ -56,9 +49,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
             textAlign: TextAlign.center,
             text: TextSpan(children: [
-              TextSpan(
-                  text: "Telegram lets you access your chats from multiple ",
-                  style: TextDisplay.regular20),
+              TextSpan(text: "Telegram lets you access your chats from multiple ", style: TextDisplay.regular20),
               TextSpan(text: "multiple ", style: TextDisplay.bold20),
               TextSpan(text: "devices.", style: TextDisplay.regular20),
             ])),
@@ -68,13 +59,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
             textAlign: TextAlign.center,
             text: TextSpan(children: [
-              TextSpan(
-                  text: "Telegram delivers messages ",
-                  style: TextDisplay.regular20),
+              TextSpan(text: "Telegram delivers messages ", style: TextDisplay.regular20),
               TextSpan(text: "faster ", style: TextDisplay.bold20),
-              TextSpan(
-                  text: "than any other application.",
-                  style: TextDisplay.regular20),
+              TextSpan(text: "than any other application.", style: TextDisplay.regular20),
             ])),
         "Assets/Introduction/Fast.json"),
     _IntroductionScreenInfo(
@@ -84,9 +71,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           text: TextSpan(children: [
             TextSpan(text: "Telegram has ", style: TextDisplay.regular20),
             TextSpan(text: "no limits ", style: TextDisplay.bold20),
-            TextSpan(
-                text: "on the size of your media and chats.",
-                style: TextDisplay.regular20),
+            TextSpan(text: "on the size of your media and chats.", style: TextDisplay.regular20),
           ]),
         ),
         "Assets/Introduction/Powerfull.json"),
@@ -97,8 +82,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           text: TextSpan(children: [
             TextSpan(text: "Telegram has an ", style: TextDisplay.regular20),
             TextSpan(text: "open API and source ", style: TextDisplay.bold20),
-            TextSpan(
-                text: "code free for everyone.", style: TextDisplay.regular20),
+            TextSpan(text: "code free for everyone.", style: TextDisplay.regular20),
           ]),
         ),
         "Assets/Introduction/Open.json"),
@@ -107,12 +91,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(children: [
-            TextSpan(
-                text: "Telegram keeps your messages ",
-                style: TextDisplay.regular20),
+            TextSpan(text: "Telegram keeps your messages ", style: TextDisplay.regular20),
             TextSpan(text: "safe ", style: TextDisplay.bold20),
-            TextSpan(
-                text: "from hacker attacks.", style: TextDisplay.regular20),
+            TextSpan(text: "from hacker attacks.", style: TextDisplay.regular20),
           ]),
         ),
         "Assets/Introduction/Secure.json"),
@@ -121,11 +102,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(children: [
-            TextSpan(
-                text: "Telegram groups can hold ",
-                style: TextDisplay.regular20),
-            TextSpan(
-                text: "up to 200,000 members. ", style: TextDisplay.bold20),
+            TextSpan(text: "Telegram groups can hold ", style: TextDisplay.regular20),
+            TextSpan(text: "up to 200,000 members. ", style: TextDisplay.bold20),
           ]),
         ),
         "Assets/Introduction/Social.json"),
@@ -143,8 +121,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   ];
 
   setT(double value) => setState(() {
-        value = clamp(value, current == 0 ? 0 : -1,
-            current == _screens.length - 1 ? 0 : 1);
+        value = clamp(value, current == 0 ? 0 : -1, current == _screens.length - 1 ? 0 : 1);
         _t = value;
       });
 
@@ -164,82 +141,85 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      RawKeyboardListener(
-          onKey: (kEvent) {
-            if (kEvent.isKeyPressed(LogicalKeyboardKey.arrowRight)) next();
-            if (kEvent.isKeyPressed(LogicalKeyboardKey.arrowLeft)) previus();
-          },
-          focusNode: FocusNode(debugLabel: "Button"),
-          child: GestureDetector(
-            onHorizontalDragStart: (draginfo) {
-              _dragStart = draginfo.globalPosition.dx;
+    return Stack(
+      children: [
+        RawKeyboardListener(
+            onKey: (kEvent) {
+              if (kEvent.isKeyPressed(LogicalKeyboardKey.arrowRight)) next();
+              if (kEvent.isKeyPressed(LogicalKeyboardKey.arrowLeft)) previus();
             },
-            onHorizontalDragEnd: (_) {
-              if (_t > 0.5) next();
-              if (_t < -0.5) previus();
-              setT(0);
-            },
-            onTap: next,
-            child: Column(
-              children: [
-                _IntroductionScreen(screenInfo: _screens[current]),
-                DotIndicator(
-                  dotsCount: _screens.length,
-                  currentDot: current,
-                  t: _t,
-                  onDotClick: setCurrent,
-                ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-            onHorizontalDragUpdate: (draginfo) {
-              setT(
-                (_dragStart - draginfo.globalPosition.dx) /
-                    (MediaQuery.of(context).size.width / 10),
-              );
-            },
-          )),
-      Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const SizedBox(height: 10),
-            DesktopButton(
-                weight: FontWeight.w500,
-                width: 300,
-                text: widget.client.getTranslation("lng_start_msgs"),
-                onPressed: () => widget.onNextClick()),
-          ],
+            focusNode: FocusNode(debugLabel: "Button"),
+            child: GestureDetector(
+              onHorizontalDragStart: (draginfo) {
+                _dragStart = draginfo.globalPosition.dx;
+              },
+              onHorizontalDragEnd: (_) {
+                if (_t > 0.5) next();
+                if (_t < -0.5) previus();
+                setT(0);
+              },
+              onTap: next,
+              child: Column(
+                children: [
+                  _IntroductionScreen(screenInfo: _screens[current]),
+                  DotIndicator(
+                    dotsCount: _screens.length,
+                    currentDot: current,
+                    t: _t,
+                    onDotClick: setCurrent,
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              onHorizontalDragUpdate: (draginfo) {
+                setT(
+                  (_dragStart - draginfo.globalPosition.dx) / (MediaQuery.of(context).size.width / 10),
+                );
+              },
+            )),
+        Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const SizedBox(height: 10),
+              DesktopButton(
+                  weight: FontWeight.w500,
+                  width: 300,
+                  text: widget.client.getTranslation("lng_start_msgs"),
+                  onPressed: () => widget.onNextClick()),
+            ],
+          ),
+          alignment: Alignment.bottomCenter,
+          margin: const EdgeInsets.only(bottom: 40),
         ),
-        alignment: Alignment.bottomCenter,
-        margin: const EdgeInsets.only(bottom: 40),
-      )
-    ]);
+      ],
+    );
   }
 }
 
 class _IntroductionScreen extends StatelessWidget {
-  const _IntroductionScreen({Key? key, required this.screenInfo})
-      : super(key: key);
+  const _IntroductionScreen({Key? key, required this.screenInfo}) : super(key: key);
   final _IntroductionScreenInfo screenInfo;
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-        child: Lottie.asset(screenInfo.lottieAnimationPath),
-        width: 256,
-        height: 256,
-        margin: const EdgeInsets.only(bottom: 20),
-      ),
-      Text(screenInfo.header, style: TextDisplay.introTitle),
-      Container(
+    return Column(
+      children: [
+        Container(
+          child: Lottie.asset(screenInfo.lottieAnimationPath),
+          width: 256,
+          height: 256,
+          margin: const EdgeInsets.only(bottom: 20),
+        ),
+        Text(screenInfo.header, style: TextDisplay.introTitle),
+        Container(
           child: screenInfo.text,
           width: 330,
           height: 64,
-          margin: const EdgeInsets.only(top: 12))
-    ]);
+          margin: const EdgeInsets.only(top: 12),
+        )
+      ],
+    );
   }
 }
 

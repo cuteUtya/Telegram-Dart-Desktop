@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 
 /// Widget that provide ease interface to hide or show [child] through [GlobalKey]
 class WidgetHider extends StatefulWidget {
-  const WidgetHider(
-      {Key? key,
-      required this.child,
-      this.emptyReplacer = const SizedBox.shrink(),
-      this.hiddenOnInit = false})
-      : super(key: key);
+  const WidgetHider({
+    Key? key,
+    required this.child,
+    this.emptyReplacer = const SizedBox.shrink(),
+    this.hiddenOnInit = false,
+  }) : super(key: key);
+
   final Widget child;
   final Widget emptyReplacer;
   final bool hiddenOnInit;

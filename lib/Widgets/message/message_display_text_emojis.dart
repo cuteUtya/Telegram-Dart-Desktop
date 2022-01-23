@@ -28,34 +28,41 @@ class MessageDisplayTextEmojis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClickableObject(
-        builder: (hover) => Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: alignment,
+      builder: (hover) => Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: alignment,
+        children: [
+          if (infoSide == Side.left)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (infoSide == Side.left)
-                  Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                    if (replieWidget != null) replieWidget!,
-                    if (hover)
-                      Container(
-                        child: messageInfo,
-                        margin: const EdgeInsets.only(top: 8),
-                      ),
-                  ]),
-                Text.rich(
-                  TextDisplay.emoji(emojis, const TextStyle(fontSize: 40)),
-                ),
-                if (infoSide == Side.right)
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (replieWidget != null) replieWidget!,
-                        if (hover)
-                          Container(
-                            child: messageInfo,
-                            margin: EdgeInsets.only(top: 8),
-                          ),
-                      ]),
+                if (replieWidget != null) replieWidget!,
+                if (hover)
+                  Container(
+                    child: messageInfo,
+                    margin: const EdgeInsets.only(top: 8),
+                  ),
               ],
-            ));
+            ),
+          Text.rich(
+            TextDisplay.emoji(
+              emojis,
+              const TextStyle(
+                fontSize: 40,
+              ),
+            ),
+          ),
+          if (infoSide == Side.right)
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              if (replieWidget != null) replieWidget!,
+              if (hover)
+                Container(
+                  child: messageInfo,
+                  margin: EdgeInsets.only(top: 8),
+                ),
+            ]),
+        ],
+      ),
+    );
   }
 }

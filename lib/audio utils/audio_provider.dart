@@ -12,6 +12,5 @@ class AudioProvider {
         player.dispose();
       }
     });
-    //player.dispose();
   }
 }

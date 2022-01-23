@@ -19,6 +19,7 @@ class FileImageDisplay extends StatelessWidget {
       this.priority = 5,
       this.emptyReplacer = const Center()})
       : super(key: key);
+
   final BoxShape containerShape;
   final int id;
   final int priority;
@@ -33,27 +34,32 @@ class FileImageDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RemoteFileBuilder(
-        emptyPlaceholder: emptyReplacer,
-        builder: (_, path) {
-          var file = io.File(path);
-          return isTGV
-              ? SvgPicture.memory(
-                  Uint8List.fromList(
-                      io.gzip.decode(file.readAsBytesSync().toList())),
-                  height: height,
-                  width: width,
-                  color: tgvColor,
-                  fit: BoxFit.cover)
-              : Container(
-                  width: width,
-                  height: height,
-                  decoration: BoxDecoration(
-                      borderRadius: borderRadius,
-                      shape: containerShape,
-                      image: DecorationImage(
-                          fit: BoxFit.cover, image: FileImage(file))));
-        },
-        fileId: id,
-        client: client);
+      emptyPlaceholder: emptyReplacer,
+      builder: (_, path) {
+        var file = io.File(path);
+        return isTGV
+            ? SvgPicture.memory(
+                Uint8List.fromList(io.gzip.decode(file.readAsBytesSync().toList())),
+                height: height,
+                width: width,
+                color: tgvColor,
+                fit: BoxFit.cover,
+              )
+            : Container(
+                width: width,
+                height: height,
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius,
+                  shape: containerShape,
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: FileImage(file),
+                  ),
+                ),
+              );
+      },
+      fileId: id,
+      client: client,
+    );
   }
 }

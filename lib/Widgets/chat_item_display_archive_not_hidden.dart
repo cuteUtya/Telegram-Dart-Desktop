@@ -11,9 +11,12 @@ import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
 
 class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
-  const ChatItemDisplayArchiveNotHidden(
-      {Key? key, required this.client, required this.chats})
-      : super(key: key);
+  const ChatItemDisplayArchiveNotHidden({
+    Key? key,
+    required this.client,
+    required this.chats,
+  }) : super(key: key);
+
   final TelegramClient client;
   final List<ChatOrder> chats;
   @override
@@ -22,47 +25,61 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
     for (var element in sortChatsFor(chats, ChatListArchive())) {
       var chat = client.getChat(element.chatId);
       content.addAll(TextDisplay.parseEmojiInString(
-              chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
-              TextDisplay.create(
-                  textColor: TextColor.RegularText,
-                  size: 18,
-                  fontWeight: (chat.unreadCount ?? 0) <= 0
-                      ? FontWeight.normal
-                      : FontWeight.bold)) +
+            chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
+            TextDisplay.create(
+              textColor: TextColor.RegularText,
+              size: 18,
+              fontWeight: (chat.unreadCount ?? 0) <= 0 ? FontWeight.normal : FontWeight.bold,
+            ),
+          ) +
           [
             const WidgetSpan(child: SizedBox(width: 4)),
             WidgetSpan(
-                child: StreamBuilder(
-                    stream: client.unreadCountOf(chat.id!),
-                    builder: (_, data) => UnreadCountBubble(
-                        fontSize: 14,
-                        count: (data.data ?? chat.unreadCount!) as int,
-                        important: false /*TODO true if have notify */))),
+              child: StreamBuilder(
+                stream: client.unreadCountOf(chat.id!),
+                builder: (_, data) => UnreadCountBubble(
+                  fontSize: 14,
+                  count: (data.data ?? chat.unreadCount!) as int,
+                  important: false /*TODO true if have notify */,
+                ),
+              ),
+            ),
             if (chat.unreadCount! > 0)
-              TextSpan(text: ", ", style: TextDisplay.create(size: 18)),
+              TextSpan(
+                text: ", ",
+                style: TextDisplay.create(size: 18),
+              ),
           ]);
     }
     return ChatItemBase(
-        selected: false,
-        onClick: () => UIEvents.openArchive(),
-        key: UniqueKey(),
-        title: Row(children: [
-          Text(client.getTranslation("lng_archived_name"),
-              style: TextDisplay.chatTittle),
-          const Spacer()
-        ]),
-        content: Expanded(
-            child: Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Padding(
-                    padding: const EdgeInsets.only(right: 0),
-                    child: RichText(
-                        maxLines: 2, text: TextSpan(children: content))))),
-        chatPic: UserpicIcon(
-            color:
-                ClientTheme.currentTheme.getField("ArchiveNotHiddenBackColor"),
-            icon: Icons.archive,
-            iconColor: ClientTheme.currentTheme
-                .getField("ArchoveNotHiddenIconColor")));
+      selected: false,
+      onClick: () => UIEvents.openArchive(),
+      key: UniqueKey(),
+      title: Row(
+        children: [
+          Text(client.getTranslation("lng_archived_name"), style: TextDisplay.chatTittle),
+          const Spacer(),
+        ],
+      ),
+      content: Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: Padding(
+            padding: const EdgeInsets.only(right: 0),
+            child: RichText(
+              maxLines: 2,
+              text: TextSpan(children: content),
+            ),
+          ),
+        ),
+      ),
+      chatPic: UserpicIcon(
+        color: ClientTheme.currentTheme.getField("ArchiveNotHiddenBackColor"),
+        icon: Icons.archive,
+        iconColor: ClientTheme.currentTheme.getField(
+          "ArchoveNotHiddenIconColor",
+        ),
+      ),
+    );
   }
 }

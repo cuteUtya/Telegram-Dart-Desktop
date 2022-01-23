@@ -27,6 +27,7 @@ class SmoothDesktopListView extends StatefulWidget {
       this.clipBehavior = Clip.hardEdge,
       this.restorationId})
       : super(key: key);
+
   final Axis scrollDirection;
   final bool reverse;
   final bool reverseScroll;

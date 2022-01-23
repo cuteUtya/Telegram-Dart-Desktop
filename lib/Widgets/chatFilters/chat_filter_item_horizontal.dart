@@ -12,6 +12,7 @@ class ChatFilterItemHorizontal extends StatelessWidget {
       required this.unread,
       required this.unreadUnmuted})
       : super(key: key);
+
   final int id;
   final String title;
   final bool active;
@@ -26,27 +27,38 @@ class ChatFilterItemHorizontal extends StatelessWidget {
       duration: const Duration(milliseconds: 250),
       height: 2,
       child: GestureDetector(
-          onTap: () => onClick(id),
-          child: Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Column(mainAxisSize: MainAxisSize.max, children: [
-                Row(children: [
+        onTap: () => onClick(id),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                children: [
                   RichText(
-                      text: TextSpan(
-                          children: TextDisplay.parseEmojiInString(
-                              title,
-                              TextDisplay.create(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: TextDisplay.greaterImportance,
-                                  size: 20,
-                                  textColor: active
-                                      ? TextColor.Accent
-                                      : TextColor.RegularText)))),
+                    text: TextSpan(
+                      children: TextDisplay.parseEmojiInString(
+                        title,
+                        TextDisplay.create(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: TextDisplay.greaterImportance,
+                          size: 20,
+                          textColor: active ? TextColor.Accent : TextColor.RegularText,
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(width: 4),
                   UnreadCountBubble(
-                      count: unread, important: unreadUnmuted > 0),
-                ]),
-              ]))),
+                    count: unread,
+                    important: unreadUnmuted > 0,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

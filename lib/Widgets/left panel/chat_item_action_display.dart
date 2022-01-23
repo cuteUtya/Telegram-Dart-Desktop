@@ -15,6 +15,7 @@ class ChatItemActionDisplay extends StatelessWidget {
       required this.isPrivate,
       required this.chatid})
       : super(key: key);
+
   final bool chatSelected;
   final List<UpdateChatAction> actions;
   final TelegramClient client;
@@ -67,49 +68,40 @@ class ChatItemActionDisplay extends StatelessWidget {
         var firstAction = actions[0].action;
         if (actions.length <= 1) {
           if (typesWithProgress.contains(firstAction.runtimeType)) {
-            animation = createUploadAnimation(firstAction.runtimeType,
-                (firstAction as dynamic).progress, chatid);
+            animation = createUploadAnimation(firstAction.runtimeType, (firstAction as dynamic).progress, chatid);
           }
-          transitionStr = (isPrivate
-              ? actionTransitionPrivate
-              : actionTransitionsChat)[firstAction.runtimeType];
+          transitionStr = (isPrivate ? actionTransitionPrivate : actionTransitionsChat)[firstAction.runtimeType];
         } else {
-          transitionStr =
-              actions.length == 2 ? "lng_users_typing" : "lng_many_typing";
+          transitionStr = actions.length == 2 ? "lng_users_typing" : "lng_many_typing";
           secondUser = actions[1].senderId!;
         }
 
-        var textStyle = chatSelected
-            ? TextDisplay.chatItemAccentSelected
-            : TextDisplay.chatItemAccent;
+        var textStyle = chatSelected ? TextDisplay.chatItemAccentSelected : TextDisplay.chatItemAccent;
 
         return StreamBuilder(
             stream: secondUser == null ? null : client.senderName(secondUser),
             builder: (_, sSenderName) {
               return RichText(
                 text: TextSpan(
-                    children: TextDisplay.parseEmojiInString(
-                            transitionStr != null
-                                ? client.getTranslation(transitionStr,
-                                    replacing: {
-                                      "{user}": firstName,
-                                      "{emoji}": (firstAction
-                                              is ChatActionWatchingAnimations)
-                                          ? firstAction.emoji ?? "🍆"
-                                          : "",
-                                      "{second_user}":
-                                          sSenderName.data.toString(),
-                                      "{count}": actions.length.toString()
-                                    },
-                                    itemsCount: actions.length)
-                                : "¯\\_(ツ)_/¯",
-                            textStyle) +
-                        [
-                          const WidgetSpan(child: SizedBox(width: 2)),
-                          WidgetSpan(
-                              child: animation ??
-                                  TextAnimation.fourPoints(textStyle))
-                        ]),
+                  children: TextDisplay.parseEmojiInString(
+                          transitionStr != null
+                              ? client.getTranslation(transitionStr,
+                                  replacing: {
+                                    "{user}": firstName,
+                                    "{emoji}": (firstAction is ChatActionWatchingAnimations) ? firstAction.emoji ?? "🍆" : "",
+                                    "{second_user}": sSenderName.data.toString(),
+                                    "{count}": actions.length.toString()
+                                  },
+                                  itemsCount: actions.length)
+                              : "¯\\_(ツ)_/¯",
+                          textStyle) +
+                      [
+                        const WidgetSpan(child: SizedBox(width: 2)),
+                        WidgetSpan(
+                          child: animation ?? TextAnimation.fourPoints(textStyle),
+                        ),
+                      ],
+                ),
               );
             });
       },
@@ -126,9 +118,10 @@ class ChatItemActionDisplay extends StatelessWidget {
     keys[action]![chatId]!.currentState?.setNewTarget(progress);
 
     return SmoothNumberCounter(
-        key: keys[action]![chatid],
-        mask: "— {value}%",
-        initialValue: progress,
-        textStyle: TextDisplay.chatItemAccent);
+      key: keys[action]![chatid],
+      mask: "— {value}%",
+      initialValue: progress,
+      textStyle: TextDisplay.chatItemAccent,
+    );
   }
 }

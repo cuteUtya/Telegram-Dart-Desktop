@@ -7,52 +7,41 @@ import 'package:myapp/utils.dart';
 class TextDisplay {
   static String _getEmojiFont() => "TwitterColorEmoji";
 
-  static TextStyle get title => create(
-      size: 24, fontWeight: FontWeight.w600, textColor: TextColor.HeaderMain);
-  static TextStyle get additional =>
-      create(textColor: TextColor.AdditionalTextColor, size: 16);
-  static TextStyle get introTitle =>
-      create(size: 26, textColor: TextColor.Accent);
-  static TextStyle get draftText =>
-      create(size: 18, textColor: TextColor.Draft);
+  static TextStyle get title => create(size: 24, fontWeight: FontWeight.w600, textColor: TextColor.HeaderMain);
+  static TextStyle get additional => create(textColor: TextColor.AdditionalTextColor, size: 16);
+  static TextStyle get introTitle => create(size: 26, textColor: TextColor.Accent);
+  static TextStyle get draftText => create(size: 18, textColor: TextColor.Draft);
   static TextStyle get regular16 => create(size: 16);
   static TextStyle get regular18 => create(size: 18);
   static TextStyle get regular20 => create(size: 20);
   static TextStyle get bold18 => create(size: 18, fontWeight: FontWeight.bold);
   static TextStyle get bold20 => create(size: 20, fontWeight: FontWeight.bold);
-  static TextStyle get actionBarOffline =>
-      create(size: 16, textColor: TextColor.HeaderSecondary);
+  static TextStyle get actionBarOffline => create(size: 16, textColor: TextColor.HeaderSecondary);
   static const String greaterImportance = "Ubuntu";
   static const String regular = "SourceSansPro";
   static const String monospace = "CodeSourcePro";
   static const String emojiFont = "emoji";
 
-  static TextStyle get chatTittleSelected => create(
-      size: 18,
-      fontWeight: FontWeight.bold,
-      textColor: TextColor.SelectedHeaderMain,
-      fontFamily: greaterImportance);
+  static TextStyle get chatTittleSelected =>
+      create(size: 18, fontWeight: FontWeight.bold, textColor: TextColor.SelectedHeaderMain, fontFamily: greaterImportance);
 
-  static TextStyle get chatTittle => create(
-      size: 18,
-      fontWeight: FontWeight.bold,
-      textColor: TextColor.HeaderMain,
-      fontFamily: greaterImportance);
-  static TextStyle get chatItemAccent =>
-      create(size: 18, textColor: TextColor.Accent);
-  static TextStyle get chatItemAccentSelected =>
-      create(size: 18, textColor: TextColor.White);
+  static TextStyle get chatTittle =>
+      create(size: 18, fontWeight: FontWeight.bold, textColor: TextColor.HeaderMain, fontFamily: greaterImportance);
+  static TextStyle get chatItemAccent => create(size: 18, textColor: TextColor.Accent);
+  static TextStyle get chatItemAccentSelected => create(size: 18, textColor: TextColor.White);
 
   static InlineSpan emoji(String emoji, TextStyle style) {
     return TextSpan(
-        text: emoji,
-        style: TextStyle(
-            fontWeight: style.fontWeight,
-            color: style.color,
-            fontFamily: _getEmojiFont(),
-            fontSize: style.fontSize,
-            shadows: style.shadows,
-            decoration: style.decoration));
+      text: emoji,
+      style: TextStyle(
+        fontWeight: style.fontWeight,
+        color: style.color,
+        fontFamily: _getEmojiFont(),
+        fontSize: style.fontSize,
+        shadows: style.shadows,
+        decoration: style.decoration,
+      ),
+    );
   }
 
   static Map<Type?, String> replacementPairs = {
@@ -68,18 +57,30 @@ class TextDisplay {
   };
 
   static Map<String, TextStyle Function()> stylePairs = {
-    "B": () => create(fontWeight: FontWeight.bold),
+    "B": () => create(
+          fontWeight: FontWeight.bold,
+        ),
     "-": () => create(),
-    "M": () => create(fontFamily: monospace),
-    "S": () => create(decoration: TextDecoration.lineThrough),
-    "U": () => create(decoration: TextDecoration.underline),
-    "I": () => create(fontStyle: FontStyle.italic),
+    "M": () => create(
+          fontFamily: monospace,
+        ),
+    "S": () => create(
+          decoration: TextDecoration.lineThrough,
+        ),
+    "U": () => create(
+          decoration: TextDecoration.underline,
+        ),
+    "I": () => create(
+          fontStyle: FontStyle.italic,
+        ),
     "L": () => create(
-        decoration: TextDecoration.underline,
-        customTextColor: ClientTheme.currentTheme.getField("HyperlinkColor")),
+          decoration: TextDecoration.underline,
+          customTextColor: ClientTheme.currentTheme.getField("HyperlinkColor"),
+        ),
     "R": () => create(
-        decoration: TextDecoration.underline,
-        customTextColor: ClientTheme.currentTheme.getField("HyperlinkColor")),
+          decoration: TextDecoration.underline,
+          customTextColor: ClientTheme.currentTheme.getField("HyperlinkColor"),
+        ),
   };
 
   static final List<Type> _interactiveTextEnteties = [
@@ -88,22 +89,17 @@ class TextDisplay {
   ];
 
   static List<InlineSpan> parseFormattedText(FormattedText text,
-      [double size = 20,
-      Color? textColor,
-      bool interactiveEnable = false,
-      Function(String)? onUrlClick]) {
+      [double size = 20, Color? textColor, bool interactiveEnable = false, Function(String)? onUrlClick]) {
     String str = "-" * text.text!.length;
     for (int i = 0; i < (text.entities?.length ?? 0); i++) {
-      if (!interactiveEnable &&
-          _interactiveTextEnteties
-              .contains(text.entities![i].type.runtimeType)) {
+      if (!interactiveEnable && _interactiveTextEnteties.contains(text.entities![i].type.runtimeType)) {
         text.entities![i].type = null;
       }
       str = str.replaceRange(
-          text.entities![i].offset!,
-          text.entities![i].offset! + text.entities![i].length!,
-          (replacementPairs[text.entities![i].type.runtimeType] ?? "/") *
-              text.entities![i].length!);
+        text.entities![i].offset!,
+        text.entities![i].offset! + text.entities![i].length!,
+        (replacementPairs[text.entities![i].type.runtimeType] ?? "/") * text.entities![i].length!,
+      );
     }
 
     List<InlineSpan> result = [];
@@ -111,11 +107,9 @@ class TextDisplay {
     var matches = RegExp(r"(?=(.))\1{1,}", unicode: true).allMatches(str);
     int entetieIndex = 0;
     for (var element in matches) {
-      var textEntety =
-          str[element.start] == "-" ? null : (text.entities![entetieIndex]);
+      var textEntety = str[element.start] == "-" ? null : (text.entities![entetieIndex]);
       var style = stylePairs[str[element.start]];
-      var recognizer = textEntety?.type is TextEntityTypeTextUrl ||
-              textEntety?.type is TextEntityTypeUrl
+      var recognizer = textEntety?.type is TextEntityTypeTextUrl || textEntety?.type is TextEntityTypeUrl
           ? (TapGestureRecognizer()
             ..onTap = () {
               if (onUrlClick != null) {
@@ -124,22 +118,27 @@ class TextDisplay {
                     onUrlClick((textEntety.type as TextEntityTypeTextUrl).url!);
                     break;
                   case TextEntityTypeUrl:
-                    onUrlClick(text.text!.substring(textEntety.offset!,
-                        textEntety.offset! + textEntety.length!));
+                    onUrlClick(text.text!.substring(textEntety.offset!, textEntety.offset! + textEntety.length!));
                     break;
                 }
               }
             })
           : null;
       var textStyle = style == null
-          ? create(size: size, customTextColor: textColor)
+          ? create(
+              size: size,
+              customTextColor: textColor,
+            )
           : style();
       textStyle = textStyle.copyWith(
-          color: textStyle.color == null ? textColor : null, fontSize: size);
+        color: textStyle.color == null ? textColor : null,
+        fontSize: size,
+      );
       var parsedStr = parseEmojiInString(
-          text.text!.substring(element.start, element.end),
-          textStyle,
-          recognizer);
+        text.text!.substring(element.start, element.end),
+        textStyle,
+        recognizer,
+      );
       result.addAll(parsedStr);
       if (str[element.start] != "-") {
         entetieIndex++;
@@ -149,8 +148,7 @@ class TextDisplay {
     return result;
   }
 
-  static List<InlineSpan> parseEmojiInString(String text,
-      [TextStyle? style, GestureRecognizer? recognizer]) {
+  static List<InlineSpan> parseEmojiInString(String text, [TextStyle? style, GestureRecognizer? recognizer]) {
     style ??= create();
     List<InlineSpan> result = [];
     var matches = emojiRegex.allMatches(text);
@@ -160,23 +158,34 @@ class TextDisplay {
       result.add(TextSpan(text: text, style: style, recognizer: recognizer));
       pos = text.length;
     }
-    matches.forEach((element) {
+    for (var element in matches) {
       if (pos != element.start) {
-        result.add(TextSpan(
+        result.add(
+          TextSpan(
             text: text.substring(pos, element.start),
             style: style,
-            recognizer: recognizer));
+            recognizer: recognizer,
+          ),
+        );
         pos = element.start;
       }
-      result.add(emoji(text.substring(element.start, element.end), style!));
+      result.add(
+        emoji(
+          text.substring(element.start, element.end),
+          style,
+        ),
+      );
       pos = element.end;
-    });
+    }
 
     if (pos != text.length) {
-      result.add(TextSpan(
+      result.add(
+        TextSpan(
           text: text.substring(pos, text.length),
           style: style,
-          recognizer: recognizer));
+          recognizer: recognizer,
+        ),
+      );
     }
 
     return result;
@@ -209,8 +218,12 @@ class TextDisplay {
     );
   }
 
-  static Color getColor(TextColor clr) => ClientTheme.currentTheme
-      .getField(clr.toString().replaceFirst("TextColor.", "")) as Color;
+  static Color getColor(TextColor clr) => ClientTheme.currentTheme.getField(
+        clr.toString().replaceFirst(
+              "TextColor.",
+              "",
+            ),
+      ) as Color;
 }
 
 enum TextColor {
@@ -228,5 +241,5 @@ enum TextColor {
   Draft,
   White,
   OnlineColor,
-  MessageTextColor
+  MessageTextColor,
 }

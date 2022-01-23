@@ -16,44 +16,37 @@ class ChatDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: UIEvents.selectedChat(),
-        builder: (_, data) {
-          var chat =
-              data.data != null ? client.getChat(data.data as int) : null;
-          return Stack(children: [
+      stream: UIEvents.selectedChat(),
+      builder: (_, data) {
+        var chat = data.data != null ? client.getChat(data.data as int) : null;
+        return Stack(
+          children: [
             if (tw1nkleeModeEnable)
               BakgroundDisplay(
-                background: Background(
-                    type: BackgroundTypeFill(
-                        fill: BackgroundFillSolid(color: 0xFFB3C98C))),
+                background: Background(type: BackgroundTypeFill(fill: BackgroundFillSolid(color: 0xFFB3C98C))),
                 client: client,
               )
             else
               StreamBuilder(
-                  stream: client.selectedBackground,
-                  builder: (_, data) {
-                    if (data.hasData) {
-                      var update = data.data == null
-                          ? null
-                          : data.data as UpdateSelectedBackground;
-                      if (update?.background == null) {
-                        client.send(GetBackgrounds()).then((backs) =>
-                            client.send(SetBackground(
-                                forDarkTheme: update?.forDarkTheme,
-                                background: InputBackgroundRemote(
-                                    backgroundId: backs is Backgrounds
-                                        ? backs.backgrounds![0].id!
-                                        : (backs as Background).id!))));
-                        return const SizedBox.shrink();
-                      }
-                      return BakgroundDisplay(
-                          client: client,
-                          //TODO correct work with dark and light themes
-                          background: (data.data as UpdateSelectedBackground)
-                              .background!);
+                stream: client.selectedBackground,
+                builder: (_, data) {
+                  if (data.hasData) {
+                    var update = data.data == null ? null : data.data as UpdateSelectedBackground;
+                    if (update?.background == null) {
+                      client.send(GetBackgrounds()).then((backs) => client.send(SetBackground(
+                          forDarkTheme: update?.forDarkTheme,
+                          background: InputBackgroundRemote(
+                              backgroundId: backs is Backgrounds ? backs.backgrounds![0].id! : (backs as Background).id!))));
+                      return const SizedBox.shrink();
                     }
-                    return const SizedBox.shrink();
-                  }),
+                    return BakgroundDisplay(
+                        client: client,
+                        //TODO correct work with dark and light themes
+                        background: (data.data as UpdateSelectedBackground).background!);
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             if (chat != null)
               Container(
                   margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
@@ -61,18 +54,20 @@ class ChatDisplay extends StatelessWidget {
                     Expanded(
                         child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child:
-                                MessageList(chatId: chat.id!, client: client))),
+                            child: MessageList(chatId: chat.id!, client: client))),
                     InputField(client: client)
                   ])),
             if (chat != null)
               Container(
-                  alignment: Alignment.topCenter,
-                  child: ActionBarDisplay(
-                    client: client,
-                    chat: chat,
-                  )),
-          ]);
-        });
+                alignment: Alignment.topCenter,
+                child: ActionBarDisplay(
+                  client: client,
+                  chat: chat,
+                ),
+              ),
+          ],
+        );
+      },
+    );
   }
 }

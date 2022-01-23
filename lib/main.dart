@@ -17,7 +17,7 @@ void main() async {
   /* await client.send(SetLogStream(
       logStream: LogStreamFile(
           maxFileSize: 100000000, path: "/home/timur/tdlib_logs.txt")));*/
-  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 0));
+  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 2));
 
   runApp(MaterialApp(home: Material(child: App(client: client))));
 }
@@ -31,7 +31,7 @@ class App extends StatelessWidget {
         child: Stack(
       children: [
         AutorizationRouter(client: client),
-        BigStickerOverlay(client: client)
+        BigStickerOverlay(client: client),
       ],
     ));
   }

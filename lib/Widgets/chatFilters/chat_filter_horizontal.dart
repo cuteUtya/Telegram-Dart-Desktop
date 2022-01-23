@@ -11,8 +11,11 @@ import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/global_key_extenstion.dart';
 
 class ChatFilterHorizontal extends StatefulWidget {
-  const ChatFilterHorizontal({Key? key, required this.client})
-      : super(key: key);
+  const ChatFilterHorizontal({
+    Key? key,
+    required this.client,
+  }) : super(key: key);
+
   final TelegramClient client;
   @override
   State<StatefulWidget> createState() => ChatFilterHorizontalState();
@@ -36,17 +39,12 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                   stream: widget.client.filters(),
                   builder: (_, data) {
                     var filters = <ChatFilterInfo>[
-                      ChatFilterInfo(
-                          id: -1,
-                          title:
-                              widget.client.getTranslation("lng_filters_all"))
+                      ChatFilterInfo(id: -1, title: widget.client.getTranslation("lng_filters_all"))
                     ];
                     if (data.hasData) {
                       var f = data.data as List<ChatFilterInfo>;
-                      UIEvents.changeChatList(<ChatList>[ChatListMain()] +
-                          (f
-                              .map((e) => ChatListFilter(chatFilterId: e.id!))
-                              .toList()));
+                      UIEvents.changeChatList(
+                          <ChatList>[ChatListMain()] + (f.map((e) => ChatListFilter(chatFilterId: e.id!)).toList()));
                       filters.addAll(f);
                     }
                     for (var e in filters) {
@@ -57,29 +55,26 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                     var items = [
                       for (final filter in filters)
                         Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            child: StreamBuilder(
-                                stream: widget.client.unreadIn(
-                                    ChatListFilter(chatFilterId: filter.id)),
-                                builder: (_, data) {
-                                  var unreadUpdate = data.data == null
-                                      ? null
-                                      : data.data as UpdateUnreadChatCount;
-                                  return ChatFilterItemHorizontal(
-                                      key: _filtersKeys[filter.id!],
-                                      id: filter.id!,
-                                      title: filter.title!,
-                                      unread: unreadUpdate?.unreadCount ?? 0,
-                                      unreadUnmuted:
-                                          unreadUpdate?.unreadUnmutedCount ?? 0,
-                                      onClick: (id) {
-                                        setState(() => active = id);
-                                        UIEvents.selectChatList(id == -1
-                                            ? ChatListMain()
-                                            : ChatListFilter(chatFilterId: id));
-                                      },
-                                      active: filter.id == active);
-                                }))
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          child: StreamBuilder(
+                            stream: widget.client.unreadIn(ChatListFilter(chatFilterId: filter.id)),
+                            builder: (_, data) {
+                              var unreadUpdate = data.data == null ? null : data.data as UpdateUnreadChatCount;
+                              return ChatFilterItemHorizontal(
+                                key: _filtersKeys[filter.id!],
+                                id: filter.id!,
+                                title: filter.title!,
+                                unread: unreadUpdate?.unreadCount ?? 0,
+                                unreadUnmuted: unreadUpdate?.unreadUnmutedCount ?? 0,
+                                onClick: (id) {
+                                  setState(() => active = id);
+                                  UIEvents.selectChatList(id == -1 ? ChatListMain() : ChatListFilter(chatFilterId: id));
+                                },
+                                active: filter.id == active,
+                              );
+                            },
+                          ),
+                        )
                     ];
                     return SmoothDesktopListView(
                       reverseScroll: true,
@@ -93,23 +88,17 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                   duration: const Duration(milliseconds: 300),
                   alignment: Alignment.bottomCenter,
                   decoration: BoxDecoration(
-                      color: ClientTheme.currentTheme
-                          .getField("ChatFilterActiveColor"),
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(4))),
+                      color: ClientTheme.currentTheme.getField("ChatFilterActiveColor"),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(4))),
                   height: 4,
                   width: _getCurrentFolderWidth(),
-                  margin: EdgeInsets.only(
-                      left: max(0, _getCurrentFolderLeftMargin()), top: 32))
+                  margin: EdgeInsets.only(left: max(0, _getCurrentFolderLeftMargin()), top: 32))
             ])));
   }
 
   double _getCurrentFolderWidth() {
     var margin = _getCurrentFolderLeftMargin();
-    return max(
-        0,
-        ((_filtersKeys[active]?.globalPaintBounds?.width) ?? 0) +
-            (margin < 0 ? margin : 0));
+    return max(0, ((_filtersKeys[active]?.globalPaintBounds?.width) ?? 0) + (margin < 0 ? margin : 0));
   }
 
   double _getCurrentFolderLeftMargin() {

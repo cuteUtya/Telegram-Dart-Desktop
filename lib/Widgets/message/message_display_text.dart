@@ -68,42 +68,38 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
             child: widget.additionalContent,
           );
 
-    var contentText =
-        widget.text ?? (widget.message.content as MessageText).text!;
+    var contentText = widget.text ?? (widget.message.content as MessageText).text!;
 
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(
-            contentText,
-            20,
-            ClientTheme.currentTheme.getField("MessageTextColor"),
-            true,
-            (s) => HttpUrlsUtils.openLink(s)));
+            contentText, 20, ClientTheme.currentTheme.getField("MessageTextColor"), true, (s) => HttpUrlsUtils.openLink(s)));
     return LayoutBuilder(builder: (context, boxCons) {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
-      var boxes = paragraph.getBoxesForSelection(
-          TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));
-      final lastBox =
-          boxes.lastOrNull ?? TextBox.fromLTRBD(0, 0, 0, 0, TextDirection.ltr);
-      final fitsLastLine =
-          boxCons.maxWidth - lastBox.right > (msgInfoBubbleSize?.width ?? 30);
+      var boxes = paragraph.getBoxesForSelection(TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));
+      final lastBox = boxes.lastOrNull ?? TextBox.fromLTRBD(0, 0, 0, 0, TextDirection.ltr);
+      final fitsLastLine = boxCons.maxWidth - lastBox.right > (msgInfoBubbleSize?.width ?? 30);
       return Stack(
         children: [
           /// fake text with title and admin titles that stratch message bubble1
-          if (widget.adminTitle != null &&
-              !widget.message.isOutgoing! &&
-              widget.senderName != null)
+          if (widget.adminTitle != null && !widget.message.isOutgoing! && widget.senderName != null)
             Text.rich(TextSpan(children: [
               TextSpan(
-                  text: widget.senderName!,
-                  style:
-                      const TextStyle(fontSize: 18, color: Colors.transparent)),
+                text: widget.senderName!,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.transparent,
+                ),
+              ),
               const WidgetSpan(
                   child: SizedBox(
                 width: 12,
               )),
               TextSpan(
                 text: widget.adminTitle,
-                style: const TextStyle(fontSize: 16, color: Colors.transparent),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.transparent,
+                ),
               )
             ])),
           if (widget.adminTitle != null && !widget.message.isOutgoing!)
@@ -122,55 +118,45 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
               key: _msgInfoWidgetKey,
             ),
           ),
-          Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (widget.senderName != null)
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                            children: TextDisplay.parseEmojiInString(
-                                widget.senderName!,
-                                TextDisplay.create(
-                                    customTextColor: getPeerColor(
-                                        getSenderId(widget.message.senderId!)!,
-                                        'b'),
-                                    fontWeight: FontWeight.bold,
-                                    size: 18,
-                                    textColor: TextColor.HeaderMain,
-                                    fontFamily:
-                                        TextDisplay.greaterImportance))),
-                      )
-                    ],
-                  ),
-                if (widget.replieWidget != null) widget.replieWidget!,
-                if (widget.additionalContent != null &&
-                    widget.additionalContentPlace == AdditionalContentPlace.top)
-                  additionalInfo,
-                if (contentText.text?.isNotEmpty ?? false)
-                  Container(
-                    child: CopyableText(parsedEntetiyes),
-                    margin: EdgeInsets.only(
-                        bottom: boxCons.maxWidth - lastBox.right <
-                                (msgInfoBubbleSize?.width ?? 30)
-                            ? 16
-                            : 0),
-                  ),
-                if (widget.additionalContent != null &&
-                    widget.additionalContentPlace ==
-                        AdditionalContentPlace.bottom)
-                  additionalInfo,
-              ]),
+          Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+            if (widget.senderName != null)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      children: TextDisplay.parseEmojiInString(
+                        widget.senderName!,
+                        TextDisplay.create(
+                          customTextColor: getPeerColor(getSenderId(widget.message.senderId!)!, 'b'),
+                          fontWeight: FontWeight.bold,
+                          size: 18,
+                          textColor: TextColor.HeaderMain,
+                          fontFamily: TextDisplay.greaterImportance,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            if (widget.replieWidget != null) widget.replieWidget!,
+            if (widget.additionalContent != null && widget.additionalContentPlace == AdditionalContentPlace.top) additionalInfo,
+            if (contentText.text?.isNotEmpty ?? false)
+              Container(
+                child: CopyableText(parsedEntetiyes),
+                margin: EdgeInsets.only(
+                  bottom: boxCons.maxWidth - lastBox.right < (msgInfoBubbleSize?.width ?? 30) ? 16 : 0,
+                ),
+              ),
+            if (widget.additionalContent != null && widget.additionalContentPlace == AdditionalContentPlace.bottom)
+              additionalInfo,
+          ]),
           AnimatedContainer(
             duration: const Duration(milliseconds: 100),
             curve: Curves.easeOutBack,
-            width: lastBox.right +
-                (!fitsLastLine ? 0 : (msgInfoBubbleSize?.width ?? 50) + 12),
-          )
+            width: lastBox.right + (!fitsLastLine ? 0 : (msgInfoBubbleSize?.width ?? 50) + 12),
+          ),
         ],
       );
     });

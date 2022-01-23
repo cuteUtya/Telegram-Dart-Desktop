@@ -6,13 +6,14 @@ import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/widget_sizer.dart';
 
 class MessageStickerDisplay extends StatelessWidget {
-  const MessageStickerDisplay(
-      {Key? key,
-      required this.message,
-      required this.client,
-      required this.infoWidget,
-      required this.replieWidget})
-      : super(key: key);
+  const MessageStickerDisplay({
+    Key? key,
+    required this.message,
+    required this.client,
+    required this.infoWidget,
+    required this.replieWidget,
+  }) : super(key: key);
+
   final Message message;
   final TelegramClient client;
   final Widget infoWidget;
@@ -26,63 +27,62 @@ class MessageStickerDisplay extends StatelessWidget {
     var hiderKey = GlobalKey<WidgetHiderState>();
     var sizerKey = GlobalKey<WidgetSizerState>();
 
-    var stickerWidth = (sticker.width ?? (sticker.width!)).toDouble() *
-        StickerDisplay.stickerSizeRatie;
-    var stickerHeight = (sticker.height ?? (sticker.height!)).toDouble() *
-        StickerDisplay.stickerSizeRatie;
+    var stickerWidth = (sticker.width ?? (sticker.width!)).toDouble() * StickerDisplay.stickerSizeRatie;
+    var stickerHeight = (sticker.height ?? (sticker.height!)).toDouble() * StickerDisplay.stickerSizeRatie;
     return Align(
-        alignment:
-            message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-        child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (replieWidget != null && message.isOutgoing!)
-                Container(
-                  child: replieWidget!,
-                  margin: const EdgeInsets.only(right: 8),
+      alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (replieWidget != null && message.isOutgoing!)
+            Container(
+              child: replieWidget!,
+              margin: const EdgeInsets.only(right: 8),
+            ),
+          Stack(alignment: Alignment.bottomRight, children: [
+            WidgetSizer(
+              key: sizerKey,
+              curve: Curves.easeOutBack,
+              resizeDuration: const Duration(milliseconds: 200),
+              alignment: message.isOutgoing! ? Alignment.centerRight : Alignment.centerLeft,
+              sizeOnInit: Size(
+                stickerWidth,
+                stickerHeight,
+              ),
+              child: GestureDetector(
+                onLongPress: () {
+                  sizerKey.currentState?.resize(Size(stickerWidth * 1.5, stickerHeight * 1.5));
+                },
+                onLongPressEnd: (_) {
+                  sizerKey.currentState?.resize(Size(stickerWidth, stickerHeight));
+                },
+                child: MouseRegion(
+                  onEnter: (_) => hiderKey.currentState?.show(),
+                  onExit: (_) => hiderKey.currentState?.hide(),
+                  child: StickerDisplay(
+                    client: client,
+                    sticker: sticker,
+                  ),
                 ),
-              Stack(alignment: Alignment.bottomRight, children: [
-                WidgetSizer(
-                    key: sizerKey,
-                    curve: Curves.easeOutBack,
-                    resizeDuration: const Duration(milliseconds: 200),
-                    alignment: message.isOutgoing!
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                    sizeOnInit: Size(
-                      stickerWidth,
-                      stickerHeight,
-                    ),
-                    child: GestureDetector(
-                        onLongPress: () {
-                          sizerKey.currentState?.resize(
-                              Size(stickerWidth * 1.5, stickerHeight * 1.5));
-                        },
-                        onLongPressEnd: (_) {
-                          sizerKey.currentState
-                              ?.resize(Size(stickerWidth, stickerHeight));
-                        },
-                        child: MouseRegion(
-                            onEnter: (_) => hiderKey.currentState?.show(),
-                            onExit: (_) => hiderKey.currentState?.hide(),
-                            child: StickerDisplay(
-                              client: client,
-                              sticker: sticker,
-                            )))),
-                Container(
-                    margin: const EdgeInsets.only(right: 8, bottom: 8),
-                    child: WidgetHider(
-                      key: hiderKey,
-                      child: infoWidget,
-                      hiddenOnInit: true,
-                    ))
-              ]),
-              if (replieWidget != null && !message.isOutgoing!)
-                Container(
-                  child: replieWidget!,
-                  margin: const EdgeInsets.only(left: 8),
-                ),
-            ]));
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 8, bottom: 8),
+              child: WidgetHider(
+                key: hiderKey,
+                child: infoWidget,
+                hiddenOnInit: true,
+              ),
+            )
+          ]),
+          if (replieWidget != null && !message.isOutgoing!)
+            Container(
+              child: replieWidget!,
+              margin: const EdgeInsets.only(left: 8),
+            ),
+        ],
+      ),
+    );
   }
 }

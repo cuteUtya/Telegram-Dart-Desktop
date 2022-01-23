@@ -13,6 +13,7 @@ class RemoteFileBuilder extends StatelessWidget {
     this.emptyPlaceholder = const SizedBox.shrink(),
     this.priority = 3,
   }) : super(key: key);
+
   final BuilderCallback builder;
   final int fileId;
   final Widget emptyPlaceholder;
@@ -27,10 +28,18 @@ class RemoteFileBuilder extends StatelessWidget {
           if (initData.hasData) {
             var initialFile = initData.data as File;
             if (initialFile.local!.isDownloadingCompleted!) {
-              return builder(context, initialFile.local!.path!);
+              return builder(
+                context,
+                initialFile.local!.path!,
+              );
             } else {
               if (!initialFile.local!.isDownloadingActive!) {
-                client.send(DownloadFile(fileId: fileId, priority: priority));
+                client.send(
+                  DownloadFile(
+                    fileId: fileId,
+                    priority: priority,
+                  ),
+                );
               }
               return StreamBuilder(
                   stream: client.fileUpdates(fileId),
@@ -38,7 +47,10 @@ class RemoteFileBuilder extends StatelessWidget {
                     if (data.hasData) {
                       var file = (data.data as File);
                       if (file.local!.isDownloadingCompleted!) {
-                        return builder(context, file.local!.path!);
+                        return builder(
+                          context,
+                          file.local!.path!,
+                        );
                       }
                     }
                     return emptyPlaceholder;

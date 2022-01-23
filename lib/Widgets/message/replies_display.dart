@@ -6,12 +6,13 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 
 class ReplieDisplay extends StatelessWidget {
-  const ReplieDisplay(
-      {Key? key,
-      required this.message,
-      required this.client,
-      this.inlineStyle = true})
-      : super(key: key);
+  const ReplieDisplay({
+    Key? key,
+    required this.message,
+    required this.client,
+    this.inlineStyle = true,
+  }) : super(key: key);
+
   final Message message;
   final TelegramClient client;
   final bool inlineStyle;
@@ -24,18 +25,16 @@ class ReplieDisplay extends StatelessWidget {
   }
 
   Widget _build() {
-    var color = inlineStyle
-        ? null
-        : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
+    var color = inlineStyle ? null : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
     return LayoutBuilder(
         builder: (_, box) => Row(mainAxisSize: MainAxisSize.min, children: [
               Container(
                 width: 2,
                 height: 40,
                 margin: const EdgeInsets.only(right: 8),
-                color: ClientTheme.currentTheme.getField(inlineStyle
-                    ? "ReplieOnMessageInlineVerticalLineColor"
-                    : "ReplieOnMessageBubbleVerticalLineColor"),
+                color: ClientTheme.currentTheme.getField(
+                  inlineStyle ? "ReplieOnMessageInlineVerticalLineColor" : "ReplieOnMessageBubbleVerticalLineColor",
+                ),
               ),
               LimitedBox(
                   maxWidth: inlineStyle ? box.maxWidth : 120,

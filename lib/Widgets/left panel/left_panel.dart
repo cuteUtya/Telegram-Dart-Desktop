@@ -7,15 +7,20 @@ import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
 
 class LeftPanel extends StatelessWidget {
-  const LeftPanel({Key? key, required this.client}) : super(key: key);
+  const LeftPanel({
+    Key? key,
+    required this.client,
+  }) : super(key: key);
+
   final TelegramClient client;
 
   @override
   Widget build(BuildContext context) {
     var listsManager = GlobalKey<ChatListsManagerState>();
     return Padding(
-        padding: const EdgeInsets.only(top: 12),
-        child: Column(children: [
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        children: [
           //settings and search
           Row(mainAxisSize: MainAxisSize.max, children: [
             const SizedBox(width: 12),
@@ -24,30 +29,40 @@ class LeftPanel extends StatelessWidget {
             const SizedBox(width: 12),
             //search field
             Expanded(
-                child: Container(
-                    margin: const EdgeInsets.only(right: 12),
-                    height: 36,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.search, size: 18),
-                          const SizedBox(width: 2),
-                          client.buildTextByKey(
-                              "lng_dlg_filter",
-                              TextDisplay.create(
-                                  size: 18,
-                                  fontFamily: TextDisplay.greaterImportance)),
-                        ]),
-                    decoration: BoxDecoration(
-                        color: ClientTheme.currentTheme
-                            .getField("SearchBackground"),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12))))),
+              child: Container(
+                margin: const EdgeInsets.only(right: 12),
+                height: 36,
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  const Icon(Icons.search, size: 18),
+                  const SizedBox(width: 2),
+                  client.buildTextByKey(
+                    "lng_dlg_filter",
+                    TextDisplay.create(
+                      size: 18,
+                      fontFamily: TextDisplay.greaterImportance,
+                    ),
+                  ),
+                ]),
+                decoration: BoxDecoration(
+                  color: ClientTheme.currentTheme.getField("SearchBackground"),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+              ),
+            ),
           ]),
           const SizedBox(height: 12),
           ChatFilterHorizontal(client: client),
           const SeparatorLine(),
-          Expanded(child: ChatListsManager(key: listsManager, client: client))
-        ]));
+          Expanded(
+            child: ChatListsManager(
+              key: listsManager,
+              client: client,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

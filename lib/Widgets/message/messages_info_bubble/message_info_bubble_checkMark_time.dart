@@ -10,14 +10,15 @@ import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_b
 /// * [isOutgoing] it's info about outgoing message? Affect on text and icon color
 /// * [useBackground] if true widget will be wrapped in [MessageInfoBubbleBase] use it if this info will be displayed outside bubble
 class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
-  const MessageInfoBubbleCheckMarkTime(
-      {Key? key,
-      required this.time,
-      this.customInfo,
-      this.checkMarkValue,
-      this.isOutgoing = false,
-      this.useBackground = false})
-      : super(key: key);
+  const MessageInfoBubbleCheckMarkTime({
+    Key? key,
+    required this.time,
+    this.customInfo,
+    this.checkMarkValue,
+    this.isOutgoing = false,
+    this.useBackground = false,
+  }) : super(key: key);
+
   final bool? checkMarkValue;
   final String? customInfo;
   final String time;
@@ -25,30 +26,38 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
   final bool useBackground;
   @override
   Widget build(BuildContext context) {
-    var color = ClientTheme.currentTheme.getField(useBackground
-        ? "CheckMarkInFlowContainer"
-        : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
+    var color = ClientTheme.currentTheme
+        .getField(useBackground ? "CheckMarkInFlowContainer" : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
     var textStyle = TextDisplay.create(size: 16, customTextColor: color);
     var content = Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (customInfo != null)
-            Text(
-              customInfo!,
-              style: textStyle,
-            ),
-          if (customInfo != null) const SizedBox(width: 4),
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (customInfo != null)
           Text(
-            time,
+            customInfo!,
             style: textStyle,
           ),
-          if (checkMarkValue != null) const SizedBox(width: 4),
-          if (checkMarkValue != null)
-            CheckMark(isReaded: checkMarkValue!, color: color, size: 20)
-        ]);
+        if (customInfo != null) const SizedBox(width: 4),
+        Text(
+          time,
+          style: textStyle,
+        ),
+        if (checkMarkValue != null) const SizedBox(width: 4),
+        if (checkMarkValue != null)
+          CheckMark(
+            isReaded: checkMarkValue!,
+            color: color,
+            size: 20,
+          ),
+      ],
+    );
 
-    if (useBackground) return MessageInfoBubbleBase(content: content);
+    if (useBackground) {
+      return MessageInfoBubbleBase(
+        content: content,
+      );
+    }
     return content;
   }
 }

@@ -11,13 +11,14 @@ import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/utils.dart';
 
 class MessageDisplayAudio extends StatelessWidget {
-  const MessageDisplayAudio(
-      {Key? key,
-      required this.message,
-      required this.client,
-      required this.infoWidget,
-      required this.replieWidget})
-      : super(key: key);
+  const MessageDisplayAudio({
+    Key? key,
+    required this.message,
+    required this.client,
+    required this.infoWidget,
+    required this.replieWidget,
+  }) : super(key: key);
+
   final Message message;
   final TelegramClient client;
   final Widget? infoWidget;
@@ -33,8 +34,7 @@ class MessageDisplayAudio extends StatelessWidget {
       additionalContentPlace: AdditionalContentPlace.top,
       additionalContent: Container(
         child: _audioItem(audio, client),
-        margin: EdgeInsets.only(
-            bottom: (audio.caption?.text?.isEmpty ?? true) ? 6 : 0),
+        margin: EdgeInsets.only(bottom: (audio.caption?.text?.isEmpty ?? true) ? 6 : 0),
       ),
       replieWidget: replieWidget,
       text: audio.caption,
@@ -48,36 +48,30 @@ class MessageDisplayAudio extends StatelessWidget {
       children: [
         RemoteFileBuilder(
             builder: (_, path) {
-              var apic = MP3Instance(io.File(path).readAsBytesSync())
-                  .getMetaTag<Map<String, String>>("APIC")?["base64"];
+              var apic = MP3Instance(io.File(path).readAsBytesSync()).getMetaTag<Map<String, String>>("APIC")?["base64"];
               return ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: apic != null || haveThumbnail
-                      ? Image(
-                          width: 52,
-                          height: 52,
-                          image: (haveThumbnail
-                              ? FileImage(io.File(path))
-                              : MemoryImage(base64Decode(apic!))
-                                  as ImageProvider))
-                      : FutureBuilder(
-                          builder: (_, data) =>
-                              data.hasData && data.data != null
-                                  ? Image.network(
-                                      (data.data as ITunesSearchResult)
-                                          .results![0]
-                                          .artworkUrl100!,
-                                      width: 52,
-                                      height: 52,
-                                    )
-                                  : Container(),
-                          future: ItunesAPI.findSong(
-                              name: audio.audio!.title!,
-                              perfomer: audio.audio!.performer!)));
+                borderRadius: BorderRadius.circular(40),
+                child: apic != null || haveThumbnail
+                    ? Image(
+                        width: 52,
+                        height: 52,
+                        image: (haveThumbnail ? FileImage(io.File(path)) : MemoryImage(base64Decode(apic!)) as ImageProvider))
+                    : FutureBuilder(
+                        builder: (_, data) => data.hasData && data.data != null
+                            ? Image.network(
+                                (data.data as ITunesSearchResult).results![0].artworkUrl100!,
+                                width: 52,
+                                height: 52,
+                              )
+                            : Container(),
+                        future: ItunesAPI.findSong(
+                          name: audio.audio!.title!,
+                          perfomer: audio.audio!.performer!,
+                        ),
+                      ),
+              );
             },
-            fileId: haveThumbnail
-                ? audio.audio!.albumCoverThumbnail!.file!.id!
-                : audio.audio!.audio!.id!,
+            fileId: haveThumbnail ? audio.audio!.albumCoverThumbnail!.file!.id! : audio.audio!.audio!.id!,
             client: client),
         const SizedBox(width: 8),
         Column(

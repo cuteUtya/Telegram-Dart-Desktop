@@ -4,16 +4,18 @@ import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 
 class ChatItemContentIconText {
-  static Color get iconClr =>
-      ClientTheme.currentTheme.getField("TextInlineIconsColor");
-  static List<InlineSpan> build(IconData icon, String text,
-      {Color? iconColor}) {
+  static Color get iconClr => ClientTheme.currentTheme.getField("TextInlineIconsColor");
+  static List<InlineSpan> build(
+    IconData icon,
+    String text, {
+    Color? iconColor,
+  }) {
     return [
       WidgetSpan(child: Icon(icon, color: iconColor ?? iconClr)),
       const WidgetSpan(child: SizedBox(width: 4)),
       TextSpan(
-          children:
-              TextDisplay.parseEmojiInString(text, TextDisplay.chatItemAccent))
+        children: TextDisplay.parseEmojiInString(text, TextDisplay.chatItemAccent),
+      ),
     ];
   }
 }

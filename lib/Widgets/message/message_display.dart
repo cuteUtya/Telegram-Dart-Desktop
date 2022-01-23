@@ -16,7 +16,6 @@ import 'package:myapp/Widgets/message/service_message.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
-import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
 
 /// UI representation of [Message] object
@@ -33,6 +32,7 @@ class MessageDisplay extends StatelessWidget {
       this.adminTitle,
       this.isServiceMessage = false})
       : super(key: key);
+
   final BubbleRelativePosition bubbleRelativePosition;
   final Message message;
   final Message? replieOn;
@@ -42,14 +42,11 @@ class MessageDisplay extends StatelessWidget {
   final bool isServiceMessage;
 
   Widget _buildInfoWidget(bool inline) => MessageInfoBubbleCheckMarkTime(
-        customInfo:
-            message.editDate == 0 ? null : client.getTranslation("lng_edited"),
+        customInfo: message.editDate == 0 ? null : client.getTranslation("lng_edited"),
         useBackground: !inline,
         isOutgoing: message.isOutgoing!,
         time: getHHMM(unixToDateTime(message.date!)),
-        checkMarkValue: message.isOutgoing!
-            ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
-            : null,
+        checkMarkValue: message.isOutgoing! ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0) : null,
       );
 
   Widget? _buildReplieWidget(bool inline) => replieOn != null
@@ -66,18 +63,15 @@ class MessageDisplay extends StatelessWidget {
         builder: (_, senderData) {
           var author = senderData.data.toString();
           Widget contentWidget;
-          bool showMessageSender = ((chat?.type is ChatTypeSupergroup ||
-                      chat?.type is ChatTypeBasicGroup) &&
+          bool showMessageSender = ((chat?.type is ChatTypeSupergroup || chat?.type is ChatTypeBasicGroup) &&
                   !message.isOutgoing!) &&
-              (bubbleRelativePosition == BubbleRelativePosition.top ||
-                  bubbleRelativePosition == BubbleRelativePosition.single);
+              (bubbleRelativePosition == BubbleRelativePosition.top || bubbleRelativePosition == BubbleRelativePosition.single);
           bool wrapInBubble = false;
 
           switch (message.content.runtimeType) {
             case MessageText:
               var contentText = message.content as MessageText;
-              var textUnwhitespaced =
-                  contentText.text!.text!.replaceAll(" ", "");
+              var textUnwhitespaced = contentText.text!.text!.replaceAll(" ", "");
               var emojiTest = emojiRegex.firstMatch(textUnwhitespaced);
               if (emojiTest != null) {
                 /*
@@ -85,12 +79,9 @@ class MessageDisplay extends StatelessWidget {
           show its without bubble and with big size, like Tdesktop or TelegramX
           */
                 var totalEmojis = emojiTest.end - emojiTest.start;
-                if (totalEmojis >= textUnwhitespaced.length &&
-                    totalEmojis < 40) {
+                if (totalEmojis >= textUnwhitespaced.length && totalEmojis < 40) {
                   contentWidget = MessageDisplayTextEmojis(
-                    alignment: message.isOutgoing!
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
+                    alignment: message.isOutgoing! ? MainAxisAlignment.end : MainAxisAlignment.start,
                     emojis: textUnwhitespaced,
                     infoSide: message.isOutgoing! ? Side.left : Side.right,
                     messageInfo: _buildInfoWidget(false),
@@ -106,8 +97,7 @@ class MessageDisplay extends StatelessWidget {
                 infoWidget: _buildInfoWidget(true),
                 replieWidget: _buildReplieWidget(true),
                 senderName: showMessageSender ? author : null,
-                adminTitle: bubbleRelativePosition ==
-                            BubbleRelativePosition.top ||
+                adminTitle: bubbleRelativePosition == BubbleRelativePosition.top ||
                         bubbleRelativePosition == BubbleRelativePosition.single
                     ? adminTitle
                     : "",
@@ -117,18 +107,20 @@ class MessageDisplay extends StatelessWidget {
             case MessageAudio:
               wrapInBubble = true;
               contentWidget = MessageDisplayAudio(
-                  message: message,
-                  client: client,
-                  infoWidget: _buildInfoWidget(true),
-                  replieWidget: _buildReplieWidget(true));
+                message: message,
+                client: client,
+                infoWidget: _buildInfoWidget(true),
+                replieWidget: _buildReplieWidget(true),
+              );
               break;
 
             case MessageSticker:
               contentWidget = MessageStickerDisplay(
-                  client: client,
-                  message: message,
-                  replieWidget: _buildReplieWidget(false),
-                  infoWidget: _buildInfoWidget(false));
+                client: client,
+                message: message,
+                replieWidget: _buildReplieWidget(false),
+                infoWidget: _buildInfoWidget(false),
+              );
               break;
 
             case MessageAnimatedEmoji:
@@ -143,77 +135,93 @@ class MessageDisplay extends StatelessWidget {
 
             case MessageVideoChatStarted:
               contentWidget = ServiceMessage(
-                  text: client.getTranslation(
-                      "lng_action_group_call_started_group",
-                      replacing: {"{from}": author}));
+                text: client.getTranslation(
+                  "lng_action_group_call_started_group",
+                  replacing: {
+                    "{from}": author,
+                  },
+                ),
+              );
               break;
 
             case MessageVideoChatEnded:
               contentWidget = ServiceMessage(
-                  text: client.getTranslation(
-                      "lng_admin_log_discarded_group_call",
-                      replacing: {"from": author}));
+                text: client.getTranslation(
+                  "lng_admin_log_discarded_group_call",
+                  replacing: {
+                    "from": author,
+                  },
+                ),
+              );
               break;
 
             case MessageBasicGroupChatCreate:
               contentWidget = ServiceMessage(
-                  text: client
-                      .getTranslation("lng_action_created_chat", replacing: {
-                "{title}":
-                    (message.content as MessageBasicGroupChatCreate).title!,
-                "{from}": author
-              }));
+                text: client.getTranslation(
+                  "lng_action_created_chat",
+                  replacing: {
+                    "{title}": (message.content as MessageBasicGroupChatCreate).title!,
+                    "{from}": author,
+                  },
+                ),
+              );
               break;
 
             case MessageSupergroupChatCreate:
               contentWidget = ServiceMessage(
-                  text: client.getTranslation("lng_action_created_channel"));
+                text: client.getTranslation(
+                  "lng_action_created_channel",
+                ),
+              );
               break;
 
             case MessageChatChangePhoto:
               contentWidget = Column(
                 children: [
-                  ServiceMessage(
-                      text: client.getTranslation("lng_action_changed_photo",
-                          replacing: {"{from}": author})),
+                  ServiceMessage(text: client.getTranslation("lng_action_changed_photo", replacing: {"{from}": author})),
                   const SizedBox(height: 16),
                   ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                      child: SizedBox(
-                          width: 240,
-                          height: 240,
-                          child: Userpic(
-                              shape: BoxShape.rectangle,
-                              chatPhoto:
-                                  (message.content as MessageChatChangePhoto)
-                                      .photo,
-                              chatId: chat?.id ?? 0,
-                              chatTitle: author,
-                              client: client)))
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    child: SizedBox(
+                      width: 240,
+                      height: 240,
+                      child: Userpic(
+                        shape: BoxShape.rectangle,
+                        chatPhoto: (message.content as MessageChatChangePhoto).photo,
+                        chatId: chat?.id ?? 0,
+                        chatTitle: author,
+                        client: client,
+                      ),
+                    ),
+                  ),
                 ],
               );
               break;
 
             case MessageChatDeletePhoto:
               contentWidget = ServiceMessage(
-                  text: client.getTranslation("lng_action_removed_photo",
-                      replacing: {"{from}": author}));
+                text: client.getTranslation(
+                  "lng_action_removed_photo",
+                  replacing: {
+                    "{from}": author,
+                  },
+                ),
+              );
               break;
 
             case MessageChatChangeTitle:
               contentWidget = ServiceMessage(
-                  text: client.getTranslation(
-                      "lng_action_changed_title_channel",
-                      replacing: {
-                    "{title}":
-                        (message.content as MessageChatChangeTitle).title!
-                  }));
+                text: client.getTranslation(
+                  "lng_action_changed_title_channel",
+                  replacing: {
+                    "{title}": (message.content as MessageChatChangeTitle).title!,
+                  },
+                ),
+              );
               break;
 
             case MessagePhoto:
-              bool haveText =
-                  ((message.content as MessagePhoto).caption?.text ?? "")
-                      .isNotEmpty;
+              bool haveText = ((message.content as MessagePhoto).caption?.text ?? "").isNotEmpty;
               wrapInBubble = haveText;
               contentWidget = MessageDisplayPhoto(
                 client: client,
@@ -228,7 +236,9 @@ class MessageDisplay extends StatelessWidget {
               wrapInBubble = true;
               contentWidget = Text(
                 "unsupported",
-                style: TextDisplay.create(size: 20),
+                style: TextDisplay.create(
+                  size: 20,
+                ),
               );
               break;
           }
@@ -239,26 +249,26 @@ class MessageDisplay extends StatelessWidget {
                   bubbleRelativePosition == BubbleRelativePosition.single)) {
             switch (message.senderId.runtimeType) {
               case MessageSenderUser:
-                var senderUserId =
-                    (message.senderId as MessageSenderUser).userId!;
+                var senderUserId = (message.senderId as MessageSenderUser).userId!;
                 var senderUser = client.getUser(senderUserId);
                 senderUserpic = Userpic(
-                    profilePhoto: senderUser.profilePhoto,
-                    chatId: senderUserId,
-                    chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
-                    client: client,
-                    emptyUserpicFontSize: 16);
+                  profilePhoto: senderUser.profilePhoto,
+                  chatId: senderUserId,
+                  chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
+                  client: client,
+                  emptyUserpicFontSize: 16,
+                );
                 break;
               case MessageSenderChat:
-                var senderChatId =
-                    (message.senderId as MessageSenderChat).chatId;
+                var senderChatId = (message.senderId as MessageSenderChat).chatId;
                 var senderChat = client.getChat(senderChatId!);
                 senderUserpic = Userpic(
-                    chatPhotoInfo: senderChat.photo,
-                    chatId: senderChatId,
-                    client: client,
-                    chatTitle: senderChat.title!,
-                    emptyUserpicFontSize: 16);
+                  chatPhotoInfo: senderChat.photo,
+                  chatId: senderChatId,
+                  client: client,
+                  chatTitle: senderChat.title!,
+                  emptyUserpicFontSize: 16,
+                );
                 break;
             }
           }
@@ -270,13 +280,15 @@ class MessageDisplay extends StatelessWidget {
 
           if (wrapInBubble) {
             contentWidget = MacMessageBubble(
-                content: contentWidget,
-                side: message.isOutgoing! ? Side.right : Side.left,
-                position: bubbleRelativePosition);
+              content: contentWidget,
+              side: message.isOutgoing! ? Side.right : Side.left,
+              position: bubbleRelativePosition,
+            );
           } else {
             contentWidget = Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                child: contentWidget);
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              child: contentWidget,
+            );
           }
 
           return isServiceMessage

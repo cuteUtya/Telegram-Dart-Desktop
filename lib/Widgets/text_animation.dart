@@ -2,20 +2,22 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 
 class TextAnimation extends StatefulWidget {
-  const TextAnimation(
-      {Key? key,
-      required this.frames,
-      required this.textStyle,
-      this.frameOffset = const Duration(seconds: 1)})
-      : super(key: key);
+  const TextAnimation({
+    Key? key,
+    required this.frames,
+    required this.textStyle,
+    this.frameOffset = const Duration(seconds: 1),
+  }) : super(key: key);
+
   final List<String> frames;
   final TextStyle textStyle;
   final Duration frameOffset;
 
   static TextAnimation fourPoints(TextStyle textStyle) => TextAnimation(
-      frames: const ["....", "...", "..", "."],
-      textStyle: textStyle,
-      frameOffset: const Duration(milliseconds: 500));
+        frames: const ["....", "...", "..", "."],
+        textStyle: textStyle,
+        frameOffset: const Duration(milliseconds: 500),
+      );
 
   @override
   State<StatefulWidget> createState() => TextAnimationState();
@@ -30,8 +32,7 @@ class TextAnimationState extends State<TextAnimation> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(
-        widget.frameOffset, (Timer t) => setState(() => ticks--));
+    timer = Timer.periodic(widget.frameOffset, (Timer t) => setState(() => ticks--));
   }
 
   @override
@@ -42,7 +43,9 @@ class TextAnimationState extends State<TextAnimation> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(widget.frames[ticks % widget.frames.length],
-        style: widget.textStyle);
+    return Text(
+      widget.frames[ticks % widget.frames.length],
+      style: widget.textStyle,
+    );
   }
 }

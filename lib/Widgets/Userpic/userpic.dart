@@ -7,18 +7,19 @@ import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/utils.dart';
 
 class Userpic extends StatelessWidget {
-  const Userpic(
-      {Key? key,
-      this.chatPhotoInfo,
-      this.profilePhoto,
-      this.chatPhoto,
-      this.shape = BoxShape.circle,
-      this.emptyUserpicFontSize,
-      required this.chatId,
-      required this.chatTitle,
-      required this.client,
-      this.useBig = false})
-      : super(key: key);
+  const Userpic({
+    Key? key,
+    this.chatPhotoInfo,
+    this.profilePhoto,
+    this.chatPhoto,
+    this.shape = BoxShape.circle,
+    this.emptyUserpicFontSize,
+    required this.chatId,
+    required this.chatTitle,
+    required this.client,
+    this.useBig = false,
+  }) : super(key: key);
+
   final ChatPhotoInfo? chatPhotoInfo;
   final ChatPhoto? chatPhoto;
   final ProfilePhoto? profilePhoto;
@@ -49,10 +50,11 @@ class Userpic extends StatelessWidget {
 
     //TODO if profilePhoto has animations animate photo on mouse hover
     return FileImageDisplay(
-        containerShape: shape,
-        client: client,
-        id: photo!.id!,
-        emptyReplacer: emptyUserpic());
+      containerShape: shape,
+      client: client,
+      id: photo!.id!,
+      emptyReplacer: emptyUserpic(),
+    );
   }
 
   Widget emptyUserpic() => UserpicEmpty(
