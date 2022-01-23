@@ -38,11 +38,11 @@ class MessageDisplayTextEmojis extends StatelessWidget {
                     if (hover)
                       Container(
                         child: messageInfo,
-                        margin: EdgeInsets.only(top: 8),
+                        margin: const EdgeInsets.only(top: 8),
                       ),
                   ]),
                 Text.rich(
-                  TextDisplay.emoji(emojis, const TextStyle(fontSize: 32)),
+                  TextDisplay.emoji(emojis, const TextStyle(fontSize: 40)),
                 ),
                 if (infoSide == Side.right)
                   Column(
