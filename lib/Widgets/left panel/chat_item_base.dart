@@ -27,12 +27,12 @@ class ChatItemBase extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
+          // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
           animationDuration: const Duration(milliseconds: 200),
           padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-          backgroundColor:
-              selected ? MaterialStateProperty.all(ClientTheme.currentTheme.getField("ChatCurrentlySelectedColor")) : null,
+          backgroundColor: MaterialStateProperty.all(
+              ClientTheme.currentTheme.getField(selected ? "ChatCurrentlySelectedColor" : "ChatCurrentlyUnselectedColor")),
           overlayColor: MaterialStateProperty.resolveWith((states) {
             String themeStr = "ChatUnselectedColor";
             if (!selected) {

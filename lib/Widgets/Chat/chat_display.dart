@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/StateManagment/ui_events.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
 import 'package:myapp/Widgets/Chat/input_field.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
@@ -22,8 +23,11 @@ class ChatDisplay extends StatelessWidget {
         return Stack(
           children: [
             if (tw1nkleeModeEnable)
-              BakgroundDisplay(
-                background: Background(type: BackgroundTypeFill(fill: BackgroundFillSolid(color: 0xFFB3C98C))),
+              BackgroundDisplay(
+                background: Background(
+                    type: BackgroundTypeFill(
+                        fill: BackgroundFillSolid(
+                            color: (ClientTheme.currentTheme.getField("tw1nkleeModeBackgroundColor") as Color).value))),
                 client: client,
               )
             else
@@ -39,7 +43,7 @@ class ChatDisplay extends StatelessWidget {
                               backgroundId: backs is Backgrounds ? backs.backgrounds![0].id! : (backs as Background).id!))));
                       return const SizedBox.shrink();
                     }
-                    return BakgroundDisplay(
+                    return BackgroundDisplay(
                         client: client,
                         //TODO correct work with dark and light themes
                         background: (data.data as UpdateSelectedBackground).background!);

@@ -17,51 +17,63 @@ class LeftPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var listsManager = GlobalKey<ChatListsManagerState>();
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Column(
-        children: [
-          //settings and search
-          Row(mainAxisSize: MainAxisSize.max, children: [
-            const SizedBox(width: 12),
-            //Settings icon
-            const Icon(Icons.menu, size: 36),
-            const SizedBox(width: 12),
-            //search field
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(right: 12),
-                height: 36,
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const Icon(Icons.search, size: 18),
-                  const SizedBox(width: 2),
-                  client.buildTextByKey(
-                    "lng_dlg_filter",
-                    TextDisplay.create(
+    return Container(
+      color: ClientTheme.currentTheme.getField("FoldersAndSearchBackgroundColor"),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: Column(
+          children: [
+            //settings and search
+
+            Row(mainAxisSize: MainAxisSize.max, children: [
+              const SizedBox(width: 12),
+              //Settings icon
+              Icon(
+                Icons.menu,
+                size: 36,
+                color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
+              ),
+              const SizedBox(width: 12),
+              //search field
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(right: 12),
+                  height: 36,
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Icon(
+                      Icons.search,
                       size: 18,
-                      fontFamily: TextDisplay.greaterImportance,
+                      color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
                     ),
-                  ),
-                ]),
-                decoration: BoxDecoration(
-                  color: ClientTheme.currentTheme.getField("SearchBackground"),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(12),
+                    const SizedBox(width: 2),
+                    client.buildTextByKey(
+                      "lng_dlg_filter",
+                      TextDisplay.create(
+                          size: 18,
+                          fontFamily: TextDisplay.greaterImportance,
+                          customTextColor: ClientTheme.currentTheme.getField("SearchTextColor")),
+                    ),
+                  ]),
+                  decoration: BoxDecoration(
+                    color: ClientTheme.currentTheme.getField("SearchBackground"),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(12),
+                    ),
                   ),
                 ),
               ),
+            ]),
+            const SizedBox(height: 12),
+            ChatFilterHorizontal(client: client),
+            const SeparatorLine(),
+            Expanded(
+              child: ChatListsManager(
+                key: listsManager,
+                client: client,
+              ),
             ),
-          ]),
-          const SizedBox(height: 12),
-          ChatFilterHorizontal(client: client),
-          const SeparatorLine(),
-          Expanded(
-            child: ChatListsManager(
-              key: listsManager,
-              client: client,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

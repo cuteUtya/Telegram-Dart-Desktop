@@ -16,12 +16,12 @@ White: #FFFFFFFF;
 
 #Typography fields#
 HeaderMain: #181818;
-SelectedHeaderMain: ref(BaseColor);
+SelectedHeaderMain: ref(SelectedColor);
 HeaderSecondary: #464646;
 AdditionalTextColor: #BABABA;
 RegularText: #696969;
 ChatLastTimeMessage: ref(RegularText);
-SelectedChatLastTimedMessage: ref(BaseColor);
+SelectedChatLastTimedMessage: ref(SelectedColor);
 
 #Introduction screen fields#
 CarouselIndicatorActive: ref(Accent);
@@ -34,10 +34,13 @@ DataInputValidColor: ref(Accent);
 DataInputInvalidColor: ref(DangerColor);
 DataInputEmtyColor: #EBEBEB;
 
+SearchTextColor: ref(RegularText);
+
 ButtonAccentBackColor: ref(AccentHalfTransparent);
 ButtonDangerBackColor: ref(DangerHalfTransparent);
 
 OnlineColor: #0BA628;
+SelectedColor: #FFFFFF;
 OnlineColorSelected: ref(ChatUnselectedColor);
 OnlineColorOutline: ref(ChatUnselectedColor);
 OnlineColorOutlineSelected: ref(ChatCurrentlySelectedColor);
@@ -46,7 +49,7 @@ SearchBackground: #EBEBEB;
 #Color(128, ref(BaseColor).r, ref(BaseColor).g, ref(BaseColor).b)#
 ChatUnselectedColor: ref(BaseColor);
 ChatSelectedColor: ref(HoveredObject);
-LoadScreenBackgroundColor: ref(BaseColor);
+LoadScreenBackgroundColor: ref(SelectedColor);
 LoadScreenShadowColor: #AAAAAA;
 
 #red#
@@ -80,9 +83,9 @@ VerifedSupergoupIconColor: ref(Accent);
 ScamIconColor: #E37B40;
 TextInlineIconsColor: ref(RegularText);
 ChatPinIconColor: ref(RegularText);
-SelectedChatPinIconColor: ref(BaseColor);
+SelectedChatPinIconColor: ref(SelectedColor);
 CheckMarkChatListColor: ref(OnlineColor);
-CheckMarkChatSelectedListColor: ref(BaseColor);
+CheckMarkChatSelectedListColor: ref(SelectedColor);
 ExpiredPhotoChatListIconColor: #F65B6D;
 Draft: ref(DangerColor);
 
@@ -94,7 +97,9 @@ UnreadFilterMentionBubbleColor: ref(UnreadMentionChatBubbleColor);
 ChatFilterActiveColor: ref(Accent);
 
 ChatClickAnimationEffectColor: #D2D2D2;
+ChatListBackgroundColor: ref(BaseColor);
 ChatCurrentlySelectedColor: ref(Accent);
+ChatCurrentlyUnselectedColor: ref(BaseColor);
 ArchiveNotHiddenBackColor: #BCBCBC;
 ArchoveNotHiddenIconColor: ref(BaseColor);
 
@@ -131,3 +136,9 @@ HyperlinkColor: ref(Accent);
 ReplieOnMessageInlineVerticalLineColor: ref(Accent);
 ReplieOnMessageBubbleVerticalLineColor: ref(InfoOutsideMessageColor);
 ReplieOnMessageBubbleTextColor: ref(InfoOutsideMessageColor);
+
+FoldersAndSearchBackgroundColor: ref(BaseColor);
+ActionBarTextColor: ref(RegularText);
+
+tw1nkleeModeBackgroundColor: #B3C98C;
+InputFieldTextColor: ref(RegularText);

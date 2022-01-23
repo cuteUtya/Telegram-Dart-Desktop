@@ -1,0 +1,142 @@
+#Base fields#
+Accent: #4E94CB;
+AccentHalfTransparent: #E0EEFD;
+BaseColor: #17212B;
+DangerColor: #DF1E1E; 
+DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
+HoveredObject: #202B36;
+GenericUIIconsColor: #7F7F7F;
+InfoOutsideMessageColor: #F6F6F6;
+
+BorderLineColor: #4A4A4A;
+
+#change this color is bad idea :D#
+Transparent: #00000000;
+White: #FFFFFFFF;
+
+#Typography fields#
+HeaderMain: #EEEEEE;
+SelectedHeaderMain: ref(SelectedColor);
+HeaderSecondary: #A5A5A5;
+AdditionalTextColor: #BABABA;
+RegularText: #BBBBBB;
+ChatLastTimeMessage: ref(RegularText);
+SelectedChatLastTimedMessage: ref(SelectedColor);
+
+#Introduction screen fields#
+CarouselIndicatorActive: ref(Accent);
+CarouselIndicatorInActive: #F0F0F0;
+
+#Login input fields#
+DataInputTextColor: ref(HeaderSecondary);
+DataInputHintColor: ref(AdditionalTextColor);
+DataInputValidColor: ref(Accent);
+DataInputInvalidColor: ref(DangerColor);
+DataInputEmtyColor: #EBEBEB;
+
+ButtonAccentBackColor: ref(AccentHalfTransparent);
+ButtonDangerBackColor: ref(DangerHalfTransparent);
+
+OnlineColor: #0BA628;
+SelectedColor: #FFFFFF;
+OnlineColorSelected: #FFFFFF;
+OnlineColorOutline: ref(ChatUnselectedColor);
+OnlineColorOutlineSelected: ref(ChatCurrentlySelectedColor);
+OnlineStatusColor: ref(OnlineColor);
+SearchBackground: #242F3D;
+SearchTextColor: ref(RegularText);
+#Color(128, ref(BaseColor).r, ref(BaseColor).g, ref(BaseColor).b)#
+ChatUnselectedColor: ref(BaseColor);
+ChatSelectedColor: ref(HoveredObject);
+LoadScreenBackgroundColor: ref(SelectedColor);
+LoadScreenShadowColor: #AAAAAA;
+
+#red#
+PeerColor1a: #A3558D;
+PeerColor1b: #C98484;
+#green#
+PeerColor2a: #55A38B;
+PeerColor2b: #84C993;
+#yellow#
+PeerColor3a: #A38855;
+PeerColor3b: #C9C684;
+#blue#
+PeerColor4a: #5561A3;
+PeerColor4b: #84A8C9;
+#purple#
+PeerColor5a: #8555A3;
+PeerColor5b: #C884C9;
+#pink#
+PeerColor6a: #A35555;
+PeerColor6b: #C984AE;
+#lazur blue#
+PeerColor7a: #5587A3;
+PeerColor7b: #84C9BD;
+#orange#
+PeerColor8a: #A35E55;
+PeerColor8b: #CFBA82;
+
+PeerNameTextColor: #FFFFFF;
+
+VerifedSupergoupIconColor: ref(Accent);
+ScamIconColor: #E37B40;
+TextInlineIconsColor: ref(RegularText);
+ChatPinIconColor: ref(RegularText);
+SelectedChatPinIconColor: ref(SelectedColor);
+CheckMarkChatListColor: ref(OnlineColor);
+CheckMarkChatSelectedListColor: ref(SelectedColor);
+ExpiredPhotoChatListIconColor: #F65B6D;
+Draft: ref(DangerColor);
+
+UnreadChatBubbleColor: #414141;
+UnreadMentionChatBubbleColor: #E64D4D;
+
+UnreadFilterBubbleColor: ref(UnreadChatBubbleColor);
+UnreadFilterMentionBubbleColor: ref(UnreadMentionChatBubbleColor);
+ChatFilterActiveColor: ref(Accent);
+
+ChatClickAnimationEffectColor: #343434;
+ChatListBackgroundColor: ref(BaseColor);
+ChatCurrentlySelectedColor: linear(ref(Accent), #000000, 0.25);
+ChatCurrentlyUnselectedColor: ref(BaseColor);
+ArchiveNotHiddenBackColor: #BCBCBC;
+ArchoveNotHiddenIconColor: ref(BaseColor);
+
+PageHeaderBackgroundColor: #282828;
+
+TitleIconColor: ref(HeaderMain);
+SelectedTitleIconColor: ref(SelectedColor);
+
+
+ActionBarColor: ref(BaseColor);
+ChatInputFieldBackgroundColor: ref(BaseColor);
+
+SaveMessagesBackColor: ref(Accent);
+SaveMessageIconColor: #FFFFFFFF;
+
+RepliesMessagesBackColor: ref(Accent);
+RepliesMessageIconColor: #FFFFFFFF;
+
+MessageTextColor: #F1F1F1;
+MessageBubbleMineColor: #2F72A5;
+MessageBubbleOtherColor: #182533;
+MessageInfoBubbleColor: #2A151515;
+CheckMarkNotMineColor: #FF989898;
+CheckMarkMineColor: #FFFFFF;
+CheckMarkInFlowContainer: ref(InfoOutsideMessageColor);
+
+StickerOutlineColor: #1E000000;
+ServiceMessageTextColor: #FFFFFFFF;
+
+CloseChatIconColor: ref(GenericUIIconsColor);
+CloseChatClickColor: ref(HoveredObject);
+HyperlinkColor: ref(Accent);
+
+ReplieOnMessageInlineVerticalLineColor: ref(Accent);
+ReplieOnMessageBubbleVerticalLineColor: ref(InfoOutsideMessageColor);
+ReplieOnMessageBubbleTextColor: ref(InfoOutsideMessageColor);
+
+FoldersAndSearchBackgroundColor: ref(BaseColor);
+ActionBarTextColor: ref(RegularText);
+tw1nkleeModeBackgroundColor: #0E1621;
+InputFieldTextColor: ref(RegularText);

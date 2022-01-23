@@ -16,7 +16,8 @@ class TextDisplay {
   static TextStyle get regular20 => create(size: 20);
   static TextStyle get bold18 => create(size: 18, fontWeight: FontWeight.bold);
   static TextStyle get bold20 => create(size: 20, fontWeight: FontWeight.bold);
-  static TextStyle get actionBarOffline => create(size: 16, textColor: TextColor.HeaderSecondary);
+  static TextStyle get actionBarOffline =>
+      create(size: 16, customTextColor: ClientTheme.currentTheme.getField("ActionBarTextColor"));
   static const String greaterImportance = "Ubuntu";
   static const String regular = "SourceSansPro";
   static const String monospace = "CodeSourcePro";

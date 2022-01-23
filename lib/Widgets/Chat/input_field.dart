@@ -37,8 +37,10 @@ class InputFieldState extends State<InputField> {
               child: Container(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: TextField(
-                  decoration: InputDecoration.collapsed(hintText: widget.client.getTranslation("lng_message_ph")),
-                  style: TextDisplay.regular20,
+                  decoration: InputDecoration.collapsed(
+                      hintText: widget.client.getTranslation("lng_message_ph"),
+                      hintStyle: TextDisplay.create(customTextColor: ClientTheme.currentTheme.getField("InputFieldTextColor"))),
+                  style: TextDisplay.create(size: 20, customTextColor: ClientTheme.currentTheme.getField("InputFieldTextColor")),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   onChanged: (value) => print("changed input value : $value"),

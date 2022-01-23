@@ -52,12 +52,6 @@ B: #FFFFFF;
 C: linear(ref(A), ref(B), 0.5);
 ```
 
-You can set different field values depending on the environment variables that are set in the interpreter. For this moment exists only `theme', what can have value "dark" and "light"
-```CSS
-background(theme=dark): #000000;
-background(theme=light): #FFFFFF;
-```
-
 # Other 
 File extension is `.tscc`
 T - mean tiny 

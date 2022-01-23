@@ -31,7 +31,8 @@ flutter:
   assets:
     - Assets/
     - Assets/Introduction/
-    - Assets/theme.tcss
+    - Assets/theme_ligth.tcss
+    - Assets/theme_dark.tcss
   fonts:
   - family: Ubuntu
     fonts:

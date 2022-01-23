@@ -83,6 +83,7 @@ class ActionBarDisplay extends StatelessWidget {
                             replacing: {"{count}": onlineCount.toString()}, itemsCount: onlineCount),
                       },
                     ),
+                    style: TextDisplay.actionBarOffline,
                   );
                 },
               ),

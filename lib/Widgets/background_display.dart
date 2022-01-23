@@ -6,8 +6,8 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
-class BakgroundDisplay extends StatelessWidget {
-  const BakgroundDisplay({
+class BackgroundDisplay extends StatelessWidget {
+  const BackgroundDisplay({
     Key? key,
     required this.background,
     required this.client,
