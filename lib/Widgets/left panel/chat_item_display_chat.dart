@@ -77,10 +77,11 @@ class ChatItemDisplay extends StatelessWidget {
               ),
               StreamBuilder(
                 initialData: chat.lastReadOutboxMessageId,
+                stream: client.chatReadOutboxOf(chatId),
                 builder: (context, data) {
                   var value = false;
                   if (data.hasData) {
-                    value = (chat.lastMessage?.id ?? 0) <= (data.data as int);
+                    value = (client.getChat(chatId).lastMessage?.id ?? 0) <= (data.data as int);
                   }
                   if (!isSavedMessages && (client.getChat(chatId).lastMessage?.isOutgoing ?? false)) {
                     return CheckMark(
