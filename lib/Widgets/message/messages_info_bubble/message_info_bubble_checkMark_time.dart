@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/check_mark.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
@@ -26,9 +26,8 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
   final bool useBackground;
   @override
   Widget build(BuildContext context) {
-    var color = ClientTheme.currentTheme.getField(useBackground
-        ? "CheckMarkInFlowContainer"
-        : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
+    var color = ClientTheme.currentTheme
+        .getField(useBackground ? "CheckMarkInFlowContainer" : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
     var textStyle = TextDisplay.create(size: 16, textColor: color);
     var content = Row(
       crossAxisAlignment: CrossAxisAlignment.end,

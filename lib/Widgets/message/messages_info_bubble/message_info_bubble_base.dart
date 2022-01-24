@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 
 /// Wrapper for [content] that will be displayed besides of main message part
 /// most offen its info about time and read status in gifs, stickers, images, other non-text content

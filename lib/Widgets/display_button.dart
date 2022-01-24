@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 
 typedef TapCallback = void Function();
@@ -51,17 +51,14 @@ class _DesktopButtonState extends State<DesktopButton> {
         width: widget.width,
         height: widget.heigth,
         decoration: BoxDecoration(
-            color: widget.pressColor ??
-                _getCurrentColor(isPressed,
-                    widget.customColor ?? _getEnumColor(widget.backColor)),
+            color: widget.pressColor ?? _getCurrentColor(isPressed, widget.customColor ?? _getEnumColor(widget.backColor)),
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         padding: widget.padding,
         child: Text(widget.text,
             textAlign: TextAlign.center,
             style: TextDisplay.create(
               fontWeight: widget.weight,
-              textColor: widget.textColor ??
-                  ClientTheme.currentTheme.getField("Accent"),
+              textColor: widget.textColor ?? ClientTheme.currentTheme.getField("Accent"),
               size: widget.fontSize,
               fontFamily: widget.font,
             )),
@@ -92,6 +89,5 @@ class _DesktopButtonState extends State<DesktopButton> {
     return baseColor;
   }
 
-  static Color _getEnumColor(ButtonColor clr) => ClientTheme.currentTheme
-      .getField(clr.toString().replaceAll("ButtonColor.", ""));
+  static Color _getEnumColor(ButtonColor clr) => ClientTheme.currentTheme.getField(clr.toString().replaceAll("ButtonColor.", ""));
 }

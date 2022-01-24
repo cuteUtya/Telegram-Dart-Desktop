@@ -3,7 +3,7 @@ import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
-import 'package:myapp/widget_sizer.dart';
+import 'package:myapp/Widgets/widget_sizer.dart';
 
 class MessageStickerDisplay extends StatelessWidget {
   const MessageStickerDisplay({

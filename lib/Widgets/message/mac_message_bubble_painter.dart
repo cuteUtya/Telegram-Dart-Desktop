@@ -19,23 +19,14 @@ class MacMessageBubblePainter extends CustomPainter {
     }
     Path path_0 = Path();
     path_0.moveTo(size.width * 0.1463414, size.height / 2);
-    path_0.cubicTo(size.width * 0.1463414, size.height * 0.2237971,
-        size.width * 0.3374390, 0, size.width * 0.573170, 0);
-    path_0.cubicTo(size.width * 0.808953, 0, size.width,
-        size.height * 0.2238571, size.width, size.height / 2);
-    path_0.cubicTo(size.width, size.height * 0.776203, size.width * 0.808902,
-        size.height, size.width * 0.573170, size.height);
-    path_0.cubicTo(size.width * 0.4705878, size.height, size.width * 0.3764744,
-        size.height * 0.957627, size.width * 0.3028768, size.height * 0.887010);
-    path_0.cubicTo(
-        size.width * 0.2208610, size.height, 0, size.height, 0, size.height);
-    path_0.cubicTo(
-        size.width * 0.1456585,
-        size.height * 0.901428,
-        size.width * 0.1463414,
-        size.height * 0.767474,
-        size.width * 0.1463414,
-        size.height * 0.767474);
+    path_0.cubicTo(size.width * 0.1463414, size.height * 0.2237971, size.width * 0.3374390, 0, size.width * 0.573170, 0);
+    path_0.cubicTo(size.width * 0.808953, 0, size.width, size.height * 0.2238571, size.width, size.height / 2);
+    path_0.cubicTo(size.width, size.height * 0.776203, size.width * 0.808902, size.height, size.width * 0.573170, size.height);
+    path_0.cubicTo(size.width * 0.4705878, size.height, size.width * 0.3764744, size.height * 0.957627, size.width * 0.3028768,
+        size.height * 0.887010);
+    path_0.cubicTo(size.width * 0.2208610, size.height, 0, size.height, 0, size.height);
+    path_0.cubicTo(size.width * 0.1456585, size.height * 0.901428, size.width * 0.1463414, size.height * 0.767474,
+        size.width * 0.1463414, size.height * 0.767474);
     path_0.lineTo(size.width * 0.1463414, size.height / 2);
     path_0.lineTo(size.width * 0.1463414, size.height / 2);
     Paint paint_0_stroke = Paint()

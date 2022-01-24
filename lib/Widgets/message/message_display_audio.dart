@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'dart:convert';
 import 'dart:io' as io;
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
-import 'package:myapp/audio%20utils/id3_metatags_utils.dart';
-import 'package:myapp/audio%20utils/itunes_api.dart';
+import 'package:myapp/Audio%20utils/id3_metatags_utils.dart';
+import 'package:myapp/Audio%20utils/itunes_api.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/utils.dart';
@@ -35,8 +35,7 @@ class MessageDisplayAudio extends StatelessWidget {
       additionalContentPlace: AdditionalContentPlace.top,
       additionalContent: Container(
         child: _audioItem(audio, client),
-        margin: EdgeInsets.only(
-            bottom: (audio.caption?.text?.isEmpty ?? true) ? 6 : 0),
+        margin: EdgeInsets.only(bottom: (audio.caption?.text?.isEmpty ?? true) ? 6 : 0),
       ),
       replieWidget: replieWidget,
       text: audio.caption,
@@ -50,24 +49,18 @@ class MessageDisplayAudio extends StatelessWidget {
       children: [
         RemoteFileBuilder(
             builder: (_, path) {
-              var apic = MP3Instance(io.File(path).readAsBytesSync())
-                  .getMetaTag<Map<String, String>>("APIC")?["base64"];
+              var apic = MP3Instance(io.File(path).readAsBytesSync()).getMetaTag<Map<String, String>>("APIC")?["base64"];
               return ClipRRect(
                 borderRadius: BorderRadius.circular(40),
                 child: apic != null || haveThumbnail
                     ? Image(
                         width: 52,
                         height: 52,
-                        image: (haveThumbnail
-                            ? FileImage(io.File(path))
-                            : MemoryImage(base64Decode(apic!))
-                                as ImageProvider))
+                        image: (haveThumbnail ? FileImage(io.File(path)) : MemoryImage(base64Decode(apic!)) as ImageProvider))
                     : FutureBuilder(
                         builder: (_, data) => data.hasData && data.data != null
                             ? Image.network(
-                                (data.data as ITunesSearchResult)
-                                    .results![0]
-                                    .artworkUrl100!,
+                                (data.data as ITunesSearchResult).results![0].artworkUrl100!,
                                 width: 52,
                                 height: 52,
                               )
@@ -79,9 +72,7 @@ class MessageDisplayAudio extends StatelessWidget {
                       ),
               );
             },
-            fileId: haveThumbnail
-                ? audio.audio!.albumCoverThumbnail!.file!.id!
-                : audio.audio!.audio!.id!,
+            fileId: haveThumbnail ? audio.audio!.albumCoverThumbnail!.file!.id! : audio.audio!.audio!.id!,
             client: client),
         const SizedBox(width: 8),
         Column(
@@ -94,8 +85,7 @@ class MessageDisplayAudio extends StatelessWidget {
                 size: 20,
 
                 /// TODO use another color from theme
-                textColor:
-                    ClientTheme.currentTheme.getField("AudioTitleTextColor"),
+                textColor: ClientTheme.currentTheme.getField("AudioTitleTextColor"),
               ),
             ),
             Text(

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' as td;
 
 class StickerOutline extends CustomPainter {
@@ -9,8 +9,7 @@ class StickerOutline extends CustomPainter {
   final double sizeRatio;
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = ClientTheme.currentTheme.getField("StickerOutlineColor");
+    var paint = Paint()..color = ClientTheme.currentTheme.getField("StickerOutlineColor");
 
     for (var vector in outline) {
       Path path = Path();
@@ -22,15 +21,13 @@ class StickerOutline extends CustomPainter {
         initPoint = last.endPoint!;
       }
       if (initPoint != null) {
-        path.moveTo(initPoint.x!.toDouble() * sizeRatio,
-            initPoint.y!.toDouble() * sizeRatio);
+        path.moveTo(initPoint.x!.toDouble() * sizeRatio, initPoint.y!.toDouble() * sizeRatio);
       }
       for (var command in vector.commands!) {
         switch (command.runtimeType) {
           case td.VectorPathCommandLine:
             var point = (command as td.VectorPathCommandLine).endPoint!;
-            path.lineTo(point.x!.toDouble() * sizeRatio,
-                point.y!.toDouble() * sizeRatio);
+            path.lineTo(point.x!.toDouble() * sizeRatio, point.y!.toDouble() * sizeRatio);
             break;
           case td.VectorPathCommandCubicBezierCurve:
             var curve = (command as td.VectorPathCommandCubicBezierCurve);
