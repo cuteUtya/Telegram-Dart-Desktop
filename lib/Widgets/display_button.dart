@@ -17,7 +17,7 @@ class DesktopButton extends StatefulWidget {
       this.customColor,
       this.pressColor,
       this.font,
-      this.textColor = TextColor.Accent,
+      this.textColor,
       this.fontSize = 20,
       this.weight = FontWeight.normal,
       this.padding = const EdgeInsets.all(12)})
@@ -32,7 +32,7 @@ class DesktopButton extends StatefulWidget {
   final Color? pressColor;
   final Color? customColor;
   final String? font;
-  final TextColor textColor;
+  final Color? textColor;
   final double fontSize;
   final EdgeInsets padding;
   final FontWeight weight;
@@ -60,7 +60,8 @@ class _DesktopButtonState extends State<DesktopButton> {
             textAlign: TextAlign.center,
             style: TextDisplay.create(
               fontWeight: widget.weight,
-              textColor: widget.textColor,
+              textColor: widget.textColor ??
+                  ClientTheme.currentTheme.getField("Accent"),
               size: widget.fontSize,
               fontFamily: widget.font,
             )),

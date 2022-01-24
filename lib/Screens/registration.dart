@@ -36,9 +36,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           const Spacer(),
           GestureDetector(
             //TODO. Validate images, open menu for image cropping. Ability to use video
-            onTap: () => FilePicker.platform.pickFiles(dialogTitle: widget.client.getTranslation("lng_save_photo")).then(
+            onTap: () => FilePicker.platform
+                .pickFiles(
+                    dialogTitle: widget.client.getTranslation("lng_save_photo"))
+                .then(
                   (value) => setState(
-                    () => _avaPath = (value == null ? null : value.files[0].path),
+                    () =>
+                        _avaPath = (value == null ? null : value.files[0].path),
                   ),
                 ),
             child: _avaPath == null
@@ -80,7 +84,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           widget.client.buildTextByKey(
               "lng_bad_name",
               TextDisplay.create(
-                textColor: TextColor.AdditionalTextColor,
+                textColor:
+                    ClientTheme.currentTheme.getField("AdditionalTextColor"),
               )),
           const SizedBox(height: 36),
           //First name
@@ -97,7 +102,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           const SizedBox(height: 36),
           DesktopButton(
               //TODO set userpic
-              onPressed: () => widget.client.send(RegisterUser(firstName: fName, lastName: lName)),
+              onPressed: () => widget.client
+                  .send(RegisterUser(firstName: fName, lastName: lName)),
               width: 400,
               text: widget.client.getTranslation("lng_intro_finish")),
           const Spacer(),
@@ -142,8 +148,10 @@ class _TOSAgree extends StatelessWidget {
                   text: tosLink,
                   style: TextDisplay.create(
                     size: 16,
-                    textColor: TextColor.Accent,
-                    decoration: selected ? TextDecoration.underline : TextDecoration.none,
+                    textColor: ClientTheme.currentTheme.getField("Accent"),
+                    decoration: selected
+                        ? TextDecoration.underline
+                        : TextDecoration.none,
                   ),
                 )
               ]));
@@ -152,7 +160,8 @@ class _TOSAgree extends StatelessWidget {
 }
 
 class _TOSAlert extends StatelessWidget {
-  const _TOSAlert({Key? key, required this.title, required this.tosText}) : super(key: key);
+  const _TOSAlert({Key? key, required this.title, required this.tosText})
+      : super(key: key);
 
   final String title;
   final String tosText;

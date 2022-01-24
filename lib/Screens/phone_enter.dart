@@ -4,13 +4,17 @@ import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/tdlib/client.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 
 class PhoneEnterScreen extends StatefulWidget {
-  const PhoneEnterScreen({required this.client, required this.phoneNumberScreenCallback, Key? key}) : super(key: key);
+  const PhoneEnterScreen(
+      {required this.client, required this.phoneNumberScreenCallback, Key? key})
+      : super(key: key);
 
   final TelegramClient client;
-  final Future<TdObject> Function(String phoneNumber, String sessionName) phoneNumberScreenCallback;
+  final Future<TdObject> Function(String phoneNumber, String sessionName)
+      phoneNumberScreenCallback;
   @override
   State<StatefulWidget> createState() => _PhoneEnterScreenState();
 }
@@ -34,16 +38,18 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
     DataState.invalid: FontWeight.w600
   };
 
-  final Map<DataState, TextColor> _colors = {
-    DataState.empty: TextColor.RegularText,
-    DataState.valid: TextColor.Accent,
-    DataState.invalid: TextColor.DangerColor
+  final Map<DataState, Color> _colors = {
+    DataState.empty: ClientTheme.currentTheme.getField("RegularText"),
+    DataState.valid: ClientTheme.currentTheme.getField("Accent"),
+    DataState.invalid: ClientTheme.currentTheme.getField("DangerColor")
   };
 
   @override
   Widget build(BuildContext context) {
     if (countries == null) {
-      widget.client.send(GetCountries()).then((value) => setState(() => countries = value as Countries));
+      widget.client
+          .send(GetCountries())
+          .then((value) => setState(() => countries = value as Countries));
     }
 
     return Material(
@@ -55,9 +61,11 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
-              widget.client.buildTextByKey("lng_phone_title", TextDisplay.title),
+              widget.client
+                  .buildTextByKey("lng_phone_title", TextDisplay.title),
               const SizedBox(height: 8),
-              widget.client.buildTextByKey("lng_phone_desc", TextDisplay.additional),
+              widget.client
+                  .buildTextByKey("lng_phone_desc", TextDisplay.additional),
               const SizedBox(height: 20),
               //Country field
               DataInput(
@@ -115,12 +123,19 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                   onPressed: () {
                     if (!sendCode) {
                       sendCode = true;
-                      widget.phoneNumberScreenCallback(_phoneCode + _phone, _sessionName).then((value) => {
-                            if (value.getConstructor() == TdError.CONSTRUCTOR && mounted)
-                              setState(
-                                () => errorStr = widget.client.getLocalizedErrorMessage(value as TdError),
-                              )
-                          });
+                      widget
+                          .phoneNumberScreenCallback(
+                              _phoneCode + _phone, _sessionName)
+                          .then((value) => {
+                                if (value.getConstructor() ==
+                                        TdError.CONSTRUCTOR &&
+                                    mounted)
+                                  setState(
+                                    () => errorStr = widget.client
+                                        .getLocalizedErrorMessage(
+                                            value as TdError),
+                                  )
+                              });
                     }
                   },
                   width: 500,
@@ -139,7 +154,8 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                 alignment: Alignment.bottomCenter,
                 child: ClickableText(
                     data: widget.client.getTranslation("lng_phone_to_qr"),
-                    onTap: () => widget.client.send(RequestQrCodeAuthentication(otherUserIds: [])),
+                    onTap: () => widget.client
+                        .send(RequestQrCodeAuthentication(otherUserIds: [])),
                     fontSize: 18),
               ),
             ],

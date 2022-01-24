@@ -26,9 +26,10 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
   final bool useBackground;
   @override
   Widget build(BuildContext context) {
-    var color = ClientTheme.currentTheme
-        .getField(useBackground ? "CheckMarkInFlowContainer" : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
-    var textStyle = TextDisplay.create(size: 16, customTextColor: color);
+    var color = ClientTheme.currentTheme.getField(useBackground
+        ? "CheckMarkInFlowContainer"
+        : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
+    var textStyle = TextDisplay.create(size: 16, textColor: color);
     var content = Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,

@@ -18,7 +18,8 @@ class LeftPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     var listsManager = GlobalKey<ChatListsManagerState>();
     return Container(
-      color: ClientTheme.currentTheme.getField("FoldersAndSearchBackgroundColor"),
+      color:
+          ClientTheme.currentTheme.getField("FoldersAndSearchBackgroundColor"),
       child: Padding(
         padding: const EdgeInsets.only(top: 12),
         child: Column(
@@ -39,23 +40,28 @@ class LeftPanel extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.only(right: 12),
                   height: 36,
-                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Icon(
-                      Icons.search,
-                      size: 18,
-                      color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
-                    ),
-                    const SizedBox(width: 2),
-                    client.buildTextByKey(
-                      "lng_dlg_filter",
-                      TextDisplay.create(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search,
                           size: 18,
-                          fontFamily: TextDisplay.greaterImportance,
-                          customTextColor: ClientTheme.currentTheme.getField("SearchTextColor")),
-                    ),
-                  ]),
+                          color: ClientTheme.currentTheme
+                              .getField("GenericUIIconsColor"),
+                        ),
+                        const SizedBox(width: 2),
+                        client.buildTextByKey(
+                          "lng_dlg_filter",
+                          TextDisplay.create(
+                              size: 18,
+                              fontFamily: TextDisplay.greaterImportance,
+                              textColor: ClientTheme.currentTheme
+                                  .getField("SearchTextColor")),
+                        ),
+                      ]),
                   decoration: BoxDecoration(
-                    color: ClientTheme.currentTheme.getField("SearchBackground"),
+                    color:
+                        ClientTheme.currentTheme.getField("SearchBackground"),
                     borderRadius: const BorderRadius.all(
                       Radius.circular(12),
                     ),

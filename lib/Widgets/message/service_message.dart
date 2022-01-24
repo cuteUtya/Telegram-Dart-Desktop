@@ -17,7 +17,7 @@ class ServiceMessage extends StatelessWidget {
       style: TextDisplay.create(
         fontFamily: TextDisplay.greaterImportance,
         size: 16,
-        customTextColor: ClientTheme.currentTheme.getField(
+        textColor: ClientTheme.currentTheme.getField(
           "ServiceMessageTextColor",
         ),
       ),

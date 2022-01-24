@@ -20,7 +20,8 @@ class InputFieldState extends State<InputField> {
     var iconColor = ClientTheme.currentTheme.getField("GenericUIIconsColor");
     return Container(
       decoration: BoxDecoration(
-        color: ClientTheme.currentTheme.getField("ChatInputFieldBackgroundColor"),
+        color:
+            ClientTheme.currentTheme.getField("ChatInputFieldBackgroundColor"),
         borderRadius: const BorderRadius.all(Radius.circular(15)),
       ),
       child: Padding(
@@ -39,8 +40,13 @@ class InputFieldState extends State<InputField> {
                 child: TextField(
                   decoration: InputDecoration.collapsed(
                       hintText: widget.client.getTranslation("lng_message_ph"),
-                      hintStyle: TextDisplay.create(customTextColor: ClientTheme.currentTheme.getField("InputFieldTextColor"))),
-                  style: TextDisplay.create(size: 20, customTextColor: ClientTheme.currentTheme.getField("InputFieldTextColor")),
+                      hintStyle: TextDisplay.create(
+                          textColor: ClientTheme.currentTheme
+                              .getField("InputFieldTextColor"))),
+                  style: TextDisplay.create(
+                      size: 20,
+                      textColor: ClientTheme.currentTheme
+                          .getField("InputFieldTextColor")),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   onChanged: (value) => print("changed input value : $value"),

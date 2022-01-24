@@ -17,31 +17,38 @@ class RevertiblePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       TextButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              ClientTheme.currentTheme.getField("BaseColor"),
-            ),
-            overlayColor: MaterialStateProperty.all(
-              ClientTheme.currentTheme.getField("PageHeaderBackgroundColor"),
-            ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            ClientTheme.currentTheme.getField("PageHeaderBackgroundColor"),
           ),
-          onPressed: onRevert,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-              child: Row(children: [
-                Icon(
-                  Icons.arrow_back,
-                  size: 24,
-                  color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
+          overlayColor: MaterialStateProperty.resolveWith(((states) {
+            return ClientTheme.currentTheme
+                .getField("PageHeaderBackgroundColorHovered");
+          })),
+        ),
+        onPressed: onRevert,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          child: Row(
+            children: [
+              Icon(
+                Icons.arrow_back,
+                size: 24,
+                color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: TextDisplay.create(
+                  size: 20,
+                  fontWeight: FontWeight.bold,
+                  textColor: ClientTheme.currentTheme.getField("HeaderMain"),
                 ),
-                const SizedBox(width: 8),
-                Text(title,
-                    style: TextDisplay.create(
-                      size: 20,
-                      fontWeight: FontWeight.bold,
-                      textColor: TextColor.HeaderMain,
-                    ))
-              ]))),
+              ),
+            ],
+          ),
+        ),
+      ),
       content
     ]);
   }

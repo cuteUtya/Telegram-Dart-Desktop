@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
@@ -37,19 +38,27 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
           const Spacer(),
           widget.client.buildTextByKey("lng_signin_title", TextDisplay.title),
           const SizedBox(height: 8),
-          widget.client.buildTextByKey(recover ? "lng_signin_recover_desc" : "lng_signin_desc", TextDisplay.additional,
-              replacing: {"{email}": widget.authWaitPassword.recoveryEmailAddressPattern!}),
+          widget.client.buildTextByKey(
+              recover ? "lng_signin_recover_desc" : "lng_signin_desc",
+              TextDisplay.additional,
+              replacing: {
+                "{email}": widget.authWaitPassword.recoveryEmailAddressPattern!
+              }),
           const SizedBox(height: 36),
           DataInput(
               onValueChange: (v) => recover ? _code = v : _pass = v,
               obscureText: !recover,
-              asyncValidationCallback: recover ? _checkEmailCode : _checkPassword,
-              fieldName: widget.client.getTranslation(recover ? "lng_signin_code" : "lng_signin_password")),
+              asyncValidationCallback:
+                  recover ? _checkEmailCode : _checkPassword,
+              fieldName: widget.client.getTranslation(
+                  recover ? "lng_signin_code" : "lng_signin_password")),
           const SizedBox(height: 8),
           (widget.authWaitPassword.passwordHint!.isEmpty
               ? const Center()
-              : widget.client.buildTextByKey("lng_signin_hint", TextDisplay.regular16,
-                  replacing: {"{password_hint}": widget.authWaitPassword.passwordHint!})),
+              : widget.client.buildTextByKey(
+                  "lng_signin_hint", TextDisplay.regular16, replacing: {
+                  "{password_hint}": widget.authWaitPassword.passwordHint!
+                })),
           widget.authWaitPassword.hasRecoveryEmailAddress! && !recover
               ? ClickableText(
                   onTap: () {
@@ -62,17 +71,26 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
           DesktopButton(
               text: widget.client.getTranslation("lng_intro_submit"),
               width: 340,
-              onPressed: () => recover ? _checkEmailCode(_code) : _checkPassword(_pass)),
+              onPressed: () =>
+                  recover ? _checkEmailCode(_code) : _checkPassword(_pass)),
           const SizedBox(height: 24),
           AnimatedContainer(
               duration: const Duration(seconds: 1),
               child: DesktopButton(
                   heigth: showResetBtn ? 48 : 0,
-                  onPressed: () => showDialog(context: context, builder: (context) => AccountResetAlert(client: widget.client)),
-                  backColor: showResetBtn ? ButtonColor.ButtonDangerBackColor : ButtonColor.Transparent,
-                  textColor: showResetBtn ? TextColor.DangerColor : TextColor.Transparent,
+                  onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) =>
+                          AccountResetAlert(client: widget.client)),
+                  backColor: showResetBtn
+                      ? ButtonColor.ButtonDangerBackColor
+                      : ButtonColor.Transparent,
+                  textColor: showResetBtn
+                      ? ClientTheme.currentTheme.getField("DangerColor")
+                      : Colors.transparent,
                   width: 340,
-                  text: widget.client.getTranslation("lng_signin_reset_account"))),
+                  text: widget.client
+                      .getTranslation("lng_signin_reset_account"))),
           const Spacer()
         ],
       ),
@@ -81,7 +99,9 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
 
   Future<bool> _checkEmailCode(String code) async {
     var completer = Completer<bool>();
-    widget.client.send(RecoverAuthenticationPassword(recoveryCode: code)).then((value) {
+    widget.client
+        .send(RecoverAuthenticationPassword(recoveryCode: code))
+        .then((value) {
       var val = value is Ok;
       if (!val) setState(() => showResetBtn = true);
       completer.complete(val);
@@ -91,7 +111,9 @@ class _PasswordCheckScreenState extends State<PasswordCheckScreen> {
 
   Future<bool> _checkPassword(String pass) {
     var completer = Completer<bool>();
-    widget.client.send(CheckAuthenticationPassword(password: pass)).then((value) {
+    widget.client
+        .send(CheckAuthenticationPassword(password: pass))
+        .then((value) {
       var valid = value is Ok;
       if (!valid) setState(() => showResetBtn = true);
       completer.complete(valid);
@@ -112,7 +134,8 @@ class AccountResetAlert extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            client.buildTextByKey("lng_signin_sure_reset", TextDisplay.regular20),
+            client.buildTextByKey(
+                "lng_signin_sure_reset", TextDisplay.regular20),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -127,10 +150,12 @@ class AccountResetAlert extends StatelessWidget {
                 const SizedBox(width: 16),
                 Container(
                     child: DesktopButton(
-                        textColor: TextColor.DangerColor,
+                        textColor:
+                            ClientTheme.currentTheme.getField("DangerColor"),
                         backColor: ButtonColor.ButtonDangerBackColor,
                         text: client.getTranslation("lng_signin_reset"),
-                        onPressed: () => Navigator.pop(context, client.send(DeleteAccount()))),
+                        onPressed: () => Navigator.pop(
+                            context, client.send(DeleteAccount()))),
                     alignment: Alignment.bottomRight),
               ],
             ),

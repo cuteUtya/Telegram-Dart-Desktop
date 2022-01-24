@@ -27,9 +27,12 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
       content.addAll(TextDisplay.parseEmojiInString(
             chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
             TextDisplay.create(
-              textColor: TextColor.RegularText,
+              textColor:
+                  ClientTheme.currentTheme.getField("ArchiveContentColor"),
               size: 18,
-              fontWeight: (chat.unreadCount ?? 0) <= 0 ? FontWeight.normal : FontWeight.bold,
+              fontWeight: (chat.unreadCount ?? 0) <= 0
+                  ? FontWeight.normal
+                  : FontWeight.bold,
             ),
           ) +
           [
@@ -57,7 +60,8 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
       key: UniqueKey(),
       title: Row(
         children: [
-          Text(client.getTranslation("lng_archived_name"), style: TextDisplay.chatTittle),
+          Text(client.getTranslation("lng_archived_name"),
+              style: TextDisplay.chatTittle),
           const Spacer(),
         ],
       ),

@@ -31,7 +31,8 @@ class UnreadCountBubble extends StatelessWidget {
           count.toString(),
           style: TextDisplay.create(
             size: fontSize ?? 18,
-            textColor: TextColor.White,
+            textColor:
+                ClientTheme.currentTheme.getField("UnreadChatBubbleTextColor"),
             fontFamily: TextDisplay.greaterImportance,
           ),
         ),

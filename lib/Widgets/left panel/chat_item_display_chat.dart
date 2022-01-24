@@ -29,18 +29,29 @@ class ChatItemDisplay extends StatelessWidget {
   final ChatList chatList;
   final Function()? onClick;
 
-  bool pinned(Chat chat) => chat.positions?.firstWhere((element) => compareChatlists(element.list!, chatList)).isPinned ?? false;
+  bool pinned(Chat chat) =>
+      chat.positions
+          ?.firstWhere((element) => compareChatlists(element.list!, chatList))
+          .isPinned ??
+      false;
 
   @override
   Widget build(BuildContext context) {
-    bool isSavedMessages = chatId == client.getOptionValue<OptionValueInteger>("my_id")?.value;
-    bool isReplieChat = chatId == (client.getOptionValue<OptionValueInteger>("replies_bot_chat_id")?.value);
+    bool isSavedMessages =
+        chatId == client.getOptionValue<OptionValueInteger>("my_id")?.value;
+    bool isReplieChat = chatId ==
+        (client
+            .getOptionValue<OptionValueInteger>("replies_bot_chat_id")
+            ?.value);
     var chat = client.getChat(chatId);
-    bool isPrivate = chat.type is ChatTypePrivate || chat.type is ChatTypeSecret;
+    bool isPrivate =
+        chat.type is ChatTypePrivate || chat.type is ChatTypeSecret;
     var interlocutorId = isPrivate ? (chat.type as dynamic).userId : null;
-    var interlocutor = interlocutorId == null ? null : client.getUser(interlocutorId!);
-    var supergroup =
-        chat.type is ChatTypeSupergroup ? client.getSupergroup((chat.type as ChatTypeSupergroup).supergroupId!) : null;
+    var interlocutor =
+        interlocutorId == null ? null : client.getUser(interlocutorId!);
+    var supergroup = chat.type is ChatTypeSupergroup
+        ? client.getSupergroup((chat.type as ChatTypeSupergroup).supergroupId!)
+        : null;
     return StreamBuilder(
       stream: UIEvents.selectedChat(),
       builder: (_, selectedSnapshot) {
@@ -57,18 +68,26 @@ class ChatItemDisplay extends StatelessWidget {
                         selected: selected,
                       )
                     : StreamBuilder(
-                        stream: isSavedMessages ? null : client.senderName(MessageSenderChat(chatId: chatId)),
+                        stream: isSavedMessages
+                            ? null
+                            : client
+                                .senderName(MessageSenderChat(chatId: chatId)),
                         initialData: chat.title,
                         builder: (_, nameSnapshot) {
                           return ChatItemTitle(
                             selected: selected,
-                            isBot: interlocutor?.type is UserTypeBot && !isReplieChat,
+                            isBot: interlocutor?.type is UserTypeBot &&
+                                !isReplieChat,
                             isChannel: (supergroup?.isChannel) ?? false,
-                            isChat: (supergroup != null && !(supergroup.isChannel ?? true)) || chat.type is ChatTypeBasicGroup,
+                            isChat: (supergroup != null &&
+                                    !(supergroup.isChannel ?? true)) ||
+                                chat.type is ChatTypeBasicGroup,
                             title: (interlocutor?.type is UserTypeDeleted)
                                 ? client.getTranslation("lng_deleted")
                                 : nameSnapshot.data.toString(),
-                            isScam: chat.type is ChatTypeSupergroup ? supergroup?.isScam ?? false : interlocutor?.isScam ?? false,
+                            isScam: chat.type is ChatTypeSupergroup
+                                ? supergroup?.isScam ?? false
+                                : interlocutor?.isScam ?? false,
                             isVerifed: supergroup?.isSlowModeEnabled ?? false,
                             isSupport: interlocutor?.isSupport ?? false,
                           );
@@ -81,9 +100,12 @@ class ChatItemDisplay extends StatelessWidget {
                 builder: (context, data) {
                   var value = false;
                   if (data.hasData) {
-                    value = (client.getChat(chatId).lastMessage?.id ?? 0) <= (data.data as int);
+                    value = (client.getChat(chatId).lastMessage?.id ?? 0) <=
+                        (data.data as int);
                   }
-                  if (!isSavedMessages && (client.getChat(chatId).lastMessage?.isOutgoing ?? false)) {
+                  if (!isSavedMessages &&
+                      (client.getChat(chatId).lastMessage?.isOutgoing ??
+                          false)) {
                     return CheckMark(
                       isReaded: value,
                       selected: selected,
@@ -98,11 +120,15 @@ class ChatItemDisplay extends StatelessWidget {
                 initialData: chat.lastMessage,
                 stream: client.lastMessageIn(chatId),
                 builder: (_, lastMessageSnapshot) => Text(
-                  lastMessageSnapshot.data == null ? "" : getMessageTime(lastMessageSnapshot.data as Message),
+                  lastMessageSnapshot.data == null
+                      ? ""
+                      : getMessageTime(lastMessageSnapshot.data as Message),
                   textAlign: TextAlign.right,
                   style: TextDisplay.create(
                     size: 18,
-                    textColor: selected ? TextColor.SelectedChatLastTimedMessage : TextColor.ChatLastTimeMessage,
+                    textColor: ClientTheme.currentTheme.getField(selected
+                        ? "SelectedChatLastTimedMessage"
+                        : "ChatLastTimeMessage"),
                   ),
                 ),
               ),
@@ -110,14 +136,18 @@ class ChatItemDisplay extends StatelessWidget {
           ),
           chatPic: isSavedMessages
               ? UserpicIcon(
-                  color: ClientTheme.currentTheme.getField("SaveMessagesBackColor"),
-                  iconColor: ClientTheme.currentTheme.getField("SaveMessageIconColor"),
+                  color: ClientTheme.currentTheme
+                      .getField("SaveMessagesBackColor"),
+                  iconColor:
+                      ClientTheme.currentTheme.getField("SaveMessageIconColor"),
                   icon: Icons.bookmarks_outlined,
                 )
               : isReplieChat
                   ? UserpicIcon(
-                      color: ClientTheme.currentTheme.getField("RepliesMessagesBackColor"),
-                      iconColor: ClientTheme.currentTheme.getField("RepliesMessageIconColor"),
+                      color: ClientTheme.currentTheme
+                          .getField("RepliesMessagesBackColor"),
+                      iconColor: ClientTheme.currentTheme
+                          .getField("RepliesMessageIconColor"),
                       icon: Icons.question_answer_outlined,
                     )
                   : Stack(
@@ -130,12 +160,15 @@ class ChatItemDisplay extends StatelessWidget {
                               stream: client.photoOf(chatId),
                               initialData: chat.photo,
                               builder: (_, data) {
-                                var chatPhoto = data.data == null ? null : data.data as ChatPhotoInfo;
+                                var chatPhoto = data.data == null
+                                    ? null
+                                    : data.data as ChatPhotoInfo;
                                 return Userpic(
                                   key: Key(
                                     "userpic#chatId?=${chatId}fileId?=${chatPhoto?.big?.id}",
                                   ),
-                                  chatPhotoInfo: data.hasData ? chatPhoto : null,
+                                  chatPhotoInfo:
+                                      data.hasData ? chatPhoto : null,
                                   chatId: chatId,
                                   chatTitle: chat.title!,
                                   client: client,
@@ -143,11 +176,13 @@ class ChatItemDisplay extends StatelessWidget {
                               },
                             ),
                           ),
-                          if (interlocutor != null && interlocutor.type is UserTypeRegular)
+                          if (interlocutor != null &&
+                              interlocutor.type is UserTypeRegular)
                             StreamBuilder(
                               stream: client.statusOf(interlocutor.id!),
                               initialData: interlocutor.status,
-                              builder: (context, statusSnapshot) => OnlineIndicatorDidplay(
+                              builder: (context, statusSnapshot) =>
+                                  OnlineIndicatorDidplay(
                                 heigth: 20,
                                 width: 20,
                                 selected: selected,
@@ -194,7 +229,8 @@ class ChatItemDisplay extends StatelessWidget {
                 stream: client.actionsOf(chatId),
                 builder: (_, actionsSnapshow) {
                   if (actionsSnapshow.hasData) {
-                    var actions = actionsSnapshow.data as List<UpdateChatAction>;
+                    var actions =
+                        actionsSnapshow.data as List<UpdateChatAction>;
                     if (actions.isNotEmpty) {
                       return ChatItemActionDisplay(
                         chatSelected: selected,
@@ -209,7 +245,8 @@ class ChatItemDisplay extends StatelessWidget {
                   if (chat.lastMessage == null) return const Center();
                   return MessageContentPreview(
                     chatSelected: selected,
-                    message: chat.draftMessage == null ? chat.lastMessage : null,
+                    message:
+                        chat.draftMessage == null ? chat.lastMessage : null,
                     draftMessage: chat.draftMessage,
                     fromChatType: chat.type!,
                     client: client,
@@ -220,7 +257,9 @@ class ChatItemDisplay extends StatelessWidget {
           ),
           icon: pinned(chat)
               ? Icon(Icons.push_pin,
-                  color: ClientTheme.currentTheme.getField(selected ? "SelectedChatPinIconColor" : "ChatPinIconColor"))
+                  color: ClientTheme.currentTheme.getField(selected
+                      ? "SelectedChatPinIconColor"
+                      : "ChatPinIconColor"))
               : null,
         );
       },
@@ -233,7 +272,11 @@ class ChatItemDisplay extends StatelessWidget {
     var now = DateTime.now();
     var deltaInDays = (DateTime.now().difference(time) +
             (const Duration(days: 1) -
-                Duration(hours: now.hour, minutes: now.minute, seconds: now.second, milliseconds: now.millisecond)))
+                Duration(
+                    hours: now.hour,
+                    minutes: now.minute,
+                    seconds: now.second,
+                    milliseconds: now.millisecond)))
         .inDays;
 
     if (deltaInDays <= 0) {

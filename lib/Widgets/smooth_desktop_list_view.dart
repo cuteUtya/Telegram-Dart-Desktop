@@ -69,7 +69,7 @@ class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
             offset = clamp(offset, 0, double.infinity);
             _controller.animateTo(
               offset,
-              duration: const Duration(seconds: 1),
+              duration: const Duration(milliseconds: 400),
               curve: Curves.easeOutExpo,
             );
           }

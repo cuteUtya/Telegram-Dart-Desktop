@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/utils.dart';
 
@@ -33,8 +34,10 @@ class UserpicEmpty extends StatelessWidget {
       Text(
         displayLetters,
         style: TextDisplay.create(
-          textColor: TextColor.PeerNameTextColor,
-          fontFamily: extractEmojis(displayLetters).isNotEmpty ? TextDisplay.emojiFont : TextDisplay.greaterImportance,
+          textColor: ClientTheme.currentTheme.getField("PeerNameTextColor"),
+          fontFamily: extractEmojis(displayLetters).isNotEmpty
+              ? TextDisplay.emojiFont
+              : TextDisplay.greaterImportance,
           size: fontSize ?? 24,
           fontWeight: FontWeight.w500,
         ),

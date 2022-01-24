@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
 
@@ -43,7 +44,9 @@ class ChatFilterItemHorizontal extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                           fontFamily: TextDisplay.greaterImportance,
                           size: 20,
-                          textColor: active ? TextColor.Accent : TextColor.RegularText,
+                          textColor: ClientTheme.currentTheme.getField(active
+                              ? "FolderTitleActiveColor"
+                              : "FolderTitleInactiveColor"),
                         ),
                       ),
                     ),

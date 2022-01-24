@@ -31,9 +31,12 @@ class ChatItemTitle extends StatelessWidget {
         [
           WidgetSpan(
               child: Icon(
-            isBot ? Icons.smart_toy : (isChannel ? Icons.campaign : Icons.group),
+            isBot
+                ? Icons.smart_toy
+                : (isChannel ? Icons.campaign : Icons.group),
             size: 22,
-            color: ClientTheme.currentTheme.getField(selected ? "SelectedTitleIconColor" : "TitleIconColor"),
+            color: ClientTheme.currentTheme.getField(
+                selected ? "SelectedTitleIconColor" : "TitleIconColor"),
           )),
           const WidgetSpan(
             child: SizedBox(
@@ -44,38 +47,45 @@ class ChatItemTitle extends StatelessWidget {
       );
     }
     return RichText(
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        textAlign: TextAlign.left,
-        text: TextSpan(
-            children: beforeTitle +
-                TextDisplay.parseEmojiInString(
-                  title,
-                  selected ? TextDisplay.chatTittleSelected : TextDisplay.chatTittle,
-                ) +
-                [
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 4),
-                      child: isSupport
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.left,
+      text: TextSpan(
+        children: beforeTitle +
+            TextDisplay.parseEmojiInString(
+              title,
+              selected
+                  ? TextDisplay.chatTittleSelected
+                  : TextDisplay.chatTittle,
+            ) +
+            [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 4),
+                  child: isSupport
+                      ? Icon(
+                          Icons.privacy_tip,
+                          color: ClientTheme.currentTheme
+                              .getField("VerifedSupergoupIconColor"),
+                        )
+                      : isScam
                           ? Icon(
-                              Icons.privacy_tip,
-                              color: ClientTheme.currentTheme.getField("VerifedSupergoupIconColor"),
+                              Icons.warning,
+                              color: ClientTheme.currentTheme
+                                  .getField("ScamIconColor"),
                             )
-                          : isScam
+                          : isVerifed
                               ? Icon(
-                                  Icons.warning,
-                                  color: ClientTheme.currentTheme.getField("ScamIconColor"),
+                                  Icons.verified,
+                                  color: ClientTheme.currentTheme
+                                      .getField("VerifedSupergoupIconColor"),
                                 )
-                              : isVerifed
-                                  ? Icon(
-                                      Icons.verified,
-                                      color: ClientTheme.currentTheme.getField("VerifedSupergoupIconColor"),
-                                    )
-                                  : const SizedBox.shrink(),
-                    ),
-                  )
-                ]));
+                              : const SizedBox.shrink(),
+                ),
+              ),
+            ],
+      ),
+    );
   }
 }
