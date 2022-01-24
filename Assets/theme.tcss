@@ -41,7 +41,8 @@ ButtonDangerBackColor: ref(DangerHalfTransparent);
 
 OnlineColor: #0BA628;
 SelectedColor: #FFFFFF;
-OnlineColorSelected: ref(ChatUnselectedColor);
+OnlineColorSelected(theme=light): ref(ChatUnselectedColor);
+OnlineColorSelected(theme=dark): ref(SelectedColor);
 OnlineColorOutline: ref(ChatUnselectedColor);
 OnlineColorOutlineSelected: ref(ChatCurrentlySelectedColor);
 OnlineStatusColor: ref(OnlineColor);
