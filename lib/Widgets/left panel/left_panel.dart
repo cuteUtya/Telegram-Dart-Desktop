@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/StateManagment/ui_events.dart';
 import 'package:myapp/ThemesEngine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
@@ -70,14 +71,38 @@ class LeftPanel extends StatelessWidget {
               ),
             ]),
             const SizedBox(height: 12),
-            ChatFilterHorizontal(client: client),
-            const SeparatorLine(),
             Expanded(
-              child: ChatListsManager(
-                key: listsManager,
-                client: client,
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      ChatFilterHorizontal(client: client),
+                      const SeparatorLine(),
+                    ],
+                  ),
+                  StreamBuilder(
+                    stream: UIEvents.archiveState(),
+                    builder: (_, data) {
+                      bool archiveOpened = data.data == true;
+                      return Column(
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.ease,
+                            height: archiveOpened ? 0 : 40,
+                          ),
+                          Expanded(
+                              child: ChatListsManager(
+                            key: listsManager,
+                            client: client,
+                          ))
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
-            ),
+            )
           ],
         ),
       ),
