@@ -13,11 +13,12 @@ class LangFunction {
 }
 
 class ClientTheme {
-  static ClientTheme currentTheme = ClientTheme("");
+  static ClientTheme currentTheme = ClientTheme("", false);
   static late ClientTheme _defaultTheme;
 
   static const String linesSeparator = ';';
   static const String valueSeparator = ':';
+  final Map<String, Function> environmentVariables = {"theme": () => "dark"};
   final Map<String, String> lines = {};
   final List<LangFunction> functions = [
     LangFunction("linear", [3], linear),
@@ -25,7 +26,10 @@ class ClientTheme {
     LangFunction("min", [2], min_inter)
   ];
 
-  ClientTheme(String themeContent) {
+  bool _isDefault = false;
+
+  ClientTheme(String themeContent, bool isDefault) {
+    _isDefault = isDefault;
     themeContent.replaceAll("\n", "\r").split("\r").forEach((element) {
       if (element.isEmpty) return;
       if (element[0] == "#") {
@@ -33,7 +37,12 @@ class ClientTheme {
       }
     });
 
-    themeContent.replaceAll("\n", "\r").split("\r").join().split(linesSeparator).forEach((element) {
+    themeContent
+        .replaceAll("\n", "\r")
+        .split("\r")
+        .join()
+        .split(linesSeparator)
+        .forEach((element) {
       if (element.isEmpty) return;
       var val = element.split(valueSeparator);
       lines[val[0].replaceAll(" ", "")] = val[1].replaceAll(" ", "");
@@ -41,8 +50,8 @@ class ClientTheme {
   }
 
   static Future init() async {
-    var file = await rootBundle.loadString("Assets/theme_dark.tcss");
-    _defaultTheme = ClientTheme(file);
+    var file = await rootBundle.loadString("Assets/theme.tcss");
+    _defaultTheme = ClientTheme(file, true);
   }
 
   String doFuntions(String value) {
@@ -52,7 +61,11 @@ class ClientTheme {
         var regex = foo.funcName;
         regex += "\\(";
         regex += "(((#[0-9a-zA-Z]{6,8})|([0-9]{1,20}([.,][0-9]{1,4})?)),?)";
-        regex += "{" + foo.argsCount.reduce(min).toString() + "," + foo.argsCount.reduce(max).toString() + "}\\)";
+        regex += "{" +
+            foo.argsCount.reduce(min).toString() +
+            "," +
+            foo.argsCount.reduce(max).toString() +
+            "}\\)";
         var reg = RegExp(regex);
 
         while (reg.hasMatch(value)) {
@@ -60,7 +73,8 @@ class ClientTheme {
           if (match != null) {
             findFunctions = true;
             var functionStr = value.substring(match.start, match.end);
-            var argsStr = functionStr.substring(foo.funcName.length + 1, functionStr.length - 1);
+            var argsStr = functionStr.substring(
+                foo.funcName.length + 1, functionStr.length - 1);
             var args = argsStr.split(',');
             value = value.replaceFirst(functionStr, foo.dartFunction(args));
           }
@@ -83,7 +97,8 @@ class ClientTheme {
       return (adouble > bdouble ? adouble : bdouble).toString();
     }
 
-    throw Exception("Error while parsing arguments. Types should be max(double, double)");
+    throw Exception(
+        "Error while parsing arguments. Types should be max(double, double)");
   }
 
   static String min_inter(List<dynamic> args) {
@@ -96,7 +111,8 @@ class ClientTheme {
       return (bdouble > adouble ? adouble : bdouble).toString();
     }
 
-    throw Exception("Error while parsing arguments. Types should be min(double, double)");
+    throw Exception(
+        "Error while parsing arguments. Types should be min(double, double)");
   }
 
   static String linear(List<dynamic> args) {
@@ -106,20 +122,24 @@ class ClientTheme {
 
     if (double.tryParse(t) != null) {
       if (isHEX(a) && isHEX(b)) {
-        var lerpedColor = Color.lerp(hexToColor(a), hexToColor(b), double.parse(t));
+        var lerpedColor =
+            Color.lerp(hexToColor(a), hexToColor(b), double.parse(t));
         if (lerpedColor != null) {
           return colorToHEX(lerpedColor);
         } else {
-          throw Exception("Error while linear interpolation: a or b color is null. But how 🤔");
+          throw Exception(
+              "Error while linear interpolation: a or b color is null. But how 🤔");
         }
       } else if (double.tryParse(a) != null && double.tryParse(b) != null) {
-        return numberToString(((1 - t) * double.parse(a) + t * double.parse(b)), 4);
+        return numberToString(
+            ((1 - t) * double.parse(a) + t * double.parse(b)), 4);
       }
 
       throw Exception(
           "Error while linear interpolation: wrong types of arguments, should be [Color, Color, double] or [double, double, double] ");
     }
-    throw Exception("Error while linear interpolation: wrong type of t, should be double");
+    throw Exception(
+        "Error while linear interpolation: wrong type of t, should be double");
   }
 
   String? getRawField(String name) {
@@ -146,8 +166,14 @@ class ClientTheme {
   String _getFieldString(String name) {
     String? value = getRawField(name);
 
+    environmentVariables.forEach((key, val) {
+      value = getRawField("$name($key=" + val.call().toString() + ")");
+    });
+
+    if ((value ?? "") == "") value = getRawField(name);
+
     if (value == null) {
-      if (_defaultTheme.lines[name] == null) {
+      if (_isDefault) {
         throw Exception("Field $name unreachible");
       }
       return _defaultTheme._getFieldString(name);
@@ -176,7 +202,10 @@ class ClientTheme {
         findRefs += newrefs.length;
         for (int j = 0; j < newrefs.length; j++) {
           if (elems.contains(newrefs[j])) {
-            throw Exception("Unreachable reference found, stack: " + paths[i] + ">" + newrefs[j]);
+            throw Exception("Unreachable reference found, stack: " +
+                paths[i] +
+                ">" +
+                newrefs[j]);
           }
           newPaths.add(paths[i] + ">" + newrefs[j]);
         }
@@ -185,14 +214,14 @@ class ClientTheme {
       if (findRefs == 0) pathsIsEnd = true;
     }
 
-    value = replaceReferences(value);
-    value = replaceColorChannel(value);
-    value = doMath(value);
-    value = buildColors(value);
-    value = replaceColorChannel(value);
-    value = doFuntions(value);
+    value = replaceReferences(value!);
+    value = replaceColorChannel(value!);
+    value = doMath(value!);
+    value = buildColors(value!);
+    value = replaceColorChannel(value!);
+    value = doFuntions(value!);
 
-    return value;
+    return value!;
   }
 
   dynamic getField(String name) {
@@ -221,13 +250,17 @@ class ClientTheme {
               colors.add(double.parse(element));
             }
           } catch (ex) {
-            throw Exception("Error while initialization new Color: parsing arguments failed");
+            throw Exception(
+                "Error while initialization new Color: parsing arguments failed");
           }
-          value =
-              value.replaceFirst(match, rgbaTohex(colors[0].toInt(), colors[1].toInt(), colors[2].toInt(), colors[3].toInt()));
+          value = value.replaceFirst(
+              match,
+              rgbaTohex(colors[0].toInt(), colors[1].toInt(), colors[2].toInt(),
+                  colors[3].toInt()));
         } else {
-          throw Exception(
-              "Error while initialization new Color: received " + colorsStr.length.toString() + " arguments, need [3, 4]");
+          throw Exception("Error while initialization new Color: received " +
+              colorsStr.length.toString() +
+              " arguments, need [3, 4]");
         }
       }
     }
@@ -236,7 +269,8 @@ class ClientTheme {
   }
 
   static String doMath(String value) {
-    var mathRegx = RegExp(r"Math\(([0-9]{1,20})[.,]?([0-9]{1,4})?[-+*\/]([0-9]{1,20})[.,]?([0-9]{1,4})?\)");
+    var mathRegx = RegExp(
+        r"Math\(([0-9]{1,20})[.,]?([0-9]{1,4})?[-+*\/]([0-9]{1,20})[.,]?([0-9]{1,4})?\)");
 
     while (mathRegx.hasMatch(value)) {
       var element = mathRegx.firstMatch(value);
@@ -261,7 +295,9 @@ class ClientTheme {
           a = double.parse(components[0]);
           b = double.parse(components[1]);
         } catch (ex) {
-          throw Exception("Error while math operation at \n" + match + "\nparsing numbers is failed");
+          throw Exception("Error while math operation at \n" +
+              match +
+              "\nparsing numbers is failed");
         }
         switch (currentOperation) {
           case '+':
@@ -277,7 +313,8 @@ class ClientTheme {
             result = a / b;
             break;
         }
-        value = value.replaceFirst(match, double.parse(result.toStringAsFixed(4)).toString());
+        value = value.replaceFirst(
+            match, double.parse(result.toStringAsFixed(4)).toString());
       }
     }
 
@@ -315,7 +352,8 @@ class ClientTheme {
         var color = Color(int.parse(hex.substring(1, hex.length), radix: 16));
 
         var channelValue = 0;
-        var channelName = match.substring(match.length - 1, match.length).toLowerCase();
+        var channelName =
+            match.substring(match.length - 1, match.length).toLowerCase();
         switch (channelName) {
           case 'a':
             channelValue = color.alpha;
@@ -331,7 +369,9 @@ class ClientTheme {
             break;
 
           default:
-            throw Exception("Not allowed channel name [" + channelName + "], allowed only [a, r, g, b]");
+            throw Exception("Not allowed channel name [" +
+                channelName +
+                "], allowed only [a, r, g, b]");
         }
 
         value = value.replaceFirst(match, channelValue.toString());

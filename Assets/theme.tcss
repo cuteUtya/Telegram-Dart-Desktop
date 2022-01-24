@@ -1,25 +1,27 @@
 #Base fields#
 Accent: #4E94CB;
 AccentHalfTransparent: #E0EEFD;
-BaseColor: #FAFAFA;
+BaseColor(theme=light): #FAFAFA;
+BaseColor(theme=dark): #17212B;
 DangerColor: #DF1E1E; 
 DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
-HoveredObject: #E0E0E0;
+HoveredObject(theme=light): #E0E0E0;
+HoveredObject(theme=dark): #202B36;
 GenericUIIconsColor: #7F7F7F;
 InfoOutsideMessageColor: #F6F6F6;
 
-BorderLineColor: #DADADA;
-
-#change this color is bad idea :D#
-Transparent: #00000000;
-White: #FFFFFFFF;
+BorderLineColor(theme=light): #DADADA;
+BorderLineColor(theme=dark): #4A4A4A;
 
 #Typography fields#
-HeaderMain: #181818;
+HeaderMain(theme=light): #181818;
+HeaderMain(theme=dark): #EEEEEE;
 SelectedHeaderMain: ref(SelectedColor);
-HeaderSecondary: #464646;
+HeaderSecondary(theme=light): #464646;
+HeaderSecondary(theme=dark): #A5A5A5;
 AdditionalTextColor: #BABABA;
-RegularText: #696969;
+RegularText(theme=light): #696969;
+RegularText(theme=dark): #BBBBBB;
 ChatLastTimeMessage: ref(RegularText);
 SelectedChatLastTimedMessage: ref(SelectedColor);
 
@@ -34,8 +36,6 @@ DataInputValidColor: ref(Accent);
 DataInputInvalidColor: ref(DangerColor);
 DataInputEmtyColor: #EBEBEB;
 
-SearchTextColor: ref(RegularText);
-
 ButtonAccentBackColor: ref(AccentHalfTransparent);
 ButtonDangerBackColor: ref(DangerHalfTransparent);
 
@@ -45,7 +45,9 @@ OnlineColorSelected: ref(ChatUnselectedColor);
 OnlineColorOutline: ref(ChatUnselectedColor);
 OnlineColorOutlineSelected: ref(ChatCurrentlySelectedColor);
 OnlineStatusColor: ref(OnlineColor);
-SearchBackground: #EBEBEB;
+SearchBackground(theme=light): #EBEBEB;
+SearchBackground(theme=dark): #242F3D;
+SearchTextColor: ref(RegularText);
 #Color(128, ref(BaseColor).r, ref(BaseColor).g, ref(BaseColor).b)#
 ChatUnselectedColor: ref(BaseColor);
 ChatSelectedColor: ref(HoveredObject);
@@ -89,24 +91,30 @@ CheckMarkChatSelectedListColor: ref(SelectedColor);
 ExpiredPhotoChatListIconColor: #F65B6D;
 Draft: ref(DangerColor);
 
-UnreadChatBubbleColor: #A5A5A5;
+UnreadChatBubbleColor(theme=light): #A5A5A5;
+UnreadChatBubbleColor(theme=dark): #414141;
+UnreadChatBubbleTextColor: #FFFFFF;
 UnreadMentionChatBubbleColor: #E64D4D;
 
 UnreadFilterBubbleColor: ref(UnreadChatBubbleColor);
 UnreadFilterMentionBubbleColor: ref(UnreadMentionChatBubbleColor);
 ChatFilterActiveColor: ref(Accent);
 
-ChatClickAnimationEffectColor: #D2D2D2;
+ChatClickAnimationEffectColor(theme=light): #D2D2D2;
+ChatClickAnimationEffectColor(theme=dark): #25313D;
 ChatListBackgroundColor: ref(BaseColor);
 ChatCurrentlySelectedColor: ref(Accent);
 ChatCurrentlyUnselectedColor: ref(BaseColor);
-ArchiveNotHiddenBackColor: #BCBCBC;
-ArchoveNotHiddenIconColor: ref(BaseColor);
+ArchiveNotHiddenBackColor(theme=light): #BCBCBC;
+ArchiveNotHiddenBackColor(theme=dark): #383838;
+ArchoveNotHiddenIconColor: #FFFFFF;
 
-PageHeaderBackgroundColor: #EAEAEA;
+PageHeaderBackgroundColor: ref(BaseColor);
+PageHeaderBackgroundColorHovered: linear(ref(PageHeaderBackgroundColor), #000000, 0.15); 
 
 TitleIconColor: ref(HeaderMain);
-SelectedTitleIconColor: ref(BaseColor);
+SelectedTitleIconColor(theme=light): ref(BaseColor);
+SelectedTitleIconColor(theme=dark): ref(SelectedColor);
 
 
 ActionBarColor: ref(BaseColor);
@@ -118,12 +126,16 @@ SaveMessageIconColor: #FFFFFFFF;
 RepliesMessagesBackColor: ref(Accent);
 RepliesMessageIconColor: #FFFFFFFF;
 
-MessageTextColor: #151515;
-MessageBubbleMineColor: #E6FEE4;
-MessageBubbleOtherColor: ref(BaseColor);
+MessageTextColor(theme=light): #151515;
+MessageTextColor(theme=dark): #F1F1F1;
+MessageBubbleMineColor(theme=light): #E6FEE4;
+MessageBubbleMineColor(theme=dark): #2F72A5;
+MessageBubbleOtherColor(theme=light): ref(BaseColor);
+MessageBubbleOtherColor(theme=dark): #182533;
 MessageInfoBubbleColor: #2A151515;
 CheckMarkNotMineColor: #FF989898;
-CheckMarkMineColor: #FF65AF5F;
+CheckMarkMineColor(theme=light): #FF65AF5F;
+CheckMarkMineColor(theme=dark): #FFFFFF;
 CheckMarkInFlowContainer: ref(InfoOutsideMessageColor);
 
 StickerOutlineColor: #1E000000;
@@ -139,7 +151,11 @@ ReplieOnMessageBubbleTextColor: ref(InfoOutsideMessageColor);
 
 FoldersAndSearchBackgroundColor: ref(BaseColor);
 ActionBarTextColor: ref(RegularText);
-
-tw1nkleeModeBackgroundColor: #B3C98C;
+tw1nkleeModeBackgroundColor(theme=light): #B3C98C;
+tw1nkleeModeBackgroundColor(theme=dark): #0E1621;
 InputFieldTextColor: ref(RegularText);
 AdminTitleColor: ref(RegularText);
+ArchiveContentColor: ref(RegularText);
+AudioTitleTextColor: ref(Accent);
+FolderTitleActiveColor: ref(Accent);
+FolderTitleInactiveColor: ref(RegularText);
