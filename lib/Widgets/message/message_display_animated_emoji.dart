@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:myapp/audio utils/audio_provider.dart';
+import 'package:myapp/Audio utils/audio_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/big_stickers_overlay.dart';
-import 'package:myapp/rlottie/rlottie.dart';
+import 'package:myapp/Rlottie/rlottie.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 

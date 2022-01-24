@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 
 class ChatItemTitle extends StatelessWidget {
@@ -31,12 +31,9 @@ class ChatItemTitle extends StatelessWidget {
         [
           WidgetSpan(
               child: Icon(
-            isBot
-                ? Icons.smart_toy
-                : (isChannel ? Icons.campaign : Icons.group),
+            isBot ? Icons.smart_toy : (isChannel ? Icons.campaign : Icons.group),
             size: 22,
-            color: ClientTheme.currentTheme.getField(
-                selected ? "SelectedTitleIconColor" : "TitleIconColor"),
+            color: ClientTheme.currentTheme.getField(selected ? "SelectedTitleIconColor" : "TitleIconColor"),
           )),
           const WidgetSpan(
             child: SizedBox(
@@ -54,9 +51,7 @@ class ChatItemTitle extends StatelessWidget {
         children: beforeTitle +
             TextDisplay.parseEmojiInString(
               title,
-              selected
-                  ? TextDisplay.chatTittleSelected
-                  : TextDisplay.chatTittle,
+              selected ? TextDisplay.chatTittleSelected : TextDisplay.chatTittle,
             ) +
             [
               WidgetSpan(
@@ -66,20 +61,17 @@ class ChatItemTitle extends StatelessWidget {
                   child: isSupport
                       ? Icon(
                           Icons.privacy_tip,
-                          color: ClientTheme.currentTheme
-                              .getField("VerifedSupergoupIconColor"),
+                          color: ClientTheme.currentTheme.getField("VerifedSupergoupIconColor"),
                         )
                       : isScam
                           ? Icon(
                               Icons.warning,
-                              color: ClientTheme.currentTheme
-                                  .getField("ScamIconColor"),
+                              color: ClientTheme.currentTheme.getField("ScamIconColor"),
                             )
                           : isVerifed
                               ? Icon(
                                   Icons.verified,
-                                  color: ClientTheme.currentTheme
-                                      .getField("VerifedSupergoupIconColor"),
+                                  color: ClientTheme.currentTheme.getField("VerifedSupergoupIconColor"),
                                 )
                               : const SizedBox.shrink(),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Stickers/sticker_outnline.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
-import 'package:myapp/rlottie/rlottie.dart';
+import 'package:myapp/Rlottie/rlottie.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'dart:io' as io;
@@ -33,10 +33,8 @@ class StickerDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width = (sticker.width ?? sticker.width!).toDouble() *
-        (stickerSizeRatie * size);
-    var height = (sticker.height ?? sticker.height!).toDouble() *
-        (stickerSizeRatie * size);
+    var width = (sticker.width ?? sticker.width!).toDouble() * (stickerSizeRatie * size);
+    var height = (sticker.height ?? sticker.height!).toDouble() * (stickerSizeRatie * size);
     return RemoteFileBuilder(
         emptyPlaceholder: sticker.outline == null
             ? const SizedBox.shrink()

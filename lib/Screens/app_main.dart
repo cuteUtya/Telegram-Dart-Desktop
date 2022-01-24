@@ -19,7 +19,8 @@ class _AppMainState extends State<AppMain> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       //start receive updates only if all UI elements was inited
-      Future.delayed(Duration.zero).then((value) => widget.client.startReceiveUpdates());
+      Future.delayed(Duration.zero)
+          .then((value) => widget.client.startReceiveUpdates());
     });
 
     return Row(children: [

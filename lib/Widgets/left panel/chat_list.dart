@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/StateManagment/ui_events.dart';
+import 'package:myapp/State managment/ui_events.dart';
 import 'package:myapp/Widgets/chat_item_display_archive_not_hidden.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';

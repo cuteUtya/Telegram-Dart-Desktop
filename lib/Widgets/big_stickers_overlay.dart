@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Stickers/sticker_display.dart';
-import 'package:myapp/rlottie/rlottie.dart';
+import 'package:myapp/Rlottie/rlottie.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 

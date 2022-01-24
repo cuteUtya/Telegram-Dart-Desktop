@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/StateManagment/ui_events.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/State managment/ui_events.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Userpic/userpic_icon.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/display_text.dart';
@@ -27,12 +27,9 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
       content.addAll(TextDisplay.parseEmojiInString(
             chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
             TextDisplay.create(
-              textColor:
-                  ClientTheme.currentTheme.getField("ArchiveContentColor"),
+              textColor: ClientTheme.currentTheme.getField("ArchiveContentColor"),
               size: 18,
-              fontWeight: (chat.unreadCount ?? 0) <= 0
-                  ? FontWeight.normal
-                  : FontWeight.bold,
+              fontWeight: (chat.unreadCount ?? 0) <= 0 ? FontWeight.normal : FontWeight.bold,
             ),
           ) +
           [
@@ -60,8 +57,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
       key: UniqueKey(),
       title: Row(
         children: [
-          Text(client.getTranslation("lng_archived_name"),
-              style: TextDisplay.chatTittle),
+          Text(client.getTranslation("lng_archived_name"), style: TextDisplay.chatTittle),
           const Spacer(),
         ],
       ),

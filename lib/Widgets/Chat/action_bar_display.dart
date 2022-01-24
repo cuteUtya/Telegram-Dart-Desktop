@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/StateManagment/ui_events.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/State managment/ui_events.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/tdlib/client.dart';

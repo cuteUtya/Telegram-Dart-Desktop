@@ -10,7 +10,9 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'dart:async';
 
 class EnterCodeScreen extends StatefulWidget {
-  const EnterCodeScreen({Key? key, required this.client, required this.codeInfo}) : super(key: key);
+  const EnterCodeScreen(
+      {Key? key, required this.client, required this.codeInfo})
+      : super(key: key);
   final TelegramClient client;
   final AuthenticationCodeInfo codeInfo;
   @override
@@ -46,7 +48,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
           seconds--;
           if (seconds == 0) {
             passedType = widget.codeInfo.nextType;
-            if (widget.codeInfo.nextType!.getConstructor() == AuthenticationCodeTypeCall.CONSTRUCTOR) {
+            if (widget.codeInfo.nextType!.getConstructor() ==
+                AuthenticationCodeTypeCall.CONSTRUCTOR) {
               widget.client.send(ResendAuthenticationCode()).then(errorHandler);
               telegramIsDial = true;
             }
@@ -73,7 +76,9 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (seconds <= 0 && widget.codeInfo.timeout != 0 && widget.codeInfo.nextType != passedType) {
+    if (seconds <= 0 &&
+        widget.codeInfo.timeout != 0 &&
+        widget.codeInfo.nextType != passedType) {
       seconds = widget.codeInfo.timeout!;
       suggestResend = false;
     }
@@ -87,7 +92,10 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
           Text(getCodeInfo().phoneNumber!, style: TextDisplay.title),
           const SizedBox(height: 18),
           widget.client.buildTextByKey(
-              getCodeInfo().type!.runtimeType == AuthenticationCodeTypeTelegramMessage ? "lng_code_telegram" : "lng_code_desc",
+              getCodeInfo().type!.runtimeType ==
+                      AuthenticationCodeTypeTelegramMessage
+                  ? "lng_code_telegram"
+                  : "lng_code_desc",
               TextDisplay.additional),
           const SizedBox(height: 20),
           DataInput(
@@ -101,20 +109,31 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
               ? ClickableText(
                   data: widget.client.getTranslation("lng_code_no_telegram"),
                   onTap: () {
-                    widget.client.send(ResendAuthenticationCode()).then(errorHandler);
+                    widget.client
+                        .send(ResendAuthenticationCode())
+                        .then(errorHandler);
                     suggestResend = false;
                   },
                 )
-              : widget.client.buildTextByKey(telegramIsDial ? "lng_code_called" : "lng_code_call", TextDisplay.additional,
-                  replacing: {"{minutes}": getMinutes(), "{seconds}": getSeconds()}),
+              : widget.client.buildTextByKey(
+                  telegramIsDial ? "lng_code_called" : "lng_code_call",
+                  TextDisplay.additional,
+                  replacing: {
+                      "{minutes}": getMinutes(),
+                      "{seconds}": getSeconds()
+                    }),
           const SizedBox(height: 40),
           DesktopButton(
-              onPressed: () => widget.client.send(CheckAuthenticationCode(code: code)).then(errorHandler),
+              onPressed: () => widget.client
+                  .send(CheckAuthenticationCode(code: code))
+                  .then(errorHandler),
               width: 400,
               weight: FontWeight.w500,
               text: widget.client.getTranslation("lng_intro_next")),
           const SizedBox(height: 16),
-          errorStr == null ? const Center() : Text(errorStr!, style: TextDisplay.regular16),
+          errorStr == null
+              ? const Center()
+              : Text(errorStr!, style: TextDisplay.regular16),
         ],
       ),
     );
@@ -122,7 +141,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
 
   void errorHandler(TdObject result) {
     if (result.getConstructor() == TdError.CONSTRUCTOR) {
-      setState(() => errorStr = widget.client.getLocalizedErrorMessage(result as TdError));
+      setState(() =>
+          errorStr = widget.client.getLocalizedErrorMessage(result as TdError));
     }
   }
 
@@ -133,7 +153,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
       case AuthenticationCodeTypeSms:
         return (getCodeInfo().type as AuthenticationCodeTypeSms).length!;
       case AuthenticationCodeTypeTelegramMessage:
-        return (getCodeInfo().type as AuthenticationCodeTypeTelegramMessage).length!;
+        return (getCodeInfo().type as AuthenticationCodeTypeTelegramMessage)
+            .length!;
       default:
         return 5;
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/StateManagment/ui_events.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/State managment/ui_events.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
@@ -19,8 +19,7 @@ class LeftPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     var listsManager = GlobalKey<ChatListsManagerState>();
     return Container(
-      color:
-          ClientTheme.currentTheme.getField("FoldersAndSearchBackgroundColor"),
+      color: ClientTheme.currentTheme.getField("FoldersAndSearchBackgroundColor"),
       child: Padding(
         padding: const EdgeInsets.only(top: 12),
         child: Column(
@@ -41,28 +40,23 @@ class LeftPanel extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.only(right: 12),
                   height: 36,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search,
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Icon(
+                      Icons.search,
+                      size: 18,
+                      color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
+                    ),
+                    const SizedBox(width: 2),
+                    client.buildTextByKey(
+                      "lng_dlg_filter",
+                      TextDisplay.create(
                           size: 18,
-                          color: ClientTheme.currentTheme
-                              .getField("GenericUIIconsColor"),
-                        ),
-                        const SizedBox(width: 2),
-                        client.buildTextByKey(
-                          "lng_dlg_filter",
-                          TextDisplay.create(
-                              size: 18,
-                              fontFamily: TextDisplay.greaterImportance,
-                              textColor: ClientTheme.currentTheme
-                                  .getField("SearchTextColor")),
-                        ),
-                      ]),
+                          fontFamily: TextDisplay.greaterImportance,
+                          textColor: ClientTheme.currentTheme.getField("SearchTextColor")),
+                    ),
+                  ]),
                   decoration: BoxDecoration(
-                    color:
-                        ClientTheme.currentTheme.getField("SearchBackground"),
+                    color: ClientTheme.currentTheme.getField("SearchBackground"),
                     borderRadius: const BorderRadius.all(
                       Radius.circular(12),
                     ),

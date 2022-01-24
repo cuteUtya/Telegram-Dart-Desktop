@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/StateManagment/ui_events.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/State managment/ui_events.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_item_horizontal.dart';
 import 'package:myapp/Widgets/smooth_desktop_list_view.dart';
 import 'package:myapp/tdlib/client.dart';

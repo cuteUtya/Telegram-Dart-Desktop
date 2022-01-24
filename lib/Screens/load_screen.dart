@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 
 class LoadScreen extends StatelessWidget {
   const LoadScreen({Key? key}) : super(key: key);
@@ -8,7 +8,8 @@ class LoadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-      child: SizedBox(width: 186, height: 186, child: Lottie.asset("Assets/Load.json")),
+      child: SizedBox(
+          width: 186, height: 186, child: Lottie.asset("Assets/Load.json")),
       width: 200,
       height: 200,
       decoration: BoxDecoration(

@@ -34,11 +34,14 @@ class _AutorizationRouter extends State<AutorizationRouter> {
   }
 
   initNewClient({String? sessionName}) {
-    getClient().send(LogOut()).then((value) => getClient().destroy()).then((value) {
+    getClient()
+        .send(LogOut())
+        .then((value) => getClient().destroy())
+        .then((value) {
       var newClient = TelegramClient();
-      newClient
-          .init()
-          .then((_) => newClient.setTdlibParameters(deviceModel: sessionName).then((_) => setState(() => client = newClient)));
+      newClient.init().then((_) => newClient
+          .setTdlibParameters(deviceModel: sessionName)
+          .then((_) => setState(() => client = newClient)));
     });
   }
 
@@ -57,7 +60,8 @@ class _AutorizationRouter extends State<AutorizationRouter> {
                 return !seeIntroduction
                     ? IntroductionScreen(
                         client: getClient(),
-                        onNextClick: () => setState(() => seeIntroduction = true),
+                        onNextClick: () =>
+                            setState(() => seeIntroduction = true),
                       )
                     : PhoneEnterScreen(
                         client: getClient(),
@@ -84,19 +88,30 @@ class _AutorizationRouter extends State<AutorizationRouter> {
               break;
 
             case AuthorizationStateWaitOtherDeviceConfirmation:
-              var authState = builder.data as AuthorizationStateWaitOtherDeviceConfirmation;
-              return QrLogin(client: getClient(), link: authState.link!, onBackButtonClick: () => initNewClient());
+              var authState =
+                  builder.data as AuthorizationStateWaitOtherDeviceConfirmation;
+              return QrLogin(
+                  client: getClient(),
+                  link: authState.link!,
+                  onBackButtonClick: () => initNewClient());
 
             case AuthorizationStateWaitRegistration:
               return RegistrationScreen(
-                  termsOfService: (builder.data as AuthorizationStateWaitRegistration).termsOfService!, client: getClient());
+                  termsOfService:
+                      (builder.data as AuthorizationStateWaitRegistration)
+                          .termsOfService!,
+                  client: getClient());
 
             case AuthorizationStateWaitCode:
-              var codeInfo = (builder.data as AuthorizationStateWaitCode).codeInfo!;
+              var codeInfo =
+                  (builder.data as AuthorizationStateWaitCode).codeInfo!;
               return EnterCodeScreen(client: getClient(), codeInfo: codeInfo);
 
             case AuthorizationStateWaitPassword:
-              return PasswordCheckScreen(client: getClient(), authWaitPassword: builder.data as AuthorizationStateWaitPassword);
+              return PasswordCheckScreen(
+                  client: getClient(),
+                  authWaitPassword:
+                      builder.data as AuthorizationStateWaitPassword);
 
             case AuthorizationStateClosed:
               seeIntroduction = false;
@@ -104,7 +119,8 @@ class _AutorizationRouter extends State<AutorizationRouter> {
               break;
 
             case AuthorizationStateReady:
-              getClient().send(SetOption(name: "online", value: OptionValueBoolean(value: true)));
+              getClient().send(SetOption(
+                  name: "online", value: OptionValueBoolean(value: true)));
               return AppMain(client: getClient());
           }
         }
@@ -119,7 +135,9 @@ class _AutorizationRouter extends State<AutorizationRouter> {
         .send(SetAuthenticationPhoneNumber(
             phoneNumber: phone,
             settings: PhoneNumberAuthenticationSettings(
-                allowFlashCall: false, isCurrentPhoneNumber: false, allowSmsRetrieverApi: false)))
+                allowFlashCall: false,
+                isCurrentPhoneNumber: false,
+                allowSmsRetrieverApi: false)))
         .then((value) {
       phoneEnterScreenResultHandler!.complete(value);
     });

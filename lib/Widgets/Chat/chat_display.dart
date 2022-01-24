@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/StateManagment/ui_events.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/State managment/ui_events.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
 import 'package:myapp/Widgets/Chat/input_field.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
@@ -27,7 +27,10 @@ class ChatDisplay extends StatelessWidget {
                 background: Background(
                     type: BackgroundTypeFill(
                         fill: BackgroundFillSolid(
-                            color: (ClientTheme.currentTheme.getField("tw1nkleeModeBackgroundColor") as Color).value))),
+                            color: (ClientTheme.currentTheme
+                                        .getField("tw1nkleeModeBackgroundColor")
+                                    as Color)
+                                .value))),
                 client: client,
               )
             else
@@ -35,18 +38,24 @@ class ChatDisplay extends StatelessWidget {
                 stream: client.selectedBackground,
                 builder: (_, data) {
                   if (data.hasData) {
-                    var update = data.data == null ? null : data.data as UpdateSelectedBackground;
+                    var update = data.data == null
+                        ? null
+                        : data.data as UpdateSelectedBackground;
                     if (update?.background == null) {
-                      client.send(GetBackgrounds()).then((backs) => client.send(SetBackground(
-                          forDarkTheme: update?.forDarkTheme,
-                          background: InputBackgroundRemote(
-                              backgroundId: backs is Backgrounds ? backs.backgrounds![0].id! : (backs as Background).id!))));
+                      client.send(GetBackgrounds()).then((backs) => client.send(
+                          SetBackground(
+                              forDarkTheme: update?.forDarkTheme,
+                              background: InputBackgroundRemote(
+                                  backgroundId: backs is Backgrounds
+                                      ? backs.backgrounds![0].id!
+                                      : (backs as Background).id!))));
                       return const SizedBox.shrink();
                     }
                     return BackgroundDisplay(
                         client: client,
                         //TODO correct work with dark and light themes
-                        background: (data.data as UpdateSelectedBackground).background!);
+                        background: (data.data as UpdateSelectedBackground)
+                            .background!);
                   }
                   return const SizedBox.shrink();
                 },
@@ -58,7 +67,8 @@ class ChatDisplay extends StatelessWidget {
                     Expanded(
                         child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: MessageList(chatId: chat.id!, client: client))),
+                            child:
+                                MessageList(chatId: chat.id!, client: client))),
                     InputField(client: client)
                   ])),
             if (chat != null)

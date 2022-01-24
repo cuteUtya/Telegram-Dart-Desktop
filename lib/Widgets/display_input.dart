@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 
 class DataInput extends StatefulWidget {
@@ -25,8 +25,7 @@ class DataInput extends StatefulWidget {
     if (externalControll) {
       _lastInputValue = value;
       _inputController.text = value;
-      _inputController.selection =
-          TextSelection(baseOffset: value.length, extentOffset: value.length);
+      _inputController.selection = TextSelection(baseOffset: value.length, extentOffset: value.length);
     }
   }
 
@@ -59,8 +58,7 @@ class _DataInputState extends State<DataInput> {
   @override
   Widget build(BuildContext contex) {
     var clr = getBorderColor(dataState);
-    var border =
-        UnderlineInputBorder(borderSide: BorderSide(color: clr, width: 2));
+    var border = UnderlineInputBorder(borderSide: BorderSide(color: clr, width: 2));
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       widget.customLabel == null
@@ -80,9 +78,7 @@ class _DataInputState extends State<DataInput> {
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 12),
               hintText: _displaingHint,
-              hintStyle: TextStyle(
-                  color:
-                      ClientTheme.currentTheme.getField("DataInputHintColor")),
+              hintStyle: TextStyle(color: ClientTheme.currentTheme.getField("DataInputHintColor")),
               disabledBorder: border,
               enabledBorder: border,
               focusedBorder: border),
@@ -94,10 +90,7 @@ class _DataInputState extends State<DataInput> {
           onSubmitted: (value) {
             setState(() {
               if (widget.externalControll) {
-                widget._inputController.text =
-                    widget.hintText.isEmpty || _displaingHint.isEmpty
-                        ? value
-                        : widget.hintText;
+                widget._inputController.text = widget.hintText.isEmpty || _displaingHint.isEmpty ? value : widget.hintText;
                 value = widget._inputController.text;
               }
               validate(value);
@@ -112,10 +105,8 @@ class _DataInputState extends State<DataInput> {
               }
               if (widget.getHintCallback != null) {
                 widget.hintText = widget.getHintCallback!(value);
-                widget._inputController.selection = TextSelection.fromPosition(
-                    TextPosition(
-                        offset:
-                            getTextPosition(widget._lastInputValue, value)));
+                widget._inputController.selection =
+                    TextSelection.fromPosition(TextPosition(offset: getTextPosition(widget._lastInputValue, value)));
                 widget._lastInputValue = value;
               }
               dataState = value.isEmpty ? DataState.empty : DataState.valid;
@@ -139,9 +130,7 @@ class _DataInputState extends State<DataInput> {
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 12),
               hintText: widget.defaultText,
-              hintStyle: TextStyle(
-                  color:
-                      ClientTheme.currentTheme.getField("DataInputHintColor")),
+              hintStyle: TextStyle(color: ClientTheme.currentTheme.getField("DataInputHintColor")),
               disabledBorder: border,
               enabledBorder: border,
               focusedBorder: border),
@@ -153,12 +142,10 @@ class _DataInputState extends State<DataInput> {
   void validate(String input) {
     if (input.isNotEmpty) {
       if (widget.validationCallback != null) {
-        setState(() => dataState = widget.validationCallback!(input)
-            ? DataState.valid
-            : DataState.invalid);
+        setState(() => dataState = widget.validationCallback!(input) ? DataState.valid : DataState.invalid);
       } else if (widget.asyncValidationCallback != null) {
-        widget.asyncValidationCallback!(input)!.then((value) => setState(
-            () => dataState = value ? DataState.valid : DataState.invalid));
+        widget.asyncValidationCallback!(input)!
+            .then((value) => setState(() => dataState = value ? DataState.valid : DataState.invalid));
       }
       if (widget.onDataStateChanged != null) {
         widget.onDataStateChanged!(dataState);
@@ -183,8 +170,7 @@ class _DataInputState extends State<DataInput> {
   String _getHintText(String? inputValue) {
     if (inputValue!.length > widget.hintText.length) return "";
 
-    if (inputValue.isEmpty ||
-        widget.hintText.substring(0, inputValue.length) == inputValue) {
+    if (inputValue.isEmpty || widget.hintText.substring(0, inputValue.length) == inputValue) {
       return widget.hintText;
     }
     return "";

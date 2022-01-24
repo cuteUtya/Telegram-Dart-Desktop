@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ThemesEngine/theme_interpreter.dart';
+import 'package:myapp/Themes engine/theme_interpreter.dart';
 
 class OnlineIndicatorDidplay extends StatelessWidget {
   const OnlineIndicatorDidplay({
@@ -29,7 +29,9 @@ class OnlineIndicatorDidplay extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: ClientTheme.currentTheme.getField(
-                    selected ? "OnlineColorOutlineSelected" : "OnlineColorOutline",
+                    selected
+                        ? "OnlineColorOutlineSelected"
+                        : "OnlineColorOutline",
                   ),
                 ),
                 width: online ? 20 : 0,
@@ -41,7 +43,8 @@ class OnlineIndicatorDidplay extends StatelessWidget {
               height: online ? 12 : 0,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: ClientTheme.currentTheme.getField(selected ? "OnlineColorSelected" : "OnlineStatusColor"),
+                color: ClientTheme.currentTheme.getField(
+                    selected ? "OnlineColorSelected" : "OnlineStatusColor"),
               ),
             ),
           ],
