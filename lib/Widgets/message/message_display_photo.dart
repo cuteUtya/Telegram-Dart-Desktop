@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/remote_file_builder_progress.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
@@ -36,65 +37,19 @@ class MessageDisplayPhoto extends StatelessWidget {
       bottom: haveText ? Radius.zero : const Radius.circular(12),
     );
 
-    return LayoutBuilder(
-      builder: (_, constraints) => SizedBox(
-        width: max(200, min(constraints.maxWidth, photoSize.width!.toDouble())),
-        child: haveText
-            ? MessageDisplayText(
-                client: client,
-                message: message,
-                senderName: senderName,
-                additionalContent: _buildImage(photoSize.photo!.id!, border),
-                infoWidget: infoWidget,
-                replieWidget: replieWidget,
-                text: photo.caption,
-              )
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (message.isOutgoing! && replieWidget != null)
-                    Container(
-                      child: replieWidget!,
-                      margin: const EdgeInsets.only(right: 8),
-                    ),
-                  Expanded(
-                    child: Align(
-                      alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          MouseRegion(
-                              onEnter: (_) => hiderKey.currentState?.show(),
-                              onExit: (_) => hiderKey.currentState?.hide(),
-                              child: _buildImage(photoSize.photo!.id!, border)),
-                          if (infoWidget != null)
-                            WidgetHider(
-                              key: hiderKey,
-                              hiddenOnInit: true,
-                              child: Container(
-                                child: infoWidget!,
-                                margin: const EdgeInsets.all(8),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (!message.isOutgoing! && replieWidget != null)
-                    Container(
-                      child: replieWidget!,
-                      margin: const EdgeInsets.only(left: 8),
-                    ),
-                ],
-              ),
+    return MessageDisplayMedia(
+      client: client,
+      message: message,
+      senderName: senderName,
+      infoWidget: infoWidget,
+      contentSize: Size(
+        max(200, photoSize.width!.toDouble()),
+        photoSize.height!.toDouble(),
       ),
-    );
-  }
-
-  Widget _buildImage(int fileId, BorderRadius border) => RemoteFileBuilderProgress(
+      caption: photo.caption,
+      content: RemoteFileBuilderProgress(
         client: client,
-        fileId: fileId,
+        fileId: photoSize.photo!.id!,
         builder: (_, progress, path) {
           if (path == null) {
             ///TODO implement better loading animation
@@ -107,10 +62,10 @@ class MessageDisplayPhoto extends StatelessWidget {
             child: Image.file(
               io.File(path),
               alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-              //height: clamp(
-              //    (photoSize.height ?? 400).toDouble(), 40, 400),
             ),
           );
         },
-      );
+      ),
+    );
+  }
 }

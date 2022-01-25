@@ -1,3 +1,4 @@
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:myapp/Screens/autorization_router.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
@@ -10,7 +11,7 @@ import 'package:libwinmedia/libwinmedia.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LWM.initialize();
-
+  DartVLC.initialize();
   await ClientTheme.init();
   var client = TelegramClient();
   await client.init();

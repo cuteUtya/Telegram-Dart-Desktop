@@ -8,6 +8,7 @@ import 'package:myapp/Widgets/message/message_display_audio.dart';
 import 'package:myapp/Widgets/message/message_display_photo.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
+import 'package:myapp/Widgets/message/message_display_video.dart';
 import 'package:myapp/Widgets/message/message_sticker.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
@@ -120,6 +121,15 @@ class MessageDisplay extends StatelessWidget {
                 message: message,
                 replieWidget: _buildReplieWidget(false),
                 infoWidget: _buildInfoWidget(false),
+              );
+              break;
+
+            case MessageVideo:
+              wrapInBubble = true;
+              contentWidget = MessageDisplayVideo(
+                client: client,
+                message: message,
+                senderName: author,
               );
               break;
 
