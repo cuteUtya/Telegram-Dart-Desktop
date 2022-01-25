@@ -23,10 +23,15 @@ class MessageDisplayVideo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(message.content is MessageVideo);
-
-    var player = vlc.Player(id: ++i);
-
     var video = message.content as MessageVideo;
+
+    var player = vlc.Player(
+      id: ++i,
+      videoDimensions: VideoDimensions(
+        video.video!.width!,
+        video.video!.height!,
+      ),
+    );
 
     client
         .send(DownloadFile(
@@ -35,19 +40,25 @@ class MessageDisplayVideo extends StatelessWidget {
       synchronous: true,
     ))
         .then((file) {
-      print((file as File).local!.path!);
-      player.add(vlc.Media.file(io.File((file as File).local!.path!)));
+      player.open(vlc.Media.file(io.File((file as File).local!.path!)));
     });
-
-    return MessageDisplayMedia(
+    return LayoutBuilder(builder: (_, box) {
+      print(box.maxWidth / video.video!.width!);
+      return MessageDisplayMedia(
         client: client,
         message: message,
         senderName: senderName,
         caption: video.caption,
+        contentSize: Size(
+          box.maxWidth,
+          video.video!.height! * (box.maxWidth / video.video!.width!),
+        ),
         content: vlc.Video(
           player: player,
-          width: 1280,
-          height: 720,
-        ));
+          width: video.video!.width!.toDouble(),
+          height: video.video!.height!.toDouble(),
+        ),
+      );
+    });
   }
 }
