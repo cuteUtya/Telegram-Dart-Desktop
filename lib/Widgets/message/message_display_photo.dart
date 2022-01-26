@@ -37,34 +37,39 @@ class MessageDisplayPhoto extends StatelessWidget {
       bottom: haveText ? Radius.zero : const Radius.circular(12),
     );
 
-    return MessageDisplayMedia(
-      client: client,
-      message: message,
-      senderName: senderName,
-      infoWidget: infoWidget,
-      contentSize: Size(
-        max(200, photoSize.width!.toDouble()),
-        photoSize.height!.toDouble(),
-      ),
-      caption: photo.caption,
-      content: RemoteFileBuilderProgress(
+    return LayoutBuilder(
+      builder: (_, box) => MessageDisplayMedia(
         client: client,
-        fileId: photoSize.photo!.id!,
-        builder: (_, progress, path) {
-          if (path == null) {
-            ///TODO implement better loading animation
-            return Text(
-              progress.toString(),
+        message: message,
+        senderName: senderName,
+        infoWidget: infoWidget,
+        contentWidth: max(
+          200,
+          min(
+            box.maxWidth,
+            photoSize.width!.toDouble(),
+          ),
+        ),
+        caption: photo.caption,
+        content: RemoteFileBuilderProgress(
+          client: client,
+          fileId: photoSize.photo!.id!,
+          builder: (_, progress, path) {
+            if (path == null) {
+              ///TODO implement better loading animation
+              return Text(
+                progress.toString(),
+              );
+            }
+            return ClipRRect(
+              borderRadius: border,
+              child: Image.file(
+                io.File(path),
+                alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
+              ),
             );
-          }
-          return ClipRRect(
-            borderRadius: border,
-            child: Image.file(
-              io.File(path),
-              alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }

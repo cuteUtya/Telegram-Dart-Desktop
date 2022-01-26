@@ -14,7 +14,8 @@ class MessageDisplayMedia extends StatelessWidget {
     required this.senderName,
     required this.caption,
     required this.content,
-    this.contentSize,
+    this.contentWidth,
+    this.contentHeight,
     this.infoWidget,
     this.replieWidget,
   }) : super(key: key);
@@ -24,7 +25,8 @@ class MessageDisplayMedia extends StatelessWidget {
   final FormattedText? caption;
   final Widget content;
   final Message message;
-  final Size? contentSize;
+  final double? contentWidth;
+  final double? contentHeight;
   final Widget? infoWidget;
   final Widget? replieWidget;
 
@@ -38,8 +40,8 @@ class MessageDisplayMedia extends StatelessWidget {
     );
 
     return SizedBox(
-      width: contentSize?.width,
-      height: contentSize?.height,
+      width: contentWidth,
+      height: contentHeight,
       child: haveText
           ? MessageDisplayText(
               client: client,
@@ -92,5 +94,8 @@ class MessageDisplayMedia extends StatelessWidget {
     );
   }
 
-  Widget _buildImage(BorderRadius border) => ClipRRect(borderRadius: border, child: content);
+  Widget _buildImage(BorderRadius border) => ClipRRect(
+        borderRadius: border,
+        child: content,
+      );
 }
