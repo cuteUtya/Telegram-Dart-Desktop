@@ -244,11 +244,12 @@ class MessageDisplay extends StatelessWidget {
 
             default:
               wrapInBubble = true;
-              contentWidget = Text(
-                "unsupported",
-                style: TextDisplay.create(
-                  size: 20,
-                ),
+              contentWidget = MessageDisplayText(
+                client: client,
+                message: message,
+                text: FormattedText(text: message.toJson().toString()),
+                infoWidget: _buildInfoWidget(true),
+                replieWidget: _buildReplieWidget(true),
               );
               break;
           }
