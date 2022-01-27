@@ -38,17 +38,18 @@ class ChatFilterItemHorizontal extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      children: TextDisplay.parseEmojiInString(
-                        title,
-                        TextDisplay.create(
-                          fontWeight: FontWeight.w400,
-                          fontFamily: TextDisplay.greaterImportance,
-                          size: 20,
-                          textColor: ClientTheme.currentTheme.getField(active
-                              ? "FolderTitleActiveColor"
-                              : "FolderTitleInactiveColor"),
+                      children: [
+                        TextDisplay.parseEmojiInString(
+                          title,
+                          TextDisplay.create(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: TextDisplay.greaterImportance,
+                            size: 20,
+                            textColor:
+                                ClientTheme.currentTheme.getField(active ? "FolderTitleActiveColor" : "FolderTitleInactiveColor"),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 4),

@@ -49,11 +49,11 @@ class ChatItemTitle extends StatelessWidget {
       textAlign: TextAlign.left,
       text: TextSpan(
         children: beforeTitle +
-            TextDisplay.parseEmojiInString(
-              title,
-              selected ? TextDisplay.chatTittleSelected : TextDisplay.chatTittle,
-            ) +
             [
+              TextDisplay.parseEmojiInString(
+                title,
+                selected ? TextDisplay.chatTittleSelected : TextDisplay.chatTittle,
+              ),
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: Container(

@@ -59,13 +59,13 @@ class MessageContentPreview extends StatelessWidget {
               break;
 
             case MessageSticker:
-              displayContent.addAll(TextDisplay.parseEmojiInString(
+              displayContent.add(TextDisplay.parseEmojiInString(
                   "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ", textStyle));
               break;
 
             case MessageChatDeletePhoto:
               messageTypeAllowShowFrom = false;
-              displayContent.addAll(TextDisplay.parseEmojiInString(
+              displayContent.add(TextDisplay.parseEmojiInString(
                   "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {"{from}": author})}", textStyle));
               break;
 
@@ -101,33 +101,43 @@ class MessageContentPreview extends StatelessWidget {
             case MessageDocument:
               var document = (content as MessageDocument);
               displayContent.addAll(
-                  TextDisplay.parseEmojiInString("📁 ${bytesToSize(document.document!.document!.size!)} —", textStyle) +
-                      [
-                        contentEntetyesMargin(),
-                        TextSpan(text: document.document?.fileName, style: textStyle),
-                        contentEntetyesMargin()
-                      ]);
+                [
+                  TextDisplay.parseEmojiInString("📁 ${bytesToSize(document.document!.document!.size!)} —", textStyle),
+                  contentEntetyesMargin(),
+                  TextSpan(text: document.document?.fileName, style: textStyle),
+                  contentEntetyesMargin(),
+                ],
+              );
               text = document.caption!;
               break;
 
             case MessageChatChangePhoto:
               messageTypeAllowShowFrom = false;
-              displayContent = TextDisplay.parseEmojiInString(
-                  "📸 ${client.getTranslation(isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo", replacing: {
-                        "{from}": author
-                      })}",
-                  textStyle);
+              displayContent.add(
+                TextDisplay.parseEmojiInString(
+                  "📸 ${client.getTranslation(
+                    isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo",
+                    replacing: {"{from}": author},
+                  )}",
+                  textStyle,
+                ),
+              );
               break;
 
             case MessageExpiredPhoto:
-              displayContent = TextDisplay.parseEmojiInString("🔥 ${client.getTranslation("lng_attach_photo")}", textStyle);
+              displayContent.add(
+                TextDisplay.parseEmojiInString(
+                  "🔥 ${client.getTranslation("lng_attach_photo")}",
+                  textStyle,
+                ),
+              );
               break;
 
             case MessageAnimation:
               var thumb = (content as MessageAnimation).animation?.thumbnail;
               Widget? mith;
               if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
-                displayContent.addAll(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
+                displayContent.add(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
               } else {
                 mith = FileImageDisplay(id: thumb.file!.id!, client: client);
                 displayContent += ChatItemContentPhotoText.build(mith, "GIF", textStyle);
@@ -136,14 +146,16 @@ class MessageContentPreview extends StatelessWidget {
 
             case MessageContactRegistered:
               messageTypeAllowShowFrom = false;
-              displayContent.addAll(TextDisplay.parseEmojiInString(
+              displayContent.add(TextDisplay.parseEmojiInString(
                   "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {"{from}": author})}", textStyle));
               break;
 
             case MessageChatChangeTitle:
               messageTypeAllowShowFrom = false;
-              displayContent = TextDisplay.parseEmojiInString(
-                  "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {"{title}": author})}", textStyle);
+              displayContent.add(TextDisplay.parseEmojiInString(
+                "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {"{title}": author})}",
+                textStyle,
+              ));
               break;
 
             case MessageSupergroupChatCreate:
@@ -182,18 +194,32 @@ class MessageContentPreview extends StatelessWidget {
                     "${map[slotMachine.leftReel!.sticker!.remote!.uniqueId!]} ${map[slotMachine.centerReel!.sticker!.remote!.uniqueId!]} ${map[slotMachine.rightReel!.sticker!.remote!.uniqueId!]}";
               }
 
-              displayContent = TextDisplay.parseEmojiInString("${dice.emoji} ($diceresult)", textStyle);
+              displayContent.add(
+                TextDisplay.parseEmojiInString(
+                  "${dice.emoji} ($diceresult)",
+                  textStyle,
+                ),
+              );
               break;
 
             case MessageAudio:
               var audio = message!.content as MessageAudio;
-              displayContent =
-                  TextDisplay.parseEmojiInString("🎵 ${audio.audio!.performer} - ${audio.audio!.title}, ", textStyle);
+              displayContent.add(
+                TextDisplay.parseEmojiInString(
+                  "🎵 ${audio.audio!.performer} - ${audio.audio!.title}, ",
+                  textStyle,
+                ),
+              );
               text = audio.caption!;
               break;
 
             case MessageVoiceNote:
-              displayContent = TextDisplay.parseEmojiInString("🎤 ${client.getTranslation("lng_media_audio")}", textStyle);
+              displayContent.add(
+                TextDisplay.parseEmojiInString(
+                  "🎤 ${client.getTranslation("lng_media_audio")}",
+                  textStyle,
+                ),
+              );
               break;
 
             default:
@@ -204,16 +230,16 @@ class MessageContentPreview extends StatelessWidget {
           return RichText(
               maxLines: 2,
               text: TextSpan(
-                children: TextDisplay.parseEmojiInString(
-                        messageTypeAllowShowFrom
-                            ? (_showAuthor
-                                ? (style == MessageContentPreviewStyle.noLineBreaks
-                                    ? "${lastMessageSenderName ?? author}: "
-                                    : "${lastMessageSenderName ?? author}\n")
-                                : "")
-                            : "",
-                        draftMessage != null ? TextDisplay.draftText : textStyle) +
-                    [
+                children: [
+                      TextDisplay.parseEmojiInString(
+                          messageTypeAllowShowFrom
+                              ? (_showAuthor
+                                  ? (style == MessageContentPreviewStyle.noLineBreaks
+                                      ? "${lastMessageSenderName ?? author}: "
+                                      : "${lastMessageSenderName ?? author}\n")
+                                  : "")
+                              : "",
+                          draftMessage != null ? TextDisplay.draftText : textStyle),
                       WidgetSpan(
                           child: message?.forwardInfo != null
                               ? Container(

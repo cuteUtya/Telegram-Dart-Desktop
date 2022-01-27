@@ -24,15 +24,14 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
     List<InlineSpan> content = [];
     for (var element in sortChatsFor(chats, ChatListArchive())) {
       var chat = client.getChat(element.chatId);
-      content.addAll(TextDisplay.parseEmojiInString(
+      content.addAll([TextDisplay.parseEmojiInString(
             chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
             TextDisplay.create(
               textColor: ClientTheme.currentTheme.getField("ArchiveContentColor"),
               size: 18,
               fontWeight: (chat.unreadCount ?? 0) <= 0 ? FontWeight.normal : FontWeight.bold,
             ),
-          ) +
-          [
+          ),
             const WidgetSpan(child: SizedBox(width: 4)),
             WidgetSpan(
               child: StreamBuilder(

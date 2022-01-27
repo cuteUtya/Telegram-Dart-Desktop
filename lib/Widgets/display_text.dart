@@ -146,7 +146,7 @@ class TextDisplay {
         textStyle,
         recognizer,
       );
-      result.addAll(parsedStr);
+      result.add(parsedStr);
       if (str[element.start] != "-") {
         entetieIndex++;
       }
@@ -155,47 +155,15 @@ class TextDisplay {
     return result;
   }
 
-  static List<InlineSpan> parseEmojiInString(String text, [TextStyle? style, GestureRecognizer? recognizer]) {
-    style ??= create();
-    List<InlineSpan> result = [];
-    var matches = emojiRegex.allMatches(text);
-
-    int pos = 0;
-    if (matches.isEmpty) {
-      result.add(TextSpan(text: text, style: style, recognizer: recognizer));
-      pos = text.length;
-    }
-    for (var element in matches) {
-      if (pos != element.start) {
-        result.add(
-          TextSpan(
-            text: text.substring(pos, element.start),
-            style: style,
-            recognizer: recognizer,
-          ),
-        );
-        pos = element.start;
-      }
-      result.add(
-        emoji(
-          text.substring(element.start, element.end),
-          style,
-        ),
-      );
-      pos = element.end;
-    }
-
-    if (pos != text.length) {
-      result.add(
-        TextSpan(
-          text: text.substring(pos, text.length),
-          style: style,
-          recognizer: recognizer,
-        ),
-      );
-    }
-
-    return result;
+  static InlineSpan parseEmojiInString(String text, [TextStyle? style, GestureRecognizer? recognizer]) {
+    return TextSpan(
+      text: text,
+      style: style?.copyWith(fontFamilyFallback: [
+        _getEmojiFont(),
+        style.fontFamily ?? "Arial",
+      ]),
+      recognizer: recognizer,
+    );
   }
 
   static TextStyle create(

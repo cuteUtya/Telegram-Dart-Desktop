@@ -83,24 +83,24 @@ class ChatItemActionDisplay extends StatelessWidget {
             builder: (_, sSenderName) {
               return RichText(
                 text: TextSpan(
-                  children: TextDisplay.parseEmojiInString(
-                          transitionStr != null
-                              ? client.getTranslation(transitionStr,
-                                  replacing: {
-                                    "{user}": firstName,
-                                    "{emoji}": (firstAction is ChatActionWatchingAnimations) ? firstAction.emoji ?? "🍆" : "",
-                                    "{second_user}": sSenderName.data.toString(),
-                                    "{count}": actions.length.toString()
-                                  },
-                                  itemsCount: actions.length)
-                              : "¯\\_(ツ)_/¯",
-                          textStyle) +
-                      [
-                        const WidgetSpan(child: SizedBox(width: 2)),
-                        WidgetSpan(
-                          child: animation ?? TextAnimation.fourPoints(textStyle),
-                        ),
-                      ],
+                  children: [
+                    TextDisplay.parseEmojiInString(
+                        transitionStr != null
+                            ? client.getTranslation(transitionStr,
+                                replacing: {
+                                  "{user}": firstName,
+                                  "{emoji}": (firstAction is ChatActionWatchingAnimations) ? firstAction.emoji ?? "🍆" : "",
+                                  "{second_user}": sSenderName.data.toString(),
+                                  "{count}": actions.length.toString()
+                                },
+                                itemsCount: actions.length)
+                            : "¯\\_(ツ)_/¯",
+                        textStyle),
+                    const WidgetSpan(child: SizedBox(width: 2)),
+                    WidgetSpan(
+                      child: animation ?? TextAnimation.fourPoints(textStyle),
+                    ),
+                  ],
                 ),
               );
             });
