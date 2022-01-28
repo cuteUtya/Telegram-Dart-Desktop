@@ -1,15 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
-import 'package:myapp/Widgets/message/mac_message_bubble_painter.dart';
 import 'package:myapp/Widgets/message/message_bubble.dart';
+import 'package:myapp/Widgets/message/tdesktop_message_bubble_painter.dart';
 
-/// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/macMessageBubble_example.jpg)
-/// message bubble that looks like bubble from telegram macOS version
-/// * [content] content that will wraps by bubble
-/// * [side] side in wich bubble will look nib of bubble
-class MacMessageBubble extends StatelessWidget {
-  const MacMessageBubble({
+class TdesktopMessageBubble extends StatelessWidget {
+  const TdesktopMessageBubble({
     Key? key,
     required this.content,
     required this.side,
@@ -28,7 +25,7 @@ class MacMessageBubble extends StatelessWidget {
         radiusFree: const Radius.circular(
           18,
         ),
-        bubblePainter: MacMessageBubblePainter(
+        bubblePainter: TdesktopMessageBubblePainter(
           color: ClientTheme.currentTheme.getField(
             side == Side.left ? "MessageBubbleOtherColor" : "MessageBubbleMineColor",
           ),

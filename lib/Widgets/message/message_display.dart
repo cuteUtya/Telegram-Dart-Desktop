@@ -14,6 +14,7 @@ import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_b
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
 import 'package:myapp/Widgets/message/replies_display.dart';
 import 'package:myapp/Widgets/message/service_message.dart';
+import 'package:myapp/Widgets/message/tdesktop_message_bubble.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
@@ -290,7 +291,7 @@ class MessageDisplay extends StatelessWidget {
           );
 
           if (wrapInBubble) {
-            contentWidget = MacMessageBubble(
+            contentWidget = TdesktopMessageBubble(
               content: contentWidget,
               side: message.isOutgoing! ? Side.right : Side.left,
               position: bubbleRelativePosition,
