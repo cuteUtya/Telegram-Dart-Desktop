@@ -21,10 +21,8 @@ class TdesktopMessageBubble extends StatelessWidget {
         content: content,
         side: side,
         position: position,
-        radiusClose: const Radius.circular(4),
-        radiusFree: const Radius.circular(
-          18,
-        ),
+        radiusClose: const Radius.circular(2),
+        radiusFree: const Radius.circular(10),
         bubblePainter: TdesktopMessageBubblePainter(
           color: ClientTheme.currentTheme.getField(
             side == Side.left ? "MessageBubbleOtherColor" : "MessageBubbleMineColor",
