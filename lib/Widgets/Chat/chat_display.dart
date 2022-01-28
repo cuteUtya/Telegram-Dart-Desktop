@@ -27,10 +27,7 @@ class ChatDisplay extends StatelessWidget {
                 background: Background(
                     type: BackgroundTypeFill(
                         fill: BackgroundFillSolid(
-                            color: (ClientTheme.currentTheme
-                                        .getField("tw1nkleeModeBackgroundColor")
-                                    as Color)
-                                .value))),
+                            color: (ClientTheme.currentTheme.getField("tw1nkleeModeBackgroundColor") as Color).value))),
                 client: client,
               )
             else
@@ -38,37 +35,30 @@ class ChatDisplay extends StatelessWidget {
                 stream: client.selectedBackground,
                 builder: (_, data) {
                   if (data.hasData) {
-                    var update = data.data == null
-                        ? null
-                        : data.data as UpdateSelectedBackground;
+                    var update = data.data == null ? null : data.data as UpdateSelectedBackground;
                     if (update?.background == null) {
-                      client.send(GetBackgrounds()).then((backs) => client.send(
-                          SetBackground(
-                              forDarkTheme: update?.forDarkTheme,
-                              background: InputBackgroundRemote(
-                                  backgroundId: backs is Backgrounds
-                                      ? backs.backgrounds![0].id!
-                                      : (backs as Background).id!))));
+                      client.send(GetBackgrounds()).then((backs) => client.send(SetBackground(
+                          forDarkTheme: update?.forDarkTheme,
+                          background: InputBackgroundRemote(
+                              backgroundId: backs is Backgrounds ? backs.backgrounds![0].id! : (backs as Background).id!))));
                       return const SizedBox.shrink();
                     }
                     return BackgroundDisplay(
                         client: client,
                         //TODO correct work with dark and light themes
-                        background: (data.data as UpdateSelectedBackground)
-                            .background!);
+                        background: (data.data as UpdateSelectedBackground).background!);
                   }
                   return const SizedBox.shrink();
                 },
               ),
             if (chat != null)
               Container(
-                  margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                  margin: const EdgeInsets.fromLTRB(108, 0, 108, 24),
                   child: Column(children: [
                     Expanded(
                         child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child:
-                                MessageList(chatId: chat.id!, client: client))),
+                            child: MessageList(chatId: chat.id!, client: client))),
                     InputField(client: client)
                   ])),
             if (chat != null)
