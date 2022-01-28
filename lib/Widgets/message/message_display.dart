@@ -70,6 +70,11 @@ class MessageDisplay extends StatelessWidget {
               (bubbleRelativePosition == BubbleRelativePosition.top || bubbleRelativePosition == BubbleRelativePosition.single);
           bool wrapInBubble = false;
 
+          bool haveText = false;
+          try {
+            haveText = ((message.content as dynamic).caption?.text ?? "").isNotEmpty;
+          } catch (_) {}
+          //bool haveText =
           switch (message.content.runtimeType) {
             case MessageText:
               var contentText = message.content as MessageText;
@@ -126,11 +131,13 @@ class MessageDisplay extends StatelessWidget {
               break;
 
             case MessageVideo:
-              wrapInBubble = true;
+              wrapInBubble = haveText;
               contentWidget = MessageDisplayVideo(
                 client: client,
                 message: message,
-                senderName: author,
+                senderName: showMessageSender ? author : null,
+                infoWidget: _buildInfoWidget(haveText),
+                replieWidget: _buildReplieWidget(haveText),
               );
               break;
 
@@ -232,7 +239,6 @@ class MessageDisplay extends StatelessWidget {
               break;
 
             case MessagePhoto:
-              bool haveText = ((message.content as MessagePhoto).caption?.text ?? "").isNotEmpty;
               wrapInBubble = haveText;
               contentWidget = MessageDisplayPhoto(
                 client: client,

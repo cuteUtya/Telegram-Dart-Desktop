@@ -1,25 +1,21 @@
-import 'dart:math';
-
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dart_vlc/dart_vlc.dart' as vlc;
-import 'package:libwinmedia/libwinmedia.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'dart:io' as io;
 
 class MessageDisplayVideo extends StatelessWidget {
-  const MessageDisplayVideo({
-    Key? key,
-    required this.message,
-    required this.client,
-    this.senderName,
-  }) : super(key: key);
+  const MessageDisplayVideo(
+      {Key? key, required this.message, required this.client, this.senderName, this.infoWidget, this.replieWidget})
+      : super(key: key);
 
   final Message message;
   final TelegramClient client;
   final String? senderName;
+  final Widget? infoWidget;
+  final Widget? replieWidget;
 
   static int i = 62420;
   @override
@@ -45,20 +41,26 @@ class MessageDisplayVideo extends StatelessWidget {
     });
     return LayoutBuilder(
       builder: (_, box) {
-        return MessageDisplayMedia(
-          client: client,
-          message: message,
-          senderName: senderName,
-          caption: video.caption,
-          contentWidth: box.maxWidth,
-          contentHeight: video.video!.height! * (box.maxWidth / video.video!.width!),
-          content: vlc.Video(
-            key: UniqueKey(),
-            player: player,
-            width: video.video!.width!.toDouble(),
-            height: video.video!.height!.toDouble(),
-          ),
-        );
+        print(video.video!.height! * (box.maxWidth / video.video!.width!));
+        return GestureDetector(
+            onTap: () => player.playOrPause(),
+            child: MessageDisplayMedia(
+              client: client,
+              message: message,
+              senderName: senderName,
+              caption: video.caption,
+              contentWidth: box.maxWidth,
+              contentHeight: video.video!.height! * (box.maxWidth / video.video!.width!),
+              replieWidget: replieWidget,
+              infoWidget: infoWidget,
+              content: vlc.Video(
+                key: UniqueKey(),
+                player: player,
+                width: video.video!.width!.toDouble(),
+                height: video.video!.height!.toDouble(),
+                showControls: false,
+              ),
+            ));
       },
     );
   }

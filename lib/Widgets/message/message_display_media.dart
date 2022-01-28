@@ -39,63 +39,62 @@ class MessageDisplayMedia extends StatelessWidget {
       bottom: haveText ? Radius.zero : const Radius.circular(12),
     );
 
-    return SizedBox(
-      width: contentWidth,
-      height: contentHeight,
-      child: haveText
-          ? MessageDisplayText(
-              client: client,
-              message: message,
-              senderName: senderName,
-              additionalContent: _buildImage(border),
-              infoWidget: infoWidget,
-              replieWidget: replieWidget,
-              text: caption,
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (message.isOutgoing! && replieWidget != null)
-                  Container(
-                    child: replieWidget!,
-                    margin: const EdgeInsets.only(right: 8),
-                  ),
-                Expanded(
-                  child: Align(
-                    alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-                    child: Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        MouseRegion(
-                            onEnter: (_) => hiderKey.currentState?.show(),
-                            onExit: (_) => hiderKey.currentState?.hide(),
-                            child: _buildImage(border)),
-                        if (infoWidget != null)
-                          WidgetHider(
-                            key: hiderKey,
-                            hiddenOnInit: true,
-                            child: Container(
-                              child: infoWidget!,
-                              margin: const EdgeInsets.all(8),
-                            ),
+    return haveText
+        ? MessageDisplayText(
+            client: client,
+            message: message,
+            senderName: senderName,
+            additionalContent: _buildImage(border),
+            infoWidget: infoWidget,
+            replieWidget: replieWidget,
+            text: caption,
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (message.isOutgoing! && replieWidget != null)
+                Container(
+                  child: replieWidget!,
+                  margin: const EdgeInsets.only(right: 8),
+                ),
+              Expanded(
+                child: Align(
+                  alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      MouseRegion(
+                          onEnter: (_) => hiderKey.currentState?.show(),
+                          onExit: (_) => hiderKey.currentState?.hide(),
+                          child: _buildImage(border)),
+                      if (infoWidget != null)
+                        WidgetHider(
+                          key: hiderKey,
+                          hiddenOnInit: true,
+                          child: Container(
+                            child: infoWidget!,
+                            margin: const EdgeInsets.all(8),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
                 ),
-                if (!message.isOutgoing! && replieWidget != null)
-                  Container(
-                    child: replieWidget!,
-                    margin: const EdgeInsets.only(left: 8),
-                  ),
-              ],
-            ),
-    );
+              ),
+              if (!message.isOutgoing! && replieWidget != null)
+                Container(
+                  child: replieWidget!,
+                  margin: const EdgeInsets.only(left: 8),
+                ),
+            ],
+          );
   }
 
-  Widget _buildImage(BorderRadius border) => ClipRRect(
+  Widget _buildImage(BorderRadius border) => SizedBox(
+      width: contentWidth,
+      height: contentHeight,
+      child: ClipRRect(
         borderRadius: border,
         child: content,
-      );
+      ));
 }
