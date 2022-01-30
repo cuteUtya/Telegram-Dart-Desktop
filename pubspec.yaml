@@ -44,23 +44,21 @@ flutter:
   - family: TwitterColorEmoji
     fonts: 
         - asset: fonts/Emoji/TwitterColorEmoji.ttf
-        - asset: fonts/Emoji/TwitterColorEmoji.ttf
-          style: italic
   - family: AppleColorEmoji
     fonts: 
         - asset: fonts/Emoji/AppleColorEmoji.ttf
-        - asset: fonts/Emoji/AppleColorEmoji.ttf
-          style: italic
+  - family: AppleColorEmojiOld
+    fonts: 
+        - asset: fonts/Emoji/AppleColorEmoji-9-3.ttf
+  - family: GoogleColorEmojiOld
+    fonts: 
+        - asset: fonts/Emoji/GoogleColorEmoji-7.0.ttf
   - family: GoogleColorEmoji
     fonts:
         - asset: fonts/Emoji/GoogleColorEmoji.ttf
-        - asset: fonts/Emoji/GoogleColorEmoji.ttf
-          style: italic
   - family: MicrosoftColorEmoji
     fonts: 
         - asset: fonts/Emoji/MicrosoftColorEmoji.ttf
-        - asset: fonts/Emoji/MicrosoftColorEmoji.ttf
-          style: italic
   - family: SourceSansPro
     fonts: 
         - asset: fonts/SourceSansPro/SourceSansPro-Bold.ttf
