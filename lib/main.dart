@@ -2,7 +2,9 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:myapp/Screens/autorization_router.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/Widgets/Context%20menus/context_menu_overlay.dart';
 import 'package:myapp/Widgets/big_stickers_overlay.dart';
+import 'package:myapp/Widgets/transcluent_gestures_stack.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart';
@@ -15,12 +17,13 @@ void main() async {
   await ClientTheme.init();
   var client = TelegramClient();
   await client.init();
-  /* await client.send(SetLogStream(
-      logStream: LogStreamFile(
-          maxFileSize: 100000000, path: "/home/timur/tdlib_logs.txt")));*/
   await client.send(SetLogVerbosityLevel(newVerbosityLevel: 2));
 
-  runApp(MaterialApp(home: Material(child: App(client: client))));
+  runApp(
+    Material(
+      child: App(client: client),
+    ),
+  );
 }
 
 class App extends StatelessWidget {
@@ -28,12 +31,16 @@ class App extends StatelessWidget {
   final TelegramClient client;
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Stack(
-      children: [
-        AutorizationRouter(client: client),
-        BigStickerOverlay(client: client),
-      ],
-    ));
+    return MaterialApp(
+      home: Center(
+        child: TranscluentGesturesStack(
+          children: [
+            AutorizationRouter(client: client),
+            BigStickerOverlay(client: client),
+            const ContextMenuOverlay(),
+          ],
+        ),
+      ),
+    );
   }
 }
