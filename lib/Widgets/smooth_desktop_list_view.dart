@@ -66,11 +66,11 @@ class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
             } else {
               offset += signal.scrollDelta.dy * 6;
             }
-            offset = clamp(offset, 0, double.infinity);
+            offset = clamp(offset, 0, _controller.position.maxScrollExtent);
             _controller.animateTo(
               offset,
               duration: const Duration(milliseconds: 400),
-              curve: Curves.easeOutExpo,
+              curve: Curves.decelerate,
             );
           }
         },
