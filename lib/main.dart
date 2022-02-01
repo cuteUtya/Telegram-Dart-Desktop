@@ -20,8 +20,10 @@ void main() async {
   await client.send(SetLogVerbosityLevel(newVerbosityLevel: 2));
 
   runApp(
-    Material(
-      child: App(client: client),
+    MaterialApp(
+      home: Material(
+        child: App(client: client),
+      ),
     ),
   );
 }
@@ -31,15 +33,13 @@ class App extends StatelessWidget {
   final TelegramClient client;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Center(
-        child: TranscluentGesturesStack(
-          children: [
-            AutorizationRouter(client: client),
-            BigStickerOverlay(client: client),
-            const ContextMenuOverlay(),
-          ],
-        ),
+    return Center(
+      child: TranscluentGesturesStack(
+        children: [
+          AutorizationRouter(client: client),
+          BigStickerOverlay(client: client),
+          const ContextMenuOverlay(),
+        ],
       ),
     );
   }
