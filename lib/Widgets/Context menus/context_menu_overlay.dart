@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:libwinmedia/libwinmedia.dart';
 import 'package:myapp/Widgets/transcluent_gestures_stack.dart';
+import 'package:myapp/global_key_extenstion.dart';
+import 'package:myapp/utils.dart';
 
 class ContextMenuOverlay extends StatefulWidget {
   const ContextMenuOverlay({Key? key}) : super(key: key);
@@ -16,11 +19,11 @@ class ContextMenuOverlayState extends State<ContextMenuOverlay> {
   int _key = 0;
   Offset mousePosition = Offset.zero;
 
-  static openMenu(Widget menu) => current._openMenu(menu);
+  static openMenu(Widget menu, [GlobalKey? placeHolderKey]) => current._openMenu(menu, placeHolderKey);
   static closeMenu(ContextMenuInstanceKey key) => current._closeMenu(key);
   static closeAllMenus() => current._closeAllMenus();
 
-  ContextMenuInstanceKey _openMenu(Widget menu) {
+  ContextMenuInstanceKey _openMenu(Widget menu, [GlobalKey? placeHolderKey]) {
     closeAllMenus();
     _key++;
     var cKey = ContextMenuInstanceKey(_key);
@@ -30,6 +33,8 @@ class ContextMenuOverlayState extends State<ContextMenuOverlay> {
           key: cKey,
           menu: menu,
           position: mousePosition,
+          childKey: placeHolderKey,
+          widgetKey: GlobalKey(),
         ),
       );
     });
@@ -72,33 +77,25 @@ class ContextMenuOverlayState extends State<ContextMenuOverlay> {
               Stack(
                 children: _displayedMenus.map(
                   (e) {
-                    var key = GlobalKey();
-                    if (e.size == null) {
-                      Future.delayed(Duration.zero, () {
-                        for (var obj in _displayedMenus) {
-                          if (obj.key == e.key) {
-                            setState(
-                              () => _displayedMenus[_displayedMenus.indexOf(obj)].size = key.currentContext?.size,
-                            );
-                          }
-                        }
-                      });
+                    bool useIternalKeyForSizeCalculating = e.childKey == null ||
+                        e.childKey?.currentContext.toString().contains("(dirty)") == true ||
+                        e.childKey?.currentContext == null;
+                    var position = useIternalKeyForSizeCalculating ? e.position : _getWidgetInfo(e.childKey!).position;
+                    if (!e.appendKey) {
+                      Future.delayed(Duration.zero, () => setState(() => e.appendKey = true));
                     }
                     //on first frame we can't know widget size,
                     //so, we render object in left top corner with opacity 0
                     //that user don't see it (yep, this catches the eye)
-                    return Opacity(
-                      opacity: e.size == null ? 0 : 1,
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          left: e.size == null ? 0 : e.position.dx - e.size!.width,
-                          top: e.size == null ? 0 : e.position.dy - e.size!.height,
-                        ),
-                        child: SizedBox(
-                          key: key,
-                          child: e.menu,
-                        ),
+                    return Container(
+                      key: e.widgetKey,
+                      margin: EdgeInsets.only(
+                        left: clamp(
+                            e.appendKey ? position.dx - (e.widgetKey.globalPaintBounds?.width ?? 0) : 0, 0, double.infinity),
+                        top: clamp(
+                            e.appendKey ? position.dy - (e.widgetKey.globalPaintBounds?.height ?? 0) : 0, 0, double.infinity),
                       ),
+                      child: e.menu,
                     );
                   },
                 ).toList(),
@@ -111,18 +108,39 @@ class ContextMenuOverlayState extends State<ContextMenuOverlay> {
   }
 }
 
+_WidgetInfo _getWidgetInfo(_widgetKey) {
+  final RenderBox renderBox = _widgetKey.currentContext?.findRenderObject() as RenderBox;
+  final Size size = renderBox.size;
+  final Offset offset = renderBox.localToGlobal(Offset.zero);
+  return _WidgetInfo(
+    //TODO -15? why?
+    position: Offset(offset.dx, offset.dy - 15),
+    size: Offset(size.width, size.height),
+  );
+}
+
+class _WidgetInfo {
+  const _WidgetInfo({required this.position, required this.size});
+  final Offset size;
+  final Offset position;
+}
+
 class _ContextMenuInstanceInfo {
   _ContextMenuInstanceInfo({
     required this.key,
     required this.menu,
     required this.position,
-    this.size,
+    required this.widgetKey,
+    this.appendKey = false,
+    this.childKey,
   });
 
   final ContextMenuInstanceKey key;
+  final GlobalKey widgetKey;
   final Offset position;
   final Widget menu;
-  Size? size;
+  bool appendKey;
+  GlobalKey? childKey;
 }
 
 class ContextMenuInstanceKey {
