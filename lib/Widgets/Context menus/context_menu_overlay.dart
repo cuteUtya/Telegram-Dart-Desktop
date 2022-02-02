@@ -87,15 +87,18 @@ class ContextMenuOverlayState extends State<ContextMenuOverlay> {
                     //on first frame we can't know widget size,
                     //so, we render object in left top corner with opacity 0
                     //that user don't see it (yep, this catches the eye)
-                    return Container(
-                      key: e.widgetKey,
-                      margin: EdgeInsets.only(
-                        left: clamp(
-                            e.appendKey ? position.dx - (e.widgetKey.globalPaintBounds?.width ?? 0) : 0, 0, double.infinity),
-                        top: clamp(
-                            e.appendKey ? position.dy - (e.widgetKey.globalPaintBounds?.height ?? 0) : 0, 0, double.infinity),
+                    return Opacity(
+                      opacity: e.appendKey ? 1 : 0,
+                      child: Container(
+                        key: e.widgetKey,
+                        margin: EdgeInsets.only(
+                          left: clamp(
+                              e.appendKey ? position.dx - (e.widgetKey.globalPaintBounds?.width ?? 0) : 0, 0, double.infinity),
+                          top: clamp(
+                              e.appendKey ? position.dy - (e.widgetKey.globalPaintBounds?.height ?? 0) : 0, 0, double.infinity),
+                        ),
+                        child: e.menu,
                       ),
-                      child: e.menu,
                     );
                   },
                 ).toList(),
