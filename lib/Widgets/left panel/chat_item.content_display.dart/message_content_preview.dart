@@ -173,12 +173,12 @@ class MessageContentPreview extends StatelessWidget {
                 "AgAD0QgAAuN4BAAB": "🍋",
                 "AgADywgAAuN4BAAB": "🍋",
                 "AgAD1wgAAuN4BAAB": "🍋",
-                "AgADyAgAAuN4BAAB": "7️⃣",
-                "AgAD1AgAAuN4BAAB": "7️⃣",
-                "AgAD0wgAAuN4BAAB": "7️⃣",
-                "AgADzQgAAuN4BAAB": "7️⃣",
-                "AgADxwgAAuN4BAAB": "7️⃣",
-                "AgADzggAAuN4BAAB": "7️⃣",
+                "AgADyAgAAuN4BAAB": "7",
+                "AgAD1AgAAuN4BAAB": "7",
+                "AgAD0wgAAuN4BAAB": "7",
+                "AgADzQgAAuN4BAAB": "7",
+                "AgADxwgAAuN4BAAB": "7",
+                "AgADzggAAuN4BAAB": "7",
                 "AgAD0AgAAuN4BAAB": "🍒",
                 "AgADyggAAuN4BAAB": "🍒",
                 "AgAD1ggAAuN4BAAB": "🍒",
@@ -187,7 +187,7 @@ class MessageContentPreview extends StatelessWidget {
                 "AgAD1QgAAuN4BAAB": "🍻"
               };
               if (dice.finalState is DiceStickersRegular) {
-                diceresult = (dice.finalState as DiceStickersRegular).sticker!.emoji!;
+                diceresult = dice.value.toString();
               } else {
                 var slotMachine = (dice.finalState as DiceStickersSlotMachine);
                 diceresult =
