@@ -66,7 +66,7 @@ class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
             } else {
               offset += signal.scrollDelta.dy * 6;
             }
-            offset = clamp(offset, 0, _controller.position.maxScrollExtent);
+            offset = clamp(offset, 0, _controller.position.maxScrollExtent).toDouble();
             _controller.animateTo(
               offset,
               duration: const Duration(milliseconds: 400),

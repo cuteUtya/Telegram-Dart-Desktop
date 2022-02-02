@@ -121,7 +121,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   ];
 
   setT(double value) => setState(() {
-        value = clamp(value, current == 0 ? 0 : -1, current == _screens.length - 1 ? 0 : 1);
+        value = clamp(value, current == 0 ? 0 : -1, current == _screens.length - 1 ? 0 : 1).toDouble();
         _t = value;
       });
 

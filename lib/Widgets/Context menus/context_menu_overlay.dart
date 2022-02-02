@@ -93,9 +93,11 @@ class ContextMenuOverlayState extends State<ContextMenuOverlay> {
                         key: e.widgetKey,
                         margin: EdgeInsets.only(
                           left: clamp(
-                              e.appendKey ? position.dx - (e.widgetKey.globalPaintBounds?.width ?? 0) : 0, 0, double.infinity),
-                          top: clamp(
-                              e.appendKey ? position.dy - (e.widgetKey.globalPaintBounds?.height ?? 0) : 0, 0, double.infinity),
+                                  e.appendKey ? position.dx - (e.widgetKey.globalPaintBounds?.width ?? 0) : 0, 0, double.infinity)
+                              .toDouble(),
+                          top: clamp(e.appendKey ? position.dy - (e.widgetKey.globalPaintBounds?.height ?? 0) : 0, 0,
+                                  double.infinity)
+                              .toDouble(),
                         ),
                         child: e.menu,
                       ),

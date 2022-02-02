@@ -5,7 +5,7 @@ import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
-double clamp(double value, double min, double max) {
+num clamp(num value, num min, num max) {
   if (value > max) return max;
   if (value < min) return min;
   return value;
@@ -22,15 +22,13 @@ var emojiRegex = RegExp(
 
 ///Sort photos from smallest to largest
 List<PhotoSize> sortPhotoSizes(List<PhotoSize> sizes) {
-  sizes.sort(
-      (a, b) => a.width! > b.width! ? -1 : (a.width! == b.width! ? 0 : 1));
+  sizes.sort((a, b) => a.width! > b.width! ? -1 : (a.width! == b.width! ? 0 : 1));
   return sizes;
 }
 
 List<String> extractEmojisAsList(String text) {
   List<String> res = [];
-  emojiRegex.allMatches(text).forEach(
-      (element) => res.add(text.substring(element.start, element.end)));
+  emojiRegex.allMatches(text).forEach((element) => res.add(text.substring(element.start, element.end)));
   return res;
 }
 
@@ -61,20 +59,13 @@ bool showChatInChatList(List<ChatPosition> poss, ChatList list) {
 }
 
 List<ChatOrder> sortChatsFor(List<ChatOrder> chats, ChatList forList) {
-  List<ChatOrder> list = chats
-      .where((element) => showChatInChatList(element.positions, forList))
-      .toList();
+  List<ChatOrder> list = chats.where((element) => showChatInChatList(element.positions, forList)).toList();
   list.sort((b, a) => a.positions
       .firstWhere((element) => compareChatlists(element.list!, forList))
       .order!
-      .compareTo(b.positions
-          .firstWhere((element) => compareChatlists(element.list!, forList))
-          .order!));
+      .compareTo(b.positions.firstWhere((element) => compareChatlists(element.list!, forList)).order!));
   for (int i = list.length - 1; i > 0; i--) {
-    var order = list[i]
-        .positions
-        .firstWhere((element) => compareChatlists(element.list!, forList))
-        .order;
+    var order = list[i].positions.firstWhere((element) => compareChatlists(element.list!, forList)).order;
     if (order == 0) {
       list.removeAt(i);
     }
@@ -84,12 +75,10 @@ List<ChatOrder> sortChatsFor(List<ChatOrder> chats, ChatList forList) {
 
 bool compareChatlists(ChatList a, ChatList b) {
   return a.runtimeType == b.runtimeType &&
-      (a is ChatListFilter ? a.chatFilterId : 0) ==
-          (b is ChatListFilter ? b.chatFilterId : 0);
+      (a is ChatListFilter ? a.chatFilterId : 0) == (b is ChatListFilter ? b.chatFilterId : 0);
 }
 
-DateTime unixToDateTime(int unix) =>
-    DateTime.fromMillisecondsSinceEpoch(unix * 1000);
+DateTime unixToDateTime(int unix) => DateTime.fromMillisecondsSinceEpoch(unix * 1000);
 
 //TODO show it in settings
 bool useUSAStyle = true;
@@ -120,15 +109,13 @@ String to00format(String compenent) {
 Color getPeerColor(int id, [String component = "a"]) {
   id = int.parse(id.toString().replaceAll("-100", "-"));
   if (id < 0) id = -id;
-  return ClientTheme.currentTheme
-      .getField("PeerColor${[0, 7, 4, 1, 6, 3, 5][(id % 7)] + 1}$component");
+  return ClientTheme.currentTheme.getField("PeerColor${[0, 7, 4, 1, 6, 3, 5][(id % 7)] + 1}$component");
 }
 
 String getUserLocale() => "ru";
 String getDatabaseDirectory() => "${Directory.current.path}/tddb/";
 String getFilesDirectory() => "${Directory.current.path}/tdfiles/";
-String getLanguagePackDatabasePath() =>
-    "${Directory.current.path}/tdtranslates.db";
+String getLanguagePackDatabasePath() => "${Directory.current.path}/tdtranslates.db";
 
 String getDeviceName() => Platform.localHostname;
 String getSystemVersion() => Platform.operatingSystem;
