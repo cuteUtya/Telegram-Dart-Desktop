@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
 import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/Widgets/emoji_input_panel.dart';
 import 'package:myapp/tdlib/client.dart';
 
 class InputField extends StatefulWidget {
@@ -18,10 +20,10 @@ class InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     var iconColor = ClientTheme.currentTheme.getField("GenericUIIconsColor");
+    var emojiPanelPlaceholderKey = GlobalKey();
     return Container(
       decoration: BoxDecoration(
-        color:
-            ClientTheme.currentTheme.getField("ChatInputFieldBackgroundColor"),
+        color: ClientTheme.currentTheme.getField("ChatInputFieldBackgroundColor"),
         borderRadius: const BorderRadius.all(Radius.circular(15)),
       ),
       child: Padding(
@@ -40,13 +42,8 @@ class InputFieldState extends State<InputField> {
                 child: TextField(
                   decoration: InputDecoration.collapsed(
                       hintText: widget.client.getTranslation("lng_message_ph"),
-                      hintStyle: TextDisplay.create(
-                          textColor: ClientTheme.currentTheme
-                              .getField("InputFieldTextColor"))),
-                  style: TextDisplay.create(
-                      size: 20,
-                      textColor: ClientTheme.currentTheme
-                          .getField("InputFieldTextColor")),
+                      hintStyle: TextDisplay.create(textColor: ClientTheme.currentTheme.getField("InputFieldTextColor"))),
+                  style: TextDisplay.create(size: 20, textColor: ClientTheme.currentTheme.getField("InputFieldTextColor")),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   onChanged: (value) => print("changed input value : $value"),
@@ -56,10 +53,19 @@ class InputFieldState extends State<InputField> {
             Container(
               height: 36,
               alignment: Alignment.bottomCenter,
-              child: Icon(
-                Icons.emoji_emotions_outlined,
-                color: iconColor,
-                size: 36,
+              child: ContextMenuRegion(
+                placeHolderKey: emojiPanelPlaceholderKey,
+                contextMenu: const EmojiInputPanel(),
+                child: Column(children: [
+                  Container(
+                    key: emojiPanelPlaceholderKey,
+                  ),
+                  Icon(
+                    Icons.emoji_emotions_outlined,
+                    color: iconColor,
+                    size: 36,
+                  )
+                ]),
               ),
             ),
             const SizedBox(width: 16),

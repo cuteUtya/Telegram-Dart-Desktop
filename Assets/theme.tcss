@@ -161,3 +161,5 @@ ArchiveContentColor: ref(RegularText);
 AudioTitleTextColor: ref(Accent);
 FolderTitleActiveColor: ref(Accent);
 FolderTitleInactiveColor: ref(RegularText);
+
+EmojiInputPanelBackgroundColor: ref(BaseColor);
