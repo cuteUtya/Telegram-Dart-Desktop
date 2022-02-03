@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
@@ -51,7 +49,7 @@ class _EmojiInputPanelState extends State<EmojiInputPanel> {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: EmojiInputPanel.emojiPanelConfig.map((column) {
               Widget result;
               if (column[0] == "/") {
@@ -74,20 +72,24 @@ class _EmojiInputPanelState extends State<EmojiInputPanel> {
                       children: List.generate(
                         sIndex,
                         (index) => _buildEmoji(
-                          emojis[(i * maxEmoji) + index].replaceAll(" ", ""),
+                          emojis[(i * maxEmoji) + index],
                         ),
                       ),
                     ));
                   }
                   result = Column(
                     children: cols,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                   );
                 } else {
                   result = Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: emojis.map((row) => _buildEmoji(row)).toList(),
+                    children: emojis
+                        .map((row) => _buildEmoji(
+                              row,
+                            ))
+                        .toList(),
                   );
                 }
               }
@@ -99,46 +101,74 @@ class _EmojiInputPanelState extends State<EmojiInputPanel> {
     );
   }
 
-  Widget _buildEmoji(String emoji) => ClickableObject(
-        builder: (hover) => AnimatedContainer(
-          duration: Duration(milliseconds: 100),
-          width: hover ? 60 : 40,
-          height: hover ? 60 : 40,
-          decoration: BoxDecoration(
-            color: hover ? Color.fromARGB(80, 0, 0, 0) : _baseColor,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(
-                6,
-              ),
-            ),
-          ),
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: Align(
-              alignment: Alignment.center,
-              child: Text.rich(
-                TextDisplay.parseEmojiInString(
-                  emoji,
-                  TextStyle(
-                    fontSize: hover ? 36 : 26,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
+  Widget _buildEmoji(String symbol) {
+    return _Emoji(
+      symbol: symbol,
+    );
+  }
 }
-/*
-class _Emoji extends StatelessWidget {
+
+class _Emoji extends StatefulWidget {
   const _Emoji({
     Key? key,
     required this.symbol,
   }) : super(key: key);
-  
+
   final String symbol;
+
   @override
-  Widget build(BuildContext context) {}
+  State<_Emoji> createState() => _EmojiState();
 }
--*/ 
+
+class _EmojiState extends State<_Emoji> {
+  bool isBig = false;
+  bool hovered = false;
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() => hovered = true);
+        Future.delayed(
+          const Duration(milliseconds: 0),
+          () => setState(
+            () {
+              if (hovered) isBig = true;
+            },
+          ),
+        );
+      },
+      onExit: (_) => setState(() {
+        hovered = false;
+        Future.delayed(Duration(milliseconds: 0), () => setState(() => isBig = false));
+      }),
+      child: Container(
+        decoration: BoxDecoration(
+          color: hovered ? Color.fromARGB(80, 0, 0, 0) : ClientTheme.currentTheme.getField("EmojiInputPanelBackgroundColor"),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(
+              6,
+            ),
+          ),
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Align(
+              alignment: Alignment.center,
+              child: AnimatedDefaultTextStyle(
+                style: TextStyle(
+                  fontSize: 26 * (isBig ? 2 : 1),
+                  fontFamily: TextDisplay.getEmojiFont(),
+                ),
+                duration: Duration(milliseconds: 200),
+                child: Text.rich(
+                  TextDisplay.parseEmojiInString(
+                    widget.symbol,
+                  ),
+                ),
+              )),
+        ),
+      ),
+    );
+  }
+}

@@ -5,7 +5,7 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/utils.dart';
 
 class TextDisplay {
-  static String _getEmojiFont() => "MicrosoftColorEmoji";
+  static String getEmojiFont() => "AppleColorEmoji";
 
   static TextStyle get title =>
       create(size: 24, fontWeight: FontWeight.w600, textColor: ClientTheme.currentTheme.getField("HeaderMain"));
@@ -43,7 +43,7 @@ class TextDisplay {
       style: TextStyle(
         fontWeight: style.fontWeight,
         color: style.color,
-        fontFamily: _getEmojiFont(),
+        fontFamily: getEmojiFont(),
         fontSize: style.fontSize,
         shadows: style.shadows,
         decoration: style.decoration,
@@ -159,7 +159,7 @@ class TextDisplay {
     return TextSpan(
       text: text,
       style: style?.copyWith(fontFamilyFallback: [
-        _getEmojiFont(),
+        getEmojiFont(),
         style.fontFamily ?? "Arial",
       ]),
       recognizer: recognizer,
@@ -177,7 +177,7 @@ class TextDisplay {
       TextDecoration decoration = TextDecoration.none}) {
     fontFamily ??= regular;
     if (fontFamily == "emoji") {
-      fontFamily = _getEmojiFont();
+      fontFamily = getEmojiFont();
     }
     return TextStyle(
       overflow: overflow,
