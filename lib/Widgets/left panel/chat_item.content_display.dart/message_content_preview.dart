@@ -235,7 +235,8 @@ class MessageContentPreview extends StatelessWidget {
                           messageTypeAllowShowFrom
                               ? (_showAuthor
                                   ? (style == MessageContentPreviewStyle.noLineBreaks
-                                      ? "${lastMessageSenderName ?? author}: "
+                                      ? client.getTranslation("lng_dialogs_text_from_wrapped",
+                                          replacing: {"{from}": lastMessageSenderName ?? author})
                                       : "${lastMessageSenderName ?? author}\n")
                                   : "")
                               : "",
