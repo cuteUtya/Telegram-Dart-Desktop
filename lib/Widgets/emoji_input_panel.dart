@@ -41,15 +41,21 @@ class _EmojiInputPanelState extends State<EmojiInputPanel> {
 
   @override
   Widget build(BuildContext context) {
-    int maxEmoji = MediaQuery.of(context).size.width ~/ 200;
+    int maxEmoji = MediaQuery.of(context).size.width ~/ 300;
     return Container(
       height: 600,
-      color: _baseColor,
+      decoration: BoxDecoration(
+          color: _baseColor,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(
+              20,
+            ),
+          )),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: EmojiInputPanel.emojiPanelConfig.map((column) {
               Widget result;
               if (column[0] == "/") {
@@ -67,7 +73,7 @@ class _EmojiInputPanelState extends State<EmojiInputPanel> {
                   for (int i = 0; i < colsCount; i++) {
                     var sIndex = i >= colsCount - 1 ? (emojis.length) % maxEmoji : maxEmoji;
                     cols.add(Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: List.generate(
                         sIndex,
@@ -84,7 +90,7 @@ class _EmojiInputPanelState extends State<EmojiInputPanel> {
                 } else {
                   result = Row(
                     mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: emojis
                         .map((row) => _buildEmoji(
                               row,
@@ -139,34 +145,43 @@ class _EmojiState extends State<_Emoji> {
       },
       onExit: (_) => setState(() {
         hovered = false;
-        Future.delayed(Duration(milliseconds: 0), () => setState(() => isBig = false));
+        Future.delayed(
+          const Duration(
+            milliseconds: 250,
+          ),
+          () => setState(
+            () => isBig = false,
+          ),
+        );
       }),
-      child: Container(
-        decoration: BoxDecoration(
-          color: hovered ? Color.fromARGB(80, 0, 0, 0) : ClientTheme.currentTheme.getField("EmojiInputPanelBackgroundColor"),
-          borderRadius: const BorderRadius.all(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
             Radius.circular(
               6,
             ),
           ),
         ),
         margin: const EdgeInsets.symmetric(horizontal: 4),
-        child: Padding(
-          padding: const EdgeInsets.all(4),
-          child: Align(
-              alignment: Alignment.center,
-              child: AnimatedDefaultTextStyle(
-                style: TextStyle(
-                  fontSize: 26 * (isBig ? 2 : 1),
-                  fontFamily: TextDisplay.getEmojiFont(),
-                ),
-                duration: Duration(milliseconds: 200),
-                child: Text.rich(
-                  TextDisplay.parseEmojiInString(
-                    widget.symbol,
-                  ),
-                ),
-              )),
+        padding: EdgeInsets.symmetric(
+          horizontal: isBig ? 2 : 10,
+          vertical: isBig ? 0 : 10,
+        ),
+        child: Align(
+          alignment: Alignment.center,
+          child: AnimatedDefaultTextStyle(
+            style: TextStyle(
+              fontSize: 26 * (isBig ? 1.5 : 1),
+              fontFamily: TextDisplay.getEmojiFont(),
+            ),
+            duration: const Duration(milliseconds: 100),
+            child: Text.rich(
+              TextDisplay.parseEmojiInString(
+                widget.symbol,
+              ),
+            ),
+          ),
         ),
       ),
     );
