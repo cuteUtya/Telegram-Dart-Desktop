@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
-import 'package:myapp/Widgets/clickable_object.dart';
+import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/display_text.dart';
-import 'package:myapp/utils.dart';
+import 'package:myapp/Widgets/widget_opacity_contoller.dart';
+import 'package:myapp/tdlib/client.dart';
+import 'package:myapp/tdlib/td_api.dart' hide Text;
+import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 
 class EmojiInputPanel extends StatefulWidget {
   const EmojiInputPanel({
     Key? key,
+    required this.client,
   }) : super(key: key);
+
+  final TelegramClient client;
 
   static const emojiPanelConfig = [
     "/People/",
@@ -39,6 +45,8 @@ class EmojiInputPanel extends StatefulWidget {
 class _EmojiInputPanelState extends State<EmojiInputPanel> {
   Color get _baseColor => ClientTheme.currentTheme.getField("EmojiInputPanelBackgroundColor");
 
+  Map<String, AnimatedEmoji> _curr = {};
+
   @override
   Widget build(BuildContext context) {
     int maxEmoji = MediaQuery.of(context).size.width ~/ 300;
@@ -52,7 +60,7 @@ class _EmojiInputPanelState extends State<EmojiInputPanel> {
             ),
           )),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,8 +116,72 @@ class _EmojiInputPanelState extends State<EmojiInputPanel> {
   }
 
   Widget _buildEmoji(String symbol) {
-    return _Emoji(
-      symbol: symbol,
+    if (_curr[symbol] == null) {
+      return _Emoji(
+        symbol: symbol,
+        onLongHover: () async {
+          var emoji = await widget.client.send(GetAnimatedEmoji(emoji: symbol));
+          if (emoji is! TdError) {
+            setState(() {
+              _curr[symbol] = emoji as AnimatedEmoji;
+            });
+          }
+        },
+      );
+    }
+    var emojiKey = GlobalKey<WidgetOpacityContollerState>();
+    var lottieKey = GlobalKey<WidgetOpacityContollerState>();
+    var animDuration = const Duration(milliseconds: 300);
+    Future.delayed(
+      Duration.zero,
+      () {
+        emojiKey.currentState?.animateOpacity(0);
+        lottieKey.currentState?.animateOpacity(1);
+      },
+    );
+    return MouseRegion(
+      onExit: (_) {
+        emojiKey.currentState?.animateOpacity(1);
+        lottieKey.currentState?.animateOpacity(0);
+        Future.delayed(
+          animDuration,
+          () => setState(
+            () => _curr.remove(symbol),
+          ),
+        );
+        //;
+      },
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          WidgetOpacityContoller(
+            key: emojiKey,
+            duration: animDuration,
+            child: Text(
+              symbol,
+              style: TextStyle(
+                fontFamily: TextDisplay.getEmojiFont(),
+                fontSize: 26,
+              ),
+            ),
+          ),
+          WidgetOpacityContoller(
+            duration: animDuration,
+            key: lottieKey,
+            opacity: 0,
+            child: Container(
+              width: 38,
+              height: 38,
+              margin: EdgeInsets.symmetric(horizontal: 11.5),
+              child: StickerDisplay(
+                client: widget.client,
+                showOutline: false,
+                sticker: _curr[symbol]!.sticker!,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -118,9 +190,11 @@ class _Emoji extends StatefulWidget {
   const _Emoji({
     Key? key,
     required this.symbol,
+    required this.onLongHover,
   }) : super(key: key);
 
   final String symbol;
+  final Function() onLongHover;
 
   @override
   State<_Emoji> createState() => _EmojiState();
@@ -135,10 +209,13 @@ class _EmojiState extends State<_Emoji> {
       onEnter: (_) {
         setState(() => hovered = true);
         Future.delayed(
-          const Duration(milliseconds: 0),
+          const Duration(milliseconds: 500),
           () => setState(
             () {
-              if (hovered) isBig = true;
+              if (hovered) {
+                isBig = true;
+                widget.onLongHover();
+              }
             },
           ),
         );
@@ -150,7 +227,9 @@ class _EmojiState extends State<_Emoji> {
             milliseconds: 250,
           ),
           () => setState(
-            () => isBig = false,
+            () {
+              isBig = false;
+            },
           ),
         );
       }),

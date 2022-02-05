@@ -55,7 +55,11 @@ class InputFieldState extends State<InputField> {
               alignment: Alignment.bottomCenter,
               child: ContextMenuRegion(
                 placeHolderKey: emojiPanelPlaceholderKey,
-                contextMenu: const EmojiInputPanel(),
+                workOnMainTap: true,
+                workOnSecondaryTap: false,
+                contextMenu: EmojiInputPanel(
+                  client: widget.client,
+                ),
                 child: Column(children: [
                   Container(
                     key: emojiPanelPlaceholderKey,

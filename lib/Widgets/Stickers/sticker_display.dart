@@ -13,8 +13,10 @@ class StickerDisplay extends StatelessWidget {
     this.rlottieKey,
     required this.client,
     required this.sticker,
+    this.loadPlaceHolder,
     this.onClick,
     this.onAnimPlayed,
+    this.showOutline = true,
     this.playBehavior = PlayBehavior.loop,
     this.size = 1.0,
     this.alignment = Alignment.center,
@@ -24,6 +26,8 @@ class StickerDisplay extends StatelessWidget {
   final double size;
   final Sticker sticker;
   final PlayBehavior playBehavior;
+  final Widget? loadPlaceHolder;
+  final bool showOutline;
   final Function()? onClick;
   final Function()? onAnimPlayed;
   final Alignment alignment;
@@ -36,17 +40,18 @@ class StickerDisplay extends StatelessWidget {
     var width = (sticker.width ?? sticker.width!).toDouble() * (stickerSizeRatie * size);
     var height = (sticker.height ?? sticker.height!).toDouble() * (stickerSizeRatie * size);
     return RemoteFileBuilder(
-        emptyPlaceholder: sticker.outline == null
-            ? const SizedBox.shrink()
-            : CustomPaint(
-                painter: StickerOutline(
-                  sticker.outline!,
-                  stickerSizeRatie * size,
-                ),
-                child: SizedBox(
-                  width: width,
-                  height: height,
-                )),
+        emptyPlaceholder: loadPlaceHolder ??
+            (sticker.outline == null || !showOutline
+                ? const SizedBox.shrink()
+                : CustomPaint(
+                    painter: StickerOutline(
+                      sticker.outline!,
+                      stickerSizeRatie * size,
+                    ),
+                    child: SizedBox(
+                      width: width,
+                      height: height,
+                    ))),
         builder: (_, path) {
           return sticker.isAnimated!
               ? Rlottie.file(
