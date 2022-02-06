@@ -69,6 +69,25 @@ class MessageContentPreview extends StatelessWidget {
                   "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {"{from}": author})}", textStyle));
               break;
 
+            case MessageVideo:
+              var video = message!.content as MessageVideo;
+              text = video.caption!;
+              messageTypeAllowShowFrom = true;
+              var thumbId = video.video?.thumbnail?.file?.id;
+              var vidString = "${client.getTranslation("lng_in_dlg_video")}${(text.text?.isNotEmpty ?? false) ? ", " : ""}";
+              if (thumbId != null) {
+                displayContent.addAll(ChatItemContentPhotoText.build(
+                    ChatItemPhotoMinithumbnail(
+                      client: client,
+                      id: thumbId,
+                    ),
+                    vidString,
+                    textStyle));
+              } else {
+                displayContent.add(TextDisplay.parseEmojiInString("📹 $vidString"));
+              }
+              break;
+
             join:
             case MessageChatAddMembers:
               /*TODO messageTypeAllowShowFrom = false;
@@ -139,7 +158,7 @@ class MessageContentPreview extends StatelessWidget {
               if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
                 displayContent.add(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
               } else {
-                mith = FileImageDisplay(id: thumb.file!.id!, client: client);
+                mith = ChatItemPhotoMinithumbnail(id: thumb.file!.id!, client: client);
                 displayContent += ChatItemContentPhotoText.build(mith, "GIF", textStyle);
               }
               break;
@@ -236,7 +255,8 @@ class MessageContentPreview extends StatelessWidget {
                               ? (_showAuthor
                                   ? (style == MessageContentPreviewStyle.noLineBreaks
                                       ? client.getTranslation("lng_dialogs_text_from_wrapped",
-                                          replacing: {"{from}": lastMessageSenderName ?? author})
+                                              replacing: {"{from}": lastMessageSenderName ?? author}) +
+                                          " "
                                       : "${lastMessageSenderName ?? author}\n")
                                   : "")
                               : "",
