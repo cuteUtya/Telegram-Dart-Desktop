@@ -20,7 +20,7 @@ int clampInt(int value, int min, int max) {
 var emojiRegex = RegExp(
     r"([^ABCČĆDĐEFGHIJKLMNOPQRSŠTUVWXYZŽabcčćdđefghijklmnopqrsštuvwxyzžАБВГҐДЂЕЁЄЖЗЅИІЇЙЈКЛЉМНЊОПРСТЋУЎФХЦЧЏШЩЪЫЬЭЮЯабвгґдђеёєжзѕиіїйјклљмнњопрстћуўфхцчџшщъыьэюяΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψωάΆέΈέΉίϊΐΊόΌύΰϋΎΫὰάὲέὴήὶίὸόὺύὼώΏ1234567890‘?’“!”(%)\[#\]{@}\/&\<\-+÷×=>®©$€£¥¢:;,.*\n ]){1,}");
 
-///Sort photos from smallest to largest
+///Sort photos from largest to smallest
 List<PhotoSize> sortPhotoSizes(List<PhotoSize> sizes) {
   sizes.sort((a, b) => a.width! > b.width! ? -1 : (a.width! == b.width! ? 0 : 1));
   return sizes;
