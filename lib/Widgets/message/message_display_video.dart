@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:dart_vlc/dart_vlc.dart' as vlc;
 import 'package:flutter/material.dart';
@@ -5,17 +8,32 @@ import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/td_api.dart' hide Text;
+import 'package:myapp/tdlib/td_api.dart' as td hide Text;
 import 'dart:io' as io;
 import 'package:myapp/utils.dart';
 
 class MessageDisplayVideo extends StatefulWidget {
-  const MessageDisplayVideo(
-      {Key? key, required this.message, required this.client, this.senderName, this.infoWidget, this.replieWidget})
-      : super(key: key);
+  const MessageDisplayVideo({
+    Key? key,
+    required this.message,
+    required this.client,
+    this.overrideVideo,
+    this.senderName,
+    this.infoWidget,
+    this.overrideCaption,
+    this.contolls,
+    this.autoplay = false,
+    this.loop = false,
+    this.replieWidget,
+  }) : super(key: key);
 
-  final Message message;
+  final td.Message message;
+  final td.Video? overrideVideo;
   final TelegramClient client;
+  final td.FormattedText? overrideCaption;
+  final Widget? contolls;
+  final bool autoplay;
+  final bool loop;
   final String? senderName;
   final Widget? infoWidget;
   final Widget? replieWidget;
@@ -27,10 +45,14 @@ class MessageDisplayVideo extends StatefulWidget {
 class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
   static int i = 62420;
   vlc.Player? player;
+  List<StreamSubscription> _subs = [];
+
   @override
   Widget build(BuildContext context) {
-    assert(widget.message.content is MessageVideo);
-    var video = widget.message.content as MessageVideo;
+    assert(widget.message.content is td.MessageVideo || widget.overrideVideo != null);
+    var video = widget.overrideVideo ?? (widget.message.content as td.MessageVideo).video!;
+    var videoCaption =
+        widget.overrideVideo == null ? (widget.message.content as td.MessageVideo).caption! : widget.overrideCaption;
     player = vlc.Player(
       id: ++i,
       videoDimensions: const VideoDimensions(0, 0),
@@ -38,32 +60,45 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
 
     widget.client
         .send(
-      DownloadFile(
-        fileId: video.video!.video!.id!,
+      td.DownloadFile(
+        fileId: video.video!.id!,
         priority: 1,
         synchronous: true,
       ),
     )
         .then((file) {
-      player!.open(vlc.Media.file(io.File((file as File).local!.path!)), autoStart: false);
+      player!.open(
+        vlc.Media.file(io.File((file as td.File).local!.path!)),
+        autoStart: widget.autoplay,
+      );
     });
 
-    var timeHiderKey = GlobalKey<WidgetHiderState>();
+    if (widget.loop) {
+      _subs.add(player!.playbackStream.listen((event) {
+        if (event.isCompleted) {
+          player!.play();
+        }
+      }));
+    }
+
+    var contollsHiderKey = GlobalKey<WidgetHiderState>();
     var duration = 0;
     var position = 0;
     var volume = 1.0;
+
     return LayoutBuilder(
       builder: (_, box) {
+        var contentWidth = min(video.width?.toDouble() ?? box.maxWidth, box.maxWidth);
         return MouseRegion(
-          onEnter: (_) => timeHiderKey.currentState?.show(),
-          onExit: (_) => timeHiderKey.currentState?.hide(),
+          onEnter: (_) => contollsHiderKey.currentState?.show(),
+          onExit: (_) => contollsHiderKey.currentState?.hide(),
           child: MessageDisplayMedia(
             client: widget.client,
             message: widget.message,
             senderName: widget.senderName,
-            caption: video.caption,
-            contentWidth: box.maxWidth,
-            contentHeight: video.video!.height! * (box.maxWidth / video.video!.width!),
+            caption: videoCaption,
+            contentWidth: contentWidth,
+            contentHeight: (video.height! * (contentWidth / video.width!)).toDouble(),
             replieWidget: widget.replieWidget,
             infoWidget: widget.infoWidget,
             content: Stack(
@@ -80,50 +115,51 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
                     child: vlc.Video(
                       key: Key("video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
                       player: player,
-                      width: video.video!.width!.toDouble(),
-                      height: video.video!.height!.toDouble(),
+                      width: video.width!.toDouble(),
+                      height: video.height!.toDouble(),
                       showControls: false,
                     )),
                 WidgetHider(
                   hiddenOnInit: true,
-                  key: timeHiderKey,
-                  child: StreamBuilder(
-                    stream: player!.positionStream,
-                    builder: (_, posData) {
-                      var data = posData.hasData ? posData.data as PositionState : null;
-                      if (data?.duration?.inSeconds != 0 && duration == 0) {
-                        if (data?.duration != null) {
-                          duration = data!.duration!.inSeconds;
-                        }
-                      }
-                      if (data?.position?.inSeconds != 0 && data?.position != null) {
-                        if (data!.position!.inSeconds != 0) {
-                          position = data.position!.inSeconds;
-                        }
-                      }
-                      return Container(
-                        child: MessageInfoBubbleBase(
-                          content: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              _MuteIcon(
-                                initValue: volume == 0,
-                                onMuteStateChange: (mute) {
-                                  volume = mute ? 0 : 1;
-                                  player!.setVolume(volume);
-                                },
+                  key: contollsHiderKey,
+                  child: widget.contolls ??
+                      StreamBuilder(
+                        stream: player!.positionStream,
+                        builder: (_, posData) {
+                          var data = posData.hasData ? posData.data as PositionState : null;
+                          if (data?.duration?.inSeconds != 0 && duration == 0) {
+                            if (data?.duration != null) {
+                              duration = data!.duration!.inSeconds;
+                            }
+                          }
+                          if (data?.position?.inSeconds != 0 && data?.position != null) {
+                            if (data!.position!.inSeconds != 0) {
+                              position = data.position!.inSeconds;
+                            }
+                          }
+                          return Container(
+                            child: MessageInfoBubbleBase(
+                              content: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _MuteIcon(
+                                    initValue: volume == 0,
+                                    onMuteStateChange: (mute) {
+                                      volume = mute ? 0 : 1;
+                                      player!.setVolume(volume);
+                                    },
+                                  ),
+                                  Text(
+                                    "${getMMSS(position)}/${getMMSS(duration)}",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "${getMMSS(position)}/${getMMSS(duration)}",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                        margin: const EdgeInsets.only(top: 4, right: 4),
-                      );
-                    },
-                  ),
+                            ),
+                            margin: const EdgeInsets.only(top: 4, right: 4),
+                          );
+                        },
+                      ),
                 ),
               ],
             ),
@@ -136,6 +172,7 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
   @override
   void dispose() {
     player?.dispose();
+    _subs.forEach((element) => element.cancel());
     super.dispose();
   }
 }

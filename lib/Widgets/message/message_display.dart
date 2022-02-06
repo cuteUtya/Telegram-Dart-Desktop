@@ -5,6 +5,7 @@ import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
 import 'package:myapp/Widgets/message/message_display_audio.dart';
+import 'package:myapp/Widgets/message/message_display_gif.dart';
 import 'package:myapp/Widgets/message/message_display_photo.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
@@ -246,6 +247,17 @@ class MessageDisplay extends StatelessWidget {
                 senderName: showMessageSender ? author : null,
                 infoWidget: _buildInfoWidget(haveText),
                 replieWidget: _buildReplieWidget(haveText),
+              );
+              break;
+
+            case MessageAnimation:
+              wrapInBubble = haveText;
+              contentWidget = MessageDisplayGif(
+                client: client,
+                message: message,
+                infoWidget: _buildInfoWidget(haveText),
+                replieWidget: _buildReplieWidget(haveText),
+                senderName: showMessageSender ? author : null,
               );
               break;
 

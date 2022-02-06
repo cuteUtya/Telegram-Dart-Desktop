@@ -40,14 +40,19 @@ class MessageDisplayMedia extends StatelessWidget {
     );
 
     return haveText
-        ? MessageDisplayText(
-            client: client,
-            message: message,
-            senderName: senderName,
-            additionalContent: _buildImage(border),
-            infoWidget: infoWidget,
-            replieWidget: replieWidget,
-            text: caption,
+        ? LayoutBuilder(
+            builder: (_, box) => SizedBox(
+              width: min(box.maxWidth, contentWidth ?? box.maxWidth),
+              child: MessageDisplayText(
+                client: client,
+                message: message,
+                senderName: senderName,
+                additionalContent: _buildImage(border),
+                infoWidget: infoWidget,
+                replieWidget: replieWidget,
+                text: caption,
+              ),
+            ),
           )
         : Row(
             mainAxisSize: MainAxisSize.min,
