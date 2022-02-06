@@ -51,7 +51,8 @@ class StickerDisplay extends StatelessWidget {
                     child: SizedBox(
                       width: width,
                       height: height,
-                    ))),
+                    ),
+                  )),
         builder: (_, path) {
           return sticker.isAnimated!
               ? Rlottie.file(
@@ -60,8 +61,7 @@ class StickerDisplay extends StatelessWidget {
                   behavior: playBehavior,
                   onClick: onClick,
                   onAnimPlayed: onAnimPlayed,
-                  width: width,
-                  height: height)
+                )
               : Image.file(io.File(path));
         },
         fileId: sticker.sticker!.id!,
