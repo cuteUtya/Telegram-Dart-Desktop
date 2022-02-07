@@ -163,3 +163,4 @@ FolderTitleActiveColor: ref(Accent);
 FolderTitleInactiveColor: ref(RegularText);
 
 EmojiInputPanelBackgroundColor: ref(BaseColor);
+EmojiInputPanelIconsColor: ref(GenericUIIconsColor);
