@@ -33,3 +33,5 @@ tdtranslates.db
 
 tdtranslates.db-shm
 tdtranslates.db-wal
+tldibLogs.txt
+tldibLogs.txt.old
