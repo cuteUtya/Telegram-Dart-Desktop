@@ -38,39 +38,46 @@ class MessageDisplayPhoto extends StatelessWidget {
     );
 
     return LayoutBuilder(
-      builder: (_, box) => MessageDisplayMedia(
-        client: client,
-        message: message,
-        senderName: senderName,
-        infoWidget: infoWidget,
-        contentWidth: max(
+      builder: (_, box) {
+        var width = max(
           200,
           min(
             box.maxWidth,
             photoSize.width!.toDouble(),
           ),
-        ),
-        caption: photo.caption,
-        content: RemoteFileBuilderProgress(
+        ).toDouble();
+        return MessageDisplayMedia(
           client: client,
-          fileId: photoSize.photo!.id!,
-          builder: (_, progress, path) {
-            if (path == null) {
-              ///TODO implement better loading animation
-              return Text(
-                progress.toString(),
-              );
-            }
-            return ClipRRect(
-              borderRadius: border,
-              child: Image.file(
-                io.File(path),
+          message: message,
+          senderName: senderName,
+          infoWidget: infoWidget,
+          contentWidth: width,
+          caption: photo.caption,
+          content: RemoteFileBuilderProgress(
+            client: client,
+            fileId: photoSize.photo!.id!,
+            builder: (_, progress, path) {
+              if (path == null) {
+                ///TODO implement better loading animation
+                return Text(
+                  progress.toString(),
+                );
+              }
+              return Align(
                 alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-              ),
-            );
-          },
-        ),
-      ),
+                child: ClipRRect(
+                  borderRadius: border,
+                  child: Image.file(
+                    io.File(path),
+                    cacheHeight: (photoSize.height! / (photoSize.width! / width)).toInt(),
+                    cacheWidth: width.toInt(),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -11,7 +11,6 @@ class FileImageDisplay extends StatelessWidget {
       required this.id,
       required this.client,
       this.borderRadius,
-      this.containerShape = BoxShape.rectangle,
       this.height,
       this.width,
       this.isTGV = false,
@@ -20,7 +19,6 @@ class FileImageDisplay extends StatelessWidget {
       this.emptyReplacer = const Center()})
       : super(key: key);
 
-  final BoxShape containerShape;
   final int id;
   final int priority;
   final double? width;
@@ -45,17 +43,21 @@ class FileImageDisplay extends StatelessWidget {
                 color: tgvColor,
                 fit: BoxFit.cover,
               )
-            : Container(
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                  borderRadius: borderRadius,
-                  shape: containerShape,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: FileImage(file),
-                  ),
-                ),
+            : LayoutBuilder(
+                builder: (_, box) {
+                  return SizedBox(
+                    width: width,
+                    height: height,
+                    child: ClipRRect(
+                      borderRadius: borderRadius ?? BorderRadius.zero,
+                      child: Image.file(
+                        file,
+                        cacheHeight: (height ?? box.maxHeight).toInt(),
+                        cacheWidth: (width ?? box.maxWidth).toInt(),
+                      ),
+                    ),
+                  );
+                },
               );
       },
       fileId: id,

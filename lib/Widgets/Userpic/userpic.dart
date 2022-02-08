@@ -50,7 +50,7 @@ class Userpic extends StatelessWidget {
 
     //TODO if profilePhoto has animations animate photo on mouse hover
     return FileImageDisplay(
-      containerShape: shape,
+      borderRadius: const BorderRadius.all(Radius.circular(40)),
       client: client,
       id: photo!.id!,
       emptyReplacer: emptyUserpic(),
