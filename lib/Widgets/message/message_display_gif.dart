@@ -37,7 +37,7 @@ class MessageDisplayGif extends StatelessWidget {
       contolls: Align(
         alignment: Alignment.topRight,
         child: Container(
-          margin: EdgeInsets.all(8),
+          margin: const EdgeInsets.all(8),
           child: MessageInfoBubbleBase(
             content: Text(
               "GIF",

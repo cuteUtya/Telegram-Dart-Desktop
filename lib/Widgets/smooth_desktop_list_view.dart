@@ -15,6 +15,7 @@ class SmoothDesktopListView extends StatefulWidget {
       this.reverseScroll = false,
       this.itemExtent,
       this.prototypeItem,
+      this.scrollController,
       this.addAutomaticKeepAlives = true,
       this.addRepaintBoundaries = true,
       this.addSemanticIndexes = true,
@@ -40,6 +41,7 @@ class SmoothDesktopListView extends StatefulWidget {
   final bool addRepaintBoundaries;
   final int? itemCount;
   final bool addSemanticIndexes;
+  final ScrollController? scrollController;
   final double? cacheExtent;
   final Widget Function(BuildContext, int) itemBuilder;
   final int? semanticChildCount;
@@ -53,7 +55,7 @@ class SmoothDesktopListView extends StatefulWidget {
 }
 
 class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
-  final ScrollController _controller = ScrollController();
+  late final ScrollController _controller = widget.scrollController ?? ScrollController();
   double offset = 0;
 
   @override

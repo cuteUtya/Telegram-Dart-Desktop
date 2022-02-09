@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
@@ -26,6 +28,7 @@ class _MessageListState extends State<MessageList> {
   Messages? messages;
   int _renderedChatId = 0;
   List<ChatAdministrator> admins = [];
+  ScrollController scrollController = ScrollController();
   static const List<Type> serviceMessages = [
     MessageVideoChatStarted,
     MessageVideoChatEnded,
@@ -35,6 +38,30 @@ class _MessageListState extends State<MessageList> {
     MessageChatChangePhoto,
     MessageChatDeletePhoto
   ];
+
+  List<StreamSubscription> _subs = [];
+
+  @override
+  void initState() {
+    _subs.add(widget.client.newMessagesIn(widget.chatId).listen((event) {
+      setState(() {
+        messages?.totalCount = messages!.totalCount! + 1;
+        messages?.messages = [event] + messages!.messages!;
+      });
+      print(scrollController.offset);
+      if (scrollController.offset <= 0) {
+        scrollController.jumpTo(41);
+        scrollController.animateTo(0, duration: Duration(seconds: 1), curve: Curves.decelerate);
+      }
+    }));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _subs.forEach((e) => e.cancel());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +83,7 @@ class _MessageListState extends State<MessageList> {
 
     return SmoothDesktopListView(
       reverse: true,
+      scrollController: scrollController,
       itemCount: messages?.totalCount ?? 0,
       cacheExtent: 1500,
       itemBuilder: (context, index) {

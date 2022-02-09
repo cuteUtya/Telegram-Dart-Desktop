@@ -48,15 +48,17 @@ class MessageDisplayText extends StatefulWidget {
 }
 
 class _MessageDisplayTextState extends State<MessageDisplayText> {
-  Size? msgInfoBubbleSize;
+  Size msgInfoBubbleSize = const Size(84, 0);
+  bool inited = false;
   final GlobalKey _msgInfoWidgetKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (mounted && msgInfoBubbleSize == null) {
+      if (mounted && !inited) {
+        inited = true;
         setState(() {
-          msgInfoBubbleSize = _msgInfoWidgetKey.currentContext?.size;
+          msgInfoBubbleSize = _msgInfoWidgetKey.currentContext!.size!;
         });
       }
     });
@@ -69,7 +71,6 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
           );
 
     var contentText = widget.text ?? (widget.message.content as MessageText).text!;
-
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(
             contentText, 20, ClientTheme.currentTheme.getField("MessageTextColor"), true, (s) => HttpUrlsUtils.openLink(s)));
@@ -77,7 +78,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
       var boxes = paragraph.getBoxesForSelection(TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));
       final lastBox = boxes.lastOrNull ?? TextBox.fromLTRBD(0, 0, 0, 0, TextDirection.ltr);
-      final fitsLastLine = boxCons.maxWidth - lastBox.right > (msgInfoBubbleSize?.width ?? 30);
+      final fitsLastLine = boxCons.maxWidth - lastBox.right > msgInfoBubbleSize.width;
       return Stack(
         children: [
           /// fake text with title and admin titles that stratch message bubble1
@@ -147,7 +148,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
               Container(
                 child: CopyableText(parsedEntetiyes),
                 margin: EdgeInsets.only(
-                  bottom: boxCons.maxWidth - lastBox.right < (msgInfoBubbleSize?.width ?? 30) ? 16 : 0,
+                  bottom: boxCons.maxWidth - lastBox.right < msgInfoBubbleSize.width ? 16 : 0,
                 ),
               ),
             if (widget.additionalContent != null && widget.additionalContentPlace == AdditionalContentPlace.bottom)
@@ -156,7 +157,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 100),
             curve: Curves.easeOutBack,
-            width: lastBox.right + (!fitsLastLine ? 0 : (msgInfoBubbleSize?.width ?? 50) + 12),
+            width: lastBox.right + (!fitsLastLine ? 0 : msgInfoBubbleSize.width + 12),
           ),
         ],
       );
