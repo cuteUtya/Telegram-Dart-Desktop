@@ -48,10 +48,10 @@ class _MessageListState extends State<MessageList> {
         messages?.totalCount = messages!.totalCount! + 1;
         messages?.messages = [event] + messages!.messages!;
       });
-      print(scrollController.offset);
+
       if (scrollController.offset <= 0) {
         scrollController.jumpTo(41);
-        scrollController.animateTo(0, duration: Duration(seconds: 1), curve: Curves.decelerate);
+        scrollController.animateTo(0, duration: Duration(milliseconds: 400), curve: Curves.decelerate);
       }
     }));
     super.initState();
