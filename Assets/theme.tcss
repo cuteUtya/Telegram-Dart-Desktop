@@ -139,6 +139,7 @@ CheckMarkNotMineColor: #FF989898;
 CheckMarkMineColor(theme=light): #FF65AF5F;
 CheckMarkMineColor(theme=dark): #FFFFFF;
 CheckMarkInFlowContainer: ref(InfoOutsideMessageColor);
+GifOverlayTextColor: ref(InfoOutsideMessageColor);
 
 StickerOutlineColor: #1E000000;
 ServiceMessageTextColor: #FFFFFFFF;

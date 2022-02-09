@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:myapp/Themes%20engine/theme_interpreter.dart';
+import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_video.dart';
+import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/td_api.dart';
+import 'package:myapp/tdlib/td_api.dart' hide Text;
 
 class MessageDisplayGif extends StatelessWidget {
   const MessageDisplayGif({
@@ -31,7 +34,23 @@ class MessageDisplayGif extends StatelessWidget {
       infoWidget: infoWidget,
       replieWidget: replieWidget,
       autoplay: true,
-      contolls: const SizedBox.shrink(),
+      contolls: Align(
+        alignment: Alignment.topRight,
+        child: Container(
+          margin: EdgeInsets.all(8),
+          child: MessageInfoBubbleBase(
+            content: Text(
+              "GIF",
+              style: TextDisplay.create(
+                size: 16,
+                textColor: ClientTheme.currentTheme.getField(
+                  "GifOverlayTextColor",
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       loop: true,
       overrideCaption: caption,
       overrideVideo: Video(
