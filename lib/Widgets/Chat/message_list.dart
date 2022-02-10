@@ -39,11 +39,11 @@ class _MessageListState extends State<MessageList> {
     MessageChatDeletePhoto
   ];
 
-  List<StreamSubscription> _subs = [];
+  StreamSubscription? newMessageSubs;
 
-  @override
-  void initState() {
-    _subs.add(widget.client.newMessagesIn(widget.chatId).listen((event) {
+  void listenNewMessage() {
+    newMessageSubs?.cancel();
+    newMessageSubs = widget.client.newMessagesIn(widget.chatId).listen((event) {
       setState(() {
         messages?.totalCount = messages!.totalCount! + 1;
         messages?.messages = [event] + messages!.messages!;
@@ -53,20 +53,14 @@ class _MessageListState extends State<MessageList> {
         scrollController.jumpTo(41);
         scrollController.animateTo(0, duration: Duration(milliseconds: 400), curve: Curves.decelerate);
       }
-    }));
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _subs.forEach((e) => e.cancel());
-    super.dispose();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var chat = widget.client.getChat(widget.chatId);
     if (_renderedChatId != widget.chatId) {
+      listenNewMessage();
       widget.client.send(GetChatHistory(chatId: widget.chatId, limit: 100)).then((mess) {
         setState(() => messages = mess as Messages);
       });
