@@ -34,9 +34,8 @@ class MessageDisplayMedia extends StatelessWidget {
   Widget build(BuildContext context) {
     bool haveText = (caption?.text ?? "").isNotEmpty;
     GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
-    BorderRadius border = BorderRadius.vertical(
-      top: replieWidget == null || !haveText ? const Radius.circular(12) : Radius.zero,
-      bottom: haveText ? Radius.zero : const Radius.circular(12),
+    BorderRadius border = const BorderRadius.all(
+      Radius.circular(12),
     );
 
     return haveText
