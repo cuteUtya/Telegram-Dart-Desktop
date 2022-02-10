@@ -41,6 +41,22 @@ class _MessageListState extends State<MessageList> {
 
   StreamSubscription? newMessageSubs;
 
+  void getChatHistory() async {
+    var limit = 100;
+    Future<Messages> _invoke() async {
+      return await widget.client.send(GetChatHistory(chatId: widget.chatId, limit: limit)) as Messages;
+    }
+
+    Messages msgs;
+    int tryes = 0;
+    do {
+      tryes++;
+      msgs = await _invoke();
+      print(msgs.totalCount);
+    } while (msgs.totalCount! < limit && tryes < 3);
+    setState(() => messages = msgs);
+  }
+
   void listenNewMessage() {
     newMessageSubs?.cancel();
     newMessageSubs = widget.client.newMessagesIn(widget.chatId).listen((event) {
@@ -61,9 +77,7 @@ class _MessageListState extends State<MessageList> {
     var chat = widget.client.getChat(widget.chatId);
     if (_renderedChatId != widget.chatId) {
       listenNewMessage();
-      widget.client.send(GetChatHistory(chatId: widget.chatId, limit: 100)).then((mess) {
-        setState(() => messages = mess as Messages);
-      });
+      getChatHistory();
       var isChannel = (chat.type is ChatTypeSupergroup ? chat.type as ChatTypeSupergroup : null)?.isChannel ?? false;
       if (chat.type is ChatTypeBasicGroup || (chat.type is ChatTypeSupergroup && !isChannel)) {
         widget.client.send(GetChatAdministrators(chatId: widget.chatId)).then((newAdmins) {
