@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
+import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 import 'package:myapp/Widgets/remote_file_builder_progress.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -50,39 +55,102 @@ class MessageDisplayPhoto extends StatelessWidget {
             photoSize.width!.toDouble(),
           ),
         ).toDouble();
-        return MessageDisplayMedia(
-          client: client,
-          message: message,
-          senderName: senderName,
-          infoWidget: infoWidget,
-          contentWidth: width,
-          adminTitle: adminTitle,
-          captionMargin: contentPadding,
-          caption: photo.caption,
-          content: RemoteFileBuilderProgress(
-            client: client,
-            fileId: photoSize.photo!.id!,
-            builder: (_, progress, path) {
-              if (path == null) {
-                ///TODO implement better loading animation
-                return Text(
-                  progress.toString(),
-                );
-              }
-              return Align(
-                alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-                child: ClipRRect(
-                  borderRadius: border,
-                  child: Image.file(
-                    io.File(path),
-                    cacheHeight: (photoSize.height! ~/ (photoSize.width! / width)),
-                    cacheWidth: width.toInt(),
-                  ),
+        var height = (photoSize.height! / (photoSize.width! / width));
+        var blurImage = Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: MemoryImage(
+                base64.decode(
+                  photo.photo!.minithumbnail!.data!,
                 ),
-              );
-            },
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 16,
+              sigmaY: 16,
+            ),
+            child: Container(
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+            ),
           ),
         );
+        return MessageDisplayMedia(
+            client: client,
+            message: message,
+            senderName: senderName,
+            infoWidget: infoWidget,
+            contentWidth: width,
+            adminTitle: adminTitle,
+            captionMargin: contentPadding,
+            caption: photo.caption,
+            content: RemoteFileBuilderProgress(
+              client: client,
+              downloadStep: 65000,
+              fileId: photoSize.photo!.id!,
+              builder: (_, progress, path) {
+                if (path == null || progress != 1) {
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      blurImage,
+                      MessageInfoBubbleBase(
+                          padding: const EdgeInsets.all(8),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "${(progress * 100).toInt()}%",
+                                style: TextDisplay.create(
+                                  size: 16,
+                                  textColor: Colors.white,
+                                  fontFamily: TextDisplay.greaterImportance,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(
+                                    4,
+                                  ),
+                                ),
+                                child: SizedBox(
+                                  width: width * 0.33,
+                                  height: 12,
+                                  child: LinearProgressIndicator(
+                                    color: Colors.white,
+                                    backgroundColor: Color(0x2A1515).withOpacity(0.24),
+                                    value: progress,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
+                    ],
+                  );
+                }
+                return Align(
+                  alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
+                  child: ClipRRect(
+                      borderRadius: border,
+                      child: SizedBox(
+                        width: width,
+                        height: height,
+                        child: Image.file(
+                          io.File(path),
+                          cacheHeight: height.toInt(),
+                          cacheWidth: width.toInt(),
+                        ),
+                      )),
+                );
+              },
+            ));
       },
     );
   }

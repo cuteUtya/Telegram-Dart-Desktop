@@ -11,12 +11,14 @@ class RemoteFileBuilderProgress extends StatefulWidget {
     required this.fileId,
     required this.builder,
     this.downloadPriority = 1,
+    this.downloadStep = 0,
   }) : super(key: key);
 
   final TelegramClient client;
   final int fileId;
   final Widget Function(BuildContext context, double progress, String? path) builder;
   final int downloadPriority;
+  final int downloadStep;
   @override
   State<StatefulWidget> createState() => _RemoteFileBuilderProgressState();
 }
@@ -32,7 +34,7 @@ class _RemoteFileBuilderProgressState extends State<RemoteFileBuilderProgress> {
       if (mounted) {
         setState(() {
           progress = file.local!.downloadedPrefixSize! / file.expectedSize!;
-          path = file.local!.isDownloadingCompleted! ? file.local!.path! : null;
+          path = file.local!.path!.isEmpty ? null : file.local!.path!;
         });
       }
     }
@@ -47,11 +49,20 @@ class _RemoteFileBuilderProgressState extends State<RemoteFileBuilderProgress> {
         fileId: widget.fileId,
         priority: widget.downloadPriority,
         synchronous: false,
+        limit: widget.downloadStep,
       ));
     }
 
     _streamSubscription = widget.client.fileUpdates(widget.fileId).listen((event) {
       processFile(event);
+      widget.client.send(
+        DownloadFile(
+          fileId: widget.fileId,
+          priority: widget.downloadPriority,
+          synchronous: false,
+          limit: event.local!.downloadedSize! + widget.downloadStep,
+        ),
+      );
     });
   }
 
