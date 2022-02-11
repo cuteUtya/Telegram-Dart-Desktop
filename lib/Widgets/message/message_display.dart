@@ -70,12 +70,12 @@ class MessageDisplay extends StatelessWidget {
                   !message.isOutgoing!) &&
               (bubbleRelativePosition == BubbleRelativePosition.top || bubbleRelativePosition == BubbleRelativePosition.single);
           bool wrapInBubble = false;
+          bool overrideBubblePadding = false;
 
           bool haveText = false;
           try {
             haveText = ((message.content as dynamic).caption?.text ?? "").isNotEmpty;
           } catch (_) {}
-          //bool haveText =
           switch (message.content.runtimeType) {
             case MessageText:
               var contentText = message.content as MessageText;
@@ -128,17 +128,6 @@ class MessageDisplay extends StatelessWidget {
                 message: message,
                 replieWidget: _buildReplieWidget(false),
                 infoWidget: _buildInfoWidget(false),
-              );
-              break;
-
-            case MessageVideo:
-              wrapInBubble = haveText;
-              contentWidget = MessageDisplayVideo(
-                client: client,
-                message: message,
-                senderName: showMessageSender ? author : null,
-                infoWidget: _buildInfoWidget(haveText),
-                replieWidget: _buildReplieWidget(haveText),
               );
               break;
 
@@ -241,7 +230,24 @@ class MessageDisplay extends StatelessWidget {
 
             case MessagePhoto:
               wrapInBubble = haveText;
+              overrideBubblePadding = true;
               contentWidget = MessageDisplayPhoto(
+                client: client,
+                message: message,
+                adminTitle: adminTitle,
+
+                ///TODO if use tdesktop bubble use tdesktop padding
+                contentPadding: MacMessageBubble.padding,
+                senderName: showMessageSender ? author : null,
+                infoWidget: _buildInfoWidget(haveText),
+                replieWidget: _buildReplieWidget(haveText),
+              );
+              break;
+
+            ///theare some issues related with it perfomance
+            /*case MessageVideo:
+              wrapInBubble = haveText;
+              contentWidget = MessageDisplayVideo(
                 client: client,
                 message: message,
                 senderName: showMessageSender ? author : null,
@@ -259,7 +265,7 @@ class MessageDisplay extends StatelessWidget {
                 replieWidget: _buildReplieWidget(haveText),
                 senderName: showMessageSender ? author : null,
               );
-              break;
+              break;*/
 
             default:
               wrapInBubble = true;
@@ -309,7 +315,8 @@ class MessageDisplay extends StatelessWidget {
           );
 
           if (wrapInBubble) {
-            contentWidget = TdesktopMessageBubble(
+            contentWidget = MacMessageBubble(
+              overridePadding: overrideBubblePadding,
               content: contentWidget,
               side: message.isOutgoing! ? Side.right : Side.left,
               position: bubbleRelativePosition,

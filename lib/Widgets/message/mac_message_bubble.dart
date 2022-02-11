@@ -14,11 +14,16 @@ class MacMessageBubble extends StatelessWidget {
     required this.content,
     required this.side,
     required this.position,
+    this.overridePadding = false,
   }) : super(key: key);
 
   final Widget content;
   final Side side;
+  final bool overridePadding;
   final BubbleRelativePosition position;
+
+  static const EdgeInsets padding = EdgeInsets.symmetric(vertical: 6, horizontal: 12);
+
   @override
   Widget build(BuildContext context) => MessageBubble(
         content: content,
@@ -34,6 +39,6 @@ class MacMessageBubble extends StatelessWidget {
           ),
           side: side,
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        contentPadding: overridePadding ? EdgeInsets.zero : padding,
       );
 }

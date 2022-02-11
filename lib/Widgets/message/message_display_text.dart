@@ -30,12 +30,14 @@ class MessageDisplayText extends StatefulWidget {
     this.additionalContent,
     this.additionalContentPlace = AdditionalContentPlace.top,
     this.text,
+    this.captionMargin,
     this.senderName,
     this.adminTitle,
   }) : super(key: key);
   final TelegramClient client;
   final Message message;
   final FormattedText? text;
+  final EdgeInsets? captionMargin;
   final String? senderName;
   final String? adminTitle;
   final Widget? additionalContent;
@@ -83,37 +85,46 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
         children: [
           /// fake text with title and admin titles that stratch message bubble1
           if (widget.adminTitle != null && !widget.message.isOutgoing! && widget.senderName != null)
-            Text.rich(TextSpan(children: [
-              TextSpan(
-                text: widget.senderName!,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.transparent,
+            Container(
+              margin: widget.captionMargin,
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: widget.senderName!,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    const WidgetSpan(
+                        child: SizedBox(
+                      width: 12,
+                    )),
+                    TextSpan(
+                      text: widget.adminTitle,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.transparent,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const WidgetSpan(
-                  child: SizedBox(
-                width: 12,
-              )),
-              TextSpan(
-                text: widget.adminTitle,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.transparent,
-                ),
-              )
-            ])),
+            ),
+
           if (widget.adminTitle != null && !widget.message.isOutgoing!)
             Positioned(
-                right: 0,
-                top: 0,
-                child: Text(
-                  widget.adminTitle!,
-                  style: TextDisplay.create(size: 16, textColor: ClientTheme.currentTheme.getField("AdminTitleColor")),
-                )),
+              right: widget.captionMargin?.right ?? 0,
+              top: widget.captionMargin?.top ?? 0,
+              child: Text(
+                widget.adminTitle!,
+                style: TextDisplay.create(size: 16, textColor: ClientTheme.currentTheme.getField("AdminTitleColor")),
+              ),
+            ),
           Positioned(
-            right: 0,
-            bottom: -2,
+            right: widget.captionMargin?.right ?? 0,
+            bottom: -2 + (widget.captionMargin?.bottom ?? 0),
             child: Container(
               child: widget.infoWidget,
               key: _msgInfoWidgetKey,
@@ -121,32 +132,43 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
           ),
           Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
             if (widget.senderName != null)
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextDisplay.parseEmojiInString(
-                          widget.senderName!,
-                          TextDisplay.create(
-                            textColor: getPeerColor(getSenderId(widget.message.senderId!)!, 'b'),
-                            fontWeight: FontWeight.bold,
-                            size: 18,
-                            fontFamily: TextDisplay.greaterImportance,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+              Container(
+                margin: EdgeInsets.only(
+                  top: widget.captionMargin?.top ?? 0,
+                  left: widget.captionMargin?.left ?? 0,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextDisplay.parseEmojiInString(
+                            widget.senderName!,
+                            TextDisplay.create(
+                              textColor: getPeerColor(getSenderId(widget.message.senderId!)!, 'b'),
+                              fontWeight: FontWeight.bold,
+                              size: 18,
+                              fontFamily: TextDisplay.greaterImportance,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             if (widget.replieWidget != null) widget.replieWidget!,
             if (widget.additionalContent != null && widget.additionalContentPlace == AdditionalContentPlace.top) additionalInfo,
             if (contentText.text?.isNotEmpty ?? false)
               Container(
-                child: CopyableText(parsedEntetiyes),
+                child: Padding(
+                  padding: widget.captionMargin?.add(EdgeInsets.only(top: -(widget.captionMargin?.top ?? 0))) ?? EdgeInsets.zero,
+                  child: CopyableText(
+                    parsedEntetiyes,
+                  ),
+                ),
                 margin: EdgeInsets.only(
                   bottom: boxCons.maxWidth - lastBox.right < msgInfoBubbleSize.width ? 16 : 0,
                 ),

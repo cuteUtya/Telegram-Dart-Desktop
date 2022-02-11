@@ -14,14 +14,18 @@ class MessageDisplayPhoto extends StatelessWidget {
     Key? key,
     required this.client,
     required this.message,
+    required this.contentPadding,
     this.senderName,
+    this.adminTitle,
     this.infoWidget,
     this.replieWidget,
   }) : super(key: key);
 
   final TelegramClient client;
   final Message message;
+  final EdgeInsets contentPadding;
   final String? senderName;
+  final String? adminTitle;
   final Widget? infoWidget;
   final Widget? replieWidget;
 
@@ -52,6 +56,8 @@ class MessageDisplayPhoto extends StatelessWidget {
           senderName: senderName,
           infoWidget: infoWidget,
           contentWidth: width,
+          adminTitle: adminTitle,
+          captionMargin: contentPadding,
           caption: photo.caption,
           content: RemoteFileBuilderProgress(
             client: client,
@@ -69,7 +75,7 @@ class MessageDisplayPhoto extends StatelessWidget {
                   borderRadius: border,
                   child: Image.file(
                     io.File(path),
-                    cacheHeight: (photoSize.height! / (photoSize.width! / width)).toInt(),
+                    cacheHeight: (photoSize.height! ~/ (photoSize.width! / width)),
                     cacheWidth: width.toInt(),
                   ),
                 ),

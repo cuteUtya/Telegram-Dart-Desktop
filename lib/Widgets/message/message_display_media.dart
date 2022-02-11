@@ -14,6 +14,8 @@ class MessageDisplayMedia extends StatelessWidget {
     required this.senderName,
     required this.caption,
     required this.content,
+    this.captionMargin,
+    this.adminTitle,
     this.contentWidth,
     this.contentHeight,
     this.infoWidget,
@@ -25,6 +27,8 @@ class MessageDisplayMedia extends StatelessWidget {
   final FormattedText? caption;
   final Widget content;
   final Message message;
+  final String? adminTitle;
+  final EdgeInsets? captionMargin;
   final double? contentWidth;
   final double? contentHeight;
   final Widget? infoWidget;
@@ -37,16 +41,22 @@ class MessageDisplayMedia extends StatelessWidget {
     BorderRadius border = const BorderRadius.all(
       Radius.circular(12),
     );
-
     return haveText
         ? LayoutBuilder(
             builder: (_, box) => SizedBox(
-              width: min(box.maxWidth, contentWidth ?? box.maxWidth),
+              width: min(box.maxWidth, contentWidth ?? box.maxWidth), //- (captionMargin?.left ?? 0),
               child: MessageDisplayText(
                 client: client,
+                adminTitle: adminTitle,
                 message: message,
                 senderName: senderName,
-                additionalContent: _buildImage(border),
+                additionalContent: Container(
+                  margin: captionMargin == null ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 4),
+                  child: _buildImage(
+                    border,
+                  ),
+                ),
+                captionMargin: captionMargin,
                 infoWidget: infoWidget,
                 replieWidget: replieWidget,
                 text: caption,
