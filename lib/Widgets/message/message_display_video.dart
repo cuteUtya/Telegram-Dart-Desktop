@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:dart_vlc/dart_vlc.dart' as vlc;
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/blur_image_preview.dart';
+import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
+import 'package:myapp/Widgets/remote_file_builder_progress.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' as td hide Text;
@@ -58,21 +62,6 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
       videoDimensions: const VideoDimensions(0, 0),
     );
 
-    widget.client
-        .send(
-      td.DownloadFile(
-        fileId: video.video!.id!,
-        priority: 1,
-        synchronous: true,
-      ),
-    )
-        .then((file) {
-      player!.open(
-        vlc.Media.file(io.File((file as td.File).local!.path!)),
-        autoStart: widget.autoplay,
-      );
-    });
-
     if (widget.loop) {
       _subs.add(player!.playbackStream.listen((event) {
         if (event.isCompleted) {
@@ -85,40 +74,71 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
     var duration = 0;
     var position = 0;
     var volume = 1.0;
+    bool videoInited = false;
 
-    return LayoutBuilder(
-      builder: (_, box) {
-        var contentWidth = min(video.width?.toDouble() ?? box.maxWidth, box.maxWidth);
-        return MouseRegion(
-          onEnter: (_) => contollsHiderKey.currentState?.show(),
-          onExit: (_) => contollsHiderKey.currentState?.hide(),
-          child: MessageDisplayMedia(
-            client: widget.client,
-            message: widget.message,
-            senderName: widget.senderName,
-            caption: videoCaption,
-            contentWidth: contentWidth,
-            contentHeight: (video.height! * (contentWidth / video.width!)).toDouble(),
-            replieWidget: widget.replieWidget,
-            infoWidget: widget.infoWidget,
-            content: Stack(
-              alignment: Alignment.topRight,
+    return LayoutBuilder(builder: (_, box) {
+      var contentWidth = min(video.width?.toDouble() ?? box.maxWidth, box.maxWidth);
+      var contentHeight = (video.height! * (contentWidth / video.width!)).toDouble();
+      return MessageDisplayMedia(
+        client: widget.client,
+        message: widget.message,
+        senderName: widget.senderName,
+        infoWidget: widget.infoWidget,
+        contentWidth: contentWidth,
+        caption: videoCaption,
+        content: RemoteFileBuilderProgress(
+          downloadStep: 256000,
+          client: widget.client,
+          fileId: video.video!.id!,
+          builder: (context, progres, path) {
+            print("$progres == ${video.supportsStreaming}");
+            if (progres != 1 && !video.supportsStreaming! || progres == 0) {
+              return BlurImagePreview(
+                image: MemoryImage(
+                  base64.decode(
+                    video.minithumbnail!.data!,
+                  ),
+                ),
+                width: contentWidth,
+                height: contentHeight,
+              );
+            }
+            if (!videoInited) {
+              videoInited = true;
+              player!.open(
+                vlc.Media.file(io.File(path!)),
+                autoStart: widget.autoplay,
+              );
+            }
+            return Stack(
               children: [
                 GestureDetector(
-                    onTap: () {
-                      if ((player!.position.duration?.inSeconds ?? 0) <= 0) {
-                        player!.play();
-                        position = 0;
-                      }
-                      player!.playOrPause();
-                    },
+                  onTap: () {
+                    if ((player!.position.duration?.inSeconds ?? 0) <= 0) {
+                      player!.play();
+                      position = 0;
+                    }
+                    player!.playOrPause();
+                  },
+                  child: MouseRegion(
+                    onEnter: (_) => contollsHiderKey.currentState?.show(),
+                    onExit: (_) => contollsHiderKey.currentState?.hide(),
                     child: vlc.Video(
                       key: Key("video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
                       player: player,
-                      width: video.width!.toDouble(),
-                      height: video.height!.toDouble(),
+                      width: contentWidth,
+                      height: contentHeight,
                       showControls: false,
-                    )),
+                    ),
+                  ),
+                ),
+                Text(
+                  "${(progres * 100).toInt()}%",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                  ),
+                ),
                 WidgetHider(
                   hiddenOnInit: true,
                   key: contollsHiderKey,
@@ -160,13 +180,51 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
                           );
                         },
                       ),
-                ),
+                )
+              ],
+            );
+          },
+        ),
+      );
+    });
+    /* return 
+        
+        return MouseRegion(
+          
+          child: MessageDisplayMedia(
+            client: widget.client,
+            message: widget.message,
+            senderName: widget.senderName,
+            caption: videoCaption,
+            contentWidth: contentWidth,
+            contentHeight: contentHeight,
+            replieWidget: widget.replieWidget,
+            infoWidget: widget.infoWidget,
+            content: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      if ((player!.position.duration?.inSeconds ?? 0) <= 0) {
+                        player!.play();
+                        position = 0;
+                      }
+                      player!.playOrPause();
+                    },
+                    child: vlc.Video(
+                      key: Key("video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
+                      player: player,
+                      width: video.width!.toDouble(),
+                      height: video.height!.toDouble(),
+                      showControls: false,
+                    )),
+                ,
               ],
             ),
           ),
         );
       },
-    );
+    );*/
   }
 
   @override

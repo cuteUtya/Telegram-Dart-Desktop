@@ -5,7 +5,7 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/utils.dart';
 
 class TextDisplay {
-  static String getEmojiFont() => "AppleColorEmoji";
+  static String getEmojiFont() => "GoogleColorEmoji";
 
   static TextStyle get title =>
       create(size: 24, fontWeight: FontWeight.w600, textColor: ClientTheme.currentTheme.getField("HeaderMain"));

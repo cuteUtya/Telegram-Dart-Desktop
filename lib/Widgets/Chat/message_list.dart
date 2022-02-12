@@ -52,7 +52,6 @@ class _MessageListState extends State<MessageList> {
     do {
       tryes++;
       msgs = await _invoke();
-      print(msgs.totalCount);
     } while (msgs.totalCount! < limit && tryes < 3);
     setState(() => messages = msgs);
   }

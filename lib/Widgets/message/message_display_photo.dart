@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/blur_image_preview.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
@@ -56,28 +57,14 @@ class MessageDisplayPhoto extends StatelessWidget {
           ),
         ).toDouble();
         var height = (photoSize.height! / (photoSize.width! / width));
-        var blurImage = Container(
+        var blurImage = BlurImagePreview(
+          image: MemoryImage(
+            base64.decode(
+              photo.photo!.minithumbnail!.data!,
+            ),
+          ),
           width: width,
           height: height,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: MemoryImage(
-                base64.decode(
-                  photo.photo!.minithumbnail!.data!,
-                ),
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 16,
-              sigmaY: 16,
-            ),
-            child: Container(
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
-            ),
-          ),
         );
         return MessageDisplayMedia(
             client: client,

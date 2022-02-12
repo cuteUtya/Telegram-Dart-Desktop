@@ -245,7 +245,7 @@ class MessageDisplay extends StatelessWidget {
               break;
 
             ///theare some issues related with it perfomance
-            /*case MessageVideo:
+            case MessageVideo:
               wrapInBubble = haveText;
               contentWidget = MessageDisplayVideo(
                 client: client,
@@ -256,7 +256,7 @@ class MessageDisplay extends StatelessWidget {
               );
               break;
 
-            case MessageAnimation:
+            /*case MessageAnimation:
               wrapInBubble = haveText;
               contentWidget = MessageDisplayGif(
                 client: client,
