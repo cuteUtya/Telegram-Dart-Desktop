@@ -7,6 +7,7 @@ import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
 import 'package:myapp/Widgets/message/message_display_audio.dart';
 import 'package:myapp/Widgets/message/message_display_gif.dart';
 import 'package:myapp/Widgets/message/message_display_photo.dart';
+import 'package:myapp/Widgets/message/message_display_poll.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
 import 'package:myapp/Widgets/message/message_display_video.dart';
@@ -196,8 +197,8 @@ class MessageDisplay extends StatelessWidget {
                       child: Userpic(
                         shape: BoxShape.rectangle,
                         chatPhoto: (message.content as MessageChatChangePhoto).photo,
-                        chatId: chat?.id ?? 0,
-                        chatTitle: author,
+                        userId: chat?.id ?? 0,
+                        userTitle: author,
                         client: client,
                       ),
                     ),
@@ -244,8 +245,19 @@ class MessageDisplay extends StatelessWidget {
               );
               break;
 
+            case MessagePoll:
+              wrapInBubble = true;
+              contentWidget = MessageDisplayPoll(
+                message: message,
+                client: client,
+                infoWidget: _buildInfoWidget(true),
+                replieWidget: _buildReplieWidget(true),
+                senderName: showMessageSender ? author : null,
+              );
+              break;
+
             ///theare some issues related with it perfomance
-            case MessageVideo:
+            /*case MessageVideo:
               wrapInBubble = haveText;
               contentWidget = MessageDisplayVideo(
                 client: client,
@@ -256,7 +268,7 @@ class MessageDisplay extends StatelessWidget {
               );
               break;
 
-            /*case MessageAnimation:
+            case MessageAnimation:
               wrapInBubble = haveText;
               contentWidget = MessageDisplayGif(
                 client: client,
@@ -289,10 +301,9 @@ class MessageDisplay extends StatelessWidget {
                 var senderUser = client.getUser(senderUserId);
                 senderUserpic = Userpic(
                   profilePhoto: senderUser.profilePhoto,
-                  chatId: senderUserId,
-                  chatTitle: "${senderUser.firstName} ${senderUser.lastName}",
+                  userId: senderUserId,
+                  userTitle: "${senderUser.firstName} ${senderUser.lastName}",
                   client: client,
-                  emptyUserpicFontSize: 16,
                 );
                 break;
               case MessageSenderChat:
@@ -300,10 +311,9 @@ class MessageDisplay extends StatelessWidget {
                 var senderChat = client.getChat(senderChatId!);
                 senderUserpic = Userpic(
                   chatPhotoInfo: senderChat.photo,
-                  chatId: senderChatId,
+                  userId: senderChatId,
                   client: client,
-                  chatTitle: senderChat.title!,
-                  emptyUserpicFontSize: 16,
+                  userTitle: senderChat.title!,
                 );
                 break;
             }

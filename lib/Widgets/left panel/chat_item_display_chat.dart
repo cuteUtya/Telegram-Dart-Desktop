@@ -137,8 +137,8 @@ class ChatItemDisplay extends StatelessWidget {
                                     "userpic#chatId?=${chatId}fileId?=${chatPhoto?.big?.id}",
                                   ),
                                   chatPhotoInfo: data.hasData ? chatPhoto : null,
-                                  chatId: chatId,
-                                  chatTitle: chat.title!,
+                                  userId: chatId,
+                                  userTitle: chat.title!,
                                   client: client,
                                 );
                               },
