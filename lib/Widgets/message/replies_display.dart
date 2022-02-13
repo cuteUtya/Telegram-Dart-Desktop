@@ -28,26 +28,34 @@ class ReplieDisplay extends StatelessWidget {
 
   Widget _build() {
     var color = inlineStyle ? null : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
-    return LayoutBuilder(
-        builder: (_, box) => Row(mainAxisSize: MainAxisSize.min, children: [
-              Container(
-                width: 2,
-                height: 40,
-                margin: const EdgeInsets.only(right: 8),
-                color: ClientTheme.currentTheme.getField(
-                  inlineStyle ? "ReplieOnMessageInlineVerticalLineColor" : "ReplieOnMessageBubbleVerticalLineColor",
-                ),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 4, top: 8),
+      child: LayoutBuilder(
+        builder: (_, box) => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 2,
+              height: 40,
+              margin: const EdgeInsets.only(right: 8),
+              color: ClientTheme.currentTheme.getField(
+                inlineStyle ? "ReplieOnMessageInlineVerticalLineColor" : "ReplieOnMessageBubbleVerticalLineColor",
               ),
-              LimitedBox(
-                  maxWidth: inlineStyle ? box.maxWidth : 120,
-                  child: MessageContentPreview(
-                    client: client,
-                    message: message,
-                    style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
-                    showAuthor: showAuthor,
-                    textColor: color,
-                    authorColor: color,
-                  ))
-            ]));
+            ),
+            LimitedBox(
+              maxWidth: inlineStyle ? box.maxWidth : 120,
+              child: MessageContentPreview(
+                client: client,
+                message: message,
+                style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
+                showAuthor: showAuthor,
+                textColor: color,
+                authorColor: color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
