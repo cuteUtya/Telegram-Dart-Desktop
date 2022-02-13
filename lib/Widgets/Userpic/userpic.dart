@@ -13,9 +13,8 @@ class Userpic extends StatelessWidget {
     this.profilePhoto,
     this.chatPhoto,
     this.shape = BoxShape.circle,
-    this.emptyUserpicFontSize,
-    required this.chatId,
-    required this.chatTitle,
+    required this.userId,
+    required this.userTitle,
     required this.client,
     this.useBig = false,
   }) : super(key: key);
@@ -24,9 +23,8 @@ class Userpic extends StatelessWidget {
   final ChatPhoto? chatPhoto;
   final ProfilePhoto? profilePhoto;
   final BoxShape shape;
-  final double? emptyUserpicFontSize;
-  final String chatTitle;
-  final int chatId;
+  final String userTitle;
+  final int userId;
   final TelegramClient client;
   final bool useBig;
 
@@ -57,19 +55,21 @@ class Userpic extends StatelessWidget {
     );
   }
 
-  Widget emptyUserpic() => UserpicEmpty(
-        chatId: chatId,
-        displayLetters: getPeerNameLetters(),
-        fontSize: emptyUserpicFontSize,
+  Widget emptyUserpic() => LayoutBuilder(
+        builder: (_, box) => UserpicEmpty(
+          chatId: userId,
+          displayLetters: getPeerNameLetters(),
+          fontSize: box.maxWidth * 0.4,
+        ),
       );
 
   String getPeerNameLetters() {
-    var emojis = extractEmojisAsList(chatTitle);
+    var emojis = extractEmojisAsList(userTitle);
     if (emojis.isNotEmpty) {
       if (emojis.length > 2) emojis.removeRange(2, emojis.length);
       return emojis.join();
     }
-    var words = chatTitle.split(" ");
+    var words = userTitle.split(" ");
     var result = "";
     for (int i = 0; i < words.length && i < 2; i++) {
       if (words[i].isNotEmpty) result += words[i][0];
