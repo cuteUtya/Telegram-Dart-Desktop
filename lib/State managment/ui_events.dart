@@ -11,6 +11,9 @@ class UIEvents {
     if (_chatsStack.isNotEmpty) {
       client.send(CloseChat(chatId: _chatsStack.last));
     }
+    if (_chatsStack.isNotEmpty) {
+      if (_chatsStack.last == id && id != null) return;
+    }
     _chatsStack.clear();
     if (id != null) {
       _chatsStack.add(id);
