@@ -43,21 +43,15 @@ class FileImageDisplay extends StatelessWidget {
                 color: tgvColor,
                 fit: BoxFit.cover,
               )
-            : LayoutBuilder(
-                builder: (_, box) {
-                  return SizedBox(
-                    width: width,
-                    height: height,
-                    child: ClipRRect(
-                      borderRadius: borderRadius ?? BorderRadius.zero,
-                      child: Image.file(
-                        file,
-                        cacheHeight: (height ?? box.maxHeight).toInt(),
-                        cacheWidth: (width ?? box.maxWidth).toInt(),
-                      ),
-                    ),
-                  );
-                },
+            : SizedBox(
+                width: width,
+                height: height,
+                child: ClipRRect(
+                  borderRadius: borderRadius ?? BorderRadius.zero,
+                  child: Image.file(
+                    file,
+                  ),
+                ),
               );
       },
       fileId: id,
