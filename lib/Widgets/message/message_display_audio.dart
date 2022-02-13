@@ -35,7 +35,10 @@ class MessageDisplayAudio extends StatelessWidget {
       additionalContentPlace: AdditionalContentPlace.top,
       additionalContent: Container(
         child: _audioItem(audio, client),
-        margin: EdgeInsets.only(bottom: (audio.caption?.text?.isEmpty ?? true) ? 6 : 0),
+        margin: EdgeInsets.only(
+          bottom: (audio.caption?.text?.isEmpty ?? true) ? 6 : 0,
+          right: 8,
+        ),
       ),
       replieWidget: replieWidget,
       text: audio.caption,
@@ -83,8 +86,6 @@ class MessageDisplayAudio extends StatelessWidget {
               audio.audio!.title!,
               style: TextDisplay.create(
                 size: 20,
-
-                /// TODO use another color from theme
                 textColor: ClientTheme.currentTheme.getField("AudioTitleTextColor"),
               ),
             ),
