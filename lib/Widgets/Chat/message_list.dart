@@ -154,6 +154,7 @@ class _MessageListState extends State<MessageList> {
                 if (msg.isOutgoing! && !isServiceMessage) Spacer(flex: spacerFlex),
                 Expanded(
                   child: FutureBuilder(
+                    key: UniqueKey(),
                     future: msg.replyToMessageId == 0
                         ? null
                         : widget.client.send(GetMessage(

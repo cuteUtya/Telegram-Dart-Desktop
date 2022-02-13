@@ -37,8 +37,11 @@ class MessageContentPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(message != null || draftMessage != null);
+    print(message!.senderId == null);
     return StreamBuilder(
+        key: UniqueKey(),
         stream: message?.senderId == null ? null : client.senderName(message!.senderId!),
+        initialData: message!.senderId == null ? "" : client.getSenderNameSync(message!.senderId!),
         builder: (_, senderData) {
           var content = draftMessage == null ? message!.content! : draftMessage!.inputMessageText;
           bool messageTypeAllowShowFrom = true;

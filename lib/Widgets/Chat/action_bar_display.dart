@@ -20,12 +20,10 @@ class ActionBarDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = getInterlocutor(chat, client);
-    Supergroup? supergroup = chat.type is ChatTypeSupergroup
-        ? client.getSupergroup((chat.type as ChatTypeSupergroup).supergroupId!)
-        : null;
-    BasicGroup? group = chat.type is ChatTypeBasicGroup
-        ? client.getBasicGroup((chat.type as ChatTypeBasicGroup).basicGroupId!)
-        : null;
+    Supergroup? supergroup =
+        chat.type is ChatTypeSupergroup ? client.getSupergroup((chat.type as ChatTypeSupergroup).supergroupId!) : null;
+    BasicGroup? group =
+        chat.type is ChatTypeBasicGroup ? client.getBasicGroup((chat.type as ChatTypeBasicGroup).basicGroupId!) : null;
     int membersCount = (group?.memberCount ?? supergroup?.memberCount) ?? 0;
     return Stack(alignment: Alignment.centerLeft, children: [
       Container(
@@ -39,6 +37,7 @@ class ActionBarDisplay extends StatelessWidget {
             StreamBuilder(
               key: UniqueKey(),
               stream: client.senderName(MessageSenderChat(chatId: chat.id)),
+              initialData: client.getChatTitleSync(chat.id!),
               builder: (_, data) => ChatItemTitle(
                 selected: false,
                 isBot: user?.type is UserTypeBot,
@@ -55,9 +54,7 @@ class ActionBarDisplay extends StatelessWidget {
               Text(
                   client.getTranslation(
                     "lng_chat_status_subscribers",
-                    replacing: {
-                      "{count}": (supergroup?.memberCount ?? 0).toString()
-                    },
+                    replacing: {"{count}": (supergroup?.memberCount ?? 0).toString()},
                     itemsCount: supergroup?.memberCount ?? 0,
                   ),
                   style: TextDisplay.actionBarOffline)
@@ -66,10 +63,8 @@ class ActionBarDisplay extends StatelessWidget {
                 key: UniqueKey(),
                 initialData: user!.status,
                 stream: client.statusOf(user.id!),
-                builder: (_, data) => data.hasData
-                    ? _buildStatusText(
-                        data.data as UserStatus, user.type is UserTypeBot)
-                    : const SizedBox.shrink(),
+                builder: (_, data) =>
+                    data.hasData ? _buildStatusText(data.data as UserStatus, user.type is UserTypeBot) : const SizedBox.shrink(),
               )
             else
               StreamBuilder(
@@ -79,20 +74,14 @@ class ActionBarDisplay extends StatelessWidget {
                   var onlineCount = (data.data ?? 0) as int;
                   return Text(
                     client.getTranslation(
-                      onlineCount > 0
-                          ? "lng_chat_status_members_online"
-                          : "lng_chat_status_members",
+                      onlineCount > 0 ? "lng_chat_status_members_online" : "lng_chat_status_members",
                       itemsCount: onlineCount,
                       replacing: {
                         "{count}": membersCount.toString(),
-                        "{members_count}": client.getTranslation(
-                            "lng_channel_members_link",
-                            replacing: {"{count}": membersCount.toString()},
-                            itemsCount: membersCount),
-                        "{online_count}": client.getTranslation(
-                            "lng_chat_status_online",
-                            replacing: {"{count}": onlineCount.toString()},
-                            itemsCount: onlineCount),
+                        "{members_count}": client.getTranslation("lng_channel_members_link",
+                            replacing: {"{count}": membersCount.toString()}, itemsCount: membersCount),
+                        "{online_count}": client.getTranslation("lng_chat_status_online",
+                            replacing: {"{count}": onlineCount.toString()}, itemsCount: onlineCount),
                       },
                     ),
                     style: TextDisplay.actionBarOffline,
@@ -136,28 +125,19 @@ class ActionBarDisplay extends StatelessWidget {
       switch (status.runtimeType) {
         case UserStatusOnline:
           return Text(client.getTranslation("lng_status_online"),
-              style: TextDisplay.create(
-                  size: 16,
-                  textColor: ClientTheme.currentTheme.getField("OnlineColor")));
+              style: TextDisplay.create(size: 16, textColor: ClientTheme.currentTheme.getField("OnlineColor")));
         case UserStatusEmpty:
           return const SizedBox.shrink();
         case UserStatusOffline:
-          var lastOnline =
-              unixToDateTime((status as UserStatusOffline).wasOnline!);
+          var lastOnline = unixToDateTime((status as UserStatusOffline).wasOnline!);
           var now = DateTime.now();
           var delta = (DateTime.now().difference(lastOnline) +
               (const Duration(days: 1) -
-                  Duration(
-                      hours: now.hour,
-                      minutes: now.minute,
-                      seconds: now.second,
-                      milliseconds: now.millisecond)));
+                  Duration(hours: now.hour, minutes: now.minute, seconds: now.second, milliseconds: now.millisecond)));
           if (delta.inDays <= 0) {
-            text = client.getTranslation("lng_status_lastseen_today",
-                replacing: {"{time}": getHHMM(lastOnline)});
+            text = client.getTranslation("lng_status_lastseen_today", replacing: {"{time}": getHHMM(lastOnline)});
           } else if (delta.inDays <= 1) {
-            text = client.getTranslation("lng_status_lastseen_yesterday",
-                replacing: {"{time}": getHHMM(lastOnline)});
+            text = client.getTranslation("lng_status_lastseen_yesterday", replacing: {"{time}": getHHMM(lastOnline)});
           } else if (delta.inDays <= 7) {
             text = client.getTranslation("lng_status_last_week");
           } else {

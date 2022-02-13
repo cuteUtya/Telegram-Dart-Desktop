@@ -58,53 +58,42 @@ class ChatItemActionDisplay extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: client.senderName(actions[0].senderId!),
-      builder: (_, fSenderName) {
-        String? transitionStr;
-        Widget? animation;
-        MessageSender? secondUser;
-        var firstName = fSenderName.data.toString();
-        var firstAction = actions[0].action;
-        if (actions.length <= 1) {
-          if (typesWithProgress.contains(firstAction.runtimeType)) {
-            animation = createUploadAnimation(firstAction.runtimeType, (firstAction as dynamic).progress, chatid);
-          }
-          transitionStr = (isPrivate ? actionTransitionPrivate : actionTransitionsChat)[firstAction.runtimeType];
-        } else {
-          transitionStr = actions.length == 2 ? "lng_users_typing" : "lng_many_typing";
-          secondUser = actions[1].senderId!;
-        }
+    var firstName = client.getSenderNameSync(actions[0].senderId!);
+    String transitionStr;
+    Widget? animation;
+    MessageSender? secondUser;
+    var firstAction = actions[0].action;
+    if (actions.length <= 1) {
+      if (typesWithProgress.contains(firstAction.runtimeType)) {
+        animation = createUploadAnimation(firstAction.runtimeType, (firstAction as dynamic).progress, chatid);
+      }
+      transitionStr = (isPrivate ? actionTransitionPrivate : actionTransitionsChat)[firstAction.runtimeType]!;
+    } else {
+      transitionStr = actions.length == 2 ? "lng_users_typing" : "lng_many_typing";
+      secondUser = actions[1].senderId!;
+    }
 
-        var textStyle = chatSelected ? TextDisplay.chatItemAccentSelected : TextDisplay.chatItemAccent;
+    var textStyle = chatSelected ? TextDisplay.chatItemAccentSelected : TextDisplay.chatItemAccent;
 
-        return StreamBuilder(
-            stream: secondUser == null ? null : client.senderName(secondUser),
-            builder: (_, sSenderName) {
-              return RichText(
-                text: TextSpan(
-                  children: [
-                    TextDisplay.parseEmojiInString(
-                        transitionStr != null
-                            ? client.getTranslation(transitionStr,
-                                replacing: {
-                                  "{user}": firstName,
-                                  "{emoji}": (firstAction is ChatActionWatchingAnimations) ? firstAction.emoji ?? "🍆" : "",
-                                  "{second_user}": sSenderName.data.toString(),
-                                  "{count}": actions.length.toString()
-                                },
-                                itemsCount: actions.length)
-                            : "¯\\_(ツ)_/¯",
-                        textStyle),
-                    const WidgetSpan(child: SizedBox(width: 2)),
-                    WidgetSpan(
-                      child: animation ?? TextAnimation.fourPoints(textStyle),
-                    ),
-                  ],
-                ),
-              );
-            });
-      },
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextDisplay.parseEmojiInString(
+              client.getTranslation(transitionStr,
+                  replacing: {
+                    "{user}": firstName,
+                    "{emoji}": (firstAction is ChatActionWatchingAnimations) ? firstAction.emoji ?? "🍆" : "",
+                    "{second_user}": secondUser == null ? "" : client.getSenderNameSync(secondUser),
+                    "{count}": actions.length.toString()
+                  },
+                  itemsCount: actions.length),
+              textStyle),
+          const WidgetSpan(child: SizedBox(width: 2)),
+          WidgetSpan(
+            child: animation ?? TextAnimation.fourPoints(textStyle),
+          ),
+        ],
+      ),
     );
   }
 

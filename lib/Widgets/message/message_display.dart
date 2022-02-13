@@ -70,10 +70,12 @@ class MessageDisplay extends StatelessWidget {
           showAuthor: replieOn != null,
         )
       : null;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: client.senderName(message.senderId!),
+        initialData: client.getSenderNameSync(message.senderId!),
         builder: (_, senderData) {
           var author = senderData.data.toString();
           Widget contentWidget;

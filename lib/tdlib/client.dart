@@ -424,27 +424,27 @@ class TelegramClient {
     }
   }
 
+  String buildUsername(String fname, String? lname) {
+    var result = fname;
+    if ((lname?.isNotEmpty) ?? false) {
+      result += " $lname";
+    }
+    return result;
+  }
+
+  String getChatTitleSync(int chatId) {
+    return getChat(chatId).title!;
+  }
+
+  String getSenderNameSync(MessageSender sender) {
+    if (sender is MessageSenderUser) {
+      var user = getUser(sender.userId!);
+      return buildUsername(user.firstName!, user.lastName);
+    }
+    return getChatTitleSync((sender as MessageSenderChat).chatId!);
+  }
+
   Stream<String> senderName(MessageSender senderId) async* {
-    String buildUsername(String fname, String? lname) {
-      var result = fname;
-      if ((lname?.isNotEmpty) ?? false) {
-        result += " $lname";
-      }
-      return result;
-    }
-
-    String getSenderName(MessageSender sender) {
-      if (sender is MessageSenderUser) {
-        var user = getUser(sender.userId!);
-        return buildUsername(user.firstName!, user.lastName);
-      }
-      return getChat((sender as MessageSenderChat).chatId!).title!;
-    }
-
-    String name = getSenderName(senderId);
-
-    yield name;
-
     if (senderId is MessageSenderChat) {
       await for (var update in _updateChatTitle) {
         if (update.chatId == senderId.chatId) {
@@ -455,10 +455,7 @@ class TelegramClient {
       await for (var update in updateUser) {
         if (update.user!.id == senderId.userId) {
           var newName = buildUsername(update.user!.firstName!, update.user!.lastName);
-          if (name != newName) {
-            name = newName;
-            yield newName;
-          }
+          yield newName;
         }
       }
     }
