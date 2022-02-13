@@ -17,7 +17,7 @@ class MessageContentPreview extends StatelessWidget {
       this.draftMessage,
       this.fromChatType,
       this.chatSelected = false,
-      this.showAuthor,
+      this.showAuthor = true,
       this.style = MessageContentPreviewStyle.noLineBreaks,
       this.authorColor,
       this.textColor})
@@ -28,7 +28,7 @@ class MessageContentPreview extends StatelessWidget {
   final TelegramClient client;
   final MessageContentPreviewStyle style;
   final bool chatSelected;
-  final bool? showAuthor;
+  final bool showAuthor;
   final Color? authorColor;
   final Color? textColor;
 
@@ -309,12 +309,22 @@ class MessageContentPreview extends StatelessWidget {
   }
 
   bool get _showAuthor {
+    if (draftMessage != null) {
+      return true;
+    }
+    if (!showAuthor) {
+      return false;
+    }
+
     var me = client.getOptionValue<OptionValueInteger>("my_id")?.value ?? 0;
-    return (draftMessage != null
-        ? true
-        : !(((fromChatType is ChatTypeSupergroup && isChannel)) ||
-                ((fromChatType is ChatTypePrivate || fromChatType is ChatTypeSecret) && lastMessageSenderId != me)) ||
-            (showAuthor ?? false));
+    if ((fromChatType is ChatTypeSecret || fromChatType is ChatTypePrivate) && lastMessageSenderId != me) {
+      return false;
+    }
+
+    if (isChannel) {
+      return false;
+    }
+    return true;
   }
 }
 

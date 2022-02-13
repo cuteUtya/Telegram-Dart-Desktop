@@ -11,11 +11,13 @@ class ReplieDisplay extends StatelessWidget {
     required this.message,
     required this.client,
     this.inlineStyle = true,
+    this.showAuthor = true,
   }) : super(key: key);
 
   final Message message;
   final TelegramClient client;
   final bool inlineStyle;
+  final bool showAuthor;
   @override
   Widget build(BuildContext context) {
     if (!inlineStyle) {
@@ -42,7 +44,7 @@ class ReplieDisplay extends StatelessWidget {
                     client: client,
                     message: message,
                     style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
-                    showAuthor: true,
+                    showAuthor: showAuthor,
                     textColor: color,
                     authorColor: color,
                   ))

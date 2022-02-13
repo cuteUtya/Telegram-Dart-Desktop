@@ -32,6 +32,7 @@ class MessageDisplay extends StatelessWidget {
       required this.client,
       required this.message,
       required this.bubbleRelativePosition,
+      this.isReplie = false,
       this.replieOn,
       this.adminTitle,
       this.isServiceMessage = false})
@@ -41,6 +42,7 @@ class MessageDisplay extends StatelessWidget {
   final Message message;
   final Message? replieOn;
   final Chat? chat;
+  final bool isReplie;
   final String? adminTitle;
   final TelegramClient client;
   final bool isServiceMessage;
@@ -53,11 +55,19 @@ class MessageDisplay extends StatelessWidget {
         checkMarkValue: message.isOutgoing! ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0) : null,
       );
 
-  Widget? _buildReplieWidget(bool inline) => replieOn != null
+  Widget? _buildReplieWidget(bool inline) => isReplie
       ? ReplieDisplay(
-          message: replieOn!,
+          message: replieOn ??
+              Message(
+                  content: MessageText(
+                text: FormattedText(
+                  text: client.getTranslation("lng_profile_loading"),
+                  entities: [],
+                ),
+              )),
           client: client,
           inlineStyle: inline,
+          showAuthor: replieOn != null,
         )
       : null;
   @override
