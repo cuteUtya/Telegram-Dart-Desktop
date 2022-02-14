@@ -25,25 +25,6 @@ class ChatListsManagerState extends State<ChatListsManager> {
   static final Map<int, ScrollController> _scrollContollers = {};
   static int _currentPage = 0;
 
-  void _listenChatPosition() async {
-    await for (final event in widget.client.updateChatPosition) {
-      if (!mounted) break;
-      setState(() {
-        var chat = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
-        if (chat == null) {
-          chat = ChatOrder(event.chatId!, [event.position!]);
-        } else {
-          for (int i = 0; i < chat.positions.length; i++) {
-            if (compareChatlists(chat.positions[i].list!, event.position!.list!)) {
-              chat.positions[i] = event.position!;
-              break;
-            }
-          }
-        }
-      });
-    }
-  }
-
   void setChatLists(List<ChatList> lists) => setState(() => _lists = lists);
 
   void setCurrentChatList(ChatList list) {
@@ -87,29 +68,45 @@ class ChatListsManagerState extends State<ChatListsManager> {
   @override
   void initState() {
     _updateChats();
-    _listenChatPosition();
-    _subscriptions.add(widget.client.updateChatLastMessage.listen((event) => setState(() {
-          var chat = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
-          if (chat == null) {
-            _chats.add(ChatOrder(event.chatId!, event.positions!));
-          } else {
-            chat.positions = event.positions!;
-          }
-        })));
-    _subscriptions.add(widget.client.updateChatDraftMessage.listen(
-        (event) => setState(() => _chats.firstWhere((element) => element.chatId == event.chatId).positions = event.positions!)));
-    _subscriptions.add(widget.client.updateChatPosition.listen((event) => setState(() {
-          var base = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
-          if (base != null) {
-            for (int i = 0; i < base.positions.length; i++) {
-              if (compareChatlists(base.positions[i].list!, event.position!.list!)) {
-                base.positions[i] = event.position!;
-              }
+    _subscriptions.add(
+      widget.client.updateChatLastMessage.listen(
+        (event) => setState(
+          () {
+            var chat = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
+            if (chat == null) {
+              _chats.add(ChatOrder(event.chatId!, event.positions!));
+            } else {
+              chat.positions = event.positions!;
             }
-          } else {
-            _chats.add(ChatOrder(event.chatId!, [event.position!]));
-          }
-        })));
+          },
+        ),
+      ),
+    );
+    _subscriptions.add(
+      widget.client.updateChatDraftMessage.listen(
+        (event) => setState(
+          () => _chats.firstWhere((element) => element.chatId == event.chatId).positions = event.positions!,
+        ),
+      ),
+    );
+    _subscriptions.add(
+      widget.client.updateChatPosition.listen(
+        (event) => setState(
+          () {
+            var base = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
+            if (base != null) {
+              for (int i = 0; i < base.positions.length; i++) {
+                if (compareChatlists(base.positions[i].list!, event.position!.list!)) {
+                  base.positions[i] = event.position!;
+                }
+              }
+            } else {
+              _chats.add(ChatOrder(event.chatId!, [event.position!]));
+            }
+          },
+        ),
+      ),
+    );
     _subscriptions.add(UIEvents.currentChatList().listen((event) => setCurrentChatList(event)));
     _subscriptions.add(UIEvents.chatLists().listen((event) => setChatLists(event)));
     _subscriptions.add(UIEvents.archiveState().listen((opened) => _switchLists(opened ? 1 : 0)));
@@ -135,30 +132,26 @@ class ChatListsManagerState extends State<ChatListsManager> {
       }
     });
 
-    return PageView.builder(
+    return PageView(
       controller: mainArchiveContoller,
       reverse: true,
-      itemCount: 2,
-      itemBuilder: (_, i) {
-        if (i == 0) {
-          return PageView.builder(
-            controller: mainContoller,
-            itemCount: _lists.length,
-            itemBuilder: (context, index) {
-              if (_scrollContollers[index] == null) {
-                _scrollContollers[index] = ScrollController();
-              }
-              return ChatListDisplay(
-                scrollController: _scrollContollers[index],
-                chatsPositions: _chats,
-                client: widget.client,
-                chatList: _lists[index],
-              );
-            },
-          );
-        }
-
-        return RevertiblePage(
+      children: [
+        PageView.builder(
+          controller: mainContoller,
+          itemCount: _lists.length,
+          itemBuilder: (context, index) {
+            if (_scrollContollers[index] == null) {
+              _scrollContollers[index] = ScrollController();
+            }
+            return ChatListDisplay(
+              scrollController: _scrollContollers[index],
+              chatsPositions: _chats,
+              client: widget.client,
+              chatList: _lists[index],
+            );
+          },
+        ),
+        RevertiblePage(
           onRevert: () => UIEvents.closeArchive(),
           title: widget.client.getTranslation("lng_archived_name"),
           content: Expanded(
@@ -168,8 +161,8 @@ class ChatListsManagerState extends State<ChatListsManager> {
               chatList: ChatListArchive(),
             ),
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }
