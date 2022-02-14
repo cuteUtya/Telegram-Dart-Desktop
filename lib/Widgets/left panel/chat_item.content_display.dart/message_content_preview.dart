@@ -37,7 +37,6 @@ class MessageContentPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(message != null || draftMessage != null);
-    print(message!.senderId == null);
     return StreamBuilder(
         key: UniqueKey(),
         stream: message?.senderId == null ? null : client.senderName(message!.senderId!),
