@@ -10,6 +10,7 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:myapp/utils.dart';
+import 'package:collection/collection.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({
@@ -71,11 +72,44 @@ class _MessageListState extends State<MessageList> {
     });
   }
 
+  List<StreamSubscription> messageEditSubs = [];
+
+  void listenMessageEdits() {
+    messageEditSubs.forEach((element) => element.cancel());
+    messageEditSubs.clear();
+    messageEditSubs.add(
+      widget.client.updateMessageContent.listen(
+        (event) {
+          if (event.chatId == widget.chatId) {
+            var msg = messages?.messages!.firstWhereOrNull((element) => element.id == event.messageId);
+            if (msg != null) {
+              setState(() => msg.content = event.newContent);
+            }
+          }
+        },
+      ),
+    );
+    messageEditSubs.add(
+      widget.client.updateMessageEdited.listen(
+        (event) {
+          if (event.chatId == widget.chatId) {
+            var msg = messages?.messages!.firstWhereOrNull((element) => element.id == event.messageId);
+            if (msg != null) {
+              msg.editDate = event.editDate;
+              msg.replyMarkup = event.replyMarkup;
+            }
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var chat = widget.client.getChat(widget.chatId);
     if (_renderedChatId != widget.chatId) {
       listenNewMessage();
+      listenMessageEdits();
       getChatHistory();
       var isChannel = (chat.type is ChatTypeSupergroup ? chat.type as ChatTypeSupergroup : null)?.isChannel ?? false;
       if (chat.type is ChatTypeBasicGroup || (chat.type is ChatTypeSupergroup && !isChannel)) {
