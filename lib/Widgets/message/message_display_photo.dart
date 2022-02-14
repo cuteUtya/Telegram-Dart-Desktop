@@ -131,8 +131,6 @@ class MessageDisplayPhoto extends StatelessWidget {
                         height: height,
                         child: Image.file(
                           io.File(path),
-                          cacheHeight: height.toInt(),
-                          cacheWidth: width.toInt(),
                         ),
                       )),
                 );

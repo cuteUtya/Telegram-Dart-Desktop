@@ -91,7 +91,6 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
           client: widget.client,
           fileId: video.video!.id!,
           builder: (context, progres, path) {
-            print("$progres == ${video.supportsStreaming}");
             if (progres != 1 && !video.supportsStreaming! || progres == 0) {
               return BlurImagePreview(
                 image: MemoryImage(
