@@ -34,6 +34,7 @@ class ChatListDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     var sorted = sortChatsFor(chatsPositions, chatList);
     bool isMain = chatList is ChatListMain;
+    String chatListId = _chatListStr(chatList);
     return SmoothDesktopListView(
       reverseScroll: true,
       itemCount: sorted.length + (isMain ? 1 : 0) + 1,
@@ -66,7 +67,7 @@ class ChatListDisplay extends StatelessWidget {
         }
         var order = sorted[index];
         return ChatItemDisplay(
-          key: Key("ChatItemDisplay?id=${order.chatId}?chatList=${_chatListStr(chatList)}"),
+          key: Key("ChatItemDisplay?id=${order.chatId}?chatList=$chatListId"),
           onClick: () => UIEvents.selectChat(order.chatId, client),
           chatId: order.chatId,
           client: client,

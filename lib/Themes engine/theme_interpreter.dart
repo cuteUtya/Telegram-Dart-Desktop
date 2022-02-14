@@ -53,10 +53,8 @@ class ClientTheme {
     while (true) {
       bool findFunctions = false;
       for (var foo in functions) {
-        var regex = foo.funcName;
-        regex +=
-            "\\((((#[0-9a-zA-Z]{6,8})|([0-9]{1,20}([.,][0-9]{1,4})?)),?){${foo.argsCount.reduce(min).toString()},${foo.argsCount.reduce(max).toString()}}\\)";
-        var reg = RegExp(regex);
+        var reg = RegExp(
+            "${foo.funcName}\\((((#[0-9a-zA-Z]{6,8})|([0-9]{1,20}([.,][0-9]{1,4})?)),?){${foo.argsCount.reduce(min).toString()},${foo.argsCount.reduce(max).toString()}}\\)");
 
         while (reg.hasMatch(value)) {
           var match = reg.firstMatch(value);

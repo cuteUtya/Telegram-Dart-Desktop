@@ -24,36 +24,37 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
     List<InlineSpan> content = [];
     for (var element in sortChatsFor(chats, ChatListArchive())) {
       var chat = client.getChat(element.chatId);
-      content.addAll([TextDisplay.parseEmojiInString(
-            chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
-            TextDisplay.create(
-              textColor: ClientTheme.currentTheme.getField("ArchiveContentColor"),
-              size: 18,
-              fontWeight: (chat.unreadCount ?? 0) <= 0 ? FontWeight.normal : FontWeight.bold,
+      content.addAll([
+        TextDisplay.parseEmojiInString(
+          chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
+          TextDisplay.create(
+            textColor: ClientTheme.currentTheme.getField("ArchiveContentColor"),
+            size: 18,
+            fontWeight: (chat.unreadCount ?? 0) <= 0 ? FontWeight.normal : FontWeight.bold,
+          ),
+        ),
+        const WidgetSpan(child: SizedBox(width: 4)),
+        WidgetSpan(
+          child: StreamBuilder(
+            stream: client.unreadCountOf(chat.id!),
+            builder: (_, data) => UnreadCountBubble(
+              fontSize: 14,
+              count: (data.data ?? chat.unreadCount!) as int,
+              important: false /*TODO true if have notify */,
             ),
           ),
-            const WidgetSpan(child: SizedBox(width: 4)),
-            WidgetSpan(
-              child: StreamBuilder(
-                stream: client.unreadCountOf(chat.id!),
-                builder: (_, data) => UnreadCountBubble(
-                  fontSize: 14,
-                  count: (data.data ?? chat.unreadCount!) as int,
-                  important: false /*TODO true if have notify */,
-                ),
-              ),
-            ),
-            if (chat.unreadCount! > 0)
-              TextSpan(
-                text: ", ",
-                style: TextDisplay.create(size: 18),
-              ),
-          ]);
+        ),
+        if (chat.unreadCount! > 0)
+          TextSpan(
+            text: ", ",
+            style: TextDisplay.create(size: 18),
+          ),
+      ]);
     }
     return ChatItemBase(
       selected: false,
       onClick: () => UIEvents.openArchive(),
-      key: UniqueKey(),
+      //   key: UniqueKey(),
       title: Row(
         children: [
           Text(client.getTranslation("lng_archived_name"), style: TextDisplay.chatTittle),

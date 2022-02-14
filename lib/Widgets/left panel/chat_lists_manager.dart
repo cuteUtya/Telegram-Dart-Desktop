@@ -91,20 +91,22 @@ class ChatListsManagerState extends State<ChatListsManager> {
     );
     _subscriptions.add(
       widget.client.updateChatPosition.listen(
-        (event) => setState(
-          () {
-            var base = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
-            if (base != null) {
-              for (int i = 0; i < base.positions.length; i++) {
-                if (compareChatlists(base.positions[i].list!, event.position!.list!)) {
-                  base.positions[i] = event.position!;
+        (event) {
+          setState(
+            () {
+              var base = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
+              if (base != null) {
+                for (int i = 0; i < base.positions.length; i++) {
+                  if (compareChatlists(base.positions[i].list!, event.position!.list!)) {
+                    base.positions[i] = event.position!;
+                  }
                 }
+              } else {
+                _chats.add(ChatOrder(event.chatId!, [event.position!]));
               }
-            } else {
-              _chats.add(ChatOrder(event.chatId!, [event.position!]));
-            }
-          },
-        ),
+            },
+          );
+        },
       ),
     );
     _subscriptions.add(UIEvents.currentChatList().listen((event) => setCurrentChatList(event)));
@@ -121,16 +123,16 @@ class ChatListsManagerState extends State<ChatListsManager> {
     super.dispose();
   }
 
-  bool _init = false;
+  //bool _init = false;
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    /*WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (!_init) {
         if (_currentPage != 0) mainContoller.jumpToPage(_currentPage);
         _init = true;
       }
-    });
+    });*/
 
     return PageView(
       controller: mainArchiveContoller,
