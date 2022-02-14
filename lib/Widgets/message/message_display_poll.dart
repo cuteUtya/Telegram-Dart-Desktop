@@ -137,7 +137,17 @@ class _MessageDisplayPollState extends State<MessageDisplayPoll> {
                 alignment: Alignment.center,
                 child: LayoutBuilder(
                   builder: (_, box) => TextButton(
-                    onPressed: () => {},
+                    onPressed: () {
+                      if (!isAnswered && answerValues.isNotEmpty) {
+                        widget.client.send(
+                          SetPollAnswer(
+                            chatId: widget.message.chatId!,
+                            messageId: widget.message.id!,
+                            optionIds: answerValues.keys.toList(),
+                          ),
+                        );
+                      }
+                    },
                     child: SizedBox(
                       width: box.maxWidth * 0.5,
                       child: Center(
