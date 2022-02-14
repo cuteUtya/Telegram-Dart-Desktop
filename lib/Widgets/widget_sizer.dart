@@ -5,13 +5,13 @@ class WidgetSizer extends StatefulWidget {
   const WidgetSizer({
     Key? key,
     required this.child,
-    required this.sizeOnInit,
+    this.sizeOnInit,
     this.curve = Curves.easeIn,
     this.resizeDuration = Duration.zero,
     this.alignment,
   }) : super(key: key);
   final Widget child;
-  final Size sizeOnInit;
+  final Size? sizeOnInit;
   final Curve curve;
   final Duration resizeDuration;
   final Alignment? alignment;
@@ -20,7 +20,7 @@ class WidgetSizer extends StatefulWidget {
 }
 
 class WidgetSizerState extends State<WidgetSizer> {
-  late Size _size = widget.sizeOnInit;
+  late Size? _size = widget.sizeOnInit;
 
   void resize(Size size) => setState(() => _size = size);
 
@@ -29,8 +29,8 @@ class WidgetSizerState extends State<WidgetSizer> {
     return AnimatedContainer(
       duration: widget.resizeDuration,
       curve: widget.curve,
-      width: _size.width,
-      height: _size.height,
+      width: _size?.width,
+      height: _size?.height,
       child: widget.child,
       alignment: widget.alignment,
     );

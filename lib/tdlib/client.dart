@@ -118,7 +118,7 @@ class TelegramClient {
   Stream<ConnectionState> get updateConnectionState =>
       updates.where((u) => u is UpdateConnectionState).map((a) => (a as UpdateConnectionState).state!);
 
-  Stream<UpdateDeleteMessages> get updateDeleteMessages =>
+  Stream<UpdateDeleteMessages> get _updateDeleteMessages =>
       updates.where((u) => u is UpdateDeleteMessages).map((a) => (a as UpdateDeleteMessages));
 
   Stream<List<String>> get updateDiceEmojis =>
@@ -442,6 +442,16 @@ class TelegramClient {
       return buildUsername(user.firstName!, user.lastName);
     }
     return getChatTitleSync((sender as MessageSenderChat).chatId!);
+  }
+
+  void deleteMessageEvent(int chatId, int messageId, Function callback) {
+    late StreamSubscription subscription;
+    subscription = _updateDeleteMessages.listen((event) {
+      if (event.chatId == chatId && event.messageIds!.contains(messageId)) {
+        callback();
+        subscription.cancel();
+      }
+    });
   }
 
   Stream<String> senderName(MessageSender senderId) async* {

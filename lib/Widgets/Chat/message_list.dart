@@ -207,6 +207,11 @@ class _MessageListState extends State<MessageList> {
                           isReplie: msg.replyToMessageId != 0,
                           replieOn: replieDate.data is Message ? replieDate.data as Message : null,
                           client: widget.client,
+                          onMessageDelete: () => setState(
+                            () => messages?.messages!.removeWhere(
+                              (element) => element.id == msg.id,
+                            ),
+                          ),
                           adminTitle: adminInfo != null
                               ? (adminInfo.customTitle?.isEmpty ?? true)
                                   ? widget.client.getTranslation(adminInfo.isOwner! ? "lng_owner_badge" : "lng_admin_badge")
