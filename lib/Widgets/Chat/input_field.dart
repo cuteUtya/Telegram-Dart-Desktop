@@ -72,7 +72,15 @@ class InputFieldState extends State<InputField> {
                   style: TextDisplay.create(size: 20, textColor: ClientTheme.currentTheme.getField("InputFieldTextColor")),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
-                  onChanged: (value) => inputValue = value,
+                  onChanged: (value) {
+                    widget.client.send(
+                      SendChatAction(
+                        chatId: widget.chatId,
+                        action: ChatActionTyping(),
+                      ),
+                    );
+                    inputValue = value;
+                  },
                 ),
               ),
             ),
