@@ -569,7 +569,7 @@ class TelegramClient {
     languagePackId ??= userLangPackId;
     localizationTarget ??= TelegramClient.localizationTarget;
 
-    var result = _sendClient!.execute(GetLanguagePackString(
+    var result = execute(GetLanguagePackString(
         key: key,
         localizationTarget: localizationTarget,
         languagePackId: languagePackId,
@@ -807,6 +807,10 @@ class TelegramClient {
     var destoryPort = ReceivePort();
     destoryPort.doOnData((_) => _sendClient!.destroy());
     _isolate!.addOnExitListener(destoryPort.sendPort);
+  }
+
+  TdObject execute(dynamic function) {
+    return _sendClient!.execute(function);
   }
 
   int _extra = 1;

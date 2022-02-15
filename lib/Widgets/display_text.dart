@@ -70,6 +70,8 @@ class TextDisplay {
     "-": () => create(),
     "M": () => create(
           fontFamily: monospace,
+          textColor: ClientTheme.currentTheme.getField("MonospaceTextColor"),
+          backgroundColor: ClientTheme.currentTheme.getField("MonospaceTextBackgroundColor"),
         ),
     "S": () => create(
           decoration: TextDecoration.lineThrough,
@@ -171,6 +173,7 @@ class TextDisplay {
       FontStyle? fontStyle = FontStyle.normal,
       String? fontFamily,
       Color? textColor,
+      Color? backgroundColor,
       FontWeight? fontWeight = FontWeight.normal,
       TextAlign? textAlign = TextAlign.left,
       TextOverflow? overflow,
@@ -185,6 +188,7 @@ class TextDisplay {
       fontSize: size,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
+      backgroundColor: backgroundColor,
       fontFamily: fontFamily,
       decoration: decoration,
     );

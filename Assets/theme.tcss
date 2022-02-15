@@ -24,6 +24,8 @@ RegularText(theme=light): #696969;
 RegularText(theme=dark): #BBBBBB;
 ChatLastTimeMessage: ref(RegularText);
 SelectedChatLastTimedMessage: ref(SelectedColor);
+MonospaceTextColor: #2e87ca;
+MonospaceTextBackgroundColor: #ecf3f8;
 
 #Introduction screen fields#
 CarouselIndicatorActive: ref(Accent);
