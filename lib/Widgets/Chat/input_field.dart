@@ -29,11 +29,12 @@ class InputFieldState extends State<InputField> {
         SendMessage(
           chatId: widget.chatId,
           inputMessageContent: InputMessageText(
-            text: FormattedText(
+              text: widget.client.execute(
+            ParseTextEntities(
               text: inputValue,
-              entities: [],
+              parseMode: TextParseModeMarkdown(),
             ),
-          ),
+          ) as FormattedText),
         ),
       );
     }
