@@ -445,12 +445,14 @@ class TelegramClient {
     return getChatTitleSync((sender as MessageSenderChat).chatId!);
   }
 
-  void deleteMessageEvent(int chatId, int messageId, Function callback) {
+  void deleteMessageEvent(int chatId, int messageId, Function callback, [bool includeFromCacheDeleting = false]) {
     late StreamSubscription subscription;
     subscription = _updateDeleteMessages.listen((event) {
       if (event.chatId == chatId && event.messageIds!.contains(messageId)) {
-        callback();
-        subscription.cancel();
+        if (!(!includeFromCacheDeleting && event.fromCache!)) {
+          callback();
+          subscription.cancel();
+        }
       }
     });
   }
