@@ -628,6 +628,12 @@ class TelegramClient {
     return _cacheLightBackground;
   }
 
+  /// returns cached info about File with entered [id] which was obtained as a result of past requests
+  /// method guarantees that [file.local.path].isNotEmpty and [file.local.isDownloadingComplete] == true
+  File? getFileSync(int id) => _cachedFiles[id];
+
+  final Map<int, File> _cachedFiles = {};
+
   Future<void> init() async {
     Completer completer = Completer<void>();
     var receive = await initIsolate();
@@ -641,6 +647,12 @@ class TelegramClient {
       if (message is String) {
         var tdobject = convertToObject(message);
         var extra = (tdobject as dynamic).extra;
+        if (tdobject is File) {
+          var file = tdobject as File;
+          if ((file.local?.path ?? '').isNotEmpty && (file.local?.isDownloadingCompleted ?? false)) {
+            _cachedFiles[file.id!] = file;
+          }
+        }
         if (tdobject is Update) {
           switch (tdobject.runtimeType) {
             case UpdateSelectedBackground:

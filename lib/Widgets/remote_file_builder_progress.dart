@@ -31,7 +31,7 @@ class _RemoteFileBuilderProgressState extends State<RemoteFileBuilderProgress> {
 
   void downloadFile() async {
     void processFile(File file) {
-      if (mounted) {
+      if (mounted && !havePath) {
         setState(() {
           progress = file.local!.downloadedPrefixSize! / file.expectedSize!;
           path = file.local!.path!.isEmpty ? null : file.local!.path!;
@@ -78,8 +78,16 @@ class _RemoteFileBuilderProgressState extends State<RemoteFileBuilderProgress> {
     super.initState();
   }
 
+  bool havePath = false;
+
   @override
   Widget build(BuildContext context) {
+    var syncFileInfo = widget.client.getFileSync(widget.fileId);
+    if (syncFileInfo != null) {
+      havePath = true;
+      path = syncFileInfo.local!.path!;
+      progress = 1;
+    }
     return widget.builder(
       context,
       progress,

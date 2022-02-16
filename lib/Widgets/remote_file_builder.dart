@@ -32,13 +32,14 @@ class _RemoteFileBuilderState extends State<RemoteFileBuilder> {
 
   void downloadFile() async {
     var initialFile = await widget.client.send(GetFile(fileId: widget.fileId)) as File;
+    void build(File file) {
+      if (mounted && !havePath) {
+        setState(() => _widget = widget.builder(context, file.local!.path!));
+      }
+    }
+
     if (initialFile.local!.isDownloadingCompleted!) {
-      setState(() {
-        _widget = widget.builder(
-          context,
-          initialFile.local!.path!,
-        );
-      });
+      build(initialFile);
     } else {
       if (!initialFile.local!.isDownloadingActive!) {
         widget.client.send(
@@ -50,12 +51,7 @@ class _RemoteFileBuilderState extends State<RemoteFileBuilder> {
       }
       _subscription = widget.client.fileUpdates(widget.fileId).listen((file) {
         if (file.local!.isDownloadingCompleted!) {
-          setState(() {
-            _widget = widget.builder(
-              context,
-              file.local!.path!,
-            );
-          });
+          build(file);
         }
       });
     }
@@ -73,8 +69,16 @@ class _RemoteFileBuilderState extends State<RemoteFileBuilder> {
     super.dispose();
   }
 
+  bool havePath = false;
+
   @override
-  Widget build(BuildContext context) => _widget;
+  Widget build(BuildContext context) {
+    var syncData = widget.client.getFileSync(widget.fileId);
+    if (syncData != null) {
+      return widget.builder(context, syncData.local!.path!);
+    }
+    return _widget;
+  }
 }
 
 typedef BuilderCallback = Widget Function(BuildContext, String);
