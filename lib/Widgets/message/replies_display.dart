@@ -47,17 +47,14 @@ class ReplieDisplay extends StatelessWidget {
           children: [
             LimitedBox(
               maxWidth: inlineStyle ? box.maxWidth : 120,
-              child: DefaultTextStyle(
-                style: TextStyle(fontStyle: FontStyle.italic),
-                child: MessageContentPreview(
-                  client: client,
-                  message: message,
-                  style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
-                  showAuthor: showAuthor,
-                  maxLines: 2,
-                  textColor: color,
-                  authorColor: color,
-                ),
+              child: MessageContentPreview(
+                client: client,
+                message: message,
+                style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
+                showAuthor: showAuthor,
+                maxLines: 2,
+                textColor: color,
+                authorColor: color,
               ),
             ),
           ],
