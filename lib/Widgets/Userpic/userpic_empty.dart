@@ -35,7 +35,7 @@ class UserpicEmpty extends StatelessWidget {
         displayLetters,
         style: TextDisplay.create(
           textColor: ClientTheme.currentTheme.getField("PeerNameTextColor"),
-          fontFamily: extractEmojis(displayLetters).isNotEmpty ? TextDisplay.emojiFont : TextDisplay.greaterImportance,
+          fontFamily: extractEmojis(displayLetters).isNotEmpty ? TextDisplay.getEmojiFont() : TextDisplay.greaterImportance,
           size: fontSize ?? 24,
           fontWeight: FontWeight.w500,
         ),

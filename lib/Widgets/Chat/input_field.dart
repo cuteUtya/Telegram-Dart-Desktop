@@ -69,7 +69,14 @@ class InputFieldState extends State<InputField> {
                   decoration: InputDecoration.collapsed(
                       hintText: widget.client.getTranslation("lng_message_ph"),
                       hintStyle: TextDisplay.create(textColor: ClientTheme.currentTheme.getField("InputFieldTextColor"))),
-                  style: TextDisplay.create(size: 20, textColor: ClientTheme.currentTheme.getField("InputFieldTextColor")),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: ClientTheme.currentTheme.getField("InputFieldTextColor"),
+                    fontFamily: TextDisplay.regular,
+                    fontFamilyFallback: [
+                      TextDisplay.getEmojiFont(),
+                    ],
+                  ),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   onChanged: (value) {
