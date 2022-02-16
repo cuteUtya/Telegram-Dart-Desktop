@@ -38,6 +38,7 @@ class ChatListDisplay extends StatelessWidget {
     return SmoothDesktopListView(
       reverseScroll: true,
       itemCount: sorted.length + (isMain ? 1 : 0) + 1,
+      scrollController: scrollController,
       itemBuilder: (_, index) {
         if (isMain) {
           if (index == 0) {
