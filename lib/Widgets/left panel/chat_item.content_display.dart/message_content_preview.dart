@@ -188,6 +188,11 @@ class MessageContentPreview extends StatelessWidget {
               text = (content as InputMessageText).text!;
               break;
 
+            case MessagePoll:
+              var poll = (message!.content as MessagePoll).poll!;
+              text = FormattedText(text: "📊 ${poll.question}", entities: []);
+              break;
+
             case MessageDice:
               var dice = message?.content as MessageDice;
               String diceresult;
