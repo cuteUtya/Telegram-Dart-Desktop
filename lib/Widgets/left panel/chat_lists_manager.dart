@@ -49,7 +49,11 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
     if (lastPage == _currentPage) {
       _scrollPositions[lastPage] = 0;
-      _scrollContollers[lastPage]?.jumpTo(0);
+      _scrollContollers[lastPage]?.animateTo(
+        0,
+        duration: Duration(milliseconds: 400),
+        curve: Curves.decelerate,
+      );
     }
   }
 
