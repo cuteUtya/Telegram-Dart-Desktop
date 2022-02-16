@@ -21,7 +21,6 @@ class TextDisplay {
   static const String greaterImportance = "Ubuntu";
   static const String regular = "SourceSansPro";
   static const String monospace = "CodeSourcePro";
-  static const String emojiFont = "emoji";
 
   static TextStyle get chatTittleSelected => create(
       size: 18,
