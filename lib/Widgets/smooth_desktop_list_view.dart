@@ -56,21 +56,26 @@ class SmoothDesktopListView extends StatefulWidget {
 
 class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
   late final ScrollController _controller = widget.scrollController ?? ScrollController();
-  double offset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Listener(
         onPointerSignal: (signal) {
           if (signal is PointerScrollEvent) {
+            double delta = 0;
             if (!widget.reverseScroll) {
-              offset -= signal.scrollDelta.dy * 6;
+              delta -= signal.scrollDelta.dy;
             } else {
-              offset += signal.scrollDelta.dy * 6;
+              delta += signal.scrollDelta.dy;
             }
-            offset = clamp(offset, 0, _controller.position.maxScrollExtent).toDouble();
+            delta *= 30;
             _controller.animateTo(
-              offset,
+              clamp(delta + _controller.offset, 0, _controller.position.maxScrollExtent).toDouble(),
               duration: const Duration(milliseconds: 400),
               curve: Curves.decelerate,
             );

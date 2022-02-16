@@ -28,9 +28,12 @@ class ChatListsManagerState extends State<ChatListsManager> {
 
   void setChatLists(List<ChatList> lists) => setState(() => _lists = lists);
 
+  bool _setsScrollPositionAfterSwitch = true;
+
   void setCurrentChatList(ChatList list) {
     if (_scrollContollers[_currentPage]!.hasClients) {
       _scrollPositions[_currentPage] = _scrollContollers[_currentPage]!.offset;
+      _setsScrollPositionAfterSwitch = false;
     }
     var lastPage = _currentPage;
     if (list is ChatListMain) {
@@ -133,45 +136,50 @@ class ChatListsManagerState extends State<ChatListsManager> {
   }
 
   @override
-  Widget build(BuildContext context) => PageView(
-        controller: mainArchiveContoller,
-        reverse: true,
-        children: [
-          PageView.builder(
-            controller: mainContoller,
-            itemCount: _lists.length,
-            itemBuilder: (context, index) {
-              if (_scrollContollers[index] == null) {
-                _scrollContollers[index] = ScrollController();
-              }
-              Future.delayed(Duration.zero, () {
-                if (_scrollPositions[index] != null) {
-                  _scrollContollers[index]!.jumpTo(
-                    _scrollPositions[index]!,
-                  );
-                }
-              });
-              return ChatListDisplay(
-                scrollController: _scrollContollers[index],
-                chatsPositions: _chats,
-                client: widget.client,
-                chatList: _lists[index],
-              );
-            },
-          ),
-          RevertiblePage(
-            onRevert: () => UIEvents.closeArchive(),
-            title: widget.client.getTranslation("lng_archived_name"),
-            content: Expanded(
-              child: ChatListDisplay(
-                chatsPositions: _chats,
-                client: widget.client,
-                chatList: ChatListArchive(),
-              ),
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      if (_scrollPositions[_currentPage] != null &&
+          !_setsScrollPositionAfterSwitch &&
+          _scrollContollers[_currentPage]!.hasClients) {
+        _setsScrollPositionAfterSwitch = true;
+        _scrollContollers[_currentPage]!.jumpTo(
+          _scrollPositions[_currentPage]!,
+        );
+      }
+    });
+    return PageView(
+      controller: mainArchiveContoller,
+      reverse: true,
+      children: [
+        PageView.builder(
+          controller: mainContoller,
+          itemCount: _lists.length,
+          itemBuilder: (context, index) {
+            if (_scrollContollers[index] == null) {
+              _scrollContollers[index] = ScrollController();
+            }
+            return ChatListDisplay(
+              scrollController: _scrollContollers[index],
+              chatsPositions: _chats,
+              client: widget.client,
+              chatList: _lists[index],
+            );
+          },
+        ),
+        RevertiblePage(
+          onRevert: () => UIEvents.closeArchive(),
+          title: widget.client.getTranslation("lng_archived_name"),
+          content: Expanded(
+            child: ChatListDisplay(
+              chatsPositions: _chats,
+              client: widget.client,
+              chatList: ChatListArchive(),
             ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 }
 
 class ChatOrder {
