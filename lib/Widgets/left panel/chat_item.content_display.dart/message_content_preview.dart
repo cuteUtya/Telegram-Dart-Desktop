@@ -18,6 +18,7 @@ class MessageContentPreview extends StatelessWidget {
       this.fromChatType,
       this.chatSelected = false,
       this.showAuthor = true,
+      this.maxLines = 2,
       this.style = MessageContentPreviewStyle.noLineBreaks,
       this.authorColor,
       this.textColor})
@@ -26,6 +27,7 @@ class MessageContentPreview extends StatelessWidget {
   final DraftMessage? draftMessage;
   final ChatType? fromChatType;
   final TelegramClient client;
+  final int maxLines;
   final MessageContentPreviewStyle style;
   final bool chatSelected;
   final bool showAuthor;
@@ -248,7 +250,7 @@ class MessageContentPreview extends StatelessWidget {
           }
 
           return RichText(
-              maxLines: 2,
+              maxLines: maxLines,
               text: TextSpan(
                 children: [
                       TextDisplay.parseEmojiInString(
