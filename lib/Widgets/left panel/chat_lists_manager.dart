@@ -29,7 +29,9 @@ class ChatListsManagerState extends State<ChatListsManager> {
   void setChatLists(List<ChatList> lists) => setState(() => _lists = lists);
 
   void setCurrentChatList(ChatList list) {
-    _scrollPositions[_currentPage] = _scrollContollers[_currentPage]!.offset;
+    if (_scrollContollers[_currentPage]!.hasClients) {
+      _scrollPositions[_currentPage] = _scrollContollers[_currentPage]!.offset;
+    }
     var lastPage = _currentPage;
     if (list is ChatListMain) {
       _changeCurrentPage(0);
