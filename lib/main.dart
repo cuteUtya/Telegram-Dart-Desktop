@@ -1,4 +1,5 @@
 import 'package:dart_vlc/dart_vlc.dart';
+import 'package:myapp/Links%20utils/linksOpener.dart';
 import 'package:myapp/Screens/autorization_router.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
@@ -18,7 +19,7 @@ void main() async {
   var client = TelegramClient();
   await client.init();
   await client.send(SetLogVerbosityLevel(newVerbosityLevel: 2));
-
+  UrlsUtils.init(client);
   runApp(
     MaterialApp(
       home: Material(

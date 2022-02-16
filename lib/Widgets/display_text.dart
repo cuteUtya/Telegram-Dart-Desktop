@@ -5,7 +5,7 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/utils.dart';
 
 class TextDisplay {
-  static String getEmojiFont() => "GoogleColorEmoji";
+  static String getEmojiFont() => "AppleColorEmoji";
 
   static TextStyle get title =>
       create(size: 24, fontWeight: FontWeight.w600, textColor: ClientTheme.currentTheme.getField("HeaderMain"));
@@ -59,6 +59,8 @@ class TextDisplay {
     TextEntityTypeCode: "M",
     TextEntityTypeTextUrl: "L",
     TextEntityTypeUrl: "R",
+    TextEntityTypeMention: "P",
+    TextEntityTypeMentionName: "P",
     null: "-"
   };
 
@@ -89,6 +91,9 @@ class TextDisplay {
           decoration: TextDecoration.underline,
           textColor: ClientTheme.currentTheme.getField("HyperlinkColor"),
         ),
+    "P": () => create(
+          textColor: ClientTheme.currentTheme.getField("MentionEntityColor"),
+        )
   };
 
   static final List<Type> _interactiveTextEnteties = [
@@ -117,7 +122,10 @@ class TextDisplay {
     for (var element in matches) {
       var textEntety = str[element.start] == "-" ? null : (text.entities![entetieIndex]);
       var style = stylePairs[str[element.start]];
-      var recognizer = textEntety?.type is TextEntityTypeTextUrl || textEntety?.type is TextEntityTypeUrl
+      var recognizer = textEntety?.type is TextEntityTypeTextUrl ||
+              textEntety?.type is TextEntityTypeUrl ||
+              textEntety?.type is TextEntityTypeMention ||
+              textEntety?.type is TextEntityTypeMentionName
           ? (TapGestureRecognizer()
             ..onTap = () {
               if (onUrlClick != null) {
@@ -127,6 +135,13 @@ class TextDisplay {
                     break;
                   case TextEntityTypeUrl:
                     onUrlClick(text.text!.substring(textEntety.offset!, textEntety.offset! + textEntety.length!));
+                    break;
+                  case TextEntityTypeMention:
+                    onUrlClick(
+                        "tg://open?username=${text.text!.substring(textEntety.offset! + 1, textEntety.offset! + textEntety.length!)}");
+                    break;
+                  case TextEntityTypeMentionName:
+                    onUrlClick("tg://open?id=${(textEntety.type as TextEntityTypeMentionName).userId}");
                     break;
                 }
               }

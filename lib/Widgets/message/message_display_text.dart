@@ -75,7 +75,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     var contentText = widget.text ?? (widget.message.content as MessageText).text!;
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(
-            contentText, 20, ClientTheme.currentTheme.getField("MessageTextColor"), true, (s) => HttpUrlsUtils.openLink(s)));
+            contentText, 20, ClientTheme.currentTheme.getField("MessageTextColor"), true, (s) => UrlsUtils.openLink(s)));
     return LayoutBuilder(builder: (context, boxCons) {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
       var boxes = paragraph.getBoxesForSelection(TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));

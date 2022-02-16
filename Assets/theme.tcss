@@ -22,6 +22,7 @@ HeaderSecondary(theme=dark): #A5A5A5;
 AdditionalTextColor: #BABABA;
 RegularText(theme=light): #696969;
 RegularText(theme=dark): #BBBBBB;
+MentionEntityColor: ref(Accent);
 ChatLastTimeMessage: ref(RegularText);
 SelectedChatLastTimedMessage: ref(SelectedColor);
 MonospaceTextColor: #2e87ca;
