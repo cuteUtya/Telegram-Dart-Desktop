@@ -184,7 +184,7 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
                             },
                           ),
                     ),
-                    if (video.thumbnail != null)
+                    if (video.thumbnail != null && !widget.autoplay)
                       WidgetHider(
                         key: previewHiderKey,
                         child: RemoteFileBuilder(
