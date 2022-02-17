@@ -7,6 +7,8 @@ import 'package:myapp/Widgets/message/message_display_audio.dart';
 import 'package:myapp/Widgets/message/message_display_photo.dart';
 import 'package:myapp/Widgets/message/message_display_poll.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
+import 'package:myapp/Widgets/message/message_display_video.dart';
+import 'package:myapp/Widgets/message/message_display_gif.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
 import 'package:myapp/Widgets/message/message_sticker.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
@@ -84,6 +86,8 @@ class MessageDisplay extends StatelessWidget {
         onMessageDelete?.call();
       });
     });
+
+    var bubblePadding = MacMessageBubble.padding;
 
     return WidgetHider(
       key: hideKey,
@@ -265,9 +269,7 @@ class MessageDisplay extends StatelessWidget {
                   client: client,
                   message: message,
                   adminTitle: adminTitle,
-
-                  ///TODO if use tdesktop bubble use tdesktop padding
-                  contentPadding: MacMessageBubble.padding,
+                  contentPadding: bubblePadding,
                   senderName: showMessageSender ? author : null,
                   infoWidget: _buildInfoWidget(haveText),
                   replieWidget: _buildReplieWidget(haveText),
@@ -286,27 +288,29 @@ class MessageDisplay extends StatelessWidget {
                 break;
 
               ///theare some issues related with it perfomance
-              /*case MessageVideo:
-              wrapInBubble = haveText;
-              contentWidget = MessageDisplayVideo(
-                client: client,
-                message: message,
-                senderName: showMessageSender ? author : null,
-                infoWidget: _buildInfoWidget(haveText),
-                replieWidget: _buildReplieWidget(haveText),
-              );
-              break;
+              case MessageVideo:
+                wrapInBubble = haveText;
+                overrideBubblePadding = true;
+                contentWidget = MessageDisplayVideo(
+                  client: client,
+                  message: message,
+                  contentPadding: bubblePadding,
+                  senderName: showMessageSender ? author : null,
+                  infoWidget: _buildInfoWidget(haveText),
+                  replieWidget: _buildReplieWidget(haveText),
+                );
+                break;
 
-            case MessageAnimation:
-              wrapInBubble = haveText;
-              contentWidget = MessageDisplayGif(
-                client: client,
-                message: message,
-                infoWidget: _buildInfoWidget(haveText),
-                replieWidget: _buildReplieWidget(haveText),
-                senderName: showMessageSender ? author : null,
-              );
-              break;*/
+              case MessageAnimation:
+                wrapInBubble = haveText;
+                contentWidget = MessageDisplayGif(
+                  client: client,
+                  message: message,
+                  infoWidget: _buildInfoWidget(haveText),
+                  replieWidget: _buildReplieWidget(haveText),
+                  senderName: showMessageSender ? author : null,
+                );
+                break;
 
               default:
                 wrapInBubble = true;

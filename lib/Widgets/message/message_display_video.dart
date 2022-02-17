@@ -9,8 +9,10 @@ import 'package:myapp/Widgets/blur_image_preview.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
+import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/Widgets/remote_file_builder_progress.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
+import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' as td hide Text;
 import 'dart:io' as io;
@@ -26,6 +28,7 @@ class MessageDisplayVideo extends StatefulWidget {
     this.infoWidget,
     this.overrideCaption,
     this.contolls,
+    this.contentPadding,
     this.autoplay = false,
     this.loop = false,
     this.replieWidget,
@@ -38,6 +41,7 @@ class MessageDisplayVideo extends StatefulWidget {
   final Widget? contolls;
   final bool autoplay;
   final bool loop;
+  final EdgeInsets? contentPadding;
   final String? senderName;
   final Widget? infoWidget;
   final Widget? replieWidget;
@@ -70,160 +74,142 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
       }));
     }
 
-    var contollsHiderKey = GlobalKey<WidgetHiderState>();
+    var contollsOpacityKey = GlobalKey<WidgetOpacityContollerState>();
+    var previewHiderKey = GlobalKey<WidgetHiderState>();
     var duration = 0;
     var position = 0;
     var volume = 1.0;
     bool videoInited = false;
 
-    return LayoutBuilder(builder: (_, box) {
-      var contentWidth = min(video.width?.toDouble() ?? box.maxWidth, box.maxWidth);
-      var contentHeight = (video.height! * (contentWidth / video.width!)).toDouble();
-      return MessageDisplayMedia(
-        client: widget.client,
-        message: widget.message,
-        senderName: widget.senderName,
-        infoWidget: widget.infoWidget,
-        contentWidth: contentWidth,
-        caption: videoCaption,
-        content: RemoteFileBuilderProgress(
-          downloadStep: 256000,
+    return LayoutBuilder(
+      builder: (_, box) {
+        var contentWidth = min(video.width?.toDouble() ?? box.maxWidth, box.maxWidth);
+        var contentHeight = (video.height! * (contentWidth / video.width!)).toDouble();
+        return MessageDisplayMedia(
           client: widget.client,
-          fileId: video.video!.id!,
-          builder: (context, progres, path) {
-            if (progres != 1 && !video.supportsStreaming! || progres == 0) {
-              return BlurImagePreview(
-                image: MemoryImage(
-                  base64.decode(
-                    video.minithumbnail!.data!,
-                  ),
-                ),
-                width: contentWidth,
-                height: contentHeight,
-              );
-            }
-            if (!videoInited) {
-              videoInited = true;
-              player!.open(
-                vlc.Media.file(io.File(path!)),
-                autoStart: widget.autoplay,
-              );
-            }
-            return Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    if ((player!.position.duration?.inSeconds ?? 0) <= 0) {
-                      player!.play();
-                      position = 0;
-                    }
-                    player!.playOrPause();
-                  },
-                  child: MouseRegion(
-                    onEnter: (_) => contollsHiderKey.currentState?.show(),
-                    onExit: (_) => contollsHiderKey.currentState?.hide(),
-                    child: vlc.Video(
-                      key: Key("video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
-                      player: player,
-                      width: contentWidth,
-                      height: contentHeight,
-                      showControls: false,
+          message: widget.message,
+          senderName: widget.senderName,
+          infoWidget: widget.infoWidget,
+          contentWidth: contentWidth,
+          captionMargin: widget.contentPadding,
+          caption: videoCaption,
+          content: RemoteFileBuilderProgress(
+            downloadStep: 256000,
+            client: widget.client,
+            fileId: video.video!.id!,
+            builder: (context, progres, path) {
+              if (progres != 1 && !video.supportsStreaming! || progres == 0) {
+                return BlurImagePreview(
+                  image: MemoryImage(
+                    base64.decode(
+                      video.minithumbnail!.data!,
                     ),
                   ),
-                ),
-                Text(
-                  "${(progres * 100).toInt()}%",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                  ),
-                ),
-                WidgetHider(
-                  hiddenOnInit: true,
-                  key: contollsHiderKey,
-                  child: widget.contolls ??
-                      StreamBuilder(
-                        stream: player!.positionStream,
-                        builder: (_, posData) {
-                          var data = posData.hasData ? posData.data as PositionState : null;
-                          if (data?.duration?.inSeconds != 0 && duration == 0) {
-                            if (data?.duration != null) {
-                              duration = data!.duration!.inSeconds;
-                            }
-                          }
-                          if (data?.position?.inSeconds != 0 && data?.position != null) {
-                            if (data!.position!.inSeconds != 0) {
-                              position = data.position!.inSeconds;
-                            }
-                          }
-                          return Container(
-                            child: MessageInfoBubbleBase(
-                              content: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  _MuteIcon(
-                                    initValue: volume == 0,
-                                    onMuteStateChange: (mute) {
-                                      volume = mute ? 0 : 1;
-                                      player!.setVolume(volume);
-                                    },
+                  width: contentWidth,
+                  height: contentHeight,
+                );
+              }
+              if (!videoInited) {
+                videoInited = true;
+                player!.open(
+                  vlc.Media.file(io.File(path!)),
+                  autoStart: widget.autoplay,
+                );
+              }
+              return GestureDetector(
+                onTap: () {
+                  previewHiderKey.currentState?.hide();
+                  if ((player!.position.duration?.inSeconds ?? 0) <= 0) {
+                    player!.play();
+                    position = 0;
+                  }
+                  player!.playOrPause();
+                },
+                child: Stack(
+                  children: [
+                    MouseRegion(
+                      onEnter: (_) => contollsOpacityKey.currentState?.animateOpacity(1),
+                      onExit: (_) => contollsOpacityKey.currentState?.animateOpacity(0),
+                      child: vlc.Video(
+                        key: Key("video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
+                        player: player,
+                        width: contentWidth,
+                        height: contentHeight,
+                        showControls: false,
+                      ),
+                    ),
+                    WidgetOpacityContoller(
+                      opacity: 0,
+                      duration: Duration.zero,
+                      key: contollsOpacityKey,
+                      child: widget.contolls ??
+                          StreamBuilder(
+                            stream: player!.positionStream,
+                            builder: (_, posData) {
+                              var data = posData.hasData ? posData.data as PositionState : null;
+                              if (data?.duration?.inSeconds != 0 && duration == 0) {
+                                if (data?.duration != null) {
+                                  duration = data!.duration!.inSeconds;
+                                }
+                              }
+                              if (data?.position?.inSeconds != 0 && data?.position != null) {
+                                if (data!.position!.inSeconds != 0) {
+                                  position = data.position!.inSeconds;
+                                }
+                              }
+                              if (position >= duration && duration != 0) {
+                                Future.delayed(Duration.zero, () => previewHiderKey.currentState?.show());
+                              }
+                              return Container(
+                                child: MessageInfoBubbleBase(
+                                  content: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _MuteIcon(
+                                        initValue: volume == 0,
+                                        onMuteStateChange: (mute) {
+                                          volume = mute ? 0 : 1;
+                                          player!.setVolume(volume);
+                                        },
+                                      ),
+                                      Text(
+                                        "${getMMSS(position)}/${getMMSS(duration)}",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    "${getMMSS(position)}/${getMMSS(duration)}",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
+                                ),
+                                margin: const EdgeInsets.only(top: 4, right: 4),
+                              );
+                            },
+                          ),
+                    ),
+                    if (video.thumbnail != null)
+                      WidgetHider(
+                        key: previewHiderKey,
+                        child: RemoteFileBuilder(
+                          builder: (_, path) => Image(
+                            image: FileImage(
+                              io.File(
+                                path,
                               ),
                             ),
-                            margin: const EdgeInsets.only(top: 4, right: 4),
-                          );
-                        },
+                            width: contentWidth,
+                            height: contentHeight,
+                            fit: BoxFit.cover,
+                          ),
+                          fileId: video.thumbnail!.file!.id!,
+                          client: widget.client,
+                        ),
                       ),
-                )
-              ],
-            );
-          },
-        ),
-      );
-    });
-    /* return 
-        
-        return MouseRegion(
-          
-          child: MessageDisplayMedia(
-            client: widget.client,
-            message: widget.message,
-            senderName: widget.senderName,
-            caption: videoCaption,
-            contentWidth: contentWidth,
-            contentHeight: contentHeight,
-            replieWidget: widget.replieWidget,
-            infoWidget: widget.infoWidget,
-            content: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                GestureDetector(
-                    onTap: () {
-                      if ((player!.position.duration?.inSeconds ?? 0) <= 0) {
-                        player!.play();
-                        position = 0;
-                      }
-                      player!.playOrPause();
-                    },
-                    child: vlc.Video(
-                      key: Key("video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
-                      player: player,
-                      width: video.width!.toDouble(),
-                      height: video.height!.toDouble(),
-                      showControls: false,
-                    )),
-                ,
-              ],
-            ),
+                  ],
+                ),
+              );
+            },
           ),
         );
       },
-    );*/
+    );
   }
 
   @override
