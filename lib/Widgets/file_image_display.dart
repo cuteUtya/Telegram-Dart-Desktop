@@ -13,6 +13,7 @@ class FileImageDisplay extends StatelessWidget {
       this.borderRadius,
       this.height,
       this.width,
+      this.fit = BoxFit.cover,
       this.isTGV = false,
       this.tgvColor,
       this.priority = 5,
@@ -24,6 +25,7 @@ class FileImageDisplay extends StatelessWidget {
   final double? width;
   final double? height;
   final bool isTGV;
+  final BoxFit fit;
   final Color? tgvColor;
   final Widget emptyReplacer;
   final TelegramClient client;
@@ -41,7 +43,7 @@ class FileImageDisplay extends StatelessWidget {
                 height: height,
                 width: width,
                 color: tgvColor,
-                fit: BoxFit.cover,
+                fit: fit,
               )
             : SizedBox(
                 width: width,
@@ -50,6 +52,7 @@ class FileImageDisplay extends StatelessWidget {
                   borderRadius: borderRadius ?? BorderRadius.zero,
                   child: Image.file(
                     file,
+                    fit: fit,
                   ),
                 ),
               );
