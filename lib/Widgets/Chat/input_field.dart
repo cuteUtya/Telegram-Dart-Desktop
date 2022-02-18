@@ -1,9 +1,11 @@
-import 'package:desktop_drop/desktop_drop.dart' as dropUtil;
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/emoji_input_panel.dart';
+import 'package:myapp/Widgets/smooth_desktop_list_view.dart';
+import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/file_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
@@ -43,7 +45,7 @@ class InputFieldState extends State<InputField> {
     }
   }
 
-  final List<XFile> uploadedFiles = [];
+  final List<_AttachedFileInfo> uploadedFiles = [];
 
   bool fileDragging = false;
   bool dropZoneClosedInUI = true;
@@ -64,14 +66,14 @@ class InputFieldState extends State<InputField> {
     var dropZoneHeight = 156.0;
     var genericFilesWidth = 196.0;
 
-    return dropUtil.DropTarget(
+    return DropTarget(
       onDragEntered: (_) => setState(() {
         fileDragging = true;
         dropZoneClosedInUI = false;
       }),
       onDragDone: (info) {
         onFileDragEnd();
-        uploadedFiles.addAll(info.files);
+        uploadedFiles.addAll(info.files.map((e) => _AttachedFileInfo(e)));
       },
       onDragExited: (_) => onFileDragEnd(),
       child: Column(
@@ -105,67 +107,34 @@ class InputFieldState extends State<InputField> {
                       ),
                     )
                   : Padding(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       child: LayoutBuilder(
-                        builder: (_, box) => Row(
-                          children: uploadedFiles.map((file) {
-                            var fileType = getFileGroup(file.name);
-                            return Stack(
-                              alignment: Alignment.bottomLeft,
-                              children: [
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(right: uploadedFiles.indexOf(file) == uploadedFiles.length ? 0 : 8),
-                                      child: fileType == FileGroup.imageRaster
-                                          ? Image(
-                                              image: FileImage(
-                                                io.File(file.path),
-                                              ),
-                                              fit: BoxFit.fitHeight,
-                                            )
-                                          : Container(
-                                              height: box.maxHeight,
-                                              width: genericFilesWidth,
-                                              decoration: BoxDecoration(
-                                                color: ClientTheme.currentTheme
-                                                    .getField("file${fileType.toString().split(".")[1]}Color"),
-                                                borderRadius: BorderRadius.all(borderRadius),
-                                              ),
-                                            ),
-                                    ),
-                                    if (fileType != FileGroup.imageRaster)
-                                      Container(
-                                        width: 48,
-                                        height: 48,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.2),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(48),
-                                          ),
-                                        ),
-                                        child: const Icon(
-                                          Icons.file_copy,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                                if (fileType != FileGroup.imageRaster)
-                                  Container(
-                                    margin: const EdgeInsets.all(8),
-                                    child: Text(
-                                      file.name,
-                                      style: TextDisplay.create(
-                                        size: 18,
-                                        textColor: Colors.white,
-                                      ),
-                                    ),
+                        builder: (_, box) => SmoothDesktopListView(
+                          reverseScroll: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 1,
+                          itemBuilder: (_, __) => Row(
+                            children: uploadedFiles.map((file) {
+                              var index = uploadedFiles.indexOf(file);
+                              return Container(
+                                margin: EdgeInsets.only(right: index == uploadedFiles.length ? 0 : 8),
+                                child: WidgetOpacityContoller(
+                                  key: file.opacityKey,
+                                  onEnd: () => setState(() => uploadedFiles.removeAt(index)),
+                                  duration: const Duration(milliseconds: 200),
+                                  child: _FileDisplay(
+                                    file: file.file,
+                                    borderRadius: BorderRadius.all(borderRadius),
+                                    width: genericFilesWidth,
+                                    height: box.maxHeight,
+                                    onDelete: () {
+                                      file.opacityKey.currentState?.animateOpacity(0);
+                                    },
                                   ),
-                              ],
-                            );
-                          }).toList(),
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
                     ),
@@ -263,4 +232,111 @@ class InputFieldState extends State<InputField> {
       ),
     );
   }
+}
+
+class _FileDisplay extends StatelessWidget {
+  const _FileDisplay({
+    Key? key,
+    required this.file,
+    this.onDelete,
+    this.height,
+    this.width,
+    this.borderRadius = BorderRadius.zero,
+  }) : super(key: key);
+
+  final XFile file;
+  final double? height, width;
+  final BorderRadius borderRadius;
+  final Function? onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    var fileType = getFileGroup(file.name);
+    var controllsBackColor = Colors.black.withOpacity(0.2);
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        if (fileType == FileGroup.imageRaster)
+          ClipRRect(
+            borderRadius: borderRadius,
+            child: Image(
+              image: FileImage(
+                io.File(file.path),
+              ),
+              fit: BoxFit.fitHeight,
+            ),
+          )
+        else
+          Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              color: ClientTheme.currentTheme.getField("file${fileType.toString().split(".")[1]}Color"),
+              borderRadius: borderRadius,
+            ),
+          ),
+        if (fileType != FileGroup.imageRaster)
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: controllsBackColor,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(48),
+              ),
+            ),
+            child: const Icon(
+              Icons.file_copy,
+              color: Colors.white,
+            ),
+          ),
+        Positioned(
+          right: 2,
+          top: 2,
+          child: GestureDetector(
+            onTap: () => onDelete?.call(),
+            child: Container(
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(2),
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
+                color: controllsBackColor,
+              ),
+            ),
+          ),
+        ),
+        if (fileType != FileGroup.imageRaster)
+          Positioned(
+            bottom: 2,
+            left: 2,
+            child: Container(
+              width: width,
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.only(right: 4),
+              child: Text(
+                file.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextDisplay.create(
+                  size: 18,
+                  textColor: Colors.white,
+                ),
+              ),
+            ),
+          )
+      ],
+    );
+  }
+}
+
+class _AttachedFileInfo {
+  _AttachedFileInfo(this.file) {
+    this.opacityKey = GlobalKey<WidgetOpacityContollerState>();
+  }
+  XFile file;
+  late GlobalKey<WidgetOpacityContollerState> opacityKey;
 }

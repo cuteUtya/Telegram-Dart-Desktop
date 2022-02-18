@@ -7,11 +7,13 @@ class WidgetOpacityContoller extends StatefulWidget {
     required this.child,
     this.opacity = 1.0,
     this.duration = const Duration(seconds: 1),
+    this.onEnd,
   }) : super(key: key);
 
   final Widget child;
   final double opacity;
   final Duration duration;
+  final VoidCallback? onEnd;
   @override
   State<StatefulWidget> createState() => WidgetOpacityContollerState();
 }
@@ -44,6 +46,7 @@ class WidgetOpacityContollerState extends State<WidgetOpacityContoller> {
       opacity: _opacity,
       duration: _duration,
       child: widget.child,
+      onEnd: widget.onEnd,
     );
   }
 }
