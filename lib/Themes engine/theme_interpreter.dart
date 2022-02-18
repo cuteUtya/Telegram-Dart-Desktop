@@ -23,7 +23,8 @@ class ClientTheme {
   final List<LangFunction> functions = [
     LangFunction("linear", [3], linear),
     LangFunction("max", [2], max_inter),
-    LangFunction("min", [2], min_inter)
+    LangFunction("min", [2], min_inter),
+    LangFunction("hsv", [3], hsv_inter),
   ];
 
   bool _isDefault = false;
@@ -98,6 +99,14 @@ class ClientTheme {
     }
 
     throw Exception("Error while parsing arguments. Types should be min(double, double)");
+  }
+
+  static String hsv_inter(List<dynamic> args) {
+    var hue = double.parse(args[0]);
+    var saturation = double.parse(args[1]);
+    var value = double.parse(args[2]);
+    var color = HSVColor.fromAHSV(1, hue, saturation / 100, value / 100);
+    return colorToHEX(color.toColor());
   }
 
   static String linear(List<dynamic> args) {
@@ -198,7 +207,6 @@ class ClientTheme {
     value = buildColors(value!);
     value = replaceColorChannel(value!);
     value = doFuntions(value!);
-
     return value!;
   }
 
