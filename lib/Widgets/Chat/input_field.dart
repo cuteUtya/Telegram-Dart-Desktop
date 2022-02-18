@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
@@ -109,33 +111,57 @@ class InputFieldState extends State<InputField> {
                   : Padding(
                       padding: const EdgeInsets.all(8),
                       child: LayoutBuilder(
-                        builder: (_, box) => SmoothDesktopListView(
-                          reverseScroll: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 1,
-                          itemBuilder: (_, __) => Row(
-                            children: uploadedFiles.map((file) {
-                              var index = uploadedFiles.indexOf(file);
+                        builder: (_, box) => ReorderableListView(
+                            buildDefaultDragHandles: false,
+                            proxyDecorator: ((child, index, animation) {
                               return Container(
-                                margin: EdgeInsets.only(right: index == uploadedFiles.length ? 0 : 8),
-                                child: WidgetOpacityContoller(
-                                  key: file.opacityKey,
-                                  onEnd: () => setState(() => uploadedFiles.removeAt(index)),
-                                  duration: const Duration(milliseconds: 200),
-                                  child: _FileDisplay(
-                                    file: file.file,
-                                    borderRadius: BorderRadius.all(borderRadius),
-                                    width: genericFilesWidth,
-                                    height: box.maxHeight,
-                                    onDelete: () {
-                                      file.opacityKey.currentState?.animateOpacity(0);
-                                    },
-                                  ),
+                                child: child,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromARGB((animation.value * 128).toInt(), 0, 0, 0),
+                                      blurRadius: 6,
+                                      offset: const Offset(1, 1),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.all(borderRadius),
                                 ),
                               );
-                            }).toList(),
-                          ),
-                        ),
+                            }),
+                            scrollDirection: Axis.horizontal,
+                            onReorder: (oldIndex, newIndex) {
+                              setState(() {
+                                if (oldIndex < newIndex) {
+                                  newIndex -= 1;
+                                }
+                                var item = uploadedFiles.removeAt(oldIndex);
+                                uploadedFiles.insert(newIndex, item);
+                              });
+                            },
+                            children: [
+                              for (final file in uploadedFiles)
+                                ReorderableDragStartListener(
+                                  key: Key("attachedObject?id=${uploadedFiles.indexOf(file)}"),
+                                  index: uploadedFiles.indexOf(file),
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: uploadedFiles.indexOf(file) == uploadedFiles.length ? 0 : 8),
+                                    child: WidgetOpacityContoller(
+                                      key: file.opacityKey,
+                                      onEnd: () => setState(() => uploadedFiles.removeAt(uploadedFiles.indexOf(file))),
+                                      duration: const Duration(milliseconds: 100),
+                                      child: _FileDisplay(
+                                        file: file.file,
+                                        borderRadius: BorderRadius.all(borderRadius),
+                                        width: genericFilesWidth,
+                                        height: box.maxHeight,
+                                        onDelete: () {
+                                          file.opacityKey.currentState?.animateOpacity(0);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ]),
                       ),
                     ),
             ),
@@ -335,7 +361,7 @@ class _FileDisplay extends StatelessWidget {
 
 class _AttachedFileInfo {
   _AttachedFileInfo(this.file) {
-    this.opacityKey = GlobalKey<WidgetOpacityContollerState>();
+    opacityKey = GlobalKey<WidgetOpacityContollerState>();
   }
   XFile file;
   late GlobalKey<WidgetOpacityContollerState> opacityKey;
