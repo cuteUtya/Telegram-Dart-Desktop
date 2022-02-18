@@ -50,7 +50,7 @@ class MessageDisplayPhoto extends StatelessWidget {
     return LayoutBuilder(
       builder: (_, box) {
         var width = max(
-          200,
+          100,
           min(
             box.maxWidth,
             photoSize.width!.toDouble(),
@@ -131,6 +131,7 @@ class MessageDisplayPhoto extends StatelessWidget {
                         height: height,
                         child: Image.file(
                           io.File(path),
+                          fit: BoxFit.cover,
                         ),
                       )),
                 );
