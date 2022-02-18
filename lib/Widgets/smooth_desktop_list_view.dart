@@ -73,7 +73,7 @@ class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
             } else {
               delta += signal.scrollDelta.dy;
             }
-            delta *= 30;
+            delta *= Platform.isWindows ? 30 : 15;
             _controller.animateTo(
               clamp(delta + _controller.offset, 0, _controller.position.maxScrollExtent).toDouble(),
               duration: const Duration(milliseconds: 400),
