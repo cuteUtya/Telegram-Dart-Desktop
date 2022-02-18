@@ -1,4 +1,4 @@
-import 'package:desktop_drop/desktop_drop.dart';
+import 'package:desktop_drop/desktop_drop.dart' as dropUtil;
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
@@ -8,6 +8,8 @@ import 'package:myapp/file_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
+import 'package:cross_file/cross_file.dart';
+import 'dart:io' as io;
 
 class InputField extends StatefulWidget {
   const InputField({
@@ -41,7 +43,7 @@ class InputFieldState extends State<InputField> {
     }
   }
 
-  final List<String> uploadedFiles = [];
+  final List<XFile> uploadedFiles = [];
 
   bool fileDragging = false;
   bool dropZoneClosedInUI = true;
@@ -60,16 +62,16 @@ class InputFieldState extends State<InputField> {
     var emojiPanelPlaceholderKey = GlobalKey();
     var borderRadius = const Radius.circular(16);
     var dropZoneHeight = 156.0;
+    var genericFilesWidth = 196.0;
 
-    return DropTarget(
+    return dropUtil.DropTarget(
       onDragEntered: (_) => setState(() {
         fileDragging = true;
         dropZoneClosedInUI = false;
       }),
       onDragDone: (info) {
-        var fileGroup = (info.files[0].name);
         onFileDragEnd();
-        uploadedFiles.addAll(info.files.map((e) => e.path));
+        uploadedFiles.addAll(info.files);
       },
       onDragExited: (_) => onFileDragEnd(),
       child: Column(
@@ -106,31 +108,64 @@ class InputFieldState extends State<InputField> {
                       padding: EdgeInsets.all(8),
                       child: LayoutBuilder(
                         builder: (_, box) => Row(
-                          children: uploadedFiles
-                              .map((file) => Stack(alignment: Alignment.center, children: [
+                          children: uploadedFiles.map((file) {
+                            var fileType = getFileGroup(file.name);
+                            return Stack(
+                              alignment: Alignment.bottomLeft,
+                              children: [
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
                                     Container(
-                                      height: box.maxHeight,
-                                      width: box.maxHeight,
                                       margin: EdgeInsets.only(right: uploadedFiles.indexOf(file) == uploadedFiles.length ? 0 : 8),
-                                      decoration: BoxDecoration(
-                                        color: ClientTheme.currentTheme
-                                            .getField("file${getFileGroup(file).toString().split(".")[1]}Color"),
-                                        borderRadius: BorderRadius.all(borderRadius),
-                                      ),
+                                      child: fileType == FileGroup.imageRaster
+                                          ? Image(
+                                              image: FileImage(
+                                                io.File(file.path),
+                                              ),
+                                              fit: BoxFit.fitHeight,
+                                            )
+                                          : Container(
+                                              height: box.maxHeight,
+                                              width: genericFilesWidth,
+                                              decoration: BoxDecoration(
+                                                color: ClientTheme.currentTheme
+                                                    .getField("file${fileType.toString().split(".")[1]}Color"),
+                                                borderRadius: BorderRadius.all(borderRadius),
+                                              ),
+                                            ),
                                     ),
-                                    Container(
-                                      width: 48,
-                                      height: 48,
-                                      decoration: BoxDecoration(
+                                    if (fileType != FileGroup.imageRaster)
+                                      Container(
+                                        width: 48,
+                                        height: 48,
+                                        decoration: BoxDecoration(
                                           color: Colors.white.withOpacity(0.2),
-                                          borderRadius: BorderRadius.all(Radius.circular(48))),
-                                      child: Icon(
-                                        Icons.file_copy,
-                                        color: Colors.white,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(48),
+                                          ),
+                                        ),
+                                        child: const Icon(
+                                          Icons.file_copy,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                if (fileType != FileGroup.imageRaster)
+                                  Container(
+                                    margin: const EdgeInsets.all(8),
+                                    child: Text(
+                                      file.name,
+                                      style: TextDisplay.create(
+                                        size: 18,
+                                        textColor: Colors.white,
                                       ),
                                     ),
-                                  ]))
-                              .toList(),
+                                  ),
+                              ],
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),
