@@ -7,6 +7,7 @@ import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/emoji_input_panel.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
+import 'package:myapp/Widgets/widget_sizer.dart';
 import 'package:myapp/file_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
@@ -68,6 +69,23 @@ class InputFieldState extends State<InputField> {
 
   int _chatId = 0;
 
+  GlobalKey<WidgetSizerState> deleteButtonSizerKey = GlobalKey<WidgetSizerState>();
+  GlobalKey<WidgetOpacityContollerState> deleteButtonOpacityKey = GlobalKey<WidgetOpacityContollerState>();
+
+  void deleteFile(_AttachedFileInfo file) {
+    file.opacityKey.currentState?.animateOpacity(0);
+  }
+
+  void showDeletebutton() {
+    deleteButtonOpacityKey.currentState?.animateOpacity(1);
+    deleteButtonSizerKey.currentState?.resize(Size(36, 36));
+  }
+
+  void hideDeleteButton() {
+    deleteButtonOpacityKey.currentState?.animateOpacity(0);
+    deleteButtonSizerKey.currentState?.resize(Size.zero);
+  }
+
   @override
   Widget build(BuildContext context) {
     var clientData = widget.client.getClientData(widget.chatId);
@@ -79,6 +97,9 @@ class InputFieldState extends State<InputField> {
         }
       });
       setState(() => uploadedFiles = validatedFiles);
+      if (validatedFiles.isNotEmpty) {
+        showDeletebutton();
+      }
     }
     _chatId = widget.chatId;
     var iconColor = ClientTheme.currentTheme.getField("GenericUIIconsColor");
@@ -87,12 +108,17 @@ class InputFieldState extends State<InputField> {
     var dropZoneHeight = 180.0;
     var genericFilesWidth = 240.0;
 
+    if (uploadedFiles.isEmpty) {
+      hideDeleteButton();
+    }
+
     return DropTarget(
       onDragEntered: (_) => setState(() {
         fileDragging = true;
         dropZoneClosedInUI = false;
       }),
       onDragDone: (info) {
+        showDeletebutton();
         onFileDragEnd();
         uploadedFiles.addAll(info.files.map((e) => _AttachedFileInfo(e.path)));
         saveAttachments();
@@ -178,9 +204,7 @@ class InputFieldState extends State<InputField> {
                                         borderRadius: BorderRadius.all(borderRadius),
                                         width: genericFilesWidth,
                                         height: box.maxHeight,
-                                        onDelete: () {
-                                          file.opacityKey.currentState?.animateOpacity(0);
-                                        },
+                                        onDelete: () => deleteFile(file),
                                       ),
                                     ),
                                   ),
@@ -207,6 +231,28 @@ class InputFieldState extends State<InputField> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  WidgetOpacityContoller(
+                    key: deleteButtonOpacityKey,
+                    opacity: 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: WidgetSizer(
+                      key: deleteButtonSizerKey,
+                      duration: const Duration(milliseconds: 200),
+                      sizeOnInit: Size.zero,
+                      child: GestureDetector(
+                        onTap: () {
+                          for (var file in uploadedFiles) {
+                            deleteFile(file);
+                          }
+                        },
+                        child: Icon(
+                          Icons.delete,
+                          size: 36,
+                          color: ClientTheme.currentTheme.getField("DropZoneClearAllButtonColor"),
+                        ),
+                      ),
+                    ),
+                  ),
                   Icon(
                     Icons.attach_file,
                     color: iconColor,

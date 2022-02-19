@@ -171,6 +171,7 @@ EmojiInputPanelIconsColor: ref(GenericUIIconsColor);
 
 InputFileDropZoneBackgroundColor: ref(ChatInputFieldBackgroundColor);
 DropHereDropZoneTextColor: ref(RegularText);
+DropZoneClearAllButtonColor: #DB6462;
 
 fileColorsSaturation: 70;
 fileColorsValue: 85;

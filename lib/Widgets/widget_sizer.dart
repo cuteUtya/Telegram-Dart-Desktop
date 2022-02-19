@@ -7,13 +7,13 @@ class WidgetSizer extends StatefulWidget {
     required this.child,
     this.sizeOnInit,
     this.curve = Curves.easeIn,
-    this.resizeDuration = Duration.zero,
+    this.duration = Duration.zero,
     this.alignment,
   }) : super(key: key);
   final Widget child;
   final Size? sizeOnInit;
   final Curve curve;
-  final Duration resizeDuration;
+  final Duration duration;
   final Alignment? alignment;
   @override
   State<StatefulWidget> createState() => WidgetSizerState();
@@ -27,7 +27,7 @@ class WidgetSizerState extends State<WidgetSizer> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: widget.resizeDuration,
+      duration: widget.duration,
       curve: widget.curve,
       width: _size?.width,
       height: _size?.height,
