@@ -72,8 +72,13 @@ class InputFieldState extends State<InputField> {
   GlobalKey<WidgetSizerState> deleteButtonSizerKey = GlobalKey<WidgetSizerState>();
   GlobalKey<WidgetOpacityContollerState> deleteButtonOpacityKey = GlobalKey<WidgetOpacityContollerState>();
 
+  void clearFiles() {
+    setState(() => uploadedFiles.clear());
+  }
+
   void deleteFile(_AttachedFileInfo file) {
     file.opacityKey.currentState?.animateOpacity(0);
+    uploadedFiles.remove(file);
   }
 
   void showDeletebutton() {
@@ -107,7 +112,6 @@ class InputFieldState extends State<InputField> {
     var borderRadius = const Radius.circular(16);
     var dropZoneHeight = 180.0;
     var genericFilesWidth = 240.0;
-
     if (uploadedFiles.isEmpty) {
       hideDeleteButton();
     }
@@ -115,7 +119,6 @@ class InputFieldState extends State<InputField> {
     return DropTarget(
       onDragEntered: (_) => setState(() {
         fileDragging = true;
-        dropZoneClosedInUI = false;
       }),
       onDragDone: (info) {
         showDeletebutton();
@@ -130,9 +133,7 @@ class InputFieldState extends State<InputField> {
             duration: animDuration,
             curve: Curves.decelerate,
             onEnd: () {
-              if (!fileDragging) {
-                setState(() => dropZoneClosedInUI = true);
-              }
+              setState(() => dropZoneClosedInUI = !fileDragging && uploadedFiles.isEmpty);
             },
             height: fileDragging || uploadedFiles.isNotEmpty ? dropZoneHeight : 0,
             width: double.infinity,
@@ -144,7 +145,7 @@ class InputFieldState extends State<InputField> {
               ),
             ),
             child: Center(
-              child: uploadedFiles.isEmpty
+              child: uploadedFiles.isEmpty && fileDragging
                   ? Text(
                       widget.client.getTranslation(
                         "lng_drag_files_here",
@@ -195,7 +196,7 @@ class InputFieldState extends State<InputField> {
                                     child: WidgetOpacityContoller(
                                       key: file.opacityKey,
                                       onEnd: () => setState(() {
-                                        uploadedFiles.removeAt(uploadedFiles.indexOf(file));
+                                        deleteFile(file);
                                         saveAttachments();
                                       }),
                                       duration: const Duration(milliseconds: 100),
@@ -204,7 +205,7 @@ class InputFieldState extends State<InputField> {
                                         borderRadius: BorderRadius.all(borderRadius),
                                         width: genericFilesWidth,
                                         height: box.maxHeight,
-                                        onDelete: () => deleteFile(file),
+                                        onDelete: () => setState(() => deleteFile(file)),
                                       ),
                                     ),
                                   ),
@@ -214,13 +215,13 @@ class InputFieldState extends State<InputField> {
                     ),
             ),
           ),
-          if (!dropZoneClosedInUI) SeparatorLine(),
+          if (!dropZoneClosedInUI || fileDragging) SeparatorLine(),
           Container(
             decoration: BoxDecoration(
               color: ClientTheme.currentTheme.getField("ChatInputFieldBackgroundColor"),
               borderRadius: BorderRadius.vertical(
                 bottom: borderRadius,
-                top: dropZoneClosedInUI && uploadedFiles.isEmpty ? borderRadius : Radius.zero,
+                top: dropZoneClosedInUI && uploadedFiles.isEmpty && !fileDragging ? borderRadius : Radius.zero,
               ),
             ),
             child: Padding(
@@ -231,20 +232,16 @@ class InputFieldState extends State<InputField> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  WidgetOpacityContoller(
-                    key: deleteButtonOpacityKey,
-                    opacity: 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: WidgetSizer(
-                      key: deleteButtonSizerKey,
+                  GestureDetector(
+                    onTap: () => clearFiles(),
+                    child: WidgetOpacityContoller(
+                      key: deleteButtonOpacityKey,
+                      opacity: 0,
                       duration: const Duration(milliseconds: 200),
-                      sizeOnInit: Size.zero,
-                      child: GestureDetector(
-                        onTap: () {
-                          for (var file in uploadedFiles) {
-                            deleteFile(file);
-                          }
-                        },
+                      child: WidgetSizer(
+                        key: deleteButtonSizerKey,
+                        duration: const Duration(milliseconds: 200),
+                        sizeOnInit: Size.zero,
                         child: Icon(
                           Icons.delete,
                           size: 36,
