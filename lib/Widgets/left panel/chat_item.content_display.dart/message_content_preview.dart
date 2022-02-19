@@ -58,7 +58,7 @@ class MessageContentPreview extends StatelessWidget {
               break;
 
             case MessageAnimatedEmoji:
-              displayContent.add(TextDisplay.emoji((content as MessageAnimatedEmoji).emoji!, TextDisplay.regular18));
+              displayContent.add(TextDisplay.emoji((content as MessageAnimatedEmoji).emoji!, style: TextDisplay.regular18));
               break;
 
             case MessageSticker:

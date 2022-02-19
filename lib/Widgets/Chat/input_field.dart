@@ -75,7 +75,6 @@ class InputFieldState extends State<InputField> {
       List<_AttachedFileInfo> validatedFiles = [];
       clientData.unsentAttachments.forEach((element) {
         if (io.File(element).existsSync()) {
-          print("add $element");
           validatedFiles.add(_AttachedFileInfo(element));
         }
       });
@@ -85,7 +84,7 @@ class InputFieldState extends State<InputField> {
     var iconColor = ClientTheme.currentTheme.getField("GenericUIIconsColor");
     var emojiPanelPlaceholderKey = GlobalKey();
     var borderRadius = const Radius.circular(16);
-    var dropZoneHeight = 156.0;
+    var dropZoneHeight = 180.0;
     var genericFilesWidth = 240.0;
 
     return DropTarget(
@@ -300,7 +299,7 @@ class _FileDisplay extends StatelessWidget {
   final BorderRadius borderRadius;
   final Function? onDelete;
 
-  Color get controllsBackColor => Colors.black.withOpacity(0.2);
+  Color get controllsBackColor => Colors.black.withOpacity(0.33);
 
   @override
   Widget build(BuildContext context) {
@@ -320,7 +319,8 @@ class _FileDisplay extends StatelessWidget {
               image: FileImage(
                 io.File(file),
               ),
-              fit: BoxFit.fitHeight,
+              //fit: BoxFit.cover,
+              height: height,
             ),
           )
         else
