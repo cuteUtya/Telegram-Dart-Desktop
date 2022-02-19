@@ -317,12 +317,11 @@ class _FileDisplay extends StatelessWidget {
             ),
           ),
         Positioned(
-          right: 2,
-          top: 2,
+          right: 10,
+          top: 10,
           child: GestureDetector(
             onTap: () => onDelete?.call(),
             child: Container(
-              margin: const EdgeInsets.all(8),
               padding: const EdgeInsets.all(2),
               child: const Icon(
                 Icons.close,
@@ -353,7 +352,25 @@ class _FileDisplay extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
+        Positioned(
+          left: 10,
+          top: 10,
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(6)),
+              color: controllsBackColor,
+            ),
+            child: Text(
+              ".${file.name.split(".").last}",
+              style: TextDisplay.create(
+                textColor: Colors.white,
+                size: 18,
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
