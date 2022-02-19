@@ -1,3 +1,7 @@
+import 'package:flutter/cupertino.dart';
+import 'package:myapp/Themes%20engine/theme_interpreter.dart';
+import 'package:path/path.dart';
+
 enum FileGroup {
   video,
   audio,
@@ -783,8 +787,16 @@ Map<String, FileGroup> _groups = {
   ".sys": FileGroup.sysFiles,
 };
 
+String getFileExtension(String fileName) => fileName.split(".").last;
+
 FileGroup getFileGroup(String fileName) {
-  var s = fileName.split(".");
-  var extension = ".${s[s.length - 1]}";
-  return _groups[extension] ?? FileGroup.unkown;
+  return _groups[".${getFileExtension(fileName)}"] ?? FileGroup.unkown;
+}
+
+Color getFileColor(String fileName) {
+  var ext = getFileExtension(fileName);
+  //filecadFilesColor:ref(fileunkownColor);
+  var color = ClientTheme.currentTheme.tryGetField("file|$ext|color");
+  color ??= ClientTheme.currentTheme.getField("file${getFileGroup(fileName).toString().split(".")[1]}Color");
+  return color;
 }

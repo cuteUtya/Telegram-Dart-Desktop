@@ -210,6 +210,14 @@ class ClientTheme {
     return value!;
   }
 
+  dynamic tryGetField(String name) {
+    try {
+      return getField(name);
+    } catch (x) {
+      //nope
+    }
+  }
+
   dynamic getField(String name) {
     var value = _getFieldString(name);
     if (isHEX(value)) return hexToColor(value);
