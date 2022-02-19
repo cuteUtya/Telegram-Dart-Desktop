@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:convert';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +6,11 @@ import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/emoji_input_panel.dart';
-import 'package:myapp/Widgets/smooth_desktop_list_view.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/file_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
-import 'package:cross_file/cross_file.dart';
 import 'dart:io' as io;
 
 class InputField extends StatefulWidget {
@@ -47,7 +45,7 @@ class InputFieldState extends State<InputField> {
     }
   }
 
-  final List<_AttachedFileInfo> uploadedFiles = [];
+  List<_AttachedFileInfo> uploadedFiles = [];
 
   bool fileDragging = false;
   bool dropZoneClosedInUI = true;
@@ -60,8 +58,28 @@ class InputFieldState extends State<InputField> {
 
   var animDuration = const Duration(milliseconds: 240);
 
+  void saveAttachments() {
+    var oldData = widget.client.getClientData(widget.chatId);
+    oldData.unsentAttachments = uploadedFiles.map((e) => e.filePath).toList();
+    widget.client.send(SetChatClientData(chatId: _chatId, clientData: json.encode(oldData)));
+  }
+
+  int _chatId = 0;
+
   @override
   Widget build(BuildContext context) {
+    var clientData = widget.client.getClientData(widget.chatId);
+    if (_chatId != widget.chatId) {
+      List<_AttachedFileInfo> validatedFiles = [];
+      clientData.unsentAttachments.forEach((element) {
+        if (io.File(element).existsSync()) {
+          print("add $element");
+          validatedFiles.add(_AttachedFileInfo(element));
+        }
+      });
+      setState(() => uploadedFiles = validatedFiles);
+    }
+    _chatId = widget.chatId;
     var iconColor = ClientTheme.currentTheme.getField("GenericUIIconsColor");
     var emojiPanelPlaceholderKey = GlobalKey();
     var borderRadius = const Radius.circular(16);
@@ -75,7 +93,8 @@ class InputFieldState extends State<InputField> {
       }),
       onDragDone: (info) {
         onFileDragEnd();
-        uploadedFiles.addAll(info.files.map((e) => _AttachedFileInfo(e)));
+        uploadedFiles.addAll(info.files.map((e) => _AttachedFileInfo(e.path)));
+        saveAttachments();
       },
       onDragExited: (_) => onFileDragEnd(),
       child: Column(
@@ -136,6 +155,7 @@ class InputFieldState extends State<InputField> {
                                 }
                                 var item = uploadedFiles.removeAt(oldIndex);
                                 uploadedFiles.insert(newIndex, item);
+                                saveAttachments();
                               });
                             },
                             children: [
@@ -147,10 +167,13 @@ class InputFieldState extends State<InputField> {
                                     margin: EdgeInsets.only(right: uploadedFiles.indexOf(file) == uploadedFiles.length ? 0 : 8),
                                     child: WidgetOpacityContoller(
                                       key: file.opacityKey,
-                                      onEnd: () => setState(() => uploadedFiles.removeAt(uploadedFiles.indexOf(file))),
+                                      onEnd: () => setState(() {
+                                        uploadedFiles.removeAt(uploadedFiles.indexOf(file));
+                                        saveAttachments();
+                                      }),
                                       duration: const Duration(milliseconds: 100),
                                       child: _FileDisplay(
-                                        file: file.file,
+                                        file: file.filePath,
                                         borderRadius: BorderRadius.all(borderRadius),
                                         width: genericFilesWidth,
                                         height: box.maxHeight,
@@ -270,14 +293,15 @@ class _FileDisplay extends StatelessWidget {
     this.borderRadius = BorderRadius.zero,
   }) : super(key: key);
 
-  final XFile file;
+  final String file;
   final double? height, width;
   final BorderRadius borderRadius;
   final Function? onDelete;
 
   @override
   Widget build(BuildContext context) {
-    var fileType = getFileGroup(file.name);
+    var fileType = getFileGroup(file);
+    var fileName = file.split(io.Platform.pathSeparator).last;
     var controllsBackColor = Colors.black.withOpacity(0.2);
     return Stack(
       alignment: Alignment.center,
@@ -287,7 +311,7 @@ class _FileDisplay extends StatelessWidget {
             borderRadius: borderRadius,
             child: Image(
               image: FileImage(
-                io.File(file.path),
+                io.File(file),
               ),
               fit: BoxFit.fitHeight,
             ),
@@ -297,7 +321,7 @@ class _FileDisplay extends StatelessWidget {
             height: height,
             width: width,
             decoration: BoxDecoration(
-              color: ClientTheme.currentTheme.getField("file${fileType.toString().split(".")[1]}Color"),
+              color: getFileColor(fileName),
               borderRadius: borderRadius,
             ),
           ),
@@ -343,7 +367,7 @@ class _FileDisplay extends StatelessWidget {
               margin: const EdgeInsets.all(8),
               padding: const EdgeInsets.only(right: 4),
               child: Text(
-                file.name,
+                fileName,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextDisplay.create(
@@ -363,7 +387,7 @@ class _FileDisplay extends StatelessWidget {
               color: controllsBackColor,
             ),
             child: Text(
-              ".${file.name.split(".").last}",
+              ".${fileName.split(".").last}",
               style: TextDisplay.create(
                 textColor: Colors.white,
                 size: 18,
@@ -377,9 +401,9 @@ class _FileDisplay extends StatelessWidget {
 }
 
 class _AttachedFileInfo {
-  _AttachedFileInfo(this.file) {
+  _AttachedFileInfo(this.filePath) {
     opacityKey = GlobalKey<WidgetOpacityContollerState>();
   }
-  XFile file;
+  String filePath;
   late GlobalKey<WidgetOpacityContollerState> opacityKey;
 }

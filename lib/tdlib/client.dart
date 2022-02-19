@@ -613,6 +613,14 @@ class TelegramClient {
   final List<Update> _cachedUpdates = [];
   bool _shouldSendUpdates = false;
 
+  ClientData getClientData(int chatId) {
+    var j = getChat(chatId);
+    if (j.clientData!.isEmpty) {
+      return ClientData();
+    }
+    return ClientData.fromJson(json.decode(j.clientData!));
+  }
+
   void startReceiveUpdates() {
     _shouldSendUpdates = true;
     for (var element in _cachedUpdates) {
@@ -835,6 +843,12 @@ class TelegramClient {
     _sendClient!.send(function);
     _requestsQueue[_extra] = _completer.complete;
     _extra++;
+
+    //why tdlib don't sents updates about changed client data?
+    if (function is SetChatClientData) {
+      _chats[function.chatId]?.clientData = function.clientData;
+    }
+
     return _completer.future;
   }
 }
@@ -847,4 +861,21 @@ void _tdlib_listen(SendPort isolateToMainStream) {
   client.incomingString().listen((update) {
     isolateToMainStream.send(update);
   });
+}
+
+class ClientData {
+  ClientData({this.unsentAttachments = const []});
+  List<String> unsentAttachments;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'unsentAttachments': unsentAttachments,
+    };
+  }
+
+  static ClientData fromJson(Map<String, dynamic> json) {
+    return ClientData(
+      unsentAttachments: (json['unsentAttachments'] as List).map((item) => item as String).toList(),
+    );
+  }
 }
