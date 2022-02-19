@@ -194,5 +194,7 @@ fileexecutableFilesColor:ref(fileunkownColor);
 filefontsFilesColor:ref(fileunkownColor);
 filesysFilesColor:ref(fileunkownColor);
 fileunkownColor: #bfbfbf;
-#adobe acrobat logo color#
 file|pdf|color: #B30B00;
+file|zip|color: #ECD36F;
+file|rar|color: #C3203C;
+file|apk|color: #43A047;
