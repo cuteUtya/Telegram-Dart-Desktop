@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:desktop_drop/desktop_drop.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
@@ -76,6 +77,14 @@ class InputFieldState extends State<InputField> {
     setState(() => uploadedFiles.clear());
   }
 
+  void attachFile(String path) {
+    setState(() {
+      uploadedFiles.add(_AttachedFileInfo(path));
+      showDeletebutton();
+      saveAttachments();
+    });
+  }
+
   void deleteFile(_AttachedFileInfo file) {
     file.opacityKey.currentState?.animateOpacity(0);
     uploadedFiles.remove(file);
@@ -83,7 +92,7 @@ class InputFieldState extends State<InputField> {
 
   void showDeletebutton() {
     deleteButtonOpacityKey.currentState?.animateOpacity(1);
-    deleteButtonSizerKey.currentState?.resize(Size(36, 36));
+    deleteButtonSizerKey.currentState?.resize(const Size(36, 36));
   }
 
   void hideDeleteButton() {
@@ -103,7 +112,8 @@ class InputFieldState extends State<InputField> {
       });
       setState(() => uploadedFiles = validatedFiles);
       if (validatedFiles.isNotEmpty) {
-        showDeletebutton();
+        /// on first open [deleteButtonSizerKey] was not be attached to any widget
+        Future.delayed(Duration.zero, () => showDeletebutton());
       }
     }
     _chatId = widget.chatId;
@@ -123,7 +133,9 @@ class InputFieldState extends State<InputField> {
       onDragDone: (info) {
         showDeletebutton();
         onFileDragEnd();
-        uploadedFiles.addAll(info.files.map((e) => _AttachedFileInfo(e.path)));
+        for (var e in info.files) {
+          attachFile(e.path);
+        }
         saveAttachments();
       },
       onDragExited: (_) => onFileDragEnd(),
@@ -250,10 +262,24 @@ class InputFieldState extends State<InputField> {
                       ),
                     ),
                   ),
-                  Icon(
-                    Icons.attach_file,
-                    color: iconColor,
-                    size: 36,
+                  GestureDetector(
+                    onTap: () {
+                      FilePicker.platform
+                          .pickFiles(
+                        dialogTitle: widget.client.getTranslation("lng_choose_file"),
+                        allowMultiple: true,
+                      )
+                          .then(
+                        (pick) {
+                          pick?.files.forEach((file) => attachFile(file.path!));
+                        },
+                      );
+                    },
+                    child: Icon(
+                      Icons.attach_file,
+                      color: iconColor,
+                      size: 36,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -262,8 +288,11 @@ class InputFieldState extends State<InputField> {
                       child: TextField(
                         controller: textController,
                         decoration: InputDecoration.collapsed(
-                            hintText: widget.client.getTranslation("lng_message_ph"),
-                            hintStyle: TextDisplay.create(textColor: ClientTheme.currentTheme.getField("InputFieldTextColor"))),
+                          hintText: widget.client.getTranslation("lng_message_ph"),
+                          hintStyle: TextDisplay.create(
+                            textColor: ClientTheme.currentTheme.getField("InputFieldTextColor"),
+                          ),
+                        ),
                         style: TextStyle(
                           fontSize: 20,
                           color: ClientTheme.currentTheme.getField("InputFieldTextColor"),
