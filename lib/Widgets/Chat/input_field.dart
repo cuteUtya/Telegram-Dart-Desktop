@@ -13,6 +13,8 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'dart:io' as io;
 
+import 'package:myapp/utils.dart';
+
 class InputField extends StatefulWidget {
   const InputField({
     Key? key,
@@ -84,7 +86,7 @@ class InputFieldState extends State<InputField> {
     var emojiPanelPlaceholderKey = GlobalKey();
     var borderRadius = const Radius.circular(16);
     var dropZoneHeight = 156.0;
-    var genericFilesWidth = 196.0;
+    var genericFilesWidth = 240.0;
 
     return DropTarget(
       onDragEntered: (_) => setState(() {
@@ -298,11 +300,16 @@ class _FileDisplay extends StatelessWidget {
   final BorderRadius borderRadius;
   final Function? onDelete;
 
+  Color get controllsBackColor => Colors.black.withOpacity(0.2);
+
   @override
   Widget build(BuildContext context) {
     var fileType = getFileGroup(file);
     var fileName = file.split(io.Platform.pathSeparator).last;
-    var controllsBackColor = Colors.black.withOpacity(0.2);
+    var textStyle = TextDisplay.create(
+      textColor: Colors.white,
+      size: 18,
+    );
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -380,21 +387,35 @@ class _FileDisplay extends StatelessWidget {
         Positioned(
           left: 10,
           top: 10,
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(6)),
-              color: controllsBackColor,
-            ),
-            child: Text(
-              ".${fileName.split(".").last}",
-              style: TextDisplay.create(
-                textColor: Colors.white,
-                size: 18,
-              ),
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+                    color: controllsBackColor,
+                  ),
+                  child: Text(
+                    ".${fileName.split(".").last}",
+                    style: textStyle,
+                  )),
+              Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(bottom: Radius.circular(6)),
+                    color: controllsBackColor,
+                  ),
+                  child: FutureBuilder(
+                    future: io.File(file).length(),
+                    builder: (_, data) => Text(
+                      data.hasData ? bytesToSize(data.data as int) : "? KB",
+                      style: textStyle,
+                    ),
+                  )),
+            ],
           ),
-        )
+        ),
       ],
     );
   }

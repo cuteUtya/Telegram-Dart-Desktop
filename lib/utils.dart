@@ -42,7 +42,7 @@ double lerp(double a, double b, double t) {
 }
 
 String bytesToSize(int bytes) {
-  var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   if (bytes == 0) return '0 Byte';
   var i = (log(bytes) / log(1024)).floor().toInt();
   return "${(bytes / pow(1024, i)).toStringAsFixed(2)} ${sizes[i]}";
