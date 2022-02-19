@@ -29,7 +29,7 @@ class ReplieDisplay extends StatelessWidget {
   Widget _build() {
     var color = inlineStyle ? null : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
     return Container(
-      margin: const EdgeInsets.only(bottom: 4, top: 8),
+      margin: EdgeInsets.only(bottom: inlineStyle ? 4 : 2, top: inlineStyle ? 8 : 4),
       padding: const EdgeInsets.only(left: 8, top: 4, bottom: 4),
       decoration: BoxDecoration(
         border: Border(
