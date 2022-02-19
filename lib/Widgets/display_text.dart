@@ -36,16 +36,12 @@ class TextDisplay {
   static TextStyle get chatItemAccent => create(size: 18, textColor: ClientTheme.currentTheme.getField("Accent"));
   static TextStyle get chatItemAccentSelected => create(size: 18, textColor: Colors.white);
 
-  static InlineSpan emoji(String emoji, TextStyle style) {
+  static TextSpan emoji(String emoji, {TextStyle? style}) {
+    style ??= const TextStyle();
     return TextSpan(
       text: emoji,
-      style: TextStyle(
-        fontWeight: style.fontWeight,
-        color: style.color,
+      style: style.copyWith(
         fontFamily: getEmojiFont(),
-        fontSize: style.fontSize,
-        shadows: style.shadows,
-        decoration: style.decoration,
       ),
     );
   }

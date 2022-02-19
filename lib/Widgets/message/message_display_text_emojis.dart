@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
@@ -44,12 +45,12 @@ class MessageDisplayTextEmojis extends StatelessWidget {
                   ),
               ],
             ),
-          Text.rich(
+          CopyableText(
             TextDisplay.emoji(
               emojis,
-              const TextStyle(
-                fontSize: 40,
-              ),
+            ),
+            style: const TextStyle(
+              fontSize: 40,
             ),
           ),
           if (infoSide == Side.right)
