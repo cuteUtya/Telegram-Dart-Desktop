@@ -54,15 +54,17 @@ class _RemoteFileBuilderProgressState extends State<RemoteFileBuilderProgress> {
     }
 
     _streamSubscription = widget.client.fileUpdates(widget.fileId).listen((event) {
-      processFile(event);
-      widget.client.send(
-        DownloadFile(
-          fileId: widget.fileId,
-          priority: widget.downloadPriority,
-          synchronous: false,
-          limit: event.local!.downloadedSize! + widget.downloadStep,
-        ),
-      );
+      if (event is! TdError) {
+        processFile(event);
+        widget.client.send(
+          DownloadFile(
+            fileId: widget.fileId,
+            priority: widget.downloadPriority,
+            synchronous: false,
+            limit: event.local!.downloadedSize! + widget.downloadStep,
+          ),
+        );
+      }
     });
   }
 
