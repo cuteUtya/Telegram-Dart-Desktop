@@ -75,6 +75,7 @@ class InputFieldState extends State<InputField> {
 
   void clearFiles() {
     setState(() => uploadedFiles.clear());
+    saveAttachments();
   }
 
   void attachFile(String path) {
