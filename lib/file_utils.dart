@@ -801,4 +801,6 @@ Color getFileColor(String fileName) {
   return color;
 }
 
-IconData? getFileIcon(String fileExtension) => ClientTheme.currentTheme.tryGetField("file|$fileExtension|icon");
+IconData? getFileIcon(String fileExtension, {FileGroup? group}) =>
+    ClientTheme.currentTheme.tryGetField("file|$fileExtension|icon") ??
+    ClientTheme.currentTheme.tryGetField("file|${group.toString().split(".").last}|icon_group");

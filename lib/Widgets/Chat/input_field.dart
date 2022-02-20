@@ -412,7 +412,7 @@ class _FileDisplay extends StatelessWidget {
               ),
             ),
             child: Icon(
-              getFileIcon(fileExtension) ?? Icons.file_copy,
+              getFileIcon(fileExtension, group: fileType) ?? Icons.file_copy,
               color: Colors.white,
             ),
           ),

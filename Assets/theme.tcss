@@ -179,6 +179,7 @@ fileColorsValue: 85;
 filevideoColor:ref(fileunkownColor);
 fileaudioColor:         hsv(196, ref(fileColorsSaturation), ref(fileColorsValue));
 fileebooksColor:        hsv(121, ref(fileColorsSaturation), ref(fileColorsValue));
+file|ebooks|icon_group: Icons.book;
 filetextColor:          hsv(225, ref(fileColorsSaturation), ref(fileColorsValue));
 filediskISOColor:ref(fileunkownColor);
 filetablesColor:        hsv(146, ref(fileColorsSaturation), ref(fileColorsValue));
