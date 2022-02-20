@@ -374,6 +374,7 @@ class _FileDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     var fileType = getFileGroup(file);
     var fileName = file.split(io.Platform.pathSeparator).last;
+    var fileExtension = fileName.split(".").last;
     var textStyle = TextDisplay.create(
       textColor: Colors.white,
       size: 18,
@@ -410,8 +411,8 @@ class _FileDisplay extends StatelessWidget {
                 Radius.circular(48),
               ),
             ),
-            child: const Icon(
-              Icons.file_copy,
+            child: Icon(
+              getFileIcon(fileExtension) ?? Icons.file_copy,
               color: Colors.white,
             ),
           ),
@@ -465,7 +466,7 @@ class _FileDisplay extends StatelessWidget {
                     color: controllsBackColor,
                   ),
                   child: Text(
-                    ".${fileName.split(".").last}",
+                    ".$fileExtension",
                     style: textStyle,
                   )),
               Container(

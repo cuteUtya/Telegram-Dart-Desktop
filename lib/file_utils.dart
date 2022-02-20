@@ -800,3 +800,5 @@ Color getFileColor(String fileName) {
   color ??= ClientTheme.currentTheme.getField("file${getFileGroup(fileName).toString().split(".")[1]}Color");
   return color;
 }
+
+IconData? getFileIcon(String fileExtension) => ClientTheme.currentTheme.tryGetField("file|$fileExtension|icon");

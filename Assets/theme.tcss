@@ -196,6 +196,8 @@ filefontsFilesColor:ref(fileunkownColor);
 filesysFilesColor:ref(fileunkownColor);
 fileunkownColor: #bfbfbf;
 file|pdf|color: #B30B00;
+file|pdf|icon: Icons.picture_as_pdf;
 file|zip|color: #ECD36F;
+file|zip|icon: Icons.folder_zip;
 file|rar|color: #C3203C;
 file|apk|color: #43A047;
