@@ -263,8 +263,11 @@ class InputFieldState extends State<InputField> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
+                  ButtonIcon(
+                    Icons.attach_file,
+                    color: iconColor,
+                    size: 36,
+                    onClick: () {
                       FilePicker.platform
                           .pickFiles(
                         dialogTitle: widget.client.getTranslation("lng_choose_file"),
@@ -276,11 +279,6 @@ class InputFieldState extends State<InputField> {
                         },
                       );
                     },
-                    child: ButtonIcon(
-                      Icons.attach_file,
-                      color: iconColor,
-                      size: 36,
-                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
