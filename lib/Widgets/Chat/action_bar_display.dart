@@ -51,13 +51,12 @@ class ActionBarDisplay extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             if (supergroup?.isChannel ?? false)
-              Text(
-                  client.getTranslation(
-                    "lng_chat_status_subscribers",
-                    replacing: {"{count}": (supergroup?.memberCount ?? 0).toString()},
-                    itemsCount: supergroup?.memberCount ?? 0,
-                  ),
-                  style: TextDisplay.actionBarOffline)
+              client.buildTextByKey(
+                "lng_chat_status_subscribers",
+                TextDisplay.actionBarOffline,
+                replacing: {"{count}": (supergroup?.memberCount ?? 0).toString()},
+                itemsCount: supergroup?.memberCount ?? 0,
+              )
             else if (user?.status != null)
               StreamBuilder(
                 key: UniqueKey(),
@@ -72,19 +71,17 @@ class ActionBarDisplay extends StatelessWidget {
                 stream: client.onlineMemebersIn(chat.id!),
                 builder: (_, data) {
                   var onlineCount = (data.data ?? 0) as int;
-                  return Text(
-                    client.getTranslation(
-                      onlineCount > 0 ? "lng_chat_status_members_online" : "lng_chat_status_members",
-                      itemsCount: onlineCount,
-                      replacing: {
-                        "{count}": membersCount.toString(),
-                        "{members_count}": client.getTranslation("lng_channel_members_link",
-                            replacing: {"{count}": membersCount.toString()}, itemsCount: membersCount),
-                        "{online_count}": client.getTranslation("lng_chat_status_online",
-                            replacing: {"{count}": onlineCount.toString()}, itemsCount: onlineCount),
-                      },
-                    ),
-                    style: TextDisplay.actionBarOffline,
+                  return client.buildTextByKey(
+                    onlineCount > 0 ? "lng_chat_status_members_online" : "lng_chat_status_members",
+                    TextDisplay.actionBarOffline,
+                    itemsCount: onlineCount,
+                    replacing: {
+                      "{count}": membersCount.toString(),
+                      "{members_count}": client.getTranslation("lng_channel_members_link",
+                          replacing: {"{count}": membersCount.toString()}, itemsCount: membersCount),
+                      "{online_count}": client.getTranslation("lng_chat_status_online",
+                          replacing: {"{count}": onlineCount.toString()}, itemsCount: onlineCount),
+                    },
                   );
                 },
               ),

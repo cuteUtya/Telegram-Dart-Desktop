@@ -298,11 +298,14 @@ class TelegramClient {
   String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
 
-  @Deprecated("will be removed in future. Use Text(client.getTransition(\"key\", replacing: {...}), style: style)")
-  Widget buildTextByKey(String key, TextStyle style, {Map<String, String>? replacing, String? languagePackId}) {
+  Widget buildTextByKey(String key, TextStyle style, {Map<String, String>? replacing, String? languagePackId, int? itemsCount}) {
     languagePackId ??= userLangPackId;
 
-    String text = getTranslation(key, replacing: replacing);
+    String text = getTranslation(
+      key,
+      replacing: replacing,
+      itemsCount: itemsCount,
+    );
 
     return Text(text, style: style);
   }

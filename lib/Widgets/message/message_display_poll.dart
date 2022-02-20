@@ -70,19 +70,17 @@ class _MessageDisplayPollState extends State<MessageDisplayPoll> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  widget.client.getTranslation(
-                    poll.isClosed!
-                        ? "lng_polls_closed"
-                        : poll.isAnonymous!
-                            ? poll.type is PollTypeQuiz
-                                ? "lng_polls_anonymous_quiz"
-                                : "lng_polls_anonymous"
-                            : poll.type is PollTypeQuiz
-                                ? "lng_polls_public_quiz"
-                                : "lng_polls_public",
-                  ),
-                  style: TextDisplay.create(
+                widget.client.buildTextByKey(
+                  poll.isClosed!
+                      ? "lng_polls_closed"
+                      : poll.isAnonymous!
+                          ? poll.type is PollTypeQuiz
+                              ? "lng_polls_anonymous_quiz"
+                              : "lng_polls_anonymous"
+                          : poll.type is PollTypeQuiz
+                              ? "lng_polls_public_quiz"
+                              : "lng_polls_public",
+                  TextDisplay.create(
                     size: 18,
                   ),
                 ),
@@ -151,11 +149,9 @@ class _MessageDisplayPollState extends State<MessageDisplayPoll> {
                     child: SizedBox(
                       width: box.maxWidth * 0.5,
                       child: Center(
-                        child: Text(
-                          widget.client.getTranslation(
-                            isAnswered ? "lng_polls_view_results" : "lng_polls_submit_votes",
-                          ),
-                          style: TextDisplay.create(
+                        child: widget.client.buildTextByKey(
+                          isAnswered ? "lng_polls_view_results" : "lng_polls_submit_votes",
+                          TextDisplay.create(
                             size: 18,
                           ),
                         ),
