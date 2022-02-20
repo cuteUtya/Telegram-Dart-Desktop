@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myapp/Themes%20engine/icons_deserializator.dart';
 
 class LangFunction {
   late String funcName;
@@ -221,6 +222,7 @@ class ClientTheme {
   dynamic getField(String name) {
     var value = _getFieldString(name);
     if (isHEX(value)) return hexToColor(value);
+    if (isIcon(value)) return getIconByName(value.split("Icons.").last) ?? value;
     return value;
   }
 
@@ -363,7 +365,11 @@ class ClientTheme {
     return value;
   }
 
-  static isHEX(String hex) {
+  static bool isIcon(String input) {
+    return RegExp(r"Icons\.(.{1,})").hasMatch(input);
+  }
+
+  static bool isHEX(String hex) {
     return RegExp("#[a-fA-F0-9]{4,6}").hasMatch(hex);
   }
 
