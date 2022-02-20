@@ -36,7 +36,6 @@ class InputFieldState extends State<InputField> {
 
   void sendMessage() {
     if (inputValue.isNotEmpty) {
-      textController.clear();
       widget.client.send(
         SendMessage(
           chatId: widget.chatId,
@@ -47,6 +46,8 @@ class InputFieldState extends State<InputField> {
           ),
         ),
       );
+      textController.clear();
+      inputValue = "";
     }
   }
 
