@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/State managment/ui_events.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/Widgets/button_icon.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
@@ -29,7 +30,7 @@ class LeftPanel extends StatelessWidget {
             Row(mainAxisSize: MainAxisSize.max, children: [
               const SizedBox(width: 12),
               //Settings icon
-              Icon(
+              ButtonIcon(
                 Icons.menu,
                 size: 36,
                 color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),

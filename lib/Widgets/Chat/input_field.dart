@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
+import 'package:myapp/Widgets/button_icon.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/emoji_input_panel.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
@@ -245,21 +246,19 @@ class InputFieldState extends State<InputField> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  GestureDetector(
-                    onTap: () => clearFiles(),
-                    child: WidgetOpacityContoller(
-                      key: deleteButtonOpacityKey,
-                      opacity: 0,
+                  WidgetOpacityContoller(
+                    key: deleteButtonOpacityKey,
+                    opacity: 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: WidgetSizer(
+                      key: deleteButtonSizerKey,
                       duration: const Duration(milliseconds: 200),
-                      child: WidgetSizer(
-                        key: deleteButtonSizerKey,
-                        duration: const Duration(milliseconds: 200),
-                        sizeOnInit: Size.zero,
-                        child: Icon(
-                          Icons.delete,
-                          size: 36,
-                          color: ClientTheme.currentTheme.getField("DropZoneClearAllButtonColor"),
-                        ),
+                      sizeOnInit: Size.zero,
+                      child: ButtonIcon(
+                        Icons.delete,
+                        size: 36,
+                        color: ClientTheme.currentTheme.getField("DropZoneClearAllButtonColor"),
+                        onClick: () => clearFiles(),
                       ),
                     ),
                   ),
@@ -276,7 +275,7 @@ class InputFieldState extends State<InputField> {
                         },
                       );
                     },
-                    child: Icon(
+                    child: ButtonIcon(
                       Icons.attach_file,
                       color: iconColor,
                       size: 36,
@@ -330,7 +329,7 @@ class InputFieldState extends State<InputField> {
                         Container(
                           key: emojiPanelPlaceholderKey,
                         ),
-                        Icon(
+                        ButtonIcon(
                           Icons.emoji_emotions_outlined,
                           color: iconColor,
                           size: 36,
@@ -339,13 +338,11 @@ class InputFieldState extends State<InputField> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  GestureDetector(
-                    onTap: () => sendMessage(),
-                    child: Icon(
-                      Icons.send,
-                      color: iconColor,
-                      size: 36,
-                    ),
+                  ButtonIcon(
+                    Icons.send,
+                    color: iconColor,
+                    size: 36,
+                    onClick: () => sendMessage(),
                   ),
                 ],
               ),
@@ -392,7 +389,6 @@ class _FileDisplay extends StatelessWidget {
               image: FileImage(
                 io.File(file),
               ),
-              //fit: BoxFit.cover,
               height: height,
             ),
           )
