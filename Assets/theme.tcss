@@ -205,4 +205,4 @@ file|apk|color: #43A047;
 
 ReactionsInChatlistBackgroundColor: #d02a2a;
 ReactionsInChatListIconColor: #FFFFFF;
-ReactionsInChatListIcon: Icons.favorite_outline;
+ReactionsInChatListIcon: Icons.favorite;
