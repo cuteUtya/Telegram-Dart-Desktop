@@ -166,27 +166,69 @@ class ChatItemDisplay extends StatelessWidget {
                         ),
                       ],
                     ),
-          unreadPlaceHolder: StreamBuilder(
-            initialData: chat.unreadCount,
-            stream: client.unreadCountOf(chatId),
-            builder: (context, data) {
-              if (data.hasData) {
-                chat.unreadCount = data.data as int;
-              }
-              return StreamBuilder(
-                initialData: chat.unreadMentionCount,
-                stream: client.unreadMentionCountOf(chat.id!),
-                builder: (context, data1) {
-                  if (data.hasData) {
-                    chat.unreadMentionCount = (data1.data as int);
-                  }
-                  return UnreadCountBubble(
-                    count: chat.unreadCount!,
-                    important: (chat.unreadMentionCount ?? 0) != 0,
+          unreadPlaceHolder: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              StreamBuilder<int>(
+                initialData: chat.unreadReactionCount!,
+                stream: client.unreadReactionsIn(chatId),
+                builder: (_, data) {
+                  if ((data.data as int) <= 0) return const SizedBox.shrink();
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(16),
+                      ),
+                      color: ClientTheme.currentTheme.getField("ReactionsInChatlistBackgroundColor"),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          ClientTheme.currentTheme.getField("ReactionsInChatListIcon"),
+                          color: ClientTheme.currentTheme.getField("ReactionsInChatListIconColor"),
+                          size: 18,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          data.data.toString(),
+                          style: TextDisplay.create(
+                            textColor: Colors.white,
+                            size: 18,
+                          ),
+                        )
+                      ],
+                    ),
                   );
                 },
-              );
-            },
+              ),
+              StreamBuilder(
+                initialData: chat.unreadCount,
+                stream: client.unreadCountOf(chatId),
+                builder: (context, data) {
+                  if (data.hasData) {
+                    chat.unreadCount = data.data as int;
+                  }
+                  return StreamBuilder(
+                    initialData: chat.unreadMentionCount,
+                    stream: client.unreadMentionCountOf(chat.id!),
+                    builder: (context, data1) {
+                      if (data.hasData) {
+                        chat.unreadMentionCount = (data1.data as int);
+                      }
+                      return Container(
+                        margin: EdgeInsets.only(left: chat.unreadCount! > 0 ? 4 : 0),
+                        child: UnreadCountBubble(
+                          count: chat.unreadCount!,
+                          important: (chat.unreadMentionCount ?? 0) != 0,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
           ),
           content: Expanded(
             child: Padding(

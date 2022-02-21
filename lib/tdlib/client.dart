@@ -132,8 +132,8 @@ class TelegramClient {
   Stream<UpdateFileGenerationStart> get updateFileGenerationStart =>
       updates.where((u) => u is UpdateFileGenerationStart).map((a) => (a as UpdateFileGenerationStart));
 
-  Stream<UpdateFileGenerationStop> get updateFileGenerationStop =>
-      updates.where((u) => u is UpdateFileGenerationStop).map((a) => (a as UpdateFileGenerationStop));
+  Stream<UpdateChatUnreadReactionCount> get _updateChatUnreadReactionCount =>
+      updates.where((u) => u is UpdateChatUnreadReactionCount).map((a) => (a as UpdateChatUnreadReactionCount));
 
   Stream<GroupCall> get updateGroupCall =>
       updates.where((u) => u is UpdateGroupCall).map((a) => (a as UpdateGroupCall).groupCall!);
@@ -497,6 +497,14 @@ class TelegramClient {
     await for (final update in _updateAnimatedEmojiMessageClicked) {
       if (update.chatId == chatId && update.messageId == messageId) {
         yield update;
+      }
+    }
+  }
+
+  Stream<int> unreadReactionsIn(int chatId) async* {
+    await for (final update in _updateChatUnreadReactionCount) {
+      if (update.chatId == chatId) {
+        yield update.unreadReactionCount!;
       }
     }
   }
