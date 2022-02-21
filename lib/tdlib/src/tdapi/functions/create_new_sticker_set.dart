@@ -6,7 +6,6 @@ class CreateNewStickerSet extends TdFunction {
   CreateNewStickerSet({this.userId,
     this.title,
     this.name,
-    this.isMasks,
     this.stickers,
     this.source});
 
@@ -19,10 +18,7 @@ class CreateNewStickerSet extends TdFunction {
   /// [name] Sticker set name. Can contain only English letters, digits and underscores. Must end with *"_by_
   String? name;
 
-  /// [isMasks] True, if stickers are masks. Animated stickers can't be masks
-  bool? isMasks;
-
-  /// [stickers] List of stickers to be added to the set; must be non-empty. All stickers must be of the same type. For animated stickers, uploadStickerFile must be used before the sticker is shown
+  /// [stickers] List of stickers to be added to the set; must be non-empty. All stickers must have the same format. For TGS stickers, uploadStickerFile must be used before the sticker is shown
   List<InputSticker>? stickers;
 
   /// [source] Source of the sticker set; may be empty if unknown
@@ -41,7 +37,6 @@ class CreateNewStickerSet extends TdFunction {
       "user_id": userId,
       "title": title,
       "name": name,
-      "is_masks": isMasks,
       "stickers": stickers?.map((i) => i.toJson()).toList(),
       "source": source,
       "@extra": extra,

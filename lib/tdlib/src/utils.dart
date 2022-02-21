@@ -6,16 +6,12 @@ import "package:path/path.dart" as path;
 /// containing the TDLib JSON client, given the name of its containing directory
 /// (`dlPath`). If the platform is not supported an [Exception] is thrown.
 String platformPath(String dlPath) {
-  var libName = "tdjson";
-  if (Platform.isLinux || Platform.isAndroid) {
+  final libName = "tdjson";
+  if (Platform.isLinux || Platform.isAndroid)
     return path.join(dlPath, "lib$libName.so");
-  }
-  if (Platform.isMacOS || Platform.isIOS) {
+  if (Platform.isMacOS || Platform.isIOS)
     return path.join(dlPath, "lib$libName.dylib");
-  }
-  if (Platform.isWindows) {
-    return path.join(dlPath, "$libName.dll");
-  }
+  if (Platform.isWindows) return path.join(dlPath, "$libName.dll");
   throw Exception("Platform Not Supported: ${Platform.operatingSystem}");
 }
 

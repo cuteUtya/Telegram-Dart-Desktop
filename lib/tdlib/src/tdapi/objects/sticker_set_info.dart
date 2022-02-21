@@ -11,8 +11,7 @@ class StickerSetInfo extends TdObject {
     this.isInstalled,
     this.isArchived,
     this.isOfficial,
-    this.isAnimated,
-    this.isMasks,
+    this.stickerType,
     this.isViewed,
     this.size,
     this.covers});
@@ -26,7 +25,7 @@ class StickerSetInfo extends TdObject {
   /// [name] Name of the sticker set 
   String? name;
 
-  /// [thumbnail] Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null
+  /// [thumbnail] Sticker set thumbnail in WEBP, TGS, or WEBM format with width and height 100; may be null
   Thumbnail? thumbnail;
 
   /// [thumbnailOutline] Sticker set thumbnail's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner
@@ -41,11 +40,8 @@ class StickerSetInfo extends TdObject {
   /// [isOfficial] True, if the sticker set is official
   bool? isOfficial;
 
-  /// [isAnimated] True, is the stickers in the set are animated 
-  bool? isAnimated;
-
-  /// [isMasks] True, if the stickers in the set are masks 
-  bool? isMasks;
+  /// [stickerType] Type of the stickers in the set 
+  StickerType? stickerType;
 
   /// [isViewed] True for already viewed trending sticker sets
   bool? isViewed;
@@ -66,8 +62,7 @@ class StickerSetInfo extends TdObject {
     isInstalled = json['is_installed'] == null ? null : json['is_installed'];
     isArchived = json['is_archived'] == null ? null : json['is_archived'];
     isOfficial = json['is_official'] == null ? null : json['is_official'];
-    isAnimated = json['is_animated'] == null ? null : json['is_animated'];
-    isMasks = json['is_masks'] == null ? null : json['is_masks'];
+    stickerType = json['sticker_type'] == null ? null : StickerType.fromJson(json['sticker_type'] ?? <String, dynamic>{});
     isViewed = json['is_viewed'] == null ? null : json['is_viewed'];
     size = json['size'] == null ? null : json['size'];
     covers = json['covers'] == null ? null : List<Sticker>.from((json['covers'] ?? [])!.map((item) => Sticker.fromJson(item ?? <String, dynamic>{})).toList());
@@ -85,8 +80,7 @@ class StickerSetInfo extends TdObject {
       "is_installed": isInstalled,
       "is_archived": isArchived,
       "is_official": isOfficial,
-      "is_animated": isAnimated,
-      "is_masks": isMasks,
+      "sticker_type": stickerType == null ? null : stickerType?.toJson(),
       "is_viewed": isViewed,
       "size": size,
       "covers": covers?.map((i) => i.toJson()).toList(),

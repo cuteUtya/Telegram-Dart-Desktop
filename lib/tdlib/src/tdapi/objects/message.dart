@@ -15,6 +15,7 @@ class Message extends TdObject {
     this.canBeSaved,
     this.canBeDeletedOnlyForSelf,
     this.canBeDeletedForAllUsers,
+    this.canGetAddedReactions,
     this.canGetStatistics,
     this.canGetMessageThread,
     this.canGetViewers,
@@ -26,6 +27,7 @@ class Message extends TdObject {
     this.editDate,
     this.forwardInfo,
     this.interactionInfo,
+    this.unreadReactions,
     this.replyInChatId,
     this.replyToMessageId,
     this.messageThreadId,
@@ -74,16 +76,19 @@ class Message extends TdObject {
   /// [canBeDeletedForAllUsers] True, if the message can be deleted for all users
   bool? canBeDeletedForAllUsers;
 
-  /// [canGetStatistics] True, if the message statistics are available
+  /// [canGetAddedReactions] True, if the list of added reactions is available through getMessageAddedReactions
+  bool? canGetAddedReactions;
+
+  /// [canGetStatistics] True, if the message statistics are available through getMessageStatistics
   bool? canGetStatistics;
 
-  /// [canGetMessageThread] True, if the message thread info is available
+  /// [canGetMessageThread] True, if the message thread info is available through getMessageThread
   bool? canGetMessageThread;
 
   /// [canGetViewers] True, if chat members already viewed the message can be received through getMessageViewers
   bool? canGetViewers;
 
-  /// [canGetMediaTimestampLinks] True, if media timestamp links can be generated for media timestamp entities in the message text, caption or web page description
+  /// [canGetMediaTimestampLinks] True, if media timestamp links can be generated for media timestamp entities in the message text, caption or web page description through getMessageLink
   bool? canGetMediaTimestampLinks;
 
   /// [hasTimestampedMedia] True, if media timestamp entities refers to a media in this message as opposed to a media in the replied message
@@ -106,6 +111,9 @@ class Message extends TdObject {
 
   /// [interactionInfo] Information about interactions with the message; may be null
   MessageInteractionInfo? interactionInfo;
+
+  /// [unreadReactions] Information about unread reactions added to the message
+  List<UnreadReaction>? unreadReactions;
 
   /// [replyInChatId] If non-zero, the identifier of the chat to which the replied message belongs; Currently, only messages in the Replies chat can have different reply_in_chat_id and chat_id
   int? replyInChatId;
@@ -157,6 +165,7 @@ class Message extends TdObject {
     canBeSaved = json['can_be_saved'] == null ? null : json['can_be_saved'];
     canBeDeletedOnlyForSelf = json['can_be_deleted_only_for_self'] == null ? null : json['can_be_deleted_only_for_self'];
     canBeDeletedForAllUsers = json['can_be_deleted_for_all_users'] == null ? null : json['can_be_deleted_for_all_users'];
+    canGetAddedReactions = json['can_get_added_reactions'] == null ? null : json['can_get_added_reactions'];
     canGetStatistics = json['can_get_statistics'] == null ? null : json['can_get_statistics'];
     canGetMessageThread = json['can_get_message_thread'] == null ? null : json['can_get_message_thread'];
     canGetViewers = json['can_get_viewers'] == null ? null : json['can_get_viewers'];
@@ -168,6 +177,7 @@ class Message extends TdObject {
     editDate = json['edit_date'] == null ? null : json['edit_date'];
     forwardInfo = json['forward_info'] == null ? null : MessageForwardInfo.fromJson(json['forward_info'] ?? <String, dynamic>{});
     interactionInfo = json['interaction_info'] == null ? null : MessageInteractionInfo.fromJson(json['interaction_info'] ?? <String, dynamic>{});
+    unreadReactions = json['unread_reactions'] == null ? null : List<UnreadReaction>.from((json['unread_reactions'] ?? [])!.map((item) => UnreadReaction.fromJson(item ?? <String, dynamic>{})).toList());
     replyInChatId = json['reply_in_chat_id'] == null ? null : json['reply_in_chat_id'];
     replyToMessageId = json['reply_to_message_id'] == null ? null : json['reply_to_message_id'];
     messageThreadId = json['message_thread_id'] == null ? null : json['message_thread_id'];
@@ -198,6 +208,7 @@ class Message extends TdObject {
       "can_be_saved": canBeSaved,
       "can_be_deleted_only_for_self": canBeDeletedOnlyForSelf,
       "can_be_deleted_for_all_users": canBeDeletedForAllUsers,
+      "can_get_added_reactions": canGetAddedReactions,
       "can_get_statistics": canGetStatistics,
       "can_get_message_thread": canGetMessageThread,
       "can_get_viewers": canGetViewers,
@@ -209,6 +220,7 @@ class Message extends TdObject {
       "edit_date": editDate,
       "forward_info": forwardInfo == null ? null : forwardInfo?.toJson(),
       "interaction_info": interactionInfo == null ? null : interactionInfo?.toJson(),
+      "unread_reactions": unreadReactions?.map((i) => i.toJson()).toList(),
       "reply_in_chat_id": replyInChatId,
       "reply_to_message_id": replyToMessageId,
       "message_thread_id": messageThreadId,

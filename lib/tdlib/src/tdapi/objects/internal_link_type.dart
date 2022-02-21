@@ -845,7 +845,7 @@ class InternalLinkTypeUnsupportedProxy extends InternalLinkType {
 
 class InternalLinkTypeVideoChat extends InternalLinkType {
 
-  /// The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGoupCall with the given invite hash to process the link
+  /// The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGroupCall with the given invite hash to process the link
   InternalLinkTypeVideoChat({this.chatUsername,
     this.inviteHash,
     this.isLiveStream});

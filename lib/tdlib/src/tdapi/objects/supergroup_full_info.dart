@@ -76,7 +76,7 @@ class SupergroupFullInfo extends TdObject {
   /// [location] Location to which the supergroup is connected; may be null
   ChatLocation? location;
 
-  /// [inviteLink] Primary invite link for this chat; may be null. For chat administrators with can_invite_users right only
+  /// [inviteLink] Primary invite link for the chat; may be null. For chat administrators with can_invite_users right only
   ChatInviteLink? inviteLink;
 
   /// [botCommands] List of commands of bots in the group

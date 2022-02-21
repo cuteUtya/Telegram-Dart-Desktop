@@ -1,17 +1,14 @@
 part of '../tdapi.dart';
 
 class VectorPathCommand extends TdObject {
-
   /// Represents a vector path command
   VectorPathCommand();
-
-  
 
   /// a VectorPathCommand return type can be :
   /// * VectorPathCommandLine
   /// * VectorPathCommandCubicBezierCurve
-  factory VectorPathCommand.fromJson(Map<String, dynamic> json)  {
-    switch(json["@type"]) {
+  factory VectorPathCommand.fromJson(Map<String, dynamic> json) {
+    switch (json["@type"]) {
       case VectorPathCommandLine.CONSTRUCTOR:
         return VectorPathCommandLine.fromJson(json);
       case VectorPathCommandCubicBezierCurve.CONSTRUCTOR:
@@ -22,19 +19,16 @@ class VectorPathCommand extends TdObject {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      
-    };
+    return {};
   }
 
   static const CONSTRUCTOR = 'vectorPathCommand';
-  
+
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class VectorPathCommandLine extends VectorPathCommand {
-
   /// A straight line to a given point
   VectorPathCommandLine({this.endPoint});
 
@@ -42,7 +36,7 @@ class VectorPathCommandLine extends VectorPathCommand {
   Point? endPoint;
 
   /// Parse from a json
-  VectorPathCommandLine.fromJson(Map<String, dynamic> json)  {
+  VectorPathCommandLine.fromJson(Map<String, dynamic> json) {
     endPoint = json['end_point'] == null ? null : Point.fromJson(json['end_point'] ?? <String, dynamic>{});
   }
 
@@ -55,30 +49,28 @@ class VectorPathCommandLine extends VectorPathCommand {
   }
 
   static const CONSTRUCTOR = 'vectorPathCommandLine';
-  
+
   @override
   String getConstructor() => CONSTRUCTOR;
 }
 
 class VectorPathCommandCubicBezierCurve extends VectorPathCommand {
-
   /// A cubic B?zier curve to a given point
-  VectorPathCommandCubicBezierCurve({this.startControlPoint,
-    this.endControlPoint,
-    this.endPoint});
+  VectorPathCommandCubicBezierCurve({this.startControlPoint, this.endControlPoint, this.endPoint});
 
-  /// [startControlPoint] The start control point of the curve 
+  /// [startControlPoint] The start control point of the curve
   Point? startControlPoint;
 
-  /// [endControlPoint] The end control point of the curve 
+  /// [endControlPoint] The end control point of the curve
   Point? endControlPoint;
 
   /// [endPoint] The end point of the curve
   Point? endPoint;
 
   /// Parse from a json
-  VectorPathCommandCubicBezierCurve.fromJson(Map<String, dynamic> json)  {
-    startControlPoint = json['start_control_point'] == null ? null : Point.fromJson(json['start_control_point'] ?? <String, dynamic>{});
+  VectorPathCommandCubicBezierCurve.fromJson(Map<String, dynamic> json) {
+    startControlPoint =
+        json['start_control_point'] == null ? null : Point.fromJson(json['start_control_point'] ?? <String, dynamic>{});
     endControlPoint = json['end_control_point'] == null ? null : Point.fromJson(json['end_control_point'] ?? <String, dynamic>{});
     endPoint = json['end_point'] == null ? null : Point.fromJson(json['end_point'] ?? <String, dynamic>{});
   }
@@ -94,7 +86,7 @@ class VectorPathCommandCubicBezierCurve extends VectorPathCommand {
   }
 
   static const CONSTRUCTOR = 'vectorPathCommandCubicBezierCurve';
-  
+
   @override
   String getConstructor() => CONSTRUCTOR;
 }

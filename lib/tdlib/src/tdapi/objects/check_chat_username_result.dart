@@ -122,7 +122,7 @@ class CheckChatUsernameResultUsernameOccupied extends CheckChatUsernameResult {
 
 class CheckChatUsernameResultPublicChatsTooMuch extends CheckChatUsernameResult {
 
-  /// The user has too much chats with username, one of them must be made private first
+  /// The user has too many chats with username, one of them must be made private first
   CheckChatUsernameResultPublicChatsTooMuch();
 
   /// callback sign

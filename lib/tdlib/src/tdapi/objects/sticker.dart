@@ -7,9 +7,7 @@ class Sticker extends TdObject {
     this.width,
     this.height,
     this.emoji,
-    this.isAnimated,
-    this.isMask,
-    this.maskPosition,
+    this.type,
     this.outline,
     this.thumbnail,
     this.sticker});
@@ -26,19 +24,13 @@ class Sticker extends TdObject {
   /// [emoji] Emoji corresponding to the sticker
   String? emoji;
 
-  /// [isAnimated] True, if the sticker is an animated sticker in TGS format 
-  bool? isAnimated;
-
-  /// [isMask] True, if the sticker is a mask 
-  bool? isMask;
-
-  /// [maskPosition] Position where the mask is placed; may be null
-  MaskPosition? maskPosition;
+  /// [type] Sticker type 
+  StickerType? type;
 
   /// [outline] Sticker's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner
   List<ClosedVectorPath>? outline;
 
-  /// [thumbnail] Sticker thumbnail in WEBP or JPEG format; may be null 
+  /// [thumbnail] Sticker thumbnail in WEBP or JPEG format; may be null
   Thumbnail? thumbnail;
 
   /// [sticker] File containing the sticker
@@ -53,9 +45,7 @@ class Sticker extends TdObject {
     width = json['width'] == null ? null : json['width'];
     height = json['height'] == null ? null : json['height'];
     emoji = json['emoji'] == null ? null : json['emoji'];
-    isAnimated = json['is_animated'] == null ? null : json['is_animated'];
-    isMask = json['is_mask'] == null ? null : json['is_mask'];
-    maskPosition = json['mask_position'] == null ? null : MaskPosition.fromJson(json['mask_position'] ?? <String, dynamic>{});
+    type = json['type'] == null ? null : StickerType.fromJson(json['type'] ?? <String, dynamic>{});
     outline = json['outline'] == null ? null : List<ClosedVectorPath>.from((json['outline'] ?? [])!.map((item) => ClosedVectorPath.fromJson(item ?? <String, dynamic>{})).toList());
     thumbnail = json['thumbnail'] == null ? null : Thumbnail.fromJson(json['thumbnail'] ?? <String, dynamic>{});
     sticker = json['sticker'] == null ? null : File.fromJson(json['sticker'] ?? <String, dynamic>{});
@@ -70,9 +60,7 @@ class Sticker extends TdObject {
       "width": width,
       "height": height,
       "emoji": emoji,
-      "is_animated": isAnimated,
-      "is_mask": isMask,
-      "mask_position": maskPosition == null ? null : maskPosition?.toJson(),
+      "type": type == null ? null : type?.toJson(),
       "outline": outline?.map((i) => i.toJson()).toList(),
       "thumbnail": thumbnail == null ? null : thumbnail?.toJson(),
       "sticker": sticker == null ? null : sticker?.toJson(),

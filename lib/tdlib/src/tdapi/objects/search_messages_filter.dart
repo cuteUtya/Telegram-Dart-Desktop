@@ -22,6 +22,7 @@ class SearchMessagesFilter extends TdObject {
   /// * SearchMessagesFilterVoiceAndVideoNote
   /// * SearchMessagesFilterMention
   /// * SearchMessagesFilterUnreadMention
+  /// * SearchMessagesFilterUnreadReaction
   /// * SearchMessagesFilterFailedToSend
   /// * SearchMessagesFilterPinned
   factory SearchMessagesFilter.fromJson(Map<String, dynamic> json)  {
@@ -54,6 +55,8 @@ class SearchMessagesFilter extends TdObject {
         return SearchMessagesFilterMention.fromJson(json);
       case SearchMessagesFilterUnreadMention.CONSTRUCTOR:
         return SearchMessagesFilterUnreadMention.fromJson(json);
+      case SearchMessagesFilterUnreadReaction.CONSTRUCTOR:
+        return SearchMessagesFilterUnreadReaction.fromJson(json);
       case SearchMessagesFilterFailedToSend.CONSTRUCTOR:
         return SearchMessagesFilterFailedToSend.fromJson(json);
       case SearchMessagesFilterPinned.CONSTRUCTOR:
@@ -392,6 +395,29 @@ class SearchMessagesFilterUnreadMention extends SearchMessagesFilter {
   }
 
   static const CONSTRUCTOR = 'searchMessagesFilterUnreadMention';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class SearchMessagesFilterUnreadReaction extends SearchMessagesFilter {
+
+  /// Returns only messages with unread reactions for the current user. When using this filter the results can't be additionally filtered by a query, a message thread or by the sending user
+  SearchMessagesFilterUnreadReaction();
+
+  
+
+  /// Parse from a json
+  SearchMessagesFilterUnreadReaction.fromJson(Map<String, dynamic> json) ;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+    };
+  }
+
+  static const CONSTRUCTOR = 'searchMessagesFilterUnreadReaction';
   
   @override
   String getConstructor() => CONSTRUCTOR;

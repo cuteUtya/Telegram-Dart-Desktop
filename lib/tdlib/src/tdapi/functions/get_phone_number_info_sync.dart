@@ -6,7 +6,7 @@ class GetPhoneNumberInfoSync extends TdFunction {
   GetPhoneNumberInfoSync({this.languageCode,
     this.phoneNumberPrefix});
 
-  /// [languageCode] A two-letter ISO 639-1 country code for country information localization
+  /// [languageCode] A two-letter ISO 639-1 language code for country information localization
   String? languageCode;
 
   /// [phoneNumberPrefix] The phone number prefix

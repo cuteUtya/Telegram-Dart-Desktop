@@ -2,104 +2,38 @@ part of '../tdapi.dart';
 
 class InputSticker extends TdObject {
 
-  /// Describes a sticker that needs to be added to a sticker set
-  InputSticker();
+  /// A sticker to be added to a sticker set
+  InputSticker({this.sticker,
+    this.emojis,
+    this.type});
 
-  
+  /// [sticker] File with the sticker; must fit in a 512x512 square. For WEBP stickers and masks the file must be in PNG format, which will be converted to WEBP server-side. Otherwise, the file must be local or uploaded within a week. See https://core.telegram.org/animated_stickers#technical-requirements for technical requirements
+  InputFile? sticker;
 
-  /// a InputSticker return type can be :
-  /// * InputStickerStatic
-  /// * InputStickerAnimated
-  factory InputSticker.fromJson(Map<String, dynamic> json)  {
-    switch(json["@type"]) {
-      case InputStickerStatic.CONSTRUCTOR:
-        return InputStickerStatic.fromJson(json);
-      case InputStickerAnimated.CONSTRUCTOR:
-        return InputStickerAnimated.fromJson(json);
-    }
-    throw new Exception('undefined type');
+  /// [emojis] Emojis corresponding to the sticker
+  String? emojis;
+
+  /// [type] Sticker type
+  StickerType? type;
+
+  /// Parse from a json
+  InputSticker.fromJson(Map<String, dynamic> json)  {
+    sticker = json['sticker'] == null ? null : InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
+    emojis = json['emojis'] == null ? null : json['emojis'];
+    type = json['type'] == null ? null : StickerType.fromJson(json['type'] ?? <String, dynamic>{});
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      
+      "@type": CONSTRUCTOR,
+      "sticker": sticker == null ? null : sticker?.toJson(),
+      "emojis": emojis,
+      "type": type == null ? null : type?.toJson(),
     };
   }
 
   static const CONSTRUCTOR = 'inputSticker';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class InputStickerStatic extends InputSticker {
-
-  /// A static sticker in PNG format, which will be converted to WEBP server-side
-  InputStickerStatic({this.sticker,
-    this.emojis,
-    this.maskPosition});
-
-  /// [sticker] PNG image with the sticker; must be up to 512 KB in size and fit in a 512x512 square
-  InputFile? sticker;
-
-  /// [emojis] Emojis corresponding to the sticker
-  String? emojis;
-
-  /// [maskPosition] For masks, position where the mask is placed; pass null if unspecified
-  MaskPosition? maskPosition;
-
-  /// Parse from a json
-  InputStickerStatic.fromJson(Map<String, dynamic> json)  {
-    sticker = json['sticker'] == null ? null : InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
-    emojis = json['emojis'] == null ? null : json['emojis'];
-    maskPosition = json['mask_position'] == null ? null : MaskPosition.fromJson(json['mask_position'] ?? <String, dynamic>{});
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "sticker": sticker == null ? null : sticker?.toJson(),
-      "emojis": emojis,
-      "mask_position": maskPosition == null ? null : maskPosition?.toJson(),
-    };
-  }
-
-  static const CONSTRUCTOR = 'inputStickerStatic';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class InputStickerAnimated extends InputSticker {
-
-  /// An animated sticker in TGS format
-  InputStickerAnimated({this.sticker,
-    this.emojis});
-
-  /// [sticker] File with the animated sticker. Only local or uploaded within a week files are supported. See https://core.telegram.org/animated_stickers#technical-requirements for technical requirements
-  InputFile? sticker;
-
-  /// [emojis] Emojis corresponding to the sticker
-  String? emojis;
-
-  /// Parse from a json
-  InputStickerAnimated.fromJson(Map<String, dynamic> json)  {
-    sticker = json['sticker'] == null ? null : InputFile.fromJson(json['sticker'] ?? <String, dynamic>{});
-    emojis = json['emojis'] == null ? null : json['emojis'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "sticker": sticker == null ? null : sticker?.toJson(),
-      "emojis": emojis,
-    };
-  }
-
-  static const CONSTRUCTOR = 'inputStickerAnimated';
   
   @override
   String getConstructor() => CONSTRUCTOR;

@@ -73,9 +73,7 @@ class ReplyMarkupForceReply extends ReplyMarkup {
   /// Parse from a json
   ReplyMarkupForceReply.fromJson(Map<String, dynamic> json) {
     isPersonal = json['is_personal'] == null ? null : json['is_personal'];
-    inputFieldPlaceholder = json['input_field_placeholder'] == null
-        ? null
-        : json['input_field_placeholder'];
+    inputFieldPlaceholder = json['input_field_placeholder'] == null ? null : json['input_field_placeholder'];
   }
 
   @override
@@ -95,12 +93,7 @@ class ReplyMarkupForceReply extends ReplyMarkup {
 
 class ReplyMarkupShowKeyboard extends ReplyMarkup {
   /// Contains a custom keyboard layout to quickly reply to bots
-  ReplyMarkupShowKeyboard(
-      {this.rows,
-      this.resizeKeyboard,
-      this.oneTime,
-      this.isPersonal,
-      this.inputFieldPlaceholder});
+  ReplyMarkupShowKeyboard({this.rows, this.resizeKeyboard, this.oneTime, this.isPersonal, this.inputFieldPlaceholder});
 
   /// [rows] A list of rows of bot keyboard buttons
   List<List<KeyboardButton>>? rows;
@@ -122,18 +115,13 @@ class ReplyMarkupShowKeyboard extends ReplyMarkup {
     rows = json['rows'] == null
         ? null
         : List<List<KeyboardButton>>.from((json['rows'] ?? [])!
-            .map((item) => List<KeyboardButton>.from((item ?? [])!
-                .map((innerItem) =>
-                    KeyboardButton.fromJson(innerItem ?? <String, dynamic>{}))
-                .toList()))
+            .map((item) => List<KeyboardButton>.from(
+                (item ?? [])!.map((innerItem) => KeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList()))
             .toList());
-    resizeKeyboard =
-        json['resize_keyboard'] == null ? null : json['resize_keyboard'];
+    resizeKeyboard = json['resize_keyboard'] == null ? null : json['resize_keyboard'];
     oneTime = json['one_time'] == null ? null : json['one_time'];
     isPersonal = json['is_personal'] == null ? null : json['is_personal'];
-    inputFieldPlaceholder = json['input_field_placeholder'] == null
-        ? null
-        : json['input_field_placeholder'];
+    inputFieldPlaceholder = json['input_field_placeholder'] == null ? null : json['input_field_placeholder'];
   }
 
   @override
@@ -166,10 +154,8 @@ class ReplyMarkupInlineKeyboard extends ReplyMarkup {
     rows = json['rows'] == null
         ? null
         : List<List<InlineKeyboardButton>>.from((json['rows'] ?? [])!
-            .map((item) => List<InlineKeyboardButton>.from((item ?? [])!
-                .map((innerItem) => InlineKeyboardButton.fromJson(
-                    innerItem ?? <String, dynamic>{}))
-                .toList()))
+            .map((item) => List<InlineKeyboardButton>.from(
+                (item ?? [])!.map((innerItem) => InlineKeyboardButton.fromJson(innerItem ?? <String, dynamic>{})).toList()))
             .toList());
   }
 

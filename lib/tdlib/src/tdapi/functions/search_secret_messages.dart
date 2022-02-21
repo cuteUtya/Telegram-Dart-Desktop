@@ -15,7 +15,7 @@ class SearchSecretMessages extends TdFunction {
   /// [query] Query to search for. If empty, searchChatMessages must be used instead
   String? query;
 
-  /// [offset] Offset of the first entry to return as received from the previous request; use empty string to get first chunk of results
+  /// [offset] Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results
   String? offset;
 
   /// [limit] The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit

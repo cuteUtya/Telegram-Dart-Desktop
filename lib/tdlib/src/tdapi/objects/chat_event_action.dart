@@ -10,92 +10,95 @@ class ChatEventAction extends TdObject {
   /// a ChatEventAction return type can be :
   /// * ChatEventMessageEdited
   /// * ChatEventMessageDeleted
-  /// * ChatEventPollStopped
   /// * ChatEventMessagePinned
   /// * ChatEventMessageUnpinned
+  /// * ChatEventPollStopped
   /// * ChatEventMemberJoined
   /// * ChatEventMemberJoinedByInviteLink
   /// * ChatEventMemberJoinedByRequest
-  /// * ChatEventMemberLeft
   /// * ChatEventMemberInvited
+  /// * ChatEventMemberLeft
   /// * ChatEventMemberPromoted
   /// * ChatEventMemberRestricted
-  /// * ChatEventTitleChanged
-  /// * ChatEventPermissionsChanged
+  /// * ChatEventAvailableReactionsChanged
   /// * ChatEventDescriptionChanged
-  /// * ChatEventUsernameChanged
-  /// * ChatEventPhotoChanged
-  /// * ChatEventInvitesToggled
   /// * ChatEventLinkedChatChanged
-  /// * ChatEventSlowModeDelayChanged
-  /// * ChatEventMessageTtlChanged
-  /// * ChatEventSignMessagesToggled
-  /// * ChatEventHasProtectedContentToggled
-  /// * ChatEventStickerSetChanged
   /// * ChatEventLocationChanged
+  /// * ChatEventMessageTtlChanged
+  /// * ChatEventPermissionsChanged
+  /// * ChatEventPhotoChanged
+  /// * ChatEventSlowModeDelayChanged
+  /// * ChatEventStickerSetChanged
+  /// * ChatEventTitleChanged
+  /// * ChatEventUsernameChanged
+  /// * ChatEventHasProtectedContentToggled
+  /// * ChatEventInvitesToggled
   /// * ChatEventIsAllHistoryAvailableToggled
+  /// * ChatEventSignMessagesToggled
   /// * ChatEventInviteLinkEdited
   /// * ChatEventInviteLinkRevoked
   /// * ChatEventInviteLinkDeleted
   /// * ChatEventVideoChatCreated
   /// * ChatEventVideoChatEnded
+  /// * ChatEventVideoChatMuteNewParticipantsToggled
   /// * ChatEventVideoChatParticipantIsMutedToggled
   /// * ChatEventVideoChatParticipantVolumeLevelChanged
-  /// * ChatEventVideoChatMuteNewParticipantsToggled
   factory ChatEventAction.fromJson(Map<String, dynamic> json)  {
     switch(json["@type"]) {
       case ChatEventMessageEdited.CONSTRUCTOR:
         return ChatEventMessageEdited.fromJson(json);
       case ChatEventMessageDeleted.CONSTRUCTOR:
         return ChatEventMessageDeleted.fromJson(json);
-      case ChatEventPollStopped.CONSTRUCTOR:
-        return ChatEventPollStopped.fromJson(json);
       case ChatEventMessagePinned.CONSTRUCTOR:
         return ChatEventMessagePinned.fromJson(json);
       case ChatEventMessageUnpinned.CONSTRUCTOR:
         return ChatEventMessageUnpinned.fromJson(json);
+      case ChatEventPollStopped.CONSTRUCTOR:
+        return ChatEventPollStopped.fromJson(json);
       case ChatEventMemberJoined.CONSTRUCTOR:
         return ChatEventMemberJoined.fromJson(json);
       case ChatEventMemberJoinedByInviteLink.CONSTRUCTOR:
         return ChatEventMemberJoinedByInviteLink.fromJson(json);
       case ChatEventMemberJoinedByRequest.CONSTRUCTOR:
         return ChatEventMemberJoinedByRequest.fromJson(json);
-      case ChatEventMemberLeft.CONSTRUCTOR:
-        return ChatEventMemberLeft.fromJson(json);
       case ChatEventMemberInvited.CONSTRUCTOR:
         return ChatEventMemberInvited.fromJson(json);
+      case ChatEventMemberLeft.CONSTRUCTOR:
+        return ChatEventMemberLeft.fromJson(json);
       case ChatEventMemberPromoted.CONSTRUCTOR:
         return ChatEventMemberPromoted.fromJson(json);
       case ChatEventMemberRestricted.CONSTRUCTOR:
         return ChatEventMemberRestricted.fromJson(json);
-      case ChatEventTitleChanged.CONSTRUCTOR:
-        return ChatEventTitleChanged.fromJson(json);
-      case ChatEventPermissionsChanged.CONSTRUCTOR:
-        return ChatEventPermissionsChanged.fromJson(json);
+      case ChatEventAvailableReactionsChanged.CONSTRUCTOR:
+        return ChatEventAvailableReactionsChanged.fromJson(json);
       case ChatEventDescriptionChanged.CONSTRUCTOR:
         return ChatEventDescriptionChanged.fromJson(json);
-      case ChatEventUsernameChanged.CONSTRUCTOR:
-        return ChatEventUsernameChanged.fromJson(json);
-      case ChatEventPhotoChanged.CONSTRUCTOR:
-        return ChatEventPhotoChanged.fromJson(json);
-      case ChatEventInvitesToggled.CONSTRUCTOR:
-        return ChatEventInvitesToggled.fromJson(json);
       case ChatEventLinkedChatChanged.CONSTRUCTOR:
         return ChatEventLinkedChatChanged.fromJson(json);
-      case ChatEventSlowModeDelayChanged.CONSTRUCTOR:
-        return ChatEventSlowModeDelayChanged.fromJson(json);
-      case ChatEventMessageTtlChanged.CONSTRUCTOR:
-        return ChatEventMessageTtlChanged.fromJson(json);
-      case ChatEventSignMessagesToggled.CONSTRUCTOR:
-        return ChatEventSignMessagesToggled.fromJson(json);
-      case ChatEventHasProtectedContentToggled.CONSTRUCTOR:
-        return ChatEventHasProtectedContentToggled.fromJson(json);
-      case ChatEventStickerSetChanged.CONSTRUCTOR:
-        return ChatEventStickerSetChanged.fromJson(json);
       case ChatEventLocationChanged.CONSTRUCTOR:
         return ChatEventLocationChanged.fromJson(json);
+      case ChatEventMessageTtlChanged.CONSTRUCTOR:
+        return ChatEventMessageTtlChanged.fromJson(json);
+      case ChatEventPermissionsChanged.CONSTRUCTOR:
+        return ChatEventPermissionsChanged.fromJson(json);
+      case ChatEventPhotoChanged.CONSTRUCTOR:
+        return ChatEventPhotoChanged.fromJson(json);
+      case ChatEventSlowModeDelayChanged.CONSTRUCTOR:
+        return ChatEventSlowModeDelayChanged.fromJson(json);
+      case ChatEventStickerSetChanged.CONSTRUCTOR:
+        return ChatEventStickerSetChanged.fromJson(json);
+      case ChatEventTitleChanged.CONSTRUCTOR:
+        return ChatEventTitleChanged.fromJson(json);
+      case ChatEventUsernameChanged.CONSTRUCTOR:
+        return ChatEventUsernameChanged.fromJson(json);
+      case ChatEventHasProtectedContentToggled.CONSTRUCTOR:
+        return ChatEventHasProtectedContentToggled.fromJson(json);
+      case ChatEventInvitesToggled.CONSTRUCTOR:
+        return ChatEventInvitesToggled.fromJson(json);
       case ChatEventIsAllHistoryAvailableToggled.CONSTRUCTOR:
         return ChatEventIsAllHistoryAvailableToggled.fromJson(json);
+      case ChatEventSignMessagesToggled.CONSTRUCTOR:
+        return ChatEventSignMessagesToggled.fromJson(json);
       case ChatEventInviteLinkEdited.CONSTRUCTOR:
         return ChatEventInviteLinkEdited.fromJson(json);
       case ChatEventInviteLinkRevoked.CONSTRUCTOR:
@@ -106,12 +109,12 @@ class ChatEventAction extends TdObject {
         return ChatEventVideoChatCreated.fromJson(json);
       case ChatEventVideoChatEnded.CONSTRUCTOR:
         return ChatEventVideoChatEnded.fromJson(json);
+      case ChatEventVideoChatMuteNewParticipantsToggled.CONSTRUCTOR:
+        return ChatEventVideoChatMuteNewParticipantsToggled.fromJson(json);
       case ChatEventVideoChatParticipantIsMutedToggled.CONSTRUCTOR:
         return ChatEventVideoChatParticipantIsMutedToggled.fromJson(json);
       case ChatEventVideoChatParticipantVolumeLevelChanged.CONSTRUCTOR:
         return ChatEventVideoChatParticipantVolumeLevelChanged.fromJson(json);
-      case ChatEventVideoChatMuteNewParticipantsToggled.CONSTRUCTOR:
-        return ChatEventVideoChatMuteNewParticipantsToggled.fromJson(json);
     }
     throw new Exception('undefined type');
   }
@@ -189,33 +192,6 @@ class ChatEventMessageDeleted extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventPollStopped extends ChatEventAction {
-
-  /// A poll in a message was stopped
-  ChatEventPollStopped({this.message});
-
-  /// [message] The message with the poll
-  Message? message;
-
-  /// Parse from a json
-  ChatEventPollStopped.fromJson(Map<String, dynamic> json)  {
-    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "message": message == null ? null : message?.toJson(),
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventPollStopped';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
 class ChatEventMessagePinned extends ChatEventAction {
 
   /// A message was pinned
@@ -265,6 +241,33 @@ class ChatEventMessageUnpinned extends ChatEventAction {
   }
 
   static const CONSTRUCTOR = 'chatEventMessageUnpinned';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventPollStopped extends ChatEventAction {
+
+  /// A poll in a message was stopped
+  ChatEventPollStopped({this.message});
+
+  /// [message] The message with the poll
+  Message? message;
+
+  /// Parse from a json
+  ChatEventPollStopped.fromJson(Map<String, dynamic> json)  {
+    message = json['message'] == null ? null : Message.fromJson(json['message'] ?? <String, dynamic>{});
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "message": message == null ? null : message?.toJson(),
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventPollStopped';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -353,29 +356,6 @@ class ChatEventMemberJoinedByRequest extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventMemberLeft extends ChatEventAction {
-
-  /// A member left the chat
-  ChatEventMemberLeft();
-
-  
-
-  /// Parse from a json
-  ChatEventMemberLeft.fromJson(Map<String, dynamic> json) ;
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventMemberLeft';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
 class ChatEventMemberInvited extends ChatEventAction {
 
   /// A new chat member was invited
@@ -404,6 +384,29 @@ class ChatEventMemberInvited extends ChatEventAction {
   }
 
   static const CONSTRUCTOR = 'chatEventMemberInvited';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventMemberLeft extends ChatEventAction {
+
+  /// A member left the chat
+  ChatEventMemberLeft();
+
+  
+
+  /// Parse from a json
+  ChatEventMemberLeft.fromJson(Map<String, dynamic> json) ;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventMemberLeft';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -487,67 +490,34 @@ class ChatEventMemberRestricted extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventTitleChanged extends ChatEventAction {
+class ChatEventAvailableReactionsChanged extends ChatEventAction {
 
-  /// The chat title was changed
-  ChatEventTitleChanged({this.oldTitle,
-    this.newTitle});
+  /// The chat available reactions were changed
+  ChatEventAvailableReactionsChanged({this.oldAvailableReactions,
+    this.newAvailableReactions});
 
-  /// [oldTitle] Previous chat title 
-  String? oldTitle;
+  /// [oldAvailableReactions] Previous chat available reactions 
+  List<String>? oldAvailableReactions;
 
-  /// [newTitle] New chat title
-  String? newTitle;
+  /// [newAvailableReactions] New chat available reactions
+  List<String>? newAvailableReactions;
 
   /// Parse from a json
-  ChatEventTitleChanged.fromJson(Map<String, dynamic> json)  {
-    oldTitle = json['old_title'] == null ? null : json['old_title'];
-    newTitle = json['new_title'] == null ? null : json['new_title'];
+  ChatEventAvailableReactionsChanged.fromJson(Map<String, dynamic> json)  {
+    oldAvailableReactions = json['old_available_reactions'] == null ? null : List<String>.from((json['old_available_reactions'] ?? [])!.map((item) => item).toList());
+    newAvailableReactions = json['new_available_reactions'] == null ? null : List<String>.from((json['new_available_reactions'] ?? [])!.map((item) => item).toList());
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       "@type": CONSTRUCTOR,
-      "old_title": oldTitle,
-      "new_title": newTitle,
+      "old_available_reactions": oldAvailableReactions?.map((i) => i).toList(),
+      "new_available_reactions": newAvailableReactions?.map((i) => i).toList(),
     };
   }
 
-  static const CONSTRUCTOR = 'chatEventTitleChanged';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventPermissionsChanged extends ChatEventAction {
-
-  /// The chat permissions was changed
-  ChatEventPermissionsChanged({this.oldPermissions,
-    this.newPermissions});
-
-  /// [oldPermissions] Previous chat permissions 
-  ChatPermissions? oldPermissions;
-
-  /// [newPermissions] New chat permissions
-  ChatPermissions? newPermissions;
-
-  /// Parse from a json
-  ChatEventPermissionsChanged.fromJson(Map<String, dynamic> json)  {
-    oldPermissions = json['old_permissions'] == null ? null : ChatPermissions.fromJson(json['old_permissions'] ?? <String, dynamic>{});
-    newPermissions = json['new_permissions'] == null ? null : ChatPermissions.fromJson(json['new_permissions'] ?? <String, dynamic>{});
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "old_permissions": oldPermissions == null ? null : oldPermissions?.toJson(),
-      "new_permissions": newPermissions == null ? null : newPermissions?.toJson(),
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventPermissionsChanged';
+  static const CONSTRUCTOR = 'chatEventAvailableReactionsChanged';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -586,99 +556,6 @@ class ChatEventDescriptionChanged extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
-class ChatEventUsernameChanged extends ChatEventAction {
-
-  /// The chat username was changed
-  ChatEventUsernameChanged({this.oldUsername,
-    this.newUsername});
-
-  /// [oldUsername] Previous chat username 
-  String? oldUsername;
-
-  /// [newUsername] New chat username
-  String? newUsername;
-
-  /// Parse from a json
-  ChatEventUsernameChanged.fromJson(Map<String, dynamic> json)  {
-    oldUsername = json['old_username'] == null ? null : json['old_username'];
-    newUsername = json['new_username'] == null ? null : json['new_username'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "old_username": oldUsername,
-      "new_username": newUsername,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventUsernameChanged';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventPhotoChanged extends ChatEventAction {
-
-  /// The chat photo was changed
-  ChatEventPhotoChanged({this.oldPhoto,
-    this.newPhoto});
-
-  /// [oldPhoto] Previous chat photo value; may be null 
-  ChatPhoto? oldPhoto;
-
-  /// [newPhoto] New chat photo value; may be null
-  ChatPhoto? newPhoto;
-
-  /// Parse from a json
-  ChatEventPhotoChanged.fromJson(Map<String, dynamic> json)  {
-    oldPhoto = json['old_photo'] == null ? null : ChatPhoto.fromJson(json['old_photo'] ?? <String, dynamic>{});
-    newPhoto = json['new_photo'] == null ? null : ChatPhoto.fromJson(json['new_photo'] ?? <String, dynamic>{});
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "old_photo": oldPhoto == null ? null : oldPhoto?.toJson(),
-      "new_photo": newPhoto == null ? null : newPhoto?.toJson(),
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventPhotoChanged';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventInvitesToggled extends ChatEventAction {
-
-  /// The can_invite_users permission of a supergroup chat was toggled
-  ChatEventInvitesToggled({this.canInviteUsers});
-
-  /// [canInviteUsers] New value of can_invite_users permission
-  bool? canInviteUsers;
-
-  /// Parse from a json
-  ChatEventInvitesToggled.fromJson(Map<String, dynamic> json)  {
-    canInviteUsers = json['can_invite_users'] == null ? null : json['can_invite_users'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "can_invite_users": canInviteUsers,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventInvitesToggled';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
 class ChatEventLinkedChatChanged extends ChatEventAction {
 
   /// The linked chat of a supergroup was changed
@@ -707,159 +584,6 @@ class ChatEventLinkedChatChanged extends ChatEventAction {
   }
 
   static const CONSTRUCTOR = 'chatEventLinkedChatChanged';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventSlowModeDelayChanged extends ChatEventAction {
-
-  /// The slow_mode_delay setting of a supergroup was changed
-  ChatEventSlowModeDelayChanged({this.oldSlowModeDelay,
-    this.newSlowModeDelay});
-
-  /// [oldSlowModeDelay] Previous value of slow_mode_delay, in seconds 
-  int? oldSlowModeDelay;
-
-  /// [newSlowModeDelay] New value of slow_mode_delay, in seconds
-  int? newSlowModeDelay;
-
-  /// Parse from a json
-  ChatEventSlowModeDelayChanged.fromJson(Map<String, dynamic> json)  {
-    oldSlowModeDelay = json['old_slow_mode_delay'] == null ? null : json['old_slow_mode_delay'];
-    newSlowModeDelay = json['new_slow_mode_delay'] == null ? null : json['new_slow_mode_delay'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "old_slow_mode_delay": oldSlowModeDelay,
-      "new_slow_mode_delay": newSlowModeDelay,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventSlowModeDelayChanged';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventMessageTtlChanged extends ChatEventAction {
-
-  /// The message TTL was changed
-  ChatEventMessageTtlChanged({this.oldMessageTtl,
-    this.newMessageTtl});
-
-  /// [oldMessageTtl] Previous value of message_ttl 
-  int? oldMessageTtl;
-
-  /// [newMessageTtl] New value of message_ttl
-  int? newMessageTtl;
-
-  /// Parse from a json
-  ChatEventMessageTtlChanged.fromJson(Map<String, dynamic> json)  {
-    oldMessageTtl = json['old_message_ttl'] == null ? null : json['old_message_ttl'];
-    newMessageTtl = json['new_message_ttl'] == null ? null : json['new_message_ttl'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "old_message_ttl": oldMessageTtl,
-      "new_message_ttl": newMessageTtl,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventMessageTtlChanged';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventSignMessagesToggled extends ChatEventAction {
-
-  /// The sign_messages setting of a channel was toggled
-  ChatEventSignMessagesToggled({this.signMessages});
-
-  /// [signMessages] New value of sign_messages
-  bool? signMessages;
-
-  /// Parse from a json
-  ChatEventSignMessagesToggled.fromJson(Map<String, dynamic> json)  {
-    signMessages = json['sign_messages'] == null ? null : json['sign_messages'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "sign_messages": signMessages,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventSignMessagesToggled';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventHasProtectedContentToggled extends ChatEventAction {
-
-  /// The has_protected_content setting of a channel was toggled
-  ChatEventHasProtectedContentToggled({this.hasProtectedContent});
-
-  /// [hasProtectedContent] New value of has_protected_content
-  bool? hasProtectedContent;
-
-  /// Parse from a json
-  ChatEventHasProtectedContentToggled.fromJson(Map<String, dynamic> json)  {
-    hasProtectedContent = json['has_protected_content'] == null ? null : json['has_protected_content'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "has_protected_content": hasProtectedContent,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventHasProtectedContentToggled';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventStickerSetChanged extends ChatEventAction {
-
-  /// The supergroup sticker set was changed
-  ChatEventStickerSetChanged({this.oldStickerSetId,
-    this.newStickerSetId});
-
-  /// [oldStickerSetId] Previous identifier of the chat sticker set; 0 if none 
-  int? oldStickerSetId;
-
-  /// [newStickerSetId] New identifier of the chat sticker set; 0 if none
-  int? newStickerSetId;
-
-  /// Parse from a json
-  ChatEventStickerSetChanged.fromJson(Map<String, dynamic> json)  {
-    oldStickerSetId = json['old_sticker_set_id'] == null ? null : int.tryParse(json['old_sticker_set_id'] ?? "");
-    newStickerSetId = json['new_sticker_set_id'] == null ? null : int.tryParse(json['new_sticker_set_id'] ?? "");
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "old_sticker_set_id": oldStickerSetId,
-      "new_sticker_set_id": newStickerSetId,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventStickerSetChanged';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -898,6 +622,291 @@ class ChatEventLocationChanged extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
+class ChatEventMessageTtlChanged extends ChatEventAction {
+
+  /// The message TTL was changed
+  ChatEventMessageTtlChanged({this.oldMessageTtl,
+    this.newMessageTtl});
+
+  /// [oldMessageTtl] Previous value of message_ttl 
+  int? oldMessageTtl;
+
+  /// [newMessageTtl] New value of message_ttl
+  int? newMessageTtl;
+
+  /// Parse from a json
+  ChatEventMessageTtlChanged.fromJson(Map<String, dynamic> json)  {
+    oldMessageTtl = json['old_message_ttl'] == null ? null : json['old_message_ttl'];
+    newMessageTtl = json['new_message_ttl'] == null ? null : json['new_message_ttl'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "old_message_ttl": oldMessageTtl,
+      "new_message_ttl": newMessageTtl,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventMessageTtlChanged';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventPermissionsChanged extends ChatEventAction {
+
+  /// The chat permissions was changed
+  ChatEventPermissionsChanged({this.oldPermissions,
+    this.newPermissions});
+
+  /// [oldPermissions] Previous chat permissions 
+  ChatPermissions? oldPermissions;
+
+  /// [newPermissions] New chat permissions
+  ChatPermissions? newPermissions;
+
+  /// Parse from a json
+  ChatEventPermissionsChanged.fromJson(Map<String, dynamic> json)  {
+    oldPermissions = json['old_permissions'] == null ? null : ChatPermissions.fromJson(json['old_permissions'] ?? <String, dynamic>{});
+    newPermissions = json['new_permissions'] == null ? null : ChatPermissions.fromJson(json['new_permissions'] ?? <String, dynamic>{});
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "old_permissions": oldPermissions == null ? null : oldPermissions?.toJson(),
+      "new_permissions": newPermissions == null ? null : newPermissions?.toJson(),
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventPermissionsChanged';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventPhotoChanged extends ChatEventAction {
+
+  /// The chat photo was changed
+  ChatEventPhotoChanged({this.oldPhoto,
+    this.newPhoto});
+
+  /// [oldPhoto] Previous chat photo value; may be null 
+  ChatPhoto? oldPhoto;
+
+  /// [newPhoto] New chat photo value; may be null
+  ChatPhoto? newPhoto;
+
+  /// Parse from a json
+  ChatEventPhotoChanged.fromJson(Map<String, dynamic> json)  {
+    oldPhoto = json['old_photo'] == null ? null : ChatPhoto.fromJson(json['old_photo'] ?? <String, dynamic>{});
+    newPhoto = json['new_photo'] == null ? null : ChatPhoto.fromJson(json['new_photo'] ?? <String, dynamic>{});
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "old_photo": oldPhoto == null ? null : oldPhoto?.toJson(),
+      "new_photo": newPhoto == null ? null : newPhoto?.toJson(),
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventPhotoChanged';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventSlowModeDelayChanged extends ChatEventAction {
+
+  /// The slow_mode_delay setting of a supergroup was changed
+  ChatEventSlowModeDelayChanged({this.oldSlowModeDelay,
+    this.newSlowModeDelay});
+
+  /// [oldSlowModeDelay] Previous value of slow_mode_delay, in seconds 
+  int? oldSlowModeDelay;
+
+  /// [newSlowModeDelay] New value of slow_mode_delay, in seconds
+  int? newSlowModeDelay;
+
+  /// Parse from a json
+  ChatEventSlowModeDelayChanged.fromJson(Map<String, dynamic> json)  {
+    oldSlowModeDelay = json['old_slow_mode_delay'] == null ? null : json['old_slow_mode_delay'];
+    newSlowModeDelay = json['new_slow_mode_delay'] == null ? null : json['new_slow_mode_delay'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "old_slow_mode_delay": oldSlowModeDelay,
+      "new_slow_mode_delay": newSlowModeDelay,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventSlowModeDelayChanged';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventStickerSetChanged extends ChatEventAction {
+
+  /// The supergroup sticker set was changed
+  ChatEventStickerSetChanged({this.oldStickerSetId,
+    this.newStickerSetId});
+
+  /// [oldStickerSetId] Previous identifier of the chat sticker set; 0 if none 
+  int? oldStickerSetId;
+
+  /// [newStickerSetId] New identifier of the chat sticker set; 0 if none
+  int? newStickerSetId;
+
+  /// Parse from a json
+  ChatEventStickerSetChanged.fromJson(Map<String, dynamic> json)  {
+    oldStickerSetId = json['old_sticker_set_id'] == null ? null : int.tryParse(json['old_sticker_set_id'] ?? "");
+    newStickerSetId = json['new_sticker_set_id'] == null ? null : int.tryParse(json['new_sticker_set_id'] ?? "");
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "old_sticker_set_id": oldStickerSetId,
+      "new_sticker_set_id": newStickerSetId,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventStickerSetChanged';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventTitleChanged extends ChatEventAction {
+
+  /// The chat title was changed
+  ChatEventTitleChanged({this.oldTitle,
+    this.newTitle});
+
+  /// [oldTitle] Previous chat title 
+  String? oldTitle;
+
+  /// [newTitle] New chat title
+  String? newTitle;
+
+  /// Parse from a json
+  ChatEventTitleChanged.fromJson(Map<String, dynamic> json)  {
+    oldTitle = json['old_title'] == null ? null : json['old_title'];
+    newTitle = json['new_title'] == null ? null : json['new_title'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "old_title": oldTitle,
+      "new_title": newTitle,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventTitleChanged';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventUsernameChanged extends ChatEventAction {
+
+  /// The chat username was changed
+  ChatEventUsernameChanged({this.oldUsername,
+    this.newUsername});
+
+  /// [oldUsername] Previous chat username 
+  String? oldUsername;
+
+  /// [newUsername] New chat username
+  String? newUsername;
+
+  /// Parse from a json
+  ChatEventUsernameChanged.fromJson(Map<String, dynamic> json)  {
+    oldUsername = json['old_username'] == null ? null : json['old_username'];
+    newUsername = json['new_username'] == null ? null : json['new_username'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "old_username": oldUsername,
+      "new_username": newUsername,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventUsernameChanged';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventHasProtectedContentToggled extends ChatEventAction {
+
+  /// The has_protected_content setting of a channel was toggled
+  ChatEventHasProtectedContentToggled({this.hasProtectedContent});
+
+  /// [hasProtectedContent] New value of has_protected_content
+  bool? hasProtectedContent;
+
+  /// Parse from a json
+  ChatEventHasProtectedContentToggled.fromJson(Map<String, dynamic> json)  {
+    hasProtectedContent = json['has_protected_content'] == null ? null : json['has_protected_content'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "has_protected_content": hasProtectedContent,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventHasProtectedContentToggled';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventInvitesToggled extends ChatEventAction {
+
+  /// The can_invite_users permission of a supergroup chat was toggled
+  ChatEventInvitesToggled({this.canInviteUsers});
+
+  /// [canInviteUsers] New value of can_invite_users permission
+  bool? canInviteUsers;
+
+  /// Parse from a json
+  ChatEventInvitesToggled.fromJson(Map<String, dynamic> json)  {
+    canInviteUsers = json['can_invite_users'] == null ? null : json['can_invite_users'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "can_invite_users": canInviteUsers,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventInvitesToggled';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
 class ChatEventIsAllHistoryAvailableToggled extends ChatEventAction {
 
   /// The is_all_history_available setting of a supergroup was toggled
@@ -920,6 +929,33 @@ class ChatEventIsAllHistoryAvailableToggled extends ChatEventAction {
   }
 
   static const CONSTRUCTOR = 'chatEventIsAllHistoryAvailableToggled';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
+class ChatEventSignMessagesToggled extends ChatEventAction {
+
+  /// The sign_messages setting of a channel was toggled
+  ChatEventSignMessagesToggled({this.signMessages});
+
+  /// [signMessages] New value of sign_messages
+  bool? signMessages;
+
+  /// Parse from a json
+  ChatEventSignMessagesToggled.fromJson(Map<String, dynamic> json)  {
+    signMessages = json['sign_messages'] == null ? null : json['sign_messages'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "sign_messages": signMessages,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventSignMessagesToggled';
   
   @override
   String getConstructor() => CONSTRUCTOR;
@@ -1066,6 +1102,33 @@ class ChatEventVideoChatEnded extends ChatEventAction {
   String getConstructor() => CONSTRUCTOR;
 }
 
+class ChatEventVideoChatMuteNewParticipantsToggled extends ChatEventAction {
+
+  /// The mute_new_participants setting of a video chat was toggled
+  ChatEventVideoChatMuteNewParticipantsToggled({this.muteNewParticipants});
+
+  /// [muteNewParticipants] New value of the mute_new_participants setting
+  bool? muteNewParticipants;
+
+  /// Parse from a json
+  ChatEventVideoChatMuteNewParticipantsToggled.fromJson(Map<String, dynamic> json)  {
+    muteNewParticipants = json['mute_new_participants'] == null ? null : json['mute_new_participants'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      "@type": CONSTRUCTOR,
+      "mute_new_participants": muteNewParticipants,
+    };
+  }
+
+  static const CONSTRUCTOR = 'chatEventVideoChatMuteNewParticipantsToggled';
+  
+  @override
+  String getConstructor() => CONSTRUCTOR;
+}
+
 class ChatEventVideoChatParticipantIsMutedToggled extends ChatEventAction {
 
   /// A video chat participant was muted or unmuted
@@ -1127,33 +1190,6 @@ class ChatEventVideoChatParticipantVolumeLevelChanged extends ChatEventAction {
   }
 
   static const CONSTRUCTOR = 'chatEventVideoChatParticipantVolumeLevelChanged';
-  
-  @override
-  String getConstructor() => CONSTRUCTOR;
-}
-
-class ChatEventVideoChatMuteNewParticipantsToggled extends ChatEventAction {
-
-  /// The mute_new_participants setting of a video chat was toggled
-  ChatEventVideoChatMuteNewParticipantsToggled({this.muteNewParticipants});
-
-  /// [muteNewParticipants] New value of the mute_new_participants setting
-  bool? muteNewParticipants;
-
-  /// Parse from a json
-  ChatEventVideoChatMuteNewParticipantsToggled.fromJson(Map<String, dynamic> json)  {
-    muteNewParticipants = json['mute_new_participants'] == null ? null : json['mute_new_participants'];
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      "@type": CONSTRUCTOR,
-      "mute_new_participants": muteNewParticipants,
-    };
-  }
-
-  static const CONSTRUCTOR = 'chatEventVideoChatMuteNewParticipantsToggled';
   
   @override
   String getConstructor() => CONSTRUCTOR;

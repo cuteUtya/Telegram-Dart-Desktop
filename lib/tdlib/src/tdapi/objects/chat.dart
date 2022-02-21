@@ -23,7 +23,9 @@ class Chat extends TdObject {
     this.lastReadInboxMessageId,
     this.lastReadOutboxMessageId,
     this.unreadMentionCount,
+    this.unreadReactionCount,
     this.notificationSettings,
+    this.availableReactions,
     this.messageTtl,
     this.themeName,
     this.actionBar,
@@ -93,8 +95,14 @@ class Chat extends TdObject {
   /// [unreadMentionCount] Number of unread messages with a mention/reply in the chat
   int? unreadMentionCount;
 
-  /// [notificationSettings] Notification settings for this chat
+  /// [unreadReactionCount] Number of messages with unread reactions in the chat
+  int? unreadReactionCount;
+
+  /// [notificationSettings] Notification settings for the chat
   ChatNotificationSettings? notificationSettings;
+
+  /// [availableReactions] List of reactions, available in the chat
+  List<String>? availableReactions;
 
   /// [messageTtl] Current message Time To Live setting (self-destruct timer) for the chat; 0 if not defined. TTL is counted from the time message or its content is viewed in secret chats and from the send date in other chats
   int? messageTtl;
@@ -145,7 +153,9 @@ class Chat extends TdObject {
     lastReadInboxMessageId = json['last_read_inbox_message_id'] == null ? null : json['last_read_inbox_message_id'];
     lastReadOutboxMessageId = json['last_read_outbox_message_id'] == null ? null : json['last_read_outbox_message_id'];
     unreadMentionCount = json['unread_mention_count'] == null ? null : json['unread_mention_count'];
+    unreadReactionCount = json['unread_reaction_count'] == null ? null : json['unread_reaction_count'];
     notificationSettings = json['notification_settings'] == null ? null : ChatNotificationSettings.fromJson(json['notification_settings'] ?? <String, dynamic>{});
+    availableReactions = json['available_reactions'] == null ? null : List<String>.from((json['available_reactions'] ?? [])!.map((item) => item).toList());
     messageTtl = json['message_ttl'] == null ? null : json['message_ttl'];
     themeName = json['theme_name'] == null ? null : json['theme_name'];
     actionBar = json['action_bar'] == null ? null : ChatActionBar.fromJson(json['action_bar'] ?? <String, dynamic>{});
@@ -181,7 +191,9 @@ class Chat extends TdObject {
       "last_read_inbox_message_id": lastReadInboxMessageId,
       "last_read_outbox_message_id": lastReadOutboxMessageId,
       "unread_mention_count": unreadMentionCount,
+      "unread_reaction_count": unreadReactionCount,
       "notification_settings": notificationSettings == null ? null : notificationSettings?.toJson(),
+      "available_reactions": availableReactions?.map((i) => i).toList(),
       "message_ttl": messageTtl,
       "theme_name": themeName,
       "action_bar": actionBar == null ? null : actionBar?.toJson(),

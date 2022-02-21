@@ -38,6 +38,7 @@ class StickerOutline extends CustomPainter {
                 curve.endControlPoint!.y!.toDouble() * sizeRatio,
                 curve.endPoint!.x!.toDouble() * sizeRatio,
                 curve.endPoint!.y!.toDouble() * sizeRatio);
+
             break;
         }
       }

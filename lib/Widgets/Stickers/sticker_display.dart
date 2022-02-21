@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Stickers/sticker_outnline.dart';
+import 'package:myapp/Widgets/message/message_display_gif.dart';
+import 'package:myapp/Widgets/message/message_display_video.dart';
+import 'package:myapp/Widgets/message/message_display_video_sticker.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/Rlottie/rlottie.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'dart:io' as io;
+import 'package:dart_vlc/dart_vlc.dart' as vlc;
 
 /// UI representation of [MessageSticker]
 class StickerDisplay extends StatelessWidget {
@@ -54,15 +58,24 @@ class StickerDisplay extends StatelessWidget {
                     ),
                   )),
         builder: (_, path) {
-          return sticker.isAnimated!
-              ? Rlottie.file(
-                  key: rlottieKey,
-                  path: path,
-                  behavior: playBehavior,
-                  onClick: onClick,
-                  onAnimPlayed: onAnimPlayed,
-                )
-              : Image.file(io.File(path));
+          switch (sticker.type.runtimeType) {
+            case StickerTypeStatic:
+              return Image.file(io.File(path));
+            case StickerTypeAnimated:
+              return Rlottie.file(
+                key: rlottieKey,
+                path: path,
+                behavior: playBehavior,
+                onClick: onClick,
+                onAnimPlayed: onAnimPlayed,
+              );
+            case StickerTypeVideo:
+              return MessageDisplayVideoSticker(
+                client: client,
+                sticker: sticker,
+              );
+          }
+          return const SizedBox.shrink();
         },
         fileId: sticker.sticker!.id!,
         client: client);
