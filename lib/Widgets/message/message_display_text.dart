@@ -147,7 +147,9 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                           TextDisplay.parseEmojiInString(
                             widget.senderName!,
                             TextDisplay.create(
-                              textColor: getPeerColor(getSenderId(widget.message.senderId!)!, 'b'),
+                              textColor: widget.message.isOutgoing!
+                                  ? ClientTheme.currentTheme.getField("OutgoingChannelMessageTitleColor")
+                                  : getPeerColor(getSenderId(widget.message.senderId!)!, 'b'),
                               fontWeight: FontWeight.bold,
                               size: 18,
                               fontFamily: TextDisplay.greaterImportance,

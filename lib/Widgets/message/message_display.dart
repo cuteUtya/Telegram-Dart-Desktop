@@ -100,9 +100,15 @@ class MessageDisplay extends StatelessWidget {
           builder: (_, senderData) {
             var author = senderData.data.toString();
             Widget contentWidget;
-            bool showMessageSender = (bubbleRelativePosition == BubbleRelativePosition.top ||
-                    bubbleRelativePosition == BubbleRelativePosition.single) &&
-                (!message.isOutgoing! || (message.isOutgoing! && message.senderId is MessageSenderChat));
+            bool showMessageSender = false;
+
+            if (chat?.type is ChatTypeSupergroup || chat?.type is ChatTypeBasicGroup) {
+              if (!message.isOutgoing! || (message.isOutgoing! && message.senderId is MessageSenderChat)) {
+                showMessageSender = true;
+              }
+            } else {
+              showMessageSender = false;
+            }
 
             bool wrapInBubble = false;
             bool overrideBubblePadding = false;

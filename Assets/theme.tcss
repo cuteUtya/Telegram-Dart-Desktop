@@ -58,6 +58,7 @@ ChatSelectedColor: ref(HoveredObject);
 LoadScreenBackgroundColor: ref(SelectedColor);
 LoadScreenShadowColor: #AAAAAA;
 
+OutgoingChannelMessageTitleColor: #0BA628; 
 #red#
 PeerColor1a: #A3558D;
 PeerColor1b: #C98484;
