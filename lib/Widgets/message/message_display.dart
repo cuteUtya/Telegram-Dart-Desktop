@@ -101,13 +101,12 @@ class MessageDisplay extends StatelessWidget {
             var author = senderData.data.toString();
             Widget contentWidget;
             bool showMessageSender = false;
-
-            if (chat?.type is ChatTypeSupergroup || chat?.type is ChatTypeBasicGroup) {
-              if (!message.isOutgoing! || (message.isOutgoing! && message.senderId is MessageSenderChat)) {
-                showMessageSender = true;
+            if (bubbleRelativePosition == BubbleRelativePosition.top || bubbleRelativePosition == BubbleRelativePosition.single) {
+              if (chat?.type is ChatTypeSupergroup || chat?.type is ChatTypeBasicGroup) {
+                if (!message.isOutgoing! || (message.isOutgoing! && message.senderId is MessageSenderChat)) {
+                  showMessageSender = true;
+                }
               }
-            } else {
-              showMessageSender = false;
             }
 
             bool wrapInBubble = false;
