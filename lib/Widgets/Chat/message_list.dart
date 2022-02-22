@@ -27,6 +27,7 @@ class MessageList extends StatefulWidget {
 
 class _MessageListState extends State<MessageList> {
   Messages? messages;
+  Chat? chat;
   int _renderedChatId = 0;
   List<ChatAdministrator> admins = [];
   ScrollController scrollController = ScrollController();
@@ -42,7 +43,7 @@ class _MessageListState extends State<MessageList> {
 
   StreamSubscription? newMessageSubs;
 
-  void getChatHistory() async {
+  Future<void> getChatHistory() async {
     var limit = 100;
     Future<Messages> _invoke() async {
       return await widget.client.send(GetChatHistory(chatId: widget.chatId, limit: limit)) as Messages;
@@ -95,8 +96,10 @@ class _MessageListState extends State<MessageList> {
           if (event.chatId == widget.chatId) {
             var msg = messages?.messages!.firstWhereOrNull((element) => element.id == event.messageId);
             if (msg != null) {
-              msg.editDate = event.editDate;
-              msg.replyMarkup = event.replyMarkup;
+              setState(() {
+                msg.editDate = event.editDate;
+                msg.replyMarkup = event.replyMarkup;
+              });
             }
           }
         },
@@ -106,15 +109,20 @@ class _MessageListState extends State<MessageList> {
 
   @override
   Widget build(BuildContext context) {
-    var chat = widget.client.getChat(widget.chatId);
     if (_renderedChatId != widget.chatId) {
+      var _chat = widget.client.getChat(widget.chatId);
+      bool messageLoaded = false;
       listenNewMessage();
       listenMessageEdits();
-      getChatHistory();
-      var isChannel = (chat.type is ChatTypeSupergroup ? chat.type as ChatTypeSupergroup : null)?.isChannel ?? false;
-      if (chat.type is ChatTypeBasicGroup || (chat.type is ChatTypeSupergroup && !isChannel)) {
+      getChatHistory().then((value) {
+        messageLoaded = true;
+        chat = _chat;
+      });
+      var isChannel = (_chat.type is ChatTypeSupergroup ? _chat.type as ChatTypeSupergroup : null)?.isChannel ?? false;
+      if (_chat.type is ChatTypeBasicGroup || (_chat.type is ChatTypeSupergroup && !isChannel)) {
         widget.client.send(GetChatAdministrators(chatId: widget.chatId)).then((newAdmins) {
-          setState(() => admins = (newAdmins as ChatAdministrators).administrators!);
+          admins = (newAdmins as ChatAdministrators).administrators!;
+          if (messageLoaded) setState(() {});
         });
       } else {
         admins = [];
@@ -192,7 +200,7 @@ class _MessageListState extends State<MessageList> {
                     future: msg.replyToMessageId == 0
                         ? null
                         : widget.client.send(GetMessage(
-                            chatId: msg.replyInChatId == 0 ? chat.id : msg.replyInChatId, messageId: msg.replyToMessageId)),
+                            chatId: msg.replyInChatId == 0 ? chat?.id : msg.replyInChatId, messageId: msg.replyToMessageId)),
                     builder: (_, replieDate) {
                       return Container(
                         margin: EdgeInsets.only(
