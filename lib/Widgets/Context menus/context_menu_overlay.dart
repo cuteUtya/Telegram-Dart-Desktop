@@ -1,9 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:libwinmedia/libwinmedia.dart';
-import 'package:myapp/Widgets/transcluent_gestures_stack.dart';
 import 'package:myapp/global_key_extenstion.dart';
 import 'package:myapp/utils.dart';
+import 'package:path/path.dart';
 
 class ContextMenuOverlay extends StatefulWidget {
   const ContextMenuOverlay({Key? key}) : super(key: key);
@@ -95,9 +96,12 @@ class ContextMenuOverlayState extends State<ContextMenuOverlay> {
                           left: clamp(
                                   e.appendKey ? position.dx - (e.widgetKey.globalPaintBounds?.width ?? 0) : 0, 0, double.infinity)
                               .toDouble(),
-                          top: clamp(e.appendKey ? position.dy - (e.widgetKey.globalPaintBounds?.height ?? 0) : 0, 0,
-                                  double.infinity)
-                              .toDouble(),
+                          top: max(
+                              e.appendKey
+                                  ? position.dy -
+                                      (position.dy >= windowSize.height / 2 ? (e.widgetKey.globalPaintBounds?.height ?? 0) : 0)
+                                  : 0,
+                              0),
                         ),
                         child: e.menu,
                       ),
