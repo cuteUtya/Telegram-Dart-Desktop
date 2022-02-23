@@ -65,43 +65,44 @@ class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
   @override
   Widget build(BuildContext context) {
     return Listener(
-        onPointerSignal: (signal) {
-          if (signal is PointerScrollEvent) {
-            double delta = 0;
-            if (!widget.reverseScroll) {
-              delta -= signal.scrollDelta.dy;
-            } else {
-              delta += signal.scrollDelta.dy;
-            }
-            delta *= Platform.isWindows ? 30 : 15;
-            _controller.animateTo(
-              clamp(delta + _controller.offset, 0, _controller.position.maxScrollExtent).toDouble(),
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.decelerate,
-            );
+      onPointerSignal: (signal) {
+        if (signal is PointerScrollEvent) {
+          double delta = 0;
+          if (!widget.reverseScroll) {
+            delta -= signal.scrollDelta.dy;
+          } else {
+            delta += signal.scrollDelta.dy;
           }
-        },
-        child: ListView.builder(
-          itemBuilder: widget.itemBuilder,
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _controller,
-          scrollDirection: widget.scrollDirection,
-          itemCount: widget.itemCount,
-          reverse: widget.reverse,
-          primary: widget.primary,
-          shrinkWrap: widget.shrinkWrap,
-          padding: widget.padding,
-          itemExtent: widget.itemExtent,
-          prototypeItem: widget.prototypeItem,
-          addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
-          addRepaintBoundaries: widget.addRepaintBoundaries,
-          addSemanticIndexes: widget.addSemanticIndexes,
-          cacheExtent: widget.cacheExtent,
-          semanticChildCount: widget.semanticChildCount,
-          dragStartBehavior: widget.dragStartBehavior,
-          keyboardDismissBehavior: widget.keyboardDismissBehavior,
-          restorationId: widget.restorationId,
-          clipBehavior: widget.clipBehavior,
-        ));
+          delta *= Platform.isWindows ? 30 : 15;
+          _controller.animateTo(
+            clamp(delta + _controller.offset, 0, _controller.position.maxScrollExtent).toDouble(),
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.decelerate,
+          );
+        }
+      },
+      child: ListView.builder(
+        itemBuilder: widget.itemBuilder,
+        physics: const NeverScrollableScrollPhysics(),
+        controller: _controller,
+        scrollDirection: widget.scrollDirection,
+        itemCount: widget.itemCount,
+        reverse: widget.reverse,
+        primary: widget.primary,
+        shrinkWrap: widget.shrinkWrap,
+        padding: widget.padding,
+        itemExtent: widget.itemExtent,
+        prototypeItem: widget.prototypeItem,
+        addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
+        addRepaintBoundaries: widget.addRepaintBoundaries,
+        addSemanticIndexes: widget.addSemanticIndexes,
+        cacheExtent: widget.cacheExtent,
+        semanticChildCount: widget.semanticChildCount,
+        dragStartBehavior: widget.dragStartBehavior,
+        keyboardDismissBehavior: widget.keyboardDismissBehavior,
+        restorationId: widget.restorationId,
+        clipBehavior: widget.clipBehavior,
+      ),
+    );
   }
 }
