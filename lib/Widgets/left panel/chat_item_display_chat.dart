@@ -149,8 +149,7 @@ class ChatItemDisplay extends StatelessWidget {
                               stream: client.statusOf(interlocutor.id!),
                               initialData: interlocutor.status,
                               builder: (context, statusSnapshot) => OnlineIndicatorDidplay(
-                                heigth: 20,
-                                width: 20,
+                                size: 20,
                                 selected: selected,
                                 online: statusSnapshot.data is UserStatusOnline,
                               ),

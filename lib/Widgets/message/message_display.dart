@@ -14,11 +14,13 @@ import 'package:myapp/Widgets/message/message_sticker.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
 import 'package:myapp/Widgets/message/replies_display.dart';
 import 'package:myapp/Widgets/message/service_message.dart';
+import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
+import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
 
 /// UI representation of [Message] object
@@ -356,12 +358,13 @@ class MessageDisplay extends StatelessWidget {
                   );
                   break;
               }
+
+              senderUserpic = SizedBox(
+                width: 40,
+                height: 40,
+                child: senderUserpic,
+              );
             }
-            senderUserpic = SizedBox(
-              width: 40,
-              height: 40,
-              child: senderUserpic,
-            );
 
             if (wrapInBubble) {
               contentWidget = MacMessageBubble(
@@ -376,14 +379,25 @@ class MessageDisplay extends StatelessWidget {
                 child: contentWidget,
               );
             }
-
+            var senderId = getSenderId(message.senderId);
             return isServiceMessage
                 ? contentWidget
                 : Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      senderUserpic,
+                      Stack(alignment: Alignment.bottomRight, children: [
+                        senderUserpic ?? const SizedBox(width: 40),
+                        if (message.senderId is MessageSenderUser && senderUserpic != null)
+                          StreamBuilder(
+                            initialData: client.getUser(senderId!).status,
+                            stream: client.statusOf(senderId),
+                            builder: (_, data) => OnlineIndicatorDidplay(
+                              online: data.data is UserStatusOnline,
+                              size: 14,
+                            ),
+                          ),
+                      ]),
                       Expanded(
                         child: contentWidget,
                       )

@@ -19,7 +19,7 @@ class ClientTheme {
 
   static const String linesSeparator = ';';
   static const String valueSeparator = ':';
-  final Map<String, Function> environmentVariables = {"theme": () => "light"};
+  final Map<String, Function> environmentVariables = {"theme": () => "dark"};
   final Map<String, String> lines = {};
   final List<LangFunction> functions = [
     LangFunction("linear", [3], linear),

@@ -6,19 +6,18 @@ class OnlineIndicatorDidplay extends StatelessWidget {
     Key? key,
     required this.online,
     this.selected = false,
-    this.heigth,
-    this.width,
+    this.size,
   }) : super(key: key);
 
   final bool online;
   final bool selected;
-  final double? width;
-  final double? heigth;
+  final double? size;
   @override
   Widget build(BuildContext context) {
+    var cSize = (size ?? 20) * 0.6;
     return SizedBox(
-      width: width,
-      height: heigth,
+      width: size,
+      height: size,
       child: Center(
         child: Stack(
           alignment: Alignment.center,
@@ -29,22 +28,19 @@ class OnlineIndicatorDidplay extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: ClientTheme.currentTheme.getField(
-                    selected
-                        ? "OnlineColorOutlineSelected"
-                        : "OnlineColorOutline",
+                    selected ? "OnlineColorOutlineSelected" : "OnlineColorOutline",
                   ),
                 ),
-                width: online ? 20 : 0,
-                height: online ? 20 : 0),
+                width: online ? size : 0,
+                height: online ? size : 0),
             AnimatedContainer(
               curve: Curves.easeInQuad,
               duration: const Duration(milliseconds: 150),
-              width: online ? 12 : 0,
-              height: online ? 12 : 0,
+              width: online ? cSize : 0,
+              height: online ? cSize : 0,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: ClientTheme.currentTheme.getField(
-                    selected ? "OnlineColorSelected" : "OnlineStatusColor"),
+                color: ClientTheme.currentTheme.getField(selected ? "OnlineColorSelected" : "OnlineStatusColor"),
               ),
             ),
           ],
