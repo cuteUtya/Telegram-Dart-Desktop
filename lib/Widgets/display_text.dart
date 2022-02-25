@@ -189,6 +189,7 @@ class TextDisplay {
       TextOverflow? overflow,
       TextDecoration decoration = TextDecoration.none}) {
     fontFamily ??= regular;
+    textColor ??= ClientTheme.currentTheme.getField("RegularText");
     if (fontFamily == "emoji") {
       fontFamily = getEmojiFont();
     }

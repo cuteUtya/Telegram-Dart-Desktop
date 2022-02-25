@@ -83,7 +83,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
       suggestResend = false;
     }
 
-    return SizedBox(
+    return Center(child: SizedBox(
       width: 400,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,6 +136,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
               : Text(errorStr!, style: TextDisplay.regular16),
         ],
       ),
+    )
     );
   }
 
