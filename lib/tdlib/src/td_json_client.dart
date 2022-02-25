@@ -105,9 +105,9 @@ class JsonClient {
   void send(dynamic request) {
     _assertActive();
     var reqJson = json.encode(request);
-    var native = reqJson.toNativeUtf8();
-    _jsonClientSend(client, native);
-    malloc.free(native);
+    var ns = reqJson.toNativeUtf8();
+    _jsonClientSend(client, ns);
+    malloc.free(ns);
   }
 
   /// Receive the API's response
@@ -127,9 +127,9 @@ class JsonClient {
   /// [send] instead.
   TdObject execute(TdFunction request) {
     _assertActive();
-    var native = json.encode(request).toNativeUtf8();
-    final result = _jsonClientExecute(client, native);
-    malloc.free(native);
+    var ns = json.encode(request).toNativeUtf8();
+    final result = _jsonClientExecute(client, ns);
+    malloc.free(ns);
     var resJson = result.toDartString();
     return convertToObject(resJson);
   }
