@@ -150,7 +150,7 @@ class TextDisplay {
             )
           : style();
       textStyle = textStyle.copyWith(
-        color: textColor,
+        color: textEntety == null ? textColor : null,
         fontSize: size,
       );
       var parsedStr = parseEmojiInString(
