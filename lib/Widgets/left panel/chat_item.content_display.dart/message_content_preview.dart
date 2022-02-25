@@ -281,7 +281,10 @@ class MessageContentPreview extends StatelessWidget {
                     ] +
                     displayContent +
                     TextDisplay.parseFormattedText(
-                        text, 18, textColor ?? (chatSelected ? Colors.white : ClientTheme.currentTheme.getField("RegularText"))),
+                      text,
+                      18,
+                      chatSelected ? Colors.white : null,
+                    ),
               ));
         });
   }
