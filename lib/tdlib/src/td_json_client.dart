@@ -10,6 +10,7 @@
 
 import "dart:convert";
 import "dart:ffi";
+import 'package:ffi/ffi.dart';
 
 import "package:ffi/ffi.dart";
 import 'package:myapp/tdlib/td_api.dart';
@@ -104,8 +105,9 @@ class JsonClient {
   void send(dynamic request) {
     _assertActive();
     var reqJson = json.encode(request);
-
-    _jsonClientSend(client, reqJson.toNativeUtf8());
+    var native = reqJson.toNativeUtf8();
+    _jsonClientSend(client, native);
+    malloc.free(native);
   }
 
   /// Receive the API's response
@@ -125,8 +127,9 @@ class JsonClient {
   /// [send] instead.
   TdObject execute(TdFunction request) {
     _assertActive();
-    final result =
-        _jsonClientExecute(client, json.encode(request).toNativeUtf8());
+    var native = json.encode(request).toNativeUtf8();
+    final result = _jsonClientExecute(client, native);
+    malloc.free(native);
     var resJson = result.toDartString();
     return convertToObject(resJson);
   }
