@@ -205,5 +205,9 @@ file|rar|color: #C3203C;
 file|apk|color: #43A047;
 
 ReactionsInChatlistBackgroundColor: #d02a2a;
+ReactionsInChatlistBackgroundColorSelected: ref(ReactionsInChatListIconColor);
 ReactionsInChatListIconColor: #FFFFFF;
+ReactionsInChatListIconColorSelected: ref(ReactionsInChatlistBackgroundColor);
+ReactionsInChatListTextColor: #FFFFFF;
+ReactionsInChatListTextColorSelected: ref(ReactionsInChatListIconColorSelected);
 ReactionsInChatListIcon: Icons.favorite;

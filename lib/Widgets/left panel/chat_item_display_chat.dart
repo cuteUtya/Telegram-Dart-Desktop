@@ -180,21 +180,26 @@ class ChatItemDisplay extends StatelessWidget {
                       borderRadius: const BorderRadius.all(
                         Radius.circular(16),
                       ),
-                      color: ClientTheme.currentTheme.getField("ReactionsInChatlistBackgroundColor"),
+                      color: ClientTheme.currentTheme.getField(
+                          selected ? "ReactionsInChatlistBackgroundColorSelected" : "ReactionsInChatlistBackgroundColor"),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           ClientTheme.currentTheme.getField("ReactionsInChatListIcon"),
-                          color: ClientTheme.currentTheme.getField("ReactionsInChatListIconColor"),
+                          color: ClientTheme.currentTheme.getField(
+                            selected ? "ReactionsInChatListIconColorSelected" : "ReactionsInChatListIconColor",
+                          ),
                           size: 18,
                         ),
                         const SizedBox(width: 2),
                         Text(
                           data.data.toString(),
                           style: TextDisplay.create(
-                            textColor: Colors.white,
+                            textColor: ClientTheme.currentTheme.getField(
+                              selected ? "ReactionsInChatListTextColorSelected" : "ReactionsInChatListTextColor",
+                            ),
                             size: 18,
                           ),
                         )
