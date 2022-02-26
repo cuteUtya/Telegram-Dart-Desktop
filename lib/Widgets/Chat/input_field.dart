@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:desktop_drop/desktop_drop.dart';
+//import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
@@ -129,7 +129,7 @@ class InputFieldState extends State<InputField> {
       hideDeleteButton();
     }
 
-    return DropTarget(
+    return /*DropTarget(
       onDragEntered: (_) => setState(() {
         fileDragging = true;
       }),
@@ -142,7 +142,7 @@ class InputFieldState extends State<InputField> {
         saveAttachments();
       },
       onDragExited: (_) => onFileDragEnd(),
-      child: Column(
+      child: */Column(
         children: [
           AnimatedContainer(
             duration: animDuration,
@@ -348,8 +348,8 @@ class InputFieldState extends State<InputField> {
             ),
           ),
         ],
-      ),
-    );
+    );//),
+   // );
   }
 }
 

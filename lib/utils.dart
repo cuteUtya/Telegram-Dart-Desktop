@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/td_api.dart';
+import 'package:path_provider/path_provider.dart';
 
 num clamp(num value, num min, num max) {
   if (value > max) return max;
@@ -113,9 +114,20 @@ Color getPeerColor(int id, [String component = "a"]) {
 }
 
 String getUserLocale() => "ru";
-String getDatabaseDirectory() => "${Directory.current.path}/tddb/";
-String getFilesDirectory() => "${Directory.current.path}/tdfiles/";
-String getLanguagePackDatabasePath() => "${Directory.current.path}/tdtranslates.db";
+
+Future<String> getDocsPath() async {
+return (await getApplicationDocumentsDirectory()).path;
+}
+
+Future<String> getDatabaseDirectory() async {
+  return "${await getDocsPath()}/tddb/";
+}
+Future<String> getFilesDirectory() async {
+  return "${await getDocsPath()}/tdfiles/";
+}
+Future<String> getLanguagePackDatabasePath() async {
+  return "${await getDocsPath()}/tdtranslates.db";
+}
 
 String getDeviceName() => Platform.localHostname;
 String getSystemVersion() => Platform.operatingSystem;

@@ -22,7 +22,7 @@ dependencies:
   libwinmedia: ^0.0.1
   dart_vlc: ^0.1.8
   desktop_drop: ^0.3.2
-
+  path_provider: ^2.0.9
 
 dev_dependencies:
   flutter_test:

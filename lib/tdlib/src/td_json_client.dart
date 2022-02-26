@@ -10,6 +10,7 @@
 
 import "dart:convert";
 import "dart:ffi";
+import 'dart:io';
 import 'package:ffi/ffi.dart';
 
 import "package:ffi/ffi.dart";
@@ -66,27 +67,29 @@ class JsonClient {
   late JsonClientExecute _jsonClientExecute;
   late JsonClientDestroy _jsonClientDestroy;
 
-  JsonClient.create(String dlDir, {Pointer<Void>? clientPointer}) {
+  JsonClient.create({Pointer<Void>? clientPointer}) {
     // Get the path to the td_json_client dynamic library
-    final dlPath = platformPath(dlDir);
-
+    final dlPath =  Platform.isAndroid ? "libtdjsonandroid.so" : platformPath("./");
     final dylib = DynamicLibrary.open(dlPath);
 
     // Get the td_json_client_create function from the dylib and create a client
+    String sym(String s) => Platform.isAndroid ? "_$s" : s;
+
+
     _jsonClientCreate =
         dylib.lookupFunction<td_json_client_create, JsonClientCreate>(
-            "td_json_client_create");
+            sym("td_json_client_create"));
     _jsonClientSend = dylib.lookupFunction<td_json_client_send, JsonClientSend>(
-        "td_json_client_send");
+        sym("td_json_client_send"));
     _jsonClientReceive =
         dylib.lookupFunction<td_json_client_receive, JsonClientReceive>(
-            "td_json_client_receive");
+            sym("td_json_client_receive"));
     _jsonClientDestroy =
         dylib.lookupFunction<td_json_client_destroy, JsonClientDestroy>(
-            "td_json_client_destroy");
+            sym("td_json_client_destroy"));
     _jsonClientExecute =
         dylib.lookupFunction<td_json_client_execute, JsonClientExecute>(
-            "td_json_client_execute");
+            sym("td_json_client_execute"));
 
     client = clientPointer ?? _jsonClientCreate();
     active = true;

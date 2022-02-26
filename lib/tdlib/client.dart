@@ -297,6 +297,7 @@ class TelegramClient {
   String userLocale = "en";
   String userLangPackId = "en";
   static const String localizationTarget = "tdesktop";
+  late String languagePackDatabasePath;
 
   Widget buildTextByKey(String key, TextStyle style, {Map<String, String>? replacing, String? languagePackId, int? itemsCount}) {
     languagePackId ??= userLangPackId;
@@ -333,8 +334,8 @@ class TelegramClient {
       String? deviceModel,
       String? systemVersion}) async {
     useTestDc ??= false;
-    databaseDirectory ??= getDatabaseDirectory();
-    filesDirectory ??= getFilesDirectory();
+    databaseDirectory ??= await getDatabaseDirectory();
+    filesDirectory ??= await getFilesDirectory();
     apiHash ??= secrets.appHash;
     apiId ??= secrets.appId;
     systemLanguageCode ??= getUserLocale();
@@ -346,7 +347,7 @@ class TelegramClient {
     systemVersion ??= getSystemVersion();
 
     send(SetOption(name: "localization_target", value: OptionValueString(value: "tdesktop")));
-    send(SetOption(name: "language_pack_database_path", value: OptionValueString(value: getLanguagePackDatabasePath())));
+    send(SetOption(name: "language_pack_database_path", value: OptionValueString(value: await getLanguagePackDatabasePath())));
     send(SetOption(name: "language_pack_id", value: OptionValueString(value: userLangPackId)));
 
     tdlibParameters = TdlibParameters(
@@ -574,12 +575,10 @@ class TelegramClient {
   }
 
   String getTranslation(String key,
-      {String? languagePackDatabasePath,
-      String? languagePackId,
+      {String? languagePackId,
       String? localizationTarget,
       Map<String, String>? replacing,
       int? itemsCount}) {
-    languagePackDatabasePath ??= getLanguagePackDatabasePath();
     languagePackId ??= userLangPackId;
     localizationTarget ??= TelegramClient.localizationTarget;
 
@@ -654,12 +653,13 @@ class TelegramClient {
   final Map<int, File> _cachedFiles = {};
 
   Future<void> init() async {
+    languagePackDatabasePath = await getLanguagePackDatabasePath();
     Completer completer = Completer<void>();
     var receive = await initIsolate();
     receive.listen((message) {
       if (message is int) {
         Pointer<Void> pointer = Pointer.fromAddress(message);
-        _sendClient = JsonClient.create("./", clientPointer: pointer);
+        _sendClient = JsonClient.create(clientPointer: pointer);
         completer.complete();
       }
 
@@ -867,7 +867,7 @@ class TelegramClient {
 void _tdlib_listen(SendPort isolateToMainStream) {
   ReceivePort mainToIsolateStream = ReceivePort();
   isolateToMainStream.send(mainToIsolateStream.sendPort);
-  var client = JsonClient.create("./");
+  var client = JsonClient.create();
   isolateToMainStream.send(client.client.address);
   client.incomingString().listen((update) {
     isolateToMainStream.send(update);

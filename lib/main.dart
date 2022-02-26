@@ -13,18 +13,15 @@ import 'package:libwinmedia/libwinmedia.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  LWM.initialize();
   DartVLC.initialize();
   await ClientTheme.init();
   var client = TelegramClient();
   await client.init();
-  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 2));
+  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 5));
   UrlsUtils.init(client);
   runApp(
     MaterialApp(
-      home: Material(
-        child: App(client: client),
-      ),
+      home: App(client: client),
     ),
   );
 }
@@ -37,6 +34,7 @@ class App extends StatelessWidget {
     return Center(
       child: TranscluentGesturesStack(
         children: [
+          Expanded(child: Container(color: Colors.white)),
           AutorizationRouter(client: client),
           BigStickerOverlay(client: client),
           const ContextMenuOverlay(),
