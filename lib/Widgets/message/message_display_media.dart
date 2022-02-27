@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:myapp/State%20managment/ui_events.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -85,7 +87,7 @@ class MessageDisplayMedia extends StatelessWidget {
                       if (infoWidget != null)
                         WidgetHider(
                           key: hiderKey,
-                          hiddenOnInit: true,
+                          hiddenOnInit: !UIManager.isMobile,
                           child: Container(
                             child: infoWidget!,
                             margin: const EdgeInsets.all(8),

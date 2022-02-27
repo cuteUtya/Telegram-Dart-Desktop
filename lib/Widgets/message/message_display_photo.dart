@@ -43,7 +43,9 @@ class MessageDisplayPhoto extends StatelessWidget {
     bool haveText = (photo.caption?.text ?? "").isNotEmpty;
     GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
     BorderRadius border = BorderRadius.vertical(
-      top: replieWidget == null || !haveText ? const Radius.circular(12) : Radius.zero,
+      top: replieWidget == null || !haveText
+          ? const Radius.circular(12)
+          : Radius.zero,
       bottom: haveText ? Radius.zero : const Radius.circular(12),
     );
 
@@ -67,76 +69,82 @@ class MessageDisplayPhoto extends StatelessWidget {
           height: height,
         );
         return MessageDisplayMedia(
+          client: client,
+          message: message,
+          senderName: senderName,
+          infoWidget: infoWidget,
+          contentWidth: width,
+          adminTitle: adminTitle,
+          captionMargin: contentPadding,
+          caption: photo.caption,
+          content: RemoteFileBuilderProgress(
             client: client,
-            message: message,
-            senderName: senderName,
-            infoWidget: infoWidget,
-            contentWidth: width,
-            adminTitle: adminTitle,
-            captionMargin: contentPadding,
-            caption: photo.caption,
-            content: RemoteFileBuilderProgress(
-              client: client,
-              downloadStep: 65000,
-              fileId: photoSize.photo!.id!,
-              builder: (_, progress, path) {
-                if (path == null || progress != 1) {
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      blurImage,
-                      MessageInfoBubbleBase(
-                          padding: const EdgeInsets.all(8),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "${(progress * 100).toInt()}%",
-                                style: TextDisplay.create(
-                                  size: 16,
-                                  textColor: Colors.white,
-                                  fontFamily: TextDisplay.greaterImportance,
-                                ),
+            downloadStep: 65000,
+            fileId: photoSize.photo!.id!,
+            builder: (_, progress, path) {
+              if (path == null || progress != 1) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    blurImage,
+                    MessageInfoBubbleBase(
+                      padding: const EdgeInsets.all(8),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "${(progress * 100).toInt()}%",
+                            style: TextDisplay.create(
+                              size: 16,
+                              textColor: Colors.white,
+                              fontFamily: TextDisplay.greaterImportance,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          ClipRRect(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(
+                                4,
                               ),
-                              const SizedBox(
-                                height: 4,
+                            ),
+                            child: SizedBox(
+                              width: width * 0.33,
+                              height: 12,
+                              child: LinearProgressIndicator(
+                                color: Colors.white,
+                                backgroundColor:
+                                    Color(0x2A1515).withOpacity(0.24),
+                                value: progress,
                               ),
-                              ClipRRect(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    4,
-                                  ),
-                                ),
-                                child: SizedBox(
-                                  width: width * 0.33,
-                                  height: 12,
-                                  child: LinearProgressIndicator(
-                                    color: Colors.white,
-                                    backgroundColor: Color(0x2A1515).withOpacity(0.24),
-                                    value: progress,
-                                  ),
-                                ),
-                              )
-                            ],
-                          )),
-                    ],
-                  );
-                }
-                return Align(
-                  alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-                  child: ClipRRect(
-                      borderRadius: border,
-                      child: SizedBox(
-                        width: width,
-                        height: height,
-                        child: Image.file(
-                          io.File(path),
-                          fit: BoxFit.cover,
-                        ),
-                      )),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 );
-              },
-            ));
+              }
+              return Align(
+                alignment: message.isOutgoing!
+                    ? Alignment.bottomRight
+                    : Alignment.bottomLeft,
+                child: ClipRRect(
+                  borderRadius: border,
+                  child: SizedBox(
+                    width: width,
+                    height: height,
+                    child: Image.file(
+                      io.File(path),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
       },
     );
   }
