@@ -6,6 +6,7 @@ import 'package:myapp/Widgets/date_bubble.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/Widgets/smooth_list_view.dart';
+import 'package:myapp/safe_spacer.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -177,7 +178,9 @@ class _MessageListState extends State<MessageList> {
 
         var adminInfo = admins.firstWhereOrNull((element) => element.userId == getSenderId(msg.senderId!));
         bool isServiceMessage = serviceMessages.contains(msg.content.runtimeType);
-        int spacerFlex = msg.content is MessageContent && msg.replyToMessageId == 0 ? 2 : 1;
+        int spacerFlex = UIManager.isMobile ?
+        msg.content is MessageContent && msg.replyToMessageId == 0 ? 1 : 0 :
+        msg.content is MessageContent && msg.replyToMessageId == 0 ? 2 : 1;
 
 
         return Column(children: [
@@ -196,8 +199,9 @@ class _MessageListState extends State<MessageList> {
           else
             Row(
               children: [
-                if (msg.isOutgoing! && !isServiceMessage && !UIManager.isMobile) Spacer(flex: spacerFlex),
+                if (msg.isOutgoing! && !isServiceMessage) SafeSpacer(flex: spacerFlex),
                 Expanded(
+                  flex: UIManager.isMobile ? 4 : 2,
                   child: FutureBuilder(
                     key: UniqueKey(),
                     future: msg.replyToMessageId == 0
@@ -233,8 +237,8 @@ class _MessageListState extends State<MessageList> {
                     },
                   ),
                 ),
-                if (!msg.isOutgoing! && !isServiceMessage && !UIManager.isMobile)
-                  Spacer(
+                if (!msg.isOutgoing! && !isServiceMessage)
+                  SafeSpacer(
                     flex: spacerFlex,
                   )
               ],

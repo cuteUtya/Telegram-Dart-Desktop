@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -27,10 +28,13 @@ class MessageStickerDisplay extends StatelessWidget {
     var hiderKey = GlobalKey<WidgetHiderState>();
     var sizerKey = GlobalKey<WidgetSizerState>();
 
-    var stickerWidth = (sticker.width ?? (sticker.width!)).toDouble() * StickerDisplay.stickerSizeRatie;
-    var stickerHeight = (sticker.height ?? (sticker.height!)).toDouble() * StickerDisplay.stickerSizeRatie;
+    var stickerWidth = (sticker.width ?? (sticker.width!)).toDouble() *
+        StickerDisplay.stickerSizeRatio;
+    var stickerHeight = (sticker.height ?? (sticker.height!)).toDouble() *
+        StickerDisplay.stickerSizeRatio;
     return Align(
-      alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
+      alignment:
+          message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,17 +49,22 @@ class MessageStickerDisplay extends StatelessWidget {
               key: sizerKey,
               curve: Curves.easeOutBack,
               duration: const Duration(milliseconds: 200),
-              alignment: message.isOutgoing! ? Alignment.centerRight : Alignment.centerLeft,
+              alignment: message.isOutgoing!
+                  ? Alignment.centerRight
+                  : Alignment.centerLeft,
               sizeOnInit: Size(
                 stickerWidth,
                 stickerHeight,
               ),
               child: GestureDetector(
                 onLongPress: () {
-                  sizerKey.currentState?.resize(Size(stickerWidth * 1.5, stickerHeight * 1.5));
+                  sizerKey.currentState?.resize(
+                    Size(stickerWidth * 1.33, stickerHeight * 1.33),
+                  );
                 },
                 onLongPressEnd: (_) {
-                  sizerKey.currentState?.resize(Size(stickerWidth, stickerHeight));
+                  sizerKey.currentState
+                      ?.resize(Size(stickerWidth, stickerHeight));
                 },
                 child: MouseRegion(
                   onEnter: (_) => hiderKey.currentState?.show(),
@@ -72,7 +81,7 @@ class MessageStickerDisplay extends StatelessWidget {
               child: WidgetHider(
                 key: hiderKey,
                 child: infoWidget,
-                hiddenOnInit: true,
+                hiddenOnInit: !UIManager.isMobile,
               ),
             )
           ]),

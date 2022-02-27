@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/Stickers/sticker_outnline.dart';
 import 'package:myapp/Widgets/message/message_display_gif.dart';
 import 'package:myapp/Widgets/message/message_display_video.dart';
@@ -37,12 +38,12 @@ class StickerDisplay extends StatelessWidget {
   final Alignment alignment;
   final TelegramClient client;
 
-  static const stickerSizeRatie = 0.5;
+  static double get stickerSizeRatio => UIManager.isMobile ? 0.35 :  0.45;
 
   @override
   Widget build(BuildContext context) {
-    var width = (sticker.width ?? sticker.width!).toDouble() * (stickerSizeRatie * size);
-    var height = (sticker.height ?? sticker.height!).toDouble() * (stickerSizeRatie * size);
+    var width = (sticker.width ?? sticker.width!).toDouble() * (stickerSizeRatio * size);
+    var height = (sticker.height ?? sticker.height!).toDouble() * (stickerSizeRatio * size);
     return RemoteFileBuilder(
         emptyPlaceholder: loadPlaceHolder ??
             (sticker.outline == null || !showOutline
@@ -50,7 +51,7 @@ class StickerDisplay extends StatelessWidget {
                 : CustomPaint(
                     painter: StickerOutline(
                       sticker.outline!,
-                      stickerSizeRatie * size,
+                      stickerSizeRatio * size,
                     ),
                     child: SizedBox(
                       width: width,

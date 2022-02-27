@@ -98,8 +98,8 @@ class _MessageDisplayAnimtedEmojiState extends State<MessageDisplayAnimatedEmoji
       child: Align(
         alignment: widget.message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
         child: SizedBox(
-          width: emoji.sticker!.width! * StickerDisplay.stickerSizeRatie,
-          height: emoji.sticker!.height! * StickerDisplay.stickerSizeRatie,
+          width: emoji.sticker!.width! * StickerDisplay.stickerSizeRatio,
+          height: emoji.sticker!.height! * StickerDisplay.stickerSizeRatio,
           child: StickerDisplay(
             rlottieKey: _animationKey,
             onClick: () => showBigAnimation(),
