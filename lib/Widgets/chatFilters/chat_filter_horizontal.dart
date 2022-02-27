@@ -24,6 +24,7 @@ class ChatFilterHorizontal extends StatefulWidget {
 
 class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
   static int active = -1;
+  static List<ChatFilterInfo> filters = [];
   final Map<int, GlobalKey> _filtersKeys = {};
 
   StreamSubscription? _s;
@@ -45,8 +46,6 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
     _s?.cancel();
     super.dispose();
   }
-
-  List<ChatFilterInfo> filters = [];
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +73,7 @@ class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
                             .toList()),
                   );
                   filters.addAll(f);
-                  this.filters = filters;
+                  ChatFilterHorizontalState.filters = filters;
                 }
                 filters = [
                       ChatFilterInfo(

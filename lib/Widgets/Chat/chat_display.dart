@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/State managment/ui_events.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
 import 'package:myapp/Widgets/Chat/input_field.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
@@ -16,7 +17,7 @@ class ChatDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return Material(child: StreamBuilder(
       stream: UIEvents.selectedChat(),
       builder: (_, data) {
         var chat = data.data != null ? client.getChat(data.data as int) : null;
@@ -70,8 +71,9 @@ class ChatDisplay extends StatelessWidget {
               ),
             if (chat != null)
               Container(
-                margin: const EdgeInsets.fromLTRB(108, 0, 108, 24),
+                margin: UIManager.isMobile ? const EdgeInsets.fromLTRB(12, 0, 12, 12) : const EdgeInsets.fromLTRB(108, 0, 108, 24),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Expanded(
                       child: Padding(
@@ -100,6 +102,6 @@ class ChatDisplay extends StatelessWidget {
           ],
         );
       },
-    );
+    ),);
   }
 }

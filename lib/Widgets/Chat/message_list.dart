@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
@@ -177,6 +178,8 @@ class _MessageListState extends State<MessageList> {
         var adminInfo = admins.firstWhereOrNull((element) => element.userId == getSenderId(msg.senderId!));
         bool isServiceMessage = serviceMessages.contains(msg.content.runtimeType);
         int spacerFlex = msg.content is MessageContent && msg.replyToMessageId == 0 ? 2 : 1;
+
+
         return Column(children: [
           if (nextDate == null)
             Container(margin: const EdgeInsets.only(bottom: 16), child: DateBubble(client: widget.client, date: currDate)),
@@ -193,7 +196,7 @@ class _MessageListState extends State<MessageList> {
           else
             Row(
               children: [
-                if (msg.isOutgoing! && !isServiceMessage) Spacer(flex: spacerFlex),
+                if (msg.isOutgoing! && !isServiceMessage && !UIManager.isMobile) Spacer(flex: spacerFlex),
                 Expanded(
                   child: FutureBuilder(
                     key: UniqueKey(),
@@ -230,7 +233,7 @@ class _MessageListState extends State<MessageList> {
                     },
                   ),
                 ),
-                if (!msg.isOutgoing! && !isServiceMessage)
+                if (!msg.isOutgoing! && !isServiceMessage && !UIManager.isMobile)
                   Spacer(
                     flex: spacerFlex,
                   )
