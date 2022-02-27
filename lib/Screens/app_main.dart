@@ -25,8 +25,8 @@ class _AppMainState extends State<AppMain> {
       Future.delayed(Duration.zero)
           .then((value) => widget.client.startReceiveUpdates());
     });
-
-    return UIManager.isMobile
+    var screenSize = MediaQuery.of(context).size;
+    return screenSize.height > screenSize.width
         ? AppMainMobile(
             client: widget.client,
           )
