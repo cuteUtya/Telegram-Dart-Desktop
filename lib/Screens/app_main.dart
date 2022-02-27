@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:myapp/Widgets/Chat/chat_display.dart';
-import 'package:myapp/Widgets/left%20panel/left_panel.dart';
+import 'package:myapp/Screens/app_main_desktop.dart';
+import 'package:myapp/Screens/app_main_mobile.dart';
 import 'package:myapp/tdlib/client.dart';
+import 'package:myapp/UIManager.dart';
 
 class AppMain extends StatefulWidget {
   const AppMain({
@@ -23,18 +26,12 @@ class _AppMainState extends State<AppMain> {
           .then((value) => widget.client.startReceiveUpdates());
     });
 
-    return Row(children: [
-      SizedBox(
-        width: MediaQuery.of(context).size.width * 0.25,
-        child: LeftPanel(
-          client: widget.client,
-        ),
-      ),
-      Expanded(
-        child: ChatDisplay(
-          client: widget.client,
-        ),
-      ),
-    ]);
+    return UIManager.isMobile
+        ? AppMainMobile(
+            client: widget.client,
+          )
+        : AppMainDesktop(
+            client: widget.client,
+          );
   }
 }

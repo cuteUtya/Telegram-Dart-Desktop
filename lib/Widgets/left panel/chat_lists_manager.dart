@@ -154,6 +154,11 @@ class ChatListsManagerState extends State<ChatListsManager> {
         PageView.builder(
           controller: mainContoller,
           itemCount: _lists.length,
+          onPageChanged: (p) {
+            setCurrentChatList(_lists[p]);
+            print("select ${_lists[p].toJson()}");
+            UIEvents.selectChatList(_lists[p]);
+          },
           itemBuilder: (context, index) {
             if (_scrollContollers[index] == null) {
               _scrollContollers[index] = ScrollController();

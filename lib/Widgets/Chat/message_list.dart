@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
-import 'package:myapp/Widgets/smooth_desktop_list_view.dart';
+import 'package:myapp/Widgets/smooth_list_view.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -130,7 +130,7 @@ class _MessageListState extends State<MessageList> {
       _renderedChatId = widget.chatId;
     }
 
-    return SmoothDesktopListView(
+    return SmoothListView(
       reverse: true,
       scrollController: scrollController,
       itemCount: messages?.totalCount ?? 0,

@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/utils.dart';
 
-class SmoothDesktopListView extends StatefulWidget {
-  const SmoothDesktopListView(
+class SmoothListView extends StatefulWidget {
+  const SmoothListView(
       {Key? key,
       this.scrollDirection = Axis.vertical,
       this.reverse = false,
@@ -54,7 +55,7 @@ class SmoothDesktopListView extends StatefulWidget {
   State<StatefulWidget> createState() => _SmoothDekstopListViewState();
 }
 
-class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
+class _SmoothDekstopListViewState extends State<SmoothListView> {
   late final ScrollController _controller = widget.scrollController ?? ScrollController();
 
   @override
@@ -83,7 +84,7 @@ class _SmoothDekstopListViewState extends State<SmoothDesktopListView> {
       },
       child: ListView.builder(
         itemBuilder: widget.itemBuilder,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: UIManager.isMobile ? const BouncingScrollPhysics() :  const NeverScrollableScrollPhysics(),
         controller: _controller,
         scrollDirection: widget.scrollDirection,
         itemCount: widget.itemCount,

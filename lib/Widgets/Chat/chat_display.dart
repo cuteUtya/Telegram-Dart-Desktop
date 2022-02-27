@@ -24,37 +24,55 @@ class ChatDisplay extends StatelessWidget {
           children: [
             if (tw1nkleeModeEnable)
               BackgroundDisplay(
-                background: Background(
-                    type: BackgroundTypeFill(
-                        fill: BackgroundFillSolid(
-                            color: (ClientTheme.currentTheme.getField("tw1nkleeModeBackgroundColor") as Color).value))),
                 client: client,
+                background: Background(
+                  type: BackgroundTypeFill(
+                    fill: BackgroundFillSolid(
+                      color: (ClientTheme.currentTheme
+                              .getField("tw1nkleeModeBackgroundColor") as Color)
+                          .value,
+                    ),
+                  ),
+                ),
               )
             else
               StreamBuilder(
                 stream: client.selectedBackground,
                 builder: (_, data) {
                   if (data.hasData) {
-                    var update = data.data == null ? null : data.data as UpdateSelectedBackground;
+                    var update = data.data == null
+                        ? null
+                        : data.data as UpdateSelectedBackground;
                     if (update?.background == null) {
-                      client.send(GetBackgrounds()).then((backs) => client.send(SetBackground(
-                          forDarkTheme: update?.forDarkTheme,
-                          background: InputBackgroundRemote(
-                              backgroundId: backs is Backgrounds ? backs.backgrounds![0].id! : (backs as Background).id!))));
+                      client.send(GetBackgrounds()).then(
+                            (backs) => client.send(
+                              SetBackground(
+                                forDarkTheme: update?.forDarkTheme,
+                                background: InputBackgroundRemote(
+                                  backgroundId: backs is Backgrounds
+                                      ? backs.backgrounds![0].id!
+                                      : (backs as Background).id!,
+                                ),
+                              ),
+                            ),
+                          );
                       return const SizedBox.shrink();
                     }
                     return BackgroundDisplay(
-                        client: client,
-                        //TODO correct work with dark and light themes
-                        background: (data.data as UpdateSelectedBackground).background!);
+                      client: client,
+                      //TODO correct work with dark and light themes
+                      background:
+                          (data.data as UpdateSelectedBackground).background!,
+                    );
                   }
                   return const SizedBox.shrink();
                 },
               ),
             if (chat != null)
               Container(
-                  margin: const EdgeInsets.fromLTRB(108, 0, 108, 24),
-                  child: Column(children: [
+                margin: const EdgeInsets.fromLTRB(108, 0, 108, 24),
+                child: Column(
+                  children: [
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -67,8 +85,10 @@ class ChatDisplay extends StatelessWidget {
                     InputField(
                       client: client,
                       chatId: chat.id ?? 0,
-                    )
-                  ])),
+                    ),
+                  ],
+                ),
+              ),
             if (chat != null)
               Container(
                 alignment: Alignment.topCenter,

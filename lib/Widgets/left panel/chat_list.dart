@@ -5,7 +5,7 @@ import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_display_chat.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
-import 'package:myapp/Widgets/smooth_desktop_list_view.dart';
+import 'package:myapp/Widgets/smooth_list_view.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/utils.dart';
@@ -35,7 +35,7 @@ class ChatListDisplay extends StatelessWidget {
     var sorted = sortChatsFor(chatsPositions, chatList);
     bool isMain = chatList is ChatListMain;
     String chatListId = _chatListStr(chatList);
-    return SmoothDesktopListView(
+    return SmoothListView(
       reverseScroll: true,
       itemCount: sorted.length + (isMain ? 1 : 0) + 1,
       scrollController: scrollController,

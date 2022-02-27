@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
@@ -83,7 +84,7 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
       suggestResend = false;
     }
 
-    return Center(child: SizedBox(
+    return Material(child: Center(child: SizedBox(
       width: 400,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,8 +137,8 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
               : Text(errorStr!, style: TextDisplay.regular16),
         ],
       ),
-    )
-    );
+    ),
+    ),);
   }
 
   void errorHandler(TdObject result) {

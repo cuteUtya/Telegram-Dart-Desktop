@@ -17,11 +17,14 @@ void main() async {
   await ClientTheme.init();
   var client = TelegramClient();
   await client.init();
-  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 5));
+  await client.send(SetLogVerbosityLevel(newVerbosityLevel: 0));
   UrlsUtils.init(client);
   runApp(
     MaterialApp(
-      home: App(client: client),
+      color: ClientTheme.currentTheme.getField("BaseColor"),
+      home: App(
+        client: client,
+      ),
     ),
   );
 }
@@ -32,13 +35,15 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: TranscluentGesturesStack(
-        children: [
-          Expanded(child: Container(color: Colors.white)),
-          AutorizationRouter(client: client),
-          BigStickerOverlay(client: client),
-          const ContextMenuOverlay(),
-        ],
+      child: SafeArea(
+        child: TranscluentGesturesStack(
+          children: [
+            //  Expanded(child: Container(color: Colors.white)),
+            AutorizationRouter(client: client),
+            BigStickerOverlay(client: client),
+            const ContextMenuOverlay(),
+          ],
+        ),
       ),
     );
   }
