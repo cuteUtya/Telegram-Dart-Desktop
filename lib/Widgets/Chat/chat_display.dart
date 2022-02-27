@@ -17,91 +17,100 @@ class ChatDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(child: StreamBuilder(
-      stream: UIEvents.selectedChat(),
-      builder: (_, data) {
-        var chat = data.data != null ? client.getChat(data.data as int) : null;
-        return Stack(
-          children: [
-            if (tw1nkleeModeEnable)
-              BackgroundDisplay(
-                client: client,
-                background: Background(
-                  type: BackgroundTypeFill(
-                    fill: BackgroundFillSolid(
-                      color: (ClientTheme.currentTheme
-                              .getField("tw1nkleeModeBackgroundColor") as Color)
-                          .value,
-                    ),
-                  ),
-                ),
-              )
-            else
-              StreamBuilder(
-                stream: client.selectedBackground,
-                builder: (_, data) {
-                  if (data.hasData) {
-                    var update = data.data == null
-                        ? null
-                        : data.data as UpdateSelectedBackground;
-                    if (update?.background == null) {
-                      client.send(GetBackgrounds()).then(
-                            (backs) => client.send(
-                              SetBackground(
-                                forDarkTheme: update?.forDarkTheme,
-                                background: InputBackgroundRemote(
-                                  backgroundId: backs is Backgrounds
-                                      ? backs.backgrounds![0].id!
-                                      : (backs as Background).id!,
-                                ),
-                              ),
-                            ),
-                          );
-                      return const SizedBox.shrink();
-                    }
-                    return BackgroundDisplay(
-                      client: client,
-                      //TODO correct work with dark and light themes
-                      background:
-                          (data.data as UpdateSelectedBackground).background!,
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            if (chat != null)
-              Container(
-                margin: UIManager.isMobile ? const EdgeInsets.fromLTRB(12, 0, 12, 12) : const EdgeInsets.fromLTRB(108, 0, 108, 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: MessageList(
-                          chatId: chat.id!,
-                          client: client,
+    return Padding(
+      padding: MediaQuery.of(context).viewInsets,
+      child: Material(
+        child: StreamBuilder(
+          stream: UIEvents.selectedChat(),
+          builder: (_, data) {
+            var chat =
+                data.data != null ? client.getChat(data.data as int) : null;
+            return Stack(
+              children: [
+                if (tw1nkleeModeEnable)
+                  BackgroundDisplay(
+                    client: client,
+                    background: Background(
+                      type: BackgroundTypeFill(
+                        fill: BackgroundFillSolid(
+                          color: (ClientTheme.currentTheme
+                                      .getField("tw1nkleeModeBackgroundColor")
+                                  as Color)
+                              .value,
                         ),
                       ),
                     ),
-                    InputField(
-                      client: client,
-                      chatId: chat.id ?? 0,
+                  )
+                else
+                  StreamBuilder(
+                    stream: client.selectedBackground,
+                    builder: (_, data) {
+                      if (data.hasData) {
+                        var update = data.data == null
+                            ? null
+                            : data.data as UpdateSelectedBackground;
+                        if (update?.background == null) {
+                          client.send(GetBackgrounds()).then(
+                                (backs) => client.send(
+                                  SetBackground(
+                                    forDarkTheme: update?.forDarkTheme,
+                                    background: InputBackgroundRemote(
+                                      backgroundId: backs is Backgrounds
+                                          ? backs.backgrounds![0].id!
+                                          : (backs as Background).id!,
+                                    ),
+                                  ),
+                                ),
+                              );
+                          return const SizedBox.shrink();
+                        }
+                        return BackgroundDisplay(
+                          client: client,
+                          //TODO correct work with dark and light themes
+                          background: (data.data as UpdateSelectedBackground)
+                              .background!,
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                if (chat != null)
+                  Container(
+                    margin: UIManager.isMobile
+                        ? const EdgeInsets.fromLTRB(12, 0, 12, 12)
+                        : const EdgeInsets.fromLTRB(108, 0, 108, 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: MessageList(
+                              chatId: chat.id!,
+                              client: client,
+                            ),
+                          ),
+                        ),
+                        InputField(
+                          client: client,
+                          chatId: chat.id ?? 0,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            if (chat != null)
-              Container(
-                alignment: Alignment.topCenter,
-                child: ActionBarDisplay(
-                  client: client,
-                  chat: chat,
-                ),
-              ),
-          ],
-        );
-      },
-    ),);
+                  ),
+                if (chat != null)
+                  Container(
+                    alignment: Alignment.topCenter,
+                    child: ActionBarDisplay(
+                      client: client,
+                      chat: chat,
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 }
