@@ -25,12 +25,12 @@ class _AppMainState extends State<AppMain> {
       Future.delayed(Duration.zero)
           .then((value) => widget.client.startReceiveUpdates());
     });
-    var screenSize = MediaQuery.of(context).size;
-    return screenSize.height > screenSize.width
-        ? AppMainMobile(
+
+    return UIManager.useDesktopLayout
+        ? AppMainDesktop(
             client: widget.client,
           )
-        : AppMainDesktop(
+        : AppMainMobile(
             client: widget.client,
           );
   }

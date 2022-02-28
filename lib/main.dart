@@ -3,6 +3,7 @@ import 'package:myapp/Links%20utils/linksOpener.dart';
 import 'package:myapp/Screens/autorization_router.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/Context%20menus/context_menu_overlay.dart';
 import 'package:myapp/Widgets/big_stickers_overlay.dart';
 import 'package:myapp/Widgets/transcluent_gestures_stack.dart';
@@ -34,6 +35,7 @@ class App extends StatelessWidget {
   final TelegramClient client;
   @override
   Widget build(BuildContext context) {
+    UIManager.screenSizeChange(context);
     return Center(
       child: SafeArea(
         child: TranscluentGesturesStack(
