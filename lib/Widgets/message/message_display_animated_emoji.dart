@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/big_stickers_overlay.dart';
 import 'package:myapp/Rlottie/rlottie.dart';
+import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 
@@ -27,7 +28,8 @@ class MessageDisplayAnimatedEmoji extends StatefulWidget {
   State<StatefulWidget> createState() => _MessageDisplayAnimtedEmojiState();
 }
 
-class _MessageDisplayAnimtedEmojiState extends State<MessageDisplayAnimatedEmoji> {
+class _MessageDisplayAnimtedEmojiState
+    extends State<MessageDisplayAnimatedEmoji> {
   bool _canPlayAnim = true;
   void showBigAnimation({Sticker? sticker}) async {
     if (_canPlayAnim) {
@@ -35,12 +37,17 @@ class _MessageDisplayAnimtedEmojiState extends State<MessageDisplayAnimatedEmoji
       _animationKey.currentState?.play();
       var renderObject = _animationKey.currentContext?.findRenderObject();
       var transition = renderObject?.getTransformTo(null).getTranslation();
-      var rect = renderObject?.paintBounds.shift(Offset(transition?.x ?? 0, transition?.y ?? 0));
+      var rect = renderObject?.paintBounds
+          .shift(Offset(transition?.x ?? 0, transition?.y ?? 0));
       var animPosition = Offset(rect?.left ?? 0, rect?.top ?? 0);
 
-      var audio = (widget.message.content as MessageAnimatedEmoji).animatedEmoji?.sound;
+      var audio =
+          (widget.message.content as MessageAnimatedEmoji).animatedEmoji?.sound;
       if (audio != null) {
-        widget.client.send(DownloadFile(fileId: audio.id, priority: 1, synchronous: true)).then(
+        widget.client
+            .send(
+                DownloadFile(fileId: audio.id, priority: 1, synchronous: true))
+            .then(
           (file) {
             file as File;
             AudioProvider.playOneTick(file.local!.path!);
@@ -72,7 +79,9 @@ class _MessageDisplayAnimtedEmojiState extends State<MessageDisplayAnimatedEmoji
 
   @override
   void initState() {
-    _streamSubscription.add(widget.client.animatedEmojiClick(widget.chatId, widget.message.id!).listen((event) {
+    _streamSubscription.add(widget.client
+        .animatedEmojiClick(widget.chatId, widget.message.id!)
+        .listen((event) {
       if (_canPlayAnim) {
         _animationKey.currentState?.play();
         showBigAnimation(sticker: event.sticker);
@@ -93,25 +102,32 @@ class _MessageDisplayAnimtedEmojiState extends State<MessageDisplayAnimatedEmoji
   Widget build(BuildContext context) {
     assert(widget.message.content is MessageAnimatedEmoji);
     var emoji = (widget.message.content as MessageAnimatedEmoji).animatedEmoji!;
-    return GestureDetector(
-      onTap: () => showBigAnimation(),
-      child: Align(
-        alignment: widget.message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-        child: SizedBox(
-          width: emoji.sticker!.width! * StickerDisplay.stickerSizeRatio,
-          height: emoji.sticker!.height! * StickerDisplay.stickerSizeRatio,
-          child: StickerDisplay(
-            rlottieKey: _animationKey,
-            onClick: () => showBigAnimation(),
-            onAnimPlayed: () {
-              _canPlayAnim = true;
-            },
-            sticker: emoji.sticker!,
-            playBehavior: PlayBehavior.externalControl,
-            client: widget.client,
+    return MessageDisplayMedia(
+        message: widget.message,
+        infoWidget: widget.infoWidget,
+        replieWidget: widget.replieWidget,
+        client: widget.client,
+        content: GestureDetector(
+          onTap: () => showBigAnimation(),
+          child: Align(
+            alignment: widget.message.isOutgoing!
+                ? Alignment.bottomRight
+                : Alignment.bottomLeft,
+            child: SizedBox(
+              width: emoji.sticker!.width! * StickerDisplay.stickerSizeRatio,
+              height: emoji.sticker!.height! * StickerDisplay.stickerSizeRatio,
+              child: StickerDisplay(
+                rlottieKey: _animationKey,
+                onClick: () => showBigAnimation(),
+                onAnimPlayed: () {
+                  _canPlayAnim = true;
+                },
+                sticker: emoji.sticker!,
+                playBehavior: PlayBehavior.externalControl,
+                client: widget.client,
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
