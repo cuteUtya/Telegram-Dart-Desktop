@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/State managment/ui_events.dart';
+import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_item_horizontal.dart';
 import 'package:myapp/Widgets/smooth_list_view.dart';
@@ -22,31 +23,21 @@ class ChatFilterHorizontal extends StatefulWidget {
   State<StatefulWidget> createState() => ChatFilterHorizontalState();
 }
 
-class ChatFilterHorizontalState extends State<ChatFilterHorizontal> {
+class ChatFilterHorizontalState extends StateWithStreamsSubscriptions<ChatFilterHorizontal> {
   static int active = -1;
   static List<ChatFilterInfo> filters = [];
-  final Map<int, GlobalKey> _filtersKeys = {};
-
-  StreamSubscription? _s;
 
   @override
   void initState() {
-    _s = UIEvents.currentChatList().listen((event) {
+     streamSubscriptions.add(UIEvents.currentChatList().listen((event) {
       setState(() {
         active = event is ChatListMain
             ? -1
             : (event as ChatListFilter).chatFilterId!;
       });
-    });
+    }));
     super.initState();
   }
-
-  @override
-  void dispose() {
-    _s?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(

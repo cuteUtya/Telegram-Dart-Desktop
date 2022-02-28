@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 
@@ -26,12 +27,13 @@ class RemoteFileBuilder extends StatefulWidget {
   State<RemoteFileBuilder> createState() => _RemoteFileBuilderState();
 }
 
-class _RemoteFileBuilderState extends State<RemoteFileBuilder> {
+class _RemoteFileBuilderState
+    extends StateWithStreamsSubscriptions<RemoteFileBuilder> {
   late Widget _widget = widget.emptyPlaceholder;
-  StreamSubscription? _subscription;
 
   void downloadFile() async {
-    var initialFile = await widget.client.send(GetFile(fileId: widget.fileId)) as File;
+    var initialFile =
+        await widget.client.send(GetFile(fileId: widget.fileId)) as File;
     void build(File file) {
       if (mounted && !havePath) {
         setState(() => _widget = widget.builder(context, file.local!.path!));
@@ -49,11 +51,15 @@ class _RemoteFileBuilderState extends State<RemoteFileBuilder> {
           ),
         );
       }
-      _subscription = widget.client.fileUpdates(widget.fileId).listen((file) {
-        if (file.local!.isDownloadingCompleted!) {
-          build(file);
-        }
-      });
+      streamSubscriptions.add(
+        widget.client.fileUpdates(widget.fileId).listen(
+          (file) {
+            if (file.local!.isDownloadingCompleted!) {
+              build(file);
+            }
+          },
+        ),
+      );
     }
   }
 
@@ -61,12 +67,6 @@ class _RemoteFileBuilderState extends State<RemoteFileBuilder> {
   void initState() {
     downloadFile();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
   }
 
   bool havePath = false;

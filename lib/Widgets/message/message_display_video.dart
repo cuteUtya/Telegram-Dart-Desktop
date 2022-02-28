@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:dart_vlc/dart_vlc.dart' as vlc;
 import 'package:flutter/material.dart';
+import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Widgets/blur_image_preview.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
@@ -50,10 +51,9 @@ class MessageDisplayVideo extends StatefulWidget {
   State<MessageDisplayVideo> createState() => _MessageDisplayVideoState();
 }
 
-class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
+class _MessageDisplayVideoState extends StateWithStreamsSubscriptions<MessageDisplayVideo> {
   static int i = 62420;
   vlc.Player? player;
-  List<StreamSubscription> _subs = [];
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
     );
 
     if (widget.loop) {
-      _subs.add(player!.playbackStream.listen((event) {
+      streamSubscriptions.add(player!.playbackStream.listen((event) {
         if (event.isCompleted) {
           player!.play();
         }
@@ -210,13 +210,6 @@ class _MessageDisplayVideoState extends State<MessageDisplayVideo> {
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    player?.dispose();
-    _subs.forEach((element) => element.cancel());
-    super.dispose();
   }
 }
 

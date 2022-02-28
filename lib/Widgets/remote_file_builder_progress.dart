@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 
@@ -23,11 +24,9 @@ class RemoteFileBuilderProgress extends StatefulWidget {
   State<StatefulWidget> createState() => _RemoteFileBuilderProgressState();
 }
 
-class _RemoteFileBuilderProgressState extends State<RemoteFileBuilderProgress> {
+class _RemoteFileBuilderProgressState extends StateWithStreamsSubscriptions<RemoteFileBuilderProgress> {
   double progress = 0;
   String? path;
-
-  StreamSubscription? _streamSubscription;
 
   void downloadFile() async {
     void processFile(File file) {
@@ -53,7 +52,7 @@ class _RemoteFileBuilderProgressState extends State<RemoteFileBuilderProgress> {
       ));
     }
 
-    _streamSubscription = widget.client.fileUpdates(widget.fileId).listen((event) {
+    streamSubscriptions.add(widget.client.fileUpdates(widget.fileId).listen((event) {
       if (event is! TdError) {
         processFile(event);
         widget.client.send(
@@ -65,13 +64,7 @@ class _RemoteFileBuilderProgressState extends State<RemoteFileBuilderProgress> {
           ),
         );
       }
-    });
-  }
-
-  @override
-  void dispose() {
-    _streamSubscription?.cancel();
-    super.dispose();
+    }));
   }
 
   @override

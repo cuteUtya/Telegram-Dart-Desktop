@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/State managment/ui_events.dart';
+import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Widgets/left%20panel/chat_list.dart';
 import 'package:myapp/Widgets/revertible_page.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -19,7 +20,8 @@ class ChatListsManager extends StatefulWidget {
   State<StatefulWidget> createState() => ChatListsManagerState();
 }
 
-class ChatListsManagerState extends State<ChatListsManager> {
+class ChatListsManagerState
+    extends StateWithStreamsSubscriptions<ChatListsManager> {
   static final List<ChatOrder> _chats = [];
   static List<ChatList> _lists = [];
   static final Map<int, ScrollController> _scrollContollers = {};
@@ -61,16 +63,17 @@ class ChatListsManagerState extends State<ChatListsManager> {
   }
 
   void _switchLists(int index) {
-    mainArchiveContoller.animateToPage(index, duration: const Duration(milliseconds: 400), curve: Curves.decelerate);
+    mainArchiveContoller.animateToPage(index,
+        duration: const Duration(milliseconds: 400), curve: Curves.decelerate);
   }
 
   void _changeCurrentPage(int index) {
-    mainContoller.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+    mainContoller.animateToPage(index,
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   PageController mainContoller = PageController();
   PageController mainArchiveContoller = PageController();
-  final List<StreamSubscription> _subscriptions = [];
 
   void _updateChats() {
     widget.client.send(LoadChats(chatList: ChatListMain(), limit: 25));
@@ -80,11 +83,12 @@ class ChatListsManagerState extends State<ChatListsManager> {
   @override
   void initState() {
     _updateChats();
-    _subscriptions.add(
+    streamSubscriptions.add(
       widget.client.updateChatLastMessage.listen(
         (event) => setState(
           () {
-            var chat = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
+            var chat = _chats
+                .firstWhereOrNull((element) => element.chatId == event.chatId);
             if (chat == null) {
               _chats.add(ChatOrder(event.chatId!, event.positions!));
             } else {
@@ -94,22 +98,26 @@ class ChatListsManagerState extends State<ChatListsManager> {
         ),
       ),
     );
-    _subscriptions.add(
+    streamSubscriptions.add(
       widget.client.updateChatDraftMessage.listen(
         (event) => setState(
-          () => _chats.firstWhere((element) => element.chatId == event.chatId).positions = event.positions!,
+          () => _chats
+              .firstWhere((element) => element.chatId == event.chatId)
+              .positions = event.positions!,
         ),
       ),
     );
-    _subscriptions.add(
+    streamSubscriptions.add(
       widget.client.updateChatPosition.listen(
         (event) {
           setState(
             () {
-              var base = _chats.firstWhereOrNull((element) => element.chatId == event.chatId);
+              var base = _chats.firstWhereOrNull(
+                  (element) => element.chatId == event.chatId);
               if (base != null) {
                 for (int i = 0; i < base.positions.length; i++) {
-                  if (compareChatlists(base.positions[i].list!, event.position!.list!)) {
+                  if (compareChatlists(
+                      base.positions[i].list!, event.position!.list!)) {
                     base.positions[i] = event.position!;
                   }
                 }
@@ -121,18 +129,13 @@ class ChatListsManagerState extends State<ChatListsManager> {
         },
       ),
     );
-    _subscriptions.add(UIEvents.currentChatList().listen((event) => setCurrentChatList(event)));
-    _subscriptions.add(UIEvents.chatLists().listen((event) => setChatLists(event)));
-    _subscriptions.add(UIEvents.archiveState().listen((opened) => _switchLists(opened ? 1 : 0)));
+    streamSubscriptions.add(UIEvents.currentChatList()
+        .listen((event) => setCurrentChatList(event)));
+    streamSubscriptions
+        .add(UIEvents.chatLists().listen((event) => setChatLists(event)));
+    streamSubscriptions.add(UIEvents.archiveState()
+        .listen((opened) => _switchLists(opened ? 1 : 0)));
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    for (var element in _subscriptions) {
-      element.cancel();
-    }
-    super.dispose();
   }
 
   @override

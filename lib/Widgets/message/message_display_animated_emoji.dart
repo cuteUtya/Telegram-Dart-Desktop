@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:myapp/Audio utils/audio_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Widgets/Stickers/sticker_display.dart';
 import 'package:myapp/Widgets/big_stickers_overlay.dart';
 import 'package:myapp/Rlottie/rlottie.dart';
@@ -29,7 +30,7 @@ class MessageDisplayAnimatedEmoji extends StatefulWidget {
 }
 
 class _MessageDisplayAnimtedEmojiState
-    extends State<MessageDisplayAnimatedEmoji> {
+    extends StateWithStreamsSubscriptions<MessageDisplayAnimatedEmoji> {
   bool _canPlayAnim = true;
   void showBigAnimation({Sticker? sticker}) async {
     if (_canPlayAnim) {
@@ -74,12 +75,11 @@ class _MessageDisplayAnimtedEmojiState
     }
   }
 
-  final List<StreamSubscription> _streamSubscription = [];
   final GlobalKey<RlottieState> _animationKey = GlobalKey<RlottieState>();
 
   @override
   void initState() {
-    _streamSubscription.add(widget.client
+    streamSubscriptions.add(widget.client
         .animatedEmojiClick(widget.chatId, widget.message.id!)
         .listen((event) {
       if (_canPlayAnim) {
@@ -91,43 +91,36 @@ class _MessageDisplayAnimtedEmojiState
   }
 
   @override
-  void dispose() {
-    for (var element in _streamSubscription) {
-      element.cancel();
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     assert(widget.message.content is MessageAnimatedEmoji);
     var emoji = (widget.message.content as MessageAnimatedEmoji).animatedEmoji!;
     return MessageDisplayMedia(
-        message: widget.message,
-        infoWidget: widget.infoWidget,
-        replieWidget: widget.replieWidget,
-        client: widget.client,
-        content: GestureDetector(
-          onTap: () => showBigAnimation(),
-          child: Align(
-            alignment: widget.message.isOutgoing!
-                ? Alignment.bottomRight
-                : Alignment.bottomLeft,
-            child: SizedBox(
-              width: emoji.sticker!.width! * StickerDisplay.stickerSizeRatio,
-              height: emoji.sticker!.height! * StickerDisplay.stickerSizeRatio,
-              child: StickerDisplay(
-                rlottieKey: _animationKey,
-                onClick: () => showBigAnimation(),
-                onAnimPlayed: () {
-                  _canPlayAnim = true;
-                },
-                sticker: emoji.sticker!,
-                playBehavior: PlayBehavior.externalControl,
-                client: widget.client,
-              ),
+      message: widget.message,
+      infoWidget: widget.infoWidget,
+      replieWidget: widget.replieWidget,
+      client: widget.client,
+      content: GestureDetector(
+        onTap: () => showBigAnimation(),
+        child: Align(
+          alignment: widget.message.isOutgoing!
+              ? Alignment.bottomRight
+              : Alignment.bottomLeft,
+          child: SizedBox(
+            width: emoji.sticker!.width! * StickerDisplay.stickerSizeRatio,
+            height: emoji.sticker!.height! * StickerDisplay.stickerSizeRatio,
+            child: StickerDisplay(
+              rlottieKey: _animationKey,
+              onClick: () => showBigAnimation(),
+              onAnimPlayed: () {
+                _canPlayAnim = true;
+              },
+              sticker: emoji.sticker!,
+              playBehavior: PlayBehavior.externalControl,
+              client: widget.client,
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

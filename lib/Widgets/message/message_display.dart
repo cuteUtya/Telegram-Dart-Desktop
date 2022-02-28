@@ -108,7 +108,6 @@ class MessageDisplay extends StatelessWidget {
             Widget contentWidget;
             bool isChannel = chat?.type is ChatTypeSupergroup ? (chat!.type as ChatTypeSupergroup).isChannel! : false;
             bool showMessageSender = false;
-            print("isChannel $isChannel");
             if (bubbleRelativePosition == BubbleRelativePosition.top ||
                 bubbleRelativePosition == BubbleRelativePosition.single) {
               if ((chat?.type is ChatTypeSupergroup ||
