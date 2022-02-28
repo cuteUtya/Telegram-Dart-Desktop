@@ -425,6 +425,7 @@ class MessageDisplay extends StatelessWidget {
                             builder: (_, data) => OnlineIndicatorDidplay(
                               online: data.data is UserStatusOnline,
                               size: 14,
+                              strokeColor: Colors.transparent,
                             ),
                           ),
                       ]),

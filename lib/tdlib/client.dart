@@ -383,6 +383,10 @@ class TelegramClient {
   final Map<int, User> _users = {};
   User getUser(int id) => _users[id]!;
 
+  String _getMsgId(int chatid, int msgId) => "$chatid||$msgId";
+  final Map<String, Message> _messages = {};
+  Message? getMessage(int chatId, int messageId) => _messages[_getMsgId(chatId, messageId)];
+
   final Map<int, Chat> _chats = {};
   Chat getChat(int id) => _chats[id]!;
 
@@ -672,8 +676,41 @@ class TelegramClient {
             _cachedFiles[file.id!] = file;
           }
         }
+
+        if(tdobject is Message){
+          _messages["${tdobject.chatId}||${tdobject.id}"] = tdobject;
+        }
+
+        if(tdobject is Messages) {
+          for(final msg in  tdobject.messages!) {
+            _messages[_getMsgId(msg.chatId!, msg.id!)] = msg;
+          }
+        }
+
         if (tdobject is Update) {
           switch (tdobject.runtimeType) {
+            case UpdateMessageContent:
+              var msg = tdobject as UpdateMessageContent;
+              getMessage(msg.chatId!, msg.messageId!)?.content = msg.newContent;
+              break;
+            case UpdateMessageEdited:
+              var upd = tdobject as UpdateMessageEdited;
+              var message = getMessage(upd.chatId!, upd.messageId!);
+              message?.editDate = upd.editDate;
+              message?.replyMarkup = upd.replyMarkup;
+              break;
+            case UpdateMessageInteractionInfo:
+              var upd = tdobject as UpdateMessageInteractionInfo;
+              getMessage(upd.chatId!, upd.messageId!)?.interactionInfo = upd.interactionInfo;
+              break;
+            case UpdateMessageIsPinned:
+              var upd = tdobject as UpdateMessageIsPinned;
+              getMessage(upd.chatId!, upd.messageId!)?.isPinned = upd.isPinned;
+              break;
+            case UpdateNewMessage:
+              var msg = tdobject as UpdateNewMessage;
+              _messages[_getMsgId(msg.message!.chatId!, msg.message!.id!)] = msg.message!;
+              break;
             case UpdateSelectedBackground:
               tdobject as UpdateSelectedBackground;
               if (tdobject.forDarkTheme!) {

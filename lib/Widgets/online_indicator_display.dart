@@ -7,11 +7,13 @@ class OnlineIndicatorDidplay extends StatelessWidget {
     required this.online,
     this.selected = false,
     this.size,
-  }) : super(key: key);
+    this.strokeColor,
+}) : super(key: key);
 
   final bool online;
   final bool selected;
   final double? size;
+  final Color? strokeColor;
   @override
   Widget build(BuildContext context) {
     var cSize = (size ?? 20) * 0.6;
@@ -27,7 +29,7 @@ class OnlineIndicatorDidplay extends StatelessWidget {
                 duration: const Duration(milliseconds: 150),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: ClientTheme.currentTheme.getField(
+                  color: strokeColor ?? ClientTheme.currentTheme.getField(
                     selected ? "OnlineColorOutlineSelected" : "OnlineColorOutline",
                   ),
                 ),

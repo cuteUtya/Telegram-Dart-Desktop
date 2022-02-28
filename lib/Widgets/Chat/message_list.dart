@@ -204,6 +204,7 @@ class _MessageListState extends State<MessageList> {
                   flex: UIManager.isMobile ? 4 : 2,
                   child: FutureBuilder(
                     key: UniqueKey(),
+                    initialData: widget.client.getMessage(widget.chatId, msg.replyToMessageId!),
                     future: msg.replyToMessageId == 0
                         ? null
                         : widget.client.send(GetMessage(
