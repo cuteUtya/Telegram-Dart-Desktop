@@ -63,6 +63,7 @@ class TextDisplay {
   static Map<String, TextStyle Function()> stylePairs = {
     "B": () => create(
           fontWeight: FontWeight.bold,
+          textColor: ClientTheme.currentTheme.getField("BoldTextColor")
         ),
     "-": () => create(),
     "M": () => create(
@@ -80,11 +81,9 @@ class TextDisplay {
           fontStyle: FontStyle.italic,
         ),
     "L": () => create(
-          decoration: TextDecoration.underline,
           textColor: ClientTheme.currentTheme.getField("HyperlinkColor"),
         ),
     "R": () => create(
-          decoration: TextDecoration.underline,
           textColor: ClientTheme.currentTheme.getField("HyperlinkColor"),
         ),
     "P": () => create(
