@@ -106,11 +106,13 @@ class MessageDisplay extends StatelessWidget {
           builder: (_, senderData) {
             var author = senderData.data.toString();
             Widget contentWidget;
+            bool isChannel = chat?.type is ChatTypeSupergroup ? (chat!.type as ChatTypeSupergroup).isChannel! : false;
             bool showMessageSender = false;
+            print("isChannel $isChannel");
             if (bubbleRelativePosition == BubbleRelativePosition.top ||
                 bubbleRelativePosition == BubbleRelativePosition.single) {
-              if (chat?.type is ChatTypeSupergroup ||
-                  chat?.type is ChatTypeBasicGroup) {
+              if ((chat?.type is ChatTypeSupergroup ||
+                  chat?.type is ChatTypeBasicGroup) &&  !isChannel) {
                 if (!message.isOutgoing! ||
                     (message.isOutgoing! &&
                         message.senderId is MessageSenderChat)) {
