@@ -46,7 +46,7 @@ class ReplieDisplay extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             LimitedBox(
-              maxWidth: inlineStyle ? box.maxWidth : 120,
+              maxWidth:  120,
               child: MessageContentPreview(
                 client: client,
                 message: message,
