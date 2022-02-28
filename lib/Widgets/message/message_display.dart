@@ -415,7 +415,7 @@ class MessageDisplay extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Stack(alignment: Alignment.bottomRight, children: [
-                        senderUserpic ?? SizedBox(width: showUserpic ? 40 : 0),
+                        senderUserpic ?? SizedBox(width: isChat ? 40 : 0),
                         if (message.senderId is MessageSenderUser &&
                             senderUserpic != null)
                           StreamBuilder(
