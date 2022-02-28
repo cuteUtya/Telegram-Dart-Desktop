@@ -22,7 +22,6 @@ void main() async {
   UrlsUtils.init(client);
   runApp(
     MaterialApp(
-      color: ClientTheme.currentTheme.getField("BaseColor"),
       home: App(
         client: client,
       ),
@@ -36,15 +35,19 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UIManager.screenSizeChange(context);
-    return Center(
-      child: SafeArea(
-        child: TranscluentGesturesStack(
-          children: [
-            //  Expanded(child: Container(color: Colors.white)),
-            AutorizationRouter(client: client),
-            BigStickerOverlay(client: client),
-            const ContextMenuOverlay(),
-          ],
+    return Scaffold(
+      body: Center(
+        child: SafeArea(
+          child: Container(
+            color: ClientTheme.currentTheme.getField("BaseColor"),
+            child: TranscluentGesturesStack(
+              children: [
+                AutorizationRouter(client: client),
+                BigStickerOverlay(client: client),
+                const ContextMenuOverlay(),
+              ],
+            ),
+          ),
         ),
       ),
     );

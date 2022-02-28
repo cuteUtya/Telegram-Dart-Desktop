@@ -59,7 +59,7 @@ class _DataInputState extends State<DataInput> {
   Widget build(BuildContext contex) {
     var clr = getBorderColor(dataState);
     var border = UnderlineInputBorder(borderSide: BorderSide(color: clr, width: 2));
-
+    var textStyle = TextStyle(fontSize: widget.fontSize, color: ClientTheme.currentTheme.getField("RegularText"));
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       widget.customLabel == null
           ? Text(
@@ -73,7 +73,7 @@ class _DataInputState extends State<DataInput> {
       Stack(children: [
         //hint field
         TextField(
-          style: TextStyle(fontSize: widget.fontSize),
+          style: textStyle,
           enabled: false,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 12),
@@ -96,7 +96,7 @@ class _DataInputState extends State<DataInput> {
               validate(value);
             });
           },
-          style: TextStyle(fontSize: widget.fontSize),
+          style: textStyle,
           onChanged: (value) {
             if (widget.onValueChange != null) widget.onValueChange!(value);
             setState(() {

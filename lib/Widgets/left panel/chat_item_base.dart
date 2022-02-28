@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/Widgets/horizontal_separator_line.dart';
 
 class ChatItemBase extends StatelessWidget {
   const ChatItemBase({
@@ -21,24 +22,23 @@ class ChatItemBase extends StatelessWidget {
   final Widget? chatPic;
   final Function()? onClick;
 
-  static const double height = 90;
-
   @override
   Widget build(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
-          // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0))),
           animationDuration: const Duration(milliseconds: 200),
           padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-          backgroundColor: MaterialStateProperty.all(
-              ClientTheme.currentTheme.getField(selected ? "ChatCurrentlySelectedColor" : "ChatCurrentlyUnselectedColor")),
+          backgroundColor: MaterialStateProperty.all(ClientTheme.currentTheme
+              .getField(selected
+                  ? "ChatCurrentlySelectedColor"
+                  : "ChatCurrentlyUnselectedColor")),
           overlayColor: MaterialStateProperty.resolveWith((states) {
             String themeStr = "ChatUnselectedColor";
             if (!selected) {
               if (states.contains(MaterialState.pressed)) {
                 themeStr = "ChatClickAnimationEffectColor";
-              } else if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
+              } else if (states.contains(MaterialState.hovered) ||
+                  states.contains(MaterialState.focused)) {
                 themeStr = "ChatSelectedColor";
               }
             } else {
@@ -47,39 +47,40 @@ class ChatItemBase extends StatelessWidget {
             return ClientTheme.currentTheme.getField(themeStr);
           })),
       onPressed: onClick,
-      child: SizedBox(
-        height: height,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          child: Row(
-            children: [
-              SizedBox(height: height - 24, width: height - 24, child: chatPic ?? const SizedBox(height: 16)),
-              const SizedBox(width: 16),
-              Flexible(
-                child: Column(
-                  children: [
-                    title ?? const SizedBox(height: 16),
-                    const SizedBox(height: 2),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        content ?? const SizedBox.shrink(),
-                        Container(
-                          margin: const EdgeInsets.only(top: 8),
-                          child: Row(
-                            children: [
-                              if (unreadPlaceHolder != null) unreadPlaceHolder!,
-                              icon ?? const SizedBox.shrink(),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        child: Row(
+          children: [
+            SizedBox(
+                  child: chatPic,
+                  width: 56,
+                  height: 56,
                 ),
-              )
-            ],
-          ),
+            const SizedBox(width: 16),
+            Flexible(
+              child: Column(
+                children: [
+                  title ?? const SizedBox(height: 16),
+                  const SizedBox(height: 2),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      content ?? const SizedBox.shrink(),
+                      Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        child: Row(
+                          children: [
+                            if (unreadPlaceHolder != null) unreadPlaceHolder!,
+                            icon ?? const SizedBox.shrink(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

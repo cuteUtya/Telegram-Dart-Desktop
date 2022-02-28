@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
@@ -51,63 +52,126 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
           .send(GetCountries())
           .then((value) => setState(() => countries = value as Countries));
     }
+    var width = MediaQuery.of(context).size.width *
+        (UIManager.useDesktopLayout ? 0.5 : 0.90);
+    return Center(
+      child: SizedBox(
+        width: width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            widget.client.buildTextByKey("lng_phone_title", TextDisplay.title),
+            const SizedBox(height: 8),
+            widget.client
+                .buildTextByKey("lng_phone_desc", TextDisplay.additional),
+            const SizedBox(height: 20),
+            DataInput(
+              value: _country,
+              externalControll: true,
+              getHintCallback: countryHint,
+              validationCallback: validateCountry,
+              fieldName: widget.client.getTranslation("lng_country_ph"),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                SizedBox(
+                    //phone code field
+                    child: DataInput(
+                        value: _phoneCode,
+                        externalControll: true,
+                        onValueChange: validatePhoneCode,
+                        onDataStateChanged: (v) => _phoneState = v,
+                        customLabel: widget.client.buildTextByKey(
+                          "lng_passport_phone_title",
+                          TextDisplay.create(
+                            overflow: TextOverflow.visible,
+                            size: 13,
+                            textColor: _colors[_phoneState],
+                            fontWeight: _weigths[_phoneState],
+                          ),
+                        ),
+                        validationCallback: validatePhoneCode),
+                    width: width * 0.25),
+                SizedBox(width: width * 0.05),
+                SizedBox(
+                  width: width * 0.70,
+                  child: DataInput(
+                    onValueChange: (v) => _phone = v,
+                    labelFontSize: 13,
+                    validationCallback: (e) => true,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 40),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DesktopButton(
+                      width: width * 0.66,
+                      onPressed: () async {
+                        if (!sendCode) {
+                          sendCode = true;
+                          var phoneCallbackResult =
+                              await widget.phoneNumberScreenCallback(
+                                  _phoneCode + _phone, _sessionName);
+                          if (phoneCallbackResult is TdError) {
+                            setState(
+                              () {
+                                errorStr = widget.client
+                                    .getLocalizedErrorMessage(
+                                        phoneCallbackResult);
+                              },
+                            );
+                          }
+                        }
+                      },
+                      weight: FontWeight.w500,
+                      text: widget.client.getTranslation("lng_intro_next"),
+                    ),
+                    const SizedBox(height: 4),
+                    errorStr == null
+                        ? const SizedBox()
+                        : Text(
+                            "hey some shit", //errorStr!,
+                            style: TextDisplay.regular18,
+                          ),
+                  ]),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 24),
+              alignment: Alignment.bottomCenter,
+              child: ClickableText(
+                  data: widget.client.getTranslation("lng_phone_to_qr"),
+                  onTap: () => widget.client
+                      .send(RequestQrCodeAuthentication(otherUserIds: [])),
+                  fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
 
-    return Material(
-      child: Center(
+    /*Center(
         child: SizedBox(
-          width: 500,
+          width: MediaQuery.of(context).size.width / 2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
-              widget.client
-                  .buildTextByKey("lng_phone_title", TextDisplay.title),
-              const SizedBox(height: 8),
-              widget.client
-                  .buildTextByKey("lng_phone_desc", TextDisplay.additional),
-              const SizedBox(height: 20),
+
+
               //Country field
-              DataInput(
-                value: _country,
-                externalControll: true,
-                getHintCallback: countryHint,
-                validationCallback: validateCountry,
-                fieldName: widget.client.getTranslation("lng_country_ph"),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  SizedBox(
-                      //phone code field
-                      child: DataInput(
-                          value: _phoneCode,
-                          externalControll: true,
-                          onValueChange: validatePhoneCode,
-                          onDataStateChanged: (v) => _phoneState = v,
-                          customLabel: widget.client.buildTextByKey(
-                            "lng_passport_phone_title",
-                            TextDisplay.create(
-                              overflow: TextOverflow.visible,
-                              size: 13,
-                              textColor: _colors[_phoneState],
-                              fontWeight: _weigths[_phoneState],
-                            ),
-                          ),
-                          validationCallback: validatePhoneCode),
-                      width: 130),
-                  const SizedBox(width: 20),
-                  SizedBox(
-                    width: 350,
-                    //phone field
-                    child: DataInput(
-                      onValueChange: (v) => _phone = v,
-                      labelFontSize: 13,
-                      validationCallback: (e) => true,
-                    ),
-                  )
-                ],
-              ),
+
+
+              ,
               const SizedBox(height: 16),
               //session name field
               DataInput(
@@ -118,51 +182,16 @@ class _PhoneEnterScreenState extends State<PhoneEnterScreen> {
                 value: _sessionName,
                 hintText: widget.client.tdlibParameters.deviceModel ?? "",
               ),
-              const SizedBox(height: 40),
-              DesktopButton(
-                  onPressed: () {
-                    if (!sendCode) {
-                      sendCode = true;
-                      widget
-                          .phoneNumberScreenCallback(
-                              _phoneCode + _phone, _sessionName)
-                          .then((value) => {
-                                if (value.getConstructor() ==
-                                        TdError.CONSTRUCTOR &&
-                                    mounted)
-                                  setState(
-                                    () => errorStr = widget.client
-                                        .getLocalizedErrorMessage(
-                                            value as TdError),
-                                  )
-                              });
-                    }
-                  },
-                  width: 500,
-                  weight: FontWeight.w500,
-                  text: widget.client.getTranslation("lng_intro_next")),
-              const SizedBox(height: 16),
-              errorStr == null
-                  ? const Center()
-                  : Text(
-                      errorStr!,
-                      style: TextDisplay.regular16,
-                    ),
+
+
+
               const Spacer(),
-              Container(
-                margin: const EdgeInsets.only(bottom: 24),
-                alignment: Alignment.bottomCenter,
-                child: ClickableText(
-                    data: widget.client.getTranslation("lng_phone_to_qr"),
-                    onTap: () => widget.client
-                        .send(RequestQrCodeAuthentication(otherUserIds: [])),
-                    fontSize: 18),
-              ),
+
             ],
           ),
         ),
-      ),
-    );
+
+    );*/
   }
 
   String countryHint(String value) {

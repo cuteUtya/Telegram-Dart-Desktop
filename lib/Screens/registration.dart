@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import "dart:io" as io;
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_button.dart';
 import 'package:myapp/Widgets/display_input.dart';
@@ -28,88 +29,97 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String lName = "";
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 340,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(),
-          GestureDetector(
-            //TODO. Validate images, open menu for image cropping. Ability to use video
-            onTap: () => FilePicker.platform
-                .pickFiles(
-                    dialogTitle: widget.client.getTranslation("lng_save_photo"))
-                .then(
-                  (value) => setState(
-                    () =>
-                        _avaPath = (value == null ? null : value.files[0].path),
-                  ),
-                ),
-            child: _avaPath == null
-                ? Container(
-                    child: const Icon(
-                      Icons.photo_camera,
-                      size: 64,
-                      color: Colors.white,
-                    ),
-                    width: 108,
-                    height: 108,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: ClientTheme.currentTheme.getField("Accent"),
-                    ),
-                  )
-                : Container(
-                    width: 108,
-                    height: 108,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: FileImage(
-                          io.File(_avaPath!),
+    return Center(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width *
+            (UIManager.isMobile
+                ? (UIManager.useDesktopLayout ? 0.5 : 0.75)
+                : 0.35),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              //TODO. Validate images, open menu for image cropping. Ability to use video
+              onTap: () async {
+                var pickresult = await FilePicker.platform.pickFiles(
+                  dialogTitle: widget.client.getTranslation("lng_save_photo"),
+                );
+
+                setState(
+                  () {
+                    _avaPath =
+                        (pickresult == null ? null : pickresult.files[0].path);
+                  },
+                );
+              },
+              child: _avaPath == null
+                  ? Container(
+                      child: const Icon(
+                        Icons.photo_camera,
+                        size: 64,
+                        color: Colors.white,
+                      ),
+                      width: 96,
+                      height: 96,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: ClientTheme.currentTheme.getField("Accent"),
+                      ),
+                    )
+                  : Container(
+                      width: 96,
+                      height: 96,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: FileImage(
+                            io.File(_avaPath!),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-          ),
-          const SizedBox(height: 36),
-          widget.client.buildTextByKey(
-              "lng_signup_title",
-              TextDisplay.create(
-                size: 24,
-                fontWeight: FontWeight.w600,
-              )),
-          const SizedBox(height: 18),
-          widget.client.buildTextByKey(
-              "lng_bad_name",
-              TextDisplay.create(
-                textColor:
-                    ClientTheme.currentTheme.getField("AdditionalTextColor"),
-              )),
-          const SizedBox(height: 36),
-          //First name
-          DataInput(
-              validationCallback: (v) => v.length <= 64,
-              onValueChange: (v) => fName = v,
-              fieldName: widget.client.getTranslation("lng_signup_firstname")),
-          const SizedBox(height: 24),
-          //Last name
-          DataInput(
-              validationCallback: (v) => v.length <= 64,
-              onValueChange: (v) => lName = v,
-              fieldName: widget.client.getTranslation("lng_signup_lastname")),
-          const SizedBox(height: 36),
-          DesktopButton(
-              //TODO set userpic
-              onPressed: () => widget.client
-                  .send(RegisterUser(firstName: fName, lastName: lName)),
-              width: 400,
-              text: widget.client.getTranslation("lng_intro_finish")),
-          const Spacer(),
-          _TOSAgree(client: widget.client, tos: widget.termsOfService),
-          const SizedBox(height: 16),
-        ],
+            ),
+            const SizedBox(height: 8),
+            widget.client.buildTextByKey(
+                "lng_signup_title",
+                TextDisplay.create(
+                  size: 22,
+                  fontWeight: FontWeight.w600,
+                )),
+            const SizedBox(height: 8),
+            widget.client.buildTextByKey(
+                "lng_bad_name",
+                TextDisplay.create(
+                  textColor:
+                      ClientTheme.currentTheme.getField("AdditionalTextColor"),
+                )),
+            const SizedBox(height: 18),
+            //First name
+            DataInput(
+                fontSize: 18,
+                validationCallback: (v) => v.length <= 64,
+                onValueChange: (v) => fName = v,
+                fieldName:
+                    widget.client.getTranslation("lng_signup_firstname")),
+            const SizedBox(height: 24),
+            //Last name
+            DataInput(
+                fontSize: 18,
+                validationCallback: (v) => v.length <= 64,
+                onValueChange: (v) => lName = v,
+                fieldName: widget.client.getTranslation("lng_signup_lastname")),
+            const SizedBox(height: 18),
+            DesktopButton(
+                //TODO set userpic
+                onPressed: () => widget.client
+                    .send(RegisterUser(firstName: fName, lastName: lName)),
+                width: 400,
+                text: widget.client.getTranslation("lng_intro_finish")),
+            _TOSAgree(client: widget.client, tos: widget.termsOfService),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }
@@ -168,15 +178,14 @@ class _TOSAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+        backgroundColor: ClientTheme.currentTheme.getField("BaseColor"),
         title: Text(
           title,
           style: TextDisplay.title,
         ),
         content: SizedBox(
-          height: 180,
-          child: Column(children: [
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
             Text(tosText, style: TextDisplay.regular16),
-            const Spacer(),
             Container(
               child: DesktopButton(
                 text: "OK",

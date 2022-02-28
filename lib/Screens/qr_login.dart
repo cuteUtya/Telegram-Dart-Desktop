@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Themes%20engine/theme_interpreter.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/clickable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -28,15 +30,16 @@ class _QrLoginState extends State<QrLogin> {
       children: [
         const Spacer(),
         QrImage(
+          foregroundColor: ClientTheme.currentTheme.environmentVariables["theme"]!() == "dark" ? Colors.white : Colors.black,
           data: widget.link,
           version: QrVersions.auto,
-          size: 256.0,
+          size: MediaQuery.of(context).size.width * (UIManager.useDesktopLayout ? 0.25 : 0.5),
           padding: const EdgeInsets.all(0),
         ),
         const SizedBox(height: 36),
         widget.client.buildTextByKey("lng_intro_qr_title", TextDisplay.title),
         const SizedBox(height: 16),
-        SizedBox(
+        Center(child:  SizedBox(
           width: 440,
           child: Column(
             children: [1, 2, 3]
@@ -52,7 +55,7 @@ class _QrLoginState extends State<QrLogin> {
                     ]))
                 .toList(),
           ),
-        ),
+        ),),
         const Spacer(),
         Container(
           alignment: Alignment.bottomCenter,

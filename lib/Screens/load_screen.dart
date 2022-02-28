@@ -7,21 +7,11 @@ class LoadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Container(
-      child: SizedBox(width: 186, height: 186, child: Lottie.asset("Assets/Load.json")),
-      width: 200,
-      height: 200,
-      decoration: BoxDecoration(
-        color: ClientTheme.currentTheme.getField("LoadScreenBackgroundColor"),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: ClientTheme.currentTheme.getField("LoadScreenShadowColor"),
-            blurRadius: 4,
-            offset: const Offset(2, -2),
-          ),
-        ],
+      child: Lottie.asset(
+        "Assets/Load.json",
+        width: 186,
+        height: 186,
       ),
-    ));
+    );
   }
 }

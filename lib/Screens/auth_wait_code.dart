@@ -84,61 +84,62 @@ class _EnterCodeScreenState extends State<EnterCodeScreen> {
       suggestResend = false;
     }
 
-    return Material(child: Center(child: SizedBox(
-      width: 400,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(getCodeInfo().phoneNumber!, style: TextDisplay.title),
-          const SizedBox(height: 18),
-          widget.client.buildTextByKey(
-              getCodeInfo().type!.runtimeType ==
-                      AuthenticationCodeTypeTelegramMessage
-                  ? "lng_code_telegram"
-                  : "lng_code_desc",
-              TextDisplay.additional),
-          const SizedBox(height: 20),
-          DataInput(
-              value: code,
-              externalControll: true,
-              onValueChange: (v) => code = v,
-              validationCallback: (v) => v.length == codeLength(),
-              fieldName: widget.client.getTranslation("lng_code_ph")),
-          const SizedBox(height: 16),
-          suggestResend
-              ? ClickableText(
-                  data: widget.client.getTranslation("lng_code_no_telegram"),
-                  onTap: () {
-                    widget.client
-                        .send(ResendAuthenticationCode())
-                        .then(errorHandler);
-                    suggestResend = false;
-                  },
-                )
-              : widget.client.buildTextByKey(
-                  telegramIsDial ? "lng_code_called" : "lng_code_call",
-                  TextDisplay.additional,
-                  replacing: {
-                      "{minutes}": getMinutes(),
-                      "{seconds}": getSeconds()
-                    }),
-          const SizedBox(height: 40),
-          DesktopButton(
-              onPressed: () => widget.client
-                  .send(CheckAuthenticationCode(code: code))
-                  .then(errorHandler),
-              width: 400,
-              weight: FontWeight.w500,
-              text: widget.client.getTranslation("lng_intro_next")),
-          const SizedBox(height: 16),
-          errorStr == null
-              ? const Center()
-              : Text(errorStr!, style: TextDisplay.regular16),
-        ],
+    return Center(
+      child: SizedBox(
+        width: 400,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(getCodeInfo().phoneNumber!, style: TextDisplay.title),
+            const SizedBox(height: 18),
+            widget.client.buildTextByKey(
+                getCodeInfo().type!.runtimeType ==
+                        AuthenticationCodeTypeTelegramMessage
+                    ? "lng_code_telegram"
+                    : "lng_code_desc",
+                TextDisplay.additional),
+            const SizedBox(height: 20),
+            DataInput(
+                value: code,
+                externalControll: true,
+                onValueChange: (v) => code = v,
+                validationCallback: (v) => v.length == codeLength(),
+                fieldName: widget.client.getTranslation("lng_code_ph")),
+            const SizedBox(height: 16),
+            suggestResend
+                ? ClickableText(
+                    data: widget.client.getTranslation("lng_code_no_telegram"),
+                    onTap: () {
+                      widget.client
+                          .send(ResendAuthenticationCode())
+                          .then(errorHandler);
+                      suggestResend = false;
+                    },
+                  )
+                : widget.client.buildTextByKey(
+                    telegramIsDial ? "lng_code_called" : "lng_code_call",
+                    TextDisplay.additional,
+                    replacing: {
+                        "{minutes}": getMinutes(),
+                        "{seconds}": getSeconds()
+                      }),
+            const SizedBox(height: 40),
+            DesktopButton(
+                onPressed: () => widget.client
+                    .send(CheckAuthenticationCode(code: code))
+                    .then(errorHandler),
+                width: 400,
+                weight: FontWeight.w500,
+                text: widget.client.getTranslation("lng_intro_next")),
+            const SizedBox(height: 16),
+            errorStr == null
+                ? const Center()
+                : Text(errorStr!, style: TextDisplay.regular16),
+          ],
+        ),
       ),
-    ),
-    ),);
+    );
   }
 
   void errorHandler(TdObject result) {

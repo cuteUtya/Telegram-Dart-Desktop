@@ -20,7 +20,7 @@ class DesktopButton extends StatefulWidget {
       this.textColor,
       this.fontSize = 20,
       this.weight = FontWeight.normal,
-      this.padding = const EdgeInsets.all(12)})
+      this.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12)})
       : super(key: key);
 
   final String text;
@@ -67,10 +67,6 @@ class _DesktopButtonState extends State<DesktopButton> {
         widget.onPressed?.call();
         setState(() => isPressed = true);
         Future.delayed(const Duration(microseconds: 100), () {
-          //if after 100ms button does not exists:
-          //screen been changed, or widget been replaced with another etc.
-          //call to setState() throw exception
-          //So, we need call setState() only if mounted = true
           if (mounted) {
             setState(() => isPressed = false);
           }
@@ -84,7 +80,7 @@ class _DesktopButtonState extends State<DesktopButton> {
 
   static Color _getCurrentColor(bool pressed, Color baseColor) {
     if (pressed) {
-      return Color.lerp(baseColor, const Color(0xFFFFFFFF), 0.5) ?? baseColor;
+      return Color.lerp(baseColor, Colors.white, 0.5) ?? baseColor;
     }
     return baseColor;
   }
