@@ -120,13 +120,12 @@ class ChatListsManagerState
               _scrollContollers[index] = ScrollController();
             }
             return StreamBuilder(
-              initialData: const <ChatOrder>[],
+              initialData: widget.client.getChatsInChatListSync(_lists[index]),
               stream: widget.client.chatsInChatList(_lists[index]),
               builder: (_, data) => ChatListDisplay(
                 scrollController: _scrollContollers[index],
-                chatsPositions: data.data as List<ChatOrder>,
+                chatList: _lists[index],
                 client: widget.client,
-                addArchive: _lists[index] is ChatListMain,
               ),
             );
           },
@@ -134,18 +133,11 @@ class ChatListsManagerState
         RevertiblePage(
           onRevert: () => UIEvents.closeArchive(),
           title: widget.client.getTranslation("lng_archived_name"),
-          content: StreamBuilder(
-            initialData: const <ChatOrder>[],
-            stream: widget.client.chatsInChatList(ChatListArchive()),
-            builder: (_, data) {
-              var archChats = data.data as List<ChatOrder>;
-              return Expanded(
-                child: ChatListDisplay(
-                  chatsPositions: archChats,
-                  client: widget.client,
-                ),
-              );
-            },
+          content: Expanded(
+            child: ChatListDisplay(
+              chatList: ChatListArchive(),
+              client: widget.client,
+            ),
           ),
         ),
       ],

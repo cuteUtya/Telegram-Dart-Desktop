@@ -617,19 +617,17 @@ class TelegramClient {
 
   Map<int, List<ChatPosition>> _allChats = {};
 
-  Stream<List<ChatOrder>> chatsInChatList(ChatList chatList) async* {
-    List<ChatOrder> result = [];
-
-    ChatOrder? tryFindChatInResult(int chatId) =>
-        result.firstWhereOrNull((l) => chatId == l.chatId);
-    void sort() {
-      for(int i = 0; i < result.length; i++){
-        if(result[i].position.order == 0){
-          result.remove(result[i]);
-        }
+  void _sortChatsOrder(List<ChatOrder> chats) {
+    for(int i = 0; i < chats.length; i++){
+      if(chats[i].position.order == 0){
+        chats.remove(chats[i]);
       }
-      result.sort((b, a) => a.position.order!.compareTo(b.position.order!));
     }
+    chats.sort((b, a) => a.position.order!.compareTo(b.position.order!));
+  }
+
+  List<ChatOrder> getChatsInChatListSync(ChatList chatList) {
+    List<ChatOrder> result = [];
 
     var l = _allChats.values.toList();
     var v = _allChats.keys.toList();
@@ -637,6 +635,17 @@ class TelegramClient {
       var ch = l[i].firstWhereOrNull((b) => chatListsEqual(chatList, b.list!));
       if(ch != null)  result.add(ChatOrder(v[i], ch));
     }
+    _sortChatsOrder(result);
+    return result;
+  }
+
+  Stream<List<ChatOrder>> chatsInChatList(ChatList chatList) async* {
+    List<ChatOrder> result = getChatsInChatListSync(chatList);
+
+    ChatOrder? tryFindChatInResult(int chatId) =>
+        result.firstWhereOrNull((l) => chatId == l.chatId);
+    void sort() => _sortChatsOrder(result);
+
     sort();
     yield result;
 
