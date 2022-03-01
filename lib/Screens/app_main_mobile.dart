@@ -21,11 +21,24 @@ class AppMainMobile extends StatefulWidget {
 class _AppMainMobileState extends State<AppMainMobile> {
   @override
   Widget build(BuildContext context) {
+    PageController pageController = PageController();
+    int pagesCount = 1;
+
+    void switchToLastPage() {
+      pageController.animateToPage(
+        pagesCount -1 ,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.decelerate,
+      );
+    }
+
+    ///TODO if user make swipe in left make UIEvents.pop();
+
     return StreamBuilder(
       initialData: const <int>[],
       stream: UIEvents.selectedChat(),
-      builder: (_, data) => PageView(
-        children: [
+      builder: (_, data) {
+        var childs = [
           LeftPanel(
             client: widget.client,
           ),
@@ -37,8 +50,17 @@ class _AppMainMobileState extends State<AppMainMobile> {
                 chatId: e,
               ),
             ),
-        ].reversed.toList(),
-      ),
+        ];
+        pagesCount = childs.length;
+        //print(pageController.hasClients);
+        if (pageController.hasClients) {
+          switchToLastPage();
+        }
+        return PageView(
+          controller: pageController,
+          children: childs,
+        );
+      },
     );
   }
 }
