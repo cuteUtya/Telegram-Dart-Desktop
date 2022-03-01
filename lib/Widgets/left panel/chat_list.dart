@@ -14,13 +14,13 @@ class ChatListDisplay extends StatelessWidget {
   const ChatListDisplay({
     Key? key,
     required this.client,
-    required this.chatList,
     required this.chatsPositions,
+    this.addArchive = false,
     this.scrollController,
   }) : super(key: key);
 
   final TelegramClient client;
-  final ChatList chatList;
+  final bool addArchive;
   final List<ChatOrder> chatsPositions;
   final ScrollController? scrollController;
 
@@ -32,47 +32,26 @@ class ChatListDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sorted = sortChatsFor(chatsPositions, chatList);
-    bool isMain = chatList is ChatListMain;
-    String chatListId = _chatListStr(chatList);
     return SmoothListView(
       reverseScroll: true,
-      itemCount: sorted.length + (isMain ? 1 : 0) + 1,
+      itemCount: chatsPositions.length + (addArchive ? 1 : 0),
       scrollController: scrollController,
       itemBuilder: (_, index) {
-        if (isMain) {
+        if (addArchive) {
           if (index == 0) {
-            return ChatItemDisplayArchiveNotHidden(client: client, chats: chatsPositions);
+            return ChatItemDisplayArchiveNotHidden(
+              client: client,
+            );
           }
           index--;
         }
-        if (index >= sorted.length) {
-          return Container(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              children: [
-                const SeparatorLine(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Total chats: ${sorted.length}",
-                      style: TextDisplay.regular18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-        var order = sorted[index];
+        var chatId = chatsPositions[index].chatId;
         return ChatItemDisplay(
-          key: Key("ChatItemDisplay?id=${order.chatId}?chatList=$chatListId"),
-          onClick: () => UIEvents.selectChat(order.chatId, client),
-          chatId: order.chatId,
+          key: Key("ChatItemDisplay?id=$chatId"),
+          onClick: () => UIEvents.selectChat(chatId, client),
+          chatId: chatId,
           client: client,
-          chatList: chatList,
+          chatList: chatsPositions[0].position.list!,
         );
       },
     );

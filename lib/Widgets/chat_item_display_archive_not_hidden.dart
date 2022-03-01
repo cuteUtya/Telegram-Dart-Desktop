@@ -14,72 +14,86 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
   const ChatItemDisplayArchiveNotHidden({
     Key? key,
     required this.client,
-    required this.chats,
   }) : super(key: key);
 
   final TelegramClient client;
-  final List<ChatOrder> chats;
   @override
   Widget build(BuildContext context) {
-    List<InlineSpan> content = [];
-    for (var element in sortChatsFor(chats, ChatListArchive())) {
-      var chat = client.getChat(element.chatId);
-      content.addAll([
-        TextDisplay.parseEmojiInString(
-          chat.title! + (chat.unreadCount! <= 0 ? ", " : ""),
-          TextDisplay.create(
-            textColor: ClientTheme.currentTheme.getField("ArchiveContentColor"),
-            size: 18,
-            fontWeight: (chat.unreadCount ?? 0) <= 0 ? FontWeight.normal : FontWeight.bold,
+    var textColor = ClientTheme.currentTheme.getField("ArchiveContentColor");
+    return StreamBuilder(
+     initialData: const <ChatOrder>[],
+      stream: client.chatsInChatList(ChatListArchive()),
+      builder: (_, data) {
+        List<InlineSpan> content = [];
+        var chats = data.data as List<ChatOrder>;
+        for (var element in chats) {
+          var chat = client.getChat(element.chatId);
+          content.add(TextSpan(children: [
+            TextDisplay.parseEmojiInString(
+              chat.title!,
+              TextDisplay.create(
+                size: 18,
+                fontWeight: (chat.unreadCount ?? 0) <= 0
+                    ? FontWeight.normal
+                    : FontWeight.bold,
+              ),
+            ),
+            WidgetSpan(
+              child: StreamBuilder(
+                initialData: chat.unreadCount!,
+                stream: client.unreadCountOf(chat.id!),
+                builder: (_, data) => Container(
+                  margin: data.data as int == 0
+                      ? EdgeInsets.zero
+                      : const EdgeInsets.only(left: 4),
+                  child: UnreadCountBubble(
+                    fontSize: 14,
+                    count: data.data as int,
+                    important: false /*TODO true if have notify */,
+                  ),
+                ),
+              ),
+            ),
+            TextSpan(
+                text: ", ",
+                style: TextDisplay.create(
+                  size: 14,
+                  textColor: textColor,
+                ))
+          ]));
+        }
+        return ChatItemBase(
+          selected: false,
+          onClick: () => UIEvents.openArchive(),
+          title: Row(
+            children: [
+              Text(client.getTranslation("lng_archived_name"),
+                  style: TextDisplay.chatTittle),
+              const Spacer(),
+            ],
           ),
-        ),
-        const WidgetSpan(child: SizedBox(width: 4)),
-        WidgetSpan(
-          child: StreamBuilder(
-            stream: client.unreadCountOf(chat.id!),
-            builder: (_, data) => UnreadCountBubble(
-              fontSize: 14,
-              count: (data.data ?? chat.unreadCount!) as int,
-              important: false /*TODO true if have notify */,
+          content: Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ExcludeSemantics(
+                excluding: true,
+                child: Text.rich(
+                  TextSpan(children: content),
+                  maxLines: 2,
+                ),
+              ),
             ),
           ),
-        ),
-        if (chat.unreadCount! > 0)
-          TextSpan(
-            text: ", ",
-            style: TextDisplay.create(size: 18),
-          ),
-      ]);
-    }
-    return ChatItemBase(
-      selected: false,
-      onClick: () => UIEvents.openArchive(),
-      //   key: UniqueKey(),
-      title: Row(
-        children: [
-          Text(client.getTranslation("lng_archived_name"), style: TextDisplay.chatTittle),
-          const Spacer(),
-        ],
-      ),
-      content: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: Padding(
-            padding: const EdgeInsets.only(right: 0),
-            child: RichText(
-              maxLines: 2,
-              text: TextSpan(children: content),
+          chatPic: UserpicIcon(
+            color:
+                ClientTheme.currentTheme.getField("ArchiveNotHiddenBackColor"),
+            icon: Icons.archive,
+            iconColor: ClientTheme.currentTheme.getField(
+              "ArchoveNotHiddenIconColor",
             ),
           ),
-        ),
-      ),
-      chatPic: UserpicIcon(
-        color: ClientTheme.currentTheme.getField("ArchiveNotHiddenBackColor"),
-        icon: Icons.archive,
-        iconColor: ClientTheme.currentTheme.getField(
-          "ArchoveNotHiddenIconColor",
-        ),
-      ),
+        );
+      },
     );
   }
 }

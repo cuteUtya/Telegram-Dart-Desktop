@@ -52,29 +52,14 @@ String bytesToSize(int bytes) {
 bool showChatInChatList(List<ChatPosition> poss, ChatList list) {
   bool result = false;
   for (var pos in poss) {
-    if (compareChatlists(pos.list!, list) && pos.order! != 0) {
+    if (chatListsEqual(pos.list!, list) && pos.order! != 0) {
       result = true;
     }
   }
   return result;
 }
 
-List<ChatOrder> sortChatsFor(List<ChatOrder> chats, ChatList forList) {
-  List<ChatOrder> list = chats.where((element) => showChatInChatList(element.positions, forList)).toList();
-  list.sort((b, a) => a.positions
-      .firstWhere((element) => compareChatlists(element.list!, forList))
-      .order!
-      .compareTo(b.positions.firstWhere((element) => compareChatlists(element.list!, forList)).order!));
-  for (int i = list.length - 1; i > 0; i--) {
-    var order = list[i].positions.firstWhere((element) => compareChatlists(element.list!, forList)).order;
-    if (order == 0) {
-      list.removeAt(i);
-    }
-  }
-  return list;
-}
-
-bool compareChatlists(ChatList a, ChatList b) {
+bool chatListsEqual(ChatList a, ChatList b) {
   return a.runtimeType == b.runtimeType &&
       (a is ChatListFilter ? a.chatFilterId : 0) == (b is ChatListFilter ? b.chatFilterId : 0);
 }

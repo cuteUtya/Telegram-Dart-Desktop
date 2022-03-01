@@ -22,7 +22,7 @@ class ChatListsManager extends StatefulWidget {
 
 class ChatListsManagerState
     extends StateWithStreamsSubscriptions<ChatListsManager> {
-  static final List<ChatOrder> _chats = [];
+  //static final List<ChatOrder> _chats = [];
   static List<ChatList> _lists = [];
   static final Map<int, ScrollController> _scrollContollers = {};
   static final Map<int, double> _scrollPositions = {};
@@ -83,52 +83,6 @@ class ChatListsManagerState
   @override
   void initState() {
     _updateChats();
-    streamSubscriptions.add(
-      widget.client.updateChatLastMessage.listen(
-        (event) => setState(
-          () {
-            var chat = _chats
-                .firstWhereOrNull((element) => element.chatId == event.chatId);
-            if (chat == null) {
-              _chats.add(ChatOrder(event.chatId!, event.positions!));
-            } else {
-              chat.positions = event.positions!;
-            }
-          },
-        ),
-      ),
-    );
-    streamSubscriptions.add(
-      widget.client.updateChatDraftMessage.listen(
-        (event) => setState(
-          () => _chats
-              .firstWhere((element) => element.chatId == event.chatId)
-              .positions = event.positions!,
-        ),
-      ),
-    );
-    streamSubscriptions.add(
-      widget.client.updateChatPosition.listen(
-        (event) {
-          setState(
-            () {
-              var base = _chats.firstWhereOrNull(
-                  (element) => element.chatId == event.chatId);
-              if (base != null) {
-                for (int i = 0; i < base.positions.length; i++) {
-                  if (compareChatlists(
-                      base.positions[i].list!, event.position!.list!)) {
-                    base.positions[i] = event.position!;
-                  }
-                }
-              } else {
-                _chats.add(ChatOrder(event.chatId!, [event.position!]));
-              }
-            },
-          );
-        },
-      ),
-    );
     streamSubscriptions.add(UIEvents.currentChatList()
         .listen((event) => setCurrentChatList(event)));
     streamSubscriptions
@@ -159,39 +113,42 @@ class ChatListsManagerState
           itemCount: _lists.length,
           onPageChanged: (p) {
             setCurrentChatList(_lists[p]);
-            print("select ${_lists[p].toJson()}");
             UIEvents.selectChatList(_lists[p]);
           },
           itemBuilder: (context, index) {
             if (_scrollContollers[index] == null) {
               _scrollContollers[index] = ScrollController();
             }
-            return ChatListDisplay(
-              scrollController: _scrollContollers[index],
-              chatsPositions: _chats,
-              client: widget.client,
-              chatList: _lists[index],
+            return StreamBuilder(
+              initialData: const <ChatOrder>[],
+              stream: widget.client.chatsInChatList(_lists[index]),
+              builder: (_, data) => ChatListDisplay(
+                scrollController: _scrollContollers[index],
+                chatsPositions: data.data as List<ChatOrder>,
+                client: widget.client,
+                addArchive: _lists[index] is ChatListMain,
+              ),
             );
           },
         ),
         RevertiblePage(
           onRevert: () => UIEvents.closeArchive(),
           title: widget.client.getTranslation("lng_archived_name"),
-          content: Expanded(
-            child: ChatListDisplay(
-              chatsPositions: _chats,
-              client: widget.client,
-              chatList: ChatListArchive(),
-            ),
+          content: StreamBuilder(
+            initialData: const <ChatOrder>[],
+            stream: widget.client.chatsInChatList(ChatListArchive()),
+            builder: (_, data) {
+              var archChats = data.data as List<ChatOrder>;
+              return Expanded(
+                child: ChatListDisplay(
+                  chatsPositions: archChats,
+                  client: widget.client,
+                ),
+              );
+            },
           ),
         ),
       ],
     );
   }
-}
-
-class ChatOrder {
-  ChatOrder(this.chatId, this.positions);
-  int chatId;
-  List<ChatPosition> positions;
 }
