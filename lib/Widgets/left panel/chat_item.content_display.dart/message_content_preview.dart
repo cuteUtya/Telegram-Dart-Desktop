@@ -253,7 +253,6 @@ class MessageContentPreview extends StatelessWidget {
               text = FormattedText(text: content.runtimeType.toString());
               break;
           }
-
           return RichText(
               maxLines: maxLines,
               text: TextSpan(
@@ -284,7 +283,7 @@ class MessageContentPreview extends StatelessWidget {
                       text,
                       18,
                       chatSelected ? Colors.white : null,
-                    ),
+                    ) + [const TextSpan(text: "\n")],
               ));
         });
   }
