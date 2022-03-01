@@ -3,7 +3,7 @@ import 'package:myapp/tdlib/td_api.dart';
 import 'package:rxdart/subjects.dart';
 
 class UIEvents {
-  static final BehaviorSubject<int?> _selectedChat = BehaviorSubject<int?>();
+  static final BehaviorSubject<List<int>> _selectedChat = BehaviorSubject<List<int>>();
   static List<int> _chatsStack = [];
 
   /// drop chats chain and open chat with entered [id], close chats if [id] is null
@@ -19,7 +19,7 @@ class UIEvents {
       _chatsStack.add(id);
       client.send(OpenChat(chatId: id));
     }
-    _selectedChat.add(id);
+    _selectedChat.add(_chatsStack);
   }
 
   /// open new chat, but save chain of opened chats
@@ -29,7 +29,7 @@ class UIEvents {
     }
     client.send(OpenChat(chatId: id));
     _chatsStack.add(id);
-    _selectedChat.add(id);
+    _selectedChat.add(_chatsStack);
   }
 
   /// close last chat in chats chain and open last before last chat in chain
@@ -37,10 +37,10 @@ class UIEvents {
     if (_chatsStack.isNotEmpty) {
       _chatsStack.removeAt(_chatsStack.length - 1);
     }
-    _selectedChat.add(_chatsStack.isEmpty ? null : _chatsStack.last);
+    _selectedChat.add(_chatsStack.isEmpty ? [] : _chatsStack);
   }
 
-  static Stream<int?> selectedChat() => _selectedChat.stream;
+  static Stream<List<int>> selectedChat() => _selectedChat.stream;
 
   static final BehaviorSubject<List<ChatList>> _chatLists = BehaviorSubject<List<ChatList>>();
   static void changeChatList(List<ChatList> newChatList) => _chatLists.add(newChatList);
