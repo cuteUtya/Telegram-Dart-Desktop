@@ -22,6 +22,13 @@ void main() async {
   UrlsUtils.init(client);
   runApp(
     MaterialApp(
+      theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: ClientTheme.currentTheme.tryGetField("TextCursorColor"),
+          selectionColor: ClientTheme.currentTheme.getField("TextSelectionColor"),
+          selectionHandleColor: ClientTheme.currentTheme.tryGetField("TextHandleColor"),
+        ),
+      ),
       home: App(
         client: client,
       ),

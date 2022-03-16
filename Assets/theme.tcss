@@ -8,6 +8,7 @@ DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
 HoveredObject(theme=light): #12000000;
 GenericUIIconsColor: #7F7F7F;
 InfoOutsideMessageColor: #F6F6F6;
+TextSelectionColor: #c2dcf2;
 
 BorderLineColor(theme=light): #DADADA;
 BorderLineColor(theme=dark): #4A4A4A;
