@@ -39,10 +39,26 @@ class MessageDisplayMedia extends StatelessWidget {
   final Widget? infoWidget;
   final Widget? replieWidget;
 
+  ///TODO add to settings
+  static const bool coverBubbleInInlineMessages = true;
+
   @override
   Widget build(BuildContext context) {
     bool haveText = (caption?.text ?? "").isNotEmpty;
     GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
+    var radius = ClientTheme.currentTheme.getField("BubbleBorderRadiusFree");
+    var radiusSmall = ClientTheme.currentTheme.getField("MediaWithoutTextBorderRadius");
+    BorderRadius border = haveText
+        ? (coverBubbleInInlineMessages
+            ? (senderName != null ? BorderRadius.zero : BorderRadius.vertical(top: Radius.circular(radiusSmall)))
+            : BorderRadius.vertical(
+                top: Radius.circular(replieWidget == null ? radiusSmall : radius),
+                bottom: Radius.circular(radiusSmall),
+              ))
+        : BorderRadius.all(
+            Radius.circular(radiusSmall),
+          );
+
     return haveText
         ? LayoutBuilder(
             builder: (_, box) => SizedBox(
@@ -53,8 +69,8 @@ class MessageDisplayMedia extends StatelessWidget {
                 message: message,
                 senderName: senderName,
                 additionalContent: Container(
-                  margin: captionMargin == null ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 4),
-                  child: _buildImage(),
+                  margin: coverBubbleInInlineMessages ? EdgeInsets.zero : const EdgeInsets.all(4),
+                  child: _buildImage(border),
                 ),
                 captionMargin: captionMargin,
                 infoWidget: infoWidget,
@@ -80,7 +96,7 @@ class MessageDisplayMedia extends StatelessWidget {
                   Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      _buildImage(),
+                      _buildImage(border),
                       if (infoWidget != null)
                         WidgetHider(
                           key: hiderKey,
@@ -103,9 +119,12 @@ class MessageDisplayMedia extends StatelessWidget {
           );
   }
 
-  Widget _buildImage() => SizedBox(
+  Widget _buildImage(BorderRadius border) => SizedBox(
         width: contentWidth,
         height: contentHeight,
-        child: content,
+        child: ClipRRect(
+          borderRadius: border,
+          child: content,
+        ),
       );
 }

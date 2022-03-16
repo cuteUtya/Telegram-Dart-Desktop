@@ -41,17 +41,6 @@ class MessageDisplayPhoto extends StatelessWidget {
     assert(message.content is MessagePhoto);
     var photo = message.content as MessagePhoto;
     var photoSize = sortPhotoSizes(photo.photo!.sizes!)[0];
-    bool haveText = (photo.caption?.text ?? "").isNotEmpty;
-    var radius = ClientTheme.currentTheme.getField("BubbleBorderRadiusFree");
-    var radiusSmall = ClientTheme.currentTheme.getField("MediaWithoutTextBorderRadius");
-    BorderRadius border = haveText
-        ? BorderRadius.vertical(
-            top: Radius.circular(replieWidget == null ? radiusSmall : radius),
-            bottom: Radius.circular(radiusSmall),
-          )
-        : BorderRadius.all(
-            Radius.circular(radiusSmall),
-          );
 
     return LayoutBuilder(
       builder: (_, box) {
@@ -80,6 +69,7 @@ class MessageDisplayPhoto extends StatelessWidget {
           contentWidth: width,
           adminTitle: adminTitle,
           captionMargin: contentPadding,
+          replieWidget: replieWidget,
           caption: photo.caption,
           content: RemoteFileBuilderProgress(
             client: client,
@@ -131,15 +121,12 @@ class MessageDisplayPhoto extends StatelessWidget {
               }
               return Align(
                 alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-                child: ClipRRect(
-                  borderRadius: border,
-                  child: SizedBox(
-                    width: width,
-                    height: height,
-                    child: Image.file(
-                      io.File(path),
-                      fit: BoxFit.cover,
-                    ),
+                child: SizedBox(
+                  width: width,
+                  height: height,
+                  child: Image.file(
+                    io.File(path),
+                    fit: BoxFit.cover,
                   ),
                 ),
               );

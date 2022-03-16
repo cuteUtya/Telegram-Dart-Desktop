@@ -68,7 +68,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     var additionalInfo = widget.additionalContent == null
         ? const SizedBox.shrink()
         : Container(
-            margin: const EdgeInsets.symmetric(vertical: 6),
+            margin: EdgeInsets.only(bottom: 6, top: widget.senderName != null ? 6 : 0),
             child: widget.additionalContent,
           );
 
@@ -79,19 +79,19 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
     return LayoutBuilder(builder: (context, boxCons) {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
       var boxes = paragraph.getBoxesForSelection(TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));
-      final lastBox = boxes.lastOrNull ?? TextBox.fromLTRBD(0, 0, 0, 0, TextDirection.ltr);
+      final lastBox = boxes.lastOrNull ?? const TextBox.fromLTRBD(0, 0, 0, 0, TextDirection.ltr);
       final fitsLastLine = boxCons.maxWidth - lastBox.right > msgInfoBubbleSize.width;
       return Stack(
         children: [
           /// fake text with title and admin titles that stratch message bubble1
-          if (widget.adminTitle != null && !widget.message.isOutgoing! && widget.senderName != null)
+          if (widget.senderName != null)
             Container(
               margin: widget.captionMargin,
               child: Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: widget.senderName!,
+                      text: widget.senderName,
                       style: const TextStyle(
                         fontSize: 18,
                         color: Colors.transparent,

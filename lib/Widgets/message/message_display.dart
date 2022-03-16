@@ -313,12 +313,14 @@ class MessageDisplay extends StatelessWidget {
 
               case MessageAnimation:
                 wrapInBubble = haveText;
+                overrideBubblePadding = true;
                 contentWidget = MessageDisplayGif(
                   client: client,
                   message: message,
                   infoWidget: _buildInfoWidget(haveText),
                   replieWidget: _buildReplieWidget(haveText),
                   senderName: showMessageSender ? author : null,
+                  contentPadding: bubblePadding,
                 );
                 break;
 

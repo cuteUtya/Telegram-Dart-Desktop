@@ -10,7 +10,7 @@ GenericUIIconsColor: #7F7F7F;
 InfoOutsideMessageColor: #F6F6F6;
 TextSelectionColor: #c2dcf2;
 BubbleBorderRadiusFree: 18;
-BubbleBorderRadiusClose: 4;
+BubbleBorderRadiusClose: 8;
 MediaWithoutTextBorderRadius: 6;
 
 BorderLineColor(theme=light): #DADADA;

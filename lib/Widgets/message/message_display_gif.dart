@@ -14,11 +14,13 @@ class MessageDisplayGif extends StatelessWidget {
     required this.infoWidget,
     required this.replieWidget,
     required this.senderName,
+    this.contentPadding,
   }) : super(key: key);
 
   final Message message;
   final TelegramClient client;
   final String? senderName;
+  final EdgeInsets? contentPadding;
   final Widget? infoWidget;
   final Widget? replieWidget;
 
@@ -34,6 +36,7 @@ class MessageDisplayGif extends StatelessWidget {
       infoWidget: infoWidget,
       replieWidget: replieWidget,
       autoplay: true,
+      contentPadding: contentPadding,
       contolls: Align(
         alignment: Alignment.topRight,
         child: Container(
