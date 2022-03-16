@@ -94,7 +94,7 @@ class TextDisplay {
   ];
 
   static List<InlineSpan> parseFormattedText(FormattedText text,
-      [double size = 20, Color? textColor, bool interactiveEnable = false, Function(String)? onUrlClick]) {
+      {double size = 20, Color? textColor, bool interactiveEnable = false, Function(String)? onUrlClick}) {
     String str = "-" * text.text!.length;
     for (int i = 0; i < (text.entities?.length ?? 0); i++) {
       if (!interactiveEnable && _interactiveTextEnteties.contains(text.entities![i].type.runtimeType)) {
@@ -142,11 +142,11 @@ class TextDisplay {
       var textStyle = style == null
           ? create(
               size: size,
-              textColor: textColor,
+              textColor: ClientTheme.currentTheme.getField("MessageTextColor"),
             )
           : style();
       textStyle = textStyle.copyWith(
-        color: textEntety == null ? textColor : null,
+        color: textColor,
         fontSize: size,
       );
       var parsedStr = parseEmojiInString(

@@ -281,9 +281,10 @@ class MessageContentPreview extends StatelessWidget {
                     displayContent +
                     TextDisplay.parseFormattedText(
                       text,
-                      18,
-                      chatSelected ? Colors.white : null,
-                    ) + [const TextSpan(text: "\n")],
+                      size: 18,
+                      textColor: chatSelected ? Colors.white : null,
+                    ) +
+                    [const TextSpan(text: "\n")],
               ));
         });
   }
