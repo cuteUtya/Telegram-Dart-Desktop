@@ -9,12 +9,13 @@ class ChatItemTitle extends StatelessWidget {
       required this.title,
       this.isBot = false,
       this.isChannel = false,
+      this.textColor,
       this.isChat = false,
       this.isScam = false,
       this.isVerifed = false,
       this.isSupport = false})
       : super(key: key);
-
+  final Color? textColor;
   final bool selected;
   final bool isChat;
   final bool isBot;
@@ -52,7 +53,7 @@ class ChatItemTitle extends StatelessWidget {
             [
               TextDisplay.parseEmojiInString(
                 title,
-                selected ? TextDisplay.chatTittleSelected : TextDisplay.chatTittle,
+                (selected ? TextDisplay.chatTittleSelected : TextDisplay.chatTittle).copyWith(color: textColor),
               ),
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,

@@ -39,6 +39,7 @@ class ActionBarDisplay extends StatelessWidget {
               stream: client.senderName(MessageSenderChat(chatId: chat.id)),
               initialData: client.getChatTitleSync(chat.id!),
               builder: (_, data) => ChatItemTitle(
+                textColor: ClientTheme.currentTheme.getField("ActionBarTitleColor"),
                 selected: false,
                 isBot: user?.type is UserTypeBot,
                 isChannel: supergroup?.isChannel ?? false,
@@ -122,7 +123,7 @@ class ActionBarDisplay extends StatelessWidget {
       switch (status.runtimeType) {
         case UserStatusOnline:
           return Text(client.getTranslation("lng_status_online"),
-              style: TextDisplay.create(size: 16, textColor: ClientTheme.currentTheme.getField("OnlineColor")));
+              style: TextDisplay.create(size: 16, textColor: ClientTheme.currentTheme.getField("ActionBarOnlineTextColor")));
         case UserStatusEmpty:
           return const SizedBox.shrink();
         case UserStatusOffline:

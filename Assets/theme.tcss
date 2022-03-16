@@ -5,8 +5,7 @@ BaseColor(theme=light): #FAFAFA;
 BaseColor(theme=dark): #17212B;
 DangerColor: #DF1E1E; 
 DangerHalfTransparent: linear(ref(DangerColor), #00FFFFFF, 0.5);
-HoveredObject(theme=light): #E0E0E0;
-HoveredObject(theme=dark): #202B36;
+HoveredObject(theme=light): #12000000;
 GenericUIIconsColor: #7F7F7F;
 InfoOutsideMessageColor: #F6F6F6;
 
@@ -125,7 +124,10 @@ SelectedTitleIconColor(theme=light): ref(BaseColor);
 SelectedTitleIconColor(theme=dark): ref(SelectedColor);
 
 
-ActionBarColor: ref(BaseColor);
+ActionBarColor(layout=desktop): ref(BaseColor);
+ActionBarColor(layout=mobile): linear(ref(Accent), #000000, 0.2);
+ActionBarTitleColor(layout=desktop): ref(HeaderMain);
+ActionBarTitleColor(layout=mobile): #FFFFFF;
 ChatInputFieldBackgroundColor: ref(BaseColor);
 
 SaveMessagesBackColor: ref(Accent);
@@ -150,7 +152,8 @@ GifOverlayTextColor: ref(InfoOutsideMessageColor);
 StickerOutlineColor: #1E000000;
 ServiceMessageTextColor: #FFFFFFFF;
 
-CloseChatIconColor: ref(GenericUIIconsColor);
+CloseChatIconColor(layout=desktop): ref(GenericUIIconsColor);
+CloseChatIconColor(layout=mobile): #FFFFFF;
 CloseChatClickColor: ref(HoveredObject);
 HyperlinkColor: ref(Accent);
 
@@ -159,7 +162,10 @@ ReplieOnMessageBubbleVerticalLineColor: ref(InfoOutsideMessageColor);
 ReplieOnMessageBubbleTextColor: ref(InfoOutsideMessageColor);
 
 FoldersAndSearchBackgroundColor: ref(BaseColor);
-ActionBarTextColor: ref(RegularText);
+ActionBarTextColor(layout=desktop): ref(RegularText);
+ActionBarTextColor(layout=mobile): #FFFFFF;
+ActionBarOnlineTextColor(layout=desktop): ref(OnlineColor);
+ActionBarOnlineTextColor(layout=mobile): #FFFFFF;
 tw1nkleeModeBackgroundColor(theme=light): #B3C98C;
 tw1nkleeModeBackgroundColor(theme=dark): #0E1621;
 InputFieldTextColor: ref(RegularText);

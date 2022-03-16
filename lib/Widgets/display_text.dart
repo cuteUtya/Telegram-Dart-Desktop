@@ -61,10 +61,7 @@ class TextDisplay {
   };
 
   static Map<String, TextStyle Function()> stylePairs = {
-    "B": () => create(
-          fontWeight: FontWeight.bold,
-          textColor: ClientTheme.currentTheme.getField("BoldTextColor")
-        ),
+    "B": () => create(fontWeight: FontWeight.bold, textColor: ClientTheme.currentTheme.getField("BoldTextColor")),
     "-": () => create(),
     "M": () => create(
           fontFamily: monospace,
