@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/Themes%20engine/icons_deserializator.dart';
+import 'package:myapp/UIManager.dart';
+import 'package:path/path.dart';
 
 class LangFunction {
   late String funcName;
@@ -19,8 +21,11 @@ class ClientTheme {
 
   static const String linesSeparator = ';';
   static const String valueSeparator = ':';
-  final Map<String, Function> environmentVariables = {"theme": () => "dark"};
-  final Map<String, String> lines = {};
+  final Map<String, Function> environmentVariables = {
+    "theme": () => "light",
+    "layout": () => UIManager.useDesktopLayout ? "desktop" : "mobile"
+  };
+  final Map<String, List<_themeValue>> lines = {};
   final List<LangFunction> functions = [
     LangFunction("linear", [3], linear),
     LangFunction("max", [2], max_inter),
@@ -42,7 +47,11 @@ class ClientTheme {
     themeContent.replaceAll("\n", "\r").split("\r").join().split(linesSeparator).forEach((element) {
       if (element.isEmpty) return;
       var val = element.split(valueSeparator);
-      lines[val[0].replaceAll(" ", "")] = val[1].replaceAll(" ", "");
+      var name = val[0].split("(")[0].replaceAll(" ", "");
+      var regex = RegExp(r"\(.{1,}\)").firstMatch(val[0]);
+      var condition = (regex == null ? "" : val[0].substring(regex.start, regex.end)).replaceAll("(", "").replaceAll(")", "");
+      if (lines[name] == null) lines[name] = [];
+      lines[name]!.add(_themeValue(value: val[1].replaceAll(" ", ""), condition: condition));
     });
   }
 
@@ -133,7 +142,7 @@ class ClientTheme {
     throw Exception("Error while linear interpolation: wrong type of t, should be double");
   }
 
-  String? getRawField(String name) {
+  List<_themeValue>? getRawField(String name) {
     return lines[name];
   }
 
@@ -141,7 +150,8 @@ class ClientTheme {
     List<String> results = [];
 
     var refRegex = RegExp(r"ref\([a-z,A-Z]{0,64}\)");
-    var rawFieldValue = getRawField(fieldName);
+    var strs = getRawField(fieldName);
+    var rawFieldValue = strs != null ? _themeValue.getValueByCondition(strs, environmentVariables).value : null;
     if (rawFieldValue != null) {
       refRegex.allMatches(rawFieldValue).forEach((element) {
         var ref = rawFieldValue.substring(element.start, element.end);
@@ -155,13 +165,8 @@ class ClientTheme {
   }
 
   String _getFieldString(String name) {
-    String? value = getRawField(name);
-
-    environmentVariables.forEach((key, val) {
-      value = getRawField("$name($key=" + val.call().toString() + ")");
-    });
-
-    if ((value ?? "") == "") value = getRawField(name);
+    var strs = getRawField(name);
+    var value = strs == null ? null : _themeValue.getValueByCondition(strs, environmentVariables).value;
 
     if (value == null) {
       if (_isDefault) {
@@ -202,13 +207,13 @@ class ClientTheme {
       if (findRefs == 0) pathsIsEnd = true;
     }
 
-    value = replaceReferences(value!);
-    value = replaceColorChannel(value!);
-    value = doMath(value!);
-    value = buildColors(value!);
-    value = replaceColorChannel(value!);
-    value = doFuntions(value!);
-    return value!;
+    value = replaceReferences(value);
+    value = replaceColorChannel(value);
+    value = doMath(value);
+    value = buildColors(value);
+    value = replaceColorChannel(value);
+    value = doFuntions(value);
+    return value;
   }
 
   dynamic tryGetField(String name) {
@@ -396,5 +401,86 @@ class ClientTheme {
     if (result.length == 1) result = "0" + result;
 
     return result.toUpperCase();
+  }
+}
+
+class _themeValue {
+  const _themeValue({required this.value, required this.condition});
+  final String value;
+  final String condition;
+
+  static _themeValue getValueByCondition(List<_themeValue> values, Map<String, Function> envVariables) {
+    bool? compareValues(String condition) {
+      ///some=another
+      ///some<another
+      ///some>another
+      ///some!=another
+      List<String> components = [];
+      String operator = "";
+      if (condition.contains("=")) {
+        components = condition.split("=");
+        operator = "=";
+      } else if (condition.contains("<")) {
+        components = condition.split("<");
+        operator = "<";
+      } else if (condition.contains(">")) {
+        components = condition.split(">");
+        operator = ">";
+      } else if (condition.contains("!=")) {
+        components = condition.split("!=");
+        operator = "!=";
+      }
+      if (components.length < 2) return null;
+
+      var envValue = envVariables[components[0]]!();
+      var conditionValue = components[1];
+      bool? value;
+      switch (operator) {
+        case "=":
+          value = envValue == conditionValue;
+          break;
+        case "!=":
+          value = envValue != conditionValue;
+          break;
+        case "<":
+          value = envValue < conditionValue;
+          break;
+        case ">":
+          value = envValue > conditionValue;
+          break;
+      }
+      return value;
+    }
+
+    bool matchCondition(String condition) {
+      List<bool> values = [];
+      condition.replaceAll("&", "|").split("|").forEach(
+        (c) {
+          var v = compareValues(c);
+          if (v != null) values.add(v);
+        },
+      );
+      var operators = RegExp("[|&]").allMatches(condition).map((e) => condition.substring(e.start, e.end)).toList();
+      bool? value = values.isNotEmpty ? values[0] : null;
+      if (values.length >= 2) {
+        for (int i = 1; i < values.length; i++) {
+          if (operators[i - 1] == "&") {
+            value = value! && values[i];
+          } else {
+            value = value! || values[i];
+          }
+        }
+      }
+      return value ?? compareValues(condition) ?? false;
+    }
+
+    for (var val in values) {
+      print("${val.condition} ==> ${matchCondition(val.condition)}");
+      if (matchCondition(val.condition)) {
+        return val;
+      }
+    }
+
+    return values.first;
   }
 }
