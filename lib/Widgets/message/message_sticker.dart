@@ -35,7 +35,7 @@ class MessageStickerDisplay extends StatelessWidget {
       message: message,
       replieWidget: replieWidget,
       infoWidget: infoWidget,
-      borderRadius: BorderRadius.zero,
+      border: BorderRadius.zero,
       content: WidgetSizer(
         key: sizerKey,
         curve: Curves.easeOutBack,

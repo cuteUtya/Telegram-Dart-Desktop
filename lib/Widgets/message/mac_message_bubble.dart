@@ -29,9 +29,9 @@ class MacMessageBubble extends StatelessWidget {
         content: content,
         side: side,
         position: position,
-        radiusClose: const Radius.circular(4),
-        radiusFree: const Radius.circular(
-          18,
+        radiusClose: Radius.circular(ClientTheme.currentTheme.getField("BubbleBorderRadiusClose")),
+        radiusFree: Radius.circular(
+          ClientTheme.currentTheme.getField("BubbleBorderRadiusFree"),
         ),
         bubblePainter: MacMessageBubblePainter(
           color: ClientTheme.currentTheme.getField(

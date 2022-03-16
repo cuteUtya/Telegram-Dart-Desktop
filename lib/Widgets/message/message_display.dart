@@ -4,6 +4,7 @@ import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
 import 'package:myapp/Widgets/message/message_display_audio.dart';
+import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/message_display_photo.dart';
 import 'package:myapp/Widgets/message/message_display_poll.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
@@ -51,14 +52,11 @@ class MessageDisplay extends StatelessWidget {
   final Function? onMessageDelete;
 
   Widget _buildInfoWidget(bool inline) => MessageInfoBubbleCheckMarkTime(
-        customInfo:
-            message.editDate == 0 ? null : client.getTranslation("lng_edited"),
+        customInfo: message.editDate == 0 ? null : client.getTranslation("lng_edited"),
         useBackground: !inline,
         isOutgoing: message.isOutgoing!,
         time: getHHMM(unixToDateTime(message.date!)),
-        checkMarkValue: message.isOutgoing!
-            ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
-            : null,
+        checkMarkValue: message.isOutgoing! ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0) : null,
       );
 
   Widget? _buildReplieWidget(bool inline) => isReplie
@@ -79,8 +77,7 @@ class MessageDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<WidgetOpacityContollerState> opacityKey =
-        GlobalKey<WidgetOpacityContollerState>();
+    GlobalKey<WidgetOpacityContollerState> opacityKey = GlobalKey<WidgetOpacityContollerState>();
     GlobalKey<WidgetHiderState> hideKey = GlobalKey<WidgetHiderState>();
 
     var opacityDuration = const Duration(milliseconds: 400);
@@ -108,13 +105,9 @@ class MessageDisplay extends StatelessWidget {
             Widget contentWidget;
             bool isChannel = chat?.type is ChatTypeSupergroup ? (chat!.type as ChatTypeSupergroup).isChannel! : false;
             bool showMessageSender = false;
-            if (bubbleRelativePosition == BubbleRelativePosition.top ||
-                bubbleRelativePosition == BubbleRelativePosition.single) {
-              if ((chat?.type is ChatTypeSupergroup ||
-                  chat?.type is ChatTypeBasicGroup) &&  !isChannel) {
-                if (!message.isOutgoing! ||
-                    (message.isOutgoing! &&
-                        message.senderId is MessageSenderChat)) {
+            if (bubbleRelativePosition == BubbleRelativePosition.top || bubbleRelativePosition == BubbleRelativePosition.single) {
+              if ((chat?.type is ChatTypeSupergroup || chat?.type is ChatTypeBasicGroup) && !isChannel) {
+                if (!message.isOutgoing! || (message.isOutgoing! && message.senderId is MessageSenderChat)) {
                   showMessageSender = true;
                 }
               }
@@ -125,14 +118,12 @@ class MessageDisplay extends StatelessWidget {
 
             bool haveText = false;
             try {
-              haveText =
-                  ((message.content as dynamic).caption?.text ?? "").isNotEmpty;
+              haveText = ((message.content as dynamic).caption?.text ?? "").isNotEmpty;
             } catch (_) {}
             switch (message.content.runtimeType) {
               case MessageText:
                 var contentText = message.content as MessageText;
-                var textUnwhitespaced =
-                    contentText.text!.text!.replaceAll(" ", "");
+                var textUnwhitespaced = contentText.text!.text!.replaceAll(" ", "");
                 var emojiTest = emojiRegex.firstMatch(textUnwhitespaced);
                 if (emojiTest != null) {
                   /*
@@ -140,12 +131,9 @@ class MessageDisplay extends StatelessWidget {
           show its without bubble and with big size, like Tdesktop or TelegramX
           */
                   var totalEmojis = emojiTest.end - emojiTest.start;
-                  if (totalEmojis >= textUnwhitespaced.length &&
-                      totalEmojis < 40) {
+                  if (totalEmojis >= textUnwhitespaced.length && totalEmojis < 40) {
                     contentWidget = MessageDisplayTextEmojis(
-                      alignment: message.isOutgoing!
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
+                      alignment: message.isOutgoing! ? MainAxisAlignment.end : MainAxisAlignment.start,
                       emojis: textUnwhitespaced,
                       infoSide: message.isOutgoing! ? Side.left : Side.right,
                       messageInfo: _buildInfoWidget(false),
@@ -161,12 +149,10 @@ class MessageDisplay extends StatelessWidget {
                   infoWidget: _buildInfoWidget(true),
                   replieWidget: _buildReplieWidget(true),
                   senderName: showMessageSender ? author : null,
-                  adminTitle:
-                      bubbleRelativePosition == BubbleRelativePosition.top ||
-                              bubbleRelativePosition ==
-                                  BubbleRelativePosition.single
-                          ? adminTitle
-                          : "",
+                  adminTitle: bubbleRelativePosition == BubbleRelativePosition.top ||
+                          bubbleRelativePosition == BubbleRelativePosition.single
+                      ? adminTitle
+                      : "",
                 );
                 break;
 
@@ -226,9 +212,7 @@ class MessageDisplay extends StatelessWidget {
                   text: client.getTranslation(
                     "lng_action_created_chat",
                     replacing: {
-                      "{title}":
-                          (message.content as MessageBasicGroupChatCreate)
-                              .title!,
+                      "{title}": (message.content as MessageBasicGroupChatCreate).title!,
                       "{from}": author,
                     },
                   ),
@@ -246,9 +230,7 @@ class MessageDisplay extends StatelessWidget {
               case MessageChatChangePhoto:
                 contentWidget = Column(
                   children: [
-                    ServiceMessage(
-                        text: client.getTranslation("lng_action_changed_photo",
-                            replacing: {"{from}": author})),
+                    ServiceMessage(text: client.getTranslation("lng_action_changed_photo", replacing: {"{from}": author})),
                     const SizedBox(height: 16),
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(16)),
@@ -257,8 +239,7 @@ class MessageDisplay extends StatelessWidget {
                         height: 240,
                         child: Userpic(
                           shape: BoxShape.rectangle,
-                          chatPhoto:
-                              (message.content as MessageChatChangePhoto).photo,
+                          chatPhoto: (message.content as MessageChatChangePhoto).photo,
                           userId: chat?.id ?? 0,
                           userTitle: author,
                           client: client,
@@ -285,8 +266,7 @@ class MessageDisplay extends StatelessWidget {
                   text: client.getTranslation(
                     "lng_action_changed_title_channel",
                     replacing: {
-                      "{title}":
-                          (message.content as MessageChatChangeTitle).title!,
+                      "{title}": (message.content as MessageChatChangeTitle).title!,
                     },
                   ),
                 );
@@ -356,18 +336,15 @@ class MessageDisplay extends StatelessWidget {
 
             Widget? senderUserpic;
             bool isChat = chat?.type is ChatTypeBasicGroup ||
-                (chat?.type is ChatTypeSupergroup
-                    ? !(chat!.type as ChatTypeSupergroup).isChannel!
-                    : false);
-            bool showUserpic  = isChat &&
+                (chat?.type is ChatTypeSupergroup ? !(chat!.type as ChatTypeSupergroup).isChannel! : false);
+            bool showUserpic = isChat &&
                 !message.isOutgoing! &&
                 (bubbleRelativePosition == BubbleRelativePosition.bottom ||
                     bubbleRelativePosition == BubbleRelativePosition.single);
             if (showUserpic) {
               switch (message.senderId.runtimeType) {
                 case MessageSenderUser:
-                  var senderUserId =
-                      (message.senderId as MessageSenderUser).userId!;
+                  var senderUserId = (message.senderId as MessageSenderUser).userId!;
                   var senderUser = client.getUser(senderUserId);
                   senderUserpic = Userpic(
                     profilePhoto: senderUser.profilePhoto,
@@ -377,8 +354,7 @@ class MessageDisplay extends StatelessWidget {
                   );
                   break;
                 case MessageSenderChat:
-                  var senderChatId =
-                      (message.senderId as MessageSenderChat).chatId;
+                  var senderChatId = (message.senderId as MessageSenderChat).chatId;
                   var senderChat = client.getChat(senderChatId!);
                   senderUserpic = Userpic(
                     chatPhotoInfo: senderChat.photo,
@@ -417,8 +393,7 @@ class MessageDisplay extends StatelessWidget {
                     children: [
                       Stack(alignment: Alignment.bottomRight, children: [
                         senderUserpic ?? SizedBox(width: isChat ? 40 : 0),
-                        if (message.senderId is MessageSenderUser &&
-                            senderUserpic != null)
+                        if (message.senderId is MessageSenderUser && senderUserpic != null)
                           StreamBuilder(
                             initialData: client.getUser(senderId!).status,
                             stream: client.statusOf(senderId),

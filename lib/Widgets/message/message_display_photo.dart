@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/blur_image_preview.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
@@ -41,13 +42,16 @@ class MessageDisplayPhoto extends StatelessWidget {
     var photo = message.content as MessagePhoto;
     var photoSize = sortPhotoSizes(photo.photo!.sizes!)[0];
     bool haveText = (photo.caption?.text ?? "").isNotEmpty;
-    GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
-    BorderRadius border = BorderRadius.vertical(
-      top: replieWidget == null || !haveText
-          ? const Radius.circular(12)
-          : Radius.zero,
-      bottom: haveText ? Radius.zero : const Radius.circular(12),
-    );
+    var radius = ClientTheme.currentTheme.getField("BubbleBorderRadiusFree");
+    var radiusSmall = ClientTheme.currentTheme.getField("MediaWithoutTextBorderRadius");
+    BorderRadius border = haveText
+        ? BorderRadius.vertical(
+            top: Radius.circular(replieWidget == null ? radiusSmall : radius),
+            bottom: Radius.circular(radiusSmall),
+          )
+        : BorderRadius.all(
+            Radius.circular(radiusSmall),
+          );
 
     return LayoutBuilder(
       builder: (_, box) {
@@ -114,8 +118,7 @@ class MessageDisplayPhoto extends StatelessWidget {
                               height: 12,
                               child: LinearProgressIndicator(
                                 color: Colors.white,
-                                backgroundColor:
-                                    Color(0x2A1515).withOpacity(0.24),
+                                backgroundColor: Color(0x2A1515).withOpacity(0.24),
                                 value: progress,
                               ),
                             ),
@@ -127,9 +130,7 @@ class MessageDisplayPhoto extends StatelessWidget {
                 );
               }
               return Align(
-                alignment: message.isOutgoing!
-                    ? Alignment.bottomRight
-                    : Alignment.bottomLeft,
+                alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
                 child: ClipRRect(
                   borderRadius: border,
                   child: SizedBox(

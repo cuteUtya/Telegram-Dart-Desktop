@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/State%20managment/ui_events.dart';
+import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
@@ -15,7 +16,7 @@ class MessageDisplayMedia extends StatelessWidget {
     required this.message,
     required this.content,
     this.caption,
-    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+    this.border,
     this.senderName,
     this.captionMargin,
     this.adminTitle,
@@ -30,9 +31,9 @@ class MessageDisplayMedia extends StatelessWidget {
   final FormattedText? caption;
   final Widget content;
   final Message message;
+  final BorderRadius? border;
   final String? adminTitle;
   final EdgeInsets? captionMargin;
-  final BorderRadius borderRadius;
   final double? contentWidth;
   final double? contentHeight;
   final Widget? infoWidget;
@@ -103,10 +104,8 @@ class MessageDisplayMedia extends StatelessWidget {
   }
 
   Widget _buildImage() => SizedBox(
-      width: contentWidth,
-      height: contentHeight,
-      child: ClipRRect(
-        borderRadius: borderRadius,
+        width: contentWidth,
+        height: contentHeight,
         child: content,
-      ));
+      );
 }

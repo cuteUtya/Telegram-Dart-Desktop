@@ -227,6 +227,7 @@ class ClientTheme {
     var value = _getFieldString(name);
     if (isHEX(value)) return hexToColor(value);
     if (isIcon(value)) return getIconByName(value.split("Icons.").last) ?? value;
+    if (double.tryParse(value) != null) return double.parse(value);
     return value;
   }
 
