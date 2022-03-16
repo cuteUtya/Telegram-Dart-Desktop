@@ -18,11 +18,13 @@ class MessageContentPreview extends StatelessWidget {
       this.fromChatType,
       this.showAuthor = true,
       this.maxLines = 2,
+      this.fontSize,
       this.style = MessageContentPreviewStyle.noLineBreaks,
       this.authorColor,
       this.textColor})
       : super(key: key);
   final Message? message;
+  final double? fontSize;
   final DraftMessage? draftMessage;
   final ChatType? fromChatType;
   final TelegramClient client;
@@ -38,58 +40,58 @@ class MessageContentPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(message != null || draftMessage != null);
     return StreamBuilder(
-        stream: message?.senderId == null ? null : client.senderName(message!.senderId!),
-        initialData: message?.senderId == null ? "" : client.getSenderNameSync(message!.senderId!),
-        builder: (_, senderData) {
-          var content = draftMessage == null ? message!.content! : draftMessage!.inputMessageText;
-          bool messageTypeAllowShowFrom = true;
-          FormattedText text = FormattedText(text: "");
-          List<InlineSpan> displayContent = [];
-          TextStyle textStyle = TextDisplay.chatItemAccent.copyWith(color: textColor);
-          var author = message == null ? "" : senderData.data.toString();
-          switch (content.runtimeType) {
-            case MessageText:
-              text = (content as MessageText).text!;
-              text.text = text.text!.replaceAll(RegExp(r"\n"), " ");
-              break;
+      stream: message?.senderId == null ? null : client.senderName(message!.senderId!),
+      initialData: message?.senderId == null ? "" : client.getSenderNameSync(message!.senderId!),
+      builder: (_, senderData) {
+        var content = draftMessage == null ? message!.content! : draftMessage!.inputMessageText;
+        bool messageTypeAllowShowFrom = true;
+        FormattedText text = FormattedText(text: "");
+        List<InlineSpan> displayContent = [];
+        TextStyle textStyle = TextDisplay.chatItemAccent.copyWith(color: textColor, fontSize: fontSize);
+        var author = message == null ? "" : senderData.data.toString();
+        switch (content.runtimeType) {
+          case MessageText:
+            text = (content as MessageText).text!;
+            text.text = text.text!.replaceAll(RegExp(r"\n"), " ");
+            break;
 
-            case MessageAnimatedEmoji:
-              displayContent.add(TextDisplay.emoji((content as MessageAnimatedEmoji).emoji!, style: TextDisplay.regular18));
-              break;
+          case MessageAnimatedEmoji:
+            displayContent.add(TextDisplay.emoji((content as MessageAnimatedEmoji).emoji!, style: textStyle));
+            break;
 
-            case MessageSticker:
-              displayContent.add(TextDisplay.parseEmojiInString(
-                  "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ", textStyle));
-              break;
+          case MessageSticker:
+            displayContent.add(TextDisplay.parseEmojiInString(
+                "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ", textStyle));
+            break;
 
-            case MessageChatDeletePhoto:
-              messageTypeAllowShowFrom = false;
-              displayContent.add(TextDisplay.parseEmojiInString(
-                  "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {"{from}": author})}", textStyle));
-              break;
+          case MessageChatDeletePhoto:
+            messageTypeAllowShowFrom = false;
+            displayContent.add(TextDisplay.parseEmojiInString(
+                "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {"{from}": author})}", textStyle));
+            break;
 
-            case MessageVideo:
-              var video = message!.content as MessageVideo;
-              text = video.caption!;
-              messageTypeAllowShowFrom = true;
-              var thumbId = video.video?.thumbnail?.file?.id;
-              var vidString = "${client.getTranslation("lng_in_dlg_video")}${(text.text?.isNotEmpty ?? false) ? ", " : ""}";
-              if (thumbId != null) {
-                displayContent.addAll(ChatItemContentPhotoText.build(
-                    ChatItemPhotoMinithumbnail(
-                      client: client,
-                      id: thumbId,
-                    ),
-                    vidString,
-                    textStyle));
-              } else {
-                displayContent.add(TextDisplay.parseEmojiInString("📹 $vidString"));
-              }
-              break;
+          case MessageVideo:
+            var video = message!.content as MessageVideo;
+            text = video.caption!;
+            messageTypeAllowShowFrom = true;
+            var thumbId = video.video?.thumbnail?.file?.id;
+            var vidString = "${client.getTranslation("lng_in_dlg_video")}${(text.text?.isNotEmpty ?? false) ? ", " : ""}";
+            if (thumbId != null) {
+              displayContent.addAll(ChatItemContentPhotoText.build(
+                  ChatItemPhotoMinithumbnail(
+                    client: client,
+                    id: thumbId,
+                  ),
+                  vidString,
+                  textStyle));
+            } else {
+              displayContent.add(TextDisplay.parseEmojiInString("📹 $vidString"));
+            }
+            break;
 
-            join:
-            case MessageChatAddMembers:
-              /*TODO messageTypeAllowShowFrom = false;
+          join:
+          case MessageChatAddMembers:
+            /*TODO messageTypeAllowShowFrom = false;
         String names = "";
         joinInfo?.addedUsers
             .forEach((element) => names += "${element.firstName!}, ");
@@ -102,187 +104,188 @@ class MessageContentPreview extends StatelessWidget {
                   "{users}": names,
                   "{from}": author
                 }));*/
-              break;
-            case MessageChatJoinByLink:
-              continue join;
-            case MessageChatJoinByRequest:
-              continue join;
+            break;
+          case MessageChatJoinByLink:
+            continue join;
+          case MessageChatJoinByRequest:
+            continue join;
 
-            case MessagePhoto:
-              text = (content as MessagePhoto).caption!;
-              displayContent = ChatItemContentPhotoText.build(
-                  ChatItemPhotoMinithumbnail(client: client, id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!),
-                  (text.text ?? "").isNotEmpty ? "" : client.getTranslation("lng_attach_photo"),
-                  textStyle);
-              break;
+          case MessagePhoto:
+            text = (content as MessagePhoto).caption!;
+            displayContent = ChatItemContentPhotoText.build(
+                ChatItemPhotoMinithumbnail(client: client, id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!),
+                (text.text ?? "").isNotEmpty ? "" : client.getTranslation("lng_attach_photo"),
+                textStyle);
+            break;
 
-            case MessageDocument:
-              var document = (content as MessageDocument);
-              displayContent.addAll(
-                [
-                  TextDisplay.parseEmojiInString("📁 ${bytesToSize(document.document!.document!.size!)} —", textStyle),
-                  contentEntetyesMargin(),
-                  TextSpan(text: document.document?.fileName, style: textStyle),
-                  contentEntetyesMargin(),
-                ],
-              );
-              text = document.caption!;
-              break;
+          case MessageDocument:
+            var document = (content as MessageDocument);
+            displayContent.addAll(
+              [
+                TextDisplay.parseEmojiInString("📁 ${bytesToSize(document.document!.document!.size!)} —", textStyle),
+                contentEntetyesMargin(),
+                TextSpan(text: document.document?.fileName, style: textStyle),
+                contentEntetyesMargin(),
+              ],
+            );
+            text = document.caption!;
+            break;
 
-            case MessageChatChangePhoto:
-              messageTypeAllowShowFrom = false;
-              displayContent.add(
-                TextDisplay.parseEmojiInString(
-                  "📸 ${client.getTranslation(
-                    isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo",
-                    replacing: {"{from}": author},
-                  )}",
-                  textStyle,
-                ),
-              );
-              break;
-
-            case MessageExpiredPhoto:
-              displayContent.add(
-                TextDisplay.parseEmojiInString(
-                  "🔥 ${client.getTranslation("lng_attach_photo")}",
-                  textStyle,
-                ),
-              );
-              break;
-
-            case MessageAnimation:
-              var thumb = (content as MessageAnimation).animation?.thumbnail;
-              Widget? mith;
-              if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
-                displayContent.add(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
-              } else {
-                mith = ChatItemPhotoMinithumbnail(id: thumb.file!.id!, client: client);
-                displayContent += ChatItemContentPhotoText.build(mith, "GIF", textStyle);
-              }
-              break;
-
-            case MessageContactRegistered:
-              messageTypeAllowShowFrom = false;
-              displayContent.add(TextDisplay.parseEmojiInString(
-                  "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {"{from}": author})}", textStyle));
-              break;
-
-            case MessageChatChangeTitle:
-              messageTypeAllowShowFrom = false;
-              displayContent.add(TextDisplay.parseEmojiInString(
-                "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {"{title}": author})}",
+          case MessageChatChangePhoto:
+            messageTypeAllowShowFrom = false;
+            displayContent.add(
+              TextDisplay.parseEmojiInString(
+                "📸 ${client.getTranslation(
+                  isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo",
+                  replacing: {"{from}": author},
+                )}",
                 textStyle,
-              ));
-              break;
+              ),
+            );
+            break;
 
-            case MessageSupergroupChatCreate:
-              displayContent = ChatItemContentIconText.build(Icons.create, client.getTranslation("lng_action_created_channel"));
-              break;
+          case MessageExpiredPhoto:
+            displayContent.add(
+              TextDisplay.parseEmojiInString(
+                "🔥 ${client.getTranslation("lng_attach_photo")}",
+                textStyle,
+              ),
+            );
+            break;
 
-            case InputMessageText:
-              text = (content as InputMessageText).text!;
-              break;
+          case MessageAnimation:
+            var thumb = (content as MessageAnimation).animation?.thumbnail;
+            Widget? mith;
+            if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
+              displayContent.add(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
+            } else {
+              mith = ChatItemPhotoMinithumbnail(id: thumb.file!.id!, client: client);
+              displayContent += ChatItemContentPhotoText.build(mith, "GIF", textStyle);
+            }
+            break;
 
-            case MessagePoll:
-              var poll = (message!.content as MessagePoll).poll!;
-              text = FormattedText(text: "📊 ${poll.question}", entities: []);
-              break;
+          case MessageContactRegistered:
+            messageTypeAllowShowFrom = false;
+            displayContent.add(TextDisplay.parseEmojiInString(
+                "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {"{from}": author})}", textStyle));
+            break;
 
-            case MessageDice:
-              var dice = message?.content as MessageDice;
-              String diceresult;
-              const map = {
-                "AgAD0QgAAuN4BAAB": "🍋",
-                "AgADywgAAuN4BAAB": "🍋",
-                "AgAD1wgAAuN4BAAB": "🍋",
-                "AgADyAgAAuN4BAAB": "7",
-                "AgAD1AgAAuN4BAAB": "7",
-                "AgAD0wgAAuN4BAAB": "7",
-                "AgADzQgAAuN4BAAB": "7",
-                "AgADxwgAAuN4BAAB": "7",
-                "AgADzggAAuN4BAAB": "7",
-                "AgAD0AgAAuN4BAAB": "🍒",
-                "AgADyggAAuN4BAAB": "🍒",
-                "AgAD1ggAAuN4BAAB": "🍒",
-                "AgADyQgAAuN4BAAB": "🍻",
-                "AgADzwgAAuN4BAAB": "🍻",
-                "AgAD1QgAAuN4BAAB": "🍻"
-              };
-              if (dice.finalState is DiceStickersRegular) {
-                diceresult = dice.value.toString();
-              } else {
-                var slotMachine = (dice.finalState as DiceStickersSlotMachine);
-                diceresult =
-                    "${map[slotMachine.leftReel!.sticker!.remote!.uniqueId!]} ${map[slotMachine.centerReel!.sticker!.remote!.uniqueId!]} ${map[slotMachine.rightReel!.sticker!.remote!.uniqueId!]}";
-              }
+          case MessageChatChangeTitle:
+            messageTypeAllowShowFrom = false;
+            displayContent.add(TextDisplay.parseEmojiInString(
+              "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {"{title}": author})}",
+              textStyle,
+            ));
+            break;
 
-              displayContent.add(
-                TextDisplay.parseEmojiInString(
-                  "${dice.emoji} ($diceresult)",
-                  textStyle,
+          case MessageSupergroupChatCreate:
+            displayContent = ChatItemContentIconText.build(Icons.create, client.getTranslation("lng_action_created_channel"));
+            break;
+
+          case InputMessageText:
+            text = (content as InputMessageText).text!;
+            break;
+
+          case MessagePoll:
+            var poll = (message!.content as MessagePoll).poll!;
+            text = FormattedText(text: "📊 ${poll.question}", entities: []);
+            break;
+
+          case MessageDice:
+            var dice = message?.content as MessageDice;
+            String diceresult;
+            const map = {
+              "AgAD0QgAAuN4BAAB": "🍋",
+              "AgADywgAAuN4BAAB": "🍋",
+              "AgAD1wgAAuN4BAAB": "🍋",
+              "AgADyAgAAuN4BAAB": "7",
+              "AgAD1AgAAuN4BAAB": "7",
+              "AgAD0wgAAuN4BAAB": "7",
+              "AgADzQgAAuN4BAAB": "7",
+              "AgADxwgAAuN4BAAB": "7",
+              "AgADzggAAuN4BAAB": "7",
+              "AgAD0AgAAuN4BAAB": "🍒",
+              "AgADyggAAuN4BAAB": "🍒",
+              "AgAD1ggAAuN4BAAB": "🍒",
+              "AgADyQgAAuN4BAAB": "🍻",
+              "AgADzwgAAuN4BAAB": "🍻",
+              "AgAD1QgAAuN4BAAB": "🍻"
+            };
+            if (dice.finalState is DiceStickersRegular) {
+              diceresult = dice.value.toString();
+            } else {
+              var slotMachine = (dice.finalState as DiceStickersSlotMachine);
+              diceresult =
+                  "${map[slotMachine.leftReel!.sticker!.remote!.uniqueId!]} ${map[slotMachine.centerReel!.sticker!.remote!.uniqueId!]} ${map[slotMachine.rightReel!.sticker!.remote!.uniqueId!]}";
+            }
+
+            displayContent.add(
+              TextDisplay.parseEmojiInString(
+                "${dice.emoji} ($diceresult)",
+                textStyle,
+              ),
+            );
+            break;
+
+          case MessageAudio:
+            var audio = message!.content as MessageAudio;
+            displayContent.add(
+              TextDisplay.parseEmojiInString(
+                "🎵 ${audio.audio!.performer} - ${audio.audio!.title}, ",
+                textStyle,
+              ),
+            );
+            text = audio.caption!;
+            break;
+
+          case MessageVoiceNote:
+            displayContent.add(
+              TextDisplay.parseEmojiInString(
+                "🎤 ${client.getTranslation("lng_media_audio")}",
+                textStyle,
+              ),
+            );
+            break;
+
+          default:
+            text = FormattedText(text: content.runtimeType.toString());
+            break;
+        }
+        return RichText(
+          maxLines: maxLines,
+          text: TextSpan(
+            children: [
+                  TextDisplay.parseEmojiInString(
+                      messageTypeAllowShowFrom
+                          ? (_showAuthor
+                              ? (style == MessageContentPreviewStyle.noLineBreaks
+                                  ? client.getTranslation("lng_dialogs_text_from_wrapped",
+                                          replacing: {"{from}": lastMessageSenderName ?? author}) +
+                                      " "
+                                  : "${lastMessageSenderName ?? author}\n")
+                              : "")
+                          : "",
+                      draftMessage != null ? TextDisplay.draftText : textStyle),
+                  WidgetSpan(
+                      child: message?.forwardInfo != null
+                          ? Container(
+                              child: Icon(
+                                Icons.reply,
+                                color: ChatItemContentIconText.iconClr,
+                              ),
+                              margin: const EdgeInsets.only(left: 2, right: 2))
+                          : const SizedBox.shrink()),
+                ] +
+                displayContent +
+                TextDisplay.parseFormattedText(
+                  text,
+                  size: fontSize ?? 16,
+                  textColor: textColor,
                 ),
-              );
-              break;
-
-            case MessageAudio:
-              var audio = message!.content as MessageAudio;
-              displayContent.add(
-                TextDisplay.parseEmojiInString(
-                  "🎵 ${audio.audio!.performer} - ${audio.audio!.title}, ",
-                  textStyle,
-                ),
-              );
-              text = audio.caption!;
-              break;
-
-            case MessageVoiceNote:
-              displayContent.add(
-                TextDisplay.parseEmojiInString(
-                  "🎤 ${client.getTranslation("lng_media_audio")}",
-                  textStyle,
-                ),
-              );
-              break;
-
-            default:
-              text = FormattedText(text: content.runtimeType.toString());
-              break;
-          }
-          return RichText(
-              maxLines: maxLines,
-              text: TextSpan(
-                children: [
-                      TextDisplay.parseEmojiInString(
-                          messageTypeAllowShowFrom
-                              ? (_showAuthor
-                                  ? (style == MessageContentPreviewStyle.noLineBreaks
-                                      ? client.getTranslation("lng_dialogs_text_from_wrapped",
-                                              replacing: {"{from}": lastMessageSenderName ?? author}) +
-                                          " "
-                                      : "${lastMessageSenderName ?? author}\n")
-                                  : "")
-                              : "",
-                          draftMessage != null ? TextDisplay.draftText : textStyle),
-                      WidgetSpan(
-                          child: message?.forwardInfo != null
-                              ? Container(
-                                  child: Icon(
-                                    Icons.reply,
-                                    color: ChatItemContentIconText.iconClr,
-                                  ),
-                                  margin: const EdgeInsets.only(left: 2, right: 2))
-                              : const SizedBox.shrink()),
-                    ] +
-                    displayContent +
-                    TextDisplay.parseFormattedText(
-                      text,
-                      size: 18,
-                      textColor: textColor,
-                    ) +
-                    [const TextSpan(text: "\n")],
-              ));
-        });
+          ),
+        );
+      },
+    );
   }
 
   int get lastMessageSenderId {

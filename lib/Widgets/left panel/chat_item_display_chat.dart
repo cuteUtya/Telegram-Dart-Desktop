@@ -260,10 +260,11 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
           child: StreamBuilder(
             stream: widget.client.actionsOf(widget.chatId),
             builder: (_, actionsSnapshow) {
+              Widget content;
               if (actionsSnapshow.hasData) {
                 var actions = actionsSnapshow.data as List<UpdateChatAction>;
                 if (actions.isNotEmpty) {
-                  return ChatItemActionDisplay(
+                  content = ChatItemActionDisplay(
                     textColor: selected ? Colors.white : null,
                     isPrivate: isPrivate,
                     chatid: widget.chatId,
@@ -273,13 +274,29 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
                 }
               }
 
-              if (chat.lastMessage == null) return const Center();
-              return MessageContentPreview(
+              if (chat.lastMessage == null) content = const Center();
+              content = MessageContentPreview(
                 textColor: selected ? Colors.white : null,
                 message: chat.draftMessage == null ? chat.lastMessage : null,
                 draftMessage: chat.draftMessage,
                 fromChatType: chat.type!,
                 client: widget.client,
+                fontSize: 18,
+              );
+              return Stack(
+                children: [
+                  content,
+
+                  ///fake text placeholder that prevents chat resize if in it preview
+                  ///contain only 1 line of text
+                  const Text(
+                    "1\n1",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.transparent,
+                    ),
+                  )
+                ],
               );
             },
           ),
@@ -291,8 +308,6 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
               color: ClientTheme.currentTheme.getField(selected ? "SelectedChatPinIconColor" : "ChatPinIconColor"),
             )
           : null,
-      //    );
-      //   },
     );
   }
 
