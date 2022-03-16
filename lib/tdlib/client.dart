@@ -672,11 +672,7 @@ class TelegramClient {
   Stream<Chat> chatAnyUpdates(int chatId) async* {
     await for (final upd in updates) {
       if (chatUpdates.contains(upd.runtimeType)) {
-        bool chatIdMatch = false;
-        try {
-          chatIdMatch = (upd as dynamic).chatId == chatId;
-        } catch (_) {}
-
+        bool chatIdMatch = upd.toJson()["chat_id"] == chatId;
         if (chatIdMatch) yield getChat(chatId);
       }
     }
