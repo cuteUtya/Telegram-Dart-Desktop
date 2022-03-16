@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/Themes%20engine/icons_deserializator.dart';
 import 'package:myapp/UIManager.dart';
-import 'package:path/path.dart';
 
 class LangFunction {
   late String funcName;
@@ -475,7 +474,6 @@ class _themeValue {
     }
 
     for (var val in values) {
-      print("${val.condition} ==> ${matchCondition(val.condition)}");
       if (matchCondition(val.condition)) {
         return val;
       }

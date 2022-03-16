@@ -4,7 +4,7 @@
 # Basic syntax
 
 You can leave comments in language,  just write it on new line with '#' character on the sides 
-```CSS 
+```CSS
 #comment#
 ```
 
@@ -52,10 +52,24 @@ B: #FFFFFF;
 C: linear(ref(A), ref(B), 0.5);
 ```
 
-You can set different field values depending on the environment variables that are set in the interpreter. For this moment exists only `theme', what can have value "dark" and "light"
+You can set different field values depending on the environment variables that are set in the interpreter. For this moment exists 
+`theme`, can have value "dark" and "light",
+`layout`, can have value "desktop" and "mobile", related on screen sides ratio
+
 ```CSS
 background(theme=dark): #000000;
 background(theme=light): #FFFFFF;
+```
+Also you can create more complicated conditions using operator AND `&` and OR `|`
+```CSS
+background(theme=dark&layout=desktop): #000000;
+background(theme=light&layout=desktop): #FFFFFF;
+```
+
+Language allow store material icons
+[List of aviable icons](https://api.flutter.dev/flutter/material/Icons-class.html)
+```CSS
+ExitIcon: Icons.close;
 ```
 
 # Other 
