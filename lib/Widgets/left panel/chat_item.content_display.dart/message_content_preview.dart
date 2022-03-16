@@ -16,7 +16,6 @@ class MessageContentPreview extends StatelessWidget {
       this.message,
       this.draftMessage,
       this.fromChatType,
-      this.chatSelected = false,
       this.showAuthor = true,
       this.maxLines = 2,
       this.style = MessageContentPreviewStyle.noLineBreaks,
@@ -29,7 +28,6 @@ class MessageContentPreview extends StatelessWidget {
   final TelegramClient client;
   final int maxLines;
   final MessageContentPreviewStyle style;
-  final bool chatSelected;
   final bool showAuthor;
   final Color? authorColor;
   final Color? textColor;
@@ -47,9 +45,7 @@ class MessageContentPreview extends StatelessWidget {
           bool messageTypeAllowShowFrom = true;
           FormattedText text = FormattedText(text: "");
           List<InlineSpan> displayContent = [];
-          TextStyle textStyle = chatSelected
-              ? TextDisplay.chatItemAccentSelected.copyWith(color: textColor)
-              : TextDisplay.chatItemAccent.copyWith(color: textColor);
+          TextStyle textStyle = TextDisplay.chatItemAccent.copyWith(color: textColor);
           var author = message == null ? "" : senderData.data.toString();
           switch (content.runtimeType) {
             case MessageText:
@@ -282,7 +278,7 @@ class MessageContentPreview extends StatelessWidget {
                     TextDisplay.parseFormattedText(
                       text,
                       size: 18,
-                      textColor: chatSelected ? Colors.white : null,
+                      textColor: textColor,
                     ) +
                     [const TextSpan(text: "\n")],
               ));

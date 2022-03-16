@@ -7,16 +7,16 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 
 class ChatItemActionDisplay extends StatelessWidget {
-  const ChatItemActionDisplay(
-      {Key? key,
-      required this.chatSelected,
-      required this.actions,
-      required this.client,
-      required this.isPrivate,
-      required this.chatid})
-      : super(key: key);
+  const ChatItemActionDisplay({
+    Key? key,
+    this.textColor,
+    required this.actions,
+    required this.client,
+    required this.isPrivate,
+    required this.chatid,
+  }) : super(key: key);
 
-  final bool chatSelected;
+  final Color? textColor;
   final List<UpdateChatAction> actions;
   final TelegramClient client;
   final int chatid;
@@ -73,7 +73,7 @@ class ChatItemActionDisplay extends StatelessWidget {
       secondUser = actions[1].senderId!;
     }
 
-    var textStyle = chatSelected ? TextDisplay.chatItemAccentSelected : TextDisplay.chatItemAccent;
+    var textStyle = TextDisplay.chatItemAccent.copyWith(color: textColor);
 
     return RichText(
       text: TextSpan(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/message_content_preview.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -29,8 +30,8 @@ class ReplieDisplay extends StatelessWidget {
   Widget _build() {
     var color = inlineStyle ? null : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
     return Container(
-      margin: EdgeInsets.only(bottom: inlineStyle ? 4 : 2, top: inlineStyle ? 8 : 4),
-      padding: const EdgeInsets.only(left: 8, top: 4, bottom: 4),
+      margin: EdgeInsets.symmetric(vertical: inlineStyle ? 8 : 4),
+      padding: const EdgeInsets.only(left: 6),
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
@@ -45,17 +46,14 @@ class ReplieDisplay extends StatelessWidget {
         builder: (_, box) => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            LimitedBox(
-              maxWidth:  120,
-              child: MessageContentPreview(
-                client: client,
-                message: message,
-                style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
-                showAuthor: showAuthor,
-                maxLines: 2,
-                textColor: color,
-                authorColor: color,
-              ),
+            MessageContentPreview(
+              client: client,
+              message: message,
+              style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
+              showAuthor: showAuthor,
+              maxLines: 2,
+              textColor: color,
+              authorColor: color,
             ),
           ],
         ),

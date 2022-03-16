@@ -36,14 +36,9 @@ class ChatItemDisplay extends StatefulWidget {
   State<ChatItemDisplay> createState() => _ChatItemDisplayState();
 }
 
-class _ChatItemDisplayState
-    extends StateWithStreamsSubscriptions<ChatItemDisplay> {
+class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDisplay> {
   bool pinned(Chat chat) =>
-      chat.positions
-          ?.firstWhereOrNull(
-              (element) => chatListsEqual(element.list!, widget.chatList))
-          ?.isPinned ??
-      false;
+      chat.positions?.firstWhereOrNull((element) => chatListsEqual(element.list!, widget.chatList))?.isPinned ?? false;
 
   bool selected = false;
 
@@ -57,22 +52,14 @@ class _ChatItemDisplayState
 
   @override
   Widget build(BuildContext context) {
-    bool isSavedMessages = widget.chatId ==
-        widget.client.getOptionValue<OptionValueInteger>("my_id")?.value;
-    bool isReplieChat = widget.chatId ==
-        (widget.client
-            .getOptionValue<OptionValueInteger>("replies_bot_chat_id")
-            ?.value);
+    bool isSavedMessages = widget.chatId == widget.client.getOptionValue<OptionValueInteger>("my_id")?.value;
+    bool isReplieChat = widget.chatId == (widget.client.getOptionValue<OptionValueInteger>("replies_bot_chat_id")?.value);
     var chat = widget.client.getChat(widget.chatId);
-    bool isPrivate =
-        chat.type is ChatTypePrivate || chat.type is ChatTypeSecret;
+    bool isPrivate = chat.type is ChatTypePrivate || chat.type is ChatTypeSecret;
     var interlocutorId = isPrivate ? (chat.type as dynamic).userId : null;
-    var interlocutor =
-        interlocutorId == null ? null : widget.client.getUser(interlocutorId!);
-    var supergroup = chat.type is ChatTypeSupergroup
-        ? widget.client
-            .getSupergroup((chat.type as ChatTypeSupergroup).supergroupId!)
-        : null;
+    var interlocutor = interlocutorId == null ? null : widget.client.getUser(interlocutorId!);
+    var supergroup =
+        chat.type is ChatTypeSupergroup ? widget.client.getSupergroup((chat.type as ChatTypeSupergroup).supergroupId!) : null;
 
     return /*StreamBuilder(
       stream: ,
@@ -91,26 +78,18 @@ class _ChatItemDisplayState
                     selected: selected,
                   )
                 : StreamBuilder(
-                    stream: isSavedMessages
-                        ? null
-                        : widget.client.senderName(
-                            MessageSenderChat(chatId: widget.chatId)),
+                    stream: isSavedMessages ? null : widget.client.senderName(MessageSenderChat(chatId: widget.chatId)),
                     initialData: chat.title,
                     builder: (_, nameSnapshot) {
                       return ChatItemTitle(
                         selected: selected,
-                        isBot:
-                            interlocutor?.type is UserTypeBot && !isReplieChat,
+                        isBot: interlocutor?.type is UserTypeBot && !isReplieChat,
                         isChannel: (supergroup?.isChannel) ?? false,
-                        isChat: (supergroup != null &&
-                                !(supergroup.isChannel ?? true)) ||
-                            chat.type is ChatTypeBasicGroup,
+                        isChat: (supergroup != null && !(supergroup.isChannel ?? true)) || chat.type is ChatTypeBasicGroup,
                         title: (interlocutor?.type is UserTypeDeleted)
                             ? widget.client.getTranslation("lng_deleted")
                             : nameSnapshot.data.toString(),
-                        isScam: chat.type is ChatTypeSupergroup
-                            ? supergroup?.isScam ?? false
-                            : interlocutor?.isScam ?? false,
+                        isScam: chat.type is ChatTypeSupergroup ? supergroup?.isScam ?? false : interlocutor?.isScam ?? false,
                         isVerifed: supergroup?.isSlowModeEnabled ?? false,
                         isSupport: interlocutor?.isSupport ?? false,
                       );
@@ -123,16 +102,9 @@ class _ChatItemDisplayState
             builder: (context, data) {
               var value = false;
               if (data.hasData) {
-                value = (widget.client.getChat(widget.chatId).lastMessage?.id ??
-                        0) <=
-                    (data.data as int);
+                value = (widget.client.getChat(widget.chatId).lastMessage?.id ?? 0) <= (data.data as int);
               }
-              if (!isSavedMessages &&
-                  (widget.client
-                          .getChat(widget.chatId)
-                          .lastMessage
-                          ?.isOutgoing ??
-                      false)) {
+              if (!isSavedMessages && (widget.client.getChat(widget.chatId).lastMessage?.isOutgoing ?? false)) {
                 return CheckMark(
                   isReaded: value,
                   selected: selected,
@@ -147,15 +119,11 @@ class _ChatItemDisplayState
             initialData: chat.lastMessage,
             stream: widget.client.lastMessageIn(widget.chatId),
             builder: (_, lastMessageSnapshot) => Text(
-              lastMessageSnapshot.data == null
-                  ? ""
-                  : getMessageTime(lastMessageSnapshot.data as Message),
+              lastMessageSnapshot.data == null ? "" : getMessageTime(lastMessageSnapshot.data as Message),
               textAlign: TextAlign.right,
               style: TextDisplay.create(
                 size: 18,
-                textColor: ClientTheme.currentTheme.getField(selected
-                    ? "SelectedChatLastTimedMessage"
-                    : "ChatLastTimeMessage"),
+                textColor: ClientTheme.currentTheme.getField(selected ? "SelectedChatLastTimedMessage" : "ChatLastTimeMessage"),
               ),
             ),
           ),
@@ -164,16 +132,13 @@ class _ChatItemDisplayState
       chatPic: isSavedMessages
           ? UserpicIcon(
               color: ClientTheme.currentTheme.getField("SaveMessagesBackColor"),
-              iconColor:
-                  ClientTheme.currentTheme.getField("SaveMessageIconColor"),
+              iconColor: ClientTheme.currentTheme.getField("SaveMessageIconColor"),
               icon: Icons.bookmarks_outlined,
             )
           : isReplieChat
               ? UserpicIcon(
-                  color: ClientTheme.currentTheme
-                      .getField("RepliesMessagesBackColor"),
-                  iconColor: ClientTheme.currentTheme
-                      .getField("RepliesMessageIconColor"),
+                  color: ClientTheme.currentTheme.getField("RepliesMessagesBackColor"),
+                  iconColor: ClientTheme.currentTheme.getField("RepliesMessageIconColor"),
                   icon: Icons.question_answer_outlined,
                 )
               : Stack(
@@ -186,9 +151,7 @@ class _ChatItemDisplayState
                           stream: widget.client.photoOf(widget.chatId),
                           initialData: chat.photo,
                           builder: (_, data) {
-                            var chatPhoto = data.data == null
-                                ? null
-                                : data.data as ChatPhotoInfo;
+                            var chatPhoto = data.data == null ? null : data.data as ChatPhotoInfo;
                             return Userpic(
                               key: Key(
                                 "userpic#chatId?=${widget.chatId}fileId?=${chatPhoto?.big?.id}",
@@ -201,13 +164,11 @@ class _ChatItemDisplayState
                           },
                         ),
                       ),
-                      if (interlocutor != null &&
-                          interlocutor.type is UserTypeRegular)
+                      if (interlocutor != null && interlocutor.type is UserTypeRegular)
                         StreamBuilder(
                           stream: widget.client.statusOf(interlocutor.id!),
                           initialData: interlocutor.status,
-                          builder: (context, statusSnapshot) =>
-                              OnlineIndicatorDidplay(
+                          builder: (context, statusSnapshot) => OnlineIndicatorDidplay(
                             size: 20,
                             selected: selected,
                             online: statusSnapshot.data is UserStatusOnline,
@@ -238,20 +199,16 @@ class _ChatItemDisplayState
                   borderRadius: const BorderRadius.all(
                     Radius.circular(16),
                   ),
-                  color: ClientTheme.currentTheme.getField(selected
-                      ? "ReactionsInChatlistBackgroundColorSelected"
-                      : "ReactionsInChatlistBackgroundColor"),
+                  color: ClientTheme.currentTheme
+                      .getField(selected ? "ReactionsInChatlistBackgroundColorSelected" : "ReactionsInChatlistBackgroundColor"),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      ClientTheme.currentTheme
-                          .getField("ReactionsInChatListIcon"),
+                      ClientTheme.currentTheme.getField("ReactionsInChatListIcon"),
                       color: ClientTheme.currentTheme.getField(
-                        selected
-                            ? "ReactionsInChatListIconColorSelected"
-                            : "ReactionsInChatListIconColor",
+                        selected ? "ReactionsInChatListIconColorSelected" : "ReactionsInChatListIconColor",
                       ),
                       size: 18,
                     ),
@@ -260,9 +217,7 @@ class _ChatItemDisplayState
                       data.data.toString(),
                       style: TextDisplay.create(
                         textColor: ClientTheme.currentTheme.getField(
-                          selected
-                              ? "ReactionsInChatListTextColorSelected"
-                              : "ReactionsInChatListTextColor",
+                          selected ? "ReactionsInChatListTextColorSelected" : "ReactionsInChatListTextColor",
                         ),
                         size: 18,
                       ),
@@ -287,8 +242,7 @@ class _ChatItemDisplayState
                     chat.unreadMentionCount = (data1.data as int);
                   }
                   return Container(
-                    margin:
-                        EdgeInsets.only(left: chat.unreadCount! > 0 ? 4 : 0),
+                    margin: EdgeInsets.only(left: chat.unreadCount! > 0 ? 4 : 0),
                     child: UnreadCountBubble(
                       count: chat.unreadCount!,
                       important: (chat.unreadMentionCount ?? 0) != 0,
@@ -310,7 +264,7 @@ class _ChatItemDisplayState
                 var actions = actionsSnapshow.data as List<UpdateChatAction>;
                 if (actions.isNotEmpty) {
                   return ChatItemActionDisplay(
-                    chatSelected: selected,
+                    textColor: selected ? Colors.white : null,
                     isPrivate: isPrivate,
                     chatid: widget.chatId,
                     client: widget.client,
@@ -321,7 +275,7 @@ class _ChatItemDisplayState
 
               if (chat.lastMessage == null) return const Center();
               return MessageContentPreview(
-                chatSelected: selected,
+                textColor: selected ? Colors.white : null,
                 message: chat.draftMessage == null ? chat.lastMessage : null,
                 draftMessage: chat.draftMessage,
                 fromChatType: chat.type!,
@@ -334,8 +288,7 @@ class _ChatItemDisplayState
       icon: pinned(chat)
           ? Icon(
               Icons.push_pin,
-              color: ClientTheme.currentTheme.getField(
-                  selected ? "SelectedChatPinIconColor" : "ChatPinIconColor"),
+              color: ClientTheme.currentTheme.getField(selected ? "SelectedChatPinIconColor" : "ChatPinIconColor"),
             )
           : null,
       //    );
@@ -349,11 +302,7 @@ class _ChatItemDisplayState
     var now = DateTime.now();
     var deltaInDays = (DateTime.now().difference(time) +
             (const Duration(days: 1) -
-                Duration(
-                    hours: now.hour,
-                    minutes: now.minute,
-                    seconds: now.second,
-                    milliseconds: now.millisecond)))
+                Duration(hours: now.hour, minutes: now.minute, seconds: now.second, milliseconds: now.millisecond)))
         .inDays;
 
     if (deltaInDays <= 0) {

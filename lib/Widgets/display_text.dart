@@ -34,7 +34,6 @@ class TextDisplay {
       textColor: ClientTheme.currentTheme.getField("HeaderMain"),
       fontFamily: greaterImportance);
   static TextStyle get chatItemAccent => create(size: 18, textColor: ClientTheme.currentTheme.getField("Accent"));
-  static TextStyle get chatItemAccentSelected => create(size: 18, textColor: Colors.white);
 
   static TextSpan emoji(String emoji, {TextStyle? style}) {
     style ??= const TextStyle();
