@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
@@ -56,10 +57,10 @@ class MessageDisplayTextEmojis extends StatelessWidget {
           if (infoSide == Side.right)
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               if (replieWidget != null) replieWidget!,
-              if (hover)
+              if (hover || UIManager.isMobile)
                 Container(
                   child: messageInfo,
-                  margin: EdgeInsets.only(top: 8),
+                  margin: const EdgeInsets.only(top: 8),
                 ),
             ]),
         ],
