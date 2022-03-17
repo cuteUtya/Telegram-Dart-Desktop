@@ -23,7 +23,7 @@ SelectedHeaderMain: ref(SelectedColor);
 HeaderSecondary(theme=light): #464646;
 HeaderSecondary(theme=dark): #A5A5A5;
 AdditionalTextColor: #BABABA;
-RegularText(theme=light): #696969;
+RegularText(theme=light): #cf000000;
 RegularText(theme=dark): #dddddd;
 BoldTextColor(theme=light): #232323;
 BoldTextColor(theme=dark): #efefef;
