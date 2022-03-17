@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
-import 'package:myapp/tdlib/td_api.dart' hide Text;
+import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
 
 class TextDisplay {
@@ -56,6 +56,7 @@ class TextDisplay {
     TextEntityTypeUrl: "R",
     TextEntityTypeMention: "P",
     TextEntityTypeMentionName: "P",
+    TextEntityTypeHashtag: "P",
     null: "-"
   };
 
@@ -84,7 +85,7 @@ class TextDisplay {
         ),
     "P": () => create(
           textColor: ClientTheme.currentTheme.getField("MentionEntityColor"),
-        )
+        ),
   };
 
   static final List<Type> _interactiveTextEnteties = [
@@ -148,12 +149,31 @@ class TextDisplay {
         color: textColor,
         fontSize: size,
       );
+      var entetyString = text.text!.substring(element.start, element.end);
       var parsedStr = parseEmojiInString(
-        text.text!.substring(element.start, element.end),
+        entetyString,
         textStyle,
         recognizer,
       );
       result.add(parsedStr);
+      if (textEntety?.type is TextEntityTypeHashtag && ClientTheme.isHEX(entetyString)) {
+        result.add(
+          WidgetSpan(
+            placeholderDimensions: [PlaceholderDimensions(size: Size(size + 2, size), alignment: PlaceholderAlignment.middle)],
+            child: Container(
+              margin: const EdgeInsets.only(left: 2),
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                color: ClientTheme.hexToColor(entetyString),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
       if (str[element.start] != "-") {
         entetieIndex++;
       }
