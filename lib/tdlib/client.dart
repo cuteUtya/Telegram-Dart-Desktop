@@ -667,6 +667,7 @@ class TelegramClient {
     UpdateChatUnreadMentionCount,
     UpdateChatVideoChat,
     UpdateChatPosition,
+    UpdateMessageMentionRead,
   ];
 
   Stream<Chat> chatAnyUpdates(int chatId) async* {
