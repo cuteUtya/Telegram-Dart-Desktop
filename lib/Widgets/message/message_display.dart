@@ -127,11 +127,11 @@ class MessageDisplay extends StatelessWidget {
                 var emojiTest = emojiRegex.firstMatch(textUnwhitespaced);
                 if (emojiTest != null) {
                   /*
-          if message contains only emojis and its count not much
-          show its without bubble and with big size, like Tdesktop or TelegramX
-          */
+                  if message contains only emojis and its count not much
+                  show its without bubble and with big size, like Tdesktop or TelegramX
+                  */
                   var totalEmojis = emojiTest.end - emojiTest.start;
-                  if (totalEmojis >= textUnwhitespaced.length && totalEmojis < 40) {
+                  if (totalEmojis >= textUnwhitespaced.length && totalEmojis < 8) {
                     contentWidget = MessageDisplayTextEmojis(
                       alignment: message.isOutgoing! ? MainAxisAlignment.end : MainAxisAlignment.start,
                       emojis: textUnwhitespaced,
