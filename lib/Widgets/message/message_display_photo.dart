@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/blur_image_preview.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
@@ -47,7 +48,7 @@ class MessageDisplayPhoto extends StatelessWidget {
         var width = max(
           100,
           min(
-            box.maxWidth,
+            box.maxWidth * (UIManager.useDesktopLayout ? 0.5 : 1),
             photoSize.width!.toDouble(),
           ),
         ).toDouble();
