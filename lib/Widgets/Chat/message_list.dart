@@ -45,19 +45,17 @@ class _MessageListState extends State<MessageList> {
 
   StreamSubscription? newMessageSubs;
 
-  Future<void> getChatHistory() async {
-    var limit = 100;
-    Future<Messages> _invoke() async {
-      return await widget.client.send(GetChatHistory(chatId: widget.chatId, limit: limit)) as Messages;
-    }
-
-    Messages msgs;
-    int tryes = 0;
-    do {
-      tryes++;
-      msgs = await _invoke();
-    } while (msgs.totalCount! < limit && tryes < 3);
-    setState(() => messages = msgs);
+  Future<void> loadMessages(int limit, int fromMessageId, int offset) async {
+    var msgs = await widget.client
+        .send(GetChatHistory(chatId: widget.chatId, fromMessageId: fromMessageId, limit: limit, offset: offset)) as Messages;
+    setState(() {
+      if (messages == null) {
+        messages = msgs;
+      } else {
+        messages!.totalCount = messages!.totalCount! + msgs.totalCount!;
+        messages!.messages!.addAll(msgs.messages!);
+      }
+    });
   }
 
   void listenNewMessage() {
@@ -112,11 +110,12 @@ class _MessageListState extends State<MessageList> {
   @override
   Widget build(BuildContext context) {
     if (_renderedChatId != widget.chatId) {
+      messages = null;
       var _chat = widget.client.getChat(widget.chatId);
       bool messageLoaded = false;
       listenNewMessage();
       listenMessageEdits();
-      getChatHistory().then((value) {
+      loadMessages(50, 0, 0).then((value) {
         messageLoaded = true;
         chat = _chat;
       });
@@ -132,12 +131,25 @@ class _MessageListState extends State<MessageList> {
       _renderedChatId = widget.chatId;
     }
 
+    int messagesCount = (messages?.totalCount ?? 0);
+
     return SmoothListView(
       reverse: true,
       scrollController: scrollController,
-      itemCount: messages?.totalCount ?? 0,
+      itemCount: messagesCount + 1,
       cacheExtent: 1500,
       itemBuilder: (context, index) {
+        if (index >= messagesCount) {
+          return _widgetBuildProvider(
+            onBuild: () {
+              // if we havent messages - that mean what we alreade called
+              // loadMessages in start of build method
+              if (messagesCount != 0) {
+                loadMessages(25, messages?.messages?.last.id ?? 0, 0);
+              }
+            },
+          );
+        }
         var msg = messages!.messages![index];
         var previus = (index - 1 < 0 ? null : messages!.messages![index - 1]);
         var next = (index + 1 >= messages!.messages!.length ? null : messages!.messages![index + 1]);
@@ -178,10 +190,13 @@ class _MessageListState extends State<MessageList> {
 
         var adminInfo = admins.firstWhereOrNull((element) => element.userId == getSenderId(msg.senderId!));
         bool isServiceMessage = serviceMessages.contains(msg.content.runtimeType);
-        int spacerFlex = UIManager.isMobile ?
-        msg.content is MessageContent && msg.replyToMessageId == 0 ? 1 : 0 :
-        msg.content is MessageContent && msg.replyToMessageId == 0 ? 2 : 1;
-
+        int spacerFlex = UIManager.isMobile
+            ? msg.content is MessageContent && msg.replyToMessageId == 0
+                ? 1
+                : 0
+            : msg.content is MessageContent && msg.replyToMessageId == 0
+                ? 2
+                : 1;
 
         return Column(children: [
           if (nextDate == null)
@@ -255,5 +270,15 @@ class _MessageListState extends State<MessageList> {
         ]);
       },
     );
+  }
+}
+
+class _widgetBuildProvider extends StatelessWidget {
+  const _widgetBuildProvider({Key? key, required this.onBuild}) : super(key: key);
+  final Function onBuild;
+  @override
+  Widget build(BuildContext context) {
+    onBuild();
+    return const SizedBox.shrink();
   }
 }
