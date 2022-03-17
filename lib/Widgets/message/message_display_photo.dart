@@ -52,15 +52,21 @@ class MessageDisplayPhoto extends StatelessWidget {
           ),
         ).toDouble();
         var height = (photoSize.height! / (photoSize.width! / width));
-        var blurImage = BlurImagePreview(
-          image: MemoryImage(
-            base64.decode(
-              photo.photo!.minithumbnail!.data!,
-            ),
-          ),
-          width: width,
-          height: height,
-        );
+        var blurImage = photo.photo?.minithumbnail?.data != null
+            ? BlurImagePreview(
+                image: MemoryImage(
+                  base64.decode(
+                    photo.photo!.minithumbnail!.data!,
+                  ),
+                ),
+                width: width,
+                height: height,
+              )
+            : Container(
+                width: width,
+                height: height,
+                color: Colors.white,
+              );
         return MessageDisplayMedia(
           client: client,
           message: message,
