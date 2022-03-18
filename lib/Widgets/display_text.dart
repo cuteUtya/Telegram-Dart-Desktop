@@ -194,6 +194,7 @@ class TextDisplay {
           );
           if (interactiveEnable) {
             colorSquare = Tooltip(
+              triggerMode: TooltipTriggerMode.tap,
                 message: UIManager.isMobile ? "Color copied" : "Click to copy",
                 //TODO put it colors to theme
                 textStyle: create(size: 14, textColor: Colors.white),
