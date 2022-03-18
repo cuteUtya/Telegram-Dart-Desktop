@@ -33,7 +33,8 @@ class AppMainDesktop extends StatelessWidget {
                 : ChatDisplay(
                     client: client,
                     chatId: (data.data as List<int>).last,
-                  ),
+              onChatRevert: () => UIEvents.popChat(client),
+            ),
           ),
         ),
       ],

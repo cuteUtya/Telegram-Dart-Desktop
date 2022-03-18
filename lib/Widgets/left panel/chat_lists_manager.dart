@@ -14,15 +14,16 @@ class ChatListsManager extends StatefulWidget {
   const ChatListsManager({
     Key? key,
     required this.client,
+    this.onChatRevert,
   }) : super(key: key);
   final TelegramClient client;
+  final VoidCallback? onChatRevert;
   @override
   State<StatefulWidget> createState() => ChatListsManagerState();
 }
 
 class ChatListsManagerState
     extends StateWithStreamsSubscriptions<ChatListsManager> {
-  //static final List<ChatOrder> _chats = [];
   static List<ChatList> _lists = [];
   static final Map<int, ScrollController> _scrollContollers = {};
   static final Map<int, double> _scrollPositions = {};

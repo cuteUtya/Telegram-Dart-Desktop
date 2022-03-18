@@ -14,9 +14,11 @@ class ChatDisplay extends StatelessWidget {
     Key? key,
     required this.client,
     required this.chatId,
+    this.onChatRevert,
   }) : super(key: key);
   final TelegramClient client;
   final int chatId;
+  final VoidCallback? onChatRevert;
 
   static const bool tw1nkleeModeEnable = true;
 
@@ -101,6 +103,7 @@ class ChatDisplay extends StatelessWidget {
             child: ActionBarDisplay(
               client: client,
               chat: chat,
+                onChatRevert: onChatRevert,
             ),
           ),
         ],

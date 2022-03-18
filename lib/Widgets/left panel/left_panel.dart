@@ -12,9 +12,11 @@ class LeftPanel extends StatelessWidget {
   const LeftPanel({
     Key? key,
     required this.client,
+    this.onChatRevert,
   }) : super(key: key);
 
   final TelegramClient client;
+  final VoidCallback? onChatRevert;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,6 @@ class LeftPanel extends StatelessWidget {
         child: Column(
           children: [
             //settings and search
-
             Row(mainAxisSize: MainAxisSize.max, children: [
               const SizedBox(width: 12),
               //Settings icon
@@ -96,6 +97,7 @@ class LeftPanel extends StatelessWidget {
                             child: ChatListsManager(
                               key: listsManager,
                               client: client,
+                              onChatRevert: onChatRevert,
                             ),
                           )
                         ],

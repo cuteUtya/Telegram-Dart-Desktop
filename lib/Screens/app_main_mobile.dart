@@ -51,8 +51,6 @@ class _AppMainMobileState extends State<AppMainMobile> {
       },
     );
 
-    ///TODO if user make swipe in left make
-
     return StreamBuilder(
       initialData: const <int>[],
       stream: UIEvents.selectedChat(),
@@ -67,11 +65,11 @@ class _AppMainMobileState extends State<AppMainMobile> {
               child: ChatDisplay(
                 client: widget.client,
                 chatId: e,
+                onChatRevert:  () => pageController.animateToPage(lPage - 1, duration: const Duration(milliseconds: 200), curve: Curves.decelerate),
               ),
             ),
         ];
         pagesCount = childs.length;
-        //print(pageController.hasClients);
         if (pageController.hasClients) {
           switchToLastPage();
         }

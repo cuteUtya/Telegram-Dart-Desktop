@@ -13,10 +13,12 @@ class ActionBarDisplay extends StatelessWidget {
     Key? key,
     required this.client,
     required this.chat,
+    this.onChatRevert,
   }) : super(key: key);
 
   final TelegramClient client;
   final Chat chat;
+  final VoidCallback? onChatRevert;
   @override
   Widget build(BuildContext context) {
     User? user = getInterlocutor(chat, client);
@@ -111,7 +113,7 @@ class ActionBarDisplay extends StatelessWidget {
             Icons.arrow_back,
             color: ClientTheme.currentTheme.getField("CloseChatIconColor"),
           ),
-          onPressed: () => UIEvents.popChat(client),
+          onPressed: onChatRevert
         ),
       )
     ]);
