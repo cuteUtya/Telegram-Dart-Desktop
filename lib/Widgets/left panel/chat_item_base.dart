@@ -26,6 +26,9 @@ class ChatItemBase extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          )),
           animationDuration: const Duration(milliseconds: 200),
           padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
           backgroundColor: MaterialStateProperty.all(
