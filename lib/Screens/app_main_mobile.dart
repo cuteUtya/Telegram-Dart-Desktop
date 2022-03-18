@@ -26,13 +26,32 @@ class _AppMainMobileState extends State<AppMainMobile> {
 
     void switchToLastPage() {
       pageController.animateToPage(
-        pagesCount -1 ,
+        pagesCount - 1,
         duration: const Duration(milliseconds: 400),
         curve: Curves.decelerate,
       );
     }
 
-    ///TODO if user make swipe in left make UIEvents.pop();
+    var lPage = 0;
+    pageController.addListener(
+      () {
+        var c = pageController.page ?? 1;
+        var remainder = c.toDouble() - (c.toInt().toDouble());
+        var intgr = remainder < 0.01
+            ? c.toInt()
+            : remainder > 0.99
+                ? c.toInt() + 1
+                : null;
+        if (intgr != null) {
+          if (intgr < lPage) {
+            UIEvents.popChat(widget.client);
+          }
+          lPage = intgr;
+        }
+      },
+    );
+
+    ///TODO if user make swipe in left make
 
     return StreamBuilder(
       initialData: const <int>[],

@@ -62,7 +62,7 @@ SearchBackground(theme=dark): #242F3D;
 SearchTextColor: ref(RegularText);
 #Color(128, ref(BaseColor).r, ref(BaseColor).g, ref(BaseColor).b)#
 ChatUnselectedColor: ref(BaseColor);
-ChatSelectedColor: ref(HoveredObject);
+ChatSelectedColor(layout=desktop): ref(HoveredObject);
 LoadScreenBackgroundColor: ref(SelectedColor);
 LoadScreenShadowColor: #AAAAAA;
 
@@ -116,6 +116,7 @@ ChatFilterActiveColor: ref(Accent);
 ChatClickAnimationEffectColor(theme=light): #D2D2D2;
 ChatClickAnimationEffectColor(theme=dark): #25313D;
 ChatListBackgroundColor: ref(BaseColor);
+ChatCurrentlySelectedColor(layout=mobile): ref(ChatUnselectedColor);
 ChatCurrentlySelectedColor(theme=light): ref(Accent);
 ChatCurrentlySelectedColor(theme=dark): linear(ref(Accent), #000000, 0.25);
 ChatCurrentlyUnselectedColor: ref(BaseColor);
