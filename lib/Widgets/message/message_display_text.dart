@@ -20,7 +20,7 @@ import 'package:collection/collection.dart';
 /// * [adminTitle] title of admin, can be null
 /// * [additionalContent] additional content that displays under sender name, can be null
 /// * [text] custom text that can be used instead [message.content]
-class MessageDisplayText extends StatefulWidget {
+class MessageDisplayText extends StatelessWidget {
   const MessageDisplayText({
     Key? key,
     required this.client,
@@ -46,36 +46,22 @@ class MessageDisplayText extends StatefulWidget {
   final Widget? replieWidget;
 
   @override
-  State<StatefulWidget> createState() => _MessageDisplayTextState();
-}
-
-class _MessageDisplayTextState extends State<MessageDisplayText> {
-  Size msgInfoBubbleSize = const Size(84, 0);
-  bool inited = false;
-  final GlobalKey _msgInfoWidgetKey = GlobalKey();
-
-  @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (mounted && !inited) {
-        inited = true;
-        setState(() {
-          msgInfoBubbleSize = _msgInfoWidgetKey.currentContext!.size!;
-        });
-      }
-    });
-
-    var additionalInfo = widget.additionalContent == null
+    /// TODO complete mechanism of getting size of info widget
+    /// but DONT TURN THIS WIDGET TO STATUFULL
+    Size msgInfoBubbleSize = const Size(84, 0);
+    var additionalInfo = additionalContent == null
         ? const SizedBox.shrink()
         : Container(
-            margin: EdgeInsets.only(bottom: 6, top: widget.senderName != null ? 6 : 0),
-            child: widget.additionalContent,
+            margin: EdgeInsets.only(bottom: 6, top: senderName != null ? 6 : 0),
+            child: additionalContent,
           );
 
-    var contentText = widget.text ?? (widget.message.content as MessageText).text!;
+    var contentText = text ?? (message.content as MessageText).text!;
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(contentText,
             size: 20, interactiveEnable: true, onUrlClick: (s) => UrlsUtils.openLink(s)));
+
     return LayoutBuilder(builder: (context, boxCons) {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
       var boxes = paragraph.getBoxesForSelection(TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));
@@ -84,14 +70,14 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
       return Stack(
         children: [
           /// fake text with title and admin titles that stratch message bubble1
-          if (widget.senderName != null)
+          if (senderName != null)
             Container(
-              margin: widget.captionMargin,
+              margin: captionMargin,
               child: Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: widget.senderName,
+                      text: senderName,
                       style: const TextStyle(
                         fontSize: 18,
                         color: Colors.transparent,
@@ -102,7 +88,7 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                       width: 12,
                     )),
                     TextSpan(
-                      text: widget.adminTitle,
+                      text: adminTitle,
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.transparent,
@@ -113,29 +99,27 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
               ),
             ),
 
-          if (widget.adminTitle != null && !widget.message.isOutgoing!)
+          if (adminTitle != null && !message.isOutgoing!)
             Positioned(
-              right: widget.captionMargin?.right ?? 0,
-              top: widget.captionMargin?.top ?? 0,
+              right: captionMargin?.right ?? 0,
+              top: captionMargin?.top ?? 0,
               child: Text(
-                widget.adminTitle!,
+                adminTitle!,
                 style: TextDisplay.create(size: 16, textColor: ClientTheme.currentTheme.getField("AdminTitleColor")),
               ),
             ),
-          Positioned(
-            right: widget.captionMargin?.right ?? 0,
-            bottom: -2 + (widget.captionMargin?.bottom ?? 0),
-            child: Container(
-              child: widget.infoWidget,
-              key: _msgInfoWidgetKey,
+          if (infoWidget != null)
+            Positioned(
+              right: captionMargin?.right ?? 0,
+              bottom: -2 + (captionMargin?.bottom ?? 0),
+              child: infoWidget!,
             ),
-          ),
           Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-            if (widget.senderName != null)
+            if (senderName != null)
               Container(
                 margin: EdgeInsets.only(
-                  top: widget.captionMargin?.top ?? 0,
-                  left: widget.captionMargin?.left ?? 0,
+                  top: captionMargin?.top ?? 0,
+                  left: captionMargin?.left ?? 0,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -145,11 +129,11 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                       TextSpan(
                         children: [
                           TextDisplay.parseEmojiInString(
-                            widget.senderName!,
+                            senderName!,
                             TextDisplay.create(
-                              textColor: widget.message.isOutgoing!
+                              textColor: message.isOutgoing!
                                   ? ClientTheme.currentTheme.getField("OutgoingChannelMessageTitleColor")
-                                  : getPeerColor(getSenderId(widget.message.senderId!)!, 'b'),
+                                  : getPeerColor(getSenderId(message.senderId!)!, 'b'),
                               fontWeight: FontWeight.bold,
                               size: 18,
                               fontFamily: TextDisplay.greaterImportance,
@@ -161,12 +145,12 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                   ],
                 ),
               ),
-            if (widget.replieWidget != null) widget.replieWidget!,
-            if (widget.additionalContent != null && widget.additionalContentPlace == AdditionalContentPlace.top) additionalInfo,
+            if (replieWidget != null) replieWidget!,
+            if (additionalContent != null && additionalContentPlace == AdditionalContentPlace.top) additionalInfo,
             if (contentText.text?.isNotEmpty ?? false)
               Container(
                 child: Padding(
-                  padding: widget.captionMargin?.add(EdgeInsets.only(top: -(widget.captionMargin?.top ?? 0))) ?? EdgeInsets.zero,
+                  padding: captionMargin?.add(EdgeInsets.only(top: -(captionMargin?.top ?? 0))) ?? EdgeInsets.zero,
                   child: CopyableText(
                     parsedEntetiyes,
                   ),
@@ -175,12 +159,9 @@ class _MessageDisplayTextState extends State<MessageDisplayText> {
                   bottom: boxCons.maxWidth - lastBox.right < msgInfoBubbleSize.width ? 16 : 0,
                 ),
               ),
-            if (widget.additionalContent != null && widget.additionalContentPlace == AdditionalContentPlace.bottom)
-              additionalInfo,
+            if (additionalContent != null && additionalContentPlace == AdditionalContentPlace.bottom) additionalInfo,
           ]),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeOutBack,
+          Container(
             width: lastBox.right + (!fitsLastLine ? 0 : msgInfoBubbleSize.width + 12),
           ),
         ],
