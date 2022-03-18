@@ -61,7 +61,7 @@ class ChatItemTitle extends StatelessWidget {
                   margin: const EdgeInsets.only(left: 4),
                   child: isSupport
                       ? Icon(
-                          Icons.privacy_tip,
+                          Icons.privacy_tip_outlined,
                           color: ClientTheme.currentTheme.getField("VerifedSupergoupIconColor"),
                         )
                       : isScam
@@ -72,7 +72,7 @@ class ChatItemTitle extends StatelessWidget {
                           : isVerifed
                               ? Icon(
                                   Icons.verified,
-                                  color: ClientTheme.currentTheme.getField("VerifedSupergoupIconColor"),
+                                  color: selected ? Colors.white : ClientTheme.currentTheme.getField("VerifedSupergoupIconColor"),
                                 )
                               : const SizedBox.shrink(),
                 ),

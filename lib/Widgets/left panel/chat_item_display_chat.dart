@@ -85,7 +85,7 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
                           title:
                               (interlocutor?.type is UserTypeDeleted) ? widget.client.getTranslation("lng_deleted") : chat.title!,
                           isScam: chat.type is ChatTypeSupergroup ? supergroup?.isScam ?? false : interlocutor?.isScam ?? false,
-                          isVerifed: supergroup?.isSlowModeEnabled ?? false,
+                          isVerifed: supergroup?.isVerified ?? false,
                           isSupport: interlocutor?.isSupport ?? false,
                         ),
                 ),
