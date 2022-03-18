@@ -30,22 +30,8 @@ class MessageDisplayTextEmojis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClickableObject(
-      builder: (hover) => Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: alignment,
-        children: [
-          if (infoSide == Side.left)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (replieWidget != null) replieWidget!,
-                if (hover)
-                  Container(
-                    child: messageInfo,
-                    margin: const EdgeInsets.only(top: 8),
-                  ),
-              ],
-            ),
+      builder: (hover) {
+        var childs = [
           CopyableText(
             TextDisplay.emoji(
               emojis,
@@ -54,17 +40,21 @@ class MessageDisplayTextEmojis extends StatelessWidget {
               fontSize: 40,
             ),
           ),
-          if (infoSide == Side.right)
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              if (replieWidget != null) replieWidget!,
-              if (hover || UIManager.isMobile)
-                Container(
-                  child: messageInfo,
-                  margin: const EdgeInsets.only(top: 8),
-                ),
-            ]),
-        ],
-      ),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            if (replieWidget != null) replieWidget!,
+            if (hover || UIManager.isMobile)
+              Container(
+                child: messageInfo,
+                margin: const EdgeInsets.only(top: 8),
+              ),
+          ]),
+        ];
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: alignment,
+          children: infoSide == Side.right ? childs : childs.reversed.toList(),
+        );
+      },
     );
   }
 }
