@@ -84,7 +84,7 @@ class _SmoothDekstopListViewState extends State<SmoothListView> {
       },
       child: ListView.builder(
         itemBuilder: widget.itemBuilder,
-        physics: UIManager.isMobile ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
+        physics: UIManager.isMobile ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
         controller: _controller,
         scrollDirection: widget.scrollDirection,
         itemCount: widget.itemCount,
