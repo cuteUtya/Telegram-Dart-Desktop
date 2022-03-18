@@ -1,3 +1,5 @@
+HEXcolorModel: ARGB;
+
 #Base fields#
 Accent: #4E94CB;
 AccentHalfTransparent: #E0EEFD;
@@ -32,6 +34,7 @@ ChatLastTimeMessage: ref(RegularText);
 SelectedChatLastTimedMessage: ref(SelectedColor);
 MonospaceTextColor: #2e87ca;
 MonospaceTextBackgroundColor: #ecf3f8;
+HEXtagColor: ref(Accent);
 
 #Introduction screen fields#
 CarouselIndicatorActive: ref(Accent);

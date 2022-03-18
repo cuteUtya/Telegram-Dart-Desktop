@@ -25,13 +25,14 @@ class ClientTheme {
     "layout": () => UIManager.useDesktopLayout ? "desktop" : "mobile"
   };
   final Map<String, List<_themeValue>> lines = {};
-  final List<LangFunction> functions = [
+  late List<LangFunction> functions = [
     LangFunction("linear", [3], linear),
     LangFunction("max", [2], max_inter),
     LangFunction("min", [2], min_inter),
     LangFunction("hsv", [3], hsv_inter),
   ];
 
+  late bool useARGB;
   bool _isDefault = false;
 
   ClientTheme(String themeContent, bool isDefault) {
@@ -52,6 +53,8 @@ class ClientTheme {
       if (lines[name] == null) lines[name] = [];
       lines[name]!.add(_themeValue(value: val[1].replaceAll(" ", ""), condition: condition));
     });
+
+    useARGB = tryGetField("HEXcolorModel") == "ARGB";
   }
 
   static Future init() async {
@@ -118,14 +121,14 @@ class ClientTheme {
     return colorToHEX(color.toColor());
   }
 
-  static String linear(List<dynamic> args) {
+  String linear(List<dynamic> args) {
     var a = args[0]; //color or number
     var b = args[1]; //color or number
     var t = args[2]; //number
 
     if (double.tryParse(t) != null) {
       if (isHEX(a) && isHEX(b)) {
-        var lerpedColor = Color.lerp(hexToColor(a), hexToColor(b), double.parse(t));
+        var lerpedColor = Color.lerp(hexToColor(a, useARGB: useARGB), hexToColor(b, useARGB: useARGB), double.parse(t));
         if (lerpedColor != null) {
           return colorToHEX(lerpedColor);
         } else {
@@ -225,7 +228,7 @@ class ClientTheme {
 
   dynamic getField(String name) {
     var value = _getFieldString(name);
-    if (isHEX(value)) return hexToColor(value);
+    if (isHEX(value)) return hexToColor(value, useARGB: useARGB);
     if (isIcon(value)) return getIconByName(value.split("Icons.").last) ?? value;
     if (double.tryParse(value) != null) return double.parse(value);
     return value;
@@ -374,15 +377,30 @@ class ClientTheme {
     return RegExp(r"Icons\.(.{1,})").hasMatch(input);
   }
 
+  static RegExp hexRegex = RegExp("#[a-fA-F0-9]{3,8}");
+
   static bool isHEX(String hex) {
-    return RegExp("#[a-fA-F0-9]{4,6}").hasMatch(hex);
+    return hexRegex.hasMatch(hex);
   }
 
   static String colorToHEX(Color clr) {
     return rgbaTohex(clr.alpha, clr.red, clr.green, clr.blue);
   }
 
-  static Color hexToColor(String hexString, {String alphaChannel = 'FF'}) {
+  /// [useARGB] if false 7-9 symbols be used as A channel, else be used 1-3 symbols, but only if totaly entered 8 symbols
+  static Color hexToColor(String hexString, {String alphaChannel = 'FF', bool useARGB = true}) {
+    if (hexString.length == 4) {
+      hexString = "#${hexString[1]}${hexString[1]}${hexString[2]}${hexString[2]}${hexString[3]}${hexString[3]}";
+    }
+    if (hexString.length == 9) {
+      if (useARGB) {
+        alphaChannel = hexString.substring(1, 3);
+        hexString = "#" + hexString.substring(3, 9);
+      } else {
+        alphaChannel = hexString.substring(7, 9);
+        hexString = hexString.substring(0, 7);
+      }
+    }
     return Color(int.parse(hexString.replaceFirst('#', '0x$alphaChannel')));
   }
 

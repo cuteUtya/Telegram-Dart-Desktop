@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
 
@@ -149,29 +151,85 @@ class TextDisplay {
         color: textColor,
         fontSize: size,
       );
+
+      InlineSpan parseToInline(String text) => parseEmojiInString(
+            text,
+            textStyle,
+            recognizer,
+          );
       var entetyString = text.text!.substring(element.start, element.end);
-      var parsedStr = parseEmojiInString(
-        entetyString,
-        textStyle,
-        recognizer,
-      );
-      result.add(parsedStr);
-      if (textEntety?.type is TextEntityTypeHashtag && ClientTheme.isHEX(entetyString)) {
-        result.add(
-          WidgetSpan(
-            placeholderDimensions: [PlaceholderDimensions(size: Size(size + 2, size), alignment: PlaceholderAlignment.middle)],
-            child: Container(
-              margin: const EdgeInsets.only(left: 2),
-              width: size,
-              height: size,
-              decoration: BoxDecoration(
-                color: ClientTheme.hexToColor(entetyString),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4),
-                ),
+      if (ClientTheme.hexRegex.hasMatch(entetyString)) {
+        var matches = ClientTheme.hexRegex.allMatches(entetyString).toList();
+        if (matches.first.start != 0) {
+          result.add(
+            parseToInline(
+              entetyString.substring(0, matches.first.start),
+            ),
+          );
+        }
+        for (int i = 0; i < matches.length; i++) {
+          var hex = entetyString.substring(matches[i].start, matches[i].end);
+          result.add(
+            parseEmojiInString(
+              hex,
+              textStyle.copyWith(
+                color: textColor ?? ClientTheme.currentTheme.getField("HEXtagColor"),
               ),
             ),
-          ),
+          );
+          Widget colorSquare = Container(
+            margin: const EdgeInsets.only(left: 2),
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: ClientTheme.hexToColor(
+                hex,
+                // TODO maybe have sense to put it in settings
+                useARGB: false,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(4),
+              ),
+            ),
+          );
+          if (interactiveEnable) {
+            colorSquare = Tooltip(
+                message: UIManager.isMobile ? "Color copied" : "Click to copy",
+                //TODO put it colors to theme
+                textStyle: create(size: 14, textColor: Colors.white),
+                child: colorSquare);
+          }
+          result.add(
+            WidgetSpan(
+              placeholderDimensions: [PlaceholderDimensions(size: Size(size + 2, size), alignment: PlaceholderAlignment.middle)],
+              child: GestureDetector(
+                  onTap: interactiveEnable
+                      ? () => Clipboard.setData(
+                            ClipboardData(text: hex),
+                          )
+                      : null,
+                  child: colorSquare),
+            ),
+          );
+
+          if (i < matches.length - 1) {
+            if (matches[i].end != matches[i + 1].start) {
+              result.add(
+                parseToInline(
+                  entetyString.substring(matches[i].end, matches[i + 1].start),
+                ),
+              );
+            }
+          }
+        }
+        if (matches.last.end != entetyString.length) {
+          result.add(parseToInline(
+            entetyString.substring(matches.last.end, entetyString.length),
+          ));
+        }
+      } else {
+        result.add(
+          parseToInline(entetyString),
         );
       }
       if (str[element.start] != "-") {
