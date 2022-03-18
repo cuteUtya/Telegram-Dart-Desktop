@@ -28,20 +28,23 @@ class ChatItemBase extends StatelessWidget {
       style: ButtonStyle(
           animationDuration: const Duration(milliseconds: 200),
           padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-          backgroundColor: MaterialStateProperty.all(ClientTheme.currentTheme
-              .getField(selected
-                  ? "ChatCurrentlySelectedColor"
-                  : "ChatCurrentlyUnselectedColor")),
+          backgroundColor: MaterialStateProperty.all(
+            ClientTheme.currentTheme.getField(
+              selected ? "ChatCurrentlySelectedColor" : "ChatCurrentlyUnselectedColor",
+            ),
+          ),
           overlayColor: MaterialStateProperty.resolveWith((states) {
             String themeStr = "ChatUnselectedColor";
             if (!selected) {
               if (states.contains(MaterialState.pressed)) {
                 themeStr = "ChatClickAnimationEffectColor";
-              } else if (states.contains(MaterialState.hovered) ||
-                  states.contains(MaterialState.focused)) {
+              } else if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
                 themeStr = "ChatSelectedColor";
               }
             } else {
+              if (states.contains(MaterialState.pressed)) {
+                return Colors.white.withOpacity(0.1);
+              }
               themeStr = "ChatCurrentlySelectedColor";
             }
             return ClientTheme.currentTheme.getField(themeStr);
@@ -52,10 +55,10 @@ class ChatItemBase extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-                  child: chatPic,
-                  width: 56,
-                  height: 56,
-                ),
+              child: chatPic,
+              width: 56,
+              height: 56,
+            ),
             const SizedBox(width: 16),
             Flexible(
               child: Column(
