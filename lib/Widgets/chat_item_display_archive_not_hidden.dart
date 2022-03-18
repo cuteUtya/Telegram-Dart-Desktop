@@ -62,6 +62,8 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
                 ))
           ]));
         }
+        if(chats.isEmpty) return const SizedBox.shrink();
+
         return ChatItemBase(
           selected: false,
           onClick: () => UIEvents.openArchive(),
