@@ -493,7 +493,7 @@ class TelegramClient {
   Map<int, List<ChatPosition>> _allChats = {};
 
   void _sortChatsOrder(List<ChatOrder> chats) {
-    for (int i = 0; i < chats.length; i++) {
+    for (int i = chats.length - 1; i > 0; i--) {
       if (chats[i].position.order == 0) {
         chats.remove(chats[i]);
       }
@@ -504,8 +504,17 @@ class TelegramClient {
   List<ChatOrder> getChatsInChatListSync(ChatList chatList) {
     List<ChatOrder> result = [];
 
+    _chats.forEach(
+      (key, value) {
+        if (_allChats[key] == null) {
+          _allChats[key] = value.positions!;
+        }
+      },
+    );
+
     var l = _allChats.values.toList();
     var v = _allChats.keys.toList();
+
     for (int i = 0; i < _allChats.length; i++) {
       var ch = l[i].firstWhereOrNull((b) => chatListsEqual(chatList, b.list!));
       if (ch != null) result.add(ChatOrder(v[i], ch));
