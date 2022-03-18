@@ -74,17 +74,17 @@ class _SmoothDekstopListViewState extends State<SmoothListView> {
           } else {
             delta += signal.scrollDelta.dy;
           }
-          delta *= Platform.isWindows ? 30 : 15;
+          delta *= Platform.isWindows ? 20 : 8;
           _controller.animateTo(
             clamp(delta + _controller.offset, 0, _controller.position.maxScrollExtent).toDouble(),
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.decelerate,
+            duration: const Duration(milliseconds: 1000),
+            curve: Curves.easeOutQuart,
           );
         }
       },
       child: ListView.builder(
         itemBuilder: widget.itemBuilder,
-        physics: UIManager.isMobile ? const BouncingScrollPhysics() :  const NeverScrollableScrollPhysics(),
+        physics: UIManager.isMobile ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
         controller: _controller,
         scrollDirection: widget.scrollDirection,
         itemCount: widget.itemCount,
