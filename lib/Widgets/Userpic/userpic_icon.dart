@@ -14,7 +14,7 @@ class UserpicIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Icon(icon, size: 36, color: iconColor),
+      child: Icon(icon, size: 30, color: iconColor),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
