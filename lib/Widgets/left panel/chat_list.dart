@@ -32,33 +32,34 @@ class ChatListDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     bool addArchive = chatList is ChatListMain;
     return StreamBuilder(
-        initialData: client.getChatsInChatListSync(chatList),
-        stream: client.chatsInChatList(chatList),
-        builder: (_, data) {
-          var chats = data.data as List<ChatOrder>;
-          return SmoothListView(
-            reverseScroll: true,
-            itemCount: chats.length + (addArchive ? 1 : 0),
-            scrollController: scrollController,
-            itemBuilder: (_, index) {
-              if (addArchive) {
-                if (index == 0) {
-                  return ChatItemDisplayArchiveNotHidden(
-                    client: client,
-                  );
-                }
-                index--;
+      initialData: client.getChatsInChatListSync(chatList),
+      stream: client.chatsInChatList(chatList),
+      builder: (_, data) {
+        var chats = data.data as List<ChatOrder>;
+        return SmoothListView(
+          reverseScroll: true,
+          itemCount: chats.length + (addArchive ? 1 : 0),
+          scrollController: scrollController,
+          itemBuilder: (_, index) {
+            if (addArchive) {
+              if (index == 0) {
+                return ChatItemDisplayArchiveNotHidden(
+                  client: client,
+                );
               }
-              var chatId = chats[index].chatId;
-              return ChatItemDisplay(
-                key: Key("ChatItemDisplay?id=$chatId"),
-                onClick: () => UIEvents.selectChat(chatId, client),
-                chatId: chatId,
-                client: client,
-                chatList: chats[0].position.list!,
-              );
-            },
-          );
-        });
+              index--;
+            }
+            var chatId = chats[index].chatId;
+            return ChatItemDisplay(
+              key: Key("ChatItemDisplay?id=$chatId"),
+              onClick: () => UIEvents.selectChat(chatId, client),
+              chatId: chatId,
+              client: client,
+              chatList: chats[0].position.list!,
+            );
+          },
+        );
+      },
+    );
   }
 }

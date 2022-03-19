@@ -21,7 +21,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
   Widget build(BuildContext context) {
     var textColor = ClientTheme.currentTheme.getField("ArchiveContentColor");
     return StreamBuilder(
-     initialData: const <ChatOrder>[],
+     initialData: client.getChatsInChatListSync(ChatListArchive()),
       stream: client.chatsInChatList(ChatListArchive()),
       builder: (_, data) {
         List<InlineSpan> content = [];
