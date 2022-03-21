@@ -73,6 +73,7 @@ Map<String, FileGroup> _groups = {
   ".png": FileGroup.imageRaster,
   ".psd": FileGroup.imageRaster,
   ".tga": FileGroup.imageRaster,
+  ".jpg": FileGroup.imageRaster,
   ".dfvu": FileGroup.imageRaster,
   ".jpeg": FileGroup.imageRaster,
   ".tiff": FileGroup.imageRaster,

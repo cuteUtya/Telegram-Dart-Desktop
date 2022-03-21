@@ -473,7 +473,11 @@ class _FileDisplay extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(6),
+                      topRight: Radius.circular(6),
+                      bottomRight: Radius.circular(3),
+                    ),
                     color: controllsBackColor,
                   ),
                   child: Text(
@@ -483,7 +487,11 @@ class _FileDisplay extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(bottom: Radius.circular(6)),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(6),
+                      bottomRight: Radius.circular(6),
+                      topRight: Radius.circular(3),
+                    ),
                     color: controllsBackColor,
                   ),
                   child: FutureBuilder(
