@@ -135,6 +135,7 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
 
         var msg = messages!.messages![index];
         return StreamBuilder(
+          key: Key("message?id=${msg.id}?chatId=${msg.chatId}"),
           stream: StreamGroup.merge(
             [
               widget.client.messageEdits(widget.chatId, msg.id!),
