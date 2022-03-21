@@ -145,7 +145,15 @@ class MessageDisplayText extends StatelessWidget {
                   ],
                 ),
               ),
-            if (replieWidget != null) replieWidget!,
+            if (replieWidget != null)
+              Container(
+                margin: EdgeInsets.only(
+                  left: captionMargin?.left ?? 0,
+                  right: captionMargin?.right ?? 0,
+                  top: senderName == null ? captionMargin?.top ?? 0 : 0,
+                ),
+                child: replieWidget,
+              ),
             if (additionalContent != null && additionalContentPlace == AdditionalContentPlace.top) additionalInfo,
             if (contentText.text?.isNotEmpty ?? false)
               Container(
