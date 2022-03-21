@@ -31,23 +31,22 @@ class InputField extends StatefulWidget {
 }
 
 class InputFieldState extends State<InputField> {
-  String inputValue = "";
-  TextEditingController textController = TextEditingController();
+  late TextEditingController textController;
 
   void sendMessage() {
-    if (inputValue.isNotEmpty) {
+    if (textController.text.isNotEmpty) {
       widget.client.send(
         SendMessage(
           chatId: widget.chatId,
           inputMessageContent: InputMessageText(
             text: widget.client.execute(ParseMarkdown(
-              text: FormattedText(text: inputValue),
+              text: FormattedText(text: textController.text),
             )) as FormattedText,
           ),
         ),
       );
       textController.clear();
-      inputValue = "";
+      textController.text = "";
     }
   }
 
@@ -67,10 +66,8 @@ class InputFieldState extends State<InputField> {
   void saveAttachments() {
     var oldData = widget.client.getClientData(widget.chatId);
     oldData.unsentAttachments = uploadedFiles.map((e) => e.filePath).toList();
-    widget.client.send(SetChatClientData(chatId: _chatId, clientData: json.encode(oldData)));
+    widget.client.send(SetChatClientData(chatId: widget.chatId, clientData: json.encode(oldData)));
   }
-
-  int _chatId = 0;
 
   GlobalKey<WidgetSizerState> deleteButtonSizerKey = GlobalKey<WidgetSizerState>();
   GlobalKey<WidgetOpacityContollerState> deleteButtonOpacityKey = GlobalKey<WidgetOpacityContollerState>();
@@ -104,252 +101,266 @@ class InputFieldState extends State<InputField> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void dispose() {
+    widget.client.send(
+      SetChatDraftMessage(
+        chatId: widget.chatId,
+        draftMessage: DraftMessage(
+          date: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+          inputMessageText: InputMessageText(
+            text: FormattedText(
+              text: textController.text,
+            ),
+          ),
+        ),
+      ),
+    );
+    super.dispose();
+  }
+
+  @override
+  void initState() {
     var clientData = widget.client.getClientData(widget.chatId);
-    if (_chatId != widget.chatId) {
-      List<_AttachedFileInfo> validatedFiles = [];
-      clientData.unsentAttachments.forEach((element) {
-        if (io.File(element).existsSync()) {
-          validatedFiles.add(_AttachedFileInfo(element));
-        }
-      });
-      setState(() => uploadedFiles = validatedFiles);
-      if (validatedFiles.isNotEmpty) {
-        /// on first open [deleteButtonSizerKey] was not be attached to any widget
-        Future.delayed(Duration.zero, () => showDeletebutton());
+    List<_AttachedFileInfo> validatedFiles = [];
+    clientData.unsentAttachments.forEach((element) {
+      if (io.File(element).existsSync()) {
+        validatedFiles.add(_AttachedFileInfo(element));
       }
+    });
+    setState(() => uploadedFiles = validatedFiles);
+    if (validatedFiles.isNotEmpty) {
+      /// on first open [deleteButtonSizerKey] was not be attached to any widget
+      Future.delayed(Duration.zero, () => showDeletebutton());
     }
-    _chatId = widget.chatId;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var iconColor = ClientTheme.currentTheme.getField("GenericUIIconsColor");
     var emojiPanelPlaceholderKey = GlobalKey();
     var borderRadius = const Radius.circular(16);
     var dropZoneHeight = 180.0;
     var genericFilesWidth = 240.0;
+
+    var chat = widget.client.getChat(widget.chatId);
+    String draftText = "";
+    if (chat.draftMessage?.inputMessageText is InputMessageText) {
+      draftText = (chat.draftMessage?.inputMessageText as InputMessageText).text!.text!;
+    }
+    textController = TextEditingController(text: draftText);
+
     if (uploadedFiles.isEmpty) {
       hideDeleteButton();
     }
 
-    return /*DropTarget(
-      onDragEntered: (_) => setState(() {
-        fileDragging = true;
-      }),
-      onDragDone: (info) {
-        showDeletebutton();
-        onFileDragEnd();
-        for (var e in info.files) {
-          attachFile(e.path);
-        }
-        saveAttachments();
-      },
-      onDragExited: (_) => onFileDragEnd(),
-      child: */Column(
-        children: [
-          AnimatedContainer(
-            duration: animDuration,
-            curve: Curves.decelerate,
-            onEnd: () {
-              setState(() => dropZoneClosedInUI = !fileDragging && uploadedFiles.isEmpty);
-            },
-            height: fileDragging || uploadedFiles.isNotEmpty ? dropZoneHeight : 0,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: ClientTheme.currentTheme.getField("InputFileDropZoneBackgroundColor"),
-              borderRadius: BorderRadius.vertical(
-                top: borderRadius,
-                bottom: Radius.zero,
-              ),
+    return Column(
+      children: [
+        AnimatedContainer(
+          duration: animDuration,
+          curve: Curves.decelerate,
+          onEnd: () {
+            setState(() => dropZoneClosedInUI = !fileDragging && uploadedFiles.isEmpty);
+          },
+          height: fileDragging || uploadedFiles.isNotEmpty ? dropZoneHeight : 0,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: ClientTheme.currentTheme.getField("InputFileDropZoneBackgroundColor"),
+            borderRadius: BorderRadius.vertical(
+              top: borderRadius,
+              bottom: Radius.zero,
             ),
-            child: Center(
-              child: uploadedFiles.isEmpty && fileDragging
-                  ? Text(
-                      widget.client.getTranslation(
-                        "lng_drag_files_here",
-                      ),
-                      style: TextDisplay.create(
-                        size: 42,
-                        textColor: ClientTheme.currentTheme.getField("DropHereDropZoneTextColor"),
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: LayoutBuilder(
-                        builder: (_, box) => ReorderableListView(
-                            buildDefaultDragHandles: false,
-                            proxyDecorator: ((child, index, animation) {
-                              return Container(
-                                child: child,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color.fromARGB((animation.value * 128).toInt(), 0, 0, 0),
-                                      blurRadius: 6,
-                                      offset: const Offset(1, 1),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.all(borderRadius),
-                                ),
-                              );
-                            }),
-                            scrollDirection: Axis.horizontal,
-                            onReorder: (oldIndex, newIndex) {
-                              setState(() {
-                                if (oldIndex < newIndex) {
-                                  newIndex -= 1;
-                                }
-                                var item = uploadedFiles.removeAt(oldIndex);
-                                uploadedFiles.insert(newIndex, item);
-                                saveAttachments();
-                              });
-                            },
-                            children: [
-                              for (final file in uploadedFiles)
-                                ReorderableDragStartListener(
-                                  key: Key("attachedObject?id=${uploadedFiles.indexOf(file)}"),
-                                  index: uploadedFiles.indexOf(file),
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: uploadedFiles.indexOf(file) == uploadedFiles.length ? 0 : 8),
-                                    child: WidgetOpacityContoller(
-                                      key: file.opacityKey,
-                                      onEnd: () => setState(() {
-                                        deleteFile(file);
-                                        saveAttachments();
-                                      }),
-                                      duration: const Duration(milliseconds: 100),
-                                      child: _FileDisplay(
-                                        file: file.filePath,
-                                        borderRadius: BorderRadius.all(borderRadius),
-                                        width: genericFilesWidth,
-                                        height: box.maxHeight,
-                                        onDelete: () => setState(() => deleteFile(file)),
-                                      ),
+          ),
+          child: Center(
+            child: uploadedFiles.isEmpty && fileDragging
+                ? Text(
+                    widget.client.getTranslation(
+                      "lng_drag_files_here",
+                    ),
+                    style: TextDisplay.create(
+                      size: 42,
+                      textColor: ClientTheme.currentTheme.getField("DropHereDropZoneTextColor"),
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: LayoutBuilder(
+                      builder: (_, box) => ReorderableListView(
+                          buildDefaultDragHandles: false,
+                          proxyDecorator: ((child, index, animation) {
+                            return Container(
+                              child: child,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB((animation.value * 128).toInt(), 0, 0, 0),
+                                    blurRadius: 6,
+                                    offset: const Offset(1, 1),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.all(borderRadius),
+                              ),
+                            );
+                          }),
+                          scrollDirection: Axis.horizontal,
+                          onReorder: (oldIndex, newIndex) {
+                            setState(() {
+                              if (oldIndex < newIndex) {
+                                newIndex -= 1;
+                              }
+                              var item = uploadedFiles.removeAt(oldIndex);
+                              uploadedFiles.insert(newIndex, item);
+                              saveAttachments();
+                            });
+                          },
+                          children: [
+                            for (final file in uploadedFiles)
+                              ReorderableDragStartListener(
+                                key: Key("attachedObject?id=${uploadedFiles.indexOf(file)}"),
+                                index: uploadedFiles.indexOf(file),
+                                child: Container(
+                                  margin: EdgeInsets.only(right: uploadedFiles.indexOf(file) == uploadedFiles.length ? 0 : 8),
+                                  child: WidgetOpacityContoller(
+                                    key: file.opacityKey,
+                                    onEnd: () => setState(() {
+                                      deleteFile(file);
+                                      saveAttachments();
+                                    }),
+                                    duration: const Duration(milliseconds: 100),
+                                    child: _FileDisplay(
+                                      file: file.filePath,
+                                      borderRadius: BorderRadius.all(borderRadius),
+                                      width: genericFilesWidth,
+                                      height: box.maxHeight,
+                                      onDelete: () => setState(() => deleteFile(file)),
                                     ),
                                   ),
-                                )
-                            ]),
-                      ),
+                                ),
+                              )
+                          ]),
                     ),
+                  ),
+          ),
+        ),
+        if (!dropZoneClosedInUI || fileDragging) SeparatorLine(),
+        Container(
+          decoration: BoxDecoration(
+            color: ClientTheme.currentTheme.getField("ChatInputFieldBackgroundColor"),
+            borderRadius: BorderRadius.vertical(
+              bottom: borderRadius,
+              top: dropZoneClosedInUI && uploadedFiles.isEmpty && !fileDragging ? borderRadius : Radius.zero,
             ),
           ),
-          if (!dropZoneClosedInUI || fileDragging) SeparatorLine(),
-          Container(
-            decoration: BoxDecoration(
-              color: ClientTheme.currentTheme.getField("ChatInputFieldBackgroundColor"),
-              borderRadius: BorderRadius.vertical(
-                bottom: borderRadius,
-                top: dropZoneClosedInUI && uploadedFiles.isEmpty && !fileDragging ? borderRadius : Radius.zero,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 12,
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 12,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  WidgetOpacityContoller(
-                    key: deleteButtonOpacityKey,
-                    opacity: 0,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                WidgetOpacityContoller(
+                  key: deleteButtonOpacityKey,
+                  opacity: 0,
+                  duration: const Duration(milliseconds: 200),
+                  child: WidgetSizer(
+                    key: deleteButtonSizerKey,
                     duration: const Duration(milliseconds: 200),
-                    child: WidgetSizer(
-                      key: deleteButtonSizerKey,
-                      duration: const Duration(milliseconds: 200),
-                      sizeOnInit: Size.zero,
-                      child: ButtonIcon(
-                        Icons.delete,
-                        size: 36,
-                        color: ClientTheme.currentTheme.getField("DropZoneClearAllButtonColor"),
-                        onClick: () => clearFiles(),
-                      ),
+                    sizeOnInit: Size.zero,
+                    child: ButtonIcon(
+                      Icons.delete,
+                      size: 36,
+                      color: ClientTheme.currentTheme.getField("DropZoneClearAllButtonColor"),
+                      onClick: () => clearFiles(),
                     ),
                   ),
-                  ButtonIcon(
-                    Icons.attach_file,
-                    color: iconColor,
-                    size: 36,
-                    onClick: () {
-                      FilePicker.platform
-                          .pickFiles(
-                        dialogTitle: widget.client.getTranslation("lng_choose_file"),
-                        allowMultiple: true,
-                      )
-                          .then(
-                        (pick) {
-                          pick?.files.forEach((file) => attachFile(file.path!));
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      child: TextField(
-                        controller: textController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: widget.client.getTranslation("lng_message_ph"),
-                          hintStyle: TextDisplay.create(
-                            textColor: ClientTheme.currentTheme.getField("InputFieldTextColor"),
+                ),
+                ButtonIcon(
+                  Icons.attach_file,
+                  color: iconColor,
+                  size: 36,
+                  onClick: () {
+                    FilePicker.platform
+                        .pickFiles(
+                      dialogTitle: widget.client.getTranslation("lng_choose_file"),
+                      allowMultiple: true,
+                    )
+                        .then(
+                      (pick) {
+                        pick?.files.forEach((file) => attachFile(file.path!));
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: TextField(
+                      controller: textController,
+                      decoration: InputDecoration.collapsed(
+                        hintText: widget.client.getTranslation("lng_message_ph"),
+                        hintStyle: TextDisplay.create(
+                          textColor: ClientTheme.currentTheme.getField("InputFieldTextColor"),
+                        ),
+                      ),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: ClientTheme.currentTheme.getField("InputFieldTextColor"),
+                        fontFamily: TextDisplay.regular,
+                        fontFamilyFallback: [
+                          TextDisplay.getEmojiFont(),
+                        ],
+                      ),
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      onChanged: (value) {
+                        widget.client.send(
+                          SendChatAction(
+                            chatId: widget.chatId,
+                            action: ChatActionTyping(),
                           ),
-                        ),
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: ClientTheme.currentTheme.getField("InputFieldTextColor"),
-                          fontFamily: TextDisplay.regular,
-                          fontFamilyFallback: [
-                            TextDisplay.getEmojiFont(),
-                          ],
-                        ),
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                        onChanged: (value) {
-                          widget.client.send(
-                            SendChatAction(
-                              chatId: widget.chatId,
-                              action: ChatActionTyping(),
-                            ),
-                          );
-                          inputValue = value;
-                        },
-                      ),
+                        );
+                      },
                     ),
                   ),
-                  Container(
-                    height: 36,
-                    alignment: Alignment.bottomCenter,
-                    child: ContextMenuRegion(
-                      placeHolderKey: emojiPanelPlaceholderKey,
-                      workOnMainTap: true,
-                      workOnSecondaryTap: false,
-                      contextMenu: EmojiInputPanel(
-                        client: widget.client,
-                      ),
-                      child: Column(children: [
-                        Container(
-                          key: emojiPanelPlaceholderKey,
-                        ),
-                        ButtonIcon(
-                          Icons.emoji_emotions_outlined,
-                          color: iconColor,
-                          size: 36,
-                        )
-                      ]),
+                ),
+                Container(
+                  height: 36,
+                  alignment: Alignment.bottomCenter,
+                  child: ContextMenuRegion(
+                    placeHolderKey: emojiPanelPlaceholderKey,
+                    workOnMainTap: true,
+                    workOnSecondaryTap: false,
+                    contextMenu: EmojiInputPanel(
+                      client: widget.client,
                     ),
+                    child: Column(children: [
+                      Container(
+                        key: emojiPanelPlaceholderKey,
+                      ),
+                      ButtonIcon(
+                        Icons.emoji_emotions_outlined,
+                        color: iconColor,
+                        size: 36,
+                      )
+                    ]),
                   ),
-                  const SizedBox(width: 16),
-                  ButtonIcon(
-                    Icons.send,
-                    color: iconColor,
-                    size: 36,
-                    onClick: () => sendMessage(),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 16),
+                ButtonIcon(
+                  Icons.send,
+                  color: iconColor,
+                  size: 36,
+                  onClick: () => sendMessage(),
+                ),
+              ],
             ),
           ),
-        ],
-    );//),
-   // );
+        ),
+      ],
+    ); //),
+    // );
   }
 }
 

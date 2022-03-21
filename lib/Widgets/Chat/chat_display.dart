@@ -86,6 +86,7 @@ class ChatDisplay extends StatelessWidget {
                   ),
                 ),
                 InputField(
+                  key: Key("inputField?chatId=$chatId"),
                   client: client,
                   chatId: chat.id ?? 0,
                 ),
