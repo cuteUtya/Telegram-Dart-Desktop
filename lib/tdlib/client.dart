@@ -150,13 +150,13 @@ class TelegramClient {
   Stream<UpdateLanguagePackStrings> get updateLanguagePackStrings =>
       updates.where((u) => u is UpdateLanguagePackStrings).map((a) => (a as UpdateLanguagePackStrings));
 
-  Stream<UpdateMessageContent> get updateMessageContent =>
+  Stream<UpdateMessageContent> get _updateMessageContent =>
       updates.where((u) => u is UpdateMessageContent).map((a) => (a as UpdateMessageContent));
 
   Stream<UpdateMessageContentOpened> get updateMessageContentOpened =>
       updates.where((u) => u is UpdateMessageContentOpened).map((a) => (a as UpdateMessageContentOpened));
 
-  Stream<UpdateMessageEdited> get updateMessageEdited =>
+  Stream<UpdateMessageEdited> get _updateMessageEdited =>
       updates.where((u) => u is UpdateMessageEdited).map((a) => (a as UpdateMessageEdited));
 
   Stream<UpdateMessageInteractionInfo> get updateMessageInteractionInfo =>
@@ -589,6 +589,12 @@ class TelegramClient {
       }
     }
   }
+
+  Stream<UpdateMessageContent> messageContentChanges(int chatId, int messageId) =>
+      _updateMessageContent.where((upd) => upd.chatId == chatId && upd.messageId == messageId);
+
+  Stream<UpdateMessageEdited> messageEdits(int chatId, int messageId) =>
+      _updateMessageEdited.where((upd) => upd.chatId == chatId && upd.messageId == messageId);
 
   Stream<List<ChatFilterInfo>> filters() async* {
     await for (final update in _updates) {

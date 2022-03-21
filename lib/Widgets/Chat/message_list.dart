@@ -1,6 +1,7 @@
 import 'dart:async';
-
+import 'package:async/src/stream_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
@@ -12,7 +13,6 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:myapp/utils.dart';
-import 'package:collection/collection.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({
@@ -27,12 +27,11 @@ class MessageList extends StatefulWidget {
   State<StatefulWidget> createState() => _MessageListState();
 }
 
-class _MessageListState extends State<MessageList> {
+class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
   Messages? messages;
-  Chat? chat;
-  int _renderedChatId = 0;
-  List<ChatAdministrator> admins = [];
   ScrollController scrollController = ScrollController();
+  List<ChatAdministrator> admins = [];
+
   static const List<Type> serviceMessages = [
     MessageVideoChatStarted,
     MessageVideoChatEnded,
@@ -43,11 +42,16 @@ class _MessageListState extends State<MessageList> {
     MessageChatDeletePhoto
   ];
 
-  StreamSubscription? newMessageSubs;
+  void loadMessages(int limit, int fromMessageId, int offset) async {
+    var msgs = await widget.client.send(
+      GetChatHistory(
+        chatId: widget.chatId,
+        fromMessageId: fromMessageId,
+        limit: limit,
+        offset: offset,
+      ),
+    ) as Messages;
 
-  Future<void> loadMessages(int limit, int fromMessageId, int offset) async {
-    var msgs = await widget.client
-        .send(GetChatHistory(chatId: widget.chatId, fromMessageId: fromMessageId, limit: limit, offset: offset)) as Messages;
     setState(() {
       if (messages == null) {
         messages = msgs;
@@ -59,48 +63,23 @@ class _MessageListState extends State<MessageList> {
   }
 
   void listenNewMessage() {
-    newMessageSubs?.cancel();
-    newMessageSubs = widget.client.newMessagesIn(widget.chatId).listen((event) {
-      setState(() {
-        messages?.totalCount = messages!.totalCount! + 1;
-        messages?.messages = [event] + messages!.messages!;
-      });
-
-      if (scrollController.offset <= 0) {
-        scrollController.jumpTo(41);
-        scrollController.animateTo(0, duration: Duration(milliseconds: 400), curve: Curves.decelerate);
-      }
-    });
-  }
-
-  List<StreamSubscription> messageEditSubs = [];
-
-  void listenMessageEdits() {
-    messageEditSubs.forEach((element) => element.cancel());
-    messageEditSubs.clear();
-    messageEditSubs.add(
-      widget.client.updateMessageContent.listen(
+    streamSubscriptions.add(
+      widget.client.newMessagesIn(widget.chatId).listen(
         (event) {
-          if (event.chatId == widget.chatId) {
-            var msg = messages?.messages!.firstWhereOrNull((element) => element.id == event.messageId);
-            if (msg != null) {
-              setState(() => msg.content = event.newContent);
-            }
-          }
-        },
-      ),
-    );
-    messageEditSubs.add(
-      widget.client.updateMessageEdited.listen(
-        (event) {
-          if (event.chatId == widget.chatId) {
-            var msg = messages?.messages!.firstWhereOrNull((element) => element.id == event.messageId);
-            if (msg != null) {
-              setState(() {
-                msg.editDate = event.editDate;
-                msg.replyMarkup = event.replyMarkup;
-              });
-            }
+          setState(
+            () {
+              messages?.totalCount = messages!.totalCount! + 1;
+              messages?.messages = [event] + messages!.messages!;
+            },
+          );
+
+          if (scrollController.offset <= 0) {
+            scrollController.jumpTo(41);
+            scrollController.animateTo(
+              0,
+              duration: Duration(milliseconds: 400),
+              curve: Curves.decelerate,
+            );
           }
         },
       ),
@@ -108,30 +87,29 @@ class _MessageListState extends State<MessageList> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (_renderedChatId != widget.chatId) {
-      messages = null;
-      var _chat = widget.client.getChat(widget.chatId);
-      bool messageLoaded = false;
-      listenNewMessage();
-      listenMessageEdits();
-      loadMessages(50, 0, 0).then((value) {
-        messageLoaded = true;
-        chat = _chat;
-      });
-      var isChannel = (_chat.type is ChatTypeSupergroup ? _chat.type as ChatTypeSupergroup : null)?.isChannel ?? false;
-      if (_chat.type is ChatTypeBasicGroup || (_chat.type is ChatTypeSupergroup && !isChannel)) {
-        widget.client.send(GetChatAdministrators(chatId: widget.chatId)).then((newAdmins) {
-          admins = (newAdmins as ChatAdministrators).administrators!;
-          if (messageLoaded) setState(() {});
-        });
-      } else {
-        admins = [];
-      }
-      _renderedChatId = widget.chatId;
-    }
+  void initState() {
+    listenNewMessage();
+    loadMessages(50, 0, 0);
+    widget.client.send(GetChatAdministrators(chatId: widget.chatId)).then(
+      (adm) {
+        if (adm is ChatAdministrators) {
+          setState(() => admins = adm.administrators!);
+        }
+      },
+    );
+    super.initState();
+  }
 
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     int messagesCount = (messages?.totalCount ?? 0);
+    var chat = widget.client.getChat(widget.chatId);
 
     return SmoothListView(
       reverse: true,
@@ -150,124 +128,146 @@ class _MessageListState extends State<MessageList> {
             },
           );
         }
+
         var msg = messages!.messages![index];
-        var previus = (index - 1 < 0 ? null : messages!.messages![index - 1]);
-        var next = (index + 1 >= messages!.messages!.length ? null : messages!.messages![index + 1]);
+        return StreamBuilder(
+          stream: StreamGroup.merge(
+            [
+              widget.client.messageEdits(widget.chatId, msg.id!),
+              widget.client.messageContentChanges(widget.chatId, msg.id!),
+            ],
+          ),
+          builder: (_, data) {
+            if (data.hasData) {
+              var update = data.data;
+              if (update is UpdateMessageEdited) {
+                msg.editDate = update.editDate;
+                msg.replyMarkup = update.replyMarkup;
+              }
+              if (update is UpdateMessageContent) {
+                msg.content = update.newContent;
+              }
+            }
+            var previus = (index - 1 < 0 ? null : messages!.messages![index - 1]);
+            var next = (index + 1 >= messages!.messages!.length ? null : messages!.messages![index + 1]);
 
-        var prevDate = previus == null ? null : unixToDateTime(previus.date!);
-        var currDate = unixToDateTime(msg.date!);
-        var nextDate = next == null ? null : unixToDateTime(next.date!);
+            var prevDate = previus == null ? null : unixToDateTime(previus.date!);
+            var currDate = unixToDateTime(msg.date!);
+            var nextDate = next == null ? null : unixToDateTime(next.date!);
 
-        bool showDateBelow = prevDate != null &&
-            (prevDate.day != currDate.day || prevDate.month != currDate.month || prevDate.year != currDate.year);
+            bool showDateBelow = prevDate != null &&
+                (prevDate.day != currDate.day || prevDate.month != currDate.month || prevDate.year != currDate.year);
 
-        bool showDateAbove = nextDate != null &&
-            (nextDate.day != currDate.day || nextDate.month != currDate.month || nextDate.year != currDate.year);
+            bool showDateAbove = nextDate != null &&
+                (nextDate.day != currDate.day || nextDate.month != currDate.month || nextDate.year != currDate.year);
 
-        var prevSenderId = getSenderId(previus?.senderId);
-        var nextSenderId = getSenderId(next?.senderId);
-        var currSenderId = getSenderId(msg.senderId);
-        BubbleRelativePosition bubbleRelativePosition = BubbleRelativePosition.single;
-        if (currSenderId == nextSenderId && currSenderId == prevSenderId) {
-          if (showDateAbove && showDateBelow) {
-            bubbleRelativePosition = BubbleRelativePosition.single;
-          } else if (showDateAbove) {
-            bubbleRelativePosition = BubbleRelativePosition.top;
-          } else if (showDateBelow) {
-            bubbleRelativePosition = BubbleRelativePosition.bottom;
-          } else {
-            bubbleRelativePosition = BubbleRelativePosition.middle;
-          }
-        } else if (currSenderId == prevSenderId) {
-          bubbleRelativePosition = BubbleRelativePosition.top;
-        } else if (currSenderId == nextSenderId) {
-          if (showDateAbove) {
-            bubbleRelativePosition = BubbleRelativePosition.single;
-          } else {
-            bubbleRelativePosition = BubbleRelativePosition.bottom;
-          }
-        }
+            var prevSenderId = getSenderId(previus?.senderId);
+            var nextSenderId = getSenderId(next?.senderId);
+            var currSenderId = getSenderId(msg.senderId);
+            BubbleRelativePosition bubbleRelativePosition = BubbleRelativePosition.single;
+            if (currSenderId == nextSenderId && currSenderId == prevSenderId) {
+              if (showDateAbove && showDateBelow) {
+                bubbleRelativePosition = BubbleRelativePosition.single;
+              } else if (showDateAbove) {
+                bubbleRelativePosition = BubbleRelativePosition.top;
+              } else if (showDateBelow) {
+                bubbleRelativePosition = BubbleRelativePosition.bottom;
+              } else {
+                bubbleRelativePosition = BubbleRelativePosition.middle;
+              }
+            } else if (currSenderId == prevSenderId) {
+              bubbleRelativePosition = BubbleRelativePosition.top;
+            } else if (currSenderId == nextSenderId) {
+              if (showDateAbove) {
+                bubbleRelativePosition = BubbleRelativePosition.single;
+              } else {
+                bubbleRelativePosition = BubbleRelativePosition.bottom;
+              }
+            }
 
-        var adminInfo = admins.firstWhereOrNull((element) => element.userId == getSenderId(msg.senderId!));
-        bool isServiceMessage = serviceMessages.contains(msg.content.runtimeType);
-        int spacerFlex = UIManager.isMobile
-            ? msg.content is MessageContent && msg.replyToMessageId == 0
-                ? 1
-                : 0
-            : msg.content is MessageContent && msg.replyToMessageId == 0
-                ? 2
-                : 1;
-
-        return Column(children: [
-          if (nextDate == null)
-            Container(margin: const EdgeInsets.only(bottom: 16), child: DateBubble(client: widget.client, date: currDate)),
-          if (isServiceMessage)
-            Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              child: MessageDisplay(
-                bubbleRelativePosition: bubbleRelativePosition,
-                client: widget.client,
-                message: msg,
-                isServiceMessage: true,
-              ),
-            )
-          else
-            Row(
+            var adminInfo = admins.firstWhereOrNull((element) => element.userId == getSenderId(msg.senderId!));
+            bool isServiceMessage = serviceMessages.contains(msg.content.runtimeType);
+            int spacerFlex = UIManager.isMobile
+                ? msg.content is MessageContent && msg.replyToMessageId == 0
+                    ? 1
+                    : 0
+                : msg.content is MessageContent && msg.replyToMessageId == 0
+                    ? 2
+                    : 1;
+            return Column(
               children: [
-                if (msg.isOutgoing! && !isServiceMessage) SafeSpacer(flex: spacerFlex),
-                Expanded(
-                  flex: UIManager.isMobile ? 4 : 2,
-                  child: FutureBuilder(
-                    key: UniqueKey(),
-                    initialData: widget.client.getMessage(widget.chatId, msg.replyToMessageId!),
-                    future: msg.replyToMessageId == 0
-                        ? null
-                        : widget.client.send(GetMessage(
-                            chatId: msg.replyInChatId == 0 ? chat?.id : msg.replyInChatId, messageId: msg.replyToMessageId)),
-                    builder: (_, replieDate) {
-                      return Container(
-                        margin: EdgeInsets.only(
-                            bottom: (bubbleRelativePosition == BubbleRelativePosition.bottom ||
-                                    bubbleRelativePosition == BubbleRelativePosition.single)
-                                ? 16
-                                : 4),
-                        child: MessageDisplay(
-                          bubbleRelativePosition: bubbleRelativePosition,
-                          chat: chat,
-                          message: msg,
-                          isReplie: msg.replyToMessageId != 0,
-                          replieOn: replieDate.data is Message ? replieDate.data as Message : null,
-                          client: widget.client,
-                          onMessageDelete: () => setState(
-                            () => messages?.messages!.removeWhere(
-                              (element) => element.id == msg.id,
-                            ),
-                          ),
-                          adminTitle: adminInfo != null
-                              ? (adminInfo.customTitle?.isEmpty ?? true)
-                                  ? widget.client.getTranslation(adminInfo.isOwner! ? "lng_owner_badge" : "lng_admin_badge")
-                                  : adminInfo.customTitle!
-                              : null,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                if (!msg.isOutgoing! && !isServiceMessage)
-                  SafeSpacer(
-                    flex: spacerFlex,
+                if (nextDate == null)
+                  Container(margin: const EdgeInsets.only(bottom: 16), child: DateBubble(client: widget.client, date: currDate)),
+                if (isServiceMessage)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: MessageDisplay(
+                      bubbleRelativePosition: bubbleRelativePosition,
+                      client: widget.client,
+                      message: msg,
+                      isServiceMessage: true,
+                    ),
                   )
+                else
+                  Row(
+                    children: [
+                      if (msg.isOutgoing! && !isServiceMessage) SafeSpacer(flex: spacerFlex),
+                      Expanded(
+                        flex: UIManager.isMobile ? 4 : 2,
+                        child: FutureBuilder(
+                          key: UniqueKey(),
+                          initialData: widget.client.getMessage(widget.chatId, msg.replyToMessageId!),
+                          future: msg.replyToMessageId == 0
+                              ? null
+                              : widget.client.send(GetMessage(
+                                  chatId: msg.replyInChatId == 0 ? chat.id : msg.replyInChatId, messageId: msg.replyToMessageId)),
+                          builder: (_, replieDate) {
+                            return Container(
+                              margin: EdgeInsets.only(
+                                  bottom: (bubbleRelativePosition == BubbleRelativePosition.bottom ||
+                                          bubbleRelativePosition == BubbleRelativePosition.single)
+                                      ? 16
+                                      : 4),
+                              child: MessageDisplay(
+                                bubbleRelativePosition: bubbleRelativePosition,
+                                chat: chat,
+                                message: msg,
+                                isReplie: msg.replyToMessageId != 0,
+                                replieOn: replieDate.data is Message ? replieDate.data as Message : null,
+                                client: widget.client,
+                                onMessageDelete: () => setState(
+                                  () => messages?.messages!.removeWhere(
+                                    (element) => element.id == msg.id,
+                                  ),
+                                ),
+                                adminTitle: adminInfo != null
+                                    ? (adminInfo.customTitle?.isEmpty ?? true)
+                                        ? widget.client.getTranslation(adminInfo.isOwner! ? "lng_owner_badge" : "lng_admin_badge")
+                                        : adminInfo.customTitle!
+                                    : null,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      if (!msg.isOutgoing! && !isServiceMessage)
+                        SafeSpacer(
+                          flex: spacerFlex,
+                        )
+                    ],
+                  ),
+                if (showDateBelow)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: DateBubble(
+                      client: widget.client,
+                      date: prevDate,
+                    ),
+                  ),
               ],
-            ),
-          if (showDateBelow)
-            Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              child: DateBubble(
-                client: widget.client,
-                date: prevDate,
-              ),
-            ),
-        ]);
+            );
+          },
+        );
       },
     );
   }

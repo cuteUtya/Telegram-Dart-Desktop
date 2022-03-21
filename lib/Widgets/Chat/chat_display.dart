@@ -35,9 +35,7 @@ class ChatDisplay extends StatelessWidget {
               background: Background(
                 type: BackgroundTypeFill(
                   fill: BackgroundFillSolid(
-                    color: (ClientTheme.currentTheme
-                            .getField("tw1nkleeModeBackgroundColor") as Color)
-                        .value,
+                    color: (ClientTheme.currentTheme.getField("tw1nkleeModeBackgroundColor") as Color).value,
                   ),
                 ),
               ),
@@ -47,18 +45,14 @@ class ChatDisplay extends StatelessWidget {
               stream: client.selectedBackground,
               builder: (_, data) {
                 if (data.hasData) {
-                  var update = data.data == null
-                      ? null
-                      : data.data as UpdateSelectedBackground;
+                  var update = data.data == null ? null : data.data as UpdateSelectedBackground;
                   if (update?.background == null) {
                     client.send(GetBackgrounds()).then(
                           (backs) => client.send(
                             SetBackground(
                               forDarkTheme: update?.forDarkTheme,
                               background: InputBackgroundRemote(
-                                backgroundId: backs is Backgrounds
-                                    ? backs.backgrounds![0].id!
-                                    : (backs as Background).id!,
+                                backgroundId: backs is Backgrounds ? backs.backgrounds![0].id! : (backs as Background).id!,
                               ),
                             ),
                           ),
@@ -68,8 +62,7 @@ class ChatDisplay extends StatelessWidget {
                   return BackgroundDisplay(
                     client: client,
                     //TODO correct work with dark and light themes
-                    background:
-                        (data.data as UpdateSelectedBackground).background!,
+                    background: (data.data as UpdateSelectedBackground).background!,
                   );
                 }
                 return const SizedBox.shrink();
@@ -86,6 +79,7 @@ class ChatDisplay extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: MessageList(
+                      key: Key("chat?chatId=$chatId"),
                       chatId: chat.id!,
                       client: client,
                     ),
@@ -103,7 +97,7 @@ class ChatDisplay extends StatelessWidget {
             child: ActionBarDisplay(
               client: client,
               chat: chat,
-                onChatRevert: onChatRevert,
+              onChatRevert: onChatRevert,
             ),
           ),
         ],
