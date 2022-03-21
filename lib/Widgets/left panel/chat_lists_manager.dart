@@ -19,7 +19,8 @@ class ChatListsManager extends StatefulWidget {
   State<StatefulWidget> createState() => ChatListsManagerState();
 }
 
-class ChatListsManagerState extends StateWithStreamsSubscriptions<ChatListsManager> {
+class ChatListsManagerState
+    extends StateWithStreamsSubscriptions<ChatListsManager> {
   List<ChatList> folders = [];
   PageController archiveContoller = PageController();
   PageController foldersContoller = PageController();
@@ -37,7 +38,8 @@ class ChatListsManagerState extends StateWithStreamsSubscriptions<ChatListsManag
     }));
     streamSubscriptions.add(UIEvents.currentChatList().listen((event) {
       foldersContoller.animateToPage(
-        folders.indexOf(folders.firstWhere((element) => chatListsEqual(element, event))),
+        folders.indexOf(
+            folders.firstWhere((element) => chatListsEqual(element, event))),
         duration: const Duration(milliseconds: 200),
         curve: Curves.decelerate,
       );
@@ -48,29 +50,29 @@ class ChatListsManagerState extends StateWithStreamsSubscriptions<ChatListsManag
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
+    return PageView.builder(
       controller: archiveContoller,
       physics: const NeverScrollableScrollPhysics(),
-      children: [
-        PageView.builder(
-          controller: foldersContoller,
-          itemCount: folders.length,
-          itemBuilder: (_, index) => ChatListDisplay(
-            client: widget.client,
-            chatList: folders[index],
-          ),
-        ),
-        RevertiblePage(
-          onRevert: () => UIEvents.closeArchive(),
-          title: widget.client.getTranslation("lng_archived_name"),
-          content: Expanded(
-            child: ChatListDisplay(
-              chatList: ChatListArchive(),
-              client: widget.client,
+      itemCount: 2,
+      itemBuilder: (_, index) => index == 0
+          ? PageView.builder(
+              controller: foldersContoller,
+              itemCount: folders.length,
+              itemBuilder: (_, index) => ChatListDisplay(
+                client: widget.client,
+                chatList: folders[index],
+              ),
+            )
+          : RevertiblePage(
+              onRevert: () => UIEvents.closeArchive(),
+              title: widget.client.getTranslation("lng_archived_name"),
+              content: Expanded(
+                child: ChatListDisplay(
+                  chatList: ChatListArchive(),
+                  client: widget.client,
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -25,9 +25,7 @@ class ChatDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var chat = client.getChat(chatId);
-    return Padding(
-      padding: MediaQuery.of(context).viewInsets,
-      child: Stack(
+    return Stack(
         children: [
           if (tw1nkleeModeEnable)
             BackgroundDisplay(
@@ -78,7 +76,7 @@ class ChatDisplay extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: MessageList(
                     key: Key("chat?chatId=$chatId"),
                     chatId: chat.id!,
@@ -88,36 +86,19 @@ class ChatDisplay extends StatelessWidget {
               ),
               Container(
                 margin: const EdgeInsets.only(
-                  bottom: 12,
-                  right: 12,
-                  left: 12,
+                  bottom: 8,
+                  right: 8,
+                  left: 8,
                 ),
                 child: InputField(
                   key: Key("inputField?chatId=$chatId"),
                   client: client,
-                  chatId: chat.id ?? 0,
+                  chatId: chat.id!,
                 ),
               )
             ],
           )
-          /*
-          Container(
-            margin: UIManager.useDesktopLayout
-                ? const EdgeInsets.fromLTRB(108, 0, 108, 24)
-                : const EdgeInsets.fromLTRB(12, 0, 12, 12),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                
-              ],
-            ),
-          ),
-          Container(
-            alignment: Alignment.topCenter,
-            child: 
-          ),*/
         ],
-      ),
     );
   }
 }

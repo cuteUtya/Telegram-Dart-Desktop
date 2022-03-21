@@ -298,7 +298,7 @@ class MessageDisplay extends StatelessWidget {
                 break;
 
               ///theare some issues related with it perfomance
-              case MessageVideo:
+             /* case MessageVideo:
                 wrapInBubble = haveText;
                 overrideBubblePadding = true;
                 contentWidget = MessageDisplayVideo(
@@ -322,14 +322,14 @@ class MessageDisplay extends StatelessWidget {
                   senderName: showMessageSender ? author : null,
                   contentPadding: bubblePadding,
                 );
-                break;
+                break;*/
 
               default:
                 wrapInBubble = true;
                 contentWidget = MessageDisplayText(
                   client: client,
                   message: message,
-                  text: FormattedText(text: message.toJson().toString()),
+                  text: FormattedText(text: "🍆🍆🍆 Unsupported 🍆🍆🍆"),//message.toJson().toString()),
                   infoWidget: _buildInfoWidget(true),
                   replieWidget: _buildReplieWidget(true),
                 );

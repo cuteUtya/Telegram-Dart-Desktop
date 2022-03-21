@@ -20,7 +20,6 @@ class LeftPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var listsManager = GlobalKey<ChatListsManagerState>();
     return Container(
       color:
           ClientTheme.currentTheme.getField("FoldersAndSearchBackgroundColor"),
@@ -76,34 +75,31 @@ class LeftPanel extends StatelessWidget {
             Expanded(
               child: Stack(
                 children: [
-                  Column(
-                    children: [
-                      ChatFilterHorizontal(client: client),
-                      const SeparatorLine(),
-                    ],
-                  ),
+                  ChatFilterHorizontal(client: client),
                   StreamBuilder(
                     stream: UIEvents.archiveState(),
                     builder: (_, data) {
                       bool archiveOpened = data.data == true;
-                      return Column(
-                        children: [
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.ease,
-                            height: archiveOpened ? 0 : 40,
-                          ),
-                          Expanded(
-                            child: ChatListsManager(
-                              key: listsManager,
-                              client: client,
-                              onChatRevert: onChatRevert,
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.ease,
+                        margin: EdgeInsets.only(
+                          top: archiveOpened ? 0 : 39,
+                        ),
+                        child: Column(
+                          children: [
+                            const SeparatorLine(),
+                            Expanded(
+                              child: ChatListsManager(
+                                client: client,
+                                onChatRevert: onChatRevert,
+                              ),
                             ),
-                          )
-                        ],
+                          ],
+                        ),
                       );
                     },
-                  ),
+                  )
                 ],
               ),
             )

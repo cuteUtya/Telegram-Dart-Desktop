@@ -52,14 +52,18 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
       ),
     ) as Messages;
 
-    setState(() {
-      if (messages == null) {
-        messages = msgs;
-      } else {
-        messages!.totalCount = messages!.totalCount! + msgs.totalCount!;
-        messages!.messages!.addAll(msgs.messages!);
-      }
-    });
+    if (mounted) {
+      setState(
+        () {
+          if (messages == null) {
+            messages = msgs;
+          } else {
+            messages!.totalCount = messages!.totalCount! + msgs.totalCount!;
+            messages!.messages!.addAll(msgs.messages!);
+          }
+        },
+      );
+    }
   }
 
   void listenNewMessage() {
@@ -148,23 +152,32 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                 msg.content = update.newContent;
               }
             }
-            var previus = (index - 1 < 0 ? null : messages!.messages![index - 1]);
-            var next = (index + 1 >= messages!.messages!.length ? null : messages!.messages![index + 1]);
+            var previus =
+                (index - 1 < 0 ? null : messages!.messages![index - 1]);
+            var next = (index + 1 >= messages!.messages!.length
+                ? null
+                : messages!.messages![index + 1]);
 
-            var prevDate = previus == null ? null : unixToDateTime(previus.date!);
+            var prevDate =
+                previus == null ? null : unixToDateTime(previus.date!);
             var currDate = unixToDateTime(msg.date!);
             var nextDate = next == null ? null : unixToDateTime(next.date!);
 
             bool showDateBelow = prevDate != null &&
-                (prevDate.day != currDate.day || prevDate.month != currDate.month || prevDate.year != currDate.year);
+                (prevDate.day != currDate.day ||
+                    prevDate.month != currDate.month ||
+                    prevDate.year != currDate.year);
 
             bool showDateAbove = nextDate != null &&
-                (nextDate.day != currDate.day || nextDate.month != currDate.month || nextDate.year != currDate.year);
+                (nextDate.day != currDate.day ||
+                    nextDate.month != currDate.month ||
+                    nextDate.year != currDate.year);
 
             var prevSenderId = getSenderId(previus?.senderId);
             var nextSenderId = getSenderId(next?.senderId);
             var currSenderId = getSenderId(msg.senderId);
-            BubbleRelativePosition bubbleRelativePosition = BubbleRelativePosition.single;
+            BubbleRelativePosition bubbleRelativePosition =
+                BubbleRelativePosition.single;
             if (currSenderId == nextSenderId && currSenderId == prevSenderId) {
               if (showDateAbove && showDateBelow) {
                 bubbleRelativePosition = BubbleRelativePosition.single;
@@ -185,8 +198,10 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
               }
             }
 
-            var adminInfo = admins.firstWhereOrNull((element) => element.userId == getSenderId(msg.senderId!));
-            bool isServiceMessage = serviceMessages.contains(msg.content.runtimeType);
+            var adminInfo = admins.firstWhereOrNull(
+                (element) => element.userId == getSenderId(msg.senderId!));
+            bool isServiceMessage =
+                serviceMessages.contains(msg.content.runtimeType);
             int spacerFlex = UIManager.isMobile
                 ? msg.content is MessageContent && msg.replyToMessageId == 0
                     ? 1
@@ -197,7 +212,9 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
             return Column(
               children: [
                 if (nextDate == null)
-                  Container(margin: const EdgeInsets.only(bottom: 16), child: DateBubble(client: widget.client, date: currDate)),
+                  Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: DateBubble(client: widget.client, date: currDate)),
                 if (isServiceMessage)
                   Container(
                     margin: const EdgeInsets.only(bottom: 16),
@@ -211,21 +228,28 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                 else
                   Row(
                     children: [
-                      if (msg.isOutgoing! && !isServiceMessage) SafeSpacer(flex: spacerFlex),
+                      if (msg.isOutgoing! && !isServiceMessage)
+                        SafeSpacer(flex: spacerFlex),
                       Expanded(
                         flex: UIManager.isMobile ? 4 : 2,
                         child: FutureBuilder(
                           key: UniqueKey(),
-                          initialData: widget.client.getMessage(widget.chatId, msg.replyToMessageId!),
+                          initialData: widget.client
+                              .getMessage(widget.chatId, msg.replyToMessageId!),
                           future: msg.replyToMessageId == 0
                               ? null
                               : widget.client.send(GetMessage(
-                                  chatId: msg.replyInChatId == 0 ? chat.id : msg.replyInChatId, messageId: msg.replyToMessageId)),
+                                  chatId: msg.replyInChatId == 0
+                                      ? chat.id
+                                      : msg.replyInChatId,
+                                  messageId: msg.replyToMessageId)),
                           builder: (_, replieDate) {
                             return Container(
                               margin: EdgeInsets.only(
-                                  bottom: (bubbleRelativePosition == BubbleRelativePosition.bottom ||
-                                          bubbleRelativePosition == BubbleRelativePosition.single)
+                                  bottom: (bubbleRelativePosition ==
+                                              BubbleRelativePosition.bottom ||
+                                          bubbleRelativePosition ==
+                                              BubbleRelativePosition.single)
                                       ? 16
                                       : 4),
                               child: MessageDisplay(
@@ -233,7 +257,9 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                                 chat: chat,
                                 message: msg,
                                 isReplie: msg.replyToMessageId != 0,
-                                replieOn: replieDate.data is Message ? replieDate.data as Message : null,
+                                replieOn: replieDate.data is Message
+                                    ? replieDate.data as Message
+                                    : null,
                                 client: widget.client,
                                 onMessageDelete: () => setState(
                                   () => messages?.messages!.removeWhere(
@@ -242,7 +268,10 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                                 ),
                                 adminTitle: adminInfo != null
                                     ? (adminInfo.customTitle?.isEmpty ?? true)
-                                        ? widget.client.getTranslation(adminInfo.isOwner! ? "lng_owner_badge" : "lng_admin_badge")
+                                        ? widget.client.getTranslation(
+                                            adminInfo.isOwner!
+                                                ? "lng_owner_badge"
+                                                : "lng_admin_badge")
                                         : adminInfo.customTitle!
                                     : null,
                               ),
@@ -274,7 +303,8 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
 }
 
 class _widgetBuildProvider extends StatelessWidget {
-  const _widgetBuildProvider({Key? key, required this.onBuild}) : super(key: key);
+  const _widgetBuildProvider({Key? key, required this.onBuild})
+      : super(key: key);
   final Function onBuild;
   @override
   Widget build(BuildContext context) {

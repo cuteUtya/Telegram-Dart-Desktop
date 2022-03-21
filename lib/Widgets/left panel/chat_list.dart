@@ -22,12 +22,6 @@ class ChatListDisplay extends StatelessWidget {
   final ChatList chatList;
   final ScrollController? scrollController;
 
-  String _chatListStr(ChatList obj) {
-    if (obj is ChatListMain) return "m";
-    if (obj is ChatListArchive) return "a";
-    return "f${(obj as ChatListFilter).chatFilterId}";
-  }
-
   @override
   Widget build(BuildContext context) {
     bool addArchive = chatList is ChatListMain;
@@ -40,6 +34,7 @@ class ChatListDisplay extends StatelessWidget {
           reverseScroll: true,
           itemCount: chats.length + (addArchive ? 1 : 0),
           scrollController: scrollController,
+          cacheExtent: 200,
           itemBuilder: (_, index) {
             if (addArchive) {
               if (index == 0) {
