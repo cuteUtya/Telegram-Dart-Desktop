@@ -68,6 +68,39 @@ class ChatDisplay extends StatelessWidget {
                 return const SizedBox.shrink();
               },
             ),
+          Column(
+            children: [
+              ActionBarDisplay(
+                key: Key("actionBarDisplay?chatId=$chatId"),
+                client: client,
+                chat: chat,
+                onChatRevert: onChatRevert,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: MessageList(
+                    key: Key("chat?chatId=$chatId"),
+                    chatId: chat.id!,
+                    client: client,
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(
+                  bottom: 12,
+                  right: 12,
+                  left: 12,
+                ),
+                child: InputField(
+                  key: Key("inputField?chatId=$chatId"),
+                  client: client,
+                  chatId: chat.id ?? 0,
+                ),
+              )
+            ],
+          )
+          /*
           Container(
             margin: UIManager.useDesktopLayout
                 ? const EdgeInsets.fromLTRB(108, 0, 108, 24)
@@ -75,32 +108,14 @@ class ChatDisplay extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: MessageList(
-                      key: Key("chat?chatId=$chatId"),
-                      chatId: chat.id!,
-                      client: client,
-                    ),
-                  ),
-                ),
-                InputField(
-                  key: Key("inputField?chatId=$chatId"),
-                  client: client,
-                  chatId: chat.id ?? 0,
-                ),
+                
               ],
             ),
           ),
           Container(
             alignment: Alignment.topCenter,
-            child: ActionBarDisplay(
-              client: client,
-              chat: chat,
-              onChatRevert: onChatRevert,
-            ),
-          ),
+            child: 
+          ),*/
         ],
       ),
     );

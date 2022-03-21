@@ -37,7 +37,6 @@ class ActionBarDisplay extends StatelessWidget {
           children: [
             const SizedBox(height: 4),
             StreamBuilder(
-              key: UniqueKey(),
               stream: client.senderName(MessageSenderChat(chatId: chat.id)),
               initialData: client.getChatTitleSync(chat.id!),
               builder: (_, data) => ChatItemTitle(
@@ -62,7 +61,6 @@ class ActionBarDisplay extends StatelessWidget {
               )
             else if (user?.status != null)
               StreamBuilder(
-                key: UniqueKey(),
                 initialData: user!.status,
                 stream: client.statusOf(user.id!),
                 builder: (_, data) =>
@@ -70,7 +68,6 @@ class ActionBarDisplay extends StatelessWidget {
               )
             else
               StreamBuilder(
-                key: UniqueKey(),
                 stream: client.onlineMemebersIn(chat.id!),
                 builder: (_, data) {
                   var onlineCount = (data.data ?? 0) as int;
@@ -96,25 +93,24 @@ class ActionBarDisplay extends StatelessWidget {
         height: 48,
         margin: const EdgeInsets.only(left: 12),
         child: TextButton(
-          style: ButtonStyle(
-            overlayColor: MaterialStateProperty.resolveWith((states) {
-              if (states.contains(MaterialState.pressed)) {
-                return ClientTheme.currentTheme.getField("CloseChatClickColor");
-              }
-              return Colors.transparent;
-            }),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return ClientTheme.currentTheme.getField("CloseChatClickColor");
+                }
+                return Colors.transparent;
+              }),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
               ),
             ),
-          ),
-          child: Icon(
-            Icons.arrow_back,
-            color: ClientTheme.currentTheme.getField("CloseChatIconColor"),
-          ),
-          onPressed: onChatRevert
-        ),
+            child: Icon(
+              Icons.arrow_back,
+              color: ClientTheme.currentTheme.getField("CloseChatIconColor"),
+            ),
+            onPressed: onChatRevert),
       )
     ]);
   }
