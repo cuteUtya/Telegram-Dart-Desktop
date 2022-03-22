@@ -52,7 +52,7 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
           CheckMark(
             isReaded: checkMarkValue!,
             color: color,
-            size: 20,
+            size: 18,
           ),
       ],
     );

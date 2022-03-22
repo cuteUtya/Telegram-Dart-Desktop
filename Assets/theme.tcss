@@ -146,7 +146,7 @@ RepliesMessageIconColor: #FFFFFFFF;
 MessageTextColor(theme=light): #151515;
 MessageTextColor(theme=dark): #F1F1F1;
 MessageBubbleMineColor(theme=light): #E6FEE4;
-MessageBubbleMineColor(theme=dark): ref(ChatCurrentlySelectedColor);
+MessageBubbleMineColor(theme=dark): #3a6f98;
 MessageBubbleOtherColor(theme=light): ref(BaseColor);
 MessageBubbleOtherColor(theme=dark): #213041;
 MessageInfoBubbleColor: #2A151515;

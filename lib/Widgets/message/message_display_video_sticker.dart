@@ -64,6 +64,7 @@ class _MessageDisplayVideoStickerState extends State<MessageDisplayVideoSticker>
             player: player,
             height: widget.sticker.height!.toDouble(),
             width: widget.sticker.width!.toDouble(),
+            playlistLength: 1,
             showControls: false,
           );
         }

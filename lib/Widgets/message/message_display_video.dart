@@ -133,6 +133,7 @@ class _MessageDisplayVideoState extends StateWithStreamsSubscriptions<MessageDis
                       child: vlc.Video(
                         key: Key("video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
                         player: player,
+                        playlistLength: 1,
                         width: contentWidth,
                         height: contentHeight,
                         showControls: false,
