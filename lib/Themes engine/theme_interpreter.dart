@@ -21,7 +21,7 @@ class ClientTheme {
   static const String linesSeparator = ';';
   static const String valueSeparator = ':';
   final Map<String, Function> environmentVariables = {
-    "theme": () => "light",
+    "theme": () => "dark",
     "layout": () => UIManager.useDesktopLayout ? "desktop" : "mobile"
   };
   final Map<String, List<_themeValue>> lines = {};

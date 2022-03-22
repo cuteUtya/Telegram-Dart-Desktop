@@ -22,7 +22,7 @@ class MacMessageBubble extends StatelessWidget {
   final bool overridePadding;
   final BubbleRelativePosition position;
 
-  static const EdgeInsets padding = EdgeInsets.symmetric(vertical: 6, horizontal: 12);
+  static const EdgeInsets padding = EdgeInsets.symmetric(vertical: 8, horizontal: 14);
 
   @override
   Widget build(BuildContext context) => MessageBubble(

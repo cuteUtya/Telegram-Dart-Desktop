@@ -45,6 +45,9 @@ flutter:
   - family: TwitterColorEmoji
     fonts: 
         - asset: fonts/Emoji/TwitterColorEmoji.ttf
+  - family: SFPro
+    fonts: 
+        - asset: fonts/SF Pro/SFProDisplay-Regular.ttf
   - family: AppleColorEmoji
     fonts: 
         - asset: fonts/Emoji/AppleColorEmoji.ttf

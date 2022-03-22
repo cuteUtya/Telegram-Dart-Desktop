@@ -20,8 +20,8 @@ class TextDisplay {
   static TextStyle get bold18 => create(size: 18, fontWeight: FontWeight.bold);
   static TextStyle get bold20 => create(size: 20, fontWeight: FontWeight.bold);
   static TextStyle get actionBarOffline => create(size: 16, textColor: ClientTheme.currentTheme.getField("ActionBarTextColor"));
-  static const String greaterImportance = "Ubuntu";
-  static const String regular = "SourceSansPro";
+  static const String greaterImportance = "SFPro";
+  static const String regular = "SFPro";
   static const String monospace = "CodeSourcePro";
 
   static TextStyle get chatTittleSelected => create(
@@ -185,7 +185,7 @@ class TextDisplay {
               color: ClientTheme.hexToColor(
                 hex,
                 // TODO maybe have sense to put it in settings
-                useARGB: false,
+                useARGB: true,
               ),
               borderRadius: const BorderRadius.all(
                 Radius.circular(4),
@@ -194,7 +194,7 @@ class TextDisplay {
           );
           if (interactiveEnable) {
             colorSquare = Tooltip(
-              triggerMode: TooltipTriggerMode.tap,
+                triggerMode: TooltipTriggerMode.tap,
                 message: UIManager.isMobile ? "Color copied" : "Click to copy",
                 //TODO put it colors to theme
                 textStyle: create(size: 14, textColor: Colors.white),
