@@ -132,7 +132,18 @@ class InputFieldState extends State<InputField> {
       /// on first open [deleteButtonSizerKey] was not be attached to any widget
       Future.delayed(Duration.zero, () => showDeletebutton());
     }
+    initTextController();
+
     super.initState();
+  }
+
+  void initTextController() {
+    var chat = widget.client.getChat(widget.chatId);
+    String draftText = "";
+    if (chat.draftMessage?.inputMessageText is InputMessageText) {
+      draftText = (chat.draftMessage?.inputMessageText as InputMessageText).text!.text!;
+    }
+    textController = TextEditingController(text: draftText);
   }
 
   @override
@@ -142,13 +153,6 @@ class InputFieldState extends State<InputField> {
     var borderRadius = const Radius.circular(16);
     var dropZoneHeight = 180.0;
     var genericFilesWidth = 240.0;
-
-    var chat = widget.client.getChat(widget.chatId);
-    String draftText = "";
-    if (chat.draftMessage?.inputMessageText is InputMessageText) {
-      draftText = (chat.draftMessage?.inputMessageText as InputMessageText).text!.text!;
-    }
-    textController = TextEditingController(text: draftText);
 
     if (uploadedFiles.isEmpty) {
       hideDeleteButton();
