@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/Widgets/blured_widget.dart';
 
 /// Wrapper for [content] that will be displayed besides of main message part
 /// most offen its info about time and read status in gifs, stickers, images, other non-text content
@@ -32,11 +35,15 @@ class MessageInfoBubbleBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(padding: padding, child: content),
-      decoration: BoxDecoration(
+    return BackgroundBlur(
+      radius: radius,
+      blur: ImageFilter.blur(
+        sigmaX: 8,
+        sigmaY: 8,
+      ),
+      child: Container(
+        child: Padding(padding: padding, child: content),
         color: ClientTheme.currentTheme.getField("MessageInfoBubbleColor"),
-        borderRadius: radius,
       ),
     );
   }
