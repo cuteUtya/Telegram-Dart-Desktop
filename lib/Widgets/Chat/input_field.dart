@@ -66,11 +66,14 @@ class InputFieldState extends State<InputField> {
   void saveAttachments() {
     var oldData = widget.client.getClientData(widget.chatId);
     oldData.unsentAttachments = uploadedFiles.map((e) => e.filePath).toList();
-    widget.client.send(SetChatClientData(chatId: widget.chatId, clientData: json.encode(oldData)));
+    widget.client.send(SetChatClientData(
+        chatId: widget.chatId, clientData: json.encode(oldData)));
   }
 
-  GlobalKey<WidgetSizerState> deleteButtonSizerKey = GlobalKey<WidgetSizerState>();
-  GlobalKey<WidgetOpacityContollerState> deleteButtonOpacityKey = GlobalKey<WidgetOpacityContollerState>();
+  GlobalKey<WidgetSizerState> deleteButtonSizerKey =
+      GlobalKey<WidgetSizerState>();
+  GlobalKey<WidgetOpacityContollerState> deleteButtonOpacityKey =
+      GlobalKey<WidgetOpacityContollerState>();
 
   void clearFiles() {
     setState(() => uploadedFiles.clear());
@@ -141,10 +144,13 @@ class InputFieldState extends State<InputField> {
     var chat = widget.client.getChat(widget.chatId);
     String draftText = "";
     if (chat.draftMessage?.inputMessageText is InputMessageText) {
-      draftText = (chat.draftMessage?.inputMessageText as InputMessageText).text!.text!;
+      draftText =
+          (chat.draftMessage?.inputMessageText as InputMessageText).text!.text!;
     }
     textController = TextEditingController(text: draftText);
   }
+
+  static const double iconsSize = 30;
 
   @override
   Widget build(BuildContext context) {
@@ -164,12 +170,14 @@ class InputFieldState extends State<InputField> {
           duration: animDuration,
           curve: Curves.decelerate,
           onEnd: () {
-            setState(() => dropZoneClosedInUI = !fileDragging && uploadedFiles.isEmpty);
+            setState(() =>
+                dropZoneClosedInUI = !fileDragging && uploadedFiles.isEmpty);
           },
           height: fileDragging || uploadedFiles.isNotEmpty ? dropZoneHeight : 0,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: ClientTheme.currentTheme.getField("InputFileDropZoneBackgroundColor"),
+            color: ClientTheme.currentTheme
+                .getField("InputFileDropZoneBackgroundColor"),
             borderRadius: BorderRadius.vertical(
               top: borderRadius,
               bottom: Radius.zero,
@@ -183,7 +191,8 @@ class InputFieldState extends State<InputField> {
                     ),
                     style: TextDisplay.create(
                       size: 42,
-                      textColor: ClientTheme.currentTheme.getField("DropHereDropZoneTextColor"),
+                      textColor: ClientTheme.currentTheme
+                          .getField("DropHereDropZoneTextColor"),
                     ),
                   )
                 : Padding(
@@ -197,7 +206,11 @@ class InputFieldState extends State<InputField> {
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Color.fromARGB((animation.value * 128).toInt(), 0, 0, 0),
+                                    color: Color.fromARGB(
+                                        (animation.value * 128).toInt(),
+                                        0,
+                                        0,
+                                        0),
                                     blurRadius: 6,
                                     offset: const Offset(1, 1),
                                   )
@@ -220,10 +233,15 @@ class InputFieldState extends State<InputField> {
                           children: [
                             for (final file in uploadedFiles)
                               ReorderableDragStartListener(
-                                key: Key("attachedObject?id=${uploadedFiles.indexOf(file)}"),
+                                key: Key(
+                                    "attachedObject?id=${uploadedFiles.indexOf(file)}"),
                                 index: uploadedFiles.indexOf(file),
                                 child: Container(
-                                  margin: EdgeInsets.only(right: uploadedFiles.indexOf(file) == uploadedFiles.length ? 0 : 8),
+                                  margin: EdgeInsets.only(
+                                      right: uploadedFiles.indexOf(file) ==
+                                              uploadedFiles.length
+                                          ? 0
+                                          : 8),
                                   child: WidgetOpacityContoller(
                                     key: file.opacityKey,
                                     onEnd: () => setState(() {
@@ -233,10 +251,12 @@ class InputFieldState extends State<InputField> {
                                     duration: const Duration(milliseconds: 100),
                                     child: _FileDisplay(
                                       file: file.filePath,
-                                      borderRadius: BorderRadius.all(borderRadius),
+                                      borderRadius:
+                                          BorderRadius.all(borderRadius),
                                       width: genericFilesWidth,
                                       height: box.maxHeight,
-                                      onDelete: () => setState(() => deleteFile(file)),
+                                      onDelete: () =>
+                                          setState(() => deleteFile(file)),
                                     ),
                                   ),
                                 ),
@@ -249,10 +269,13 @@ class InputFieldState extends State<InputField> {
         if (!dropZoneClosedInUI || fileDragging) SeparatorLine(),
         Container(
           decoration: BoxDecoration(
-            color: ClientTheme.currentTheme.getField("ChatInputFieldBackgroundColor"),
+            color: ClientTheme.currentTheme
+                .getField("ChatInputFieldBackgroundColor"),
             borderRadius: BorderRadius.vertical(
               bottom: borderRadius,
-              top: dropZoneClosedInUI && uploadedFiles.isEmpty && !fileDragging ? borderRadius : Radius.zero,
+              top: dropZoneClosedInUI && uploadedFiles.isEmpty && !fileDragging
+                  ? borderRadius
+                  : Radius.zero,
             ),
           ),
           child: Padding(
@@ -273,8 +296,9 @@ class InputFieldState extends State<InputField> {
                     sizeOnInit: Size.zero,
                     child: ButtonIcon(
                       Icons.delete,
-                      size: 36,
-                      color: ClientTheme.currentTheme.getField("DropZoneClearAllButtonColor"),
+                      size: iconsSize,
+                      color: ClientTheme.currentTheme
+                          .getField("DropZoneClearAllButtonColor"),
                       onClick: () => clearFiles(),
                     ),
                   ),
@@ -282,11 +306,12 @@ class InputFieldState extends State<InputField> {
                 ButtonIcon(
                   Icons.attach_file,
                   color: iconColor,
-                  size: 36,
+                  size: iconsSize,
                   onClick: () {
                     FilePicker.platform
                         .pickFiles(
-                      dialogTitle: widget.client.getTranslation("lng_choose_file"),
+                      dialogTitle:
+                          widget.client.getTranslation("lng_choose_file"),
                       allowMultiple: true,
                     )
                         .then(
@@ -303,14 +328,17 @@ class InputFieldState extends State<InputField> {
                     child: TextField(
                       controller: textController,
                       decoration: InputDecoration.collapsed(
-                        hintText: widget.client.getTranslation("lng_message_ph"),
+                        hintText:
+                            widget.client.getTranslation("lng_message_ph"),
                         hintStyle: TextDisplay.create(
-                          textColor: ClientTheme.currentTheme.getField("InputFieldTextColor"),
+                          textColor: ClientTheme.currentTheme
+                              .getField("InputFieldTextColor"),
                         ),
                       ),
                       style: TextStyle(
-                        fontSize: 20,
-                        color: ClientTheme.currentTheme.getField("InputFieldTextColor"),
+                        fontSize: 18,
+                        color: ClientTheme.currentTheme
+                            .getField("InputFieldTextColor"),
                         fontFamily: TextDisplay.regular,
                         fontFamilyFallback: [
                           TextDisplay.getEmojiFont(),
@@ -330,7 +358,7 @@ class InputFieldState extends State<InputField> {
                   ),
                 ),
                 Container(
-                  height: 36,
+                  height: iconsSize,
                   alignment: Alignment.bottomCenter,
                   child: ContextMenuRegion(
                     placeHolderKey: emojiPanelPlaceholderKey,
@@ -346,7 +374,7 @@ class InputFieldState extends State<InputField> {
                       ButtonIcon(
                         Icons.emoji_emotions_outlined,
                         color: iconColor,
-                        size: 36,
+                        size: iconsSize,
                       )
                     ]),
                   ),
@@ -355,7 +383,7 @@ class InputFieldState extends State<InputField> {
                 ButtonIcon(
                   Icons.send,
                   color: iconColor,
-                  size: 36,
+                  size: iconsSize,
                   onClick: () => sendMessage(),
                 ),
               ],
@@ -363,8 +391,7 @@ class InputFieldState extends State<InputField> {
           ),
         ),
       ],
-    ); //),
-    // );
+    );
   }
 }
 
