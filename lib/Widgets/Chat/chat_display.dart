@@ -20,85 +20,89 @@ class ChatDisplay extends StatelessWidget {
   final int chatId;
   final VoidCallback? onChatRevert;
 
-  static const bool tw1nkleeModeEnable = true;
+  static const bool tw1nkleeModeEnable = false;
 
   @override
   Widget build(BuildContext context) {
     var chat = client.getChat(chatId);
     return Stack(
-        children: [
-          if (tw1nkleeModeEnable)
-            BackgroundDisplay(
-              client: client,
-              background: Background(
-                type: BackgroundTypeFill(
-                  fill: BackgroundFillSolid(
-                    color: (ClientTheme.currentTheme.getField("tw1nkleeModeBackgroundColor") as Color).value,
-                  ),
+      children: [
+        if (tw1nkleeModeEnable)
+          BackgroundDisplay(
+            client: client,
+            background: Background(
+              type: BackgroundTypeFill(
+                fill: BackgroundFillSolid(
+                  color: (ClientTheme.currentTheme
+                          .getField("tw1nkleeModeBackgroundColor") as Color)
+                      .value,
                 ),
+              ),
+            ),
+          )
+        else
+          StreamBuilder(
+            stream: client.selectedBackground,
+            builder: (_, data) {
+              bool useDark =
+                  ClientTheme.currentTheme.environmentVariables["theme"]!() ==
+                      "dark";
+              var background = client.getCachedBackground(useDark);
+              if (background == null) {
+                client.send(GetBackgrounds()).then(
+                      (backs) => client.send(
+                        SetBackground(
+                          forDarkTheme: useDark,
+                          background: InputBackgroundRemote(
+                            backgroundId: backs is Backgrounds
+                                ? backs.backgrounds![3].id!
+                                : (backs as Background).id!,
+                          ),
+                        ),
+                      ),
+                    );
+                return const SizedBox.shrink();
+              }
+              return BackgroundDisplay(
+                client: client,
+                //TODO correct work with dark and light themes
+                background: background,
+              );
+            },
+          ),
+        Column(
+          children: [
+            ActionBarDisplay(
+              key: Key("actionBarDisplay?chatId=$chatId"),
+              client: client,
+              chat: chat,
+              onChatRevert: onChatRevert,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: MessageList(
+                  key: Key("chat?chatId=$chatId"),
+                  chatId: chat.id!,
+                  client: client,
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(
+                bottom: 8,
+                right: 8,
+                left: 8,
+              ),
+              child: InputField(
+                key: Key("inputField?chatId=$chatId"),
+                client: client,
+                chatId: chat.id!,
               ),
             )
-          else
-            StreamBuilder(
-              stream: client.selectedBackground,
-              builder: (_, data) {
-                if (data.hasData) {
-                  var update = data.data == null ? null : data.data as UpdateSelectedBackground;
-                  if (update?.background == null) {
-                    client.send(GetBackgrounds()).then(
-                          (backs) => client.send(
-                            SetBackground(
-                              forDarkTheme: update?.forDarkTheme,
-                              background: InputBackgroundRemote(
-                                backgroundId: backs is Backgrounds ? backs.backgrounds![0].id! : (backs as Background).id!,
-                              ),
-                            ),
-                          ),
-                        );
-                    return const SizedBox.shrink();
-                  }
-                  return BackgroundDisplay(
-                    client: client,
-                    //TODO correct work with dark and light themes
-                    background: (data.data as UpdateSelectedBackground).background!,
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          Column(
-            children: [
-              ActionBarDisplay(
-                key: Key("actionBarDisplay?chatId=$chatId"),
-                client: client,
-                chat: chat,
-                onChatRevert: onChatRevert,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: MessageList(
-                    key: Key("chat?chatId=$chatId"),
-                    chatId: chat.id!,
-                    client: client,
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                  bottom: 8,
-                  right: 8,
-                  left: 8,
-                ),
-                child: InputField(
-                  key: Key("inputField?chatId=$chatId"),
-                  client: client,
-                  chatId: chat.id!,
-                ),
-              )
-            ],
-          )
-        ],
+          ],
+        )
+      ],
     );
   }
 }

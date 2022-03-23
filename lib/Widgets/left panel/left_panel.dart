@@ -7,6 +7,7 @@ import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/tdlib/client.dart';
+import 'package:myapp/tdlib/td_api.dart';
 
 class LeftPanel extends StatelessWidget {
   const LeftPanel({
@@ -17,6 +18,8 @@ class LeftPanel extends StatelessWidget {
 
   final TelegramClient client;
   final VoidCallback? onChatRevert;
+
+  static int i = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,18 @@ class LeftPanel extends StatelessWidget {
                 Icons.menu,
                 size: 36,
                 color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
+                onClick: () => client.send(GetBackgrounds()).then(
+                      (backs) => client.send(
+                        SetBackground(
+                          forDarkTheme: true,
+                          background: InputBackgroundRemote(
+                            backgroundId: backs is Backgrounds
+                                ? backs.backgrounds![++i].id!
+                                : (backs as Background).id!,
+                          ),
+                        ),
+                      ),
+                    ),
               ),
               const SizedBox(width: 12),
               //search field

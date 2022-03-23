@@ -17,7 +17,9 @@ dependencies:
   lottie: ^1.2.1
   qr_flutter: ^4.0.0
   file_picker: ^4.2.4
-  flutter_svg: ^1.0.0
+  flutter_svg: 
+    git:
+      url: https://github.com/cuteUtya/flutter_svg.git
   url_launcher: ^6.0.18 
   libwinmedia: ^0.0.1
   dart_vlc: ^0.1.8
