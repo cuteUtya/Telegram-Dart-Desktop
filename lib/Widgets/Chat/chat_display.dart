@@ -66,7 +66,9 @@ class ChatDisplay extends StatelessWidget {
                         );
                     return const SizedBox.shrink();
                   }
+
                   return BackgroundDisplay(
+                    key: Key("background?hashCode=${background.hashCode}"),
                     client: client,
                     //TODO correct work with dark and light themes
                     background: background,
