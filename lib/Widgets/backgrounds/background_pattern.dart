@@ -1,5 +1,13 @@
+import 'dart:typed_data';
+import 'dart:io' as io;
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
+import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 import 'package:myapp/Widgets/backgrounds/background_fill.dart';
@@ -16,58 +24,118 @@ class BackgroundPatternDisplay extends StatelessWidget {
   final TelegramClient client;
   final Document file;
 
-  static const double patternWidth = 600;
-
   @override
   Widget build(BuildContext context) {
-    //TODO support background.type.isInterted
+    pattern.isInverted =
+        ClientTheme.currentTheme.environmentVariables["theme"]!() == "dark";
 
-    ///its 1440 2960 always, yep 😅?
-    var height = 2960 / (1440 / patternWidth);
-    Widget svg = FileImageDisplay(
-      width: patternWidth,
-      height: height,
-      tgvColor:
-          Color.fromARGB(((pattern.intensity ?? 50) * 2.55).toInt(), 0, 0, 0),
-      isTGV: file.mimeType == "application/x-tgwallpattern",
-      id: file.document!.id!,
-      client: client,
-    );
+    print(pattern.toJson());
 
     return LayoutBuilder(
       builder: (_, box) {
-        int rows = ((box.maxWidth / patternWidth) + 1).toInt();
-        int columns = ((box.maxHeight / height) + 1).toInt();
-        var row = SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (int i = 0; i < rows; i++) svg,
-            ],
-          ),
+        Widget svgWidget = RemoteFileBuilder(
+          builder: (_, path) {
+            var file = io.File(path);
+            var bytes = Uint8List.fromList(
+              io.gzip.decode(
+                file.readAsBytesSync().toList(),
+              ),
+            );
+            var colors = BackgroundFillDisplay.getColorsFromFill(
+              pattern.fill!,
+            );
+
+            var fillColor = Colors.black.withOpacity(pattern.intensity! / 100);
+            if (colors.length == 1) colors.add(colors[0]);
+
+            var gradient = LinearGradient(
+              colors: pattern.isInverted! ? colors : [fillColor, fillColor],
+            );
+            return FittedBox(
+              fit: BoxFit.fill,
+              clipBehavior: Clip.antiAlias,
+              child: SizedBox(
+                width: box.maxWidth,
+                height: box.maxHeight,
+                child: ShaderedSVG(
+                  image: bytes,
+                  shaderCallback: (rect) => gradient.createShader(rect),
+                ),
+              ),
+            );
+          },
+          fileId: file.document!.id!,
+          client: client,
         );
 
-        Widget child;
-        if (height < box.maxHeight) {
-          child = ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              for (int i = 0; i < columns; i++) row,
-            ],
-          );
-        } else {
-          child = row;
-        }
         return Stack(
           children: [
-            BackgroundFillDisplay(
-              fill: pattern.fill!,
-            ),
-            child,
+            if (!pattern.isInverted!)
+              BackgroundFillDisplay(
+                fill: pattern.fill!,
+              ),
+            svgWidget,
           ],
         );
       },
+    );
+  }
+}
+
+class ShaderedSVG extends StatefulWidget {
+  const ShaderedSVG({
+    Key? key,
+    required this.image,
+    required this.shaderCallback,
+    this.blendMode = BlendMode.srcATop,
+  }) : super(key: key);
+  final Uint8List image;
+  final Shader Function(Rect)? shaderCallback;
+  final BlendMode blendMode;
+
+  @override
+  State<StatefulWidget> createState() => ShaderedSVGState();
+}
+
+class ShaderedSVGState extends State<ShaderedSVG> {
+  Widget? _image;
+
+  void loadImage() async {
+    var svgRoot =
+        await svg.fromSvgBytes(widget.image, "${widget.image.length}");
+    var picture = svgRoot.toPicture();
+    var image = await picture.toImage(
+      svgRoot.viewport.viewBox.width.toInt(),
+      svgRoot.viewport.viewBox.height.toInt(),
+    );
+    setState(
+      () => _image = RawImage(
+        image: image,
+        repeat: ImageRepeat.repeatX,
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    loadImage();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_image == null) {
+      return const SizedBox();
+    }
+
+    return Container(
+      child: widget.shaderCallback == null
+          ? _image
+          : ShaderMask(
+              blendMode: widget.blendMode,
+              shaderCallback: widget.shaderCallback!,
+              child: _image,
+            ),
     );
   }
 }

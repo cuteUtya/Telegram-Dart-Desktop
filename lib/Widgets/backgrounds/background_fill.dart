@@ -4,46 +4,47 @@ import 'package:myapp/tdlib/td_api.dart';
 class BackgroundFillDisplay extends StatelessWidget {
   const BackgroundFillDisplay({Key? key, required this.fill}) : super(key: key);
   final BackgroundFill fill;
+
   @override
   Widget build(BuildContext context) {
+    var colors = getColorsFromFill(fill);
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: colors,
+          transform: const GradientRotation(50 * 3.14 / 180),
+        ),
+      ),
+    );
+  }
+
+  static List<Color> getColorsFromFill(BackgroundFill fill) {
+    List<Color> colors = [];
     switch (fill.runtimeType) {
       case BackgroundFillFreeformGradient:
-        var colors = (fill as BackgroundFillFreeformGradient).colors!.map(
+        colors = (fill as BackgroundFillFreeformGradient).colors!.map(
           (n) {
             var clr = Color(n);
             return Color.fromRGBO(clr.red, clr.green, clr.blue, 1);
           },
         ).toList();
-        return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: colors,
-              transform: const GradientRotation(50 * 3.14 / 180),
-            ),
-          ),
-        );
+        break;
       case BackgroundFillSolid:
-        return Container(
-          color: Color(
+        colors = [
+          Color(
             (fill as BackgroundFillSolid).color!,
-          ),
-        );
+          )
+        ];
+        break;
 
       case BackgroundFillGradient:
         var gradient = fill as BackgroundFillGradient;
-        //TODO rotate background when message was sended;
-        return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(gradient.bottomColor!),
-                Color(gradient.topColor!),
-              ],
-            ),
-          ),
-        );
+        colors = [
+          Color(gradient.bottomColor!),
+          Color(gradient.topColor!),
+        ];
+        break;
     }
-
-    throw Exception("Undefined type of BackgroundFill was used");
+    return colors;
   }
 }
