@@ -29,8 +29,6 @@ class BackgroundPatternDisplay extends StatelessWidget {
     pattern.isInverted =
         ClientTheme.currentTheme.environmentVariables["theme"]!() == "dark";
 
-    print(pattern.toJson());
-
     return LayoutBuilder(
       builder: (_, box) {
         Widget svgWidget = RemoteFileBuilder(
@@ -45,11 +43,14 @@ class BackgroundPatternDisplay extends StatelessWidget {
               pattern.fill!,
             );
 
-            var fillColor = Colors.black.withOpacity(pattern.intensity! / 100);
+            var intensity = pattern.intensity! / 100;
+            var fillColor = Colors.black.withOpacity(intensity);
             if (colors.length == 1) colors.add(colors[0]);
 
             var gradient = LinearGradient(
-              colors: pattern.isInverted! ? colors : [fillColor, fillColor],
+              colors: pattern.isInverted!
+                  ? colors.map((e) => e.withOpacity(intensity)).toList()
+                  : [fillColor, fillColor],
             );
             return FittedBox(
               fit: BoxFit.fill,
