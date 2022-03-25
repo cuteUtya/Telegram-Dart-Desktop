@@ -37,9 +37,14 @@ class ChatItemDisplay extends StatefulWidget {
   State<ChatItemDisplay> createState() => _ChatItemDisplayState();
 }
 
-class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDisplay> {
+class _ChatItemDisplayState
+    extends StateWithStreamsSubscriptions<ChatItemDisplay> {
   bool pinned(Chat chat) =>
-      chat.positions?.firstWhereOrNull((element) => chatListsEqual(element.list!, widget.chatList))?.isPinned ?? false;
+      chat.positions
+          ?.firstWhereOrNull(
+              (element) => chatListsEqual(element.list!, widget.chatList))
+          ?.isPinned ??
+      false;
 
   bool selected = false;
 
@@ -62,14 +67,22 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
 
   @override
   Widget build(BuildContext context) {
-    bool isSavedMessages = widget.chatId == widget.client.getOptionValue<OptionValueInteger>("my_id")?.value;
-    bool isReplieChat = widget.chatId == (widget.client.getOptionValue<OptionValueInteger>("replies_bot_chat_id")?.value);
+    bool isSavedMessages = widget.chatId ==
+        widget.client.getOptionValue<OptionValueInteger>("my_id")?.value;
+    bool isReplieChat = widget.chatId ==
+        (widget.client
+            .getOptionValue<OptionValueInteger>("replies_bot_chat_id")
+            ?.value);
     var initialChat = widget.client.getChat(widget.chatId);
-    bool isPrivate = initialChat.type is ChatTypePrivate || initialChat.type is ChatTypeSecret;
-    var interlocutorId = isPrivate ? (initialChat.type as dynamic).userId : null;
-    var interlocutor = interlocutorId == null ? null : widget.client.getUser(interlocutorId!);
+    bool isPrivate = initialChat.type is ChatTypePrivate ||
+        initialChat.type is ChatTypeSecret;
+    var interlocutorId =
+        isPrivate ? (initialChat.type as dynamic).userId : null;
+    var interlocutor =
+        interlocutorId == null ? null : widget.client.getUser(interlocutorId!);
     var supergroup = initialChat.type is ChatTypeSupergroup
-        ? widget.client.getSupergroup((initialChat.type as ChatTypeSupergroup).supergroupId!)
+        ? widget.client.getSupergroup(
+            (initialChat.type as ChatTypeSupergroup).supergroupId!)
         : null;
 
     return StreamBuilder(
@@ -84,49 +97,70 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
               Expanded(
                 child: isSavedMessages
                     ? ChatItemTitle(
-                        title: widget.client.getTranslation("lng_saved_messages"),
+                        title:
+                            widget.client.getTranslation("lng_saved_messages"),
                         selected: selected,
                       )
                     : ChatItemTitle(
                         selected: selected,
-                        isBot: interlocutor?.type is UserTypeBot && !isReplieChat,
+                        isBot:
+                            interlocutor?.type is UserTypeBot && !isReplieChat,
                         isChannel: (supergroup?.isChannel) ?? false,
-                        isChat: (supergroup != null && !(supergroup.isChannel ?? true)) || chat.type is ChatTypeBasicGroup,
-                        title:
-                            (interlocutor?.type is UserTypeDeleted) ? widget.client.getTranslation("lng_deleted") : chat.title!,
-                        isScam: chat.type is ChatTypeSupergroup ? supergroup?.isScam ?? false : interlocutor?.isScam ?? false,
+                        isChat: (supergroup != null &&
+                                !(supergroup.isChannel ?? true)) ||
+                            chat.type is ChatTypeBasicGroup,
+                        title: (interlocutor?.type is UserTypeDeleted)
+                            ? widget.client.getTranslation("lng_deleted")
+                            : chat.title!,
+                        isScam: chat.type is ChatTypeSupergroup
+                            ? supergroup?.isScam ?? false
+                            : interlocutor?.isScam ?? false,
                         isVerifed: supergroup?.isVerified ?? false,
                         isSupport: interlocutor?.isSupport ?? false,
                       ),
               ),
-              if (!isSavedMessages && (widget.client.getChat(widget.chatId).lastMessage?.isOutgoing ?? false))
+              if (!isSavedMessages &&
+                  (widget.client
+                          .getChat(widget.chatId)
+                          .lastMessage
+                          ?.isOutgoing ??
+                      false))
                 CheckMark(
-                  isReaded: (chat.lastMessage?.id ?? 0) <= chat.lastReadOutboxMessageId!,
+                  isReaded: (chat.lastMessage?.id ?? 0) <=
+                      chat.lastReadOutboxMessageId!,
                   selected: selected,
                 )
               else
                 const SizedBox.shrink(),
               const SizedBox(width: 2),
               Text(
-                chat.lastMessage == null ? "" : getMessageTime(chat.lastMessage as Message),
+                chat.lastMessage == null
+                    ? ""
+                    : getMessageTime(chat.lastMessage as Message),
                 textAlign: TextAlign.right,
                 style: TextDisplay.create(
                   size: 18,
-                  textColor: ClientTheme.currentTheme.getField(selected ? "SelectedChatLastTimedMessage" : "ChatLastTimeMessage"),
+                  textColor: ClientTheme.currentTheme.getField(selected
+                      ? "SelectedChatLastTimedMessage"
+                      : "ChatLastTimeMessage"),
                 ),
               )
             ],
           ),
           chatPic: isSavedMessages
               ? UserpicIcon(
-                  color: ClientTheme.currentTheme.getField("SaveMessagesBackColor"),
-                  iconColor: ClientTheme.currentTheme.getField("SaveMessageIconColor"),
+                  color: ClientTheme.currentTheme
+                      .getField("SaveMessagesBackColor"),
+                  iconColor:
+                      ClientTheme.currentTheme.getField("SaveMessageIconColor"),
                   icon: Icons.bookmarks_outlined,
                 )
               : isReplieChat
                   ? UserpicIcon(
-                      color: ClientTheme.currentTheme.getField("RepliesMessagesBackColor"),
-                      iconColor: ClientTheme.currentTheme.getField("RepliesMessageIconColor"),
+                      color: ClientTheme.currentTheme
+                          .getField("RepliesMessagesBackColor"),
+                      iconColor: ClientTheme.currentTheme
+                          .getField("RepliesMessageIconColor"),
                       icon: Icons.question_answer_outlined,
                     )
                   : Stack(
@@ -145,11 +179,13 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
                               client: widget.client,
                             ),
                           ),
-                          if (interlocutor != null && interlocutor.type is UserTypeRegular)
+                          if (interlocutor != null &&
+                              interlocutor.type is UserTypeRegular)
                             StreamBuilder(
                               stream: widget.client.statusOf(interlocutor.id!),
                               initialData: interlocutor.status,
-                              builder: (context, statusSnapshot) => OnlineIndicatorDidplay(
+                              builder: (context, statusSnapshot) =>
+                                  OnlineIndicatorDidplay(
                                 size: 20,
                                 selected: selected,
                                 online: statusSnapshot.data is UserStatusOnline,
@@ -169,21 +205,26 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
                 const SizedBox.shrink()
               else
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(
                       Radius.circular(16),
                     ),
-                    color: ClientTheme.currentTheme
-                        .getField(selected ? "ReactionsInChatlistBackgroundColorSelected" : "ReactionsInChatlistBackgroundColor"),
+                    color: ClientTheme.currentTheme.getField(selected
+                        ? "ReactionsInChatlistBackgroundColorSelected"
+                        : "ReactionsInChatlistBackgroundColor"),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        ClientTheme.currentTheme.getField("ReactionsInChatListIcon"),
+                        ClientTheme.currentTheme
+                            .getField("ReactionsInChatListIcon"),
                         color: ClientTheme.currentTheme.getField(
-                          selected ? "ReactionsInChatListIconColorSelected" : "ReactionsInChatListIconColor",
+                          selected
+                              ? "ReactionsInChatListIconColorSelected"
+                              : "ReactionsInChatListIconColor",
                         ),
                         size: 18,
                       ),
@@ -192,7 +233,9 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
                         chat.unreadReactionCount.toString(),
                         style: TextDisplay.create(
                           textColor: ClientTheme.currentTheme.getField(
-                            selected ? "ReactionsInChatListTextColorSelected" : "ReactionsInChatListTextColor",
+                            selected
+                                ? "ReactionsInChatListTextColorSelected"
+                                : "ReactionsInChatListTextColor",
                           ),
                           size: 18,
                         ),
@@ -217,7 +260,8 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
                 builder: (_, actionsSnapshow) {
                   Widget content;
                   if (actionsSnapshow.hasData) {
-                    var actions = actionsSnapshow.data as List<UpdateChatAction>;
+                    var actions =
+                        actionsSnapshow.data as List<UpdateChatAction>;
                     if (actions.isNotEmpty) {
                       content = ChatItemActionDisplay(
                         textColor: selected ? Colors.white : null,
@@ -233,8 +277,11 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
                     content = const Center();
                   } else {
                     content = MessageContentPreview(
+                      key: Key(
+                          "messagePreview?from=${chat.messageSenderId?.toJson()}"),
                       textColor: selected ? Colors.white : null,
-                      message: chat.draftMessage == null ? chat.lastMessage : null,
+                      message:
+                          chat.draftMessage == null ? chat.lastMessage : null,
                       draftMessage: chat.draftMessage,
                       fromChatType: chat.type!,
                       client: widget.client,
@@ -263,7 +310,9 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
           icon: pinned(chat)
               ? Icon(
                   Icons.push_pin,
-                  color: ClientTheme.currentTheme.getField(selected ? "SelectedChatPinIconColor" : "ChatPinIconColor"),
+                  color: ClientTheme.currentTheme.getField(selected
+                      ? "SelectedChatPinIconColor"
+                      : "ChatPinIconColor"),
                 )
               : null,
         );
@@ -277,7 +326,11 @@ class _ChatItemDisplayState extends StateWithStreamsSubscriptions<ChatItemDispla
     var now = DateTime.now();
     var deltaInDays = (DateTime.now().difference(time) +
             (const Duration(days: 1) -
-                Duration(hours: now.hour, minutes: now.minute, seconds: now.second, milliseconds: now.millisecond)))
+                Duration(
+                    hours: now.hour,
+                    minutes: now.minute,
+                    seconds: now.second,
+                    milliseconds: now.millisecond)))
         .inDays;
 
     if (deltaInDays <= 0) {
