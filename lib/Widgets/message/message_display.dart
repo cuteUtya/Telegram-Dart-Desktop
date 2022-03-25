@@ -52,14 +52,11 @@ class MessageDisplay extends StatelessWidget {
   final Function? onMessageDelete;
 
   Widget _buildInfoWidget(bool inline) => MessageInfoBubbleCheckMarkTime(
-        customInfo:
-            message.editDate == 0 ? null : client.getTranslation("lng_edited"),
+        customInfo: message.editDate == 0 ? null : client.getTranslation("lng_edited"),
         useBackground: !inline,
         isOutgoing: message.isOutgoing!,
         time: getHHMM(unixToDateTime(message.date!)),
-        checkMarkValue: message.isOutgoing!
-            ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0)
-            : null,
+        checkMarkValue: message.isOutgoing! ? message.id! <= (chat?.lastReadOutboxMessageId ?? 0) : null,
       );
 
   Widget? _buildReplieWidget(bool inline) => isReplie
@@ -93,18 +90,11 @@ class MessageDisplay extends StatelessWidget {
       builder: (_, senderData) {
         var author = senderData.data.toString();
         Widget contentWidget;
-        bool isChannel = chat?.type is ChatTypeSupergroup
-            ? (chat!.type as ChatTypeSupergroup).isChannel!
-            : false;
+        bool isChannel = chat?.type is ChatTypeSupergroup ? (chat!.type as ChatTypeSupergroup).isChannel! : false;
         bool showMessageSender = false;
-        if (bubbleRelativePosition == BubbleRelativePosition.top ||
-            bubbleRelativePosition == BubbleRelativePosition.single) {
-          if ((chat?.type is ChatTypeSupergroup ||
-                  chat?.type is ChatTypeBasicGroup) &&
-              !isChannel) {
-            if (!message.isOutgoing! ||
-                (message.isOutgoing! &&
-                    message.senderId is MessageSenderChat)) {
+        if (bubbleRelativePosition == BubbleRelativePosition.top || bubbleRelativePosition == BubbleRelativePosition.single) {
+          if ((chat?.type is ChatTypeSupergroup || chat?.type is ChatTypeBasicGroup) && !isChannel) {
+            if (!message.isOutgoing! || (message.isOutgoing! && message.senderId is MessageSenderChat)) {
               showMessageSender = true;
             }
           }
@@ -115,8 +105,7 @@ class MessageDisplay extends StatelessWidget {
 
         bool haveText = false;
         try {
-          haveText =
-              ((message.content as dynamic).caption?.text ?? "").isNotEmpty;
+          haveText = ((message.content as dynamic).caption?.text ?? "").isNotEmpty;
         } catch (_) {}
         switch (message.content.runtimeType) {
           case MessageText:
@@ -131,9 +120,7 @@ class MessageDisplay extends StatelessWidget {
               var totalEmojis = emojiTest.end - emojiTest.start;
               if (totalEmojis >= textUnwhitespaced.length && totalEmojis < 8) {
                 contentWidget = MessageDisplayTextEmojis(
-                  alignment: message.isOutgoing!
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
+                  alignment: message.isOutgoing! ? MainAxisAlignment.end : MainAxisAlignment.start,
                   emojis: textUnwhitespaced,
                   infoSide: message.isOutgoing! ? Side.left : Side.right,
                   messageInfo: _buildInfoWidget(false),
@@ -149,11 +136,8 @@ class MessageDisplay extends StatelessWidget {
               infoWidget: _buildInfoWidget(true),
               replieWidget: _buildReplieWidget(true),
               senderName: showMessageSender ? author : null,
-              adminTitle: bubbleRelativePosition ==
-                          BubbleRelativePosition.top ||
-                      bubbleRelativePosition == BubbleRelativePosition.single
-                  ? adminTitle
-                  : "",
+              adminTitle:
+                  bubbleRelativePosition == BubbleRelativePosition.top || bubbleRelativePosition == BubbleRelativePosition.single ? adminTitle : "",
             );
             break;
 
@@ -181,7 +165,7 @@ class MessageDisplay extends StatelessWidget {
               chatId: chat!.id!,
               message: message,
               client: client,
-              replieWidget: _buildReplieWidget(true),
+              replieWidget: _buildReplieWidget(false),
               infoWidget: _buildInfoWidget(false),
             );
             break;
@@ -213,8 +197,7 @@ class MessageDisplay extends StatelessWidget {
               text: client.getTranslation(
                 "lng_action_created_chat",
                 replacing: {
-                  "{title}":
-                      (message.content as MessageBasicGroupChatCreate).title!,
+                  "{title}": (message.content as MessageBasicGroupChatCreate).title!,
                   "{from}": author,
                 },
               ),
@@ -232,9 +215,7 @@ class MessageDisplay extends StatelessWidget {
           case MessageChatChangePhoto:
             contentWidget = Column(
               children: [
-                ServiceMessage(
-                    text: client.getTranslation("lng_action_changed_photo",
-                        replacing: {"{from}": author})),
+                ServiceMessage(text: client.getTranslation("lng_action_changed_photo", replacing: {"{from}": author})),
                 const SizedBox(height: 16),
                 ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
@@ -243,8 +224,7 @@ class MessageDisplay extends StatelessWidget {
                     height: 240,
                     child: Userpic(
                       shape: BoxShape.rectangle,
-                      chatPhoto:
-                          (message.content as MessageChatChangePhoto).photo,
+                      chatPhoto: (message.content as MessageChatChangePhoto).photo,
                       userId: chat?.id ?? 0,
                       userTitle: author,
                       client: client,
@@ -334,9 +314,7 @@ class MessageDisplay extends StatelessWidget {
             contentWidget = MessageDisplayText(
               client: client,
               message: message,
-              text: FormattedText(
-                  text:
-                      "🍆🍆🍆 Unsupported 🍆🍆🍆"), //message.toJson().toString()),
+              text: FormattedText(text: "🍆🍆🍆 Unsupported 🍆🍆🍆"), //message.toJson().toString()),
               infoWidget: _buildInfoWidget(true),
               replieWidget: _buildReplieWidget(true),
             );
@@ -344,19 +322,14 @@ class MessageDisplay extends StatelessWidget {
         }
 
         Widget? senderUserpic;
-        bool isChat = chat?.type is ChatTypeBasicGroup ||
-            (chat?.type is ChatTypeSupergroup
-                ? !(chat!.type as ChatTypeSupergroup).isChannel!
-                : false);
+        bool isChat = chat?.type is ChatTypeBasicGroup || (chat?.type is ChatTypeSupergroup ? !(chat!.type as ChatTypeSupergroup).isChannel! : false);
         bool showUserpic = isChat &&
             !message.isOutgoing! &&
-            (bubbleRelativePosition == BubbleRelativePosition.bottom ||
-                bubbleRelativePosition == BubbleRelativePosition.single);
+            (bubbleRelativePosition == BubbleRelativePosition.bottom || bubbleRelativePosition == BubbleRelativePosition.single);
         if (showUserpic) {
           switch (message.senderId.runtimeType) {
             case MessageSenderUser:
-              var senderUserId =
-                  (message.senderId as MessageSenderUser).userId!;
+              var senderUserId = (message.senderId as MessageSenderUser).userId!;
               var senderUser = client.getUser(senderUserId);
               senderUserpic = Userpic(
                 profilePhoto: senderUser.profilePhoto,
@@ -393,9 +366,7 @@ class MessageDisplay extends StatelessWidget {
         }
 
         var senderId = getSenderId(message.senderId);
-        if (bubbleRelativePosition == BubbleRelativePosition.middle ||
-            bubbleRelativePosition == BubbleRelativePosition.top ||
-            !wrapInBubble) {
+        if (bubbleRelativePosition == BubbleRelativePosition.middle || bubbleRelativePosition == BubbleRelativePosition.top || !wrapInBubble) {
           contentWidget = Container(
             child: contentWidget,
             margin: EdgeInsets.symmetric(horizontal: wrapInBubble ? 0 : 6),
@@ -409,8 +380,7 @@ class MessageDisplay extends StatelessWidget {
                 children: [
                   Stack(alignment: Alignment.bottomRight, children: [
                     senderUserpic ?? SizedBox(width: isChat ? 40 : 0),
-                    if (message.senderId is MessageSenderUser &&
-                        senderUserpic != null)
+                    if (message.senderId is MessageSenderUser && senderUserpic != null)
                       StreamBuilder(
                         initialData: client.getUser(senderId!).status,
                         stream: client.statusOf(senderId),
