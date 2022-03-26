@@ -60,13 +60,16 @@ class MessageDisplayText extends StatelessWidget {
     var contentText = text ?? (message.content as MessageText).text!;
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(contentText,
-            size: 20, interactiveEnable: true, onUrlClick: (s) => UrlsUtils.openLink(s)));
+            size: 20, interactiveEnable: true));
 
     return LayoutBuilder(builder: (context, boxCons) {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
-      var boxes = paragraph.getBoxesForSelection(TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));
-      final lastBox = boxes.lastOrNull ?? const TextBox.fromLTRBD(0, 0, 0, 0, TextDirection.ltr);
-      final fitsLastLine = boxCons.maxWidth - lastBox.right > msgInfoBubbleSize.width;
+      var boxes = paragraph.getBoxesForSelection(
+          TextSelection(baseOffset: 0, extentOffset: contentText.text!.length));
+      final lastBox = boxes.lastOrNull ??
+          const TextBox.fromLTRBD(0, 0, 0, 0, TextDirection.ltr);
+      final fitsLastLine =
+          boxCons.maxWidth - lastBox.right > msgInfoBubbleSize.width;
       return Stack(
         children: [
           /// fake text with title and admin titles that stratch message bubble1
@@ -105,7 +108,10 @@ class MessageDisplayText extends StatelessWidget {
               top: captionMargin?.top ?? 0,
               child: Text(
                 adminTitle!,
-                style: TextDisplay.create(size: 16, textColor: ClientTheme.currentTheme.getField("AdminTitleColor")),
+                style: TextDisplay.create(
+                    size: 16,
+                    textColor:
+                        ClientTheme.currentTheme.getField("AdminTitleColor")),
               ),
             ),
           if (infoWidget != null)
@@ -114,63 +120,78 @@ class MessageDisplayText extends StatelessWidget {
               bottom: -2 + (captionMargin?.bottom ?? 0),
               child: infoWidget!,
             ),
-          Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-            if (senderName != null)
-              Container(
-                margin: EdgeInsets.only(
-                  top: captionMargin?.top ?? 0,
-                  left: captionMargin?.left ?? 0,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextDisplay.parseEmojiInString(
-                            senderName!,
-                            TextDisplay.create(
-                              textColor: message.isOutgoing!
-                                  ? ClientTheme.currentTheme.getField("OutgoingChannelMessageTitleColor")
-                                  : getPeerColor(getSenderId(message.senderId!)!, 'b'),
-                              fontWeight: FontWeight.bold,
-                              size: 18,
-                              fontFamily: TextDisplay.greaterImportance,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            if (replieWidget != null)
-              Container(
-                margin: EdgeInsets.only(
-                  left: captionMargin?.left ?? 0,
-                  right: captionMargin?.right ?? 0,
-                  top: senderName == null ? captionMargin?.top ?? 0 : 0,
-                ),
-                child: replieWidget,
-              ),
-            if (additionalContent != null && additionalContentPlace == AdditionalContentPlace.top) additionalInfo,
-            if (contentText.text?.isNotEmpty ?? false)
-              Container(
-                child: Padding(
-                  padding: captionMargin?.add(EdgeInsets.only(top: -(captionMargin?.top ?? 0))) ?? EdgeInsets.zero,
-                  child: CopyableText(
-                    parsedEntetiyes,
+          Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (senderName != null)
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: captionMargin?.top ?? 0,
+                      left: captionMargin?.left ?? 0,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextDisplay.parseEmojiInString(
+                                senderName!,
+                                TextDisplay.create(
+                                  textColor: message.isOutgoing!
+                                      ? ClientTheme.currentTheme.getField(
+                                          "OutgoingChannelMessageTitleColor")
+                                      : getPeerColor(
+                                          getSenderId(message.senderId!)!, 'b'),
+                                  fontWeight: FontWeight.bold,
+                                  size: 18,
+                                  fontFamily: TextDisplay.greaterImportance,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                margin: EdgeInsets.only(
-                  bottom: boxCons.maxWidth - lastBox.right < msgInfoBubbleSize.width ? 16 : 0,
-                ),
-              ),
-            if (additionalContent != null && additionalContentPlace == AdditionalContentPlace.bottom) additionalInfo,
-          ]),
+                if (replieWidget != null)
+                  Container(
+                    margin: EdgeInsets.only(
+                      left: captionMargin?.left ?? 0,
+                      right: captionMargin?.right ?? 0,
+                      top: senderName == null ? captionMargin?.top ?? 0 : 0,
+                    ),
+                    child: replieWidget,
+                  ),
+                if (additionalContent != null &&
+                    additionalContentPlace == AdditionalContentPlace.top)
+                  additionalInfo,
+                if (contentText.text?.isNotEmpty ?? false)
+                  Container(
+                    child: Padding(
+                      padding: captionMargin?.add(EdgeInsets.only(
+                              top: -(captionMargin?.top ?? 0))) ??
+                          EdgeInsets.zero,
+                      child: CopyableText(
+                        parsedEntetiyes,
+                      ),
+                    ),
+                    margin: EdgeInsets.only(
+                      bottom: boxCons.maxWidth - lastBox.right <
+                              msgInfoBubbleSize.width
+                          ? 16
+                          : 0,
+                    ),
+                  ),
+                if (additionalContent != null &&
+                    additionalContentPlace == AdditionalContentPlace.bottom)
+                  additionalInfo,
+              ]),
           Container(
-            width: lastBox.right + (!fitsLastLine ? 0 : msgInfoBubbleSize.width + 12),
+            width: lastBox.right +
+                (!fitsLastLine ? 0 : msgInfoBubbleSize.width + 12),
           ),
         ],
       );
