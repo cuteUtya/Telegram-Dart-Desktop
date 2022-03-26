@@ -102,22 +102,6 @@ class TextDisplay {
     }
 
     return parsedText;
-    /*
-    
-
-      var entetyString = text.text!.substring(element.start, element.end);
-       else {
-        result.add(
-          parseToInline(entetyString),
-        );
-      }
-      if (str[element.start] != "-") {
-        entetieIndex++;
-      }
-    }
-
-    return result;
-    */
   }
 
   static InlineSpan parseEmojiInString(String text,
@@ -391,10 +375,5 @@ class _textEntety {
       add(0, text.length);
     }
     return strings;
-  }
-
-  @override
-  String toString() {
-    return "$from-$to";
   }
 }
