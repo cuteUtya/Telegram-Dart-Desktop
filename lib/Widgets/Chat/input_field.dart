@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 //import 'package:desktop_drop/desktop_drop.dart';
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
 import 'package:myapp/Widgets/button_icon.dart';
 import 'package:myapp/Widgets/display_text.dart';
@@ -33,20 +35,54 @@ class InputField extends StatefulWidget {
 class InputFieldState extends State<InputField> {
   late TextEditingController textController;
 
-  void sendMessage() {
-    if (textController.text.isNotEmpty) {
-      widget.client.send(
-        SendMessage(
-          chatId: widget.chatId,
-          inputMessageContent: InputMessageText(
-            text: widget.client.execute(ParseMarkdown(
-              text: FormattedText(text: textController.text),
-            )) as FormattedText,
+  Future<InputMessagePhoto?> createPhotoToUpload(
+      String path, FormattedText? caption) async {
+    var image = io.File(path);
+    var decodedImage = await decodeImageFromList(image.readAsBytesSync());
+
+    return InputMessagePhoto(
+      photo: InputFileLocal(path: path),
+      width: decodedImage.width,
+      height: decodedImage.height,
+      caption: caption,
+    );
+  }
+
+  void sendMessage() async {
+    //TODO add ability to send albums
+    //TODO also validate images before send it as image
+    if (textController.text.isNotEmpty || uploadedFiles.isNotEmpty) {
+      if (uploadedFiles.length <= 1) {
+        var text = widget.client.execute(
+          ParseMarkdown(
+            text: FormattedText(text: textController.text),
           ),
-        ),
+        ) as FormattedText;
+
+        var content = uploadedFiles.isEmpty
+            ? InputMessageText(
+                text: text,
+              )
+            : (sendAsFiles
+                ? InputMessageDocument(
+                    document: InputFileLocal(path: uploadedFiles[0].filePath),
+                    caption: text,
+                  )
+                : await createPhotoToUpload(uploadedFiles[0].filePath, text));
+        widget.client.send(
+          SendMessage(
+            chatId: widget.chatId,
+            inputMessageContent: content,
+          ),
+        );
+      }
+
+      setState(
+        () {
+          uploadedFiles.clear();
+          textController.clear();
+        },
       );
-      textController.clear();
-      textController.text = "";
     }
   }
 
@@ -54,6 +90,8 @@ class InputFieldState extends State<InputField> {
 
   bool fileDragging = false;
   bool dropZoneClosedInUI = true;
+  bool sendAsFiles = false;
+  bool groupItems = true;
 
   void onFileDragEnd() => setState(
         () {
@@ -164,7 +202,7 @@ class InputFieldState extends State<InputField> {
       hideDeleteButton();
     }
 
-    return Column(
+    Widget child = Column(
       children: [
         AnimatedContainer(
           duration: animDuration,
@@ -357,6 +395,39 @@ class InputFieldState extends State<InputField> {
                     ),
                   ),
                 ),
+                if (uploadedFiles.length >= 2)
+                  Tooltip(
+                    message: widget.client.getTranslation("lng_send_album"),
+                    textStyle: TextDisplay.create(size: 14),
+                    child: ButtonIcon(
+                      Icons.collections,
+                      size: iconsSize,
+                      color: groupItems
+                          ? ClientTheme.currentTheme.getField("Accent")
+                          : iconColor,
+                      onClick: () => setState(
+                        () => groupItems = !groupItems,
+                      ),
+                    ),
+                  ),
+                if (uploadedFiles.length >= 2) const SizedBox(width: 16),
+                if (uploadedFiles.isNotEmpty)
+                  Tooltip(
+                    message: widget.client.getTranslation(
+                      sendAsFiles ? "lng_send_file" : "lng_send_photo",
+                    ),
+                    //TODO use separate color from theme
+                    textStyle: TextDisplay.create(size: 14),
+                    child: ButtonIcon(
+                      sendAsFiles ? Icons.description : Icons.image,
+                      onClick: () => setState(
+                        () => sendAsFiles = !sendAsFiles,
+                      ),
+                      size: iconsSize,
+                      color: iconColor,
+                    ),
+                  ),
+                if (uploadedFiles.isNotEmpty) const SizedBox(width: 16),
                 Container(
                   height: iconsSize,
                   alignment: Alignment.bottomCenter,
@@ -392,6 +463,28 @@ class InputFieldState extends State<InputField> {
         ),
       ],
     );
+
+    if (!UIManager.isMobile) {
+      child = DropTarget(
+        child: child,
+        onDragEntered: (_) => setState(() {
+          fileDragging = true;
+          dropZoneClosedInUI = false;
+        }),
+        onDragDone: (info) {
+          showDeletebutton();
+          onFileDragEnd();
+          uploadedFiles.addAll(
+            info.files.map(
+              (e) => _AttachedFileInfo(e.path),
+            ),
+          );
+        },
+        onDragExited: (_) => onFileDragEnd(),
+      );
+    }
+
+    return child;
   }
 }
 
