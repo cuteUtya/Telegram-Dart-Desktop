@@ -34,35 +34,41 @@ class BackgroundPatternDisplay extends StatelessWidget {
         Widget svgWidget = RemoteFileBuilder(
           builder: (_, path) {
             var file = io.File(path);
-            var bytes = Uint8List.fromList(
-              io.gzip.decode(
-                file.readAsBytesSync().toList(),
-              ),
-            );
-            var colors = BackgroundFillDisplay.getColorsFromFill(
-              pattern.fill!,
-            );
+            return FutureBuilder(
+              future: file.readAsBytes(),
+              builder: (_, data) {
+                if (data.hasData) {
+                  var bytes = Uint8List.fromList(
+                    io.gzip.decode((data.data as Uint8List).toList()),
+                  );
+                  var colors = BackgroundFillDisplay.getColorsFromFill(
+                    pattern.fill!,
+                  );
 
-            var intensity = pattern.intensity! / 100;
-            var fillColor = Colors.black.withOpacity(intensity);
-            if (colors.length == 1) colors.add(colors[0]);
+                  var intensity = pattern.intensity! / 100;
+                  var fillColor = Colors.black.withOpacity(intensity);
+                  if (colors.length == 1) colors.add(colors[0]);
 
-            var gradient = LinearGradient(
-              colors: pattern.isInverted!
-                  ? colors.map((e) => e.withOpacity(intensity)).toList()
-                  : [fillColor, fillColor],
-            );
-            return FittedBox(
-              fit: BoxFit.fill,
-              clipBehavior: Clip.antiAlias,
-              child: SizedBox(
-                width: box.maxWidth,
-                height: box.maxHeight,
-                child: ShaderedSVG(
-                  image: bytes,
-                  shaderCallback: (rect) => gradient.createShader(rect),
-                ),
-              ),
+                  var gradient = LinearGradient(
+                    colors: pattern.isInverted!
+                        ? colors.map((e) => e.withOpacity(intensity)).toList()
+                        : [fillColor, fillColor],
+                  );
+                  return FittedBox(
+                    fit: BoxFit.fill,
+                    clipBehavior: Clip.antiAlias,
+                    child: SizedBox(
+                      width: box.maxWidth,
+                      height: box.maxHeight,
+                      child: ShaderedSVG(
+                        image: bytes,
+                        shaderCallback: (rect) => gradient.createShader(rect),
+                      ),
+                    ),
+                  );
+                }
+                return const SizedBox();
+              },
             );
           },
           fileId: file.document!.id!,
