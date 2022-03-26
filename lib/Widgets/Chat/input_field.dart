@@ -179,7 +179,7 @@ class InputFieldState extends State<InputField> {
 
   void showDeletebutton() {
     deleteButtonOpacityKey.currentState?.animateOpacity(1);
-    deleteButtonSizerKey.currentState?.resize(const Size(36, 36));
+    deleteButtonSizerKey.currentState?.resize(const Size(iconsSize, iconsSize));
   }
 
   void hideDeleteButton() {
