@@ -35,46 +35,92 @@ class InputField extends StatefulWidget {
 class InputFieldState extends State<InputField> {
   late TextEditingController textController;
 
-  Future<InputMessagePhoto?> createPhotoToUpload(
-      String path, FormattedText? caption) async {
-    var image = io.File(path);
-    var decodedImage = await decodeImageFromList(image.readAsBytesSync());
-
-    return InputMessagePhoto(
-      photo: InputFileLocal(path: path),
-      width: decodedImage.width,
-      height: decodedImage.height,
-      caption: caption,
-    );
-  }
-
   void sendMessage() async {
     //TODO add ability to send albums
     //TODO also validate images before send it as image
-    if (textController.text.isNotEmpty || uploadedFiles.isNotEmpty) {
-      if (uploadedFiles.length <= 1) {
-        var text = widget.client.execute(
-          ParseMarkdown(
-            text: FormattedText(text: textController.text),
-          ),
-        ) as FormattedText;
 
-        var content = uploadedFiles.isEmpty
-            ? InputMessageText(
-                text: text,
-              )
-            : (sendAsFiles
-                ? InputMessageDocument(
-                    document: InputFileLocal(path: uploadedFiles[0].filePath),
-                    caption: text,
-                  )
-                : await createPhotoToUpload(uploadedFiles[0].filePath, text));
-        widget.client.send(
+    InputMessageContent createFile(String path, FormattedText? caption) {
+      return InputMessageDocument(
+        document: InputFileLocal(path: path),
+        caption: caption,
+      );
+    }
+
+    Future<InputMessageContent> createPhotoToUpload(
+        String path, FormattedText? caption) async {
+      try {
+        var image = io.File(path);
+        var decodedImage = await decodeImageFromList(image.readAsBytesSync());
+
+        return InputMessagePhoto(
+          photo: InputFileLocal(path: path),
+          width: decodedImage.width,
+          height: decodedImage.height,
+          caption: caption,
+        );
+      } catch (_) {
+        return createFile(path, caption);
+      }
+    }
+
+    void send(InputMessageContent content) => widget.client.send(
           SendMessage(
             chatId: widget.chatId,
             inputMessageContent: content,
           ),
         );
+
+    /// will autodetect type of file
+    /// considering send settings
+    Future<InputMessageContent> createObject(
+        String path, FormattedText? caption) async {
+      if (sendAsFiles) {
+        return createFile(path, caption);
+      } else {
+        return await createPhotoToUpload(path, caption);
+      }
+    }
+
+    void sendText(FormattedText text) => send(
+          InputMessageText(
+            text: text,
+          ),
+        );
+
+    void sendAlbum(List<InputMessageContent> items) {
+      widget.client.send(
+          SendMessageAlbum(chatId: widget.chatId, inputMessageContents: items));
+    }
+
+    if (textController.text.isNotEmpty || uploadedFiles.isNotEmpty) {
+      var text = widget.client.execute(
+        ParseMarkdown(
+          text: FormattedText(text: textController.text),
+        ),
+      ) as FormattedText;
+
+      if (uploadedFiles.isEmpty) {
+        sendText(text);
+      } else if (uploadedFiles.length <= 1) {
+        send(await createObject(uploadedFiles[0].filePath, text));
+      } else {
+        if (groupItems) {
+          List<InputMessageContent> items = [];
+          for (int i = 0; i < uploadedFiles.length; i++) {
+            items.add(
+              await createObject(
+                uploadedFiles[0].filePath,
+                i == uploadedFiles.length - 1 ? text : null,
+              ),
+            );
+          }
+          sendAlbum(items);
+        } else {
+          sendText(text);
+          for (var file in uploadedFiles) {
+            send(await createObject(file.filePath, null));
+          }
+        }
       }
 
       setState(
