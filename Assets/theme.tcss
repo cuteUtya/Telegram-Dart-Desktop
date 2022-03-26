@@ -173,8 +173,6 @@ ActionBarTextColor(layout=desktop): ref(RegularText);
 ActionBarTextColor(layout=mobile): #FFFFFF;
 ActionBarOnlineTextColor(layout=desktop): ref(OnlineColor);
 ActionBarOnlineTextColor(layout=mobile): #FFFFFF;
-tw1nkleeModeBackgroundColor(theme=light): #B3C98C;
-tw1nkleeModeBackgroundColor(theme=dark): #18222d;
 InputFieldTextColor: ref(RegularText);
 AdminTitleColor: ref(RegularText);
 ArchiveContentColor: ref(RegularText);

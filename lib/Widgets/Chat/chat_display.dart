@@ -18,8 +18,6 @@ class ChatDisplay extends StatelessWidget {
   final int chatId;
   final VoidCallback? onChatRevert;
 
-  static const bool tw1nkleeModeEnable = false;
-
   ///TODO get value from settings
   static const bool useBlurBar = true;
 
@@ -30,51 +28,57 @@ class ChatDisplay extends StatelessWidget {
       children: [
         Stack(
           children: [
-            if (tw1nkleeModeEnable)
-              BackgroundDisplay(
-                client: client,
-                background: Background(
-                  type: BackgroundTypeFill(
-                    fill: BackgroundFillSolid(
-                      color: (ClientTheme.currentTheme
-                              .getField("tw1nkleeModeBackgroundColor") as Color)
-                          .value,
-                    ),
-                  ),
-                ),
-              )
-            else
-              StreamBuilder(
-                stream: client.selectedBackground,
-                builder: (_, data) {
-                  bool useDark = ClientTheme
-                          .currentTheme.environmentVariables["theme"]!() ==
-                      "dark";
-                  var background = client.getCachedBackground(useDark);
-                  if (background == null) {
-                    client.send(GetBackgrounds()).then(
-                          (backs) => client.send(
-                            SetBackground(
-                              forDarkTheme: useDark,
-                              background: InputBackgroundRemote(
-                                backgroundId: backs is Backgrounds
-                                    ? backs.backgrounds![3].id!
-                                    : (backs as Background).id!,
-                              ),
-                            ),
-                          ),
-                        );
-                    return const SizedBox.shrink();
-                  }
-
+            StreamBuilder(
+              key: Key(chatId.toString()),
+              stream: client.chatThemeIn(chatId),
+              builder: (_, theme) {
+                bool useDark =
+                    ClientTheme.currentTheme.environmentVariables["theme"]!() ==
+                        "dark";
+                var name =
+                    theme.hasData ? theme.data.toString() : chat.themeName!;
+                if (name.isNotEmpty) {
+                  var themes = client.getCachedThemes().firstWhere(
+                        (e) => e.name == name,
+                      );
+                  var theme =
+                      useDark ? themes.darkSettings! : themes.lightSettings!;
                   return BackgroundDisplay(
-                    key: Key("background?hashCode=${background.hashCode}"),
+                    key: Key(name),
                     client: client,
-                    //TODO correct work with dark and light themes
-                    background: background,
+                    background: theme.background!,
                   );
-                },
-              ),
+                } else {
+                  return StreamBuilder(
+                    stream: client.selectedBackground,
+                    builder: (_, data) {
+                      var background = client.getCachedBackground(useDark);
+                      if (background == null) {
+                        client.send(GetBackgrounds()).then(
+                              (backs) => client.send(
+                                SetBackground(
+                                  forDarkTheme: useDark,
+                                  background: InputBackgroundRemote(
+                                    backgroundId: backs is Backgrounds
+                                        ? backs.backgrounds![3].id!
+                                        : (backs as Background).id!,
+                                  ),
+                                ),
+                              ),
+                            );
+                        return const SizedBox.shrink();
+                      }
+                      return BackgroundDisplay(
+                        key: Key("background?hashCode=${background.hashCode}"),
+                        client: client,
+                        //TODO correct work with dark and light themes
+                        background: background,
+                      );
+                    },
+                  );
+                }
+              },
+            ),
             Column(
               children: [
                 Flexible(
