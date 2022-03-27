@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Widgets/Chat/message_list.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
@@ -43,7 +44,7 @@ class MessageDisplay extends StatelessWidget {
 
   final BubbleRelativePosition bubbleRelativePosition;
   final Message message;
-  final Message? replieOn;
+  final ReplieLoadingResult? replieOn;
   final Chat? chat;
   final bool isReplie;
   final String? adminTitle;
@@ -64,14 +65,18 @@ class MessageDisplay extends StatelessWidget {
 
   Widget? _buildReplieWidget(bool inline) => isReplie
       ? ReplieDisplay(
-          message: replieOn ??
-              Message(
+          message: replieOn is! ReplieLoadingResultSucces
+              ? Message(
                   content: MessageText(
-                text: FormattedText(
-                  text: client.getTranslation("lng_profile_loading"),
-                  entities: [],
-                ),
-              )),
+                  text: FormattedText(
+                    text: client.getTranslation(
+                        replieOn is ReplieLoadingResultDeleted
+                            ? "lng_deleted_message"
+                            : "lng_profile_loading"),
+                    entities: [],
+                  ),
+                ))
+              : (replieOn as ReplieLoadingResultSucces).replieOn,
           client: client,
           inlineStyle: inline,
           showAuthor: replieOn != null,

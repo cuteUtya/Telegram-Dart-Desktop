@@ -266,9 +266,15 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                                 chat: chat,
                                 message: msg,
                                 isReplie: msg.replyToMessageId != 0,
-                                replieOn: replieDate.data is Message
+                                replieOn: replieDate.hasData
+                                    ? (replieDate.data is Message
+                                        ? ReplieLoadingResultSucces(
+                                            replieDate.data as Message)
+                                        : ReplieLoadingResultDeleted())
+                                    : null /*replieDate.data is Message
                                     ? replieDate.data as Message
-                                    : null,
+                                    : null*/
+                                ,
                                 client: widget.client,
                                 onMessageDelete: () => setState(
                                   () => messages?.messages!.removeWhere(
@@ -320,4 +326,15 @@ class _widgetBuildProvider extends StatelessWidget {
     onBuild();
     return const SizedBox.shrink();
   }
+}
+
+// You know, I'm something of a architect myself 😏😏😏
+
+abstract class ReplieLoadingResult {}
+
+class ReplieLoadingResultDeleted extends ReplieLoadingResult {}
+
+class ReplieLoadingResultSucces extends ReplieLoadingResult {
+  ReplieLoadingResultSucces(this.replieOn);
+  final Message replieOn;
 }
