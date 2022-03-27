@@ -9,6 +9,7 @@ import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/Widgets/smooth_list_view.dart';
 import 'package:myapp/safe_spacer.dart';
 import 'package:myapp/tdlib/client.dart';
+import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:collection/collection.dart';
@@ -39,7 +40,8 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
     MessageSupergroupChatCreate,
     MessageChatChangeTitle,
     MessageChatChangePhoto,
-    MessageChatDeletePhoto
+    MessageChatDeletePhoto,
+    MessageChatSetTheme,
   ];
 
   void loadMessages(int limit, int fromMessageId, int offset) async {

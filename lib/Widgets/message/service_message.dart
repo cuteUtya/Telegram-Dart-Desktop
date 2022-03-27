@@ -12,15 +12,19 @@ class ServiceMessage extends StatelessWidget {
   final String text;
   @override
   Widget build(BuildContext context) {
-    return MessageInfoBubbleBase.forBig(Text(
-      text,
-      style: TextDisplay.create(
-        fontFamily: TextDisplay.greaterImportance,
-        size: 16,
-        textColor: ClientTheme.currentTheme.getField(
-          "ServiceMessageTextColor",
+    return MessageInfoBubbleBase.forBig(
+      Text.rich(
+        TextDisplay.parseEmojiInString(
+          text,
+          TextDisplay.create(
+            fontFamily: TextDisplay.greaterImportance,
+            size: 16,
+            textColor: ClientTheme.currentTheme.getField(
+              "ServiceMessageTextColor",
+            ),
+          ),
         ),
       ),
-    ));
+    );
   }
 }

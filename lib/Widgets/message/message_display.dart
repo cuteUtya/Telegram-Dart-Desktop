@@ -266,6 +266,21 @@ class MessageDisplay extends StatelessWidget {
             );
             break;
 
+          case MessageChatSetTheme:
+            var emoji = (message.content as MessageChatSetTheme).themeName!;
+            contentWidget = ServiceMessage(
+              text: client.getTranslation(
+                message.isOutgoing!
+                    ? "lng_action_you_theme_changed"
+                    : "lng_action_theme_changed",
+                replacing: {
+                  "{from}": author,
+                  "{emoji}": emoji,
+                },
+              ),
+            );
+            break;
+
           case MessageChatChangeTitle:
             contentWidget = ServiceMessage(
               text: client.getTranslation(
