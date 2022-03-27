@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Screens/app_main.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
 import 'package:myapp/Widgets/Chat/input_field.dart';
@@ -42,12 +43,21 @@ class ChatDisplay extends StatelessWidget {
                       );
                   var theme =
                       useDark ? themes.darkSettings! : themes.lightSettings!;
+                  var themeColor = Color(theme.accentColor!).withOpacity(1);
+                  if (ClientTheme.currentTheme.getField("Accent") !=
+                      themeColor) {
+                    ClientTheme.currentTheme.overrideValue(
+                      "Accent",
+                      ClientTheme.colorToHEX(themeColor),
+                    );
+                  }
                   return BackgroundDisplay(
                     key: Key(name),
                     client: client,
                     background: theme.background!,
                   );
                 } else {
+                  ClientTheme.currentTheme.clearOverridenValues();
                   return StreamBuilder(
                     stream: client.selectedBackground,
                     builder: (_, data) {

@@ -25,6 +25,7 @@ class ClientTheme {
     "layout": () => UIManager.useDesktopLayout ? "desktop" : "mobile"
   };
   final Map<String, List<_themeValue>> lines = {};
+  final Map<String, List<_themeValue>> overridenLines = {};
   late List<LangFunction> functions = [
     LangFunction("linear", [3], linear),
     LangFunction("max", [2], max_inter),
@@ -37,6 +38,9 @@ class ClientTheme {
 
   ClientTheme(String themeContent, bool isDefault) {
     _isDefault = isDefault;
+    if (isDefault) {
+      currentTheme = this;
+    }
     themeContent.replaceAll("\n", "\r").split("\r").forEach((element) {
       if (element.isEmpty) return;
       if (element[0] == "#") {
@@ -44,14 +48,23 @@ class ClientTheme {
       }
     });
 
-    themeContent.replaceAll("\n", "\r").split("\r").join().split(linesSeparator).forEach((element) {
+    themeContent
+        .replaceAll("\n", "\r")
+        .split("\r")
+        .join()
+        .split(linesSeparator)
+        .forEach((element) {
       if (element.isEmpty) return;
       var val = element.split(valueSeparator);
       var name = val[0].split("(")[0].replaceAll(" ", "");
       var regex = RegExp(r"\(.{1,}\)").firstMatch(val[0]);
-      var condition = (regex == null ? "" : val[0].substring(regex.start, regex.end)).replaceAll("(", "").replaceAll(")", "");
+      var condition =
+          (regex == null ? "" : val[0].substring(regex.start, regex.end))
+              .replaceAll("(", "")
+              .replaceAll(")", "");
       if (lines[name] == null) lines[name] = [];
-      lines[name]!.add(_themeValue(value: val[1].replaceAll(" ", ""), condition: condition));
+      lines[name]!.add(
+          _themeValue(value: val[1].replaceAll(" ", ""), condition: condition));
     });
 
     useARGB = tryGetField("HEXcolorModel") == "ARGB";
@@ -74,7 +87,8 @@ class ClientTheme {
           if (match != null) {
             findFunctions = true;
             var functionStr = value.substring(match.start, match.end);
-            var argsStr = functionStr.substring(foo.funcName.length + 1, functionStr.length - 1);
+            var argsStr = functionStr.substring(
+                foo.funcName.length + 1, functionStr.length - 1);
             var args = argsStr.split(',');
             value = value.replaceFirst(functionStr, foo.dartFunction(args));
           }
@@ -97,7 +111,8 @@ class ClientTheme {
       return (adouble > bdouble ? adouble : bdouble).toString();
     }
 
-    throw Exception("Error while parsing arguments. Types should be max(double, double)");
+    throw Exception(
+        "Error while parsing arguments. Types should be max(double, double)");
   }
 
   static String min_inter(List<dynamic> args) {
@@ -110,7 +125,8 @@ class ClientTheme {
       return (bdouble > adouble ? adouble : bdouble).toString();
     }
 
-    throw Exception("Error while parsing arguments. Types should be min(double, double)");
+    throw Exception(
+        "Error while parsing arguments. Types should be min(double, double)");
   }
 
   static String hsv_inter(List<dynamic> args) {
@@ -128,24 +144,38 @@ class ClientTheme {
 
     if (double.tryParse(t) != null) {
       if (isHEX(a) && isHEX(b)) {
-        var lerpedColor = Color.lerp(hexToColor(a, useARGB: useARGB), hexToColor(b, useARGB: useARGB), double.parse(t));
+        var lerpedColor = Color.lerp(hexToColor(a, useARGB: useARGB),
+            hexToColor(b, useARGB: useARGB), double.parse(t));
         if (lerpedColor != null) {
           return colorToHEX(lerpedColor);
         } else {
-          throw Exception("Error while linear interpolation: a or b color is null. But how 🤔");
+          throw Exception(
+              "Error while linear interpolation: a or b color is null. But how 🤔");
         }
       } else if (double.tryParse(a) != null && double.tryParse(b) != null) {
-        return numberToString(((1 - t) * double.parse(a) + t * double.parse(b)), 4);
+        return numberToString(
+            ((1 - t) * double.parse(a) + t * double.parse(b)), 4);
       }
 
       throw Exception(
           "Error while linear interpolation: wrong types of arguments, should be [Color, Color, double] or [double, double, double] ");
     }
-    throw Exception("Error while linear interpolation: wrong type of t, should be double");
+    throw Exception(
+        "Error while linear interpolation: wrong type of t, should be double");
   }
 
+  void overrideValue(String name, String value) {
+    overridenLines[name] = [_themeValue(value: value, condition: "")];
+  }
+
+  void clearOverridenValues() {
+    overridenLines.clear();
+  }
+
+  dynamic getOverridenValue(String name) => overridenLines[name];
+
   List<_themeValue>? getRawField(String name) {
-    return lines[name];
+    return overridenLines[name] ?? lines[name];
   }
 
   List<String> findAllRefsInField(String fieldName) {
@@ -153,7 +183,9 @@ class ClientTheme {
 
     var refRegex = RegExp(r"ref\([a-z,A-Z]{0,64}\)");
     var strs = getRawField(fieldName);
-    var rawFieldValue = strs != null ? _themeValue.getValueByCondition(strs, environmentVariables).value : null;
+    var rawFieldValue = strs != null
+        ? _themeValue.getValueByCondition(strs, environmentVariables).value
+        : null;
     if (rawFieldValue != null) {
       refRegex.allMatches(rawFieldValue).forEach((element) {
         var ref = rawFieldValue.substring(element.start, element.end);
@@ -168,8 +200,9 @@ class ClientTheme {
 
   String _getFieldString(String name) {
     var strs = getRawField(name);
-    var value = strs == null ? null : _themeValue.getValueByCondition(strs, environmentVariables).value;
-
+    var value = strs == null
+        ? null
+        : _themeValue.getValueByCondition(strs, environmentVariables).value;
     if (value == null) {
       if (_isDefault) {
         throw Exception("Field $name unreachible");
@@ -200,7 +233,10 @@ class ClientTheme {
         findRefs += newrefs.length;
         for (int j = 0; j < newrefs.length; j++) {
           if (elems.contains(newrefs[j])) {
-            throw Exception("Unreachable reference found, stack: " + paths[i] + ">" + newrefs[j]);
+            throw Exception("Unreachable reference found, stack: " +
+                paths[i] +
+                ">" +
+                newrefs[j]);
           }
           newPaths.add(paths[i] + ">" + newrefs[j]);
         }
@@ -229,7 +265,8 @@ class ClientTheme {
   dynamic getField(String name) {
     var value = _getFieldString(name);
     if (isHEX(value)) return hexToColor(value, useARGB: useARGB);
-    if (isIcon(value)) return getIconByName(value.split("Icons.").last) ?? value;
+    if (isIcon(value))
+      return getIconByName(value.split("Icons.").last) ?? value;
     if (double.tryParse(value) != null) return double.parse(value);
     return value;
   }
@@ -254,13 +291,17 @@ class ClientTheme {
               colors.add(double.parse(element));
             }
           } catch (ex) {
-            throw Exception("Error while initialization new Color: parsing arguments failed");
+            throw Exception(
+                "Error while initialization new Color: parsing arguments failed");
           }
-          value =
-              value.replaceFirst(match, rgbaTohex(colors[0].toInt(), colors[1].toInt(), colors[2].toInt(), colors[3].toInt()));
+          value = value.replaceFirst(
+              match,
+              rgbaTohex(colors[0].toInt(), colors[1].toInt(), colors[2].toInt(),
+                  colors[3].toInt()));
         } else {
-          throw Exception(
-              "Error while initialization new Color: received " + colorsStr.length.toString() + " arguments, need [3, 4]");
+          throw Exception("Error while initialization new Color: received " +
+              colorsStr.length.toString() +
+              " arguments, need [3, 4]");
         }
       }
     }
@@ -269,7 +310,8 @@ class ClientTheme {
   }
 
   static String doMath(String value) {
-    var mathRegx = RegExp(r"Math\(([0-9]{1,20})[.,]?([0-9]{1,4})?[-+*\/]([0-9]{1,20})[.,]?([0-9]{1,4})?\)");
+    var mathRegx = RegExp(
+        r"Math\(([0-9]{1,20})[.,]?([0-9]{1,4})?[-+*\/]([0-9]{1,20})[.,]?([0-9]{1,4})?\)");
 
     while (mathRegx.hasMatch(value)) {
       var element = mathRegx.firstMatch(value);
@@ -294,7 +336,9 @@ class ClientTheme {
           a = double.parse(components[0]);
           b = double.parse(components[1]);
         } catch (ex) {
-          throw Exception("Error while math operation at \n" + match + "\nparsing numbers is failed");
+          throw Exception("Error while math operation at \n" +
+              match +
+              "\nparsing numbers is failed");
         }
         switch (currentOperation) {
           case '+':
@@ -310,7 +354,8 @@ class ClientTheme {
             result = a / b;
             break;
         }
-        value = value.replaceFirst(match, double.parse(result.toStringAsFixed(4)).toString());
+        value = value.replaceFirst(
+            match, double.parse(result.toStringAsFixed(4)).toString());
       }
     }
 
@@ -348,7 +393,8 @@ class ClientTheme {
         var color = Color(int.parse(hex.substring(1, hex.length), radix: 16));
 
         var channelValue = 0;
-        var channelName = match.substring(match.length - 1, match.length).toLowerCase();
+        var channelName =
+            match.substring(match.length - 1, match.length).toLowerCase();
         switch (channelName) {
           case 'a':
             channelValue = color.alpha;
@@ -364,7 +410,9 @@ class ClientTheme {
             break;
 
           default:
-            throw Exception("Not allowed channel name [" + channelName + "], allowed only [a, r, g, b]");
+            throw Exception("Not allowed channel name [" +
+                channelName +
+                "], allowed only [a, r, g, b]");
         }
 
         value = value.replaceFirst(match, channelValue.toString());
@@ -388,9 +436,11 @@ class ClientTheme {
   }
 
   /// [useARGB] if false 7-9 symbols be used as A channel, else be used 1-3 symbols, but only if totaly entered 8 symbols
-  static Color hexToColor(String hexString, {String alphaChannel = 'FF', bool useARGB = true}) {
+  static Color hexToColor(String hexString,
+      {String alphaChannel = 'FF', bool useARGB = true}) {
     if (hexString.length == 4) {
-      hexString = "#${hexString[1]}${hexString[1]}${hexString[2]}${hexString[2]}${hexString[3]}${hexString[3]}";
+      hexString =
+          "#${hexString[1]}${hexString[1]}${hexString[2]}${hexString[2]}${hexString[3]}${hexString[3]}";
     }
     if (hexString.length == 9) {
       if (useARGB) {
@@ -427,7 +477,8 @@ class _themeValue {
   final String value;
   final String condition;
 
-  static _themeValue getValueByCondition(List<_themeValue> values, Map<String, Function> envVariables) {
+  static _themeValue getValueByCondition(
+      List<_themeValue> values, Map<String, Function> envVariables) {
     bool? compareValues(String condition) {
       ///some=another
       ///some<another
@@ -478,7 +529,10 @@ class _themeValue {
           if (v != null) values.add(v);
         },
       );
-      var operators = RegExp("[|&]").allMatches(condition).map((e) => condition.substring(e.start, e.end)).toList();
+      var operators = RegExp("[|&]")
+          .allMatches(condition)
+          .map((e) => condition.substring(e.start, e.end))
+          .toList();
       bool? value = values.isNotEmpty ? values[0] : null;
       if (values.length >= 2) {
         for (int i = 1; i < values.length; i++) {
