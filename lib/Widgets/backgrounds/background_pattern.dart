@@ -41,18 +41,18 @@ class BackgroundPatternDisplay extends StatelessWidget {
                   var bytes = Uint8List.fromList(
                     io.gzip.decode((data.data as Uint8List).toList()),
                   );
-                  var colors = BackgroundFillDisplay.getColorsFromFill(
-                    pattern.fill!,
-                  );
-
                   var intensity = pattern.intensity! / 100;
+                  var colors =
+                      BackgroundFillDisplay.getColorsFromFill(pattern.fill!)
+                          .map((e) => e.withOpacity(intensity))
+                          .toList();
+
                   var fillColor = Colors.black.withOpacity(intensity);
                   if (colors.length == 1) colors.add(colors[0]);
 
                   var gradient = LinearGradient(
-                    colors: pattern.isInverted!
-                        ? colors.map((e) => e.withOpacity(intensity)).toList()
-                        : [fillColor, fillColor],
+                    colors:
+                        pattern.isInverted! ? colors : [fillColor, fillColor],
                   );
                   return FittedBox(
                     fit: BoxFit.fill,
@@ -77,10 +77,11 @@ class BackgroundPatternDisplay extends StatelessWidget {
 
         return Stack(
           children: [
-            if (!pattern.isInverted!)
-              BackgroundFillDisplay(
-                fill: pattern.fill!,
-              ),
+            BackgroundFillDisplay(
+              fill: pattern.isInverted!
+                  ? BackgroundFillSolid(color: Colors.black.value)
+                  : pattern.fill!,
+            ),
             svgWidget,
           ],
         );

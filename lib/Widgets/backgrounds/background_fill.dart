@@ -8,6 +8,7 @@ class BackgroundFillDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var colors = getColorsFromFill(fill);
+    if (colors.length == 1) colors = [colors[0], colors[0]];
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -22,12 +23,10 @@ class BackgroundFillDisplay extends StatelessWidget {
     List<Color> colors = [];
     switch (fill.runtimeType) {
       case BackgroundFillFreeformGradient:
-        colors = (fill as BackgroundFillFreeformGradient).colors!.map(
-          (n) {
-            var clr = Color(n);
-            return Color.fromRGBO(clr.red, clr.green, clr.blue, 1);
-          },
-        ).toList();
+        colors = (fill as BackgroundFillFreeformGradient)
+            .colors!
+            .map((n) => Color(n).withOpacity(1))
+            .toList();
         break;
       case BackgroundFillSolid:
         colors = [

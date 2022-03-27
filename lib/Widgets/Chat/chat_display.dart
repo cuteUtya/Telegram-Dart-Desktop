@@ -29,7 +29,6 @@ class ChatDisplay extends StatelessWidget {
         Stack(
           children: [
             StreamBuilder(
-              key: Key(chatId.toString()),
               stream: client.chatThemeIn(chatId),
               builder: (_, theme) {
                 bool useDark =
