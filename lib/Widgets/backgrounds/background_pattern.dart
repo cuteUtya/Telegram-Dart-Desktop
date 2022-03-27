@@ -51,6 +51,8 @@ class BackgroundPatternDisplay extends StatelessWidget {
                   if (colors.length == 1) colors.add(colors[0]);
 
                   var gradient = LinearGradient(
+                    begin: const Alignment(-1, 0.5),
+                    end: const Alignment(1, -0.5),
                     colors:
                         pattern.isInverted! ? colors : [fillColor, fillColor],
                   );
