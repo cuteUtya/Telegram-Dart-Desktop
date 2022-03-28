@@ -5,6 +5,7 @@ import 'package:myapp/State managment/ui_events.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -34,9 +35,9 @@ class ActionBarDisplay extends StatelessWidget {
         : null;
     int membersCount = (group?.memberCount ?? supergroup?.memberCount) ?? 0;
 
-    const double height = 64;
+    double height = p(48);
 
-    var blurSize = const SizedBox(
+    var blurSize = SizedBox(
       width: double.infinity,
       height: height,
     );
@@ -109,9 +110,9 @@ class ActionBarDisplay extends StatelessWidget {
     );
 
     var closeBtn = Container(
-      width: 48,
-      height: 48,
-      margin: const EdgeInsets.only(left: 12),
+      width: p(32),
+      height: p(32),
+      margin: EdgeInsets.only(left: p(8)),
       child: TextButton(
           style: ButtonStyle(
             overlayColor: MaterialStateProperty.resolveWith((states) {
@@ -167,7 +168,7 @@ class ActionBarDisplay extends StatelessWidget {
         case UserStatusOnline:
           return Text(client.getTranslation("lng_status_online"),
               style: TextDisplay.create(
-                  size: 16,
+                  size: font(13),
                   textColor: ClientTheme.currentTheme
                       .getField("ActionBarOnlineTextColor")));
         case UserStatusEmpty:

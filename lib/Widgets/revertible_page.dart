@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/scale_utils.dart';
 
 class RevertiblePage extends StatelessWidget {
   const RevertiblePage({
@@ -28,19 +29,19 @@ class RevertiblePage extends StatelessWidget {
         ),
         onPressed: onRevert,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          padding: EdgeInsets.symmetric(vertical: p(8), horizontal: p(6)),
           child: Row(
             children: [
               Icon(
                 Icons.arrow_back,
-                size: 24,
+                size: p(16),
                 color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
               ),
               const SizedBox(width: 8),
               Text(
                 title,
                 style: TextDisplay.create(
-                  size: 20,
+                  size: font(14),
                   fontWeight: FontWeight.bold,
                   textColor: ClientTheme.currentTheme.getField("HeaderMain"),
                 ),

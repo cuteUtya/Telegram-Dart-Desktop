@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
+import 'package:myapp/scale_utils.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble(
@@ -24,7 +25,9 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var bubbleColor = ClientTheme.currentTheme.getField(side == Side.left ? "MessageBubbleOtherColor" : "MessageBubbleMineColor");
+    var bubbleColor = ClientTheme.currentTheme.getField(side == Side.left
+        ? "MessageBubbleOtherColor"
+        : "MessageBubbleMineColor");
     BorderRadius borderRadius = BorderRadius.all(radiusFree);
     switch (position) {
       case BubbleRelativePosition.top:
@@ -45,9 +48,11 @@ class MessageBubble extends StatelessWidget {
         break;
       case BubbleRelativePosition.middle:
         if (side == Side.right) {
-          borderRadius = BorderRadius.horizontal(left: radiusFree, right: radiusClose);
+          borderRadius =
+              BorderRadius.horizontal(left: radiusFree, right: radiusClose);
         } else {
-          borderRadius = BorderRadius.horizontal(left: radiusClose, right: radiusFree);
+          borderRadius =
+              BorderRadius.horizontal(left: radiusClose, right: radiusFree);
         }
         break;
       case BubbleRelativePosition.single:
@@ -55,19 +60,24 @@ class MessageBubble extends StatelessWidget {
         break;
     }
     return Stack(
-      alignment: side == Side.left ? Alignment.bottomLeft : Alignment.bottomRight,
+      alignment:
+          side == Side.left ? Alignment.bottomLeft : Alignment.bottomRight,
       children: [
-        if (position == BubbleRelativePosition.bottom || position == BubbleRelativePosition.single)
+        if (position == BubbleRelativePosition.bottom ||
+            position == BubbleRelativePosition.single)
           CustomPaint(
             painter: bubblePainter,
-            child: const SizedBox(
-              width: 41,
-              height: 35,
+            child: SizedBox(
+              width: p(30),
+              height: p(20),
             ),
           ),
         Container(
-          margin: EdgeInsets.only(left: side == Side.left ? 6 : 0, right: side == Side.left ? 0 : 6),
-          decoration: BoxDecoration(color: bubbleColor, borderRadius: borderRadius),
+          margin: EdgeInsets.only(
+              left: side == Side.left ? p(4) : 0,
+              right: side == Side.left ? 0 : p(4)),
+          decoration:
+              BoxDecoration(color: bubbleColor, borderRadius: borderRadius),
           child: Padding(
             padding: contentPadding,
             child: content,

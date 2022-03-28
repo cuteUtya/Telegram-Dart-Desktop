@@ -13,6 +13,7 @@ import 'package:myapp/Widgets/emoji_input_panel.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/Widgets/widget_sizer.dart';
 import 'package:myapp/file_utils.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
@@ -179,7 +180,7 @@ class InputFieldState extends State<InputField> {
 
   void showDeletebutton() {
     deleteButtonOpacityKey.currentState?.animateOpacity(1);
-    deleteButtonSizerKey.currentState?.resize(const Size(iconsSize, iconsSize));
+    deleteButtonSizerKey.currentState?.resize(Size(iconsSize, iconsSize));
   }
 
   void hideDeleteButton() {
@@ -234,15 +235,15 @@ class InputFieldState extends State<InputField> {
     textController = TextEditingController(text: draftText);
   }
 
-  static const double iconsSize = 30;
+  static double iconsSize = p(20);
 
   @override
   Widget build(BuildContext context) {
     var iconColor = ClientTheme.currentTheme.getField("GenericUIIconsColor");
     var emojiPanelPlaceholderKey = GlobalKey();
-    var borderRadius = const Radius.circular(16);
-    var dropZoneHeight = 180.0;
-    var genericFilesWidth = 240.0;
+    var borderRadius = Radius.circular(p(10));
+    var dropZoneHeight = 120.0;
+    var genericFilesWidth = 160.0;
 
     if (uploadedFiles.isEmpty) {
       hideDeleteButton();
@@ -274,13 +275,13 @@ class InputFieldState extends State<InputField> {
                       "lng_drag_files_here",
                     ),
                     style: TextDisplay.create(
-                      size: 42,
+                      size: font(28),
                       textColor: ClientTheme.currentTheme
                           .getField("DropHereDropZoneTextColor"),
                     ),
                   )
                 : Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(p(4)),
                     child: LayoutBuilder(
                       builder: (_, box) => ReorderableListView(
                           buildDefaultDragHandles: false,
@@ -325,7 +326,7 @@ class InputFieldState extends State<InputField> {
                                       right: uploadedFiles.indexOf(file) ==
                                               uploadedFiles.length
                                           ? 0
-                                          : 8),
+                                          : p(4)),
                                   child: WidgetOpacityContoller(
                                     key: file.opacityKey,
                                     onEnd: () => setState(() {
@@ -363,9 +364,9 @@ class InputFieldState extends State<InputField> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: 12,
+            padding: EdgeInsets.symmetric(
+              vertical: p(6),
+              horizontal: p(8),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -405,22 +406,23 @@ class InputFieldState extends State<InputField> {
                     );
                   },
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: p(8)),
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 8),
+                    margin: EdgeInsets.only(bottom: p(4)),
                     child: TextField(
                       controller: textController,
                       decoration: InputDecoration.collapsed(
                         hintText:
                             widget.client.getTranslation("lng_message_ph"),
                         hintStyle: TextDisplay.create(
+                          size: font(14),
                           textColor: ClientTheme.currentTheme
                               .getField("InputFieldTextColor"),
                         ),
                       ),
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: font(13),
                         color: ClientTheme.currentTheme
                             .getField("InputFieldTextColor"),
                         fontFamily: TextDisplay.regular,
@@ -444,7 +446,7 @@ class InputFieldState extends State<InputField> {
                 if (uploadedFiles.length >= 2)
                   Tooltip(
                     message: widget.client.getTranslation("lng_send_album"),
-                    textStyle: TextDisplay.create(size: 14),
+                    textStyle: TextDisplay.create(size: font(13)),
                     child: ButtonIcon(
                       Icons.collections,
                       size: iconsSize,
@@ -456,7 +458,7 @@ class InputFieldState extends State<InputField> {
                       ),
                     ),
                   ),
-                if (uploadedFiles.length >= 2) const SizedBox(width: 16),
+                if (uploadedFiles.length >= 2) SizedBox(width: p(10)),
                 if (uploadedFiles.isNotEmpty)
                   Tooltip(
                     message: widget.client.getTranslation(
@@ -473,7 +475,7 @@ class InputFieldState extends State<InputField> {
                       color: iconColor,
                     ),
                   ),
-                if (uploadedFiles.isNotEmpty) const SizedBox(width: 16),
+                if (uploadedFiles.isNotEmpty) SizedBox(width: p(10)),
                 Container(
                   height: iconsSize,
                   alignment: Alignment.bottomCenter,
@@ -496,7 +498,7 @@ class InputFieldState extends State<InputField> {
                     ]),
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: p(10)),
                 ButtonIcon(
                   Icons.send,
                   color: iconColor,
@@ -558,7 +560,7 @@ class _FileDisplay extends StatelessWidget {
     var fileExtension = fileName.split(".").last;
     var textStyle = TextDisplay.create(
       textColor: Colors.white,
-      size: 18,
+      size: font(13),
     );
     return Stack(
       alignment: Alignment.center,
@@ -584,12 +586,12 @@ class _FileDisplay extends StatelessWidget {
           ),
         if (fileType != FileGroup.imageRaster)
           Container(
-            width: 48,
-            height: 48,
+            width: p(32),
+            height: p(32),
             decoration: BoxDecoration(
               color: controllsBackColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(48),
+              borderRadius: BorderRadius.all(
+                Radius.circular(p(32)),
               ),
             ),
             child: Icon(
@@ -598,8 +600,8 @@ class _FileDisplay extends StatelessWidget {
             ),
           ),
         Positioned(
-          right: 10,
-          top: 10,
+          right: p(6),
+          top: p(6),
           child: GestureDetector(
             onTap: () => onDelete?.call(),
             child: Container(
@@ -628,15 +630,15 @@ class _FileDisplay extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextDisplay.create(
-                  size: 18,
+                  size: font(13),
                   textColor: Colors.white,
                 ),
               ),
             ),
           ),
         Positioned(
-          left: 10,
-          top: 10,
+          left: p(6),
+          top: p(6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

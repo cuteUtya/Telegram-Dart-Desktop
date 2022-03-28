@@ -14,6 +14,7 @@ import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
@@ -129,6 +130,7 @@ class _ChatItemDisplayState
                   isReaded: (chat.lastMessage?.id ?? 0) <=
                       chat.lastReadOutboxMessageId!,
                   selected: selected,
+                  size: p(14),
                 )
               else
                 const SizedBox.shrink(),
@@ -139,7 +141,7 @@ class _ChatItemDisplayState
                     : getMessageTime(chat.lastMessage as Message),
                 textAlign: TextAlign.right,
                 style: TextDisplay.create(
-                  size: 18,
+                  size: font(13),
                   textColor: ClientTheme.currentTheme.getField(selected
                       ? "SelectedChatLastTimedMessage"
                       : "ChatLastTimeMessage"),
@@ -167,8 +169,8 @@ class _ChatItemDisplayState
                       children: [
                         Stack(alignment: Alignment.bottomRight, children: [
                           SizedBox(
-                            height: 64,
-                            width: 64,
+                            height: p(42),
+                            width: p(42),
                             child: Userpic(
                               key: Key(
                                 "userpic#chatId?=${widget.chatId}fileId?=${chat.photo?.big?.id}",
@@ -186,7 +188,7 @@ class _ChatItemDisplayState
                               initialData: interlocutor.status,
                               builder: (context, statusSnapshot) =>
                                   OnlineIndicatorDidplay(
-                                size: 20,
+                                size: p(14),
                                 selected: selected,
                                 online: statusSnapshot.data is UserStatusOnline,
                               ),
@@ -195,6 +197,7 @@ class _ChatItemDisplayState
                         UnreadCountBubble(
                           count: chat.unreadMentionCount!,
                           important: true,
+                          fontSize: p(13),
                         )
                       ],
                     ),
@@ -206,10 +209,10 @@ class _ChatItemDisplayState
               else
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                      EdgeInsets.symmetric(horizontal: p(4), vertical: p(1)),
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(16),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(p(12)),
                     ),
                     color: ClientTheme.currentTheme.getField(selected
                         ? "ReactionsInChatlistBackgroundColorSelected"
@@ -226,7 +229,7 @@ class _ChatItemDisplayState
                               ? "ReactionsInChatListIconColorSelected"
                               : "ReactionsInChatListIconColor",
                         ),
-                        size: 18,
+                        size: p(12),
                       ),
                       const SizedBox(width: 2),
                       Text(
@@ -237,24 +240,25 @@ class _ChatItemDisplayState
                                 ? "ReactionsInChatListTextColorSelected"
                                 : "ReactionsInChatListTextColor",
                           ),
-                          size: 18,
+                          size: font(14),
                         ),
                       )
                     ],
                   ),
                 ),
               Container(
-                margin: EdgeInsets.only(left: chat.unreadCount! > 0 ? 4 : 0),
+                margin: EdgeInsets.only(left: chat.unreadCount! > 0 ? p(2) : 0),
                 child: UnreadCountBubble(
                   count: chat.unreadCount!,
                   important: (chat.unreadMentionCount ?? 0) != 0,
+                  fontSize: p(13),
                 ),
               ),
             ],
           ),
           content: Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(right: 8),
+              padding: EdgeInsets.only(right: p(6)),
               child: StreamBuilder(
                 stream: widget.client.actionsOf(widget.chatId),
                 builder: (_, actionsSnapshow) {
@@ -285,7 +289,8 @@ class _ChatItemDisplayState
                       draftMessage: chat.draftMessage,
                       fromChatType: chat.type!,
                       client: widget.client,
-                      fontSize: 18,
+                      fontSize: font(14),
+                      maxLines: ChatItemBase.contentLines,
                     );
                   }
                   return Stack(
@@ -294,13 +299,14 @@ class _ChatItemDisplayState
 
                       ///fake text placeholder that prevents chat resize if in it preview
                       ///contain only 1 line of text
-                      const Text(
-                        "1\n1",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.transparent,
-                        ),
-                      )
+                      if (ChatItemBase.contentLines == 2)
+                        Text(
+                          "1\n1",
+                          style: TextStyle(
+                            fontSize: font(14),
+                            color: Colors.transparent,
+                          ),
+                        )
                     ],
                   );
                 },
@@ -310,6 +316,7 @@ class _ChatItemDisplayState
           icon: pinned(chat)
               ? Icon(
                   Icons.push_pin,
+                  size: p(16),
                   color: ClientTheme.currentTheme.getField(selected
                       ? "SelectedChatPinIconColor"
                       : "ChatPinIconColor"),

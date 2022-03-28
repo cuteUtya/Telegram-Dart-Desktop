@@ -40,14 +40,21 @@ class MessageContentPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(message != null || draftMessage != null);
     return StreamBuilder(
-      stream: message?.senderId == null ? null : client.senderName(message!.senderId!),
-      initialData: message?.senderId == null ? "" : client.getSenderNameSync(message!.senderId!),
+      stream: message?.senderId == null
+          ? null
+          : client.senderName(message!.senderId!),
+      initialData: message?.senderId == null
+          ? ""
+          : client.getSenderNameSync(message!.senderId!),
       builder: (_, senderData) {
-        var content = draftMessage == null ? message!.content! : draftMessage!.inputMessageText;
+        var content = draftMessage == null
+            ? message!.content!
+            : draftMessage!.inputMessageText;
         bool messageTypeAllowShowFrom = true;
         FormattedText text = FormattedText(text: "");
         List<InlineSpan> displayContent = [];
-        TextStyle textStyle = TextDisplay.chatItemAccent.copyWith(color: textColor, fontSize: fontSize);
+        TextStyle textStyle = TextDisplay.chatItemAccent
+            .copyWith(color: textColor, fontSize: fontSize);
         var author = message == null ? "" : senderData.data.toString();
         switch (content.runtimeType) {
           case MessageText:
@@ -56,18 +63,24 @@ class MessageContentPreview extends StatelessWidget {
             break;
 
           case MessageAnimatedEmoji:
-            displayContent.add(TextDisplay.emoji((content as MessageAnimatedEmoji).emoji!, style: textStyle));
+            displayContent.add(TextDisplay.emoji(
+                (content as MessageAnimatedEmoji).emoji!,
+                style: textStyle));
             break;
 
           case MessageSticker:
             displayContent.add(TextDisplay.parseEmojiInString(
-                "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ", textStyle));
+                "${client.getTranslation("lng_in_dlg_sticker")} ${(content as MessageSticker).sticker!.emoji!} ",
+                textStyle));
             break;
 
           case MessageChatDeletePhoto:
             messageTypeAllowShowFrom = false;
             displayContent.add(TextDisplay.parseEmojiInString(
-                "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {"{from}": author})}", textStyle));
+                "🗑 ${client.getTranslation("lng_action_removed_photo", replacing: {
+                      "{from}": author
+                    })}",
+                textStyle));
             break;
 
           case MessageVideo:
@@ -75,7 +88,8 @@ class MessageContentPreview extends StatelessWidget {
             text = video.caption!;
             messageTypeAllowShowFrom = true;
             var thumbId = video.video?.thumbnail?.file?.id;
-            var vidString = "${client.getTranslation("lng_in_dlg_video")}${(text.text?.isNotEmpty ?? false) ? ", " : ""}";
+            var vidString =
+                "${client.getTranslation("lng_in_dlg_video")}${(text.text?.isNotEmpty ?? false) ? ", " : ""}";
             if (thumbId != null) {
               displayContent.addAll(ChatItemContentPhotoText.build(
                   ChatItemPhotoMinithumbnail(
@@ -85,7 +99,8 @@ class MessageContentPreview extends StatelessWidget {
                   vidString,
                   textStyle));
             } else {
-              displayContent.add(TextDisplay.parseEmojiInString("📹 $vidString"));
+              displayContent
+                  .add(TextDisplay.parseEmojiInString("📹 $vidString"));
             }
             break;
 
@@ -113,8 +128,12 @@ class MessageContentPreview extends StatelessWidget {
           case MessagePhoto:
             text = (content as MessagePhoto).caption!;
             displayContent = ChatItemContentPhotoText.build(
-                ChatItemPhotoMinithumbnail(client: client, id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!),
-                (text.text ?? "").isNotEmpty ? "" : client.getTranslation("lng_attach_photo"),
+                ChatItemPhotoMinithumbnail(
+                    client: client,
+                    id: sortPhotoSizes(content.photo!.sizes!).last.photo!.id!),
+                (text.text ?? "").isNotEmpty
+                    ? ""
+                    : client.getTranslation("lng_attach_photo"),
                 textStyle);
             break;
 
@@ -122,7 +141,9 @@ class MessageContentPreview extends StatelessWidget {
             var document = (content as MessageDocument);
             displayContent.addAll(
               [
-                TextDisplay.parseEmojiInString("📁 ${bytesToSize(document.document!.document!.size!)} —", textStyle),
+                TextDisplay.parseEmojiInString(
+                    "📁 ${bytesToSize(document.document!.document!.size!)} —",
+                    textStyle),
                 contentEntetyesMargin(),
                 TextSpan(text: document.document?.fileName, style: textStyle),
                 contentEntetyesMargin(),
@@ -136,7 +157,9 @@ class MessageContentPreview extends StatelessWidget {
             displayContent.add(
               TextDisplay.parseEmojiInString(
                 "📸 ${client.getTranslation(
-                  isChannel ? "lng_action_changed_photo_channel" : "lng_action_changed_photo",
+                  isChannel
+                      ? "lng_action_changed_photo_channel"
+                      : "lng_action_changed_photo",
                   replacing: {"{from}": author},
                 )}",
                 textStyle,
@@ -157,29 +180,38 @@ class MessageContentPreview extends StatelessWidget {
             var thumb = (content as MessageAnimation).animation?.thumbnail;
             Widget? mith;
             if (thumb == null || thumb.format is ThumbnailFormatMpeg4) {
-              displayContent.add(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
+              displayContent
+                  .add(TextDisplay.parseEmojiInString("🖼 GIF", textStyle));
             } else {
-              mith = ChatItemPhotoMinithumbnail(id: thumb.file!.id!, client: client);
-              displayContent += ChatItemContentPhotoText.build(mith, "GIF", textStyle);
+              mith = ChatItemPhotoMinithumbnail(
+                  id: thumb.file!.id!, client: client);
+              displayContent +=
+                  ChatItemContentPhotoText.build(mith, "GIF", textStyle);
             }
             break;
 
           case MessageContactRegistered:
             messageTypeAllowShowFrom = false;
             displayContent.add(TextDisplay.parseEmojiInString(
-                "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {"{from}": author})}", textStyle));
+                "🎉 ${client.getTranslation("lng_action_user_registered", replacing: {
+                      "{from}": author
+                    })}",
+                textStyle));
             break;
 
           case MessageChatChangeTitle:
             messageTypeAllowShowFrom = false;
             displayContent.add(TextDisplay.parseEmojiInString(
-              "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {"{title}": author})}",
+              "📝 ${client.getTranslation("lng_action_changed_title_channel", replacing: {
+                    "{title}": author
+                  })}",
               textStyle,
             ));
             break;
 
           case MessageSupergroupChatCreate:
-            displayContent = ChatItemContentIconText.build(Icons.create, client.getTranslation("lng_action_created_channel"));
+            displayContent = ChatItemContentIconText.build(Icons.create,
+                client.getTranslation("lng_action_created_channel"));
             break;
 
           case InputMessageText:
@@ -258,9 +290,14 @@ class MessageContentPreview extends StatelessWidget {
                   TextDisplay.parseEmojiInString(
                       messageTypeAllowShowFrom
                           ? (_showAuthor
-                              ? (style == MessageContentPreviewStyle.noLineBreaks
-                                  ? client.getTranslation("lng_dialogs_text_from_wrapped",
-                                          replacing: {"{from}": lastMessageSenderName ?? author}) +
+                              ? (style ==
+                                      MessageContentPreviewStyle.noLineBreaks
+                                  ? client.getTranslation(
+                                          "lng_dialogs_text_from_wrapped",
+                                          replacing: {
+                                            "{from}":
+                                                lastMessageSenderName ?? author
+                                          }) +
                                       " "
                                   : "${lastMessageSenderName ?? author}\n")
                               : "")
@@ -272,6 +309,7 @@ class MessageContentPreview extends StatelessWidget {
                               child: Icon(
                                 Icons.reply,
                                 color: ChatItemContentIconText.iconClr,
+                                size: fontSize,
                               ),
                               margin: const EdgeInsets.only(left: 2, right: 2))
                           : const SizedBox.shrink()),
@@ -303,7 +341,8 @@ class MessageContentPreview extends StatelessWidget {
       return client.getTranslation("lng_from_draft");
     }
     if (message?.senderId is MessageSenderUser) {
-      if (lastMessageSenderId == client.getOptionValue<OptionValueInteger>("my_id")?.value) {
+      if (lastMessageSenderId ==
+          client.getOptionValue<OptionValueInteger>("my_id")?.value) {
         return client.getTranslation("lng_from_you");
       }
     }
@@ -327,7 +366,8 @@ class MessageContentPreview extends StatelessWidget {
     }
 
     var me = client.getOptionValue<OptionValueInteger>("my_id")?.value ?? 0;
-    if ((fromChatType is ChatTypeSecret || fromChatType is ChatTypePrivate) && lastMessageSenderId != me) {
+    if ((fromChatType is ChatTypeSecret || fromChatType is ChatTypePrivate) &&
+        lastMessageSenderId != me) {
       return false;
     }
 

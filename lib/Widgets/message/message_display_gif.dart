@@ -3,6 +3,7 @@ import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_video.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 
@@ -45,7 +46,7 @@ class MessageDisplayGif extends StatelessWidget {
             content: Text(
               "GIF",
               style: TextDisplay.create(
-                size: 16,
+                size: font(13),
                 textColor: ClientTheme.currentTheme.getField(
                   "GifOverlayTextColor",
                 ),

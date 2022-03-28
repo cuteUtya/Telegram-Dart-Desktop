@@ -7,6 +7,7 @@ import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/Audio%20utils/id3_metatags_utils.dart';
 import 'package:myapp/Audio%20utils/itunes_api.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/utils.dart';
@@ -36,8 +37,8 @@ class MessageDisplayAudio extends StatelessWidget {
       additionalContent: Container(
         child: _audioItem(audio, client),
         margin: EdgeInsets.only(
-          bottom: (audio.caption?.text?.isEmpty ?? true) ? 6 : 0,
-          right: 8,
+          bottom: (audio.caption?.text?.isEmpty ?? true) ? p(4) : 0,
+          right: p(6),
         ),
       ),
       replieWidget: replieWidget,
@@ -52,20 +53,26 @@ class MessageDisplayAudio extends StatelessWidget {
       children: [
         RemoteFileBuilder(
             builder: (_, path) {
-              var apic = MP3Instance(io.File(path).readAsBytesSync()).getMetaTag<Map<String, String>>("APIC")?["base64"];
+              var apic = MP3Instance(io.File(path).readAsBytesSync())
+                  .getMetaTag<Map<String, String>>("APIC")?["base64"];
               return ClipRRect(
                 borderRadius: BorderRadius.circular(40),
                 child: apic != null || haveThumbnail
                     ? Image(
-                        width: 52,
-                        height: 52,
-                        image: (haveThumbnail ? FileImage(io.File(path)) : MemoryImage(base64Decode(apic!)) as ImageProvider))
+                        width: p(32),
+                        height: p(32),
+                        image: (haveThumbnail
+                            ? FileImage(io.File(path))
+                            : MemoryImage(base64Decode(apic!))
+                                as ImageProvider))
                     : FutureBuilder(
                         builder: (_, data) => data.hasData && data.data != null
                             ? Image.network(
-                                (data.data as ITunesSearchResult).results![0].artworkUrl100!,
-                                width: 52,
-                                height: 52,
+                                (data.data as ITunesSearchResult)
+                                    .results![0]
+                                    .artworkUrl100!,
+                                width: p(32),
+                                height: p(32),
                               )
                             : Container(),
                         future: ItunesAPI.findSong(
@@ -75,9 +82,11 @@ class MessageDisplayAudio extends StatelessWidget {
                       ),
               );
             },
-            fileId: haveThumbnail ? audio.audio!.albumCoverThumbnail!.file!.id! : audio.audio!.audio!.id!,
+            fileId: haveThumbnail
+                ? audio.audio!.albumCoverThumbnail!.file!.id!
+                : audio.audio!.audio!.id!,
             client: client),
-        const SizedBox(width: 8),
+        SizedBox(width: p(6)),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -85,8 +94,9 @@ class MessageDisplayAudio extends StatelessWidget {
             Text(
               audio.audio!.title!,
               style: TextDisplay.create(
-                size: 20,
-                textColor: ClientTheme.currentTheme.getField("AudioTitleTextColor"),
+                size: font(14),
+                textColor:
+                    ClientTheme.currentTheme.getField("AudioTitleTextColor"),
               ),
             ),
             Text(

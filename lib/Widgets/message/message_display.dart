@@ -19,6 +19,7 @@ import 'package:myapp/Widgets/message/service_message.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
@@ -240,12 +241,12 @@ class MessageDisplay extends StatelessWidget {
                 ServiceMessage(
                     text: client.getTranslation("lng_action_changed_photo",
                         replacing: {"{from}": author})),
-                const SizedBox(height: 16),
+                SizedBox(height: p(12)),
                 ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  borderRadius: BorderRadius.all(Radius.circular(p(12))),
                   child: SizedBox(
-                    width: 240,
-                    height: 240,
+                    width: p(140),
+                    height: p(140),
                     child: Userpic(
                       shape: BoxShape.rectangle,
                       chatPhoto:
@@ -398,8 +399,8 @@ class MessageDisplay extends StatelessWidget {
           }
 
           senderUserpic = SizedBox(
-            width: 40,
-            height: 40,
+            width: p(28),
+            height: p(28),
             child: senderUserpic,
           );
         }
@@ -418,7 +419,7 @@ class MessageDisplay extends StatelessWidget {
             !wrapInBubble) {
           contentWidget = Container(
             child: contentWidget,
-            margin: EdgeInsets.symmetric(horizontal: wrapInBubble ? 0 : 6),
+            margin: EdgeInsets.symmetric(horizontal: wrapInBubble ? 0 : p(4)),
           );
         }
         return isServiceMessage
@@ -428,7 +429,7 @@ class MessageDisplay extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Stack(alignment: Alignment.bottomRight, children: [
-                    senderUserpic ?? SizedBox(width: isChat ? 40 : 0),
+                    senderUserpic ?? SizedBox(width: isChat ? p(28) : 0),
                     if (message.senderId is MessageSenderUser &&
                         senderUserpic != null)
                       StreamBuilder(
@@ -436,7 +437,7 @@ class MessageDisplay extends StatelessWidget {
                         stream: client.statusOf(senderId),
                         builder: (_, data) => OnlineIndicatorDidplay(
                           online: data.data is UserStatusOnline,
-                          size: 14,
+                          size: p(12),
                           strokeColor: Colors.transparent,
                         ),
                       ),

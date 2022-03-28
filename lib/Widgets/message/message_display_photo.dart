@@ -11,6 +11,7 @@ import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 import 'package:myapp/Widgets/remote_file_builder_progress.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text;
 import 'package:myapp/utils.dart';
@@ -101,21 +102,22 @@ class MessageDisplayPhoto extends StatelessWidget {
                               fontFamily: TextDisplay.greaterImportance,
                             ),
                           ),
-                          const SizedBox(
-                            height: 4,
+                          SizedBox(
+                            height: p(2),
                           ),
                           ClipRRect(
-                            borderRadius: const BorderRadius.all(
+                            borderRadius: BorderRadius.all(
                               Radius.circular(
-                                4,
+                                p(2),
                               ),
                             ),
                             child: SizedBox(
                               width: width * 0.33,
-                              height: 12,
+                              height: p(8),
                               child: LinearProgressIndicator(
                                 color: Colors.white,
-                                backgroundColor: Color(0x2A1515).withOpacity(0.24),
+                                backgroundColor:
+                                    Color(0x2A1515).withOpacity(0.24),
                                 value: progress,
                               ),
                             ),
@@ -127,7 +129,9 @@ class MessageDisplayPhoto extends StatelessWidget {
                 );
               }
               return Align(
-                alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
+                alignment: message.isOutgoing!
+                    ? Alignment.bottomRight
+                    : Alignment.bottomLeft,
                 child: SizedBox(
                   width: width,
                   height: height,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
+import 'package:myapp/scale_utils.dart';
 
 class ChatFilterItemHorizontal extends StatelessWidget {
   const ChatFilterItemHorizontal(
@@ -44,18 +45,20 @@ class ChatFilterItemHorizontal extends StatelessWidget {
                           TextDisplay.create(
                             fontWeight: FontWeight.w400,
                             fontFamily: TextDisplay.greaterImportance,
-                            size: 20,
-                            textColor:
-                                ClientTheme.currentTheme.getField(active ? "FolderTitleActiveColor" : "FolderTitleInactiveColor"),
+                            size: font(14),
+                            textColor: ClientTheme.currentTheme.getField(active
+                                ? "FolderTitleActiveColor"
+                                : "FolderTitleInactiveColor"),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: p(2)),
                   UnreadCountBubble(
                     count: unread,
                     important: unreadUnmuted > 0,
+                    fontSize: font(14),
                   ),
                 ],
               ),

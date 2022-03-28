@@ -6,6 +6,7 @@ import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 
@@ -36,7 +37,9 @@ class _MessageDisplayPollState extends State<MessageDisplayPoll> {
     assert(widget.message.content is MessagePoll);
     var poll = (widget.message.content as MessagePoll).poll!;
     bool isAnswered = false;
-    bool multyplyAnswers = poll.type is PollTypeRegular ? (poll.type as PollTypeRegular).allowMultipleAnswers! : false;
+    bool multyplyAnswers = poll.type is PollTypeRegular
+        ? (poll.type as PollTypeRegular).allowMultipleAnswers!
+        : false;
     for (final a in poll.options!) {
       if (a.isChosen!) {
         isAnswered = true;
@@ -62,7 +65,7 @@ class _MessageDisplayPollState extends State<MessageDisplayPoll> {
               TextSpan(
                 text: poll.question!,
                 style: TextDisplay.create(
-                  size: 18,
+                  size: font(14),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -81,19 +84,21 @@ class _MessageDisplayPollState extends State<MessageDisplayPoll> {
                               ? "lng_polls_public_quiz"
                               : "lng_polls_public",
                   TextDisplay.create(
-                    size: 18,
+                    size: font(14),
                   ),
                 ),
                 if (!poll.isAnonymous!)
                   Container(
-                    margin: EdgeInsets.only(left: 4),
+                    margin: EdgeInsets.only(left: p(2)),
                     child: Stack(
                       children: poll.recentVoterUserIds!.map((e) {
                         var user = widget.client.getUser(e);
                         return Container(
-                          width: 28,
-                          height: 28,
-                          margin: EdgeInsets.only(left: poll.recentVoterUserIds!.indexOf(e) * 16),
+                          width: p(18),
+                          height: p(18),
+                          margin: EdgeInsets.only(
+                              left:
+                                  poll.recentVoterUserIds!.indexOf(e) * p(12)),
                           child: Userpic(
                             userId: user.id!,
                             userTitle: "${user.firstName} ${user.lastName}",
@@ -150,9 +155,11 @@ class _MessageDisplayPollState extends State<MessageDisplayPoll> {
                       width: box.maxWidth * 0.5,
                       child: Center(
                         child: widget.client.buildTextByKey(
-                          isAnswered ? "lng_polls_view_results" : "lng_polls_submit_votes",
+                          isAnswered
+                              ? "lng_polls_view_results"
+                              : "lng_polls_submit_votes",
                           TextDisplay.create(
-                            size: 18,
+                            size: font(13),
                           ),
                         ),
                       ),
@@ -185,6 +192,7 @@ class _PollOptionDisplay extends StatelessWidget {
   final bool value;
   final Function(bool nvalue) onValueChanged;
 
+  @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.centerLeft,
@@ -198,7 +206,7 @@ class _PollOptionDisplay extends StatelessWidget {
             shape: multyplyAnswers ? null : const CircleBorder(),
           ),
         Container(
-          margin: const EdgeInsets.only(left: 40),
+          margin: EdgeInsets.only(left: p(24)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,14 +214,14 @@ class _PollOptionDisplay extends StatelessWidget {
               Text(
                 option.text!,
                 style: TextDisplay.create(
-                  size: 18,
+                  size: font(14),
                 ),
               ),
               if (answered)
                 LayoutBuilder(
                   builder: (_, box) => Container(
-                    margin: EdgeInsets.only(top: 2),
-                    height: 4,
+                    margin: const EdgeInsets.only(top: 2),
+                    height: p(2),
                     width: max(box.maxWidth / 100 * option.votePercentage!, 4),
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(

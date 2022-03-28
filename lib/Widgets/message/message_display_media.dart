@@ -6,6 +6,7 @@ import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 
@@ -47,12 +48,16 @@ class MessageDisplayMedia extends StatelessWidget {
     bool haveText = (caption?.text ?? "").isNotEmpty;
     GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
     var radius = ClientTheme.currentTheme.getField("BubbleBorderRadiusFree");
-    var radiusSmall = ClientTheme.currentTheme.getField("MediaWithoutTextBorderRadius");
+    var radiusSmall =
+        ClientTheme.currentTheme.getField("MediaWithoutTextBorderRadius");
     BorderRadius border = haveText
         ? (coverBubbleInInlineMessages
-            ? (senderName != null ? BorderRadius.zero : BorderRadius.vertical(top: Radius.circular(radiusSmall)))
+            ? (senderName != null
+                ? BorderRadius.zero
+                : BorderRadius.vertical(top: Radius.circular(radiusSmall)))
             : BorderRadius.vertical(
-                top: Radius.circular(replieWidget == null ? radiusSmall : radius),
+                top: Radius.circular(
+                    replieWidget == null ? radiusSmall : radius),
                 bottom: Radius.circular(radiusSmall),
               ))
         : BorderRadius.all(
@@ -69,7 +74,9 @@ class MessageDisplayMedia extends StatelessWidget {
                 message: message,
                 senderName: senderName,
                 additionalContent: Container(
-                  margin: coverBubbleInInlineMessages ? EdgeInsets.zero : const EdgeInsets.all(4),
+                  margin: coverBubbleInInlineMessages
+                      ? EdgeInsets.zero
+                      : EdgeInsets.all(p(2)),
                   child: _buildImage(border),
                 ),
                 captionMargin: captionMargin,
@@ -80,7 +87,9 @@ class MessageDisplayMedia extends StatelessWidget {
             ),
           )
         : Align(
-            alignment: message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
+            alignment: message.isOutgoing!
+                ? Alignment.bottomRight
+                : Alignment.bottomLeft,
             child: MouseRegion(
               onEnter: (_) => hiderKey.currentState?.show(),
               onExit: (_) => hiderKey.currentState?.hide(),
@@ -91,7 +100,7 @@ class MessageDisplayMedia extends StatelessWidget {
                   if (message.isOutgoing! && replieWidget != null)
                     Container(
                       child: replieWidget!,
-                      margin: const EdgeInsets.only(right: 8),
+                      margin: EdgeInsets.only(right: p(6)),
                     ),
                   Stack(
                     alignment: Alignment.bottomRight,
@@ -103,7 +112,7 @@ class MessageDisplayMedia extends StatelessWidget {
                           hiddenOnInit: !UIManager.isMobile,
                           child: Container(
                             child: infoWidget!,
-                            padding: const EdgeInsets.all(8),
+                            padding: EdgeInsets.all(p(6)),
                           ),
                         ),
                     ],
@@ -111,7 +120,7 @@ class MessageDisplayMedia extends StatelessWidget {
                   if (!message.isOutgoing! && replieWidget != null)
                     Container(
                       child: replieWidget!,
-                      margin: const EdgeInsets.only(left: 8),
+                      margin: EdgeInsets.only(left: p(6)),
                     ),
                 ],
               ),

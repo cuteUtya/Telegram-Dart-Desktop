@@ -271,10 +271,7 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                                         ? ReplieLoadingResultSucces(
                                             replieDate.data as Message)
                                         : ReplieLoadingResultDeleted())
-                                    : null /*replieDate.data is Message
-                                    ? replieDate.data as Message
-                                    : null*/
-                                ,
+                                    : null,
                                 client: widget.client,
                                 onMessageDelete: () => setState(
                                   () => messages?.messages!.removeWhere(

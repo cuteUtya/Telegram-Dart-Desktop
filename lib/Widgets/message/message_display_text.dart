@@ -4,6 +4,7 @@ import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Links utils/linksOpener.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide RichText hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -53,14 +54,15 @@ class MessageDisplayText extends StatelessWidget {
     var additionalInfo = additionalContent == null
         ? const SizedBox.shrink()
         : Container(
-            margin: EdgeInsets.only(bottom: 6, top: senderName != null ? 6 : 0),
+            margin:
+                EdgeInsets.only(bottom: 6, top: senderName != null ? p(4) : 0),
             child: additionalContent,
           );
 
     var contentText = text ?? (message.content as MessageText).text!;
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(contentText,
-            size: 20, interactiveEnable: true));
+            size: font(14), interactiveEnable: true));
 
     return LayoutBuilder(builder: (context, boxCons) {
       var paragraph = calcLines(context, boxCons, parsedEntetiyes);
@@ -81,19 +83,19 @@ class MessageDisplayText extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: senderName,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: TextStyle(
+                        fontSize: font(13),
                         color: Colors.transparent,
                       ),
                     ),
-                    const WidgetSpan(
+                    WidgetSpan(
                         child: SizedBox(
-                      width: 12,
+                      width: p(8),
                     )),
                     TextSpan(
                       text: adminTitle,
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: font(13),
                         color: Colors.transparent,
                       ),
                     ),
@@ -109,7 +111,7 @@ class MessageDisplayText extends StatelessWidget {
               child: Text(
                 adminTitle!,
                 style: TextDisplay.create(
-                    size: 16,
+                    size: font(13),
                     textColor:
                         ClientTheme.currentTheme.getField("AdminTitleColor")),
               ),
@@ -146,7 +148,7 @@ class MessageDisplayText extends StatelessWidget {
                                       : getPeerColor(
                                           getSenderId(message.senderId!)!, 'b'),
                                   fontWeight: FontWeight.bold,
-                                  size: 18,
+                                  size: font(13),
                                   fontFamily: TextDisplay.greaterImportance,
                                 ),
                               )
@@ -181,7 +183,7 @@ class MessageDisplayText extends StatelessWidget {
                     margin: EdgeInsets.only(
                       bottom: boxCons.maxWidth - lastBox.right <
                               msgInfoBubbleSize.width
-                          ? 16
+                          ? p(12)
                           : 0,
                     ),
                   ),

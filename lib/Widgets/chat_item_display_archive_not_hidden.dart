@@ -6,6 +6,7 @@ import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
@@ -21,7 +22,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
   Widget build(BuildContext context) {
     var textColor = ClientTheme.currentTheme.getField("ArchiveContentColor");
     return StreamBuilder(
-     initialData: client.getChatsInChatListSync(ChatListArchive()),
+      initialData: client.getChatsInChatListSync(ChatListArchive()),
       stream: client.chatsInChatList(ChatListArchive()),
       builder: (_, data) {
         List<InlineSpan> content = [];
@@ -32,7 +33,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
             TextDisplay.parseEmojiInString(
               chat.title!,
               TextDisplay.create(
-                size: 18,
+                size: font(13),
                 fontWeight: (chat.unreadCount ?? 0) <= 0
                     ? FontWeight.normal
                     : FontWeight.bold,
@@ -62,7 +63,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
                 ))
           ]));
         }
-        if(chats.isEmpty) return const SizedBox.shrink();
+        if (chats.isEmpty) return const SizedBox.shrink();
 
         return ChatItemBase(
           selected: false,
@@ -81,7 +82,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
                 excluding: true,
                 child: Text.rich(
                   TextSpan(children: content),
-                  maxLines: 2,
+                  maxLines: ChatItemBase.contentLines,
                 ),
               ),
             ),

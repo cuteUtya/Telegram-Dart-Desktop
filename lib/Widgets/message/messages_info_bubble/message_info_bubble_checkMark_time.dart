@@ -3,6 +3,7 @@ import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/check_mark.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
+import 'package:myapp/scale_utils.dart';
 
 /// Widget, what displays time at which the message was sent and icon with read status
 /// * [checkMarkValue] is message was readed? If null, icon with read status will not be displayed
@@ -26,12 +27,12 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
   final bool useBackground;
   @override
   Widget build(BuildContext context) {
-    var color = ClientTheme.currentTheme
-        .getField(useBackground ? "CheckMarkInFlowContainer" : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
+    var color = ClientTheme.currentTheme.getField(useBackground
+        ? "CheckMarkInFlowContainer"
+        : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
     var textStyle = TextDisplay.create(
-      size: 14,
+      size: font(12),
       textColor: color,
-      fontStyle: FontStyle.italic,
     );
     var content = Row(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -52,7 +53,7 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
           CheckMark(
             isReaded: checkMarkValue!,
             color: color,
-            size: 18,
+            size: font(12),
           ),
       ],
     );

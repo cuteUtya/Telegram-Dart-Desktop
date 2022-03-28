@@ -4,6 +4,7 @@ import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
+import 'package:myapp/scale_utils.dart';
 
 /// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/messageDisplayTextEmojis_example.jpg)
 /// UI representation of MessageText entetiy what contains only emojis.
@@ -36,8 +37,8 @@ class MessageDisplayTextEmojis extends StatelessWidget {
             TextDisplay.emoji(
               emojis,
             ),
-            style: const TextStyle(
-              fontSize: 40,
+            style: TextStyle(
+              fontSize: font(26),
             ),
           ),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -45,7 +46,7 @@ class MessageDisplayTextEmojis extends StatelessWidget {
             if (hover || UIManager.isMobile)
               Container(
                 child: messageInfo,
-                margin: const EdgeInsets.only(top: 8),
+                margin: EdgeInsets.only(top: p(6)),
               ),
           ]),
         ];

@@ -3,6 +3,7 @@ import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble_painter.dart';
 import 'package:myapp/Widgets/message/message_bubble.dart';
+import 'package:myapp/scale_utils.dart';
 
 /// ![](https://raw.githubusercontent.com/Tim-dev-hub/tgclient-doc-resources/main/images/macMessageBubble_example.jpg)
 /// message bubble that looks like bubble from telegram macOS version
@@ -22,20 +23,24 @@ class MacMessageBubble extends StatelessWidget {
   final bool overridePadding;
   final BubbleRelativePosition position;
 
-  static const EdgeInsets padding = EdgeInsets.symmetric(vertical: 8, horizontal: 14);
+  static EdgeInsets padding =
+      EdgeInsets.symmetric(vertical: p(6), horizontal: p(9));
 
   @override
   Widget build(BuildContext context) => MessageBubble(
         content: content,
         side: side,
         position: position,
-        radiusClose: Radius.circular(ClientTheme.currentTheme.getField("BubbleBorderRadiusClose")),
+        radiusClose: Radius.circular(
+            ClientTheme.currentTheme.getField("BubbleBorderRadiusClose")),
         radiusFree: Radius.circular(
           ClientTheme.currentTheme.getField("BubbleBorderRadiusFree"),
         ),
         bubblePainter: MacMessageBubblePainter(
           color: ClientTheme.currentTheme.getField(
-            side == Side.left ? "MessageBubbleOtherColor" : "MessageBubbleMineColor",
+            side == Side.left
+                ? "MessageBubbleOtherColor"
+                : "MessageBubbleMineColor",
           ),
           side: side,
         ),

@@ -14,6 +14,7 @@ import 'package:myapp/Widgets/remote_file_builder.dart';
 import 'package:myapp/Widgets/remote_file_builder_progress.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' as td hide Text;
 import 'dart:io' as io;
@@ -51,16 +52,20 @@ class MessageDisplayVideo extends StatefulWidget {
   State<MessageDisplayVideo> createState() => _MessageDisplayVideoState();
 }
 
-class _MessageDisplayVideoState extends StateWithStreamsSubscriptions<MessageDisplayVideo> {
+class _MessageDisplayVideoState
+    extends StateWithStreamsSubscriptions<MessageDisplayVideo> {
   static int i = 62420;
   vlc.Player? player;
 
   @override
   Widget build(BuildContext context) {
-    assert(widget.message.content is td.MessageVideo || widget.overrideVideo != null);
-    var video = widget.overrideVideo ?? (widget.message.content as td.MessageVideo).video!;
-    var videoCaption =
-        widget.overrideVideo == null ? (widget.message.content as td.MessageVideo).caption! : widget.overrideCaption;
+    assert(widget.message.content is td.MessageVideo ||
+        widget.overrideVideo != null);
+    var video = widget.overrideVideo ??
+        (widget.message.content as td.MessageVideo).video!;
+    var videoCaption = widget.overrideVideo == null
+        ? (widget.message.content as td.MessageVideo).caption!
+        : widget.overrideCaption;
     player = vlc.Player(
       id: ++i,
       videoDimensions: const VideoDimensions(0, 0),
@@ -83,8 +88,10 @@ class _MessageDisplayVideoState extends StateWithStreamsSubscriptions<MessageDis
 
     return LayoutBuilder(
       builder: (_, box) {
-        var contentWidth = min(video.width?.toDouble() ?? box.maxWidth, box.maxWidth);
-        var contentHeight = (video.height! * (contentWidth / video.width!)).toDouble();
+        var contentWidth =
+            min(video.width?.toDouble() ?? box.maxWidth, box.maxWidth);
+        var contentHeight =
+            (video.height! * (contentWidth / video.width!)).toDouble();
         return MessageDisplayMedia(
           client: widget.client,
           message: widget.message,
@@ -128,10 +135,13 @@ class _MessageDisplayVideoState extends StateWithStreamsSubscriptions<MessageDis
                 child: Stack(
                   children: [
                     MouseRegion(
-                      onEnter: (_) => contollsOpacityKey.currentState?.animateOpacity(1),
-                      onExit: (_) => contollsOpacityKey.currentState?.animateOpacity(0),
+                      onEnter: (_) =>
+                          contollsOpacityKey.currentState?.animateOpacity(1),
+                      onExit: (_) =>
+                          contollsOpacityKey.currentState?.animateOpacity(0),
                       child: vlc.Video(
-                        key: Key("video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
+                        key: Key(
+                            "video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
                         player: player,
                         playlistLength: 1,
                         width: contentWidth,
@@ -147,19 +157,24 @@ class _MessageDisplayVideoState extends StateWithStreamsSubscriptions<MessageDis
                           StreamBuilder(
                             stream: player!.positionStream,
                             builder: (_, posData) {
-                              var data = posData.hasData ? posData.data as PositionState : null;
-                              if (data?.duration?.inSeconds != 0 && duration == 0) {
+                              var data = posData.hasData
+                                  ? posData.data as PositionState
+                                  : null;
+                              if (data?.duration?.inSeconds != 0 &&
+                                  duration == 0) {
                                 if (data?.duration != null) {
                                   duration = data!.duration!.inSeconds;
                                 }
                               }
-                              if (data?.position?.inSeconds != 0 && data?.position != null) {
+                              if (data?.position?.inSeconds != 0 &&
+                                  data?.position != null) {
                                 if (data!.position!.inSeconds != 0) {
                                   position = data.position!.inSeconds;
                                 }
                               }
                               if (position >= duration && duration != 0) {
-                                Future.delayed(Duration.zero, () => previewHiderKey.currentState?.show());
+                                Future.delayed(Duration.zero,
+                                    () => previewHiderKey.currentState?.show());
                               }
                               return Container(
                                 child: MessageInfoBubbleBase(
@@ -180,7 +195,7 @@ class _MessageDisplayVideoState extends StateWithStreamsSubscriptions<MessageDis
                                     ],
                                   ),
                                 ),
-                                margin: const EdgeInsets.only(top: 4, right: 4),
+                                margin: EdgeInsets.only(top: p(2), right: p(2)),
                               );
                             },
                           ),

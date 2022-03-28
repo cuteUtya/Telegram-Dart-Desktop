@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/scale_utils.dart';
 
 class UnreadCountBubble extends StatelessWidget {
   const UnreadCountBubble({
@@ -12,7 +13,7 @@ class UnreadCountBubble extends StatelessWidget {
 
   final int count;
   final bool important;
-  final double? fontSize;
+  final double fontSize;
   @override
   Widget build(BuildContext context) {
     if (count <= 0) return const SizedBox.shrink();
@@ -21,16 +22,16 @@ class UnreadCountBubble extends StatelessWidget {
         color: ClientTheme.currentTheme.getField(
           important ? "UnreadMentionChatBubbleColor" : "UnreadChatBubbleColor",
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12),
+        borderRadius: BorderRadius.all(
+          Radius.circular(p(8)),
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+        padding: EdgeInsets.symmetric(vertical: p(1), horizontal: p(4)),
         child: Text(
           count.toString(),
           style: TextDisplay.create(
-            size: fontSize ?? 18,
+            size: fontSize,
             textColor:
                 ClientTheme.currentTheme.getField("UnreadChatBubbleTextColor"),
             fontFamily: TextDisplay.greaterImportance,

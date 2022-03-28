@@ -3,6 +3,7 @@ import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/copyable_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/message_content_preview.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 
@@ -28,15 +29,19 @@ class ReplieDisplay extends StatelessWidget {
   }
 
   Widget _build() {
-    var color = inlineStyle ? null : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
+    var color = inlineStyle
+        ? null
+        : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
     return Container(
-      margin: EdgeInsets.symmetric(vertical: inlineStyle ? 8 : 4),
-      padding: const EdgeInsets.only(left: 6),
+      margin: EdgeInsets.symmetric(vertical: inlineStyle ? p(4) : p(2)),
+      padding: EdgeInsets.only(left: p(6)),
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
             color: ClientTheme.currentTheme.getField(
-              inlineStyle ? "ReplieOnMessageInlineVerticalLineColor" : "ReplieOnMessageBubbleVerticalLineColor",
+              inlineStyle
+                  ? "ReplieOnMessageInlineVerticalLineColor"
+                  : "ReplieOnMessageBubbleVerticalLineColor",
             ),
             width: 3,
           ),

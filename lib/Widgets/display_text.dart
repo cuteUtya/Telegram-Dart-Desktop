@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:myapp/Links%20utils/linksOpener.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/UIManager.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
@@ -33,20 +34,20 @@ class TextDisplay {
   static TextStyle get bold18 => create(size: 18, fontWeight: FontWeight.bold);
   static TextStyle get bold20 => create(size: 20, fontWeight: FontWeight.bold);
   static TextStyle get actionBarOffline => create(
-      size: 16,
+      size: font(14),
       textColor: ClientTheme.currentTheme.getField("ActionBarTextColor"));
   static const String greaterImportance = "SFPro";
   static const String regular = "SFPro";
   static const String monospace = "CodeSourcePro";
 
   static TextStyle get chatTittleSelected => create(
-      size: 18,
+      size: p(14),
       fontWeight: FontWeight.bold,
       textColor: ClientTheme.currentTheme.getField("SelectedHeaderMain"),
       fontFamily: greaterImportance);
 
   static TextStyle get chatTittle => create(
-      size: 18,
+      size: p(14),
       fontWeight: FontWeight.bold,
       textColor: ClientTheme.currentTheme.getField("HeaderMain"),
       fontFamily: greaterImportance);

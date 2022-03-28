@@ -6,6 +6,7 @@ import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
 
@@ -32,11 +33,11 @@ class LeftPanel extends StatelessWidget {
           children: [
             //settings and search
             Row(mainAxisSize: MainAxisSize.max, children: [
-              const SizedBox(width: 12),
+              SizedBox(width: p(8)),
               //Settings icon
               ButtonIcon(
                 Icons.menu,
-                size: 36,
+                size: p(24),
                 color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
                 onClick: () => client.send(GetBackgrounds()).then(
                       (backs) => client.send(
@@ -51,18 +52,18 @@ class LeftPanel extends StatelessWidget {
                       ),
                     ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: p(8)),
               //search field
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.only(right: 12),
-                  height: 36,
+                  margin: EdgeInsets.only(right: p(8)),
+                  height: p(24),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.search,
-                          size: 18,
+                          size: p(14),
                           color: ClientTheme.currentTheme
                               .getField("GenericUIIconsColor"),
                         ),
@@ -70,7 +71,7 @@ class LeftPanel extends StatelessWidget {
                         client.buildTextByKey(
                           "lng_dlg_filter",
                           TextDisplay.create(
-                              size: 18,
+                              size: p(14),
                               fontFamily: TextDisplay.greaterImportance,
                               textColor: ClientTheme.currentTheme
                                   .getField("SearchTextColor")),
@@ -79,14 +80,14 @@ class LeftPanel extends StatelessWidget {
                   decoration: BoxDecoration(
                     color:
                         ClientTheme.currentTheme.getField("SearchBackground"),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(12),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(p(8)),
                     ),
                   ),
                 ),
               ),
             ]),
-            const SizedBox(height: 12),
+            SizedBox(height: p(8)),
             Expanded(
               child: Stack(
                 children: [
@@ -99,7 +100,7 @@ class LeftPanel extends StatelessWidget {
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.ease,
                         margin: EdgeInsets.only(
-                          top: archiveOpened ? 0 : 39,
+                          top: archiveOpened ? 0 : p(26),
                         ),
                         child: Column(
                           children: [

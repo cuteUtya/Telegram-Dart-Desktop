@@ -4,6 +4,7 @@ import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/Chat/action_bar_display.dart';
 import 'package:myapp/Widgets/Chat/input_field.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
+import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/Widgets/background_display.dart';
@@ -94,7 +95,7 @@ class ChatDisplay extends StatelessWidget {
                   child: Stack(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        padding: EdgeInsets.symmetric(horizontal: p(8)),
                         child: MessageList(
                           key: Key("chat?chatId=$chatId"),
                           chatId: chat.id!,
@@ -112,10 +113,10 @@ class ChatDisplay extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(
-                    bottom: 8,
-                    right: 8,
-                    left: 8,
+                  margin: EdgeInsets.only(
+                    bottom: p(4),
+                    right: p(4),
+                    left: p(4),
                   ),
                   child: InputField(
                     key: Key("inputField?chatId=$chatId"),

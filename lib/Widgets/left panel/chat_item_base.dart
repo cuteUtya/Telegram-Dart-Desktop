@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
+import 'package:myapp/scale_utils.dart';
 
 class ChatItemBase extends StatelessWidget {
   const ChatItemBase({
@@ -22,18 +23,24 @@ class ChatItemBase extends StatelessWidget {
   final Widget? chatPic;
   final Function()? onClick;
 
+  /// TODO get value from settings
+  static int contentLines = 2;
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0),
           )),
           animationDuration: const Duration(milliseconds: 200),
           padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
           backgroundColor: MaterialStateProperty.all(
             ClientTheme.currentTheme.getField(
-              selected ? "ChatCurrentlySelectedColor" : "ChatCurrentlyUnselectedColor",
+              selected
+                  ? "ChatCurrentlySelectedColor"
+                  : "ChatCurrentlyUnselectedColor",
             ),
           ),
           overlayColor: MaterialStateProperty.resolveWith((states) {
@@ -41,7 +48,8 @@ class ChatItemBase extends StatelessWidget {
             if (!selected) {
               if (states.contains(MaterialState.pressed)) {
                 themeStr = "ChatClickAnimationEffectColor";
-              } else if (states.contains(MaterialState.hovered) || states.contains(MaterialState.focused)) {
+              } else if (states.contains(MaterialState.hovered) ||
+                  states.contains(MaterialState.focused)) {
                 themeStr = "ChatSelectedColor";
               }
             } else {
@@ -54,26 +62,26 @@ class ChatItemBase extends StatelessWidget {
           })),
       onPressed: onClick,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: EdgeInsets.symmetric(vertical: p(6), horizontal: p(8)),
         child: Row(
           children: [
             SizedBox(
               child: chatPic,
-              width: 56,
-              height: 56,
+              width: p(42),
+              height: p(42),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: p(12)),
             Flexible(
               child: Column(
                 children: [
-                  title ?? const SizedBox(height: 16),
+                  title ?? SizedBox(height: p(12)),
                   const SizedBox(height: 2),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       content ?? const SizedBox.shrink(),
                       Container(
-                        margin: const EdgeInsets.only(top: 8),
+                        margin: EdgeInsets.only(top: p(4)),
                         child: Row(
                           children: [
                             if (unreadPlaceHolder != null) unreadPlaceHolder!,
