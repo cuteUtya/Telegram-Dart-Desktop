@@ -23,6 +23,8 @@ class MessageBubble extends StatelessWidget {
   final CustomPainter? bubblePainter;
   final EdgeInsetsGeometry contentPadding;
 
+  final sidePadding = p(5);
+
   @override
   Widget build(BuildContext context) {
     var bubbleColor = ClientTheme.currentTheme.getField(side == Side.left
@@ -68,14 +70,14 @@ class MessageBubble extends StatelessWidget {
           CustomPaint(
             painter: bubblePainter,
             child: SizedBox(
-              width: p(30),
-              height: p(20),
+              width: p(36),
+              height: p(29),
             ),
           ),
         Container(
           margin: EdgeInsets.only(
-              left: side == Side.left ? p(4) : 0,
-              right: side == Side.left ? 0 : p(4)),
+              left: side == Side.left ? sidePadding : 0,
+              right: side == Side.left ? 0 : sidePadding),
           decoration:
               BoxDecoration(color: bubbleColor, borderRadius: borderRadius),
           child: Padding(

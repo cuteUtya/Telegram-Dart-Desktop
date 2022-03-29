@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
+import 'package:myapp/Widgets/message/message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
 import 'package:myapp/Widgets/message/message_display_audio.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
@@ -419,7 +420,9 @@ class MessageDisplay extends StatelessWidget {
             !wrapInBubble) {
           contentWidget = Container(
             child: contentWidget,
-            margin: EdgeInsets.symmetric(horizontal: wrapInBubble ? 0 : p(4)),
+            margin: EdgeInsets.symmetric(
+              horizontal: wrapInBubble ? 0 : MessageBubble.sidePadding,
+            ),
           );
         }
         return isServiceMessage
