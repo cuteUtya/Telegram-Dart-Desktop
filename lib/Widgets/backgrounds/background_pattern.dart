@@ -41,7 +41,7 @@ class BackgroundPatternDisplay extends StatelessWidget {
                   var bytes = Uint8List.fromList(
                     io.gzip.decode((data.data as Uint8List).toList()),
                   );
-                  var intensity = pattern.intensity! / 100;
+                  var intensity = pattern.intensity! / 256;
                   var colors =
                       BackgroundFillDisplay.getColorsFromFill(pattern.fill!)
                           .map((e) => e.withOpacity(intensity))
