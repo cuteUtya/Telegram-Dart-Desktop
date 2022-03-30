@@ -13,7 +13,6 @@ InfoOutsideMessageColor: #F6F6F6;
 TextSelectionColor: #c2dcf2;
 BubbleBorderRadiusFree: 18;
 BubbleBorderRadiusClose: 8;
-MediaWithoutTextBorderRadius: 6;
 
 BorderLineColor(theme=light): #DADADA;
 BorderLineColor(theme=dark): #4A4A4A;

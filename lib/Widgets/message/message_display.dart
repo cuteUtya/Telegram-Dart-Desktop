@@ -26,6 +26,7 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
+import 'package:path/path.dart';
 
 /// UI representation of [Message] object
 /// * [message] message object
@@ -94,6 +95,8 @@ class MessageDisplay extends StatelessWidget {
     });
 
     var bubblePadding = MacMessageBubble.padding;
+    var bubbleBorderRadius = MacMessageBubble.calculateBorderRadius(
+        bubbleRelativePosition, message.isOutgoing! ? Side.right : Side.left);
 
     return StreamBuilder(
       stream: client.senderName(message.senderId!),
@@ -301,13 +304,15 @@ class MessageDisplay extends StatelessWidget {
             break;
 
           case MessagePhoto:
-            wrapInBubble = haveText;
-            overrideBubblePadding = true;
+            bool addStroke = haveText || replieOn == null;
+            wrapInBubble = addStroke;
+            overrideBubblePadding = addStroke;
             contentWidget = MessageDisplayPhoto(
               client: client,
               message: message,
               adminTitle: adminTitle,
               contentPadding: bubblePadding,
+              bubbleBorderRadius: bubbleBorderRadius,
               senderName: showMessageSender ? author : null,
               infoWidget: _buildInfoWidget(haveText),
               replieWidget: _buildReplieWidget(haveText),

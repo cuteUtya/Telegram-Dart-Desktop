@@ -17,7 +17,7 @@ class MessageDisplayMedia extends StatelessWidget {
     required this.message,
     required this.content,
     this.caption,
-    this.border,
+    this.borderRadius,
     this.senderName,
     this.captionMargin,
     this.adminTitle,
@@ -32,7 +32,7 @@ class MessageDisplayMedia extends StatelessWidget {
   final FormattedText? caption;
   final Widget content;
   final Message message;
-  final BorderRadius? border;
+  final BorderRadius? borderRadius;
   final String? adminTitle;
   final EdgeInsets? captionMargin;
   final double? contentWidth;
@@ -47,22 +47,22 @@ class MessageDisplayMedia extends StatelessWidget {
   Widget build(BuildContext context) {
     bool haveText = (caption?.text ?? "").isNotEmpty;
     GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
-    var radius = ClientTheme.currentTheme.getField("BubbleBorderRadiusFree");
-    var radiusSmall =
-        ClientTheme.currentTheme.getField("MediaWithoutTextBorderRadius");
-    BorderRadius border = haveText
-        ? (coverBubbleInInlineMessages
-            ? (senderName != null
-                ? BorderRadius.zero
-                : BorderRadius.vertical(top: Radius.circular(radiusSmall)))
-            : BorderRadius.vertical(
-                top: Radius.circular(
-                    replieWidget == null ? radiusSmall : radius),
-                bottom: Radius.circular(radiusSmall),
-              ))
-        : BorderRadius.all(
-            Radius.circular(radiusSmall),
+    BorderRadius border = BorderRadius.zero;
+    if (haveText && coverBubbleInInlineMessages) {
+      if (coverBubbleInInlineMessages) {
+        if (senderName == null && replieWidget == null) {
+          var r = const Radius.circular(4);
+          border = BorderRadius.only(
+            topLeft: borderRadius!.topLeft,
+            topRight: borderRadius!.topRight,
+            bottomLeft: r,
+            bottomRight: r,
           );
+        }
+      }
+    } else {
+      border = borderRadius ?? border;
+    }
 
     return haveText
         ? LayoutBuilder(
@@ -128,7 +128,7 @@ class MessageDisplayMedia extends StatelessWidget {
           );
   }
 
-  Widget _buildImage(BorderRadius border) => SizedBox(
+  Widget _buildImage(BorderRadius? border) => SizedBox(
         width: contentWidth,
         height: contentHeight,
         child: ClipRRect(

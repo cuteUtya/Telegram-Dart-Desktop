@@ -28,19 +28,22 @@ class MessageStickerDisplay extends StatelessWidget {
 
     var sizerKey = GlobalKey<WidgetSizerState>();
 
-    var stickerWidth = (sticker.width ?? (sticker.width!)).toDouble() * StickerDisplay.stickerSizeRatio;
-    var stickerHeight = (sticker.height ?? (sticker.height!)).toDouble() * StickerDisplay.stickerSizeRatio;
+    var stickerWidth = (sticker.width ?? (sticker.width!)).toDouble() *
+        StickerDisplay.stickerSizeRatio;
+    var stickerHeight = (sticker.height ?? (sticker.height!)).toDouble() *
+        StickerDisplay.stickerSizeRatio;
     return MessageDisplayMedia(
       client: client,
       message: message,
       replieWidget: replieWidget,
       infoWidget: infoWidget,
-      border: BorderRadius.zero,
+      borderRadius: BorderRadius.zero,
       content: WidgetSizer(
         key: sizerKey,
         curve: Curves.easeOutBack,
         duration: const Duration(milliseconds: 200),
-        alignment: message.isOutgoing! ? Alignment.centerRight : Alignment.centerLeft,
+        alignment:
+            message.isOutgoing! ? Alignment.centerRight : Alignment.centerLeft,
         sizeOnInit: Size(
           stickerWidth,
           stickerHeight,

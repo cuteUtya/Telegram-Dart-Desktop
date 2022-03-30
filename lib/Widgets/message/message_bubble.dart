@@ -25,42 +25,51 @@ class MessageBubble extends StatelessWidget {
 
   static final double sidePadding = p(5);
 
-  @override
-  Widget build(BuildContext context) {
-    var bubbleColor = ClientTheme.currentTheme.getField(side == Side.left
-        ? "MessageBubbleOtherColor"
-        : "MessageBubbleMineColor");
-    BorderRadius borderRadius = BorderRadius.all(radiusFree);
+  static BorderRadius calculateBorderRadius({
+    required BubbleRelativePosition position,
+    required Radius radiusFree,
+    required Radius radiusClose,
+    required Side side,
+  }) {
     switch (position) {
       case BubbleRelativePosition.top:
-        borderRadius = BorderRadius.only(
+        return BorderRadius.only(
           bottomLeft: side == Side.left ? radiusClose : radiusFree,
           bottomRight: side == Side.left ? radiusFree : radiusClose,
           topLeft: radiusFree,
           topRight: radiusFree,
         );
-        break;
       case BubbleRelativePosition.bottom:
-        borderRadius = BorderRadius.only(
+        return BorderRadius.only(
           topRight: side == Side.left ? radiusFree : radiusClose,
           topLeft: side == Side.left ? radiusClose : radiusFree,
           bottomLeft: radiusFree,
           bottomRight: radiusFree,
         );
-        break;
       case BubbleRelativePosition.middle:
         if (side == Side.right) {
-          borderRadius =
-              BorderRadius.horizontal(left: radiusFree, right: radiusClose);
+          return BorderRadius.horizontal(left: radiusFree, right: radiusClose);
         } else {
-          borderRadius =
-              BorderRadius.horizontal(left: radiusClose, right: radiusFree);
+          return BorderRadius.horizontal(left: radiusClose, right: radiusFree);
         }
-        break;
       case BubbleRelativePosition.single:
-        borderRadius = BorderRadius.all(radiusFree);
-        break;
+        return BorderRadius.all(radiusFree);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var bubbleColor = ClientTheme.currentTheme.getField(side == Side.left
+        ? "MessageBubbleOtherColor"
+        : "MessageBubbleMineColor");
+
+    var borderRadius = calculateBorderRadius(
+      position: position,
+      radiusFree: radiusFree,
+      radiusClose: radiusClose,
+      side: side,
+    );
+
     return Stack(
       alignment:
           side == Side.left ? Alignment.bottomLeft : Alignment.bottomRight,

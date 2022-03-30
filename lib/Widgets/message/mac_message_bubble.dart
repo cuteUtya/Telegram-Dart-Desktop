@@ -26,16 +26,27 @@ class MacMessageBubble extends StatelessWidget {
   static EdgeInsets padding =
       EdgeInsets.symmetric(vertical: p(6), horizontal: p(9));
 
+  static Radius get radiusClose => Radius.circular(
+      ClientTheme.currentTheme.getField("BubbleBorderRadiusClose"));
+  static Radius get radiusFree => Radius.circular(
+      ClientTheme.currentTheme.getField("BubbleBorderRadiusFree"));
+
+  static BorderRadius calculateBorderRadius(
+          BubbleRelativePosition position, Side side) =>
+      MessageBubble.calculateBorderRadius(
+        position: position,
+        radiusFree: radiusFree,
+        radiusClose: radiusClose,
+        side: side,
+      );
+
   @override
   Widget build(BuildContext context) => MessageBubble(
         content: content,
         side: side,
         position: position,
-        radiusClose: Radius.circular(
-            ClientTheme.currentTheme.getField("BubbleBorderRadiusClose")),
-        radiusFree: Radius.circular(
-          ClientTheme.currentTheme.getField("BubbleBorderRadiusFree"),
-        ),
+        radiusClose: radiusClose,
+        radiusFree: radiusFree,
         bubblePainter: MacMessageBubblePainter(
           color: ClientTheme.currentTheme.getField(
             side == Side.left

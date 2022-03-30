@@ -24,6 +24,7 @@ class MessageDisplayPhoto extends StatelessWidget {
     required this.client,
     required this.message,
     required this.contentPadding,
+    required this.bubbleBorderRadius,
     this.senderName,
     this.adminTitle,
     this.infoWidget,
@@ -33,6 +34,7 @@ class MessageDisplayPhoto extends StatelessWidget {
   final TelegramClient client;
   final Message message;
   final EdgeInsets contentPadding;
+  final BorderRadius bubbleBorderRadius;
   final String? senderName;
   final String? adminTitle;
   final Widget? infoWidget;
@@ -44,107 +46,103 @@ class MessageDisplayPhoto extends StatelessWidget {
     var photo = message.content as MessagePhoto;
     var photoSize = sortPhotoSizes(photo.photo!.sizes!)[0];
 
-    return LayoutBuilder(
-      builder: (_, box) {
-        var width = max(
-          100,
-          min(
-            box.maxWidth * (UIManager.useDesktopLayout ? 0.5 : 1),
-            photoSize.width!.toDouble(),
-          ),
-        ).toDouble();
-        var height = (photoSize.height! / (photoSize.width! / width));
-        var blurImage = photo.photo?.minithumbnail?.data != null
-            ? BlurImagePreview(
-                image: MemoryImage(
-                  base64.decode(
-                    photo.photo!.minithumbnail!.data!,
-                  ),
-                ),
-                width: width,
-                height: height,
-              )
-            : Container(
-                width: width,
-                height: height,
-                color: Colors.white,
-              );
-        return MessageDisplayMedia(
+    var width = min(photoSize.width!.toDouble(), 400.0);
+    var height = (photoSize.height! / (photoSize.width! / width));
+    var blurImage = photo.photo?.minithumbnail?.data != null
+        ? BlurImagePreview(
+            image: MemoryImage(
+              base64.decode(
+                photo.photo!.minithumbnail!.data!,
+              ),
+            ),
+            width: width,
+            height: height,
+          )
+        : Container(
+            width: width,
+            height: height,
+            color: Colors.white,
+          );
+
+    return Container(
+      width: width,
+      margin: EdgeInsets.all(p(1)),
+      child: MessageDisplayMedia(
+        client: client,
+        message: message,
+        senderName: senderName,
+        infoWidget: infoWidget,
+        contentWidth: width,
+        adminTitle: adminTitle,
+        captionMargin: contentPadding,
+        replieWidget: replieWidget,
+        caption: photo.caption,
+        borderRadius: bubbleBorderRadius,
+        content: RemoteFileBuilderProgress(
           client: client,
-          message: message,
-          senderName: senderName,
-          infoWidget: infoWidget,
-          contentWidth: width,
-          adminTitle: adminTitle,
-          captionMargin: contentPadding,
-          replieWidget: replieWidget,
-          caption: photo.caption,
-          content: RemoteFileBuilderProgress(
-            client: client,
-            downloadStep: 65000,
-            fileId: photoSize.photo!.id!,
-            builder: (_, progress, path) {
-              if (path == null || progress != 1) {
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    blurImage,
-                    MessageInfoBubbleBase(
-                      padding: const EdgeInsets.all(8),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "${(progress * 100).toInt()}%",
-                            style: TextDisplay.create(
-                              size: 16,
-                              textColor: Colors.white,
-                              fontFamily: TextDisplay.greaterImportance,
+          downloadStep: 65000,
+          fileId: photoSize.photo!.id!,
+          builder: (_, progress, path) {
+            if (path == null || progress != 1) {
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  blurImage,
+                  MessageInfoBubbleBase(
+                    padding: const EdgeInsets.all(8),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "${(progress * 100).toInt()}%",
+                          style: TextDisplay.create(
+                            size: 16,
+                            textColor: Colors.white,
+                            fontFamily: TextDisplay.greaterImportance,
+                          ),
+                        ),
+                        SizedBox(
+                          height: p(2),
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              p(2),
                             ),
                           ),
-                          SizedBox(
-                            height: p(2),
+                          child: SizedBox(
+                            width: width * 0.33,
+                            height: p(8),
+                            child: LinearProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor:
+                                  Color(0x2A1515).withOpacity(0.24),
+                              value: progress,
+                            ),
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(
-                                p(2),
-                              ),
-                            ),
-                            child: SizedBox(
-                              width: width * 0.33,
-                              height: p(8),
-                              child: LinearProgressIndicator(
-                                color: Colors.white,
-                                backgroundColor:
-                                    Color(0x2A1515).withOpacity(0.24),
-                                value: progress,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                  ],
-                );
-              }
-              return Align(
-                alignment: message.isOutgoing!
-                    ? Alignment.bottomRight
-                    : Alignment.bottomLeft,
-                child: SizedBox(
-                  width: width,
-                  height: height,
-                  child: Image.file(
-                    io.File(path),
-                    fit: BoxFit.cover,
                   ),
-                ),
+                ],
               );
-            },
-          ),
-        );
-      },
+            }
+            return Align(
+              alignment: message.isOutgoing!
+                  ? Alignment.bottomRight
+                  : Alignment.bottomLeft,
+              child: SizedBox(
+                width: width,
+                height: height,
+                child: Image.file(
+                  io.File(path),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
