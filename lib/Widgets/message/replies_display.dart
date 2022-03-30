@@ -35,61 +35,44 @@ class ReplieDisplay extends StatelessWidget {
     var color = inlineStyle
         ? null
         : ClientTheme.currentTheme.getField("ReplieOnMessageBubbleTextColor");
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: p(32),
-          width: p(3),
-          margin: EdgeInsets.only(right: p(6)),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(p(3))),
-            color: ClientTheme.currentTheme.getField(
-              inlineStyle
-                  ? (isOutgoing
-                      ? "ReplieOnMessageInlineVerticalLineColorMine"
-                      : "ReplieOnMessageInlineVerticalLineColor")
-                  : "ReplieOnMessageBubbleVerticalLineColor",
-            ),
-          ),
-        ),
-        Flexible(
-          child: MessageContentPreview(
-            client: client,
-            message: message,
-            style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
-            showAuthor: showAuthor,
-            maxLines: 2,
-            authorColor: ClientTheme.currentTheme.getField(inlineStyle
-                ? (isOutgoing
-                    ? "ReplieOnMessageInlineSenderColorMine"
-                    : "ReplieOnMessageInlineSenderColor")
-                : "ReplieOnMessageBubbleTextColor"),
-            textColor: color,
-            fontSize: font(13),
-          ),
-        )
-      ],
-    ); /*Container(
+    return Container(
       margin: EdgeInsets.symmetric(vertical: inlineStyle ? p(4) : p(2)),
-      padding: EdgeInsets.only(left: p(6)),
-      decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(
-            
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: p(32),
+            width: p(3),
+            margin: EdgeInsets.only(right: p(6)),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(p(3))),
+              color: ClientTheme.currentTheme.getField(
+                inlineStyle
+                    ? (isOutgoing
+                        ? "ReplieOnMessageInlineVerticalLineColorMine"
+                        : "ReplieOnMessageInlineVerticalLineColor")
+                    : "ReplieOnMessageBubbleVerticalLineColor",
+              ),
             ),
-            width: 3,
           ),
-        ),
+          Flexible(
+            child: MessageContentPreview(
+              client: client,
+              message: message,
+              style: MessageContentPreviewStyle.lineBreakeAfterAuthorName,
+              showAuthor: showAuthor,
+              maxLines: 2,
+              authorColor: ClientTheme.currentTheme.getField(inlineStyle
+                  ? (isOutgoing
+                      ? "ReplieOnMessageInlineSenderColorMine"
+                      : "ReplieOnMessageInlineSenderColor")
+                  : "ReplieOnMessageBubbleTextColor"),
+              textColor: color,
+              fontSize: font(13),
+            ),
+          )
+        ],
       ),
-      child: LayoutBuilder(
-        builder: (_, box) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ,
-          ],
-        ),
-      ),
-    );*/
+    );
   }
 }
