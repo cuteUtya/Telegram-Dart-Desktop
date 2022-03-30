@@ -19,7 +19,7 @@ class AppMainDesktop extends StatefulWidget {
 }
 
 class _AppMainDesktopState extends State<AppMainDesktop> {
-  double j = 0;
+  double resizePX = 0;
   bool startResize = false;
   bool down = false;
 
@@ -30,7 +30,7 @@ class _AppMainDesktopState extends State<AppMainDesktop> {
         SizedBox(
           width: MediaQuery.of(context).size.width *
                   (UIManager.isMobile ? 0.4 : 0.25) +
-              j,
+              resizePX,
           child: LeftPanel(
             client: widget.client,
           ),
@@ -53,13 +53,13 @@ class _AppMainDesktopState extends State<AppMainDesktop> {
                 width: 3,
                 child: GestureDetector(
                   onHorizontalDragUpdate: (pointer) {
-                    setState(() => j += pointer.delta.dx);
+                    setState(() => resizePX += pointer.delta.dx);
                   },
                   child: MouseRegion(
                     cursor: SystemMouseCursors.resizeColumn,
                     onHover: (pointer) {
                       if (down) {
-                        setState(() => j += pointer.delta.dx);
+                        setState(() => resizePX += pointer.delta.dx);
                       }
                     },
                   ),

@@ -99,7 +99,7 @@ ScamIconColor: #E37B40;
 TextInlineIconsColor: ref(RegularText);
 ChatPinIconColor: ref(RegularText);
 SelectedChatPinIconColor: ref(SelectedColor);
-CheckMarkChatListColor: ref(OnlineColor);
+CheckMarkChatListColor:  #0BA628;
 CheckMarkChatSelectedListColor: ref(SelectedColor);
 ExpiredPhotoChatListIconColor: #F65B6D;
 Draft: ref(DangerColor);
@@ -164,9 +164,18 @@ CloseChatIconColor(layout=mobile): #FFFFFF;
 CloseChatClickColor: ref(HoveredObject);
 HyperlinkColor: ref(Accent);
 
+#--------------replies color--------------#
+#Line color - inline#
 ReplieOnMessageInlineVerticalLineColor: ref(Accent);
+ReplieOnMessageInlineVerticalLineColorMine: #0BA628;
+
+#Author color - inline#
+ReplieOnMessageInlineSenderColor: ref(ReplieOnMessageInlineVerticalLineColor);
+ReplieOnMessageInlineSenderColorMine: ref(ReplieOnMessageInlineVerticalLineColorMine); 
+
 ReplieOnMessageBubbleVerticalLineColor: ref(InfoOutsideMessageColor);
 ReplieOnMessageBubbleTextColor: ref(InfoOutsideMessageColor);
+#-----------------------------------------#
 
 FoldersAndSearchBackgroundColor: ref(BaseColor);
 ActionBarTextColor(layout=desktop): ref(RegularText);

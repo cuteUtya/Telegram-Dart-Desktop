@@ -23,7 +23,7 @@ class MessageBubble extends StatelessWidget {
   final CustomPainter? bubblePainter;
   final EdgeInsetsGeometry contentPadding;
 
-  final sidePadding = p(5);
+  static final double sidePadding = p(5);
 
   @override
   Widget build(BuildContext context) {

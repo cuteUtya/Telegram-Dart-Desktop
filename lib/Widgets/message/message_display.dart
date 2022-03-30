@@ -67,6 +67,7 @@ class MessageDisplay extends StatelessWidget {
 
   Widget? _buildReplieWidget(bool inline) => isReplie
       ? ReplieDisplay(
+          isOutgoing: message.isOutgoing!,
           message: replieOn is! ReplieLoadingResultSucces
               ? Message(
                   content: MessageText(

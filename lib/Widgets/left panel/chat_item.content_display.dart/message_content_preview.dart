@@ -283,26 +283,29 @@ class MessageContentPreview extends StatelessWidget {
             text = FormattedText(text: content.runtimeType.toString());
             break;
         }
+        var senderNameStyle = draftMessage != null
+            ? TextDisplay.draftText
+            : textStyle.copyWith(
+                color: authorColor,
+                fontWeight: FontWeight.w500,
+              );
+
         return RichText(
           maxLines: maxLines,
           text: TextSpan(
             children: [
-                  TextDisplay.parseEmojiInString(
-                      messageTypeAllowShowFrom
-                          ? (_showAuthor
-                              ? (style ==
-                                      MessageContentPreviewStyle.noLineBreaks
-                                  ? client.getTranslation(
-                                          "lng_dialogs_text_from_wrapped",
-                                          replacing: {
-                                            "{from}":
-                                                lastMessageSenderName ?? author
-                                          }) +
-                                      " "
-                                  : "${lastMessageSenderName ?? author}\n")
-                              : "")
-                          : "",
-                      draftMessage != null ? TextDisplay.draftText : textStyle),
+                  if (_showAuthor && messageTypeAllowShowFrom)
+                    TextDisplay.parseEmojiInString(
+                      style == MessageContentPreviewStyle.noLineBreaks
+                          ? (client.getTranslation(
+                                  "lng_dialogs_text_from_wrapped",
+                                  replacing: {
+                                    "{from}": lastMessageSenderName ?? author
+                                  }) +
+                              " ")
+                          : ("${lastMessageSenderName ?? author}\n"),
+                      senderNameStyle,
+                    ),
                   WidgetSpan(
                       child: message?.forwardInfo != null
                           ? Container(

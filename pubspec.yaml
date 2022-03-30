@@ -50,6 +50,7 @@ flutter:
   - family: SFPro
     fonts: 
         - asset: fonts/SF Pro/SFProDisplay-Regular.ttf
+        - asset: fonts/SF Pro/SFProDisplay-Medium.ttf
   - family: AppleColorEmoji
     fonts: 
         - asset: fonts/Emoji/AppleColorEmoji.ttf

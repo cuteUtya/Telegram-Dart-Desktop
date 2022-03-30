@@ -31,7 +31,7 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
         ? "CheckMarkInFlowContainer"
         : (isOutgoing ? "CheckMarkMineColor" : "CheckMarkNotMineColor"));
     var textStyle = TextDisplay.create(
-      size: font(12),
+      size: font(11),
       textColor: color,
     );
     var content = Row(
@@ -48,7 +48,6 @@ class MessageInfoBubbleCheckMarkTime extends StatelessWidget {
           time,
           style: textStyle,
         ),
-        if (checkMarkValue != null) const SizedBox(width: 4),
         if (checkMarkValue != null)
           CheckMark(
             isReaded: checkMarkValue!,
