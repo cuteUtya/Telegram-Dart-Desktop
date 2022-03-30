@@ -56,6 +56,7 @@ class BackgroundPatternDisplay extends StatelessWidget {
                     colors:
                         pattern.isInverted! ? colors : [fillColor, fillColor],
                   );
+
                   return FittedBox(
                     fit: BoxFit.fill,
                     clipBehavior: Clip.antiAlias,
@@ -97,7 +98,7 @@ class ShaderedSVG extends StatefulWidget {
     Key? key,
     required this.image,
     required this.shaderCallback,
-    this.blendMode = BlendMode.srcATop,
+    this.blendMode = BlendMode.srcIn,
   }) : super(key: key);
   final Uint8List image;
   final Shader Function(Rect)? shaderCallback;
