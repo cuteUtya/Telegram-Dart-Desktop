@@ -30,6 +30,7 @@ class MessageList extends StatefulWidget {
 
 class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
   Messages? messages;
+  bool loadedFirstMessage = false;
   ScrollController scrollController = ScrollController();
   List<ChatAdministrator> admins = [];
 
@@ -53,6 +54,10 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
         offset: offset,
       ),
     ) as Messages;
+
+    if (offset == 0 && (msgs.messages?.length ?? 1) == 0) {
+      loadedFirstMessage = true;
+    }
 
     if (mounted) {
       setState(
@@ -128,7 +133,7 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
             onBuild: () {
               // if we havent messages - that mean what we alreade called
               // loadMessages in start of build method
-              if (messagesCount != 0) {
+              if (messagesCount != 0 && !loadedFirstMessage) {
                 loadMessages(25, messages?.messages?.last.id ?? 0, 0);
               }
             },
