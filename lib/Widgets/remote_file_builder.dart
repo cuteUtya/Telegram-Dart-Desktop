@@ -65,7 +65,12 @@ class _RemoteFileBuilderState
 
   @override
   void initState() {
-    downloadFile();
+    var syncData = widget.client.getFileSync(widget.fileId);
+    if (syncData != null) {
+      _widget = widget.builder(context, syncData.local!.path!);
+    } else {
+      downloadFile();
+    }
     super.initState();
   }
 
@@ -73,10 +78,6 @@ class _RemoteFileBuilderState
 
   @override
   Widget build(BuildContext context) {
-    var syncData = widget.client.getFileSync(widget.fileId);
-    if (syncData != null) {
-      return widget.builder(context, syncData.local!.path!);
-    }
     return _widget;
   }
 }
