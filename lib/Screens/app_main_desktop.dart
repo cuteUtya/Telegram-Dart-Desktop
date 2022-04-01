@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/Chat/chat_display.dart';
+import 'package:myapp/Widgets/background_manager_desktop.dart';
 import 'package:myapp/Widgets/left%20panel/left_panel.dart';
 import 'package:myapp/Widgets/transcluent_gestures_stack.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -38,6 +39,7 @@ class _AppMainDesktopState extends State<AppMainDesktop> {
         Flexible(
           child: Stack(
             children: [
+              DesktopBackgroundManager(client: widget.client),
               StreamBuilder(
                 stream: UIEvents.selectedChat(),
                 initialData: const <int>[],
