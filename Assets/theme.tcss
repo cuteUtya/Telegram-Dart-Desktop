@@ -144,7 +144,7 @@ RepliesMessageIconColor: #FFFFFFFF;
 
 MessageTextColor(theme=light): #151515;
 MessageTextColor(theme=dark): #F1F1F1;
-MessageBubbleMineColor(theme=light): #E6FEE4;
+MessageBubbleMineColor(theme=light): #e0fdc5;
 MessageBubbleMineColor(theme=dark): linear(ref(Accent), #505050, 0.30);
 MessageBubbleOtherColor(theme=light): ref(BaseColor);
 MessageBubbleOtherColor(theme=dark): #213041;
@@ -166,7 +166,7 @@ HyperlinkColor: ref(Accent);
 #--------------replies color--------------#
 #Line color - inline#
 ReplieOnMessageInlineVerticalLineColor: ref(Accent);
-ReplieOnMessageInlineVerticalLineColorMine: #0BA628;
+ReplieOnMessageInlineVerticalLineColorMine: #5ca351;
 
 #Author color - inline#
 ReplieOnMessageInlineSenderColor: ref(ReplieOnMessageInlineVerticalLineColor);
@@ -232,3 +232,8 @@ ReactionsInChatListIconColorSelected: ref(ReactionsInChatlistBackgroundColor);
 ReactionsInChatListTextColor: #FFFFFF;
 ReactionsInChatListTextColorSelected: ref(ReactionsInChatListIconColorSelected);
 ReactionsInChatListIcon: Icons.favorite;
+
+InlineKeyboardButton.color: #22000000;
+InlineKeyboardButton.color.pressed: #44000000;
+InlineKeyboardButton.color.hover: #33000000;
+InlineKeyboardButton.text.color: #FFFFFF;

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
+import 'package:myapp/Widgets/InlineKeyboard/inline_keyboard_display.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
@@ -430,7 +431,22 @@ class MessageDisplay extends StatelessWidget {
             ),
           );
         }
-        return isServiceMessage
+
+        Widget inlineKeyboard = const SizedBox();
+
+        if (message.replyMarkup is ReplyMarkupInlineKeyboard) {
+          inlineKeyboard = Container(
+            margin: EdgeInsets.only(
+              top: p(8),
+            ),
+            child: InlineKeyboardDisplay(
+              client: client,
+              keyboard: message.replyMarkup! as ReplyMarkupInlineKeyboard,
+            ),
+          );
+        }
+
+        var result = isServiceMessage
             ? contentWidget
             : Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -455,6 +471,14 @@ class MessageDisplay extends StatelessWidget {
                   )
                 ],
               );
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            result,
+            inlineKeyboard,
+          ],
+        );
       },
     );
   }
