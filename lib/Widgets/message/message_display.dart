@@ -304,9 +304,8 @@ class MessageDisplay extends StatelessWidget {
             break;
 
           case MessagePhoto:
-            bool addStroke = haveText || replieOn == null;
-            wrapInBubble = addStroke;
-            overrideBubblePadding = addStroke;
+            wrapInBubble = true;
+            overrideBubblePadding = true;
             contentWidget = MessageDisplayPhoto(
               client: client,
               message: message,
@@ -315,7 +314,7 @@ class MessageDisplay extends StatelessWidget {
               bubbleBorderRadius: bubbleBorderRadius,
               senderName: showMessageSender ? author : null,
               infoWidget: _buildInfoWidget(haveText),
-              replieWidget: _buildReplieWidget(haveText),
+              replieWidget: _buildReplieWidget(true),
             );
             break;
 

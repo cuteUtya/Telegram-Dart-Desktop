@@ -68,6 +68,7 @@ class MessageDisplayPhoto extends StatelessWidget {
       width: width,
       margin: EdgeInsets.all(p(1)),
       child: MessageDisplayMedia(
+        forceToTextMessage: true,
         client: client,
         message: message,
         senderName: senderName,

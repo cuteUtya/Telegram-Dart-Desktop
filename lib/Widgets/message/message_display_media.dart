@@ -16,6 +16,7 @@ class MessageDisplayMedia extends StatelessWidget {
     required this.client,
     required this.message,
     required this.content,
+    this.forceToTextMessage = false,
     this.caption,
     this.borderRadius,
     this.senderName,
@@ -33,6 +34,7 @@ class MessageDisplayMedia extends StatelessWidget {
   final Widget content;
   final Message message;
   final BorderRadius? borderRadius;
+  final bool forceToTextMessage;
   final String? adminTitle;
   final EdgeInsets? captionMargin;
   final double? contentWidth;
@@ -46,12 +48,12 @@ class MessageDisplayMedia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool haveText = (caption?.text ?? "").isNotEmpty;
-    GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
+
     BorderRadius border = BorderRadius.zero;
+    var r = const Radius.circular(4);
     if (haveText && coverBubbleInInlineMessages) {
       if (coverBubbleInInlineMessages) {
         if (senderName == null && replieWidget == null) {
-          var r = const Radius.circular(4);
           border = BorderRadius.only(
             topLeft: borderRadius!.topLeft,
             topRight: borderRadius!.topRight,
@@ -61,71 +63,94 @@ class MessageDisplayMedia extends StatelessWidget {
         }
       }
     } else {
-      border = borderRadius ?? border;
+      if (forceToTextMessage && replieWidget != null) {
+        border = BorderRadius.only(
+          bottomLeft: borderRadius!.topLeft,
+          bottomRight: borderRadius!.topRight,
+          topLeft: r,
+          topRight: r,
+        );
+      } else {
+        border = borderRadius ?? border;
+      }
     }
 
-    return haveText
+    bool showName = (forceToTextMessage && !haveText && replieWidget == null) ||
+        senderName == null;
+
+    return haveText || forceToTextMessage
         ? LayoutBuilder(
             builder: (_, box) => SizedBox(
               width: min(box.maxWidth, contentWidth ?? box.maxWidth),
               child: MessageDisplayText(
+                showText: haveText,
                 client: client,
-                adminTitle: adminTitle,
+                adminTitle: showName ? null : adminTitle,
                 message: message,
-                senderName: senderName,
-                additionalContent: Container(
-                  margin: coverBubbleInInlineMessages
-                      ? EdgeInsets.zero
-                      : EdgeInsets.all(p(2)),
-                  child: _buildImage(border),
-                ),
+                senderName: showName ? null : senderName,
+                additionalContent: forceToTextMessage && !haveText
+                    ? _buildBubbleStyle(border)
+                    : Container(
+                        margin: coverBubbleInInlineMessages
+                            ? EdgeInsets.zero
+                            : EdgeInsets.all(p(2)),
+                        child: _buildImage(border),
+                      ),
                 captionMargin: captionMargin,
-                infoWidget: infoWidget,
+                infoWidget: forceToTextMessage && !haveText ? null : infoWidget,
                 replieWidget: replieWidget,
                 text: caption,
               ),
             ),
           )
-        : Align(
-            alignment: message.isOutgoing!
-                ? Alignment.bottomRight
-                : Alignment.bottomLeft,
-            child: MouseRegion(
-              onEnter: (_) => hiderKey.currentState?.show(),
-              onExit: (_) => hiderKey.currentState?.hide(),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (message.isOutgoing! && replieWidget != null)
-                    Container(
-                      child: replieWidget!,
-                      margin: EdgeInsets.only(right: p(6)),
-                    ),
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      _buildImage(border),
-                      if (infoWidget != null)
-                        WidgetHider(
-                          key: hiderKey,
-                          hiddenOnInit: !UIManager.isMobile,
-                          child: Container(
-                            child: infoWidget!,
-                            padding: EdgeInsets.all(p(6)),
-                          ),
-                        ),
-                    ],
-                  ),
-                  if (!message.isOutgoing! && replieWidget != null)
-                    Container(
-                      child: replieWidget!,
-                      margin: EdgeInsets.only(left: p(6)),
-                    ),
-                ],
+        : _buildBubbleStyle(border);
+  }
+
+  Widget _buildBubbleStyle(BorderRadius border) {
+    GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
+    return Align(
+      alignment:
+          message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
+      child: MouseRegion(
+        onEnter: (_) => hiderKey.currentState?.show(),
+        onExit: (_) => hiderKey.currentState?.hide(),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (message.isOutgoing! &&
+                replieWidget != null &&
+                !forceToTextMessage)
+              Container(
+                child: replieWidget!,
+                margin: EdgeInsets.only(right: p(6)),
               ),
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                _buildImage(border),
+                if (infoWidget != null)
+                  WidgetHider(
+                    key: hiderKey,
+                    hiddenOnInit: !UIManager.isMobile,
+                    child: Container(
+                      child: infoWidget!,
+                      padding: EdgeInsets.all(p(6)),
+                    ),
+                  ),
+              ],
             ),
-          );
+            if (!message.isOutgoing! &&
+                replieWidget != null &&
+                !forceToTextMessage)
+              Container(
+                child: replieWidget!,
+                margin: EdgeInsets.only(left: p(6)),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildImage(BorderRadius? border) => SizedBox(

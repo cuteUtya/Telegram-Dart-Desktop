@@ -30,6 +30,7 @@ class MessageDisplayText extends StatelessWidget {
     required this.replieWidget,
     this.additionalContent,
     this.additionalContentPlace = AdditionalContentPlace.top,
+    this.showText = true,
     this.text,
     this.captionMargin,
     this.senderName,
@@ -40,6 +41,7 @@ class MessageDisplayText extends StatelessWidget {
   final FormattedText? text;
   final EdgeInsets? captionMargin;
   final String? senderName;
+  final bool showText;
   final String? adminTitle;
   final Widget? additionalContent;
   final AdditionalContentPlace additionalContentPlace;
@@ -51,15 +53,19 @@ class MessageDisplayText extends StatelessWidget {
     /// TODO complete mechanism of getting size of info widget
     /// but DONT TURN THIS WIDGET TO STATUFULL
     Size msgInfoBubbleSize = const Size(84, 0);
+    var contentText = showText
+        ? text ?? (message.content as MessageText).text!
+        : FormattedText(text: "");
     var additionalInfo = additionalContent == null
         ? const SizedBox.shrink()
         : Container(
-            margin:
-                EdgeInsets.only(bottom: 6, top: senderName != null ? p(4) : 0),
+            margin: contentText.text!.isEmpty && infoWidget == null
+                ? EdgeInsets.zero
+                : EdgeInsets.only(
+                    bottom: 6, top: senderName != null ? p(4) : 0),
             child: additionalContent,
           );
 
-    var contentText = text ?? (message.content as MessageText).text!;
     var parsedEntetiyes = TextSpan(
         children: TextDisplay.parseFormattedText(contentText,
             size: font(14), interactiveEnable: true));
@@ -119,7 +125,7 @@ class MessageDisplayText extends StatelessWidget {
           if (infoWidget != null)
             Positioned(
               right: captionMargin?.right ?? 0,
-              bottom: -2 + (captionMargin?.bottom ?? 0),
+              bottom: (captionMargin?.bottom ?? 0) - 2,
               child: infoWidget!,
             ),
           Column(
@@ -170,7 +176,7 @@ class MessageDisplayText extends StatelessWidget {
                 if (additionalContent != null &&
                     additionalContentPlace == AdditionalContentPlace.top)
                   additionalInfo,
-                if (contentText.text?.isNotEmpty ?? false)
+                if (contentText.text!.isNotEmpty)
                   Container(
                     child: Padding(
                       padding: captionMargin?.add(EdgeInsets.only(
@@ -191,10 +197,13 @@ class MessageDisplayText extends StatelessWidget {
                     additionalContentPlace == AdditionalContentPlace.bottom)
                   additionalInfo,
               ]),
-          Container(
-            width: lastBox.right +
-                (!fitsLastLine ? 0 : msgInfoBubbleSize.width + 12),
-          ),
+          //info widget placeholder
+          if (contentText.text!.isNotEmpty)
+            SizedBox(
+              width: lastBox.right +
+                  (!fitsLastLine ? 0 : msgInfoBubbleSize.width + 12),
+              height: (lastBox.bottom - lastBox.top),
+            ),
         ],
       );
     });
