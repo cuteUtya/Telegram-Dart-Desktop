@@ -292,7 +292,6 @@ class _textEntety {
 
     var defaultStyle = TextDisplay.create(
       size: size,
-      textColor: color,
     );
 
     var interactiveEntety = appliedEnteties!.firstWhereOrNull(
@@ -322,7 +321,7 @@ class _textEntety {
       defaultStyle.copyWith(
         fontStyle: isItalic ? FontStyle.italic : FontStyle.normal,
         fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-        color: affectedColor,
+        color: color ?? affectedColor,
         decoration: isUnderline || isLineThgough
             ? TextDecoration.combine([
                 isUnderline
