@@ -42,7 +42,9 @@ class LeftPanel extends StatelessWidget {
                 onClick: () => client.send(GetBackgrounds()).then(
                       (backs) => client.send(
                         SetBackground(
-                          forDarkTheme: true,
+                          forDarkTheme: ClientTheme.currentTheme
+                                  .environmentVariables["theme"]!() ==
+                              "dark",
                           background: InputBackgroundRemote(
                             backgroundId: backs is Backgrounds
                                 ? backs.backgrounds![++i].id!
