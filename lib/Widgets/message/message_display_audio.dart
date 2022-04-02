@@ -66,15 +66,26 @@ class MessageDisplayAudio extends StatelessWidget {
                             : MemoryImage(base64Decode(apic!))
                                 as ImageProvider))
                     : FutureBuilder(
-                        builder: (_, data) => data.hasData && data.data != null
-                            ? Image.network(
-                                (data.data as ITunesSearchResult)
-                                    .results![0]
-                                    .artworkUrl100!,
-                                width: p(32),
-                                height: p(32),
-                              )
-                            : Container(),
+                        builder: (_, data) {
+                          bool hasData = data.hasData && data.data != null;
+                          if (data.hasData) {
+                            hasData = (data.data as ITunesSearchResult)
+                                .results!
+                                .isNotEmpty;
+                          }
+                          return hasData
+                              ? Image.network(
+                                  (data.data as ITunesSearchResult)
+                                      .results![0]
+                                      .artworkUrl100!,
+                                  width: p(32),
+                                  height: p(32),
+                                )
+                              : SizedBox(
+                                  width: p(32),
+                                  height: p(32),
+                                );
+                        },
                         future: ItunesAPI.findSong(
                           name: audio.audio!.title!,
                           perfomer: audio.audio!.performer!,
@@ -101,7 +112,7 @@ class MessageDisplayAudio extends StatelessWidget {
             ),
             Text(
               "${getMMSS(audio.audio!.duration!)} • ${audio.audio!.performer}",
-              style: TextDisplay.regular18,
+              style: TextDisplay.create(size: font(14)),
             )
           ],
         )
