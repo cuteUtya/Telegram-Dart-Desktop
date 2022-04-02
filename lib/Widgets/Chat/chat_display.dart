@@ -21,113 +21,46 @@ class ChatDisplay extends StatelessWidget {
   final VoidCallback? onChatRevert;
 
   ///TODO get value from settings
-  static const bool useBlurBar = true;
+  static const bool useBlurBar = false;
 
   @override
   Widget build(BuildContext context) {
     var chat = client.getChat(chatId);
-    return Stack(
+    return Column(
       children: [
-        Stack(
-          children: [
-            StreamBuilder(
-              stream: client.chatThemeIn(chatId),
-              builder: (_, theme) {
-                bool useDark =
-                    ClientTheme.currentTheme.environmentVariables["theme"]!() ==
-                        "dark";
-                var name =
-                    theme.hasData ? theme.data.toString() : chat.themeName!;
-                if (name.isNotEmpty) {
-                  var themes = client.getCachedThemes().firstWhere(
-                        (e) => e.name == name,
-                      );
-                  var theme =
-                      useDark ? themes.darkSettings! : themes.lightSettings!;
-                  var themeColor = Color(theme.accentColor!).withOpacity(1);
-                  if (ClientTheme.currentTheme.getField("Accent") !=
-                      themeColor) {
-                    ClientTheme.currentTheme.overrideValue(
-                      "Accent",
-                      ClientTheme.colorToHEX(themeColor),
-                    );
-                  }
-                  return BackgroundDisplay(
-                    key: Key(name),
-                    client: client,
-                    background: theme.background!,
-                  );
-                } else {
-                  ClientTheme.currentTheme.clearOverridenValues();
-                  return StreamBuilder(
-                    stream: client.selectedBackground,
-                    builder: (_, data) {
-                      var background = client.getCachedBackground(useDark);
-                      if (background == null) {
-                        client.send(GetBackgrounds()).then(
-                              (backs) => client.send(
-                                SetBackground(
-                                  forDarkTheme: useDark,
-                                  background: InputBackgroundRemote(
-                                    backgroundId: backs is Backgrounds
-                                        ? backs.backgrounds![3].id!
-                                        : (backs as Background).id!,
-                                  ),
-                                ),
-                              ),
-                            );
-                        return const SizedBox.shrink();
-                      }
-                      return BackgroundDisplay(
-                        key: Key("background?hashCode=${background.hashCode}"),
-                        client: client,
-                        //TODO correct work with dark and light themes
-                        background: background,
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-            Column(
-              children: [
-                Flexible(
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: p(8)),
-                        child: MessageList(
-                          key: Key("chat?chatId=$chatId"),
-                          chatId: chat.id!,
-                          client: client,
-                        ),
-                      ),
-                      ActionBarDisplay(
-                        key: Key("actionBarDisplay?chatId=$chatId"),
-                        client: client,
-                        chat: chat,
-                        onChatRevert: onChatRevert,
-                        useBlurStyle: useBlurBar,
-                      ),
-                    ],
-                  ),
+        Flexible(
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: p(8)),
+                child: MessageList(
+                  key: Key("chat?chatId=$chatId"),
+                  chatId: chat.id!,
+                  client: client,
                 ),
-                Container(
-                  margin: EdgeInsets.only(
-                    bottom: p(4),
-                    right: p(4),
-                    left: p(4),
-                  ),
-                  child: InputField(
-                    key: Key("inputField?chatId=$chatId"),
-                    client: client,
-                    chatId: chat.id!,
-                  ),
-                )
-              ],
-            ),
-          ],
+              ),
+              ActionBarDisplay(
+                key: Key("actionBarDisplay?chatId=$chatId"),
+                client: client,
+                chat: chat,
+                onChatRevert: onChatRevert,
+                useBlurStyle: useBlurBar,
+              ),
+            ],
+          ),
         ),
+        Container(
+          margin: EdgeInsets.only(
+            bottom: p(4),
+            right: p(4),
+            left: p(4),
+          ),
+          child: InputField(
+            key: Key("inputField?chatId=$chatId"),
+            client: client,
+            chatId: chat.id!,
+          ),
+        )
       ],
     );
   }
