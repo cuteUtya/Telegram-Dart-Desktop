@@ -89,12 +89,13 @@ class InlineKeyboardDisplay extends StatelessWidget {
     var size = box.size;
     var offset = box.globalToLocal(Offset.zero);
     var width = size.width;
+    var popupWidth = p(96);
     var entry = OverlayEntry(
       builder: (context) => Positioned(
-        left: (-offset.dx) - width * 0.15,
+        left: (-offset.dx) - ((popupWidth - width) / 2),
         top: -offset.dy + size.height + 5.0,
+        width: popupWidth,
         child: LimitedBox(
-          maxWidth: width * 1.3,
           child: BackgroundBlur(
             blur: ImageFilter.blur(
               sigmaX: 4,
