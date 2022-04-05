@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/InlineKeyboard/inline_keyboard_display.dart';
@@ -434,7 +436,10 @@ class MessageDisplay extends StatelessWidget {
 
         Widget inlineKeyboard = const SizedBox();
 
+        bool haveKeyboard = false;
+
         if (message.replyMarkup is ReplyMarkupInlineKeyboard) {
+          haveKeyboard = true;
           inlineKeyboard = Container(
             margin: EdgeInsets.only(
               top: p(8),
@@ -442,6 +447,8 @@ class MessageDisplay extends StatelessWidget {
             child: InlineKeyboardDisplay(
               client: client,
               keyboard: message.replyMarkup! as ReplyMarkupInlineKeyboard,
+              messageId: message.id!,
+              chatId: chat!.id!,
             ),
           );
         }
@@ -466,13 +473,18 @@ class MessageDisplay extends StatelessWidget {
                         ),
                       ),
                   ]),
-                  Expanded(
+                  Flexible(
                     child: contentWidget,
                   )
                 ],
               );
 
         return Column(
+          crossAxisAlignment: haveKeyboard
+              ? CrossAxisAlignment.center
+              : (message.isOutgoing!
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start),
           mainAxisSize: MainAxisSize.min,
           children: [
             result,

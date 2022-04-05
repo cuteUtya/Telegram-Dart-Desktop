@@ -13,7 +13,7 @@ class InlineKeyboardButtonDisplay extends StatelessWidget {
     required this.text,
   }) : super(key: key);
 
-  final VoidCallback onClick;
+  final Function(BuildContext) onClick;
   final String text;
 
   @override
@@ -23,7 +23,7 @@ class InlineKeyboardButtonDisplay extends StatelessWidget {
         Radius.circular(4),
       ),
       child: TextButton(
-        onPressed: onClick,
+        onPressed: () => onClick(context),
         child: Container(
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(

@@ -1,42 +1,73 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/InlineKeyboard/inline_keyboard_button_display.dart';
+import 'package:myapp/Widgets/blured_widget.dart';
+import 'package:myapp/Widgets/display_text.dart';
+import 'package:myapp/Widgets/left%20panel/left_panel.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
+import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide Animation;
 
 class InlineKeyboardDisplay extends StatelessWidget {
   const InlineKeyboardDisplay({
     Key? key,
     required this.client,
     required this.keyboard,
+    required this.chatId,
+    required this.messageId,
   }) : super(key: key);
 
   final TelegramClient client;
   final ReplyMarkupInlineKeyboard keyboard;
+  final int messageId;
+  final int chatId;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> buttons = [];
 
     for (final column in keyboard.rows!) {
+      List<Widget> b = [];
+      for (final btn in column) {
+        var child = Expanded(
+          child: Container(
+            margin: const EdgeInsets.all(2),
+            child: InlineKeyboardButtonDisplay(
+              key: key,
+              onClick: (c) async {
+                switch (btn.type.runtimeType) {
+                  case InlineKeyboardButtonTypeCallback:
+                    var data =
+                        (btn.type as InlineKeyboardButtonTypeCallback).data;
+                    var answer = await client.send(
+                      GetCallbackQueryAnswer(
+                        chatId: chatId,
+                        messageId: messageId,
+                        payload: CallbackQueryPayloadData(
+                          data: data,
+                        ),
+                      ),
+                    ) as CallbackQueryAnswer;
+                    if (answer.text!.isNotEmpty) {
+                      showMessage(c, answer.text!, context);
+                    }
+                    break;
+                }
+              },
+              text: btn.text!,
+            ),
+          ),
+        );
+
+        b.add(child);
+      }
+
       buttons.add(
         Row(
-          children: [
-            for (final btn in column)
-              Expanded(
-                  child: Container(
-                margin: const EdgeInsets.fromLTRB(
-                  2,
-                  0,
-                  2,
-                  2,
-                ),
-                child: InlineKeyboardButtonDisplay(
-                  onClick: () => print("click"),
-                  text: btn.text!,
-                ),
-              ))
-          ],
+          mainAxisSize: MainAxisSize.min,
+          children: b,
         ),
       );
     }
@@ -46,8 +77,64 @@ class InlineKeyboardDisplay extends StatelessWidget {
         Radius.circular(20),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: buttons,
       ),
+    );
+  }
+
+  void showMessage(
+      BuildContext objectContext, String message, BuildContext context) {
+    var box = objectContext.findRenderObject()! as RenderBox;
+    var size = box.size;
+    var offset = box.globalToLocal(Offset.zero);
+    var width = size.width;
+    var entry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: (-offset.dx) - width * 0.15,
+        top: -offset.dy + size.height + 5.0,
+        child: LimitedBox(
+          maxWidth: width * 1.3,
+          child: BackgroundBlur(
+            blur: ImageFilter.blur(
+              sigmaX: 4,
+              sigmaY: 4,
+            ),
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(
+                vertical: p(4),
+                horizontal: p(2),
+              ),
+              decoration: BoxDecoration(
+                color: ClientTheme.currentTheme.getField(
+                  "InlineKeyboard.answerPopup.backgroundColor",
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              child: Text.rich(
+                TextDisplay.parseEmojiInString(
+                  message,
+                  TextDisplay.create(
+                    textColor: ClientTheme.currentTheme.getField(
+                      "InlineKeyboard.answerPopup.textColor",
+                    ),
+                    size: font(12),
+                  ),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    Overlay.of(context)!.insert(entry);
+    Future.delayed(
+      const Duration(seconds: 2),
+      () => entry.remove(),
     );
   }
 }

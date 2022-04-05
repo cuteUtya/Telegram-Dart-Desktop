@@ -237,3 +237,6 @@ InlineKeyboardButton.color: #22000000;
 InlineKeyboardButton.color.pressed: #44000000;
 InlineKeyboardButton.color.hover: #33000000;
 InlineKeyboardButton.text.color: #FFFFFF;
+
+InlineKeyboard.answerPopup.backgroundColor: #2f000000;
+InlineKeyboard.answerPopup.textColor: #FFF;
