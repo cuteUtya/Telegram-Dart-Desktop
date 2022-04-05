@@ -95,38 +95,36 @@ class InlineKeyboardDisplay extends StatelessWidget {
         left: (-offset.dx) - ((popupWidth - width) / 2),
         top: -offset.dy + size.height + 5.0,
         width: popupWidth,
-        child: LimitedBox(
-          child: BackgroundBlur(
-            blur: ImageFilter.blur(
-              sigmaX: 4,
-              sigmaY: 4,
+        child: BackgroundBlur(
+          blur: ImageFilter.blur(
+            sigmaX: 4,
+            sigmaY: 4,
+          ),
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(
+              vertical: p(4),
+              horizontal: p(2),
             ),
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(
-                vertical: p(4),
-                horizontal: p(2),
+            decoration: BoxDecoration(
+              color: ClientTheme.currentTheme.getField(
+                "InlineKeyboard.answerPopup.backgroundColor",
               ),
-              decoration: BoxDecoration(
-                color: ClientTheme.currentTheme.getField(
-                  "InlineKeyboard.answerPopup.backgroundColor",
-                ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(5),
-                ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(5),
               ),
-              child: Text.rich(
-                TextDisplay.parseEmojiInString(
-                  message,
-                  TextDisplay.create(
-                    textColor: ClientTheme.currentTheme.getField(
-                      "InlineKeyboard.answerPopup.textColor",
-                    ),
-                    size: font(12),
+            ),
+            child: Text.rich(
+              TextDisplay.parseEmojiInString(
+                message,
+                TextDisplay.create(
+                  textColor: ClientTheme.currentTheme.getField(
+                    "InlineKeyboard.answerPopup.textColor",
                   ),
+                  size: font(12),
                 ),
-                textAlign: TextAlign.center,
               ),
+              textAlign: TextAlign.center,
             ),
           ),
         ),
