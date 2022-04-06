@@ -77,13 +77,9 @@ class InlineKeyboardDisplay extends StatelessWidget {
       );
     }
 
-    if (buttons.length <= 1) {
-      return buttons[0];
-    }
-
     return ClipRRect(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(20),
+      borderRadius: const BorderRadius.vertical(
+        bottom: Radius.circular(20),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
