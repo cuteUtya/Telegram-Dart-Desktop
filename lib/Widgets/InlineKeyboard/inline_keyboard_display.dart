@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/Links%20utils/linksOpener.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/InlineKeyboard/inline_keyboard_button_display.dart';
 import 'package:myapp/Widgets/blured_widget.dart';
@@ -23,7 +24,6 @@ class InlineKeyboardDisplay extends StatelessWidget {
   final ReplyMarkupInlineKeyboard keyboard;
   final int messageId;
   final int chatId;
-
   @override
   Widget build(BuildContext context) {
     List<Widget> buttons = [];
@@ -36,6 +36,7 @@ class InlineKeyboardDisplay extends StatelessWidget {
             margin: const EdgeInsets.all(2),
             child: InlineKeyboardButtonDisplay(
               key: key,
+              type: btn.type!,
               onClick: (c) async {
                 switch (btn.type.runtimeType) {
                   case InlineKeyboardButtonTypeCallback:
@@ -54,6 +55,10 @@ class InlineKeyboardDisplay extends StatelessWidget {
                       showMessage(c, answer.text!, context);
                     }
                     break;
+                  case InlineKeyboardButtonTypeUrl:
+                    var url = btn.type as InlineKeyboardButtonTypeUrl;
+                    UrlsUtils.openLink(url.url!);
+                    break;
                 }
               },
               text: btn.text!,
@@ -70,6 +75,10 @@ class InlineKeyboardDisplay extends StatelessWidget {
           children: b,
         ),
       );
+    }
+
+    if (buttons.length <= 1) {
+      return buttons[0];
     }
 
     return ClipRRect(
