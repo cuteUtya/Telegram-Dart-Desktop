@@ -237,6 +237,13 @@ InlineKeyboardButton.color: #22000000;
 InlineKeyboardButton.color.pressed: #44000000;
 InlineKeyboardButton.color.hover: #33000000;
 InlineKeyboardButton.text.color: #FFFFFF;
-
+InlineKeyboardButton.icon.color: #FFFFFF;
+InlineKeyboardButton.icon.InlineKeyboardButtonTypeUrl: Icons.link;
+InlineKeyboardButton.icon.InlineKeyboardButtonTypeUser: Icons.person_sharp;
+InlineKeyboardButton.icon.InlineKeyboardButtonTypeBuy: Icons.Icons.storefront;
+InlineKeyboardButton.icon.InlineKeyboardButtonTypeCallbackGame: Icons.videogame_asset;
+InlineKeyboardButton.icon.InlineKeyboardButtonTypeCallbackWithPassword: Icons.password;
+InlineKeyboardButton.icon.InlineKeyboardButtonTypeSwitchInline: Icons.send;
+InlineKeyboardButton.icon.InlineKeyboardButtonTypeLoginUrl: Icons.login;
 InlineKeyboard.answerPopup.backgroundColor: #2f000000;
 InlineKeyboard.answerPopup.textColor: #FFF;
