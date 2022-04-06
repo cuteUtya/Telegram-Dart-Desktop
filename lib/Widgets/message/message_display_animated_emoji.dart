@@ -1,10 +1,6 @@
-import 'dart:async';
-
-import 'package:myapp/Audio utils/audio_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Widgets/Stickers/sticker_display.dart';
-import 'package:myapp/Widgets/big_stickers_overlay.dart';
 import 'package:myapp/Rlottie/rlottie.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -32,29 +28,43 @@ class MessageDisplayAnimatedEmoji extends StatefulWidget {
 class _MessageDisplayAnimtedEmojiState
     extends StateWithStreamsSubscriptions<MessageDisplayAnimatedEmoji> {
   bool _canPlayAnim = true;
+  OverlayEntry? entry;
+  @override
+  void dispose() {
+    entry?.remove();
+    super.dispose();
+  }
+
   void showBigAnimation({Sticker? sticker}) async {
+    void animate({required Offset position, required Sticker sticker}) {
+      var size = _animationKey.currentContext!.size!;
+      Size stickerSize = const Size(386, 386);
+      entry = OverlayEntry(
+        builder: (_) => Positioned(
+          left: -position.dx - (stickerSize.width - size.width),
+          top: -position.dy - size.height,
+          child: IgnorePointer(
+            child: SizedBox.fromSize(
+              size: stickerSize,
+              child: StickerDisplay(
+                client: widget.client,
+                sticker: sticker,
+                onAnimPlayed: () {
+                  entry!.remove();
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      Overlay.of(context)!.insert(entry!);
+    }
+
     if (_canPlayAnim) {
       _canPlayAnim = false;
       _animationKey.currentState?.play();
-      var renderObject = _animationKey.currentContext?.findRenderObject();
-      var transition = renderObject?.getTransformTo(null).getTranslation();
-      var rect = renderObject?.paintBounds
-          .shift(Offset(transition?.x ?? 0, transition?.y ?? 0));
-      var animPosition = Offset(rect?.left ?? 0, rect?.top ?? 0);
-
-      var audio =
-          (widget.message.content as MessageAnimatedEmoji).animatedEmoji?.sound;
-      if (audio != null) {
-        widget.client
-            .send(
-                DownloadFile(fileId: audio.id, priority: 1, synchronous: true))
-            .then(
-          (file) {
-            file as File;
-            AudioProvider.playOneTick(file.local!.path!);
-          },
-        );
-      }
+      var box = _animationKey.currentContext?.findRenderObject() as RenderBox;
+      var animPosition = box.globalToLocal(Offset.zero);
 
       if (sticker == null) {
         var clickResult = await widget.client.send(
@@ -64,13 +74,16 @@ class _MessageDisplayAnimtedEmojiState
           ),
         );
         if (clickResult is Sticker) {
-          BigStickerOverlayState.animateSticker(
-            clickResult,
-            animPosition,
+          animate(
+            position: animPosition,
+            sticker: clickResult,
           );
         }
       } else {
-        BigStickerOverlayState.animateSticker(sticker, animPosition);
+        animate(
+          position: animPosition,
+          sticker: sticker,
+        );
       }
     }
   }

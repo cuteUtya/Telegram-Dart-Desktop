@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/Context%20menus/context_menu_overlay.dart';
-import 'package:myapp/Widgets/big_stickers_overlay.dart';
 import 'package:myapp/Widgets/transcluent_gestures_stack.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart';
-import 'package:libwinmedia/libwinmedia.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +23,10 @@ void main() async {
       theme: ThemeData(
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: ClientTheme.currentTheme.tryGetField("TextCursorColor"),
-          selectionColor: ClientTheme.currentTheme.getField("TextSelectionColor"),
-          selectionHandleColor: ClientTheme.currentTheme.tryGetField("TextHandleColor"),
+          selectionColor:
+              ClientTheme.currentTheme.getField("TextSelectionColor"),
+          selectionHandleColor:
+              ClientTheme.currentTheme.tryGetField("TextHandleColor"),
         ),
       ),
       home: App(
@@ -50,7 +50,6 @@ class App extends StatelessWidget {
             child: TranscluentGesturesStack(
               children: [
                 AutorizationRouter(client: client),
-                BigStickerOverlay(client: client),
                 const ContextMenuOverlay(),
               ],
             ),
