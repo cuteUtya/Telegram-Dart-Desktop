@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/Links%20utils/linksOpener.dart';
+import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/InlineKeyboard/inline_keyboard_button_display.dart';
 import 'package:myapp/Widgets/blured_widget.dart';
@@ -58,6 +59,11 @@ class InlineKeyboardDisplay extends StatelessWidget {
                   case InlineKeyboardButtonTypeUrl:
                     var url = btn.type as InlineKeyboardButtonTypeUrl;
                     UrlsUtils.openLink(url.url!);
+                    break;
+
+                  case InlineKeyboardButtonTypeUser:
+                    var usr = btn.type as InlineKeyboardButtonTypeUser;
+                    UIEvents.pushChat(usr.userId!, client);
                     break;
                 }
               },
