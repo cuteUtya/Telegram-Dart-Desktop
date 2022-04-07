@@ -46,6 +46,15 @@ DataInputValidColor: ref(Accent);
 DataInputInvalidColor: ref(DangerColor);
 DataInputEmtyColor: #EBEBEB;
 
+BurgerMenu.color: ref(BaseColor);
+BurgerMenu.themeIcon(theme=dark): Icons.dark_mode;
+BurgerMenu.themeIcon(theme=light): Icons.light_mode;
+BurgerMenu.themeIcon.color(theme=dark): #FFF;
+BurgerMenu.themeIcon.color(theme=light):  #17212B;
+
+BurgerMenu.name.color: ref(HeaderMain);
+BurgerMenu.phoneNumber.color: ref(RegularText);
+
 ButtonAccentBackColor: ref(AccentHalfTransparent);
 ButtonDangerBackColor: ref(DangerHalfTransparent);
 

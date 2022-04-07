@@ -39,20 +39,7 @@ class LeftPanel extends StatelessWidget {
                 Icons.menu,
                 size: p(24),
                 color: ClientTheme.currentTheme.getField("GenericUIIconsColor"),
-                onClick: () => client.send(GetBackgrounds()).then(
-                      (backs) => client.send(
-                        SetBackground(
-                          forDarkTheme: ClientTheme.currentTheme
-                                  .environmentVariables["theme"]!() ==
-                              "dark",
-                          background: InputBackgroundRemote(
-                            backgroundId: backs is Backgrounds
-                                ? backs.backgrounds![++i].id!
-                                : (backs as Background).id!,
-                          ),
-                        ),
-                      ),
-                    ),
+                onClick: () => Scaffold.of(context).openDrawer(),
               ),
               SizedBox(width: p(8)),
               //search field

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/Themes%20engine/icons_deserializator.dart';
 import 'package:myapp/UIManager.dart';
 
@@ -18,10 +19,13 @@ class ClientTheme {
   static ClientTheme currentTheme = ClientTheme("", false);
   static late ClientTheme _defaultTheme;
 
+  //Kinda not final implement...
+  static String theme = "light";
+
   static const String linesSeparator = ';';
   static const String valueSeparator = ':';
   final Map<String, Function> environmentVariables = {
-    "theme": () => "light",
+    "theme": () => theme,
     "layout": () => UIManager.useDesktopLayout ? "desktop" : "mobile"
   };
   final Map<String, List<_themeValue>> lines = {};
