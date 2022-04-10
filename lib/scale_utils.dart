@@ -1,4 +1,8 @@
-ScaleConfig config = const ScaleConfig(fontRatio: 1.1, pointRatio: 1.1);
+import 'package:myapp/UIManager.dart';
+
+ScaleConfig get config => UIManager.isMobile
+    ? const ScaleConfig(fontRatio: 1.15, pointRatio: 1.15)
+    : const ScaleConfig(fontRatio: 1.1, pointRatio: 1.1);
 
 double font(double base) {
   return base * config.fontRatio;
