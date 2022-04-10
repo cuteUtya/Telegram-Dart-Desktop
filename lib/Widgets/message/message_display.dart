@@ -11,6 +11,7 @@ import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
 import 'package:myapp/Widgets/message/message_display_audio.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/message_display_photo.dart';
+import 'package:myapp/Widgets/message/message_display_photo_album.dart';
 import 'package:myapp/Widgets/message/message_display_poll.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_display_video.dart';
@@ -39,7 +40,7 @@ class MessageDisplay extends StatelessWidget {
       {Key? key,
       this.chat,
       required this.client,
-      required this.message,
+      required this.messages,
       required this.bubbleRelativePosition,
       this.onMessageDelete,
       this.isReplie = false,
@@ -49,7 +50,7 @@ class MessageDisplay extends StatelessWidget {
       : super(key: key);
 
   final BubbleRelativePosition bubbleRelativePosition;
-  final Message message;
+  final List<Message> messages;
   final ReplieLoadingResult? replieOn;
   final Chat? chat;
   final bool isReplie;
@@ -57,6 +58,8 @@ class MessageDisplay extends StatelessWidget {
   final TelegramClient client;
   final bool isServiceMessage;
   final Function? onMessageDelete;
+
+  Message get message => messages.last;
 
   Widget _buildInfoWidget(bool inline) => MessageInfoBubbleCheckMarkTime(
         customInfo:
@@ -132,208 +135,212 @@ class MessageDisplay extends StatelessWidget {
           haveText =
               ((message.content as dynamic).caption?.text ?? "").isNotEmpty;
         } catch (_) {}
-        switch (message.content.runtimeType) {
-          case MessageText:
-            var contentText = message.content as MessageText;
-            var textUnwhitespaced = contentText.text!.text!.replaceAll(" ", "");
-            var emojiTest = emojiRegex.firstMatch(textUnwhitespaced);
-            if (emojiTest != null) {
-              /*
+        if (messages.length == 1) {
+          switch (message.content.runtimeType) {
+            case MessageText:
+              var contentText = message.content as MessageText;
+              var textUnwhitespaced =
+                  contentText.text!.text!.replaceAll(" ", "");
+              var emojiTest = emojiRegex.firstMatch(textUnwhitespaced);
+              if (emojiTest != null) {
+                /*
                   if message contains only emojis and its count not much
                   show its without bubble and with big size, like Tdesktop or TelegramX
                   */
-              var totalEmojis = emojiTest.end - emojiTest.start;
-              if (totalEmojis >= textUnwhitespaced.length && totalEmojis < 8) {
-                contentWidget = MessageDisplayTextEmojis(
-                  alignment: message.isOutgoing!
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
-                  emojis: textUnwhitespaced,
-                  infoSide: message.isOutgoing! ? Side.left : Side.right,
-                  messageInfo: _buildInfoWidget(false),
-                  replieWidget: _buildReplieWidget(false),
-                );
-                break;
+                var totalEmojis = emojiTest.end - emojiTest.start;
+                if (totalEmojis >= textUnwhitespaced.length &&
+                    totalEmojis < 8) {
+                  contentWidget = MessageDisplayTextEmojis(
+                    alignment: message.isOutgoing!
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    emojis: textUnwhitespaced,
+                    infoSide: message.isOutgoing! ? Side.left : Side.right,
+                    messageInfo: _buildInfoWidget(false),
+                    replieWidget: _buildReplieWidget(false),
+                  );
+                  break;
+                }
               }
-            }
-            wrapInBubble = true;
-            contentWidget = MessageDisplayText(
-              client: client,
-              message: message,
-              infoWidget: _buildInfoWidget(true),
-              replieWidget: _buildReplieWidget(true),
-              senderName: showMessageSender ? author : null,
-              adminTitle: bubbleRelativePosition ==
-                          BubbleRelativePosition.top ||
-                      bubbleRelativePosition == BubbleRelativePosition.single
-                  ? adminTitle
-                  : "",
-            );
-            break;
+              wrapInBubble = true;
+              contentWidget = MessageDisplayText(
+                client: client,
+                message: message,
+                infoWidget: _buildInfoWidget(true),
+                replieWidget: _buildReplieWidget(true),
+                senderName: showMessageSender ? author : null,
+                adminTitle: bubbleRelativePosition ==
+                            BubbleRelativePosition.top ||
+                        bubbleRelativePosition == BubbleRelativePosition.single
+                    ? adminTitle
+                    : "",
+              );
+              break;
 
-          case MessageAudio:
-            wrapInBubble = true;
-            contentWidget = MessageDisplayAudio(
-              message: message,
-              client: client,
-              infoWidget: _buildInfoWidget(true),
-              replieWidget: _buildReplieWidget(true),
-            );
-            break;
+            case MessageAudio:
+              wrapInBubble = true;
+              contentWidget = MessageDisplayAudio(
+                message: message,
+                client: client,
+                infoWidget: _buildInfoWidget(true),
+                replieWidget: _buildReplieWidget(true),
+              );
+              break;
 
-          case MessageSticker:
-            contentWidget = MessageStickerDisplay(
-              client: client,
-              message: message,
-              replieWidget: _buildReplieWidget(false),
-              infoWidget: _buildInfoWidget(false),
-            );
-            break;
+            case MessageSticker:
+              contentWidget = MessageStickerDisplay(
+                client: client,
+                message: message,
+                replieWidget: _buildReplieWidget(false),
+                infoWidget: _buildInfoWidget(false),
+              );
+              break;
 
-          case MessageAnimatedEmoji:
-            contentWidget = MessageDisplayAnimatedEmoji(
-              chatId: chat!.id!,
-              message: message,
-              client: client,
-              replieWidget: _buildReplieWidget(false),
-              infoWidget: _buildInfoWidget(false),
-            );
-            break;
+            case MessageAnimatedEmoji:
+              contentWidget = MessageDisplayAnimatedEmoji(
+                chatId: chat!.id!,
+                message: message,
+                client: client,
+                replieWidget: _buildReplieWidget(false),
+                infoWidget: _buildInfoWidget(false),
+              );
+              break;
 
-          case MessageVideoChatStarted:
-            contentWidget = ServiceMessage(
-              text: client.getTranslation(
-                "lng_action_group_call_started_group",
-                replacing: {
-                  "{from}": author,
-                },
-              ),
-            );
-            break;
+            case MessageVideoChatStarted:
+              contentWidget = ServiceMessage(
+                text: client.getTranslation(
+                  "lng_action_group_call_started_group",
+                  replacing: {
+                    "{from}": author,
+                  },
+                ),
+              );
+              break;
 
-          case MessageVideoChatEnded:
-            contentWidget = ServiceMessage(
-              text: client.getTranslation(
-                "lng_admin_log_discarded_group_call",
-                replacing: {
-                  "from": author,
-                },
-              ),
-            );
-            break;
+            case MessageVideoChatEnded:
+              contentWidget = ServiceMessage(
+                text: client.getTranslation(
+                  "lng_admin_log_discarded_group_call",
+                  replacing: {
+                    "from": author,
+                  },
+                ),
+              );
+              break;
 
-          case MessageBasicGroupChatCreate:
-            contentWidget = ServiceMessage(
-              text: client.getTranslation(
-                "lng_action_created_chat",
-                replacing: {
-                  "{title}":
-                      (message.content as MessageBasicGroupChatCreate).title!,
-                  "{from}": author,
-                },
-              ),
-            );
-            break;
+            case MessageBasicGroupChatCreate:
+              contentWidget = ServiceMessage(
+                text: client.getTranslation(
+                  "lng_action_created_chat",
+                  replacing: {
+                    "{title}":
+                        (message.content as MessageBasicGroupChatCreate).title!,
+                    "{from}": author,
+                  },
+                ),
+              );
+              break;
 
-          case MessageSupergroupChatCreate:
-            contentWidget = ServiceMessage(
-              text: client.getTranslation(
-                "lng_action_created_channel",
-              ),
-            );
-            break;
+            case MessageSupergroupChatCreate:
+              contentWidget = ServiceMessage(
+                text: client.getTranslation(
+                  "lng_action_created_channel",
+                ),
+              );
+              break;
 
-          case MessageChatChangePhoto:
-            contentWidget = Column(
-              children: [
-                ServiceMessage(
-                    text: client.getTranslation("lng_action_changed_photo",
-                        replacing: {"{from}": author})),
-                SizedBox(height: p(12)),
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(p(12))),
-                  child: SizedBox(
-                    width: p(140),
-                    height: p(140),
-                    child: Userpic(
-                      shape: BoxShape.rectangle,
-                      chatPhoto:
-                          (message.content as MessageChatChangePhoto).photo,
-                      userId: chat?.id ?? 0,
-                      userTitle: author,
-                      client: client,
+            case MessageChatChangePhoto:
+              contentWidget = Column(
+                children: [
+                  ServiceMessage(
+                      text: client.getTranslation("lng_action_changed_photo",
+                          replacing: {"{from}": author})),
+                  SizedBox(height: p(12)),
+                  ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(p(12))),
+                    child: SizedBox(
+                      width: p(140),
+                      height: p(140),
+                      child: Userpic(
+                        shape: BoxShape.rectangle,
+                        chatPhoto:
+                            (message.content as MessageChatChangePhoto).photo,
+                        userId: chat?.id ?? 0,
+                        userTitle: author,
+                        client: client,
+                      ),
                     ),
                   ),
+                ],
+              );
+              break;
+
+            case MessageChatDeletePhoto:
+              contentWidget = ServiceMessage(
+                text: client.getTranslation(
+                  "lng_action_removed_photo",
+                  replacing: {
+                    "{from}": author,
+                  },
                 ),
-              ],
-            );
-            break;
+              );
+              break;
 
-          case MessageChatDeletePhoto:
-            contentWidget = ServiceMessage(
-              text: client.getTranslation(
-                "lng_action_removed_photo",
-                replacing: {
-                  "{from}": author,
-                },
-              ),
-            );
-            break;
+            case MessageChatSetTheme:
+              var emoji = (message.content as MessageChatSetTheme).themeName!;
+              contentWidget = ServiceMessage(
+                text: client.getTranslation(
+                  message.isOutgoing!
+                      ? "lng_action_you_theme_changed"
+                      : "lng_action_theme_changed",
+                  replacing: {
+                    "{from}": author,
+                    "{emoji}": emoji,
+                  },
+                ),
+              );
+              break;
 
-          case MessageChatSetTheme:
-            var emoji = (message.content as MessageChatSetTheme).themeName!;
-            contentWidget = ServiceMessage(
-              text: client.getTranslation(
-                message.isOutgoing!
-                    ? "lng_action_you_theme_changed"
-                    : "lng_action_theme_changed",
-                replacing: {
-                  "{from}": author,
-                  "{emoji}": emoji,
-                },
-              ),
-            );
-            break;
+            case MessageChatChangeTitle:
+              contentWidget = ServiceMessage(
+                text: client.getTranslation(
+                  "lng_action_changed_title_channel",
+                  replacing: {
+                    "{title}":
+                        (message.content as MessageChatChangeTitle).title!,
+                  },
+                ),
+              );
+              break;
 
-          case MessageChatChangeTitle:
-            contentWidget = ServiceMessage(
-              text: client.getTranslation(
-                "lng_action_changed_title_channel",
-                replacing: {
-                  "{title}": (message.content as MessageChatChangeTitle).title!,
-                },
-              ),
-            );
-            break;
+            case MessagePhoto:
+              wrapInBubble = true;
+              overrideBubblePadding = true;
+              contentWidget = MessageDisplayPhoto(
+                client: client,
+                message: message,
+                adminTitle: adminTitle,
+                contentPadding: bubblePadding,
+                bubbleBorderRadius: bubbleBorderRadius,
+                senderName: showMessageSender ? author : null,
+                infoWidget: _buildInfoWidget(haveText),
+                replieWidget: _buildReplieWidget(true),
+              );
+              break;
 
-          case MessagePhoto:
-            wrapInBubble = true;
-            overrideBubblePadding = true;
-            contentWidget = MessageDisplayPhoto(
-              client: client,
-              message: message,
-              adminTitle: adminTitle,
-              contentPadding: bubblePadding,
-              bubbleBorderRadius: bubbleBorderRadius,
-              senderName: showMessageSender ? author : null,
-              infoWidget: _buildInfoWidget(haveText),
-              replieWidget: _buildReplieWidget(true),
-            );
-            break;
+            case MessagePoll:
+              wrapInBubble = true;
+              contentWidget = MessageDisplayPoll(
+                message: message,
+                client: client,
+                infoWidget: _buildInfoWidget(true),
+                replieWidget: _buildReplieWidget(true),
+                senderName: showMessageSender ? author : null,
+              );
+              break;
 
-          case MessagePoll:
-            wrapInBubble = true;
-            contentWidget = MessageDisplayPoll(
-              message: message,
-              client: client,
-              infoWidget: _buildInfoWidget(true),
-              replieWidget: _buildReplieWidget(true),
-              senderName: showMessageSender ? author : null,
-            );
-            break;
-
-          ///theare some issues related with it perfomance
-          /* case MessageVideo:
+            ///theare some issues related with it perfomance
+            /* case MessageVideo:
                 wrapInBubble = haveText;
                 overrideBubblePadding = true;
                 contentWidget = MessageDisplayVideo(
@@ -359,18 +366,34 @@ class MessageDisplay extends StatelessWidget {
                 );
                 break;*/
 
-          default:
-            wrapInBubble = true;
-            contentWidget = MessageDisplayText(
-              client: client,
-              message: message,
-              text: FormattedText(
-                  text:
-                      "🍆🍆🍆 Unsupported 🍆🍆🍆"), //message.toJson().toString()),
-              infoWidget: _buildInfoWidget(true),
-              replieWidget: _buildReplieWidget(true),
-            );
-            break;
+            default:
+              wrapInBubble = true;
+              contentWidget = MessageDisplayText(
+                client: client,
+                message: message,
+                text: FormattedText(
+                    text:
+                        "🍆🍆🍆 Unsupported 🍆🍆🍆"), //message.toJson().toString()),
+                infoWidget: _buildInfoWidget(true),
+                replieWidget: _buildReplieWidget(true),
+              );
+              break;
+          }
+        } else {
+          // build album
+          contentWidget = ServiceMessage(text: "album");
+          overrideBubblePadding = true;
+          wrapInBubble = false;
+          switch (message.content.runtimeType) {
+            case MessagePhoto:
+              wrapInBubble = haveText;
+              contentWidget = MessageDisplayPhotoAlbum(
+                client: client,
+                messages: messages,
+                bubbleBorderRadius: bubbleBorderRadius,
+              );
+              break;
+          }
         }
 
         Widget? senderUserpic;

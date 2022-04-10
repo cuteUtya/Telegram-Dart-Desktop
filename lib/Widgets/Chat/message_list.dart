@@ -4,13 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
+import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/bubble_utils.dart';
+import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/Widgets/smooth_list_view.dart';
 import 'package:myapp/safe_spacer.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
-import 'package:myapp/tdlib/td_api.dart' hide Text;
+import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:myapp/utils.dart';
@@ -117,6 +118,8 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
     super.dispose();
   }
 
+  Map<int, List<Message>> albums = {};
+
   @override
   Widget build(BuildContext context) {
     int messagesCount = (messages?.totalCount ?? 0);
@@ -141,6 +144,30 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
         }
 
         var msg = messages!.messages![index];
+
+        var previus = (index - 1 < 0 ? null : messages!.messages![index - 1]);
+        var next = (index + 1 >= messages!.messages!.length
+            ? null
+            : messages!.messages![index + 1]);
+
+        bool buildAlbum = false;
+
+        if (msg.mediaAlbumId != 0) {
+          if (albums[msg.mediaAlbumId] == null) {
+            albums[msg.mediaAlbumId!] = [];
+          }
+          var album = albums[msg.mediaAlbumId!]!;
+          if (!album.contains(msg)) {
+            album.add(msg);
+          }
+
+          if (next?.mediaAlbumId != msg.mediaAlbumId) {
+            buildAlbum = true;
+          } else {
+            return const SizedBox();
+          }
+        }
+
         return StreamBuilder(
           key: Key("message?id=${msg.id}?chatId=${msg.chatId}"),
           stream: StreamGroup.merge(
@@ -160,11 +187,6 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                 msg.content = update.newContent;
               }
             }
-            var previus =
-                (index - 1 < 0 ? null : messages!.messages![index - 1]);
-            var next = (index + 1 >= messages!.messages!.length
-                ? null
-                : messages!.messages![index + 1]);
 
             var prevDate =
                 previus == null ? null : unixToDateTime(previus.date!);
@@ -234,7 +256,7 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                     child: MessageDisplay(
                       bubbleRelativePosition: bubbleRelativePosition,
                       client: widget.client,
-                      message: msg,
+                      messages: [msg],
                       isServiceMessage: true,
                     ),
                   )
@@ -269,7 +291,9 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                               child: MessageDisplay(
                                 bubbleRelativePosition: bubbleRelativePosition,
                                 chat: chat,
-                                message: msg,
+                                messages: buildAlbum
+                                    ? albums[msg.mediaAlbumId!]!
+                                    : [msg],
                                 isReplie: msg.replyToMessageId != 0,
                                 replieOn: replieDate.hasData
                                     ? (replieDate.data is Message
