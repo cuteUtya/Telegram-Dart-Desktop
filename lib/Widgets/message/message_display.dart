@@ -26,6 +26,7 @@ import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
+import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/tdlib/tdlib_utils.dart';
@@ -130,11 +131,19 @@ class MessageDisplay extends StatelessWidget {
         bool wrapInBubble = false;
         bool overrideBubblePadding = false;
 
-        bool haveText = false;
-        try {
-          haveText =
-              ((message.content as dynamic).caption?.text ?? "").isNotEmpty;
-        } catch (_) {}
+        FormattedText? caption;
+
+        for (final m in messages) {
+          try {
+            var c = (m.content as dynamic).caption;
+            if (c.text!.isNotEmpty) {
+              caption = c;
+            }
+          } catch (ignore) {}
+        }
+
+        bool haveText = caption != null;
+
         if (messages.length == 1) {
           switch (message.content.runtimeType) {
             case MessageText:
@@ -382,15 +391,18 @@ class MessageDisplay extends StatelessWidget {
         } else {
           // build album
           contentWidget = ServiceMessage(text: "album");
-          overrideBubblePadding = true;
-          wrapInBubble = false;
           switch (message.content.runtimeType) {
             case MessagePhoto:
-              wrapInBubble = haveText;
+              overrideBubblePadding = true;
+              wrapInBubble = haveText || message.replyToMessageId != 0;
               contentWidget = MessageDisplayPhotoAlbum(
                 client: client,
                 messages: messages,
                 bubbleBorderRadius: bubbleBorderRadius,
+                infoWidget: _buildInfoWidget(haveText),
+                replieWidget: _buildReplieWidget(true),
+                caption: caption,
+                contentPadding: bubblePadding,
               );
               break;
           }

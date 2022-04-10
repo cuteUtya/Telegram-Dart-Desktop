@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
+import 'package:myapp/Widgets/message/message_display_media.dart';
+import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/remote_image_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
@@ -11,16 +13,23 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
     required this.client,
     required this.messages,
     required this.bubbleBorderRadius,
+    this.infoWidget,
+    this.replieWidget,
+    this.caption,
+    this.contentPadding,
   }) : super(key: key);
 
   final TelegramClient client;
   final List<Message> messages;
   final BorderRadius bubbleBorderRadius;
+  final Widget? infoWidget, replieWidget;
+  final FormattedText? caption;
+  final EdgeInsets? contentPadding;
 
   @override
   Widget build(BuildContext context) {
     /// if havent any text
-    return LayoutBuilder(
+    var child = LayoutBuilder(
       builder: (_, box) {
         Widget content = SizedBox();
 
@@ -48,7 +57,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                         : "MessageBubbleOtherColor",
                   ),
                 ),
-                padding: const EdgeInsets.all(1),
+                padding:
+                    caption == null ? const EdgeInsets.all(1) : EdgeInsets.zero,
                 child: ClipRRect(
                   child: w,
                   borderRadius: r,
@@ -133,16 +143,23 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
         var sort = sortImages(messages);
         bool landscape = sort[0].length > sort[1].length;
         double heightDivider = 1;
+        BorderRadius externalBorders = bubbleBorderRadius;
+        if (caption != null) {
+          externalBorders = externalBorders.copyWith(
+            bottomLeft: r,
+            bottomRight: r,
+          );
+        }
 
         switch (messages.length) {
           case 2:
             content = imagesLine(
               messages,
               axis: isLandscape(messages[0]) ? Axis.vertical : Axis.horizontal,
-              topLeft: bubbleBorderRadius.topLeft,
-              topRight: bubbleBorderRadius.topRight,
-              bottomLeft: bubbleBorderRadius.bottomLeft,
-              bottomRight: bubbleBorderRadius.bottomRight,
+              topLeft: externalBorders.topLeft,
+              topRight: externalBorders.topRight,
+              bottomLeft: externalBorders.bottomLeft,
+              bottomRight: externalBorders.bottomRight,
             );
             break;
           three:
@@ -151,11 +168,11 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
               wrap(
                 photo(messages[0]),
                 landscape
-                    ? bubbleBorderRadius.copyWith(
+                    ? externalBorders.copyWith(
                         bottomLeft: r,
                         bottomRight: r,
                       )
-                    : bubbleBorderRadius.copyWith(
+                    : externalBorders.copyWith(
                         bottomRight: r,
                         topRight: r,
                       ),
@@ -167,14 +184,14 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                     ? imagesLine(
                         messages.sublist(1),
                         axis: Axis.horizontal,
-                        bottomLeft: bubbleBorderRadius.bottomLeft,
-                        bottomRight: bubbleBorderRadius.bottomRight,
+                        bottomLeft: externalBorders.bottomLeft,
+                        bottomRight: externalBorders.bottomRight,
                       )
                     : imagesLine(
                         messages.sublist(1),
                         axis: Axis.vertical,
-                        topRight: bubbleBorderRadius.topRight,
-                        bottomRight: bubbleBorderRadius.topLeft,
+                        topRight: externalBorders.topRight,
+                        bottomRight: externalBorders.topLeft,
                       ),
               )
             ];
@@ -199,8 +216,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                     child: imagesLine(
                       messages.sublist(0, 2),
                       axis: Axis.vertical,
-                      topLeft: bubbleBorderRadius.topLeft,
-                      bottomLeft: bubbleBorderRadius.bottomLeft,
+                      topLeft: externalBorders.topLeft,
+                      bottomLeft: externalBorders.bottomLeft,
                       topRight: r,
                     ),
                   ),
@@ -214,42 +231,13 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                     child: imagesLine(
                       messages.sublist(2, messages.length),
                       axis: Axis.vertical,
-                      bottomRight: bubbleBorderRadius.bottomRight,
-                      topRight: bubbleBorderRadius.topRight,
+                      bottomRight: externalBorders.bottomRight,
+                      topRight: externalBorders.topRight,
                     ),
                   ),
                 ],
               );
             }
-            /*
-            content = Column(
-              children: [
-                wrap(
-                  photo(messages[0]),
-                  bubbleBorderRadius.copyWith(
-                    bottomLeft: r,
-                    bottomRight: r,
-                  ),
-                ),
-                vMargin,
-                Flexible(
-                  child: imagesLine(
-                    messages.sublist(1, 3),
-                  ),
-                ),
-                vMargin,
-                Flexible(
-                  child: imagesLine(
-                    messages.sublist(
-                      3,
-                      messages.length,
-                    ),
-                    bottomLeft: bubbleBorderRadius.bottomLeft,
-                    bottomRight: bubbleBorderRadius.bottomRight,
-                  ),
-                )
-              ],
-            );*/
             break;
         }
 
@@ -260,8 +248,22 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
         );
       },
     );
+    if (caption != null || replieWidget != null) {
+      return MessageDisplayText(
+        client: client,
+        message: messages.first,
+        text: caption,
+        infoWidget: caption != null ? infoWidget : null,
+        replieWidget: replieWidget,
+        additionalContent: Padding(
+          padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
+          child: child,
+        ),
+        captionMargin: contentPadding,
+        showText: caption != null,
+      );
+    }
 
-    /// -------------------
-    return SizedBox();
+    return child;
   }
 }

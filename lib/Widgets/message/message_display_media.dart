@@ -18,7 +18,7 @@ class MessageDisplayMedia extends StatelessWidget {
     required this.content,
     this.forceToTextMessage = false,
     this.caption,
-    this.borderRadius,
+    this.borderRadius = BorderRadius.zero,
     this.senderName,
     this.captionMargin,
     this.adminTitle,
@@ -33,7 +33,7 @@ class MessageDisplayMedia extends StatelessWidget {
   final FormattedText? caption;
   final Widget content;
   final Message message;
-  final BorderRadius? borderRadius;
+  final BorderRadius borderRadius;
   final bool forceToTextMessage;
   final String? adminTitle;
   final EdgeInsets? captionMargin;
@@ -55,8 +55,8 @@ class MessageDisplayMedia extends StatelessWidget {
       if (coverBubbleInInlineMessages) {
         if (senderName == null && replieWidget == null) {
           border = BorderRadius.only(
-            topLeft: borderRadius!.topLeft,
-            topRight: borderRadius!.topRight,
+            topLeft: borderRadius.topLeft,
+            topRight: borderRadius.topRight,
             bottomLeft: r,
             bottomRight: r,
           );
@@ -65,13 +65,13 @@ class MessageDisplayMedia extends StatelessWidget {
     } else {
       if (forceToTextMessage && replieWidget != null) {
         border = BorderRadius.only(
-          bottomLeft: borderRadius!.topLeft,
-          bottomRight: borderRadius!.topRight,
+          bottomLeft: borderRadius.topLeft,
+          bottomRight: borderRadius.topRight,
           topLeft: r,
           topRight: r,
         );
       } else {
-        border = borderRadius ?? border;
+        border = borderRadius;
       }
     }
 
