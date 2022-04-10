@@ -36,7 +36,7 @@ class InlineKeyboardButtonDisplay extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               padding: EdgeInsets.symmetric(
-                vertical: p(8),
+                vertical: 8,
               ),
               child: RichText(
                 text: TextDisplay.parseEmojiInString(
