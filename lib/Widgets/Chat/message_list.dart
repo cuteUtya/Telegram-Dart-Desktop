@@ -293,6 +293,9 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                                 chat: chat,
                                 messages: buildAlbum
                                     ? albums[msg.mediaAlbumId!]!
+                                        //because tdlib load messages in reverse chronological order
+                                        .reversed
+                                        .toList()
                                     : [msg],
                                 isReplie: msg.replyToMessageId != 0,
                                 replieOn: replieDate.hasData
