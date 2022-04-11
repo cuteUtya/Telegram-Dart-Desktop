@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:myapp/Widgets/Chat/message_list.dart';
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/InlineKeyboard/inline_keyboard_display.dart';
@@ -22,8 +19,6 @@ import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_c
 import 'package:myapp/Widgets/message/replies_display.dart';
 import 'package:myapp/Widgets/message/service_message.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
-import 'package:myapp/Widgets/widget_hider.dart';
-import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
@@ -31,7 +26,6 @@ import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
-import 'package:path/path.dart';
 
 /// UI representation of [Message] object
 /// * [message] message object
@@ -299,9 +293,11 @@ class MessageDisplay extends StatelessWidget {
               var emoji = (message.content as MessageChatSetTheme).themeName!;
               contentWidget = ServiceMessage(
                 text: client.getTranslation(
-                  message.isOutgoing!
-                      ? "lng_action_you_theme_changed"
-                      : "lng_action_theme_changed",
+                  emoji.isEmpty
+                      ? "lng_action_you_theme_disabled"
+                      : (message.isOutgoing!
+                          ? "lng_action_you_theme_changed"
+                          : "lng_action_theme_changed"),
                   replacing: {
                     "{from}": author,
                     "{emoji}": emoji,
