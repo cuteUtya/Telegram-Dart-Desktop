@@ -28,7 +28,6 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// if havent any text
     var child = LayoutBuilder(
       builder: (_, box) {
         Widget content = SizedBox();
@@ -235,6 +234,35 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                       topRight: externalBorders.topRight,
                     ),
                   ),
+                ],
+              );
+            } else {
+              content = Column(
+                children: [
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(1, 3),
+                      bottomLeft: r,
+                      bottomRight: r,
+                    ),
+                  ),
+                  vMargin,
+                  wrap(
+                    photo(messages[0]),
+                    BorderRadius.all(r),
+                    2,
+                  ),
+                  vMargin,
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(
+                        3,
+                        messages.length,
+                      ),
+                      bottomLeft: bubbleBorderRadius.bottomLeft,
+                      bottomRight: bubbleBorderRadius.bottomRight,
+                    ),
+                  )
                 ],
               );
             }
