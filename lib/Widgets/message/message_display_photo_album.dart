@@ -72,6 +72,7 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
           Radius? topLeft,
           Radius? bottomRight,
           Radius? bottomLeft,
+          Map<int, int>? messagesFlex,
         }) {
           List<Widget> ch = [];
           for (int i = 0; i < messages.length; i++) {
@@ -105,6 +106,7 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
               wrap(
                 photo(messages[i]),
                 rad,
+                messagesFlex?[i] ?? 1,
               ),
             );
             if (i != messages.length - 1) {
@@ -263,6 +265,199 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                       bottomRight: bubbleBorderRadius.bottomRight,
                     ),
                   )
+                ],
+              );
+            }
+            break;
+
+          case 6:
+            content = Column(
+              children: [
+                wrap(
+                  photo(messages[0]),
+                  bubbleBorderRadius.copyWith(
+                    bottomRight: r,
+                    bottomLeft: r,
+                  ),
+                ),
+                vMargin,
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(1, 3),
+                  ),
+                ),
+                vMargin,
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(
+                      3,
+                      messages.length,
+                    ),
+                    bottomLeft: bubbleBorderRadius.bottomLeft,
+                    bottomRight: bubbleBorderRadius.bottomRight,
+                  ),
+                ),
+              ],
+            );
+            break;
+
+          case 7:
+            content = Column(
+              children: [
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(0, 2),
+                    topLeft: bubbleBorderRadius.topLeft,
+                    topRight: bubbleBorderRadius.topRight,
+                  ),
+                ),
+                vMargin,
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(2, 5),
+                  ),
+                ),
+                vMargin,
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(5, messages.length),
+                    bottomLeft: bubbleBorderRadius.bottomLeft,
+                    bottomRight: bubbleBorderRadius.bottomRight,
+                  ),
+                ),
+              ],
+            );
+            break;
+
+          case 8:
+            if (sort[1].length == 1) {
+              heightDivider = 1.2;
+              messages.remove(sort[1][0]);
+              content = Column(
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Row(
+                      children: [
+                        wrap(
+                          photo(sort[1][0]),
+                          bubbleBorderRadius.copyWith(
+                            bottomLeft: r,
+                            bottomRight: r,
+                            topRight: r,
+                          ),
+                        ),
+                        lMargin,
+                        Flexible(
+                          child: Column(
+                            children: [
+                              Flexible(
+                                child: imagesLine(
+                                  messages.sublist(0, 2),
+                                  topRight: bubbleBorderRadius.topRight,
+                                  messagesFlex: {1: 2},
+                                ),
+                              ),
+                              vMargin,
+                              Flexible(
+                                child: imagesLine(
+                                  messages.sublist(2, 4),
+                                  topRight: bubbleBorderRadius.topRight,
+                                  messagesFlex: {2: 2},
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  vMargin,
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(4, messages.length),
+                      bottomLeft: bubbleBorderRadius.bottomLeft,
+                      bottomRight: bubbleBorderRadius.bottomRight,
+                      messagesFlex: {2: 2, 3: 2},
+                    ),
+                  )
+                ],
+              );
+            } else if (sort[1].length == 2) {
+              messages.remove(sort[1][0]);
+              messages.remove(sort[1][1]);
+              content = Column(
+                children: [
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(0, 2),
+                      topLeft: bubbleBorderRadius.topLeft,
+                      topRight: bubbleBorderRadius.topRight,
+                    ),
+                  ),
+                  vMargin,
+                  Flexible(
+                    flex: 2,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: imagesLine(
+                            [messages[2], sort[1][0]],
+                            axis: Axis.vertical,
+                            bottomLeft: bubbleBorderRadius.bottomLeft,
+                            messagesFlex: {1: 2},
+                          ),
+                        ),
+                        lMargin,
+                        Flexible(
+                          child: imagesLine(
+                            messages.sublist(3, 5),
+                            axis: Axis.vertical,
+                            messagesFlex: {0: 3, 1: 2},
+                          ),
+                        ),
+                        lMargin,
+                        Flexible(
+                          child: imagesLine(
+                            [messages[5], sort[1][1]],
+                            axis: Axis.vertical,
+                            bottomRight: bubbleBorderRadius.bottomRight,
+                            messagesFlex: {1: 2},
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              );
+            } else {
+              heightDivider = 1.5;
+              content = Row(
+                children: [
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(0, 3),
+                      axis: Axis.vertical,
+                      topLeft: bubbleBorderRadius.topLeft,
+                      bottomLeft: bubbleBorderRadius.topLeft,
+                    ),
+                  ),
+                  lMargin,
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(3, 5),
+                      axis: Axis.vertical,
+                    ),
+                  ),
+                  lMargin,
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(5, messages.length),
+                      axis: Axis.vertical,
+                      topRight: bubbleBorderRadius.topRight,
+                      bottomRight: bubbleBorderRadius.bottomRight,
+                    ),
+                  ),
                 ],
               );
             }
