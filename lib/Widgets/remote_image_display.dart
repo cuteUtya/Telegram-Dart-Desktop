@@ -97,6 +97,8 @@ class RemoteImageDisplay extends StatelessWidget {
         return Image.file(
           io.File(path),
           fit: fit,
+          width: width,
+          height: height,
         );
       },
     );

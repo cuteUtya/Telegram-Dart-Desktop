@@ -232,13 +232,6 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                 (element) => element.userId == getSenderId(msg.senderId!));
             bool isServiceMessage =
                 serviceMessages.contains(msg.content.runtimeType);
-            int spacerFlex = UIManager.isMobile
-                ? msg.content is MessageContent && msg.replyToMessageId == 0
-                    ? 1
-                    : 0
-                : msg.content is MessageContent && msg.replyToMessageId == 0
-                    ? 2
-                    : 1;
 
             const double serviceMessageMargin = 6;
             const double messageMargin = 4;
@@ -262,11 +255,12 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                   )
                 else
                   Row(
+                    mainAxisAlignment: msg.isOutgoing!
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
                     children: [
-                      if (msg.isOutgoing! && !isServiceMessage)
-                        SafeSpacer(flex: spacerFlex),
-                      Expanded(
-                        flex: UIManager.isMobile ? 4 : 2,
+                      SizedBox(
+                        width: 400,
                         child: FutureBuilder(
                           key: Key(
                               "replie?replyToMessageId=${msg.replyToMessageId}?replyInChatId=${msg.replyInChatId}"),
@@ -292,8 +286,8 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                                 bubbleRelativePosition: bubbleRelativePosition,
                                 chat: chat,
                                 messages: buildAlbum
+                                    //because tdlib load messages in reverse chronological order
                                     ? albums[msg.mediaAlbumId!]!
-                                        //because tdlib load messages in reverse chronological order
                                         .reversed
                                         .toList()
                                     : [msg],
@@ -323,10 +317,6 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                           },
                         ),
                       ),
-                      if (!msg.isOutgoing! && !isServiceMessage)
-                        SafeSpacer(
-                          flex: spacerFlex,
-                        )
                     ],
                   ),
                 if (showDateBelow)

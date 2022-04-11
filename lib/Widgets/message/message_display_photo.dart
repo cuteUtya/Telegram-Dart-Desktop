@@ -34,38 +34,32 @@ class MessageDisplayPhoto extends StatelessWidget {
     assert(message.content is MessagePhoto);
     var photo = message.content as MessagePhoto;
     var photoSize = sortPhotoSizes(photo.photo!.sizes!)[0];
-    var width = min(photoSize.width!.toDouble(), 400.0);
-    var height = (photoSize.height! / (photoSize.width! / width));
 
-    return Container(
-      width: width,
-      margin: EdgeInsets.all(p(1)),
-      child: MessageDisplayMedia(
-        forceToTextMessage: true,
-        client: client,
-        message: message,
-        senderName: senderName,
-        infoWidget: infoWidget,
-        contentWidth: width,
-        adminTitle: adminTitle,
-        captionMargin: contentPadding,
-        replieWidget: replieWidget,
-        caption: photo.caption,
-        borderRadius: bubbleBorderRadius,
-        content: Container(
-          width: width,
-          height: height,
-          alignment: message.isOutgoing!
-              ? Alignment.bottomRight
-              : Alignment.bottomLeft,
-          child: RemoteImageDisplay(
+    return LayoutBuilder(
+      builder: (_, box) {
+        var width = min(photoSize.width!.toDouble(), box.maxWidth - 10);
+        return Padding(
+          padding: EdgeInsets.all(p(1)),
+          child: MessageDisplayMedia(
+            forceToTextMessage: true,
             client: client,
-            photo: photo,
-            width: width,
-            height: height,
+            message: message,
+            senderName: senderName,
+            infoWidget: infoWidget,
+            contentWidth: width,
+            adminTitle: adminTitle,
+            captionMargin: contentPadding,
+            replieWidget: replieWidget,
+            caption: photo.caption,
+            borderRadius: bubbleBorderRadius,
+            content: RemoteImageDisplay(
+              client: client,
+              photo: photo,
+              width: width,
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
