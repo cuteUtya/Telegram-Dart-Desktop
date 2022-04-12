@@ -5,6 +5,7 @@ import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
+import 'package:myapp/Widgets/message/message_info_overlay_display.dart';
 import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -107,14 +108,12 @@ class MessageDisplayMedia extends StatelessWidget {
   }
 
   Widget _buildBubbleStyle(BorderRadius border) {
-    GlobalKey<WidgetHiderState> hiderKey = GlobalKey<WidgetHiderState>();
     return Align(
       alignment:
           message.isOutgoing! ? Alignment.bottomRight : Alignment.bottomLeft,
-      child: MouseRegion(
-        onEnter: (_) => hiderKey.currentState?.show(),
-        onExit: (_) => hiderKey.currentState?.hide(),
-        child: Row(
+      child: MessageInfoOverlayDisplay(
+        info: infoWidget ?? const SizedBox(),
+        content: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -125,21 +124,7 @@ class MessageDisplayMedia extends StatelessWidget {
                 child: replieWidget!,
                 margin: EdgeInsets.only(right: p(6)),
               ),
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                _buildImage(border),
-                if (infoWidget != null)
-                  WidgetHider(
-                    key: hiderKey,
-                    hiddenOnInit: !UIManager.isMobile,
-                    child: Container(
-                      child: infoWidget!,
-                      padding: EdgeInsets.all(p(6)),
-                    ),
-                  ),
-              ],
-            ),
+            _buildImage(border),
             if (!message.isOutgoing! &&
                 replieWidget != null &&
                 !forceToTextMessage)

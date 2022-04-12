@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
+import 'package:myapp/Widgets/message/message_info_overlay_display.dart';
 import 'package:myapp/Widgets/remote_image_display.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
@@ -261,8 +262,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                         3,
                         messages.length,
                       ),
-                      bottomLeft: bubbleBorderRadius.bottomLeft,
-                      bottomRight: bubbleBorderRadius.bottomRight,
+                      bottomLeft: externalBorders.bottomLeft,
+                      bottomRight: externalBorders.bottomRight,
                     ),
                   )
                 ],
@@ -275,7 +276,7 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
               children: [
                 wrap(
                   photo(messages[0]),
-                  bubbleBorderRadius.copyWith(
+                  externalBorders.copyWith(
                     bottomRight: r,
                     bottomLeft: r,
                   ),
@@ -293,8 +294,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                       3,
                       messages.length,
                     ),
-                    bottomLeft: bubbleBorderRadius.bottomLeft,
-                    bottomRight: bubbleBorderRadius.bottomRight,
+                    bottomLeft: externalBorders.bottomLeft,
+                    bottomRight: externalBorders.bottomRight,
                   ),
                 ),
               ],
@@ -307,8 +308,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                 Flexible(
                   child: imagesLine(
                     messages.sublist(0, 2),
-                    topLeft: bubbleBorderRadius.topLeft,
-                    topRight: bubbleBorderRadius.topRight,
+                    topLeft: externalBorders.topLeft,
+                    topRight: externalBorders.topRight,
                   ),
                 ),
                 vMargin,
@@ -321,8 +322,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                 Flexible(
                   child: imagesLine(
                     messages.sublist(5, messages.length),
-                    bottomLeft: bubbleBorderRadius.bottomLeft,
-                    bottomRight: bubbleBorderRadius.bottomRight,
+                    bottomLeft: externalBorders.bottomLeft,
+                    bottomRight: externalBorders.bottomRight,
                   ),
                 ),
               ],
@@ -341,7 +342,7 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                       children: [
                         wrap(
                           photo(sort[1][0]),
-                          bubbleBorderRadius.copyWith(
+                          externalBorders.copyWith(
                             bottomLeft: r,
                             bottomRight: r,
                             topRight: r,
@@ -354,7 +355,7 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                               Flexible(
                                 child: imagesLine(
                                   messages.sublist(0, 2),
-                                  topRight: bubbleBorderRadius.topRight,
+                                  topRight: externalBorders.topRight,
                                   messagesFlex: {1: 2},
                                 ),
                               ),
@@ -362,7 +363,7 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                               Flexible(
                                 child: imagesLine(
                                   messages.sublist(2, 4),
-                                  topRight: bubbleBorderRadius.topRight,
+                                  topRight: externalBorders.topRight,
                                   messagesFlex: {2: 2},
                                 ),
                               ),
@@ -376,8 +377,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                   Flexible(
                     child: imagesLine(
                       messages.sublist(4, messages.length),
-                      bottomLeft: bubbleBorderRadius.bottomLeft,
-                      bottomRight: bubbleBorderRadius.bottomRight,
+                      bottomLeft: externalBorders.bottomLeft,
+                      bottomRight: externalBorders.bottomRight,
                       messagesFlex: {2: 2, 3: 2},
                     ),
                   )
@@ -391,8 +392,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                   Flexible(
                     child: imagesLine(
                       messages.sublist(0, 2),
-                      topLeft: bubbleBorderRadius.topLeft,
-                      topRight: bubbleBorderRadius.topRight,
+                      topLeft: externalBorders.topLeft,
+                      topRight: externalBorders.topRight,
                     ),
                   ),
                   vMargin,
@@ -404,7 +405,7 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                           child: imagesLine(
                             [messages[2], sort[1][0]],
                             axis: Axis.vertical,
-                            bottomLeft: bubbleBorderRadius.bottomLeft,
+                            bottomLeft: externalBorders.bottomLeft,
                             messagesFlex: {1: 2},
                           ),
                         ),
@@ -421,7 +422,7 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                           child: imagesLine(
                             [messages[5], sort[1][1]],
                             axis: Axis.vertical,
-                            bottomRight: bubbleBorderRadius.bottomRight,
+                            bottomRight: externalBorders.bottomRight,
                             messagesFlex: {1: 2},
                           ),
                         ),
@@ -438,8 +439,8 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                     child: imagesLine(
                       messages.sublist(0, 3),
                       axis: Axis.vertical,
-                      topLeft: bubbleBorderRadius.topLeft,
-                      bottomLeft: bubbleBorderRadius.topLeft,
+                      topLeft: externalBorders.topLeft,
+                      bottomLeft: externalBorders.topLeft,
                     ),
                   ),
                   lMargin,
@@ -454,13 +455,41 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                     child: imagesLine(
                       messages.sublist(5, messages.length),
                       axis: Axis.vertical,
-                      topRight: bubbleBorderRadius.topRight,
-                      bottomRight: bubbleBorderRadius.bottomRight,
+                      topRight: externalBorders.topRight,
+                      bottomRight: externalBorders.bottomRight,
                     ),
                   ),
                 ],
               );
             }
+            break;
+
+          case 9:
+            content = Column(
+              children: [
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(0, 3),
+                    topLeft: externalBorders.topLeft,
+                    topRight: externalBorders.topRight,
+                  ),
+                ),
+                vMargin,
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(3, 6),
+                  ),
+                ),
+                vMargin,
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(6, messages.length),
+                    bottomRight: externalBorders.bottomRight,
+                    bottomLeft: externalBorders.bottomLeft,
+                  ),
+                ),
+              ],
+            );
             break;
         }
 
@@ -487,6 +516,9 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
       );
     }
 
-    return child;
+    return MessageInfoOverlayDisplay(
+      content: child,
+      info: infoWidget ?? const SizedBox(),
+    );
   }
 }
