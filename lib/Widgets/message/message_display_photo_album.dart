@@ -34,16 +34,23 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
         Widget content = SizedBox();
 
         Radius r = const Radius.circular(4);
-        Widget vMargin = const SizedBox(height: 3);
-        Widget lMargin = const SizedBox(width: 3);
+        double margin = caption == null ? 3 : 1.5;
+        Widget vMargin = SizedBox(height: margin);
+        Widget lMargin = SizedBox(width: margin);
 
-        Widget photo(Message p) => SizedBox.expand(
+        Widget photo(Message p) {
+          if (p.content is MessagePhoto) {
+            return SizedBox.expand(
               child: RemoteImageDisplay(
                 client: client,
                 photo: p.content as MessagePhoto,
                 fit: BoxFit.cover,
               ),
             );
+          }
+          //TODO support video displayng
+          return const SizedBox();
+        }
 
         Widget wrap(Widget w, BorderRadius r, [int flex = 1]) => Flexible(
               flex: flex,
@@ -484,6 +491,34 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                 Flexible(
                   child: imagesLine(
                     messages.sublist(6, messages.length),
+                    bottomRight: externalBorders.bottomRight,
+                    bottomLeft: externalBorders.bottomLeft,
+                  ),
+                ),
+              ],
+            );
+            break;
+
+          case 10:
+            content = Column(
+              children: [
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(0, 3),
+                    topLeft: externalBorders.topLeft,
+                    topRight: externalBorders.bottomRight,
+                  ),
+                ),
+                vMargin,
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(3, 7),
+                  ),
+                ),
+                vMargin,
+                Flexible(
+                  child: imagesLine(
+                    messages.sublist(7, messages.length),
                     bottomRight: externalBorders.bottomRight,
                     bottomLeft: externalBorders.bottomLeft,
                   ),
