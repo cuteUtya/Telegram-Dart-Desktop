@@ -211,12 +211,33 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
                 : Row(
                     children: ch,
                   );
+
             break;
           case 4:
             continue three;
 
           case 5:
-            if (sort[1].isNotEmpty) {
+            if (sort[1].length == 5) {
+              content = Column(
+                children: [
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(0, 2),
+                      topLeft: externalBorders.topLeft,
+                      topRight: externalBorders.topRight,
+                    ),
+                  ),
+                  vMargin,
+                  Flexible(
+                    child: imagesLine(
+                      messages.sublist(2, 5),
+                      bottomLeft: externalBorders.bottomLeft,
+                      bottomRight: externalBorders.bottomRight,
+                    ),
+                  ),
+                ],
+              );
+            } else if (sort[1].length == 1) {
               heightDivider = 2;
               messages.remove(sort[1][0]);
               content = Row(
