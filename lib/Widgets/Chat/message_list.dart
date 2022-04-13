@@ -260,7 +260,9 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                         : MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 400,
+                        width: UIManager.useDesktopLayout
+                            ? 400
+                            : MediaQuery.of(context).size.width * 0.75,
                         child: FutureBuilder(
                           key: Key(
                               "replie?replyToMessageId=${msg.replyToMessageId}?replyInChatId=${msg.replyInChatId}"),
