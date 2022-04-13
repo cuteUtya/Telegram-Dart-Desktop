@@ -37,8 +37,6 @@ class Userpic extends StatelessWidget {
     File? photo;
 
     if (chatPhoto != null) {
-      print(
-          "${sortPhotoSizes(chatPhoto!.sizes!).first} --> ${sortPhotoSizes(chatPhoto!.sizes!).last}");
       photo = sortPhotoSizes(chatPhoto!.sizes!).last.photo!;
     } else if (chatPhotoInfo != null) {
       photo = (useBig ? chatPhotoInfo!.big! : chatPhotoInfo!.small!);
