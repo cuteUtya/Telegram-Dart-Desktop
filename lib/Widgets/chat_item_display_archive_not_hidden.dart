@@ -11,24 +11,36 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
 
-class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
+class ChatItemDisplayArchiveNotHidden extends StatefulWidget {
   const ChatItemDisplayArchiveNotHidden({
     Key? key,
     required this.client,
   }) : super(key: key);
 
   final TelegramClient client;
+
+  @override
+  State<ChatItemDisplayArchiveNotHidden> createState() =>
+      _ChatItemDisplayArchiveNotHiddenState();
+}
+
+class _ChatItemDisplayArchiveNotHiddenState
+    extends State<ChatItemDisplayArchiveNotHidden> {
+  late List<ChatOrder> _chats =
+      widget.client.getChatsInChatListSync(ChatListArchive());
+
   @override
   Widget build(BuildContext context) {
     var textColor = ClientTheme.currentTheme.getField("ArchiveContentColor");
     return StreamBuilder(
-      initialData: client.getChatsInChatListSync(ChatListArchive()),
-      stream: client.chatsInChatList(ChatListArchive()),
+      initialData: _chats,
+      stream: widget.client.chatsInChatList(ChatListArchive()),
       builder: (_, data) {
         List<InlineSpan> content = [];
         var chats = data.data as List<ChatOrder>;
+        _chats = chats;
         for (var element in chats) {
-          var chat = client.getChat(element.chatId);
+          var chat = widget.client.getChat(element.chatId);
           content.add(TextSpan(children: [
             TextDisplay.parseEmojiInString(
               chat.title!,
@@ -42,7 +54,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
             WidgetSpan(
               child: StreamBuilder(
                 initialData: chat.unreadCount!,
-                stream: client.unreadCountOf(chat.id!),
+                stream: widget.client.unreadCountOf(chat.id!),
                 builder: (_, data) => Container(
                   margin: data.data as int == 0
                       ? EdgeInsets.zero
@@ -70,7 +82,7 @@ class ChatItemDisplayArchiveNotHidden extends StatelessWidget {
           onClick: () => UIEvents.openArchive(),
           title: Row(
             children: [
-              Text(client.getTranslation("lng_archived_name"),
+              Text(widget.client.getTranslation("lng_archived_name"),
                   style: TextDisplay.chatTittle),
               const Spacer(),
             ],

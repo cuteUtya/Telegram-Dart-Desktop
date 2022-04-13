@@ -10,7 +10,7 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/utils.dart';
 
-class ChatListDisplay extends StatelessWidget {
+class ChatListDisplay extends StatefulWidget {
   const ChatListDisplay({
     Key? key,
     required this.client,
@@ -23,23 +23,37 @@ class ChatListDisplay extends StatelessWidget {
   final ScrollController? scrollController;
 
   @override
+  State<ChatListDisplay> createState() => _ChatListDisplayState();
+}
+
+class _ChatListDisplayState extends State<ChatListDisplay> {
+  late List<ChatOrder> _chats =
+      widget.client.getChatsInChatListSync(widget.chatList);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool addArchive = chatList is ChatListMain;
+    bool addArchive = widget.chatList is ChatListMain;
     return StreamBuilder(
-      initialData: client.getChatsInChatListSync(chatList),
-      stream: client.chatsInChatList(chatList),
+      initialData: _chats,
+      stream: widget.client.chatsInChatList(widget.chatList),
       builder: (_, data) {
         var chats = data.data as List<ChatOrder>;
+        _chats = chats;
         return SmoothListView(
           reverseScroll: true,
           itemCount: chats.length + (addArchive ? 1 : 0),
-          scrollController: scrollController,
+          scrollController: widget.scrollController,
           cacheExtent: 200,
           itemBuilder: (_, index) {
             if (addArchive) {
               if (index == 0) {
                 return ChatItemDisplayArchiveNotHidden(
-                  client: client,
+                  client: widget.client,
                 );
               }
               index--;
@@ -47,9 +61,9 @@ class ChatListDisplay extends StatelessWidget {
             var chatId = chats[index].chatId;
             return ChatItemDisplay(
               key: Key("ChatItemDisplay?id=$chatId"),
-              onClick: () => UIEvents.selectChat(chatId, client),
+              onClick: () => UIEvents.selectChat(chatId, widget.client),
               chatId: chatId,
-              client: client,
+              client: widget.client,
               chatList: chats[0].position.list!,
             );
           },
