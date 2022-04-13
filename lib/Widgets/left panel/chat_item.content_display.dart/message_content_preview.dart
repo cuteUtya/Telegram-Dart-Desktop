@@ -59,7 +59,6 @@ class MessageContentPreview extends StatelessWidget {
         switch (content.runtimeType) {
           case MessageText:
             text = (content as MessageText).text!;
-            text.text = text.text!.replaceAll(RegExp(r"\n"), " ");
             break;
 
           case MessageAnimatedEmoji:
@@ -290,7 +289,10 @@ class MessageContentPreview extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               );
 
+        text.text = text.text!.replaceAll("\n", "").replaceAll("\r", "");
+
         return RichText(
+          overflow: TextOverflow.ellipsis,
           maxLines: maxLines,
           text: TextSpan(
             children: [
