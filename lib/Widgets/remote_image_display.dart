@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io' as io;
+import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/blur_image_preview.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
@@ -11,7 +14,7 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text;
 import 'package:myapp/utils.dart';
 
-class RemoteImageDisplay extends StatelessWidget {
+class RemoteImageDisplay extends StatefulWidget {
   const RemoteImageDisplay({
     Key? key,
     required this.client,
@@ -27,27 +30,82 @@ class RemoteImageDisplay extends StatelessWidget {
   final double? width, height;
 
   @override
-  Widget build(BuildContext context) {
-    var photoSize = sortPhotoSizes(photo.photo!.sizes!)[0];
+  State<RemoteImageDisplay> createState() => _RemoteImageDisplayState();
+}
 
-    var blurImage = photo.photo?.minithumbnail?.data != null
+class _RemoteImageDisplayState extends State<RemoteImageDisplay> {
+  //ui.Image? image;
+  int? width, height;
+
+  Widget _build(io.File imageFile) {
+    return LayoutBuilder(
+      builder: (_, box) {
+        if (width != null && height != null) {
+          var placeholderRatio = box.maxHeight / box.maxWidth;
+          var ratio = height! / width!;
+
+          int w = 0;
+          int h = 0;
+
+          //TODO idk why images looks bad without this magic multyplier
+          const double multyplier = 1.15;
+
+          if (placeholderRatio > ratio && box.maxHeight != double.infinity) {
+            h = (box.maxHeight *
+                    MediaQuery.of(context).devicePixelRatio *
+                    multyplier)
+                .toInt();
+            w = (h * (width! / height!)).toInt();
+          } else {
+            w = (box.maxWidth *
+                    MediaQuery.of(context).devicePixelRatio *
+                    multyplier)
+                .toInt();
+            h = (w * ratio).toInt();
+          }
+
+          w = min(w, width!);
+          h = min(h, height!);
+
+          return Image.file(
+            imageFile,
+            fit: widget.fit,
+            width: widget.width,
+            height: widget.height,
+            cacheWidth: w,
+            cacheHeight: h,
+            filterQuality: FilterQuality.medium,
+          );
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var photoSize = sortPhotoSizes(widget.photo.photo!.sizes!)[0];
+    width = photoSize.width;
+    height = photoSize.height;
+
+    var blurImage = widget.photo.photo?.minithumbnail?.data != null
         ? BlurImagePreview(
             image: MemoryImage(
               base64.decode(
-                photo.photo!.minithumbnail!.data!,
+                widget.photo.photo!.minithumbnail!.data!,
               ),
             ),
-            width: width,
-            height: height,
+            width: widget.width,
+            height: widget.height,
           )
         : Container(
-            width: width,
-            height: height,
+            width: widget.width,
+            height: widget.height,
             color: Colors.white,
           );
 
     return RemoteFileBuilderProgress(
-      client: client,
+      client: widget.client,
       downloadStep: 65000,
       fileId: photoSize.photo!.id!,
       builder: (_, progress, path) {
@@ -79,7 +137,7 @@ class RemoteImageDisplay extends StatelessWidget {
                         ),
                       ),
                       child: SizedBox(
-                        width: (width ?? 200) * 0.33,
+                        width: (widget.width ?? 200) * 0.33,
                         height: p(8),
                         child: LinearProgressIndicator(
                           color: Colors.white,
@@ -94,12 +152,9 @@ class RemoteImageDisplay extends StatelessWidget {
             ],
           );
         }
-        return Image.file(
-          io.File(path),
-          fit: fit,
-          width: width,
-          height: height,
-        );
+
+        var imageFile = io.File(path);
+        return _build(imageFile);
       },
     );
   }
