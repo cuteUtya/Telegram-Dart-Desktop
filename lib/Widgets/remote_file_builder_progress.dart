@@ -50,7 +50,7 @@ class _RemoteFileBuilderProgressState
       widget.client.send(DownloadFile(
         fileId: widget.fileId,
         priority: widget.downloadPriority,
-        synchronous: false,
+        synchronous: true,
         limit: widget.downloadStep,
       ));
     }
