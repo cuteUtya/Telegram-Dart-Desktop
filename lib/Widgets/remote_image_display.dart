@@ -34,14 +34,14 @@ class RemoteImageDisplay extends StatefulWidget {
 }
 
 class _RemoteImageDisplayState extends State<RemoteImageDisplay> {
-  int? width, height;
+  late PhotoSize photoSize = sortPhotoSizes(widget.photo.photo!.sizes!)[0];
 
   Widget _build(io.File imageFile) {
     return LayoutBuilder(
       builder: (_, box) {
-        if (width != null && height != null) {
+        if (photoSize.width != null && photoSize.height != null) {
           var placeholderRatio = box.maxHeight / box.maxWidth;
-          var ratio = height! / width!;
+          var ratio = photoSize.height! / photoSize.width!;
 
           int w = 0;
           int h = 0;
@@ -54,7 +54,7 @@ class _RemoteImageDisplayState extends State<RemoteImageDisplay> {
                     MediaQuery.of(context).devicePixelRatio *
                     multyplier)
                 .toInt();
-            w = (h * (width! / height!)).toInt();
+            w = (h * (photoSize.width! / photoSize.height!)).toInt();
           } else {
             w = (box.maxWidth *
                     MediaQuery.of(context).devicePixelRatio *
@@ -63,8 +63,8 @@ class _RemoteImageDisplayState extends State<RemoteImageDisplay> {
             h = (w * ratio).toInt();
           }
 
-          w = min(w, width!);
-          h = min(h, height!);
+          w = min(w, photoSize.width!);
+          h = min(h, photoSize.height!);
 
           return Image.file(
             imageFile,
@@ -83,20 +83,22 @@ class _RemoteImageDisplayState extends State<RemoteImageDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    var photoSize = sortPhotoSizes(widget.photo.photo!.sizes!)[0];
-    width = photoSize.width;
-    height = photoSize.height;
-
     var blurImage = widget.photo.photo?.minithumbnail?.data != null
-        ? BlurImagePreview(
-            image: MemoryImage(
-              base64.decode(
-                widget.photo.photo!.minithumbnail!.data!,
+        ? FittedBox(
+            fit: widget.fit,
+            child: SizedBox(
+              width: photoSize.width!.toDouble(),
+              height: photoSize.height!.toDouble(),
+              child: BlurImagePreview(
+                image: MemoryImage(
+                  base64.decode(
+                    widget.photo.photo!.minithumbnail!.data!,
+                  ),
+                ),
+                width: widget.width,
+                height: widget.height,
               ),
-            ),
-            width: widget.width,
-            height: widget.height,
-          )
+            ))
         : Container(
             width: widget.width,
             height: widget.height,
