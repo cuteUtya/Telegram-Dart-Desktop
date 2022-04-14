@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Widgets/Chat/chat_display.dart';
+import 'package:myapp/Widgets/background_manager_desktop.dart';
 import 'package:myapp/Widgets/left%20panel/left_panel.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
@@ -62,10 +63,20 @@ class _AppMainMobileState extends State<AppMainMobile> {
           for (final e in data.data as List<int>)
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: ChatDisplay(
-                client: widget.client,
-                chatId: e,
-                onChatRevert:  () => pageController.animateToPage(lPage - 1, duration: const Duration(milliseconds: 200), curve: Curves.decelerate),
+              child: Stack(
+                children: [
+                  //TODO white own background manager for mobile layout
+                  DesktopBackgroundManager(
+                    client: widget.client,
+                  ),
+                  ChatDisplay(
+                    client: widget.client,
+                    chatId: e,
+                    onChatRevert: () => pageController.animateToPage(lPage - 1,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.decelerate),
+                  ),
+                ],
               ),
             ),
         ];

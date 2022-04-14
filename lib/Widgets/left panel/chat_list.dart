@@ -31,16 +31,11 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
       widget.client.getChatsInChatListSync(widget.chatList);
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     bool addArchive = widget.chatList is ChatListMain;
     return StreamBuilder(
       initialData: _chats,
-      stream: widget.client.chatsInChatList(widget.chatList),
+      stream: widget.client.chatsInChatList(widget.chatList, _chats),
       builder: (_, data) {
         var chats = data.data as List<ChatOrder>;
         _chats = chats;

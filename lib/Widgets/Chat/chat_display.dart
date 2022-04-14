@@ -49,12 +49,8 @@ class ChatDisplay extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(
-            bottom: p(4),
-            right: p(4),
-            left: p(4),
-          ),
+        Padding(
+          padding: EdgeInsets.all(p(6)).copyWith(top: 0),
           child: InputField(
             key: Key("inputField?chatId=$chatId"),
             client: client,

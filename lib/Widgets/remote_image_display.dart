@@ -34,7 +34,6 @@ class RemoteImageDisplay extends StatefulWidget {
 }
 
 class _RemoteImageDisplayState extends State<RemoteImageDisplay> {
-  //ui.Image? image;
   int? width, height;
 
   Widget _build(io.File imageFile) {

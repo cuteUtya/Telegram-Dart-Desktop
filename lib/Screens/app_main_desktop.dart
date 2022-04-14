@@ -4,7 +4,6 @@ import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/Chat/chat_display.dart';
 import 'package:myapp/Widgets/background_manager_desktop.dart';
 import 'package:myapp/Widgets/left%20panel/left_panel.dart';
-import 'package:myapp/Widgets/transcluent_gestures_stack.dart';
 import 'package:myapp/tdlib/client.dart';
 
 class AppMainDesktop extends StatefulWidget {
@@ -57,14 +56,13 @@ class _AppMainDesktopState extends State<AppMainDesktop> {
                   onHorizontalDragUpdate: (pointer) {
                     setState(() => resizePX += pointer.delta.dx);
                   },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.resizeColumn,
-                    onHover: (pointer) {
-                      if (down) {
-                        setState(() => resizePX += pointer.delta.dx);
-                      }
-                    },
-                  ),
+                  // MouseRegion in this case just switch mouse
+                  // cursor view to this: <-->
+                  child: UIManager.isMobile
+                      ? null
+                      : const MouseRegion(
+                          cursor: SystemMouseCursors.resizeColumn,
+                        ),
                 ),
               ),
             ],

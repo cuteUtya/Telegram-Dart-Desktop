@@ -246,8 +246,9 @@ class _ChatItemDisplayState
                     ],
                   ),
                 ),
-              Container(
-                margin: EdgeInsets.only(left: chat.unreadCount! > 0 ? p(2) : 0),
+              Padding(
+                padding:
+                    EdgeInsets.only(left: chat.unreadCount! > 0 ? p(2) : 0),
                 child: UnreadCountBubble(
                   count: chat.unreadCount!,
                   important: (chat.unreadMentionCount ?? 0) != 0,

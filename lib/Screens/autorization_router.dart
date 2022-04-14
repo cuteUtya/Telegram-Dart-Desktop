@@ -119,9 +119,17 @@ class _AutorizationRouter extends State<AutorizationRouter> {
               break;
 
             case AuthorizationStateReady:
-              getClient().send(SetOption(
-                  name: "online", value: OptionValueBoolean(value: true)));
-              return AppMain(client: getClient());
+              getClient().send(
+                SetOption(
+                  name: "online",
+                  value: OptionValueBoolean(
+                    value: true,
+                  ),
+                ),
+              );
+              return AppMain(
+                client: getClient(),
+              );
           }
         }
         return const LoadScreen();

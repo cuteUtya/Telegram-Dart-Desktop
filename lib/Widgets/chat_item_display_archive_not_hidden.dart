@@ -34,7 +34,7 @@ class _ChatItemDisplayArchiveNotHiddenState
     var textColor = ClientTheme.currentTheme.getField("ArchiveContentColor");
     return StreamBuilder(
       initialData: _chats,
-      stream: widget.client.chatsInChatList(ChatListArchive()),
+      stream: widget.client.chatsInChatList(ChatListArchive(), _chats),
       builder: (_, data) {
         List<InlineSpan> content = [];
         var chats = data.data as List<ChatOrder>;

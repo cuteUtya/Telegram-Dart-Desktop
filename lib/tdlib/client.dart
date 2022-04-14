@@ -650,8 +650,9 @@ class TelegramClient {
     return result;
   }
 
-  Stream<List<ChatOrder>> chatsInChatList(ChatList chatList) async* {
-    List<ChatOrder> result = getChatsInChatListSync(chatList);
+  Stream<List<ChatOrder>> chatsInChatList(
+      ChatList chatList, List<ChatOrder> initialChats) async* {
+    List<ChatOrder> result = initialChats;
 
     ChatOrder? tryFindChatInResult(int chatId) =>
         result.firstWhereOrNull((l) => chatId == l.chatId);
@@ -1192,6 +1193,7 @@ class TelegramClient {
 
   int _extra = 1;
   Future<TdObject> send(dynamic function) async {
+    print(function.runtimeType);
     final Completer<TdObject> _completer = Completer<TdObject>();
     function.extra = _extra;
     _sendClient!.send(function);
