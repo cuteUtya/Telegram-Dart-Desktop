@@ -36,36 +36,38 @@ class _AppMainDesktopState extends State<AppMainDesktop> {
           ),
         ),
         Flexible(
-          child: Stack(
-            children: [
-              DesktopBackgroundManager(client: widget.client),
-              StreamBuilder(
-                stream: UIEvents.selectedChat(),
-                initialData: const <int>[],
-                builder: (_, data) => (data.data as List<int>).isEmpty
-                    ? const SizedBox()
-                    : ChatDisplay(
-                        client: widget.client,
-                        chatId: (data.data as List<int>).last,
-                        onChatRevert: () => UIEvents.popChat(widget.client),
-                      ),
-              ),
-              SizedBox(
-                width: 3,
-                child: GestureDetector(
-                  onHorizontalDragUpdate: (pointer) {
-                    setState(() => resizePX += pointer.delta.dx);
-                  },
-                  // MouseRegion in this case just switch mouse
-                  // cursor view to this: <-->
-                  child: UIManager.isMobile
-                      ? null
-                      : const MouseRegion(
-                          cursor: SystemMouseCursors.resizeColumn,
+          child: RepaintBoundary(
+            child: Stack(
+              children: [
+                DesktopBackgroundManager(client: widget.client),
+                StreamBuilder(
+                  stream: UIEvents.selectedChat(),
+                  initialData: const <int>[],
+                  builder: (_, data) => (data.data as List<int>).isEmpty
+                      ? const SizedBox()
+                      : ChatDisplay(
+                          client: widget.client,
+                          chatId: (data.data as List<int>).last,
+                          onChatRevert: () => UIEvents.popChat(widget.client),
                         ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: 3,
+                  child: GestureDetector(
+                    onHorizontalDragUpdate: (pointer) {
+                      setState(() => resizePX += pointer.delta.dx);
+                    },
+                    // MouseRegion in this case just switch mouse
+                    // cursor view to this: <-->
+                    child: UIManager.isMobile
+                        ? null
+                        : const MouseRegion(
+                            cursor: SystemMouseCursors.resizeColumn,
+                          ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
