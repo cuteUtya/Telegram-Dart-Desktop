@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Context%20menu/context_menu_config.dart';
+import 'package:myapp/Context%20menu/context_menu_region.dart';
 import 'package:myapp/State managment/ui_events.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
@@ -19,6 +21,7 @@ import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/utils.dart';
 import 'package:collection/collection.dart';
+import 'dart:collection';
 
 class ChatItemDisplay extends StatefulWidget {
   const ChatItemDisplay({
@@ -90,7 +93,7 @@ class _ChatItemDisplayState
       stream: widget.client.chatAnyUpdates(widget.chatId),
       builder: (_, data) {
         var chat = (data.data ?? initialChat) as Chat;
-        return ChatItemBase(
+        var result = ChatItemBase(
           selected: selected,
           onClick: () => widget.onClick?.call(),
           title: Row(
@@ -323,6 +326,81 @@ class _ChatItemDisplayState
                       : "ChatPinIconColor"),
                 )
               : null,
+        );
+
+        bool isArchived = chat.positions!.firstWhereOrNull(
+                (e) => e.list is ChatListArchive && e.order != 0) !=
+            null;
+        bool isChatOrChannel = (chat.type is ChatTypeSupergroup ||
+            chat.type is ChatTypeBasicGroup);
+
+        return ContextMenuRegion(
+          config: ContextMenuConfig(
+            items: [
+              ContextMenuItem(
+                icon: isArchived
+                    ? Icons.unarchive_outlined
+                    : Icons.archive_outlined,
+                text: widget.client.getTranslation(
+                  isArchived ? "lng_archived_remove" : "lng_archived_add",
+                ),
+                onClick: () => widget.client.send(
+                  AddChatToList(
+                    chatId: chat.id,
+                    chatList: isArchived ? ChatListMain() : ChatListArchive(),
+                  ),
+                ),
+              ),
+              ContextMenuItem(
+                icon: Icons.push_pin_outlined,
+                text: widget.client.getTranslation(
+                  pinned(chat)
+                      ? "lng_context_unpin_from_top"
+                      : "lng_context_pin_to_top",
+                ),
+                onClick: () => widget.client.send(
+                  ToggleChatIsPinned(
+                    chatList: widget.chatList,
+                    chatId: widget.chatId,
+                    isPinned: !pinned(chat),
+                  ),
+                ),
+              ),
+              ContextMenuItem(
+                icon: chat.unreadCount == 0
+                    ? Icons.mark_chat_unread_outlined
+                    : Icons.mark_chat_read_outlined,
+                text: widget.client.getTranslation(
+                  chat.unreadCount == 0
+                      ? "lng_context_mark_unread"
+                      : "lng_context_mark_read",
+                ),
+                onClick: () => widget.client.send(
+                  ToggleChatIsMarkedAsUnread(
+                    chatId: chat.id!,
+                    isMarkedAsUnread: true, //chat.unreadCount != 0,
+                  ),
+                ),
+              ),
+              ContextMenuItem(
+                icon: isChatOrChannel
+                    ? Icons.logout_rounded
+                    : Icons.delete_outline,
+                text: widget.client.getTranslation(
+                  isChatOrChannel
+                      ? "lng_profile_leave_group"
+                      : "lng_profile_delete_conversation",
+                ),
+                destructiveAction: true,
+                onClick: () => widget.client.send(
+                  isChatOrChannel
+                      ? LeaveChat(chatId: chat.id!)
+                      : DeleteChat(chatId: chat.id!),
+                ),
+              ),
+            ],
+          ),
+          child: result,
         );
       },
     );

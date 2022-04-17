@@ -256,3 +256,10 @@ InlineKeyboardButton.icon.InlineKeyboardButtonTypeSwitchInline: Icons.send;
 InlineKeyboardButton.icon.InlineKeyboardButtonTypeLoginUrl: Icons.login;
 InlineKeyboard.answerPopup.backgroundColor: #2f000000;
 InlineKeyboard.answerPopup.textColor: #FFF;
+
+ContextMenu.color: ref(BaseColor);
+ContextMenu.icon.colorRegular: ref(RegularText);
+ContextMenu.icon.colorDestructive: ref(DangerColor);
+ContextMenu.text.colorRegular: ref(RegularText);
+ContextMenu.text.colorDestructive: ref(DangerColor);
+ContextMenu.line.color: #a1a1a1;

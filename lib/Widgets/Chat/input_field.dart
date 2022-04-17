@@ -3,10 +3,10 @@ import 'dart:convert';
 //import 'package:desktop_drop/desktop_drop.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/UIManager.dart';
-import 'package:myapp/Widgets/Context%20menus/context_menu_region.dart';
 import 'package:myapp/Widgets/button_icon.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/emoji_input_panel.dart';
@@ -476,7 +476,9 @@ class InputFieldState extends State<InputField> {
                     ),
                   ),
                 if (uploadedFiles.isNotEmpty) SizedBox(width: p(10)),
-                Container(
+
+                ///TODO
+                /*Container(
                   height: iconsSize,
                   alignment: Alignment.bottomCenter,
                   child: ContextMenuRegion(
@@ -497,7 +499,7 @@ class InputFieldState extends State<InputField> {
                       )
                     ]),
                   ),
-                ),
+                ),*/
                 SizedBox(width: p(10)),
                 ButtonIcon(
                   Icons.send,
