@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:async/src/stream_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:myapp/Context%20menu/context_menu_config.dart';
+import 'package:myapp/Context%20menu/context_menu_region.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
@@ -236,7 +239,7 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
             const double serviceMessageMargin = 6;
             const double messageMargin = 4;
 
-            return Column(
+            Widget result = Column(
               children: [
                 if (nextDate == null)
                   Container(
@@ -330,6 +333,29 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                     ),
                   ),
               ],
+            );
+
+            return ContextMenuRegion(
+              config: ContextMenuConfig(
+                items: [
+                  ContextMenuItem(
+                    icon: Icons.delete,
+                    text: widget.client.getTranslation(
+                      "lng_mediaview_delete",
+                    ),
+                    destructiveAction: true,
+                    //TODO show dialog alert to confirm
+                    onClick: () => widget.client.send(
+                      DeleteMessages(
+                        chatId: widget.chatId,
+                        messageIds: [msg.id!],
+                        revoke: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              child: result,
             );
           },
         );
