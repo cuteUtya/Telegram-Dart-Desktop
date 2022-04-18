@@ -194,11 +194,13 @@ class InputFieldState extends State<InputField> {
 
   @override
   void dispose() {
+    print(replyToMessageId);
     widget.client.send(
       SetChatDraftMessage(
         chatId: widget.chatId,
         draftMessage: DraftMessage(
           date: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+          replyToMessageId: replyToMessageId,
           inputMessageText: InputMessageText(
             text: FormattedText(
               text: textController.text,
@@ -224,12 +226,12 @@ class InputFieldState extends State<InputField> {
       /// on first open [deleteButtonSizerKey] was not be attached to any widget
       Future.delayed(Duration.zero, () => showDeletebutton());
     }
-    initTextController();
+    initTextField();
 
     super.initState();
   }
 
-  void initTextController() {
+  void initTextField() {
     var chat = widget.client.getChat(widget.chatId);
     String draftText = "";
     if (chat.draftMessage?.inputMessageText is InputMessageText) {
@@ -237,6 +239,14 @@ class InputFieldState extends State<InputField> {
           (chat.draftMessage?.inputMessageText as InputMessageText).text!.text!;
     }
     textController = TextEditingController(text: draftText);
+    if ((chat.draftMessage?.replyToMessageId ?? 0) != 0) {
+      Future.delayed(
+        Duration.zero,
+        () => UIEvents.replieTo(
+          chat.draftMessage?.replyToMessageId,
+        ),
+      );
+    }
   }
 
   static double iconsSize = p(20);
@@ -379,6 +389,7 @@ class InputFieldState extends State<InputField> {
                       stream: UIEvents.replieOnStream(),
                       builder: (_, data) {
                         if (data.data == null) {
+                          replyToMessageId = null;
                           return const SizedBox();
                         }
                         replyToMessageId = data.data as int;

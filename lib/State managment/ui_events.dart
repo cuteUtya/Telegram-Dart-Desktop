@@ -21,6 +21,7 @@ class UIEvents {
       client.send(OpenChat(chatId: id));
     }
     _selectedChat.add(_chatsStack);
+    replieTo(null);
   }
 
   /// open new chat, but save chain of opened chats
@@ -31,6 +32,7 @@ class UIEvents {
     client.send(OpenChat(chatId: id));
     _chatsStack.add(id);
     _selectedChat.add(_chatsStack);
+    replieTo(null);
   }
 
   /// close last chat in chats chain and open last before last chat in chain
