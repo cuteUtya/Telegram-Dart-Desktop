@@ -366,22 +366,31 @@ class _ChatItemDisplayState
                   ),
                 ),
               ),
-              ContextMenuItem(
-                icon: chat.unreadCount == 0
-                    ? Icons.mark_chat_unread_outlined
-                    : Icons.mark_chat_read_outlined,
-                text: widget.client.getTranslation(
-                  chat.unreadCount == 0
-                      ? "lng_context_mark_unread"
-                      : "lng_context_mark_read",
-                ),
-                onClick: () => widget.client.send(
-                  ToggleChatIsMarkedAsUnread(
-                    chatId: chat.id!,
-                    isMarkedAsUnread: true, //chat.unreadCount != 0,
+              if (chat.lastMessage != null)
+                ContextMenuItem(
+                  icon: chat.unreadCount == 0
+                      ? Icons.mark_chat_unread_outlined
+                      : Icons.mark_chat_read_outlined,
+                  text: widget.client.getTranslation(
+                    chat.unreadCount == 0
+                        ? "lng_context_mark_unread"
+                        : "lng_context_mark_read",
                   ),
+                  onClick: () {
+                    widget.client.send(
+                      ToggleChatIsMarkedAsUnread(
+                        chatId: chat.id!,
+                        isMarkedAsUnread: chat.unreadCount != 0,
+                      ),
+                    );
+                    if (chat.unreadCount != 0) {
+                      widget.client.send(ViewMessages(
+                          chatId: chat.id,
+                          forceRead: true,
+                          messageIds: [chat.lastMessage!.id!]));
+                    }
+                  },
                 ),
-              ),
               ContextMenuItem(
                 icon: isChatOrChannel
                     ? Icons.logout_rounded
