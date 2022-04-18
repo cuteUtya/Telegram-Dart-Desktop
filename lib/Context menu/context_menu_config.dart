@@ -40,21 +40,29 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
       var item = widget.items[i];
       var width = p(200.0);
       _items.add(
-        ClickableObject(
-          builder: (hover) => Container(
-            width: width,
-            padding: const EdgeInsets.symmetric(
-              vertical: 6,
-              horizontal: 3,
+        Material(
+          child: InkWell(
+            overlayColor: MaterialStateProperty.resolveWith(
+              (states) => states.contains(MaterialState.hovered)
+                  ? Colors.black12.withOpacity(0.1)
+                  : null,
             ),
-            color: hover ? Colors.black12.withOpacity(0.1) : null,
-            child: item._build(
+            onTap: () {
+              item.onClick?.call();
+              if (widget.closeOnClick) ContextMenuRegionState.close();
+            },
+            child: Container(
+              width: width,
+              padding: const EdgeInsets.symmetric(
+                vertical: 6,
+                horizontal: 3,
+              ),
+              child: item._build(
                 TextDisplay.create(
                   size: font(15),
-                ), () {
-              if (widget.closeOnClick) ContextMenuRegionState.close();
-              item.onClick?.call();
-            }),
+                ),
+              ),
+            ),
           ),
         ),
       );
@@ -110,30 +118,27 @@ class ContextMenuItem {
   final bool destructiveAction;
   final VoidCallback? onClick;
 
-  Widget _build(TextStyle? textStyle, VoidCallback onClick) => GestureDetector(
-        onTap: onClick,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: ClientTheme.currentTheme.getField(
-                destructiveAction
-                    ? "ContextMenu.icon.colorDestructive"
-                    : "ContextMenu.icon.colorRegular",
-              ),
+  Widget _build(TextStyle? textStyle) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 24,
+            color: ClientTheme.currentTheme.getField(
+              destructiveAction
+                  ? "ContextMenu.icon.colorDestructive"
+                  : "ContextMenu.icon.colorRegular",
             ),
-            const SizedBox(width: 12),
-            Text(
-              text,
-              style: textStyle?.copyWith(
-                color: ClientTheme.currentTheme.getField(destructiveAction
-                    ? "ContextMenu.text.colorDestructive"
-                    : "ContextMenu.text.colorRegular"),
-              ),
-            )
-          ],
-        ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            text,
+            style: textStyle?.copyWith(
+              color: ClientTheme.currentTheme.getField(destructiveAction
+                  ? "ContextMenu.text.colorDestructive"
+                  : "ContextMenu.text.colorRegular"),
+            ),
+          )
+        ],
       );
 }
