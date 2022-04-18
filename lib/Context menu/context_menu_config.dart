@@ -4,6 +4,7 @@ import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
+import 'package:myapp/scale_utils.dart';
 
 class ContextMenuConfig extends StatefulWidget {
   const ContextMenuConfig({
@@ -37,7 +38,7 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
 
     for (int i = 0; i < widget.items.length; i++) {
       var item = widget.items[i];
-      const width = 200.0;
+      var width = p(200.0);
       _items.add(
         ClickableObject(
           builder: (hover) => Container(
@@ -49,7 +50,7 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
             color: hover ? Colors.black12.withOpacity(0.1) : null,
             child: item._build(
                 TextDisplay.create(
-                  size: 15,
+                  size: font(15),
                 ), () {
               if (widget.closeOnClick) ContextMenuRegionState.close();
               item.onClick?.call();
