@@ -49,28 +49,30 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     UIManager.screenSizeChange(context);
-    return SafeArea(
-      child: Scaffold(
-        drawer: Container(
-          width: UIManager.useDesktopLayout
-              ? max(
-                  MediaQuery.of(context).size.width * 0.20,
-                  p(300),
-                ).toDouble()
-              : MediaQuery.of(context).size.width * 0.75,
-          child: BurgerMenu(
-            client: widget.client,
-            onThemeChange: () => setState(() {}),
-          ),
-          color: ClientTheme.currentTheme.getField(
-            "BurgerMenu.color",
-          ),
-        ),
-        body: Center(
-          child: ColoredBox(
-            color: ClientTheme.currentTheme.getField("BaseColor"),
-            child: AutorizationRouter(
+    return ExcludeSemantics(
+      child: SafeArea(
+        child: Scaffold(
+          drawer: Container(
+            width: UIManager.useDesktopLayout
+                ? max(
+                    MediaQuery.of(context).size.width * 0.20,
+                    p(300),
+                  ).toDouble()
+                : MediaQuery.of(context).size.width * 0.75,
+            child: BurgerMenu(
               client: widget.client,
+              onThemeChange: () => setState(() {}),
+            ),
+            color: ClientTheme.currentTheme.getField(
+              "BurgerMenu.color",
+            ),
+          ),
+          body: Center(
+            child: ColoredBox(
+              color: ClientTheme.currentTheme.getField("BaseColor"),
+              child: AutorizationRouter(
+                client: widget.client,
+              ),
             ),
           ),
         ),

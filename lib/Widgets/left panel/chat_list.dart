@@ -30,6 +30,8 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   late List<ChatOrder> _chats =
       widget.client.getChatsInChatListSync(widget.chatList);
 
+  int maxChats = 20;
+
   @override
   Widget build(BuildContext context) {
     bool addArchive = widget.chatList is ChatListMain;
@@ -41,9 +43,10 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
         _chats = chats;
         return SmoothListView(
           reverseScroll: true,
-          itemCount: chats.length + (addArchive ? 1 : 0),
+          itemCount: maxChats,
           scrollController: widget.scrollController,
-          cacheExtent: 200,
+          addAutomaticKeepAlives: false,
+          addRepaintBoundaries: false,
           itemBuilder: (_, index) {
             if (addArchive) {
               if (index == 0) {
@@ -52,6 +55,15 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
                 );
               }
               index--;
+            }
+            if (index == maxChats - 2 && maxChats != _chats.length) {
+              Future.delayed(
+                Duration.zero,
+                () => setState(
+                  () =>
+                      maxChats = clamp(maxChats + 10, 0, _chats.length).toInt(),
+                ),
+              );
             }
             var chatId = chats[index].chatId;
             return ChatItemDisplay(

@@ -1193,7 +1193,6 @@ class TelegramClient {
 
   int _extra = 1;
   Future<TdObject> send(dynamic function) async {
-    print(function.runtimeType);
     final Completer<TdObject> _completer = Completer<TdObject>();
     function.extra = _extra;
     _sendClient!.send(function);
