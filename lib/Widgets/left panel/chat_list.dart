@@ -30,7 +30,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   late List<ChatOrder> _chats =
       widget.client.getChatsInChatListSync(widget.chatList);
 
-  int maxChats = 20;
+  int maxChats = 2;
 
   @override
   Widget build(BuildContext context) {
