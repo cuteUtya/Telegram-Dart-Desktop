@@ -3,7 +3,8 @@ import 'package:myapp/tdlib/td_api.dart';
 import 'package:rxdart/subjects.dart';
 
 class UIEvents {
-  static final BehaviorSubject<List<int>> _selectedChat = BehaviorSubject<List<int>>();
+  static final BehaviorSubject<List<int>> _selectedChat =
+      BehaviorSubject<List<int>>();
   static List<int> _chatsStack = [];
 
   /// drop chats chain and open chat with entered [id], close chats if [id] is null
@@ -42,16 +43,25 @@ class UIEvents {
 
   static Stream<List<int>> selectedChat() => _selectedChat.stream;
 
-  static final BehaviorSubject<List<ChatList>> _chatLists = BehaviorSubject<List<ChatList>>();
-  static void changeChatList(List<ChatList> newChatList) => _chatLists.add(newChatList);
+  static final BehaviorSubject<List<ChatList>> _chatLists =
+      BehaviorSubject<List<ChatList>>();
+  static void changeChatList(List<ChatList> newChatList) =>
+      _chatLists.add(newChatList);
   static Stream<List<ChatList>> chatLists() => _chatLists.stream;
 
-  static final BehaviorSubject<ChatList> _currentChatList = BehaviorSubject<ChatList>();
-  static void selectChatList(ChatList newChatList) => _currentChatList.add(newChatList);
+  static final BehaviorSubject<ChatList> _currentChatList =
+      BehaviorSubject<ChatList>();
+  static void selectChatList(ChatList newChatList) =>
+      _currentChatList.add(newChatList);
   static Stream<ChatList> currentChatList() => _currentChatList.stream;
 
   static final BehaviorSubject<bool> _archiveOpened = BehaviorSubject<bool>();
   static void openArchive() => _archiveOpened.add(true);
   static void closeArchive() => _archiveOpened.add(false);
   static Stream<bool> archiveState() => _archiveOpened.stream;
+
+  static final BehaviorSubject<int?> _replieOn = BehaviorSubject<int?>();
+  static void replieTo(int? messageId) => _replieOn.add(messageId);
+  static void removeReplie() => replieTo(null);
+  static Stream<int?> replieOnStream() => _replieOn.stream;
 }

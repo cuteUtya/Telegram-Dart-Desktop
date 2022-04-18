@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Context%20menu/context_menu_config.dart';
 import 'package:myapp/Context%20menu/context_menu_region.dart';
+import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/date_bubble.dart';
@@ -338,6 +339,13 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
             return ContextMenuRegion(
               config: ContextMenuConfig(
                 items: [
+                  ContextMenuItem(
+                    icon: Icons.reply,
+                    text: widget.client.getTranslation(
+                      "lng_context_reply_msg",
+                    ),
+                    onClick: () => UIEvents.replieTo(msg.id),
+                  ),
                   ContextMenuItem(
                     icon: Icons.delete,
                     text: widget.client.getTranslation(

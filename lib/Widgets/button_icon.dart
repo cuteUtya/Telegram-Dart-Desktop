@@ -16,15 +16,11 @@ class ButtonIcon extends StatelessWidget {
   final VoidCallback? onClick;
 
   @override
-  Widget build(BuildContext context) => ClickableObject(
-        builder: (hover) => Icon(
+  Widget build(BuildContext context) => InkWell(
+        child: Icon(
           icon,
           size: size,
-          color: Color.lerp(
-            color,
-            Colors.white,
-            hover ? 0.2 : 0,
-          ),
+          color: color,
         ),
         onTap: () => onClick?.call(),
       );

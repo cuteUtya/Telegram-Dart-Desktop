@@ -5,11 +5,13 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/button_icon.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/emoji_input_panel.dart';
+import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/message_content_preview.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/Widgets/widget_sizer.dart';
 import 'package:myapp/file_utils.dart';
@@ -35,9 +37,9 @@ class InputField extends StatefulWidget {
 
 class InputFieldState extends State<InputField> {
   late TextEditingController textController;
+  int? replyToMessageId;
 
   void sendMessage() async {
-    //TODO add ability to send albums
     //TODO also validate images before send it as image
 
     InputMessageContent createFile(String path, FormattedText? caption) {
@@ -68,6 +70,7 @@ class InputFieldState extends State<InputField> {
           SendMessage(
             chatId: widget.chatId,
             inputMessageContent: content,
+            replyToMessageId: replyToMessageId,
           ),
         );
 
@@ -128,6 +131,7 @@ class InputFieldState extends State<InputField> {
         () {
           uploadedFiles.clear();
           textController.clear();
+          UIEvents.removeReplie();
         },
       );
     }
@@ -351,7 +355,7 @@ class InputFieldState extends State<InputField> {
                   ),
           ),
         ),
-        if (!dropZoneClosedInUI || fileDragging) SeparatorLine(),
+        if (!dropZoneClosedInUI || fileDragging) const SeparatorLine(),
         Container(
           decoration: BoxDecoration(
             color: ClientTheme.currentTheme
@@ -364,121 +368,175 @@ class InputFieldState extends State<InputField> {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: p(6),
-              horizontal: p(8),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                WidgetOpacityContoller(
-                  key: deleteButtonOpacityKey,
-                  opacity: 0,
-                  duration: const Duration(milliseconds: 200),
-                  child: WidgetSizer(
-                    key: deleteButtonSizerKey,
-                    duration: const Duration(milliseconds: 200),
-                    sizeOnInit: Size.zero,
-                    child: ButtonIcon(
-                      Icons.delete,
-                      size: iconsSize,
-                      color: ClientTheme.currentTheme
-                          .getField("DropZoneClearAllButtonColor"),
-                      onClick: () => clearFiles(),
-                    ),
-                  ),
-                ),
-                ButtonIcon(
-                  Icons.attach_file,
-                  color: iconColor,
-                  size: iconsSize,
-                  onClick: () {
-                    FilePicker.platform
-                        .pickFiles(
-                      dialogTitle:
-                          widget.client.getTranslation("lng_choose_file"),
-                      allowMultiple: true,
-                    )
-                        .then(
-                      (pick) {
-                        pick?.files.forEach((file) => attachFile(file.path!));
-                      },
-                    );
-                  },
-                ),
-                SizedBox(width: p(8)),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: p(4)),
-                    child: TextField(
-                      controller: textController,
-                      decoration: InputDecoration.collapsed(
-                        hintText:
-                            widget.client.getTranslation("lng_message_ph"),
-                        hintStyle: TextDisplay.create(
-                          size: font(14),
-                          textColor: ClientTheme.currentTheme
-                              .getField("InputFieldTextColor"),
+              padding: EdgeInsets.symmetric(
+                vertical: p(6),
+                horizontal: p(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  StreamBuilder(
+                      stream: UIEvents.replieOnStream(),
+                      builder: (_, data) {
+                        if (data.data == null) {
+                          return const SizedBox();
+                        }
+                        replyToMessageId = data.data as int;
+                        return FutureBuilder(
+                          future: widget.client.send(
+                            GetMessage(
+                              chatId: widget.chatId,
+                              messageId: data.data as int,
+                            ),
+                          ),
+                          builder: (__, msg) => msg.data == null
+                              ? const SizedBox()
+                              : Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.reply_rounded,
+                                          size: 24,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Expanded(
+                                          child: MessageContentPreview(
+                                            client: widget.client,
+                                            message: msg.data as Message,
+                                            style: MessageContentPreviewStyle
+                                                .lineBreakeAfterAuthorName,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        ButtonIcon(
+                                          Icons.close,
+                                          size: 24,
+                                          onClick: () =>
+                                              UIEvents.removeReplie(),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4),
+                                    const SeparatorLine(),
+                                    const SizedBox(height: 8),
+                                  ],
+                                ),
+                        );
+                      }),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      WidgetOpacityContoller(
+                        key: deleteButtonOpacityKey,
+                        opacity: 0,
+                        duration: const Duration(milliseconds: 200),
+                        child: WidgetSizer(
+                          key: deleteButtonSizerKey,
+                          duration: const Duration(milliseconds: 200),
+                          sizeOnInit: Size.zero,
+                          child: ButtonIcon(
+                            Icons.delete,
+                            size: iconsSize,
+                            color: ClientTheme.currentTheme
+                                .getField("DropZoneClearAllButtonColor"),
+                            onClick: () => clearFiles(),
+                          ),
                         ),
                       ),
-                      style: TextStyle(
-                        fontSize: font(13),
-                        color: ClientTheme.currentTheme
-                            .getField("InputFieldTextColor"),
-                        fontFamily: TextDisplay.regular,
-                        fontFamilyFallback: [
-                          TextDisplay.getEmojiFont(),
-                        ],
+                      ButtonIcon(
+                        Icons.attach_file,
+                        color: iconColor,
+                        size: iconsSize,
+                        onClick: () {
+                          FilePicker.platform
+                              .pickFiles(
+                            dialogTitle:
+                                widget.client.getTranslation("lng_choose_file"),
+                            allowMultiple: true,
+                          )
+                              .then(
+                            (pick) {
+                              pick?.files
+                                  .forEach((file) => attachFile(file.path!));
+                            },
+                          );
+                        },
                       ),
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      onChanged: (value) {
-                        widget.client.send(
-                          SendChatAction(
-                            chatId: widget.chatId,
-                            action: ChatActionTyping(),
+                      SizedBox(width: p(8)),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: p(4)),
+                          child: TextField(
+                            controller: textController,
+                            decoration: InputDecoration.collapsed(
+                              hintText: widget.client
+                                  .getTranslation("lng_message_ph"),
+                              hintStyle: TextDisplay.create(
+                                size: font(14),
+                                textColor: ClientTheme.currentTheme
+                                    .getField("InputFieldTextColor"),
+                              ),
+                            ),
+                            style: TextStyle(
+                              fontSize: font(13),
+                              color: ClientTheme.currentTheme
+                                  .getField("InputFieldTextColor"),
+                              fontFamily: TextDisplay.regular,
+                              fontFamilyFallback: [
+                                TextDisplay.getEmojiFont(),
+                              ],
+                            ),
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            onChanged: (value) {
+                              widget.client.send(
+                                SendChatAction(
+                                  chatId: widget.chatId,
+                                  action: ChatActionTyping(),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                if (uploadedFiles.length >= 2)
-                  Tooltip(
-                    message: widget.client.getTranslation("lng_send_album"),
-                    textStyle: TextDisplay.create(size: font(13)),
-                    child: ButtonIcon(
-                      Icons.collections,
-                      size: iconsSize,
-                      color: groupItems
-                          ? ClientTheme.currentTheme.getField("Accent")
-                          : iconColor,
-                      onClick: () => setState(
-                        () => groupItems = !groupItems,
+                        ),
                       ),
-                    ),
-                  ),
-                if (uploadedFiles.length >= 2) SizedBox(width: p(10)),
-                if (uploadedFiles.isNotEmpty)
-                  Tooltip(
-                    message: widget.client.getTranslation(
-                      sendAsFiles ? "lng_send_file" : "lng_send_photo",
-                    ),
-                    //TODO use separate color from theme
-                    textStyle: TextDisplay.create(size: 14),
-                    child: ButtonIcon(
-                      sendAsFiles ? Icons.description : Icons.image,
-                      onClick: () => setState(
-                        () => sendAsFiles = !sendAsFiles,
-                      ),
-                      size: iconsSize,
-                      color: iconColor,
-                    ),
-                  ),
-                if (uploadedFiles.isNotEmpty) SizedBox(width: p(10)),
+                      if (uploadedFiles.length >= 2)
+                        Tooltip(
+                          message:
+                              widget.client.getTranslation("lng_send_album"),
+                          textStyle: TextDisplay.create(size: font(13)),
+                          child: ButtonIcon(
+                            Icons.collections,
+                            size: iconsSize,
+                            color: groupItems
+                                ? ClientTheme.currentTheme.getField("Accent")
+                                : iconColor,
+                            onClick: () => setState(
+                              () => groupItems = !groupItems,
+                            ),
+                          ),
+                        ),
+                      if (uploadedFiles.length >= 2) SizedBox(width: p(10)),
+                      if (uploadedFiles.isNotEmpty)
+                        Tooltip(
+                          message: widget.client.getTranslation(
+                            sendAsFiles ? "lng_send_file" : "lng_send_photo",
+                          ),
+                          //TODO use separate color from theme
+                          textStyle: TextDisplay.create(size: 14),
+                          child: ButtonIcon(
+                            sendAsFiles ? Icons.description : Icons.image,
+                            onClick: () => setState(
+                              () => sendAsFiles = !sendAsFiles,
+                            ),
+                            size: iconsSize,
+                            color: iconColor,
+                          ),
+                        ),
+                      if (uploadedFiles.isNotEmpty) SizedBox(width: p(10)),
 
-                ///TODO
-                /*Container(
+                      ///TODO
+                      /*Container(
                   height: iconsSize,
                   alignment: Alignment.bottomCenter,
                   child: ContextMenuRegion(
@@ -500,16 +558,17 @@ class InputFieldState extends State<InputField> {
                     ]),
                   ),
                 ),*/
-                SizedBox(width: p(10)),
-                ButtonIcon(
-                  Icons.send,
-                  color: iconColor,
-                  size: iconsSize,
-                  onClick: () => sendMessage(),
-                ),
-              ],
-            ),
-          ),
+                      SizedBox(width: p(10)),
+                      ButtonIcon(
+                        Icons.send,
+                        color: iconColor,
+                        size: iconsSize,
+                        onClick: () => sendMessage(),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
         ),
       ],
     );
