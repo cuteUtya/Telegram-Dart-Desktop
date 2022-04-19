@@ -19,6 +19,7 @@ import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text;
 import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:myapp/utils.dart';
+import 'package:collection/collection.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({
@@ -78,7 +79,7 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
     }
   }
 
-  void listenNewMessage() {
+  void listenMessagesUpdates() {
     streamSubscriptions.add(
       widget.client.newMessagesIn(widget.chatId).listen(
         (event) {
@@ -100,11 +101,24 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
         },
       ),
     );
+    streamSubscriptions.add(
+      widget.client.updateMessageIsPinned.listen(
+        (event) {
+          if (event.chatId == widget.chatId) {
+            var msg = messages?.messages
+                ?.firstWhereOrNull((e) => e.id == event.messageId);
+            if (msg != null) {
+              setState(() => msg.isPinned = event.isPinned);
+            }
+          }
+        },
+      ),
+    );
   }
 
   @override
   void initState() {
-    listenNewMessage();
+    listenMessagesUpdates();
     loadMessages(50, 0, 0);
     widget.client.send(GetChatAdministrators(chatId: widget.chatId)).then(
       (adm) {
@@ -346,6 +360,28 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                     ),
                     onClick: () => UIEvents.replieTo(msg.id),
                   ),
+                  if (chat.permissions!.canPinMessages!)
+                    ContextMenuItemIconButton(
+                      icon: Icons.push_pin,
+                      text: widget.client.getTranslation(
+                        msg.isPinned! ? "lng_pinned_unpin" : "lng_pinned_pin",
+                      ),
+                      onClick: () => widget.client.send(
+                        msg.isPinned!
+                            ? UnpinChatMessage(
+                                chatId: chat.id,
+                                messageId: msg.id,
+                              )
+                            : PinChatMessage(
+                                chatId: chat.id,
+                                //TODO ask for it
+                                disableNotification: true,
+                                messageId: msg.id,
+                                //TODO ask for it
+                                onlyForSelf: false,
+                              ),
+                      ),
+                    ),
                   ContextMenuItemIconButton(
                     icon: Icons.delete,
                     text: widget.client.getTranslation(
