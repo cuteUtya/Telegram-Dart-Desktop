@@ -153,7 +153,7 @@ class MessageDisplayText extends StatelessWidget {
                                           "OutgoingChannelMessageTitleColor")
                                       : getPeerColor(
                                           getSenderId(message.senderId!)!, 'b'),
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
                                   size: font(13),
                                   fontFamily: TextDisplay.greaterImportance,
                                 ),
