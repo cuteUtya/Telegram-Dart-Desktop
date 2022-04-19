@@ -339,14 +339,14 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
             return ContextMenuRegion(
               config: ContextMenuConfig(
                 items: [
-                  ContextMenuItem(
+                  ContextMenuItemIconButton(
                     icon: Icons.reply,
                     text: widget.client.getTranslation(
                       "lng_context_reply_msg",
                     ),
                     onClick: () => UIEvents.replieTo(msg.id),
                   ),
-                  ContextMenuItem(
+                  ContextMenuItemIconButton(
                     icon: Icons.delete,
                     text: widget.client.getTranslation(
                       "lng_mediaview_delete",
@@ -361,12 +361,40 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                       ),
                     ),
                   ),
+                  if (msg.editDate != 0)
+                    ContextMenuItemText(
+                      icon: Icons.info_outline,
+                      text: widget.client.getTranslation(
+                        "lng_edited_date",
+                        replacing: {
+                          "{date}": formatEditTime(msg.editDate!),
+                        },
+                      ),
+                    ),
                 ],
               ),
               child: result,
             );
           },
         );
+      },
+    );
+  }
+
+  String formatEditTime(int unix) {
+    var date = unixToDateTime(unix);
+    var now = DateTime.now();
+
+    return widget.client.getTranslation(
+      now.day - date.day <= 1
+          ? (date.day == now.day
+              ? "lng_player_message_today"
+              : "lng_player_message_yesterday")
+          : "lng_player_message_date",
+      replacing: {
+        "{time}": getHHMM(date),
+        "{date}":
+            "${widget.client.getTranslation("lng_month${date.month}")} ${date.day}"
       },
     );
   }

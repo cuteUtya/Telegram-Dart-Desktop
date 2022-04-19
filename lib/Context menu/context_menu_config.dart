@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Context%20menu/context_menu_region.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
-import 'package:myapp/Widgets/clickable_object.dart';
 import 'package:myapp/Widgets/display_text.dart';
-import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/scale_utils.dart';
 
 class ContextMenuConfig extends StatefulWidget {
   const ContextMenuConfig({
     Key? key,
     required this.items,
-    this.closeOnClick = true,
   }) : super(key: key);
 
   final List<ContextMenuItem> items;
-  final bool closeOnClick;
 
   @override
   State<ContextMenuConfig> createState() => _ContextMenuConfigState();
@@ -49,7 +45,6 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
             ),
             onTap: () {
               item.onClick?.call();
-              if (widget.closeOnClick) ContextMenuRegionState.close();
             },
             child: Container(
               width: width,
@@ -57,9 +52,9 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
                 vertical: 6,
                 horizontal: 3,
               ),
-              child: item._build(
+              child: item.build(
                 TextDisplay.create(
-                  size: font(15),
+                  size: font(14),
                 ),
               ),
             ),
@@ -82,9 +77,8 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
       opacity: opacity,
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeIn,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(6)),
           boxShadow: [
             BoxShadow(
               color: Colors.black12.withAlpha(20),
@@ -93,45 +87,74 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
               spreadRadius: 2,
             ),
           ],
-          color: ClientTheme.currentTheme.getField(
-            "ContextMenu.color",
-          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: _items,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          child: ColoredBox(
+            color: ClientTheme.currentTheme.getField(
+              "ContextMenu.color",
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _items,
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class ContextMenuItem {
-  const ContextMenuItem({
+abstract class ContextMenuItem {
+  ContextMenuItem({
+    VoidCallback? clickEvent,
+    this.closeOnClick = true,
+  }) {
+    onClick = () {
+      if (closeOnClick) ContextMenuRegionState.close();
+      clickEvent?.call();
+    };
+  }
+
+  VoidCallback? onClick;
+  final bool closeOnClick;
+
+  static const double iconSize = 24;
+  static const double baseIconMargin = 12;
+
+  Widget build(TextStyle? textStyle) => throw Exception();
+}
+
+class ContextMenuItemIconButton extends ContextMenuItem {
+  ContextMenuItemIconButton({
     required this.icon,
     required this.text,
+    VoidCallback? onClick,
+    closeOnClick = true,
     this.destructiveAction = false,
-    this.onClick,
-  });
+  }) : super(
+          clickEvent: onClick,
+          closeOnClick: closeOnClick,
+        );
 
   final IconData icon;
   final String text;
   final bool destructiveAction;
-  final VoidCallback? onClick;
 
-  Widget _build(TextStyle? textStyle) => Row(
+  @override
+  Widget build(TextStyle? textStyle) => Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             icon,
-            size: 24,
+            size: ContextMenuItem.iconSize,
             color: ClientTheme.currentTheme.getField(
               destructiveAction
                   ? "ContextMenu.icon.colorDestructive"
                   : "ContextMenu.icon.colorRegular",
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: ContextMenuItem.baseIconMargin),
           Text(
             text,
             style: textStyle?.copyWith(
@@ -140,6 +163,38 @@ class ContextMenuItem {
                   : "ContextMenu.text.colorRegular"),
             ),
           )
+        ],
+      );
+}
+
+class ContextMenuItemText extends ContextMenuItem {
+  ContextMenuItemText({
+    required this.text,
+    this.icon,
+    this.colorIcon,
+  }) : super();
+
+  final String text;
+  final IconData? icon;
+  final Color? colorIcon;
+
+  @override
+  Widget build(TextStyle? textStyle) => Row(
+        children: [
+          if (icon != null)
+            Icon(
+              icon,
+              size: ContextMenuItem.iconSize,
+              color: colorIcon,
+            ),
+          if (icon != null)
+            const SizedBox(
+              width: ContextMenuItem.baseIconMargin,
+            ),
+          Text(
+            text,
+            style: textStyle,
+          ),
         ],
       );
 }

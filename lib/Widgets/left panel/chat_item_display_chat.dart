@@ -337,7 +337,7 @@ class _ChatItemDisplayState
         return ContextMenuRegion(
           config: ContextMenuConfig(
             items: [
-              ContextMenuItem(
+              ContextMenuItemIconButton(
                 icon: isArchived
                     ? Icons.unarchive_outlined
                     : Icons.archive_outlined,
@@ -351,7 +351,7 @@ class _ChatItemDisplayState
                   ),
                 ),
               ),
-              ContextMenuItem(
+              ContextMenuItemIconButton(
                 icon: Icons.push_pin_outlined,
                 text: widget.client.getTranslation(
                   pinned(chat)
@@ -367,7 +367,7 @@ class _ChatItemDisplayState
                 ),
               ),
               if (chat.lastMessage != null)
-                ContextMenuItem(
+                ContextMenuItemIconButton(
                   icon: chat.unreadCount == 0
                       ? Icons.mark_chat_unread_outlined
                       : Icons.mark_chat_read_outlined,
@@ -391,7 +391,7 @@ class _ChatItemDisplayState
                     }
                   },
                 ),
-              ContextMenuItem(
+              ContextMenuItemIconButton(
                 icon: isChatOrChannel
                     ? Icons.logout_rounded
                     : Icons.delete_outline,
