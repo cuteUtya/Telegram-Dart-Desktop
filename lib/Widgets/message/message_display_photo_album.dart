@@ -134,9 +134,12 @@ class MessageDisplayPhotoAlbum extends StatelessWidget {
         }
 
         bool isLandscape(Message m) {
-          var photo = m.content as MessagePhoto;
-          var s = sortPhotoSizes(photo.photo!.sizes!)[0];
-          return (s.width! / s.height!) > 1;
+          if (m.content is MessagePhoto) {
+            var photo = m.content as MessagePhoto;
+            var s = sortPhotoSizes(photo.photo!.sizes!)[0];
+            return (s.width! / s.height!) > 1;
+          }
+          return true;
         }
 
         /// sorts images, first array contains all landscape images,
