@@ -70,7 +70,8 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
         _items.add(
           Container(
             height: 0.5,
-            width: width,
+            width: 150,
+            margin: const EdgeInsets.only(left: 40),
             color: lineColor,
           ),
         );
