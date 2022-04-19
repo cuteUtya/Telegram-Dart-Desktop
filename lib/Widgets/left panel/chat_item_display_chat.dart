@@ -380,7 +380,7 @@ class _ChatItemDisplayState
                     widget.client.send(
                       ToggleChatIsMarkedAsUnread(
                         chatId: chat.id!,
-                        isMarkedAsUnread: chat.unreadCount != 0,
+                        isMarkedAsUnread: chat.unreadCount == 0,
                       ),
                     );
                     if (chat.unreadCount != 0) {
