@@ -457,7 +457,6 @@ class MessageDisplay extends StatelessWidget {
             );
           }
 
-          var senderId = getSenderId(message.senderId);
           if (bubbleRelativePosition == BubbleRelativePosition.middle ||
               bubbleRelativePosition == BubbleRelativePosition.top ||
               !wrapInBubble) {
@@ -494,20 +493,7 @@ class MessageDisplay extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Stack(alignment: Alignment.bottomRight, children: [
-                      senderUserpic ?? SizedBox(width: isChat ? p(28) : 0),
-                      if (message.senderId is MessageSenderUser &&
-                          senderUserpic != null)
-                        StreamBuilder(
-                          initialData: client.getUser(senderId!).status,
-                          stream: client.statusOf(senderId),
-                          builder: (_, data) => OnlineIndicatorDidplay(
-                            online: data.data is UserStatusOnline,
-                            size: p(12),
-                            strokeColor: Colors.transparent,
-                          ),
-                        ),
-                    ]),
+                    senderUserpic ?? SizedBox(width: isChat ? p(28) : 0),
                     Flexible(
                       child: contentWidget,
                     )
