@@ -53,7 +53,7 @@ class InlineKeyboardDisplay extends StatelessWidget {
                       ),
                     ) as CallbackQueryAnswer;
                     if (answer.text!.isNotEmpty) {
-                      showMessage(c, answer.text!, context);
+                      showMessage(c, answer.text!, c);
                     }
                     break;
                   case InlineKeyboardButtonTypeUrl:
