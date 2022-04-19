@@ -217,7 +217,7 @@ class TelegramClient {
           .where((u) => u is UpdateMessageInteractionInfo)
           .map((a) => (a as UpdateMessageInteractionInfo));
 
-  Stream<UpdateMessageIsPinned> get updateMessageIsPinned => updates
+  Stream<UpdateMessageIsPinned> get _updateMessageIsPinned => updates
       .where((u) => u is UpdateMessageIsPinned)
       .map((a) => (a as UpdateMessageIsPinned));
 
@@ -730,6 +730,10 @@ class TelegramClient {
   Stream<UpdateMessageEdited> messageEdits(int chatId, int messageId) =>
       _updateMessageEdited
           .where((upd) => upd.chatId == chatId && upd.messageId == messageId);
+
+  Stream<UpdateMessageIsPinned> messagePinState(int chatId, int messageId) =>
+      _updateMessageIsPinned
+          .where((e) => e.chatId == chatId && e.messageId == messageId);
 
   Stream<List<ChatFilterInfo>> filters() async* {
     await for (final update in _updates) {

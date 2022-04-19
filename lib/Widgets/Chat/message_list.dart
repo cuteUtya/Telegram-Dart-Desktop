@@ -79,7 +79,7 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
     }
   }
 
-  void listenMessagesUpdates() {
+  void listenNewMessages() {
     streamSubscriptions.add(
       widget.client.newMessagesIn(widget.chatId).listen(
         (event) {
@@ -101,24 +101,11 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
         },
       ),
     );
-    streamSubscriptions.add(
-      widget.client.updateMessageIsPinned.listen(
-        (event) {
-          if (event.chatId == widget.chatId) {
-            var msg = messages?.messages
-                ?.firstWhereOrNull((e) => e.id == event.messageId);
-            if (msg != null) {
-              setState(() => msg.isPinned = event.isPinned);
-            }
-          }
-        },
-      ),
-    );
   }
 
   @override
   void initState() {
-    listenMessagesUpdates();
+    listenNewMessages();
     loadMessages(50, 0, 0);
     widget.client.send(GetChatAdministrators(chatId: widget.chatId)).then(
       (adm) {
@@ -192,18 +179,33 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
             [
               widget.client.messageEdits(widget.chatId, msg.id!),
               widget.client.messageContentChanges(widget.chatId, msg.id!),
+              widget.client.messagePinState(widget.chatId, msg.id!)
             ],
           ),
           builder: (_, data) {
             if (data.hasData) {
               var update = data.data;
-              if (update is UpdateMessageEdited) {
-                msg.editDate = update.editDate;
-                msg.replyMarkup = update.replyMarkup;
+              switch (update.runtimeType) {
+                case UpdateMessageEdited:
+                  update as UpdateMessageEdited;
+                  msg.editDate = update.editDate;
+                  msg.replyMarkup = update.replyMarkup;
+                  break;
+                case UpdateMessageContent:
+                  update as UpdateMessageContent;
+                  msg.content = update.newContent;
+                  break;
+                case UpdateMessageIsPinned:
+                  update as UpdateMessageIsPinned;
+                  msg.isPinned = update.isPinned;
+                  break;
               }
-              if (update is UpdateMessageContent) {
-                msg.content = update.newContent;
+              /*if (update is ) {
+                
               }
+              if (update is) {
+                
+              }*/
             }
 
             var prevDate =
@@ -283,9 +285,12 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                             : MediaQuery.of(context).size.width * 0.75,
                         child: FutureBuilder(
                           key: Key(
-                              "replie?replyToMessageId=${msg.replyToMessageId}?replyInChatId=${msg.replyInChatId}"),
-                          initialData: widget.client
-                              .getMessage(widget.chatId, msg.replyToMessageId!),
+                            "replie?replyToMessageId=${msg.replyToMessageId}?replyInChatId=${msg.replyInChatId}",
+                          ),
+                          initialData: widget.client.getMessage(
+                            widget.chatId,
+                            msg.replyToMessageId!,
+                          ),
                           future: msg.replyToMessageId == 0
                               ? null
                               : widget.client.send(GetMessage(
