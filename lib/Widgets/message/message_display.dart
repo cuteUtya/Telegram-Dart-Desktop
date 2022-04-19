@@ -90,9 +90,11 @@ class MessageDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    client.deleteMessageEvent(message.chatId!, message.id!, () {
-      //TODO show nice deletetion animation
-      onMessageDelete?.call();
+    client.deleteMessageEvent(message.chatId!, message.id!, (fromCache) {
+      if (!fromCache) {
+        //TODO show nice deletetion animation
+        onMessageDelete?.call();
+      }
     });
 
     var bubblePadding = MacMessageBubble.padding;
