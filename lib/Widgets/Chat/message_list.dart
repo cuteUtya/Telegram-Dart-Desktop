@@ -267,75 +267,69 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                     ),
                   )
                 else
-                  Row(
-                    mainAxisAlignment: msg.isOutgoing!
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: UIManager.useDesktopLayout
-                            ? 400
-                            : MediaQuery.of(context).size.width * 0.75,
-                        child: FutureBuilder(
-                          key: Key(
-                            "replie?replyToMessageId=${msg.replyToMessageId}?replyInChatId=${msg.replyInChatId}",
-                          ),
-                          initialData: widget.client.getMessage(
-                            widget.chatId,
-                            msg.replyToMessageId!,
-                          ),
-                          future: msg.replyToMessageId == 0
-                              ? null
-                              : widget.client.send(GetMessage(
-                                  chatId: msg.replyInChatId == 0
-                                      ? chat.id
-                                      : msg.replyInChatId,
-                                  messageId: msg.replyToMessageId)),
-                          builder: (_, replieDate) {
-                            return Container(
-                              margin: EdgeInsets.only(
-                                  bottom: (bubbleRelativePosition ==
-                                              BubbleRelativePosition.bottom ||
-                                          bubbleRelativePosition ==
-                                              BubbleRelativePosition.single)
-                                      ? serviceMessageMargin
-                                      : messageMargin),
-                              child: MessageDisplay(
-                                bubbleRelativePosition: bubbleRelativePosition,
-                                chat: chat,
-                                messages: buildAlbum
-                                    //because tdlib load messages in reverse chronological order
-                                    ? albums[msg.mediaAlbumId!]!
-                                        .reversed
-                                        .toList()
-                                    : [msg],
-                                isReplie: msg.replyToMessageId != 0,
-                                replieOn: replieDate.hasData
-                                    ? (replieDate.data is Message
-                                        ? ReplieLoadingResultSucces(
-                                            replieDate.data as Message)
-                                        : ReplieLoadingResultDeleted())
-                                    : null,
-                                client: widget.client,
-                                onMessageDelete: () => setState(
-                                  () => messages?.messages!.removeWhere(
-                                    (element) => element.id == msg.id,
-                                  ),
-                                ),
-                                adminTitle: adminInfo != null
-                                    ? (adminInfo.customTitle?.isEmpty ?? true)
-                                        ? widget.client.getTranslation(
-                                            adminInfo.isOwner!
-                                                ? "lng_owner_badge"
-                                                : "lng_admin_badge")
-                                        : adminInfo.customTitle!
-                                    : null,
-                              ),
-                            );
-                          },
-                        ),
+                  SizedBox(
+                    width: UIManager.useDesktopLayout
+                        ? 400
+                        : MediaQuery.of(context).size.width * 0.75,
+                    child: FutureBuilder(
+                      key: Key(
+                        "replie?replyToMessageId=${msg.replyToMessageId}",
                       ),
-                    ],
+                      initialData: widget.client.getMessage(
+                        widget.chatId,
+                        msg.replyToMessageId!,
+                      ),
+                      future: msg.replyToMessageId == 0
+                          ? null
+                          : widget.client.send(
+                              GetMessage(
+                                chatId: msg.replyInChatId == 0
+                                    ? chat.id
+                                    : msg.replyInChatId,
+                                messageId: msg.replyToMessageId,
+                              ),
+                            ),
+                      builder: (_, replieDate) {
+                        return Container(
+                          margin: EdgeInsets.only(
+                              bottom: (bubbleRelativePosition ==
+                                          BubbleRelativePosition.bottom ||
+                                      bubbleRelativePosition ==
+                                          BubbleRelativePosition.single)
+                                  ? serviceMessageMargin
+                                  : messageMargin),
+                          child: MessageDisplay(
+                            bubbleRelativePosition: bubbleRelativePosition,
+                            chat: chat,
+                            messages: buildAlbum
+                                //because tdlib load messages in reverse chronological order
+                                ? albums[msg.mediaAlbumId!]!.reversed.toList()
+                                : [msg],
+                            isReplie: msg.replyToMessageId != 0,
+                            replieOn: replieDate.hasData
+                                ? (replieDate.data is Message
+                                    ? ReplieLoadingResultSucces(
+                                        replieDate.data as Message)
+                                    : ReplieLoadingResultDeleted())
+                                : null,
+                            client: widget.client,
+                            onMessageDelete: () => setState(
+                              () => messages?.messages!.removeWhere(
+                                (element) => element.id == msg.id,
+                              ),
+                            ),
+                            adminTitle: adminInfo != null
+                                ? (adminInfo.customTitle?.isEmpty ?? true)
+                                    ? widget.client.getTranslation(
+                                        adminInfo.isOwner!
+                                            ? "lng_owner_badge"
+                                            : "lng_admin_badge")
+                                    : adminInfo.customTitle!
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 if (showDateBelow)
                   Container(
@@ -345,6 +339,27 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                       date: prevDate,
                     ),
                   ),
+              ],
+            );
+
+            /// for increaseing region, where context menu can be called
+            result = Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: msg.isOutgoing!
+                      ? MainAxisAlignment.end
+                      : MainAxisAlignment.start,
+                  children: [result],
+                ),
               ],
             );
 

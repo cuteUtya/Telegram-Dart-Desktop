@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
+import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/scale_utils.dart';
 
@@ -31,7 +32,6 @@ class _ContextMenuState extends State<ContextMenu> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () => setState(() => opacity = 1));
     super.initState();
   }
 
@@ -42,10 +42,16 @@ class _ContextMenuState extends State<ContextMenu> {
     _entryes.clear();
   }
 
-  void _spawnWindow() {
-    var box = _childKey.currentContext?.findRenderObject() as RenderBox;
-    var position = box.globalToLocal(Offset.zero);
-    position -= _mousePosition;
+  void _spawnWindow(bool substractChildPosition) {
+    Offset position;
+    if (substractChildPosition) {
+      var box = _childKey.currentContext?.findRenderObject() as RenderBox;
+      position = box.globalToLocal(Offset.zero);
+      position -= _mousePosition;
+    } else {
+      position = _mousePosition;
+    }
+
     OverlayEntry entry = OverlayEntry(
       builder: (context) => Stack(
         children: [
@@ -56,8 +62,8 @@ class _ContextMenuState extends State<ContextMenu> {
             ),
           ),
           Positioned(
-            left: -position.dx,
-            top: -position.dy,
+            left: position.dx,
+            top: position.dy,
             child: _buildWindow(),
           ),
         ],
@@ -126,49 +132,53 @@ class _ContextMenuState extends State<ContextMenu> {
   }
 
   Widget _buildWindow() {
-    return AnimatedOpacity(
-      opacity: opacity,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeIn,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12.withAlpha(20),
-              offset: const Offset(-2, 2),
-              blurRadius: 4,
-              spreadRadius: 2,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12.withAlpha(20),
+            offset: const Offset(-2, 2),
+            blurRadius: 4,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: ColoredBox(
+            color: ClientTheme.currentTheme.getField(
+              "ContextMenu.color",
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          child: ColoredBox(
-              color: ClientTheme.currentTheme.getField(
-                "ContextMenu.color",
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: buildItems(true),
-              )),
-        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: buildItems(true),
+            )),
       ),
     );
+  }
+
+  void handleTap(TapUpDetails details) {
+    _mousePosition = details.globalPosition;
+    _spawnWindow(false);
   }
 
   @override
   Widget build(BuildContext context) {
     _childKey = GlobalKey();
+    var _child = Container(
+      key: _childKey,
+      child: widget.child,
+    );
     return widget.viewType == ContextMenuView.desktopView
-        ? MouseRegion(
-            onHover: (pointer) => _mousePosition = pointer.localPosition,
-            child: GestureDetector(
-              onSecondaryTap: () => _spawnWindow(),
-              child: Container(
-                key: _childKey,
-                child: widget.child,
+        ? Stack(
+            children: [
+              _child,
+              Positioned.fill(
+                child: GestureDetector(
+                  onSecondaryTapUp: handleTap,
+                ),
               ),
-            ),
+            ],
           )
         : CupertinoContextMenu(
             actions: buildItems(false),
