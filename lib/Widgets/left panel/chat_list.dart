@@ -32,6 +32,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
 
   int maxChats = 2;
   int? totalChats;
+  static bool loaded = false;
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
       builder: (_, data) {
         var chats = data.data as List<ChatOrder>;
         _chats = chats;
-        if ((totalChats ?? double.infinity) > chats.length + 1) {
+        if ((totalChats ?? double.infinity) > chats.length + 1 && !loaded) {
           return Center(
             child: Text(
               //TODO make cool loading animation
@@ -62,6 +63,7 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
             ),
           );
         }
+        loaded = true;
         return SmoothListView(
           reverseScroll: true,
           itemCount: maxChats,
