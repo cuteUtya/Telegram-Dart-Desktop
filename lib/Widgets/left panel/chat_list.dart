@@ -31,6 +31,15 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
       widget.client.getChatsInChatListSync(widget.chatList);
 
   int maxChats = 2;
+  int? totalChats;
+
+  @override
+  void initState() {
+    widget.client.send(GetChats(chatList: widget.chatList, limit: 5)).then(
+          (e) => totalChats = (e as Chats).totalCount,
+        );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +50,18 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
       builder: (_, data) {
         var chats = data.data as List<ChatOrder>;
         _chats = chats;
+        if ((totalChats ?? double.infinity) > chats.length + 1) {
+          return Center(
+            child: Text(
+              //TODO make cool loading animation
+              "Load chats...\n${chats.length} / $totalChats",
+              style: TextDisplay.create(
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
         return SmoothListView(
           reverseScroll: true,
           itemCount: maxChats,
