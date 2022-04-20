@@ -418,7 +418,7 @@ class _ChatItemDisplayState
             ),
           ],
           child: SizedBox(
-            height: 86,
+            height: p(68),
             child: result,
           ),
         );
