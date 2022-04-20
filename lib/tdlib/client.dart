@@ -18,7 +18,7 @@ import "src/td_json_client.dart" show JsonClient;
 /// A controller that handles incoming requests asynchronously and exposes
 /// [Observable]s that stream data to their listeners.
 class TelegramClient {
-  final BehaviorSubject<Update> _updates = BehaviorSubject();
+  BehaviorSubject<Update> _updates = BehaviorSubject();
 
   /// All [Update] objects received by the client are put into a
   /// [BehaviorSubject] whose [Stream] is exposed to other parts of the
@@ -1063,6 +1063,22 @@ class TelegramClient {
     languagePackDatabasePath = await getLanguagePackDatabasePath();
     Completer completer = Completer<void>();
     var receive = await initIsolate();
+
+    /// If don't do this thousands of _BroadcastSubscription will be in memory
+    /// and they won't cleaned by GC
+    void free() {
+      Future.delayed(
+        const Duration(seconds: 30),
+        () {
+          _updates.close();
+          _updates = BehaviorSubject<Update>();
+          free();
+        },
+      );
+    }
+
+    free();
+
     receive.listen((message) {
       if (message is int) {
         Pointer<Void> pointer = Pointer.fromAddress(message);
