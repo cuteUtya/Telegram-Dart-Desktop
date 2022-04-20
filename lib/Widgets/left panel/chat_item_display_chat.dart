@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Context%20menu/context_menu_config.dart';
-import 'package:myapp/Context%20menu/context_menu_region.dart';
 import 'package:myapp/State managment/ui_events.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
@@ -264,7 +263,8 @@ class _ChatItemDisplayState
             child: Padding(
               padding: EdgeInsets.only(right: p(6)),
               child: StreamBuilder(
-                stream: widget.client.actionsOf(widget.chatId),
+                stream:
+                    widget.client.actionsOf(widget.chatId).asBroadcastStream(),
                 builder: (_, actionsSnapshow) {
                   Widget content;
                   if (actionsSnapshow.hasData) {
@@ -334,82 +334,93 @@ class _ChatItemDisplayState
         bool isChatOrChannel = (chat.type is ChatTypeSupergroup ||
             chat.type is ChatTypeBasicGroup);
 
-        return ContextMenuRegion(
-          config: ContextMenuConfig(
-            items: [
-              ContextMenuItemIconButton(
-                icon: isArchived
-                    ? Icons.unarchive_outlined
-                    : Icons.archive_outlined,
-                text: widget.client.getTranslation(
-                  isArchived ? "lng_archived_remove" : "lng_archived_add",
-                ),
-                onClick: () => widget.client.send(
-                  AddChatToList(
-                    chatId: chat.id,
-                    chatList: isArchived ? ChatListMain() : ChatListArchive(),
-                  ),
-                ),
-              ),
-              ContextMenuItemIconButton(
-                icon: Icons.push_pin_outlined,
-                text: widget.client.getTranslation(
-                  pinned(chat)
-                      ? "lng_context_unpin_from_top"
-                      : "lng_context_pin_to_top",
-                ),
-                onClick: () => widget.client.send(
-                  ToggleChatIsPinned(
-                    chatList: widget.chatList,
-                    chatId: widget.chatId,
-                    isPinned: !pinned(chat),
-                  ),
-                ),
-              ),
-              if (chat.lastMessage != null)
-                ContextMenuItemIconButton(
-                  icon: chat.unreadCount == 0
-                      ? Icons.mark_chat_unread_outlined
-                      : Icons.mark_chat_read_outlined,
-                  text: widget.client.getTranslation(
-                    chat.unreadCount == 0
-                        ? "lng_context_mark_unread"
-                        : "lng_context_mark_read",
-                  ),
-                  onClick: () {
-                    widget.client.send(
-                      ToggleChatIsMarkedAsUnread(
-                        chatId: chat.id!,
-                        isMarkedAsUnread: chat.unreadCount == 0,
-                      ),
-                    );
-                    if (chat.unreadCount != 0) {
-                      widget.client.send(ViewMessages(
-                          chatId: chat.id,
-                          forceRead: true,
-                          messageIds: [chat.lastMessage!.id!]));
-                    }
-                  },
-                ),
-              ContextMenuItemIconButton(
-                icon: isChatOrChannel
-                    ? Icons.logout_rounded
-                    : Icons.delete_outline,
-                text: widget.client.getTranslation(
-                  isChatOrChannel
-                      ? "lng_profile_leave_group"
-                      : "lng_profile_delete_conversation",
-                ),
-                destructiveAction: true,
-                onClick: () => widget.client.send(
-                  isChatOrChannel
-                      ? LeaveChat(chatId: chat.id!)
-                      : DeleteChat(chatId: chat.id!),
-                ),
-              ),
-            ],
+        return ContextMenu(
+          previewBuilder: (_, __, w) => ClipRRect(
+            child: IgnorePointer(
+              child: w,
+            ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(6),
+            ),
           ),
-          child: result,
+          viewType: UIManager.isMobile
+              ? ContextMenuView.iosView
+              : ContextMenuView.desktopView,
+          items: [
+            ContextMenuItemIconButton(
+              icon: isArchived
+                  ? Icons.unarchive_outlined
+                  : Icons.archive_outlined,
+              text: widget.client.getTranslation(
+                isArchived ? "lng_archived_remove" : "lng_archived_add",
+              ),
+              onClick: () => widget.client.send(
+                AddChatToList(
+                  chatId: chat.id,
+                  chatList: isArchived ? ChatListMain() : ChatListArchive(),
+                ),
+              ),
+            ),
+            ContextMenuItemIconButton(
+              icon: Icons.push_pin_outlined,
+              text: widget.client.getTranslation(
+                pinned(chat)
+                    ? "lng_context_unpin_from_top"
+                    : "lng_context_pin_to_top",
+              ),
+              onClick: () => widget.client.send(
+                ToggleChatIsPinned(
+                  chatList: widget.chatList,
+                  chatId: widget.chatId,
+                  isPinned: !pinned(chat),
+                ),
+              ),
+            ),
+            if (chat.lastMessage != null)
+              ContextMenuItemIconButton(
+                icon: chat.unreadCount == 0
+                    ? Icons.mark_chat_unread_outlined
+                    : Icons.mark_chat_read_outlined,
+                text: widget.client.getTranslation(
+                  chat.unreadCount == 0
+                      ? "lng_context_mark_unread"
+                      : "lng_context_mark_read",
+                ),
+                onClick: () {
+                  widget.client.send(
+                    ToggleChatIsMarkedAsUnread(
+                      chatId: chat.id!,
+                      isMarkedAsUnread: chat.unreadCount == 0,
+                    ),
+                  );
+                  if (chat.unreadCount != 0) {
+                    widget.client.send(ViewMessages(
+                        chatId: chat.id,
+                        forceRead: true,
+                        messageIds: [chat.lastMessage!.id!]));
+                  }
+                },
+              ),
+            ContextMenuItemIconButton(
+              icon:
+                  isChatOrChannel ? Icons.logout_rounded : Icons.delete_outline,
+              text: widget.client.getTranslation(
+                isChatOrChannel
+                    ? "lng_profile_leave_group"
+                    : "lng_profile_delete_conversation",
+              ),
+              destructiveAction: true,
+              onClick: () => widget.client.send(
+                isChatOrChannel
+                    ? LeaveChat(chatId: chat.id!)
+                    : DeleteChat(chatId: chat.id!),
+              ),
+            ),
+          ],
+          child: SizedBox(
+            height: 86,
+            child: result,
+          ),
         );
       },
     );

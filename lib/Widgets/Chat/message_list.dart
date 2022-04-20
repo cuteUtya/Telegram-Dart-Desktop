@@ -3,7 +3,6 @@ import 'package:async/src/stream_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Context%20menu/context_menu_config.dart';
-import 'package:myapp/Context%20menu/context_menu_region.dart';
 import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/UIManager.dart';
@@ -200,12 +199,6 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                   msg.isPinned = update.isPinned;
                   break;
               }
-              /*if (update is ) {
-                
-              }
-              if (update is) {
-                
-              }*/
             }
 
             var prevDate =
@@ -355,65 +348,63 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
               ],
             );
 
-            return ContextMenuRegion(
-              config: ContextMenuConfig(
-                items: [
-                  ContextMenuItemIconButton(
-                    icon: Icons.reply,
-                    text: widget.client.getTranslation(
-                      "lng_context_reply_msg",
-                    ),
-                    onClick: () => UIEvents.replieTo(msg.id),
+            return ContextMenu(
+              items: [
+                ContextMenuItemIconButton(
+                  icon: Icons.reply,
+                  text: widget.client.getTranslation(
+                    "lng_context_reply_msg",
                   ),
-                  if (chat.permissions!.canPinMessages!)
-                    ContextMenuItemIconButton(
-                      icon: Icons.push_pin,
-                      text: widget.client.getTranslation(
-                        msg.isPinned! ? "lng_pinned_unpin" : "lng_pinned_pin",
-                      ),
-                      onClick: () => widget.client.send(
-                        msg.isPinned!
-                            ? UnpinChatMessage(
-                                chatId: chat.id,
-                                messageId: msg.id,
-                              )
-                            : PinChatMessage(
-                                chatId: chat.id,
-                                //TODO ask for it
-                                disableNotification: true,
-                                messageId: msg.id,
-                                //TODO ask for it
-                                onlyForSelf: false,
-                              ),
-                      ),
-                    ),
+                  onClick: () => UIEvents.replieTo(msg.id),
+                ),
+                if (chat.permissions!.canPinMessages!)
                   ContextMenuItemIconButton(
-                    icon: Icons.delete,
+                    icon: Icons.push_pin,
                     text: widget.client.getTranslation(
-                      "lng_mediaview_delete",
+                      msg.isPinned! ? "lng_pinned_unpin" : "lng_pinned_pin",
                     ),
-                    destructiveAction: true,
-                    //TODO show dialog alert to confirm
                     onClick: () => widget.client.send(
-                      DeleteMessages(
-                        chatId: widget.chatId,
-                        messageIds: [msg.id!],
-                        revoke: true,
-                      ),
+                      msg.isPinned!
+                          ? UnpinChatMessage(
+                              chatId: chat.id,
+                              messageId: msg.id,
+                            )
+                          : PinChatMessage(
+                              chatId: chat.id,
+                              //TODO ask for it
+                              disableNotification: true,
+                              messageId: msg.id,
+                              //TODO ask for it
+                              onlyForSelf: false,
+                            ),
                     ),
                   ),
-                  if (msg.editDate != 0)
-                    ContextMenuItemText(
-                      icon: Icons.info_outline,
-                      text: widget.client.getTranslation(
-                        "lng_edited_date",
-                        replacing: {
-                          "{date}": formatEditTime(msg.editDate!),
-                        },
-                      ),
+                ContextMenuItemIconButton(
+                  icon: Icons.delete,
+                  text: widget.client.getTranslation(
+                    "lng_mediaview_delete",
+                  ),
+                  destructiveAction: true,
+                  //TODO show dialog alert to confirm
+                  onClick: () => widget.client.send(
+                    DeleteMessages(
+                      chatId: widget.chatId,
+                      messageIds: [msg.id!],
+                      revoke: true,
                     ),
-                ],
-              ),
+                  ),
+                ),
+                if (msg.editDate != 0)
+                  ContextMenuItemText(
+                    icon: Icons.info_outline,
+                    text: widget.client.getTranslation(
+                      "lng_edited_date",
+                      replacing: {
+                        "{date}": formatEditTime(msg.editDate!),
+                      },
+                    ),
+                  ),
+              ],
               child: result,
             );
           },

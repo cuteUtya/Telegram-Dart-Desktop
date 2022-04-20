@@ -1,23 +1,33 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Context%20menu/context_menu_region.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/scale_utils.dart';
 
-class ContextMenuConfig extends StatefulWidget {
-  const ContextMenuConfig({
+class ContextMenu extends StatefulWidget {
+  const ContextMenu({
     Key? key,
     required this.items,
+    this.previewBuilder,
+    required this.child,
+    this.viewType = ContextMenuView.desktopView,
   }) : super(key: key);
 
   final List<ContextMenuItem> items;
+  final ContextMenuView viewType;
+  final Widget Function(BuildContext, Animation<double>, Widget)?
+      previewBuilder;
+  final Widget child;
 
   @override
-  State<ContextMenuConfig> createState() => _ContextMenuConfigState();
+  State<ContextMenu> createState() => _ContextMenuState();
 }
 
-class _ContextMenuConfigState extends State<ContextMenuConfig> {
+class _ContextMenuState extends State<ContextMenu> {
   double opacity = 0;
+  Offset _mousePosition = Offset.zero;
+  late GlobalKey _childKey;
+  static final List<OverlayEntry> _entryes = [];
 
   @override
   void initState() {
@@ -25,13 +35,43 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> _items = [];
+  static void close() {
+    for (int i = 0; i < _entryes.length; i++) {
+      _entryes[i].remove();
+    }
+    _entryes.clear();
+  }
+
+  void _spawnWindow() {
+    var box = _childKey.currentContext?.findRenderObject() as RenderBox;
+    var position = box.globalToLocal(Offset.zero);
+    position -= _mousePosition;
+    OverlayEntry entry = OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          GestureDetector(
+            onTap: () => close(),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+          Positioned(
+            left: -position.dx,
+            top: -position.dy,
+            child: _buildWindow(),
+          ),
+        ],
+      ),
+    );
+    _entryes.add(entry);
+    Overlay.of(context)!.insert(entry);
+  }
+
+  List<Widget> buildItems(bool addSeparator) {
     var lineColor = ClientTheme.currentTheme.getField(
       "ContextMenu.line.color",
     );
-
+    List<Widget> _items = [];
     for (int i = 0; i < widget.items.length; i++) {
       var item = widget.items[i];
       var width = p(200.0);
@@ -45,6 +85,16 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
             ),
             onTap: () {
               item.onClick?.call();
+              if (item.closeOnClick) {
+                switch (widget.viewType) {
+                  case ContextMenuView.desktopView:
+                    _ContextMenuState.close();
+                    break;
+                  case ContextMenuView.iosView:
+                    Navigator.pop(context);
+                    break;
+                }
+              }
             },
             child: Container(
               width: width,
@@ -61,7 +111,7 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
           ),
         ),
       );
-      if (i != (widget.items.length - 1)) {
+      if (i != (widget.items.length - 1) && addSeparator) {
         _items.add(
           Container(
             height: 0.5,
@@ -72,7 +122,10 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
         );
       }
     }
+    return _items;
+  }
 
+  Widget _buildWindow() {
     return AnimatedOpacity(
       opacity: opacity,
       duration: const Duration(milliseconds: 200),
@@ -91,30 +144,45 @@ class _ContextMenuConfigState extends State<ContextMenuConfig> {
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           child: ColoredBox(
-            color: ClientTheme.currentTheme.getField(
-              "ContextMenu.color",
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _items,
-            ),
-          ),
+              color: ClientTheme.currentTheme.getField(
+                "ContextMenu.color",
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: buildItems(true),
+              )),
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _childKey = GlobalKey();
+    return widget.viewType == ContextMenuView.desktopView
+        ? MouseRegion(
+            onHover: (pointer) => _mousePosition = pointer.localPosition,
+            child: GestureDetector(
+              onSecondaryTap: () => _spawnWindow(),
+              child: Container(
+                key: _childKey,
+                child: widget.child,
+              ),
+            ),
+          )
+        : CupertinoContextMenu(
+            actions: buildItems(false),
+            child: widget.child,
+            previewBuilder: widget.previewBuilder,
+          );
   }
 }
 
 abstract class ContextMenuItem {
   ContextMenuItem({
-    VoidCallback? clickEvent,
+    this.onClick,
     this.closeOnClick = true,
-  }) {
-    onClick = () {
-      if (closeOnClick) ContextMenuRegionState.close();
-      clickEvent?.call();
-    };
-  }
+  });
 
   VoidCallback? onClick;
   final bool closeOnClick;
@@ -133,7 +201,7 @@ class ContextMenuItemIconButton extends ContextMenuItem {
     closeOnClick = true,
     this.destructiveAction = false,
   }) : super(
-          clickEvent: onClick,
+          onClick: onClick,
           closeOnClick: closeOnClick,
         );
 
@@ -197,4 +265,9 @@ class ContextMenuItemText extends ContextMenuItem {
           ),
         ],
       );
+}
+
+enum ContextMenuView {
+  desktopView,
+  iosView,
 }
