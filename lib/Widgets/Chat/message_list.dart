@@ -313,11 +313,12 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
                                     : ReplieLoadingResultDeleted())
                                 : null,
                             client: widget.client,
-                            onMessageDelete: () => setState(
-                              () => messages?.messages!.removeWhere(
-                                (element) => element.id == msg.id,
-                              ),
-                            ),
+                            onMessageDelete: () => setState(() {
+                              messages!.messages!.removeWhere(
+                                (element) => element == msg,
+                              );
+                              messages!.totalCount = messages!.totalCount! - 1;
+                            }),
                             adminTitle: adminInfo != null
                                 ? (adminInfo.customTitle?.isEmpty ?? true)
                                     ? widget.client.getTranslation(
