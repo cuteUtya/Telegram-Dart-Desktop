@@ -4,6 +4,7 @@ import 'package:myapp/Widgets/chat_item_photo_minithumbnail.dart';
 import 'package:myapp/Widgets/file_image_display.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_icon_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/chat_item_content_photo_text.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text hide RichText;
 import 'package:myapp/Widgets/display_text.dart';
@@ -39,8 +40,8 @@ class MessageContentPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(message != null || draftMessage != null);
-    return StreamBuilder(
-      stream: message?.senderId == null
+    return StreamBuilderWrapper(
+      stream: () => message?.senderId == null
           ? null
           : client.senderName(message!.senderId!),
       initialData: message?.senderId == null

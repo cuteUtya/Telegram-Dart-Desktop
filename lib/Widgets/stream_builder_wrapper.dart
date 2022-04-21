@@ -64,12 +64,14 @@ class _StreamBuilderWrapperState
     return _build(_data);
   }
 
-  Widget _build(dynamic data) => widget.builder(
+  Widget _build(dynamic data) =>
+      widget.builder(
         context,
         TAsyncSnapshot(
           data: _data,
         ),
-      );
+      ) ??
+      const SizedBox();
 }
 
 class TAsyncSnapshot {
@@ -81,5 +83,5 @@ class TAsyncSnapshot {
   final dynamic data;
 }
 
-typedef TAsyncWidgetBuilder = Widget Function(BuildContext, TAsyncSnapshot);
+typedef TAsyncWidgetBuilder = Widget? Function(BuildContext, TAsyncSnapshot);
 typedef StreamCallback = Stream<dynamic>? Function();

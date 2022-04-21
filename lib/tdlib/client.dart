@@ -574,17 +574,20 @@ class TelegramClient {
     return getChatTitleSync((sender as MessageSenderChat).chatId!);
   }
 
-  void deleteMessageEvent(
-      int chatId, int messageId, Function(bool fromCache) callback) {
-    late StreamSubscription subscription;
-    subscription = _updateDeleteMessages.listen(
-      (event) {
-        if (event.chatId == chatId && event.messageIds!.contains(messageId)) {
-          callback(event.fromCache!);
-          subscription.cancel();
+  Stream<UpdateDeleteMessages> deleteMessageEvent(
+      int chatId, List<int> messageId) async* {
+    await for (var e in _updateDeleteMessages) {
+      bool contain = false;
+      for (var d in messageId) {
+        if (e.messageIds!.contains(d)) {
+          contain = true;
+          break;
         }
-      },
-    );
+      }
+      if (e.chatId == chatId && contain) {
+        yield e;
+      }
+    }
   }
 
   Stream<String> chatThemeIn(int chatId) async* {
@@ -1080,7 +1083,7 @@ class TelegramClient {
       );
     }
 
-    free();
+    //free();
 
     receive.listen((message) {
       if (message is int) {

@@ -4,6 +4,7 @@ import 'package:myapp/State managment/ui_events.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Widgets/chatFilters/chat_filter_item_horizontal.dart';
 import 'package:myapp/Widgets/smooth_list_view.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
@@ -54,10 +55,10 @@ class ChatFilterHorizontalState
         ),
         child: Stack(
           children: [
-            StreamBuilder(
+            StreamBuilderWrapper(
               key: UniqueKey(),
               initialData: filters,
-              stream: widget.client.filters(),
+              stream: () => widget.client.filters(),
               builder: (_, data) {
                 List<ChatFilterInfo> filters = [];
                 if (data.hasData) {
@@ -82,9 +83,9 @@ class ChatFilterHorizontalState
                   for (final filter in filters)
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: p(10)),
-                      child: StreamBuilder(
+                      child: StreamBuilderWrapper(
                         initialData: _chatCount[filter.id!],
-                        stream: widget.client
+                        stream: () => widget.client
                             .unreadIn(ChatListFilter(chatFilterId: filter.id)),
                         builder: (_, data) {
                           var unreadUpdate = data.data == null

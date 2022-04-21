@@ -38,7 +38,7 @@ class MessageDisplay extends StatelessWidget {
       required this.client,
       required this.messages,
       required this.bubbleRelativePosition,
-      this.onMessageDelete,
+      required this.onMessageDelete,
       this.isReplie = false,
       this.replieOn,
       this.adminTitle,
@@ -53,7 +53,7 @@ class MessageDisplay extends StatelessWidget {
   final String? adminTitle;
   final TelegramClient client;
   final bool isServiceMessage;
-  final Function? onMessageDelete;
+  final Function onMessageDelete;
 
   Message get message => messages.last;
 
@@ -91,13 +91,6 @@ class MessageDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    client.deleteMessageEvent(message.chatId!, message.id!, (fromCache) {
-      if (!fromCache) {
-        //TODO show nice deletetion animation
-        onMessageDelete?.call();
-      }
-    });
-
     var bubblePadding = MacMessageBubble.padding;
     var bubbleBorderRadius = MacMessageBubble.calculateBorderRadius(
         bubbleRelativePosition, message.isOutgoing! ? Side.right : Side.left);
@@ -513,6 +506,21 @@ class MessageDisplay extends StatelessWidget {
             children: [
               result,
               inlineKeyboard,
+              StreamBuilderWrapper(
+                //  cleanupDataAfterBuild: true,
+                stream: () => client.deleteMessageEvent(
+                  message.chatId!,
+                  messages.map((e) => e.id!).toList(),
+                ),
+                builder: (_, data) {
+                  if (data.hasData) {
+                    var j = data.data as UpdateDeleteMessages;
+                    if (j.fromCache == false) {
+                      onMessageDelete();
+                    }
+                  }
+                },
+              )
             ],
           );
         },

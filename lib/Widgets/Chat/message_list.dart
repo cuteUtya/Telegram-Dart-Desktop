@@ -100,10 +100,25 @@ class _MessageListState extends State<MessageList> {
 
   Map<int, List<Message>> albums = {};
 
+  void deleteHandler(Message message) {
+    Future.delayed(
+      Duration.zero,
+      () => setState(
+        () {
+          messages!.messages!.removeWhere(
+            (element) => element.id == message.id,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    int messagesCount = (messages?.totalCount ?? 0);
+    int messagesCount = (messages?.messages?.length ?? 0);
     var chat = widget.client.getChat(widget.chatId);
+
+    albums = {};
 
     var result = SmoothListView(
       reverse: true,
@@ -239,6 +254,7 @@ class _MessageListState extends State<MessageList> {
                       bubbleRelativePosition: bubbleRelativePosition,
                       client: widget.client,
                       messages: [msg],
+                      onMessageDelete: () => deleteHandler(msg),
                       isServiceMessage: true,
                     ),
                   )
@@ -289,12 +305,7 @@ class _MessageListState extends State<MessageList> {
                                     : ReplieLoadingResultDeleted())
                                 : null,
                             client: widget.client,
-                            onMessageDelete: () => setState(() {
-                              messages!.messages!.removeWhere(
-                                (element) => element == msg,
-                              );
-                              messages!.totalCount = messages!.totalCount! - 1;
-                            }),
+                            onMessageDelete: () => deleteHandler(msg),
                             adminTitle: adminInfo != null
                                 ? (adminInfo.customTitle?.isEmpty ?? true)
                                     ? widget.client.getTranslation(
@@ -396,6 +407,10 @@ class _MessageListState extends State<MessageList> {
                       },
                     ),
                   ),
+                ContextMenuItemText(
+                  icon: Icons.medical_information,
+                  text: msg.id!.toString(),
+                ),
               ],
               child: result,
             );
@@ -403,7 +418,6 @@ class _MessageListState extends State<MessageList> {
         );
       },
     );
-
     return Stack(
       children: [
         result,
@@ -414,13 +428,12 @@ class _MessageListState extends State<MessageList> {
               if (data.hasData) {
                 var update = data.data as Message;
                 if (messages?.messages?.first.id == update.id) {
-                  return SizedBox();
+                  return null;
                 }
                 Future.delayed(
                   Duration.zero,
                   () => setState(
                     () {
-                      messages?.totalCount = messages!.totalCount! + 1;
                       messages?.messages = [update] + messages!.messages!;
                     },
                   ),
@@ -435,7 +448,7 @@ class _MessageListState extends State<MessageList> {
                   );
                 }
               }
-              return const SizedBox();
+              return null;
             })
       ],
     );
