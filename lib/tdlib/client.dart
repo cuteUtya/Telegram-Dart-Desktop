@@ -1083,7 +1083,7 @@ class TelegramClient {
       );
     }
 
-    //free();
+    free();
 
     receive.listen((message) {
       if (message is int) {
