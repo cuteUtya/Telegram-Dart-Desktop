@@ -16,3 +16,14 @@ User? getInterlocutor(Chat chat, TelegramClient client) {
   }
   if (id != null) return client.getUser(id);
 }
+
+bool isChannel(ChatType type) {
+  if (type is ChatTypeSupergroup) {
+    return (type as ChatTypeSupergroup).isChannel!;
+  }
+  return false;
+}
+
+bool isPrivate(ChatType type) {
+  return type is ChatTypePrivate || type is ChatTypeSecret;
+}

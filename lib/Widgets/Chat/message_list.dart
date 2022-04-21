@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:async/src/stream_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myapp/Context%20menu/context_menu_config.dart';
 import 'package:myapp/State%20managment/ui_events.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
@@ -382,21 +383,47 @@ class _MessageListState extends State<MessageList> {
                             ),
                     ),
                   ),
-                ContextMenuItemIconButton(
-                  icon: Icons.delete,
-                  text: widget.client.getTranslation(
-                    "lng_mediaview_delete",
+                if (!isPrivate(chat.type!) && chat.type is! ChatTypeBasicGroup)
+                  ContextMenuItemIconButton(
+                    icon: Icons.link,
+                    text: widget.client.getTranslation(
+                      isChannel(chat.type!)
+                          ? "lng_context_copy_post_link"
+                          : "lng_context_copy_message_link",
+                    ),
+                    onClick: () async {
+                      var link = await widget.client.send(
+                        GetMessageLink(
+                          chatId: widget.chatId,
+                          messageId: msg.id,
+                          forAlbum: true,
+                        ),
+                      );
+                      if (link is MessageLink) {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: (link as MessageLink).link,
+                          ),
+                        );
+                      }
+                    },
                   ),
-                  destructiveAction: true,
-                  //TODO show dialog alert to confirm
-                  onClick: () => widget.client.send(
-                    DeleteMessages(
-                      chatId: widget.chatId,
-                      messageIds: [msg.id!],
-                      revoke: true,
+                if (msg.canBeDeletedForAllUsers!)
+                  ContextMenuItemIconButton(
+                    icon: Icons.delete,
+                    text: widget.client.getTranslation(
+                      "lng_mediaview_delete",
+                    ),
+                    destructiveAction: true,
+                    //TODO show dialog alert to confirm
+                    onClick: () => widget.client.send(
+                      DeleteMessages(
+                        chatId: widget.chatId,
+                        messageIds: [msg.id!],
+                        revoke: true,
+                      ),
                     ),
                   ),
-                ),
                 if (msg.editDate != 0)
                   ContextMenuItemText(
                     icon: Icons.info_outline,
