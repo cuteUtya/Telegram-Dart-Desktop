@@ -6,6 +6,7 @@ import 'package:myapp/Widgets/chatFilters/chat_filter_horizontal.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart';
@@ -81,8 +82,8 @@ class LeftPanel extends StatelessWidget {
               child: Stack(
                 children: [
                   ChatFilterHorizontal(client: client),
-                  StreamBuilder(
-                    stream: UIEvents.archiveState(),
+                  StreamBuilderWrapper(
+                    stream: () => UIEvents.archiveState(),
                     builder: (_, data) {
                       bool archiveOpened = data.data == true;
                       return AnimatedContainer(

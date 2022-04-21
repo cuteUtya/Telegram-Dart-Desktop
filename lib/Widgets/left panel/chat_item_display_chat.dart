@@ -14,6 +14,7 @@ import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/messag
 import 'package:myapp/Widgets/Userpic/userpic.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -88,8 +89,8 @@ class _ChatItemDisplayState
             (initialChat.type as ChatTypeSupergroup).supergroupId!)
         : null;
 
-    return StreamBuilder(
-      stream: widget.client.chatAnyUpdates(widget.chatId),
+    return StreamBuilderWrapper(
+      stream: () => widget.client.chatAnyUpdates(widget.chatId),
       builder: (_, data) {
         var chat = (data.data ?? initialChat) as Chat;
         var result = ChatItemBase(
@@ -185,8 +186,9 @@ class _ChatItemDisplayState
                           ),
                           if (interlocutor != null &&
                               interlocutor.type is UserTypeRegular)
-                            StreamBuilder(
-                              stream: widget.client.statusOf(interlocutor.id!),
+                            StreamBuilderWrapper(
+                              stream: () =>
+                                  widget.client.statusOf(interlocutor.id!),
                               initialData: interlocutor.status,
                               builder: (context, statusSnapshot) =>
                                   OnlineIndicatorDidplay(
@@ -262,8 +264,8 @@ class _ChatItemDisplayState
           content: Expanded(
             child: Padding(
               padding: EdgeInsets.only(right: p(6)),
-              child: StreamBuilder(
-                stream:
+              child: StreamBuilderWrapper(
+                stream: () =>
                     widget.client.actionsOf(widget.chatId).asBroadcastStream(),
                 builder: (_, actionsSnapshow) {
                   Widget content;
@@ -286,7 +288,7 @@ class _ChatItemDisplayState
                   } else {
                     content = MessageContentPreview(
                       key: Key(
-                          "messagePreview?from=${chat.messageSenderId?.toJson()}"),
+                          "messagePreview?id=${chat.lastMessage?.id}?edited=${chat.lastMessage?.editDate}"),
                       textColor: selected ? Colors.white : null,
                       message:
                           chat.draftMessage == null ? chat.lastMessage : null,

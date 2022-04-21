@@ -5,6 +5,7 @@ import 'package:myapp/State managment/ui_events.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_title.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide RichText;
@@ -47,8 +48,8 @@ class ActionBarDisplay extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 4),
-          StreamBuilder(
-            stream: client.senderName(MessageSenderChat(chatId: chat.id)),
+          StreamBuilderWrapper(
+            stream: () => client.senderName(MessageSenderChat(chatId: chat.id)),
             initialData: client.getChatTitleSync(chat.id!),
             builder: (_, data) => ChatItemTitle(
               textColor:
@@ -72,17 +73,17 @@ class ActionBarDisplay extends StatelessWidget {
               itemsCount: supergroup?.memberCount ?? 0,
             )
           else if (user?.status != null)
-            StreamBuilder(
+            StreamBuilderWrapper(
               initialData: user!.status,
-              stream: client.statusOf(user.id!),
+              stream: () => client.statusOf(user.id!),
               builder: (_, data) => data.hasData
                   ? _buildStatusText(
                       data.data as UserStatus, user.type is UserTypeBot)
                   : const SizedBox.shrink(),
             )
           else
-            StreamBuilder(
-              stream: client.onlineMemebersIn(chat.id!),
+            StreamBuilderWrapper(
+              stream: () => client.onlineMemebersIn(chat.id!),
               builder: (_, data) {
                 var onlineCount = (data.data ?? 0) as int;
                 return client.buildTextByKey(

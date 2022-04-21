@@ -6,6 +6,7 @@ import 'package:myapp/Widgets/horizontal_separator_line.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_display_chat.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
 import 'package:myapp/Widgets/smooth_list_view.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/utils.dart';
@@ -45,9 +46,9 @@ class _ChatListDisplayState extends State<ChatListDisplay> {
   @override
   Widget build(BuildContext context) {
     bool addArchive = widget.chatList is ChatListMain;
-    return StreamBuilder(
+    return StreamBuilderWrapper(
       initialData: _chats,
-      stream: widget.client.chatsInChatList(widget.chatList, _chats),
+      stream: () => widget.client.chatsInChatList(widget.chatList, _chats),
       builder: (_, data) {
         var chats = data.data as List<ChatOrder>;
         _chats = chats;

@@ -5,6 +5,7 @@ import 'package:myapp/Widgets/Userpic/userpic_icon.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item_base.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/left%20panel/chat_lists_manager.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/Widgets/unread_mention_bubble.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -32,9 +33,9 @@ class _ChatItemDisplayArchiveNotHiddenState
   @override
   Widget build(BuildContext context) {
     var textColor = ClientTheme.currentTheme.getField("ArchiveContentColor");
-    return StreamBuilder(
+    return StreamBuilderWrapper(
       initialData: _chats,
-      stream: widget.client.chatsInChatList(ChatListArchive(), _chats),
+      stream: () => widget.client.chatsInChatList(ChatListArchive(), _chats),
       builder: (_, data) {
         List<InlineSpan> content = [];
         var chats = data.data as List<ChatOrder>;
@@ -52,9 +53,9 @@ class _ChatItemDisplayArchiveNotHiddenState
               ),
             ),
             WidgetSpan(
-              child: StreamBuilder(
+              child: StreamBuilderWrapper(
                 initialData: chat.unreadCount!,
-                stream: widget.client.unreadCountOf(chat.id!),
+                stream: () => widget.client.unreadCountOf(chat.id!),
                 builder: (_, data) => Container(
                   margin: data.data as int == 0
                       ? EdgeInsets.zero

@@ -12,6 +12,7 @@ import 'package:myapp/Widgets/button_icon.dart';
 import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/emoji_input_panel.dart';
 import 'package:myapp/Widgets/left%20panel/chat_item.content_display.dart/message_content_preview.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/Widgets/widget_opacity_contoller.dart';
 import 'package:myapp/Widgets/widget_sizer.dart';
 import 'package:myapp/file_utils.dart';
@@ -385,8 +386,8 @@ class InputFieldState extends State<InputField> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  StreamBuilder(
-                      stream: UIEvents.replieOnStream(),
+                  StreamBuilderWrapper(
+                      stream: () => UIEvents.replieOnStream(),
                       builder: (_, data) {
                         if (data.data == null) {
                           replyToMessageId = null;
@@ -394,46 +395,49 @@ class InputFieldState extends State<InputField> {
                         }
                         replyToMessageId = data.data as int;
                         return FutureBuilder(
-                          future: widget.client.send(
-                            GetMessage(
-                              chatId: widget.chatId,
-                              messageId: data.data as int,
+                            future: widget.client.send(
+                              GetMessage(
+                                chatId: widget.chatId,
+                                messageId: data.data as int,
+                              ),
                             ),
-                          ),
-                          builder: (__, msg) => msg.data == null
-                              ? const SizedBox()
-                              : Column(
-                                  children: [
-                                    Row(
+                            builder: (__, msg) {
+                              print("$replyToMessageId % ${widget.chatId}");
+                              print((msg.data as TdObject?)?.toJson());
+                              return msg.data == null || msg.data is! Message
+                                  ? const SizedBox()
+                                  : Column(
                                       children: [
-                                        Icon(
-                                          Icons.reply_rounded,
-                                          size: 24,
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.reply_rounded,
+                                              size: 24,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Expanded(
+                                              child: MessageContentPreview(
+                                                client: widget.client,
+                                                message: msg.data as Message,
+                                                style: MessageContentPreviewStyle
+                                                    .lineBreakeAfterAuthorName,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            ButtonIcon(
+                                              Icons.close,
+                                              size: 24,
+                                              onClick: () =>
+                                                  UIEvents.removeReplie(),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(width: 4),
-                                        Expanded(
-                                          child: MessageContentPreview(
-                                            client: widget.client,
-                                            message: msg.data as Message,
-                                            style: MessageContentPreviewStyle
-                                                .lineBreakeAfterAuthorName,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        ButtonIcon(
-                                          Icons.close,
-                                          size: 24,
-                                          onClick: () =>
-                                              UIEvents.removeReplie(),
-                                        ),
+                                        const SizedBox(height: 4),
+                                        const SeparatorLine(),
+                                        const SizedBox(height: 8),
                                       ],
-                                    ),
-                                    const SizedBox(height: 4),
-                                    const SeparatorLine(),
-                                    const SizedBox(height: 8),
-                                  ],
-                                ),
-                        );
+                                    );
+                            });
                       }),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,

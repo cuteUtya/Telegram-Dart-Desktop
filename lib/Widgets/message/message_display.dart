@@ -19,6 +19,7 @@ import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_c
 import 'package:myapp/Widgets/message/replies_display.dart';
 import 'package:myapp/Widgets/message/service_message.dart';
 import 'package:myapp/Widgets/online_indicator_display.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
@@ -102,8 +103,8 @@ class MessageDisplay extends StatelessWidget {
         bubbleRelativePosition, message.isOutgoing! ? Side.right : Side.left);
 
     return RepaintBoundary(
-      child: StreamBuilder(
-        stream: client.senderName(message.senderId!),
+      child: StreamBuilderWrapper(
+        stream: () => client.senderName(message.senderId!),
         initialData: client.getSenderNameSync(message.senderId!),
         builder: (_, senderData) {
           var author = senderData.data.toString();

@@ -39,7 +39,8 @@ class FileImageDisplay extends StatelessWidget {
         var file = io.File(path);
         return isTGV
             ? SvgPicture.memory(
-                Uint8List.fromList(io.gzip.decode(file.readAsBytesSync().toList())),
+                Uint8List.fromList(
+                    io.gzip.decode(file.readAsBytesSync().toList())),
                 height: height,
                 width: width,
                 color: tgvColor,

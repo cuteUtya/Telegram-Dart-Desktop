@@ -12,6 +12,7 @@ import 'package:myapp/Widgets/message/bubble_utils.dart';
 import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/Widgets/smooth_list_view.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/safe_spacer.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text;
@@ -33,7 +34,7 @@ class MessageList extends StatefulWidget {
   State<StatefulWidget> createState() => _MessageListState();
 }
 
-class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
+class _MessageListState extends State<MessageList> {
   Messages? messages;
   bool loadedFirstMessage = false;
   ScrollController scrollController = ScrollController();
@@ -78,33 +79,8 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
     }
   }
 
-  void listenNewMessages() {
-    streamSubscriptions.add(
-      widget.client.newMessagesIn(widget.chatId).listen(
-        (event) {
-          setState(
-            () {
-              messages?.totalCount = messages!.totalCount! + 1;
-              messages?.messages = [event] + messages!.messages!;
-            },
-          );
-
-          if (scrollController.offset <= 0) {
-            scrollController.jumpTo(41);
-            scrollController.animateTo(
-              0,
-              duration: Duration(milliseconds: 400),
-              curve: Curves.decelerate,
-            );
-          }
-        },
-      ),
-    );
-  }
-
   @override
   void initState() {
-    listenNewMessages();
     loadMessages(50, 0, 0);
     widget.client.send(GetChatAdministrators(chatId: widget.chatId)).then(
       (adm) {
@@ -129,7 +105,7 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
     int messagesCount = (messages?.totalCount ?? 0);
     var chat = widget.client.getChat(widget.chatId);
 
-    return SmoothListView(
+    var result = SmoothListView(
       reverse: true,
       scrollController: scrollController,
       itemCount: messagesCount + 1,
@@ -172,9 +148,9 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
           }
         }
 
-        return StreamBuilder(
+        return StreamBuilderWrapper(
           key: Key("message?id=${msg.id}?chatId=${msg.chatId}"),
-          stream: StreamGroup.merge(
+          stream: () => StreamGroup.merge(
             [
               widget.client.messageEdits(widget.chatId, msg.id!),
               widget.client.messageContentChanges(widget.chatId, msg.id!),
@@ -426,6 +402,42 @@ class _MessageListState extends StateWithStreamsSubscriptions<MessageList> {
           },
         );
       },
+    );
+
+    return Stack(
+      children: [
+        result,
+        StreamBuilderWrapper(
+            stream: () => widget.client.newMessagesIn(widget.chatId),
+            cleanupDataAfterBuild: true,
+            builder: (_, data) {
+              if (data.hasData) {
+                var update = data.data as Message;
+                if (messages?.messages?.first.id == update.id) {
+                  return SizedBox();
+                }
+                Future.delayed(
+                  Duration.zero,
+                  () => setState(
+                    () {
+                      messages?.totalCount = messages!.totalCount! + 1;
+                      messages?.messages = [update] + messages!.messages!;
+                    },
+                  ),
+                );
+
+                if (scrollController.offset <= 0) {
+                  scrollController.jumpTo(41);
+                  scrollController.animateTo(
+                    0,
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.decelerate,
+                  );
+                }
+              }
+              return const SizedBox();
+            })
+      ],
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:myapp/Screens/autorization_router.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Themes engine/theme_interpreter.dart';
 import 'package:myapp/UIManager.dart';
+import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/Widgets/burger_menu.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
@@ -49,6 +50,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     UIManager.screenSizeChange(context);
+    StreamBuilderWrapper.init(widget.client);
     return ExcludeSemantics(
       child: SafeArea(
         child: Scaffold(

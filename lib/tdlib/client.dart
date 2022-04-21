@@ -19,12 +19,14 @@ import "src/td_json_client.dart" show JsonClient;
 /// [Observable]s that stream data to their listeners.
 class TelegramClient {
   BehaviorSubject<Update> _updates = BehaviorSubject();
+  BehaviorSubject<void> _freeUpdates = BehaviorSubject();
 
   /// All [Update] objects received by the client are put into a
   /// [BehaviorSubject] whose [Stream] is exposed to other parts of the
   /// application. This way updates can be listened to, filtered, mapped, and
   /// Flutter widgets can rebuild in response to them with a StreamBuilder.
   Stream<Update> get updates => _updates.stream;
+  Stream<void> get freeUpdates => _freeUpdates.stream;
 
   /// A convenience getter that streams [AuthorizationState]s. It does this by
   /// filtering for [updates] that are [UpdateAuthorizationState]s and yields
@@ -1072,6 +1074,7 @@ class TelegramClient {
         () {
           _updates.close();
           _updates = BehaviorSubject<Update>();
+          _freeUpdates.add(() {});
           free();
         },
       );
