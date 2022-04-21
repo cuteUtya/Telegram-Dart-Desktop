@@ -20,7 +20,7 @@ class AppMain extends StatefulWidget {
 class _AppMainState extends State<AppMain> {
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       //start receive updates only if all UI elements was inited
       Future.delayed(Duration.zero)
           .then((value) => widget.client.startReceiveUpdates());
