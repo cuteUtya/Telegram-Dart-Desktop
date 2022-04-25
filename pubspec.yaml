@@ -25,6 +25,7 @@ dependencies:
   dart_vlc: ^0.1.8
   desktop_drop: ^0.3.2
   path_provider: ^2.0.9
+  scrollable_positioned_list: ^0.2.3
 
 dev_dependencies:
   flutter_test:
