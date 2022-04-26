@@ -176,6 +176,7 @@ class _ContextMenuState extends State<ContextMenu> {
               Positioned.fill(
                 child: GestureDetector(
                   onSecondaryTapUp: handleTap,
+                  onTapUp: UIManager.isMobile ? handleTap : null,
                 ),
               ),
             ],
