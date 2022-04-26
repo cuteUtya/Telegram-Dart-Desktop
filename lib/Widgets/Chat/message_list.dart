@@ -20,7 +20,6 @@ import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display.dart';
 import 'package:myapp/Widgets/smooth_list_view.dart';
 import 'package:myapp/Widgets/stream_builder_wrapper.dart';
-import 'package:myapp/Widgets/widget_size_measuring.dart';
 import 'package:myapp/safe_spacer.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text;
@@ -121,7 +120,7 @@ class _MessageListState extends State<MessageList> {
     var chat = widget.client.getChat(widget.chatId);
     bool haveUnread = chat.unreadCount != 0;
     startLoadMoreMessagesBelow = true;
-    var offset = -min(chat.unreadCount! + 1, 50);
+    var offset = -min(chat.unreadCount!, 50);
 
     await loadMessages(
       -offset,
@@ -134,30 +133,37 @@ class _MessageListState extends State<MessageList> {
       0,
     );
 
-    if (haveUnread) {
-      itemScrollController.jumpTo(
-        index: -offset,
-      );
-      firstUnreadMessageId = messages!.messages![-offset].id!;
-      startLoadMoreMessagesBelow = false;
-    }
-    itemPositionsListener.itemPositions.addListener(
+    Future.delayed(
+      Duration.zero,
       () {
-        var readed =
-            itemPositionsListener.itemPositions.value.map((e) => e.index);
-        if (messages!.messages!.length >=
-            itemPositionsListener.itemPositions.value.length) {
-          widget.client.send(
-            ViewMessages(
-              chatId: widget.chatId,
-              messageIds: readed
-                  .map(
-                    (e) => messages!.messages![e].id!,
-                  )
-                  .toList(),
-            ),
+        if (haveUnread) {
+          itemScrollController.jumpTo(
+            index: -offset,
+            alignment: 0.1,
           );
+          firstUnreadMessageId = messages!.messages![-offset].id!;
+          startLoadMoreMessagesBelow = false;
         }
+        itemPositionsListener.itemPositions.addListener(
+          () {
+            var readed =
+                itemPositionsListener.itemPositions.value.map((e) => e.index);
+
+            if (messages!.messages!.length >=
+                itemPositionsListener.itemPositions.value.length) {
+              widget.client.send(
+                ViewMessages(
+                  chatId: widget.chatId,
+                  messageIds: readed
+                      .map(
+                        (e) => e == -1 ? 0 : messages!.messages![e].id!,
+                      )
+                      .toList(),
+                ),
+              );
+            }
+          },
+        );
       },
     );
   }
@@ -169,6 +175,16 @@ class _MessageListState extends State<MessageList> {
 
   Map<int, List<Message>> albums = {};
   Map<int, Size> itemsSize = {};
+
+  void shiftIndexes(int shift) {
+    var position = itemPositionsListener.itemPositions.value.reduce(
+      (a, b) => a.index < b.index ? a : b,
+    );
+    itemScrollController.jumpTo(
+      index: position.index + shift,
+      alignment: position.itemLeadingEdge,
+    );
+  }
 
   void deleteHandler(Message message) {
     Future.delayed(
@@ -196,7 +212,7 @@ class _MessageListState extends State<MessageList> {
       reverse: true,
       itemScrollController: itemScrollController,
       itemPositionsListener: itemPositionsListener,
-      itemCount: 9999999,
+      itemCount: messagesCount,
       itemBuilder: (context, index) {
         if (index == messagesCount - 1 || index == 0) {
           if (messages?.messages != null) {
@@ -204,23 +220,19 @@ class _MessageListState extends State<MessageList> {
                 messages!.messages?.first.id != chat.lastMessage!.id &&
                 !startLoadMoreMessagesBelow) {
               startLoadMoreMessagesBelow = true;
-              var position = itemPositionsListener.itemPositions.value.reduce(
-                (a, b) => a.index > b.index ? a : b,
-              );
               int count = messages!.messages!.length;
+
+              ///TODO: bug
               loadMessages(
-                5,
+                30,
                 messages!.messages!.first.id!,
-                -5,
+                -30,
                 () {
                   int loaded = messages!.messages!.length - count;
                   Future.delayed(
                     Duration.zero,
                     () {
-                      itemScrollController.jumpTo(
-                        index: position.index + loaded,
-                        alignment: position.itemTrailingEdge,
-                      );
+                      shiftIndexes(loaded);
                       startLoadMoreMessagesBelow = false;
                     },
                   );
@@ -237,7 +249,7 @@ class _MessageListState extends State<MessageList> {
           }
         }
 
-        if (index >= messagesCount) {
+        if (index >= messagesCount || index < 0) {
           return SizedBox(
             height: 100,
             child: Text(
@@ -265,18 +277,10 @@ class _MessageListState extends State<MessageList> {
                   () => setState(
                     () {
                       messages?.messages = [update] + messages!.messages!;
+                      shiftIndexes(1);
                     },
                   ),
                 );
-
-                /*if (scrollController.offset <= 0) {
-                  scrollController.jumpTo(41);
-                  scrollController.animateTo(
-                    0,
-                    duration: Duration(milliseconds: 400),
-                    curve: Curves.decelerate,
-                  );
-                }*/
               }
               return null;
             })
@@ -500,7 +504,7 @@ class _MessageListState extends State<MessageList> {
           ],
         );
 
-        if (msg.id == firstUnreadMessageId) {
+        if (next?.id == firstUnreadMessageId) {
           result = Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -521,7 +525,9 @@ class _MessageListState extends State<MessageList> {
                 ),
               ),
             ],
-          ); /*Container(
+          );
+
+          /*Container(
             child: result,
             decoration: BoxDecoration(
               border: Border.all(
@@ -614,7 +620,7 @@ class _MessageListState extends State<MessageList> {
                 ),
               ),
             ContextMenuItemText(
-              icon: Icons.medical_information,
+              icon: Icons.numbers,
               text: msg.id!.toString(),
             ),
           ],
