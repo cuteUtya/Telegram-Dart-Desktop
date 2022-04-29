@@ -72,6 +72,7 @@ class _MessageListState extends State<MessageList> {
       ),
     );
     if (msgs is! Messages) {
+      print(msgs.toJson());
       return;
     }
     if (offset == 0 && (msgs.messages?.length ?? 1) == 0) {
@@ -123,14 +124,15 @@ class _MessageListState extends State<MessageList> {
     var offset = -min(chat.unreadCount!, 50);
 
     await loadMessages(
-      -offset,
+      50,
       chat.lastReadInboxMessageId!,
       offset,
     );
+    print(messages?.messages?.length);
     await loadMessages(
       50,
       chat.lastReadInboxMessageId!,
-      0,
+      -1,
     );
 
     Future.delayed(
@@ -208,8 +210,10 @@ class _MessageListState extends State<MessageList> {
     var chat = widget.client.getChat(widget.chatId);
 
     albums = {};
+    print('build list with $messagesCount messages');
     var result = ScrollablePositionedList.builder(
       reverse: true,
+      minCacheExtent: 500,
       itemScrollController: itemScrollController,
       itemPositionsListener: itemPositionsListener,
       itemCount: messagesCount,
@@ -222,7 +226,7 @@ class _MessageListState extends State<MessageList> {
               startLoadMoreMessagesBelow = true;
               int count = messages!.messages!.length;
 
-              ///TODO: bug
+              ///TODO: bug, skipped messages
               loadMessages(
                 30,
                 messages!.messages!.first.id!,
