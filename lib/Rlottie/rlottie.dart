@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:myapp/Widgets/clickable_object.dart';
 import 'dart:io' as io;
 
 class Rlottie {

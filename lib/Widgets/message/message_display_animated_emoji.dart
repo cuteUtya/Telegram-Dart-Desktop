@@ -57,7 +57,7 @@ class _MessageDisplayAnimtedEmojiState
           ),
         ),
       );
-      Overlay.of(context)!.insert(entry!);
+      Overlay.of(context).insert(entry!);
     }
 
     if (_canPlayAnim) {

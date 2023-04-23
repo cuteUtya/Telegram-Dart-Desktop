@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:myapp/Themes%20engine/theme_interpreter.dart';
-import 'package:path/path.dart';
 
 enum FileGroup {
   video,
@@ -798,10 +797,12 @@ Color getFileColor(String fileName) {
   var ext = getFileExtension(fileName);
   //filecadFilesColor:ref(fileunkownColor);
   var color = ClientTheme.currentTheme.tryGetField("file|$ext|color");
-  color ??= ClientTheme.currentTheme.getField("file${getFileGroup(fileName).toString().split(".")[1]}Color");
+  color ??= ClientTheme.currentTheme
+      .getField("file${getFileGroup(fileName).toString().split(".")[1]}Color");
   return color;
 }
 
 IconData? getFileIcon(String fileExtension, {FileGroup? group}) =>
     ClientTheme.currentTheme.tryGetField("file|$fileExtension|icon") ??
-    ClientTheme.currentTheme.tryGetField("file|${group.toString().split(".").last}|icon_group");
+    ClientTheme.currentTheme
+        .tryGetField("file|${group.toString().split(".").last}|icon_group");

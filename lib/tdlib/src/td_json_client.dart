@@ -13,7 +13,6 @@ import "dart:ffi";
 import 'dart:io';
 import 'package:ffi/ffi.dart';
 
-import "package:ffi/ffi.dart";
 import 'package:myapp/tdlib/td_api.dart';
 
 import "utils.dart";
@@ -69,12 +68,12 @@ class JsonClient {
 
   JsonClient.create({Pointer<Void>? clientPointer}) {
     // Get the path to the td_json_client dynamic library
-    final dlPath =  Platform.isAndroid ? "libtdjsonandroid.so" : platformPath("./");
+    final dlPath =
+        Platform.isAndroid ? "libtdjsonandroid.so" : platformPath("./");
     final dylib = DynamicLibrary.open(dlPath);
 
     // Get the td_json_client_create function from the dylib and create a client
     String sym(String s) => Platform.isAndroid ? "_$s" : s;
-
 
     _jsonClientCreate =
         dylib.lookupFunction<td_json_client_create, JsonClientCreate>(

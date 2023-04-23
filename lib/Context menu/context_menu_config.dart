@@ -70,7 +70,7 @@ class _ContextMenuState extends State<ContextMenu> {
       ),
     );
     _entryes.add(entry);
-    Overlay.of(context)!.insert(entry);
+    Overlay.of(context).insert(entry);
   }
 
   List<Widget> buildItems(bool addSeparator) {

@@ -7,7 +7,6 @@ import 'package:myapp/Themes%20engine/theme_interpreter.dart';
 import 'package:myapp/Widgets/InlineKeyboard/inline_keyboard_button_display.dart';
 import 'package:myapp/Widgets/blured_widget.dart';
 import 'package:myapp/Widgets/display_text.dart';
-import 'package:myapp/Widgets/left%20panel/left_panel.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart' hide Text hide Animation;
@@ -141,7 +140,7 @@ class InlineKeyboardDisplay extends StatelessWidget {
         ),
       ),
     );
-    Overlay.of(context)!.insert(entry);
+    Overlay.of(context).insert(entry);
     Future.delayed(
       const Duration(seconds: 2),
       () => entry.remove(),

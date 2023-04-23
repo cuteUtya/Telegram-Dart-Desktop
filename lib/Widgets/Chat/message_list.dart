@@ -591,7 +591,7 @@ class _MessageListState extends State<MessageList> {
                   if (link is MessageLink) {
                     Clipboard.setData(
                       ClipboardData(
-                        text: (link as MessageLink).link,
+                        text: link.link ?? "",
                       ),
                     );
                   }

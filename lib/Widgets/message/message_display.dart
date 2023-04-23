@@ -6,26 +6,21 @@ import 'package:myapp/Widgets/message/mac_message_bubble.dart';
 import 'package:myapp/Widgets/message/message_bubble.dart';
 import 'package:myapp/Widgets/message/message_display_animated_emoji.dart';
 import 'package:myapp/Widgets/message/message_display_audio.dart';
-import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/message_display_photo.dart';
 import 'package:myapp/Widgets/message/message_display_photo_album.dart';
 import 'package:myapp/Widgets/message/message_display_poll.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
-import 'package:myapp/Widgets/message/message_display_video.dart';
-import 'package:myapp/Widgets/message/message_display_gif.dart';
 import 'package:myapp/Widgets/message/message_display_text_emojis.dart';
 import 'package:myapp/Widgets/message/message_sticker.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_checkMark_time.dart';
 import 'package:myapp/Widgets/message/replies_display.dart';
 import 'package:myapp/Widgets/message/service_message.dart';
-import 'package:myapp/Widgets/online_indicator_display.dart';
 import 'package:myapp/Widgets/stream_builder_wrapper.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;
 import 'package:myapp/Widgets/message/bubble_utils.dart';
-import 'package:myapp/tdlib/tdlib_utils.dart';
 import 'package:myapp/utils.dart';
 
 /// UI representation of [Message] object
@@ -385,7 +380,7 @@ class MessageDisplay extends StatelessWidget {
             }
           } else {
             // build album
-            contentWidget = ServiceMessage(text: "album");
+            contentWidget = const ServiceMessage(text: "album");
             switch (message.content.runtimeType) {
               case MessagePhoto:
                 overrideBubblePadding = true;

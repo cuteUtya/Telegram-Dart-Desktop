@@ -7,7 +7,6 @@ import 'package:dart_vlc/dart_vlc.dart' as vlc;
 import 'package:flutter/material.dart';
 import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Widgets/blur_image_preview.dart';
-import 'package:myapp/Widgets/display_text.dart';
 import 'package:myapp/Widgets/message/message_display_media.dart';
 import 'package:myapp/Widgets/message/messages_info_bubble/message_info_bubble_base.dart';
 import 'package:myapp/Widgets/remote_file_builder.dart';
@@ -143,7 +142,6 @@ class _MessageDisplayVideoState
                         key: Key(
                             "video?chat=${widget.message.chatId}?message=${widget.message.id}playerId=${player?.id}"),
                         player: player,
-                        playlistLength: 1,
                         width: contentWidth,
                         height: contentHeight,
                         showControls: false,

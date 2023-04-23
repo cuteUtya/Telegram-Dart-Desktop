@@ -1,12 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/State%20managment/ui_events.dart';
-import 'package:myapp/Themes%20engine/theme_interpreter.dart';
-import 'package:myapp/UIManager.dart';
 import 'package:myapp/Widgets/message/message_display_text.dart';
 import 'package:myapp/Widgets/message/message_info_overlay_display.dart';
-import 'package:myapp/Widgets/widget_hider.dart';
 import 'package:myapp/scale_utils.dart';
 import 'package:myapp/tdlib/client.dart';
 import 'package:myapp/tdlib/td_api.dart' hide Text;

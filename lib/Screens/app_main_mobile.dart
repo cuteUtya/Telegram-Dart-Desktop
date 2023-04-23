@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/State%20managment/ui_events.dart';
-import 'package:myapp/StateWithStreamsSubscriptions.dart';
 import 'package:myapp/Widgets/Chat/chat_display.dart';
 import 'package:myapp/Widgets/background_manager_desktop.dart';
 import 'package:myapp/Widgets/left%20panel/left_panel.dart';
 import 'package:myapp/tdlib/client.dart';
-import 'package:myapp/tdlib/src/tdapi/tdapi.dart';
 
 class AppMainMobile extends StatefulWidget {
   const AppMainMobile({

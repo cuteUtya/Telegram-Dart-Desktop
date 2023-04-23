@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Widgets/Design/desing_colors.dart';
 import 'package:myapp/Widgets/Design/desing_layout.dart';
-import 'package:myapp/Widgets/Design/desing_system.dart';
 import 'package:myapp/Widgets/Design/desing_typography.dart';
 
-class Spectrum implements DesingSystem {
+class Spectrum {
   Spectrum({
     SpectrumTheme theme = SpectrumTheme.light,
   }) {

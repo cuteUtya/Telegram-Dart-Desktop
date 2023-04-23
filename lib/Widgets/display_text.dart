@@ -235,11 +235,11 @@ class _textEntety {
         }
         result.add(
           WidgetSpan(
-            placeholderDimensions: [
+          /*  placeholderDimensions: [
               PlaceholderDimensions(
                   size: Size(size + 2, size),
                   alignment: PlaceholderAlignment.middle)
-            ],
+            ],*/
             child: GestureDetector(
                 onTap: interactiveEnable
                     ? () => Clipboard.setData(

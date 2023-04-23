@@ -19,7 +19,8 @@ class MessageDisplayVideoSticker extends StatefulWidget {
   State<StatefulWidget> createState() => _MessageDisplayVideoStickerState();
 }
 
-class _MessageDisplayVideoStickerState extends State<MessageDisplayVideoSticker> {
+class _MessageDisplayVideoStickerState
+    extends State<MessageDisplayVideoSticker> {
   late vlc.Player player;
 
   @override
@@ -38,6 +39,7 @@ class _MessageDisplayVideoStickerState extends State<MessageDisplayVideoSticker>
 
   @override
   Widget build(BuildContext context) {
+    return const SizedBox();
     return RemoteFileBuilderProgress(
       client: widget.client,
       fileId: widget.sticker.sticker!.id!,
@@ -64,7 +66,6 @@ class _MessageDisplayVideoStickerState extends State<MessageDisplayVideoSticker>
             player: player,
             height: widget.sticker.height!.toDouble(),
             width: widget.sticker.width!.toDouble(),
-            playlistLength: 1,
             showControls: false,
           );
         }
